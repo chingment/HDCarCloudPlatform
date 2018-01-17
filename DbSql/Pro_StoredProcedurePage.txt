@@ -1,0 +1,55 @@
+CREATE   PROCEDURE [dbo].[Pro_StoredProcedurePage]
+(
+
+	@TableName		varchar(1000),			-- 表名
+	@ReturnFields	varchar(8000) = '*',	-- 需要返回的列
+	@PageSize		int = 10,				-- 每页记录数
+	@PageIndex		int = 1,				-- 当前页码
+	@Where			varchar(8000) = '',		-- 查询条件
+	@Orderfld		varchar(500),--,			-- 排序字段名最好为唯一主键
+	@TotalRecord INT OUTPUT,      --返回记录总数
+    @TotalPage int  OUTPUT,   --返回总页数
+	@Sql          varchar(8000) output  -----最后返回的SQL语句
+)
+AS
+BEGIN 
+ SET NOCOUNT ON; 
+    if(@PageIndex=0)
+    begin
+    set @PageIndex=1
+    end
+       else
+    begin
+     set @PageIndex= @PageIndex+1
+    end
+    
+    DECLARE @OrderBy nvarchar(500)
+	declare @statIndex  int
+	declare @endIndex int
+	
+	if(@Orderfld='' or @Orderfld is null)
+	begin
+		set @OrderBy = ' Order by sncode '
+	end
+	else
+	begin
+		set @OrderBy = ' Order by ' + @Orderfld 
+	end
+        -- 记录总数
+	declare @countSql nvarchar(4000)  
+	set @countSql='SELECT @TotalRecord=Count(*) From '+@TableName+' where '+@Where
+
+	execute sp_executesql @countSql,N'@TotalRecord int out',@TotalRecord out
+	
+	set @statIndex=(@PageIndex-1)*@PageSize + 1
+	set @endIndex=@PageIndex*@PageSize
+
+	SET @TotalPage=(@TotalRecord-1)/@PageSize+1
+    SET @Sql=  ' SELECT * FROM ( SELECT ROW_NUMBER() OVER( '
+		+@OrderBy+' ) AS [ROW_NUMBER], '
+		+@ReturnFields+' FROM  '
+		+@TableName+' where '+ISNULL(@Where,'1=1')+' ) AS t1 WHERE [t1].[ROW_NUMBER] BETWEEN '
+		+STR(@statIndex)+' AND '+STR(@endIndex)
+
+     exec(@Sql)
+end

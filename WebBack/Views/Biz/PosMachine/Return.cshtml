@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewBag.Title = "Return";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+
+}
+@section scriptsbyend{
+    <script src="~/Scripts/AreaSelect/public.js"></script>
+    <script type="text/javascript">
+
+
+        $(this).ready(function () {
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { $.lumos.tips(msg); }, onSuccess: function () { return openAccount(); } });
+            $("#Model_MerchantPosMachine_Deposit").formValidator().inputValidator({ type: "number", min: 0.01, max: 10000, onError: "押金不能为空，金额范围在0.01~10000.00之间" });
+            $("#Model_MerchantPosMachine_Deposit").decimalInput(2);
+
+
+            $("#btn_select_MerchantPosMachine").click(function () {
+
+                art.dialog.open('../PosMachine/MerchantPosMachineList', {
+                    id: "openDialog565", title: '选择商户POS机', width: '800px', height: '480px', lock: true, drag: false, cancelVal: '关闭', cancel: true
+                });
+
+            });
+
+
+
+        });
+
+        function openAccount() {
+            art.dialog.confirm(
+'确定要开户？',
+function () {
+    var postData = $("#form1").serializeArray();
+
+    $.lumos.postJson({
+        url: "../Merchant/OpenAccount",
+        data: postData,
+        success: function (d) {
+
+            if (d.result == resultType.success) {
+                $.lumos.parentDialog().listTable.loadData();
+                $.lumos.tips(d.message, true);
+            }
+            else {
+                $.lumos.tips(d.message);
+            }
+
+        }
+    });
+});
+            return false;
+        }
+
+        function getMerchantPosMachineDetails(obj) {
+            $('#Model_MerchantPosMachine_Id').val(obj.id);
+            $('#lbl_Merchant_ClientCode').text(obj.clientCode);
+            $('#lbl_Merchant_YYZZ_Name').text(obj.yYZZ_Name);
+            $('#lbl_Merchant_ContactName').text(obj.contactName);
+            $('#lbl_Merchant_ContactPhoneNumber').text(obj.contactPhoneNumber);
+            $('#lbl_PosMachine_DeviceId').text(obj.deviceId);
+            $('#lbl_PosMachine_FuselageNumber').text(obj.fuselageNumber);
+            $('#lbl_PosMachine_Version').text(obj.version);
+            $('#lbl_MerchantPosMachine_Deposit').text(obj.deposit);
+            $('#lbl_MerchantPosMachine_DepositPayTime').text(obj.depositPayTime);
+        }
+
+        //-->
+    </script>
+}
+
+<div class="gbr-row-title clearfix">
+    <div class="pull-left">
+        <h5>商户基本信息</h5>
+    </div>
+    <div class="pull-right f-tb1-item-pull-right">
+        <h6></h6>
+    </div>
+</div>
+<table class="f-tb1-detail">
+    <tr>
+        <td class="t">商户代码：</td>
+        <td class="c">
+            <span id="lbl_Merchant_ClientCode"></span>
+            <input type="hidden" class="input-control" name="Model.MerchantPosMachine.Id" id="Model_MerchantPosMachine_Id" value="" />
+            <span><input type="button" class="btn btn-add" id="btn_select_MerchantPosMachine" value="选择" /></span>
+        </td>
+        <td class="t">商户名称：</td>
+        <td class="c">
+            <span id="lbl_Merchant_YYZZ_Name"></span>
+        </td>
+    </tr>
+    <tr>
+        <td class="t">联系人：</td>
+        <td class="c">
+            <span id="lbl_Merchant_ContactName"></span>
+        </td>
+        <td class="t">联系电话：</td>
+        <td class="c">
+            <span id="lbl_Merchant_ContactPhoneNumber"></span>
+        </td>
+    </tr>
+</table>
+
+
+<div class="gbr-row-title clearfix">
+    <div class="pull-left">
+        <h5>POS机信息</h5>
+    </div>
+    <div class="pull-right f-tb1-item-pull-right">
+        <h6></h6>
+    </div>
+</div>
+<input type="hidden" value="" name="Model.MerchantPosMachine.Id" id="Model_MerchantPosMachine_Id" />
+<table class="f-tb1-detail">
+    <tr>
+        <td class="t">设备ID：</td>
+        <td class="c">
+            <span id="lbl_PosMachine_DeviceId"></span>
+        </td>
+        <td class="t">机身号：</td>
+        <td class="c">
+            <span id="lbl_PosMachine_FuselageNumber"></span>
+        </td>
+    </tr>
+    <tr>
+        <td class="t">终端号：</td>
+        <td class="c">
+            <span id="lbl_PosMachine_TerminalNumber"></span>
+        </td>
+        <td class="t">版本号：</td>
+        <td class="c">
+            <span id="lbl_PosMachine_Version"></span>
+        </td>
+    </tr>
+    <tr>
+        <td class="t">已收押金：</td>
+        <td class="c">
+            <span id="lbl_MerchantPosMachine_Deposit"></span><span class="moneyunit">元</span>
+        </td>
+        <td class="t">收取时间：</td>
+        <td class="c">
+            <span id="lbl_MerchantPosMachine_DepositPayTime"></span>
+        </td>
+    </tr>
+    <tr>
+        <td class="t">退回押金：</td>
+        <td class="c">
+            <span><input type="text" class="input-control" name="Model.MerchantPosMachine.Deposit" id="Model_MerchantPosMachine_Deposit" value="" style="width: 100px;" /></span><span class="moneyunit">元</span>
+        </td>
+        <td class="t"></td>
+        <td class="c">
+            <span></span>
+        </td>
+    </tr>
+</table>
+

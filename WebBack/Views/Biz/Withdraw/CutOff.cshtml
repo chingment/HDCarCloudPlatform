@@ -1,0 +1,219 @@
+﻿
+@{
+    ViewBag.Title = "CutOff";
+    Layout = "~/Views/Shared/_LayoutHomeIframeMainList.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        var listCutOff;
+
+        $(document).ready(function () {
+
+
+            //$('.view-cutoffdetail').live('click', function () {
+
+            //    var id = $(this).attr("referenceid");
+            //    var batchno = $(this).attr("batchno");
+            //    var url = '../CutOff/CutOffDetail?id=' + id;
+            //    var title = '查看批次号为' + batchno + '的详情';
+            //    art.dialog.open(url, {
+            //        id: "openDialog", title: title, width: '900px', height: '500px', padding: '20px 25px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '下载', ok: function () {
+            //            $.lumos.download('../CutOff/DownloadCutOffDetail?id=' + id + '&status=1,2,3', '', 'post');
+            //            return false;
+            //        }
+            //    });
+            //});
+
+            getCutOffAmountByTimePeriods();
+
+            listCutOff = $("#list_cutoff").loadDataTable({
+                url: "../Withdraw/GetCutOffList",
+                pageIndex: 0,
+                searchParams: $("#form1").serializeArray(),
+                searchButtonId: "btn_Search",
+                containerId: "form1",
+                rowDataCombie: function (p_index, p_row) {
+                    var l_StrRows = "";
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.BatchNo + "\"   >" + p_row.batchNo + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.amount + "\">" + $.lumos.convertMoney(p_row.amount) + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.amountByAfterFee + "\">" + $.lumos.convertMoney(p_row.amountByAfterFee) + "</td>";
+                    l_StrRows += "<td><span style=\"padding: 5px; color: #10a139; \">处理中(" + p_row.handingCount + ")</span><span style=\"padding:5px;color:#0026ff\">成功(" + p_row.successCount + ")</span><span style=\"padding:5px;color:#ff0000\">失败(" + p_row.failureCount + ")</span></td>";
+                    l_StrRows += "<td class=\"operation\"><a href=\"javascript:void(0)\" class=\"a-btn\"  operate=\"details\" >查看详细</a></td>";
+                    l_StrRows += "</td>";
+                    l_StrRows += "</tr>";
+                    return l_StrRows;
+                },
+                operate: {
+                    "details": function (obj) {
+                        var url = '../Withdraw/CutOffDetail?id=' + obj.id;
+
+                        var title = '查看截单详情';
+                        art.dialog.open(url, {
+                            id: "openDialog", title: title, width: '1000px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '下载', ok: function () {
+                                $.lumos.download('../Withdraw/DownloadCutOffDetail?id=' + obj.id, '', 'post');
+                                return false;
+                            }
+                        });
+                    }
+                }
+            });
+
+
+
+
+        });
+
+        function cutoff() {
+
+            var chkVal_len = $('#list_CutOffAmountByTimePeriods').find('input[name=timePeriods]').length;
+            if (chkVal_len == 0) {
+                art.dialog.tips("暂时没有可截单的数据");
+                return;
+            }
+
+            var chkVal = $('input[name=timePeriods]:checked').val();
+            if (chkVal == '') {
+                art.dialog.tips("请选择要截单的时间段");
+                return;
+            }
+
+            var startTime = chkVal.split('|')[0];
+            var endTime = chkVal.split('|')[1];
+            var amount = $.lumos.convertMoney(chkVal.split('|')[2]);
+            var amountByAfterFee = $.lumos.convertMoney(chkVal.split('|')[3]);
+            art.dialog.confirm('您选择的条件<br/>时间段：从' + startTime + '到' + endTime + '<br/>总金额：' + amount + '<br/>实际总金额：' + amountByAfterFee + '<br/>确定要截单？', function () {
+
+
+                var l_Data = $("#form1").serializeArray();
+
+                l_Data.push({ name: "startTime", value: startTime });
+                l_Data.push({ name: "endTime", value: endTime });
+
+
+                $.lumos.postJson({
+                    url: "../Withdraw/BuildCutOffData",
+                    data: l_Data,
+                    success: function (data) {
+                        art.dialog.tips(data.message);
+                        getCutOffAmountByTimePeriods();
+                        listCutOff.loadData();
+                    }
+                });
+
+
+
+                return true;
+            });
+
+            return false;
+        }
+
+        function getCutOffAmountByTimePeriods() {
+
+            $.lumos.postJson({
+                url: "../Withdraw/GetCutOffAmountByTimePeriods",
+                data: $("#form1").serializeArray(),
+                success: function (d) {
+
+                    var d = d.data;
+
+                    $('#list_CutOffAmountByTimePeriods').find("tbody tr").remove(); //删除所有行
+                    if (d.length == 0) {
+                        $('#list_CutOffAmountByTimePeriods').find("tbody").append("<tr><td colspan=\"5\" style=\"text-align:center\">暂时没有可截单的数据</td></tr>"); //追加所有行
+                    }
+                    else {
+                        var l_StrRows = "";
+                        $.each(d, function (p_index, p_row) {
+
+                            l_StrRows += "<tr>";
+                            l_StrRows += "<td style=\"font-size:20px;\"><span>" + p_row.startTime + " </span> - <span>" + p_row.endTime + "</span></td>";
+                            l_StrRows += "<td style=\"font-size:20px;\"><span>" + $.lumos.convertMoney(p_row.amount) + "</span></td>";
+                            l_StrRows += "<td style=\"font-size:20px;\"><span>" + $.lumos.convertMoney(p_row.amountByAfterFee) + "</span></td>";
+                            l_StrRows += "<td><input name=\"timePeriods\" type=\"radio\" value=\"" + p_row.startTime + "|" + p_row.endTime + "|" + p_row.amount + "|" + p_row.amountByAfterFee + "\" /></td>";
+                            l_StrRows += " </tr>";
+                        });
+                        $('#list_CutOffAmountByTimePeriods').find("tbody").append(l_StrRows); //追加所有行
+                    }
+                }
+            });
+        }
+
+    </script>
+}
+
+<form name="form1" method="post" action="#" id="form1">
+    @AntiForgery.GetHtml()
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>截单</h5>
+        </div>
+        <div class="pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <input name="timePeriods" type="radio" value="" checked style="display:none" />
+    <input name="currency" type="hidden" value="EUR" />
+    <div>
+        <table id="list_CutOffAmountByTimePeriods" class="list-tb" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:50%;">时间段</th>
+                    <th style="width:12%">总金额</th>
+                    <th style="width:14%">实际总金额</th>
+                    <th style="width:12%"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div style="text-align:center;padding:10px 0px;">
+            <input type="button" name="btn_Submit" id="btn_Submit" value="截单" onclick="cutoff()" class="btn btn-sure" style="width:250px" />
+        </div>
+    </div>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>截单历史</h5>
+        </div>
+        <div class="pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table id="list_cutoff" class="list-tb" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:15%">批次号</th>
+                <th style="width:15%">截单时间</th>
+                <th style="width:15%">总金额</th>
+                <th style="width:15%">实际总金额</th>
+                <th style="width:17%"></th>
+                <th style="width:8%" class="operation">操作</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pull-left">
+
+                    </div>
+                    <div class="pull-right pagination">
+                        <div class="pagination-info">
+
+                        </div>
+                        <div class="pagination-index">
+
+                        </div>
+                        <div class="pagination-goto">
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</form>
+

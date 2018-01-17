@@ -1,0 +1,115 @@
+﻿@model WebBack.Models.Biz.Withdraw.DetailsViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 100px;
+        }
+
+        .f-tb1-detail .c {
+            width: 225px;
+        }
+    </style>
+
+}
+<div class="gbr-row-title clearfix">
+    <div class="pull-left">
+        <h5>商户信息</h5>
+    </div>
+</div>
+<table class="f-tb1-detail">
+    <tr>
+        <td class="t">商户代码：</td>
+        <td class="c">
+            <span>@Model.Merchant.ClientCode</span>
+        </td>
+        <td class="t">商户名称：</td>
+        <td class="c">
+            @Model.Merchant.YYZZ_Name
+        </td>
+    </tr>
+</table>
+
+<div class="gbr-row-title clearfix">
+    <div class="pull-left">
+        <h5>提现信息</h5>
+    </div>
+</div>
+
+<table class="f-tb1-detail">
+    <tr>
+        <td class="t">提现流水号：</td>
+        <td class="c">
+            <span>@Model.Withdraw.Sn</span>
+        </td>
+        <td class="t"></td>
+        <td class="c">
+            <span></span>
+        </td>
+    </tr>
+    <tr>
+        <td class="t">提现银行卡帐号：</td>
+        <td class="c">
+            <span>@Model.WithdrawBankCard.BankAccountNo 【@Model.WithdrawBankCard.BankName】</span>
+        </td>
+        <td class="t">提现银行卡持有人：</td>
+        <td class="c">@Model.WithdrawBankCard.BankAccountName</td>
+    </tr>
+    <tr>
+        <td class="t">提现金额：</td>
+        <td class="c">
+            <span>@Model.Withdraw.Amount</span>
+        </td>
+        <td class="t">提现费用：</td>
+        <td class="c">
+            <span>@Model.Withdraw.Fee</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="t">提现实际金额：</td>
+        <td class="c">
+            <span>@Model.Withdraw.AmountByAfterFee</span>
+        </td>
+        <td class="t"></td>
+        <td class="c">
+            <span></span>
+        </td>
+    </tr>
+    <tr>
+        <td class="t">结算开始时间：</td>
+        <td class="c">
+            <span>@Model.Withdraw.SettlementStartTime.ToUnifiedFormatDateTime()</span>
+        </td>
+        <td class="t">结算结束时间：</td>
+        <td class="c">
+            <span>@Model.Withdraw.SettlementEndTime.ToUnifiedFormatDateTime("-")</span>
+
+        </td>
+    </tr>
+    <tr>
+        <td class="t">状态：</td>
+        <td class="c">
+            <span>@Model.Withdraw.Status.GetCnName()</span>
+        </td>
+        <td class="t"></td>
+        <td class="c">
+            <span></span>
+        </td>
+    </tr>
+    @if (Model.Withdraw.Status == Lumos.Entity.Enumeration.WithdrawStatus.Failure)
+    {
+        <tr>
+            <td class="t">失败原因：</td>
+            <td class="c">
+                <span>@Model.Withdraw.FailureReason</span>
+            </td>
+            <td class="t"></td>
+            <td class="c">
+                <span></span>
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,317 @@
+﻿@model WebBack.Models.Biz.CarClaim.VerifyAmountViewModel
+@{
+    ViewBag.Title = "Dealt";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script type="text/javascript">
+
+        var listTable;
+        $(document).ready(function () {
+
+            var win = art.dialog.open.origin;
+            var dealtStatus = $.lumos.getUrlParamValue("dealtStatus");
+            if (dealtStatus == "@((int)Lumos.Entity.Enumeration.CarClaimDealtStatus.WaitVerifyAmount)") {
+                win.listTable.loadData();
+            }
+
+
+            @if (Model.IsHasOperater)
+            {
+                @Html.Raw("setTimeout(function () {art.dialog({ title: '提示', content: '用户【" + Model.OperaterName + "】正在审核', cancelVal:'退出',cancel: function () {art.dialog.close();}, lock: true, drag: false, dblclickClose: false }); }, 100);");
+            }
+
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_OrderToCarClaim_WorkingHoursPrice").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.01, max: 100000, onError: "请输入工时费，金额范围在0.01~100000.00之间" });
+            $("#Model_OrderToCarClaim_AccessoriesPrice").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.01, max: 100000, onError: "请输入配件费，金额范围在0.01~100000.00之间" });
+            $("#Model_OrderToCarClaim_Remarks").formValidator({ onShow: "", onFocus: "", onCorrect: "", empty: true, onEmpty: "" }).inputValidator({ min: 0, max: 500, onError: "告知备注不超过500个字符" });
+
+
+            $("#Model_OrderToCarClaim_WorkingHoursPrice").decimalInput(2);
+            $("#Model_OrderToCarClaim_AccessoriesPrice").decimalInput(2);
+
+
+            listTable = $("#list_table_repairmerchant").loadDataTable({
+                url: "../CarClaim/GetRepairMerchantList",
+                pageIndex: 0,
+                searchParams: $("#form1").serializeArray(),
+                searchButtonId: "btn_Search",
+                containerId: "form1",
+                rowDataCombie: function (p_index, p_row) {
+
+
+                    var l_StrRows = "";
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
+                    l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.clientCode + "\"   >" + p_row.clientCode + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yYZZ_Name + "\">" + p_row.yYZZ_Name + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactPhoneNumber + "\">" + p_row.contactPhoneNumber + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactAddress + "\">" + p_row.ContactAddress + "</td>";
+                    l_StrRows += "<td class=\"operation\">";
+                    l_StrRows += "<input  type=\"radio\" name=\"Model.OrderToCarClaim.EstimateMerchantId\" value=\"" + p_row.id + "\" />";
+                    l_StrRows += "</td>";
+                    l_StrRows += "</tr>";
+                    return l_StrRows;
+                }
+            });
+
+
+
+        });
+
+
+
+        function submit(operate, fun) {
+            var form = $("#form1");
+            var msg = "";
+            var model_OrderToCarClaim_Remarks = $("#Model_OrderToCarClaim_Remarks").val();
+
+            if (operate == operateType.save) {
+                msg = "确定要保存？";
+                $(form).find('*').setInputRequired(false);
+            }
+            if (operate == operateType.submit) {
+                msg = "确定要提交？";
+                $(form).find('*').setInputRequired(true);
+            }
+            else if (operate == operateType.cancle) {
+                msg = "确定要取消？";
+                $(form).find('*').setInputRequired(false);
+
+                if (model_OrderToCarClaim_Remarks == "") {
+                    $.lumos.tips('请输入告知备注');
+                    return;
+                }
+            }
+
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+
+                art.dialog.confirm(msg, function () {
+                    var l_Data = $("#form1").serializeArray();
+                    l_Data.push({ name: "Model.Operate", value: operate });
+
+                    $.lumos.postJson({
+                        isUseHandling: true,
+                        url: "../CarClaim/VerifyAmount",
+                        data: l_Data,
+                        success: function (data) {
+                            fun(data);
+
+                        }
+                    });
+                });
+            }
+            return false;
+
+        }
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @AntiForgery.GetHtml()
+    <input name="Model.OrderToCarClaim.Id" type="hidden" value="@Model.OrderToCarClaim.Id" />
+    <input name="Model.BizProcessesAudit.CurrentDetails.Id" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.Id" />
+    <input name="Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" />
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>理赔需求信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t">商户名：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">地区：</td>
+            <td class="c">
+                <span>@Model.Merchant.Area</span>
+            </td>
+            <td class="t">联系地址</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactAddress</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">保险公司：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.InsuranceCompanyName</span>
+            </td>
+            <td class="t">车牌号码：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.CarPlateNo</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">对接人：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.HandPerson</span>
+            </td>
+            <td class="t">对接电话：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.HandPersonPhone</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">方式：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.RepairsType.GetCnName()</span>
+            </td>
+            <td class="t"></td>
+            <td class="c">
+              
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>维修厂信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ClientCode</span>
+            </td>
+            <td class="t">商户名：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">地区：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.Area</span>
+            </td>
+            <td class="t">联系地址</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ContactAddress</span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>定损单</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail" style="text-align:center">
+        <tr style="vertical-align:top">
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="false">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarClaim.EstimateListImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="">预览</span>
+                    </span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>复核定损金额</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t"><span class="required-symbol">*</span>工时费：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.OrderToCarClaim.WorkingHoursPrice" id="Model_OrderToCarClaim_WorkingHoursPrice" value="@Model.OrderToCarClaim.WorkingHoursPrice" /></span>
+            </td>
+            <td class="t"></td>
+            <td class="c">
+              
+            </td>
+        </tr>
+        <tr>
+            <td class="t"><span class="required-symbol">*</span>配件费：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.OrderToCarClaim.AccessoriesPrice" id="Model_OrderToCarClaim_AccessoriesPrice" value="@Model.OrderToCarClaim.AccessoriesPrice" /></span>
+            </td>
+            <td class="t"></td>
+            <td class="c"></td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>告知备注</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:96%">
+        <tr>
+            <td>
+                <textarea name="Model.OrderToCarClaim.Remarks" class="input-control" id="Model_OrderToCarClaim_Remarks" style="width:98%;">@Model.OrderToCarClaim.Remarks</textarea>
+            </td>
+        </tr>
+    </table>
+
+</form>

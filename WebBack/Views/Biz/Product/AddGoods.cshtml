@@ -1,0 +1,223 @@
+﻿
+@{
+    ViewBag.Title = "AddGoods";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section styles{
+    <style type="text/css">
+        #list_GoodsPic tr > td {
+            width: 100px;
+            padding: 10px;
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/ckeditor/config.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            CKEDITOR.replace('Model_Product_Details', { height: '180px' });
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_Product_Name").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 60, onError: "商品名称不能为空,且不超过60个字符！" });
+            $("#Model_Product_Type").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择商品类型" });
+            $("#Model_Product_Price").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.01, max: 1000000, onError: "商品价格在0.01~1000000.00之间" });
+            $("#Model_Product_Price").decimalInput(2);
+            $("#Model_Product_MainImgUrl").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传商品封面图片" });
+
+        });
+
+        function preview() {
+
+            var product_Name = $('#Model_Product_Name').val();
+            var product_Price = $('#Model_Product_Price').val();
+            var product_Details = CKEDITOR.instances.Model_Product_Details.getData();
+            art.dialog.data('product_Name', product_Name);
+            art.dialog.data('product_Price', product_Price);
+            art.dialog.data('product_Details', product_Details);
+
+            art.dialog.open('../Product/AppGoodsDetails', {
+                title: '预览',
+                id: 'BannerDetails',
+                width: '720px',
+                height: '600px',
+                lock: true,
+                drag: false,
+                cancelVal: '关闭',
+                cancel: true
+            }, false);
+
+        }
+
+        function submit(fun) {
+
+           // var stemTxt = CKEDITOR.instances.Model_Product_Details.document.getBody().getText();
+            var stem = CKEDITOR.instances.Model_Product_Details.getData();
+
+            var form = $("#form1");
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+
+                //if (stemTxt.trim() == '') {
+                //    art.dialog.tips('请输入商品描述');
+                //    return;
+                //}
+                $("#Model_Product_Details").val(stem);
+
+                art.dialog.confirm(
+               '确定要提交？',
+                function () {
+                    var l_Data = $(form).serializeArray();
+                    $.lumos.postJson({
+                        url: "../Product/AddGoods",
+                        data: l_Data,
+                        success: function (d) {
+                            fun(d);
+                        }
+                    });
+                });
+            }
+
+            return false;
+        }
+
+    </script>
+}
+
+<div class="gbr-row">
+    <form id="form1" name="form1" method="post">
+        @Html.AntiForgeryToken()
+        <div class="cked-item">
+            <div class="cked-title">
+                <label class="frm_label" for="">
+                    <span class="title">商品名称</span>
+                </label>
+            </div>
+            <div>
+                <input name="Model.Product.Name" class="input-control" autocomplete="off" type="text" id="Model_Product_Name" style="width: 600px;" />
+            </div>
+        </div>
+        <div class="cked-item">
+            <div class="cked-title">
+                <label class="frm_label" for="">
+                    <span class="title">商品类型</span>
+                </label>
+            </div>
+            <div>
+                @Html.initGoodsType(Lumos.Entity.Enumeration.InputType.Select, "Model.Product.Type", new { @class = "select-control", defaulttext = "请选择" })
+            </div>
+        </div>
+        <div class="cked-item">
+            <div class="cked-title">
+                <label class="frm_label" for="">
+                    <span class="title">商品价格</span>
+                </label>
+            </div>
+            <div>
+                <input name="Model.Product.Price" class="input-control" autocomplete="off" type="text" id="Model_Product_Price" value="" style="width: 200px;" />
+            </div>
+        </div>
+        <div class="cked-item">
+            <div class="cked-title">
+                <label class="frm_label" for="">
+                    <span class="title" style="float:left;">商品图片</span>
+                    <span class="tip" style="float:left;">大图片建议尺寸：900像素 * 500像素</span>
+                </label>
+            </div>
+            <div>
+                <table class="f-tb1-detail" id="list_GoodsPic" style="text-align:center;width:auto" >
+                    <tr style="vertical-align:top">
+                        <td>
+                            <div>
+                                <span class="uploadimgbox"  upload="true" >
+                                    <span class="uploadimg" inputname="Model.Product.MainImgUrl" path="product">
+                                        <img src="" />
+                                        <span class="uploadimg-click" style="">上传</span>
+                                        <input id="Model_Product_MainImgUrl" value="" name="Model.Product.MainImgUrl" type="hidden" />
+                                    </span>
+                                    <span class="uploadimg-view" style="">预览</span>
+                                </span>
+                            </div>
+                            <div>
+                                <span>封面</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <span class="uploadimgbox"  upload="true" >
+                                    <span class="uploadimg" inputname="Model.ElseImgUrls[0]" path="product">
+                                        <img src="" />
+                                        <span class="uploadimg-click" style="">上传</span>
+                                        <input value="" name="Model.ElseImgUrls[0]" type="hidden" />
+                                    </span>
+                                    <span class="uploadimg-view" style="">预览</span>
+                                </span>
+                            </div>
+                            <div>
+                                <span>图片1</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <span class="uploadimgbox"  upload="true" >
+                                    <span class="uploadimg" inputname="Model.ElseImgUrls[1]" path="product">
+                                        <img src="" />
+                                        <span class="uploadimg-click" style="">上传</span>
+                                        <input value="" name="Model.ElseImgUrls[1]" type="hidden" />
+                                    </span>
+                                    <span class="uploadimg-view" style="">预览</span>
+                                </span>
+                            </div>
+                            <div>
+                                <span>图片2</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <span class="uploadimgbox" upload="true">
+                                    <span class="uploadimg" inputname="Model.ElseImgUrls[2]" path="product">
+                                        <img src="" />
+                                        <span class="uploadimg-click" style="">上传</span>
+                                        <input value="" name="Model.ElseImgUrls[2]" type="hidden" />
+                                    </span>
+                                    <span class="uploadimg-view" style="">预览</span>
+                                </span>
+                            </div>
+                            <div>
+                                <span>图片3</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <span class="uploadimgbox" upload="true" >
+                                    <span class="uploadimg" inputname="Model.ElseImgUrls[3]" path="product">
+                                        <img src="" />
+                                        <span class="uploadimg-click" style="">上传</span>
+                                        <input value="" name="Model.ElseImgUrls[3]" type="hidden" />
+                                    </span>
+                                    <span class="uploadimg-view" style="">预览</span>
+                                </span>
+                            </div>
+                            <div>
+                                <span>图片4</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="cked-item">
+            <div class="cked-title">
+                <label class="frm_label" for="">
+                    <span class="title">商品描述</span>
+                </label>
+            </div>
+            <textarea id="Model_Product_Details" name="Model.Product.Details" class="ckeditor"></textarea>
+        </div>
+    </form>
+</div>
+

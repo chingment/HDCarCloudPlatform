@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "InsuranceCompanyList";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        var listTable;
+
+        $(document).ready(function () {
+
+            listTable = $("#list_table").loadDataTable({
+                url: "../CarInsuranceCompany/GetInsuranceCompanyList",
+                pageIndex: 0,
+                searchParams: $("#form1").serializeArray(),
+                searchButtonId: "btn_Search",
+                containerId: "form1",
+                rowDataCombie: function (p_index, p_row) {
+
+                    var l_StrRows = "";
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
+
+                    var app = "<div> <img src=\"" + p_row.imgUrl + "\" style=\"width:50px;height:50px\"><div>";
+
+                    l_StrRows += "<td class=\"overflow\" >" + app + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.name + "\">" + p_row.name + "</td>";
+                    l_StrRows += "<td class=\"no\"><a href=\"javascript:void(0)\" operate=\"selectin\"   class=\"a-btn\"  >选择</a></td>"
+                    l_StrRows += "</tr>";
+                    return l_StrRows;
+                },
+                operate: {
+                    "selectin": function (obj) {
+                        art.dialog.confirm(
+    '确定要选择' + obj.name+'？',
+    function () {
+        $.lumos.parentDialog().getInsuranceCompanyDetails(obj);
+        art.dialog.close();
+    });
+                    }
+                }
+            });
+
+
+        });
+
+
+        function submit(fun) {
+            var selVal = $("input[name=insuranceCompanys]:checked").val();
+            if (typeof selVal == 'undefined') {
+                $.lumos.tips('请选择保险公司');
+                return false;
+            }
+            art.dialog.confirm(
+            '确定要选择？',
+            function () {
+                var l_Data = $("#form1").serializeArray();
+                $.lumos.postJson({
+                    url: "../CarInsuranceCompany/Add?i=1",
+                    data: l_Data,
+                    success: function (d) {
+                        fun(d);
+                    }
+                });
+            });
+
+            return false;
+        }
+
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @Html.AntiForgeryToken()
+
+    <div class="search-bar">
+        <div class="filter">
+            <span class="filter-label">保险公司名称：</span>
+            <span class="filter-input">
+                <input type="text" class="input-control" name="Name" style="width:120px;" />
+            </span>
+        </div>
+
+        <div class="filter"><input type="button" class="btn btn-search" id="btn_Search" value="查询" /> </div>
+
+        @*<div class="filter" style="float:right">
+                <input type="button" class="btn btn-add btn-apply" id="btn_Add" opertion="add" value="新增" />
+            </div>
+        *@
+
+    </div>
+    <div class="list">
+        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:5%" class="no">
+                        序号
+                    </th>
+                    <th style="width:45%">
+                        图标
+                    </th>
+                    <th style="width:45%">
+                        名称
+                    </th>
+                    <th style="width:5%">
+                        选择
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <div class="pull-left">
+
+                        </div>
+                        <div class="pull-right pagination">
+                            <div class="pagination-info">
+
+                            </div>
+                            <div class="pagination-index">
+
+                            </div>
+                            <div class="pagination-goto">
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+

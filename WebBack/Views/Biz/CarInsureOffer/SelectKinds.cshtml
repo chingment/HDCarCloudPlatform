@@ -1,0 +1,183 @@
+﻿@model WebBack.Models.Biz.CarInsureOffer.SelectKindsViewModel
+
+@{
+    ViewBag.Title = "SelectKinds";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+
+
+
+}
+@section scripts{
+
+    <script type="text/javascript">
+
+        var kinds= @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.InsurePlanKinds));
+        $(document).ready(function () {
+            var html="";
+
+            if(kinds!=null)  {
+
+                for(var i=0;i<kinds.length;i++)
+                {
+                    html+="<tr>"
+                    html+="<td>"+kinds[i].name+"</td>";
+
+                    html+="<td>";
+
+                    if(kinds[i].inputType==2)
+                    {
+                        var defaut=kinds[i].inputValue.default;
+                        html+="<input type=\"text\" value=\""+defaut+"\" class=\"inputvalue input-control\" style=\"width:60px\" >";
+                        if(kinds[i].inputUnit!=null)
+                        {
+                            html+="<span>"+kinds[i].inputUnit+"</span>";
+                        }
+                    }
+                    else if(kinds[i].inputType==3)
+                    {
+                        html+="<select class=\"inputvalue  select-control\"  style=\"width:84px\">";
+
+                        var defaut=kinds[i].inputValue.default;
+                        var values=kinds[i].inputValue.value;
+                        for(var j=0;j<values.length;j++)
+                        {
+                            var selected="";
+                            if(defaut==values[j])
+                            {
+                                selected="selected";
+                            }
+                            html+="<option "+selected+">"+values[j]+"</option>";
+                        }
+
+
+                        html+="</select>";
+                        if(kinds[i].inputUnit!=null)
+                        {
+                            html+="<span>"+kinds[i].inputUnit+"</span>";
+                        }
+                    }
+
+
+                    html+="</td>";
+
+
+                    html+="<td>";
+                    if(kinds[i].isHasDetails)
+                    {
+                        html+="<span><input class='isHasDetails input-control' name=\"isHasDetails\" placeholder=\"投保明细\" type=\"text\" value=\"\" /></span>";
+                    }
+                    html+="</td>";
+
+
+
+                    html+="<td>";
+                    if(kinds[i].canWaiverDeductible)
+                    {
+                        html+="<span><input class='isWaiverDeductible' id=\"chk_canWaiverDeductible_"+i+"\" type=\"checkbox\" checked /><label for=\"chk_canWaiverDeductible_"+i+"\">不计免赔<label></span>";
+                    }
+                    html+="</td>";
+
+
+                    html+="<td><input name='checkedkind' type=\"checkbox\" value=\""+kinds[i].id+"\" /></td>";
+
+
+                    html+="</tr>"
+                }
+            }
+
+            $("#list_table tbody").html(html);
+        });
+
+
+
+
+        var structKind={ kindId:0,kindName:"",kindValue:"",kindUnit:"",isWaiverDeductible:false,kindDetails:""};
+        var arrKind=[];
+        function submit(fun){
+
+
+            $("input[name='checkedkind']:checkbox:checked").each(function(){
+                var _val=$(this).val();
+
+                var kind=$.lumos.jsonHelper.getDetail(kinds,"id",_val);
+                var selObj=structKind.constructor();
+                selObj.kindId=kind.id;
+                selObj.kindName=kind.name;
+
+                var kindValue=$(this).parent().parent().find('.inputvalue').val();
+                if(typeof kindValue =='undefined'){
+                    kindValue='';
+                }
+
+                selObj.kindValue=kindValue;
+
+                selObj.kindUnit=kind.inputUnit;
+
+                var isWaiverDeductible=$(this).parent().parent().find('.isWaiverDeductible');
+                if(isWaiverDeductible.length>0)
+                {
+                    isWaiverDeductible=$(isWaiverDeductible).attr("checked");
+                    if(typeof isWaiverDeductible=='undefined')
+                    {
+                        isWaiverDeductible=false;
+                    }
+                    else
+                    {
+                        isWaiverDeductible=true;
+                    }
+                }
+                else
+                {
+                    isWaiverDeductible=false;
+                }
+
+                selObj.isWaiverDeductible=isWaiverDeductible;
+
+
+                var isHasDetails=$(this).parent().parent().find('.isHasDetails');
+
+                if(isHasDetails.length>0) {
+                    selObj.kindDetails=$(isHasDetails).val();
+                }
+                else{
+                    selObj.kindDetails='';
+                }
+
+                arrKind.push(selObj);
+
+            })
+
+            fun(arrKind);
+        }
+
+
+    </script>
+}
+
+
+
+<table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr>
+            <th style="width:30%">
+                险种名称
+            </th>
+            <th style="width:20%">
+
+            </th>
+            <th style="width:20%">
+
+            </th>
+            <th style="width:20%">
+
+            </th>
+            <th style="width:10%">
+
+            </th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+

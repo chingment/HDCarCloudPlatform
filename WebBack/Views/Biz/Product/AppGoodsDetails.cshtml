@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "AppGoodsDetails";
+    Layout = "~/Views/Shared/_AppLayout.cshtml";
+}
+@section scripts{
+    @OwnStaticScriptsResource.Render("ArtDialog/artDialog.source.js?skin=default")
+    @OwnStaticScriptsResource.Render("ArtDialog/iframeTools.source.js")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#lbl_Name').text(art.dialog.data('product_Name'));
+            $('#lbl_Price').html(art.dialog.data('product_Price'));
+            $('#tab_Details').html(art.dialog.data('product_Details'));
+
+
+
+        });
+    </script>
+}
+<!--图片轮换-->
+<div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
+    <ul class="am-slides">
+        <li><img id="img_1" src="" /></li>
+        <li><img id="img_2" src="" /></li>
+        <li><img id="img_3" src="" /></li>
+        <li><img id="img_4" src="" /></li>
+    </ul>
+</div>
+<div class="detal-info">
+    <p id="lbl_Name"></p>
+    <h2>商城价：<span>￥<span id="lbl_Price"></span></span></h2>
+</div>
+<div style="background: #eee; height: 10px;"></div>
+<div class="am-tabs detail-list" data-am-tabs>
+    <ul class="am-tabs-nav am-nav am-nav-tabs">
+        <li class="am-active"><a href="#tab1">商品详情</a></li>
+    </ul>
+
+    <div class="am-tabs-bd">
+        <div class="am-tab-panel am-fade am-in am-active detail" id="tab_Details">
+            
+        </div>
+    </div>
+</div>
+<script>
+    //购物数量加减
+    $(function () {
+        $('.increase').click(function () {
+            var self = $(this);
+            var current_num = parseInt(self.siblings('input').val());
+            current_num += 1;
+            self.siblings('input').val(current_num);
+            update_item(self.siblings('input').data('item-id'));
+        })
+        $('.decrease').click(function () {
+            var self = $(this);
+            var current_num = parseInt(self.siblings('input').val());
+            if (current_num > 1) {
+                current_num -= 1;
+                self.siblings('input').val(current_num);
+                update_item(self.siblings('input').data('item-id'));
+            }
+        })
+    })
+</script>
+

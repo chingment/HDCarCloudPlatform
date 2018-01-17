@@ -1,0 +1,419 @@
+﻿@model WebBack.Models.Biz.Merchant.EditViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+
+
+}
+
+@section scriptsbyend{
+    <script src="~/Scripts/AreaSelect/public.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); }, onSuccess: function () { return edit(); } });
+            $("#Model_Merchant_Type").formValidator().inputValidator({ min: 1, max: 500, onError: "请选择商户类型" });
+            $("#Model_Merchant_ContactName").formValidator().inputValidator({ min: 1, max: 100, onError: "[商户信息]联系人不能为空,且不超过100个字符" });
+            $("#Model_Merchant_ContactPhoneNumber").formValidator().inputValidator({ min: 11, max: 11, onError: "[商户信息]联系电话只能输入11位的手机号码" });
+            $("#Model_Merchant_AreaCode").formValidator().inputValidator({ min: 1, onError: "请选择地区" });
+            $("#Model_Merchant_ContactAddress").formValidator().inputValidator({ min: 1, max: 100, onError: "[商户信息]联系地址不能为空,且不超过100个字符" });
+            $("#Model_Merchant_SalesmanId").formValidator().inputValidator({ min: 1, max: 500, empty: { leftEmpty: false, emptyError: "请选择业务员" }, onError: "请选择业务员" });
+
+            $("#Model_Merchant_RepairCapacity").formValidator().inputValidator({ min: 1, max: 500, onError: "请选择维修能力" });
+            $(":checkbox[name='Model.EstimateInsuranceCompanyIds']").formValidator({ onShow: "至少选一间定损公司", onFocus: "至少选一间定损公司", onCorrect: "&nbsp;" }).inputValidator({ min: 1, onError: "至少选一间定损公司" });
+
+            $("#Model_Merchant_YYZZ_RegisterNo").formValidator().inputValidator({ min: 1, max: 100, onError: "[营业执照信息]注册号不能为空,且不超过100个字符" });
+            $("#Model_Merchant_YYZZ_Name").formValidator().inputValidator({ min: 1, max: 100, onError: "[营业执照信息]商户名称不能为空,且不超过100个字符" });
+            $("#Model_Merchant_YYZZ_Type").formValidator().inputValidator({ min: 0, max: 100, onError: "[营业执照信息]类型不能过超过100个字符" });
+            $("#Model_Merchant_YYZZ_Address").formValidator().inputValidator({ min: 0, max: 200, onError: "[营业执照信息]地址不能过超过200个字符" });
+            $("#Model_Merchant_YYZZ_OperatingPeriodStart").formValidator({ empty: true }).regexValidator({ min: 0, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]有效期(开始)格式不正确,格式例子:2016-08-08" });
+            $("#Model_Merchant_YYZZ_OperatingPeriodEnd").formValidator({ empty: true }).regexValidator({ min: 0, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]有效期(开始)格式不正确,格式例子:2016-08-08" });
+
+
+            $("#Model_Merchant_FR_Name").formValidator().inputValidator({ min: 1, max: 100, onError: "[营业执照信息]法人姓名不能为空,且不超过100个字符" });
+            $("#Model_Merchant_FR_IdCardNo").formValidator().inputValidator({ min: 1, max: 18, onError: "请输入15或18位的身份证" }).functionValidator({ fun: isCardID });
+            $("#Model_Merchant_FR_Address").formValidator().inputValidator({ min: 0, max: 200, onError: "[营业执照信息]住址,且不超过200个字符" });
+            $("#Model_Merchant_FR_IssuingAuthority").formValidator().inputValidator({ min: 0, max: 100, onError: "[营业执照信息]法人身份证签发机关不能为空,且不超过100个字符" });
+            $("#Model_Merchant_FR_ValidPeriodStart").formValidator({ empty: true }).inputValidator({ min: 0, max: 20, onError: "[营业执照信息]法人身份证有效期(开始)不能为空" }).regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]法人身份证有效期格式不正确,格式例子:2016-08-08" });
+            $("#Model_Merchant_FR_ValidPeriodEnd").formValidator({ empty: true }).inputValidator({ min: 0, max: 20, onError: "[营业执照信息]法人身份证有效期(结束)不能为空" }).regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]法人身份证有效期格式不正确,格式例子:2016-08-08" });
+
+
+            //$("#Model_MerchantPosMachine_Deposit_0").formValidator().inputValidator({ min: 1, max: 100, onError: "请输入押金，金额范围在0.01~10000.00之间" });
+            //$("#Model_MerchantPosMachine_Rent_0").formValidator().inputValidator({ min: 1, max: 100, onError: "请输入租金，金额范围在0.01~10000.00之间" });
+            //$("#Model_MerchantPosMachine_Deposit_0").decimalInput(2);
+            //$("#Model_MerchantPosMachine_Rent_0").decimalInput(2);
+
+            $("#Model_BankCard_BankName_0").formValidator().inputValidator({ min: 1, max: 100, onError: "开户行不能为空,且不超过100个字符" });
+            $("#Model_BankCard_BankAccountName_0").formValidator().inputValidator({ min: 1, max: 100, onError: "持卡人不能为空,且不超过100个字符" });
+            $("#Model_BankCard_BankAccountNo_0").formValidator().inputValidator({ min: 1, max: 100, onError: "开户账号不能为空,且不超过100个字符" });
+
+
+            $('#Model_Merchant_Type').change(function () {
+
+                var v = $(this).find('option:checked').val();
+                $('[class^=tr_MerchantType]').hide();
+                $('[class^=tr_MerchantType]').find('input,select').attr("disabled", "disabled");
+                $('[class^=tr_MerchantType]').find('input,select').unFormValidator(true);
+
+                if (v == 2) {
+                    $('.tr_MerchantType_' + v + '').show();
+                    $('.tr_MerchantType_' + v + '').find('input,select').removeAttr("disabled");
+                    $('.tr_MerchantType_' + v + '').find('input,select').unFormValidator(false);
+                }
+
+            });
+
+            $('#Model_Merchant_RepairCapacity').change(function () {
+                var v = $(this).find('option:checked').val();
+
+                $('.tr_MerchantRepairCapacity').hide();
+                $('.tr_MerchantRepairCapacity').find('input,select').attr("disabled", "disabled");
+                $('.tr_MerchantRepairCapacity').find('input,select').unFormValidator(true);
+
+
+                if (v == 3) {
+                    $('.tr_MerchantRepairCapacity').show();
+                    $('.tr_MerchantRepairCapacity').find('input,select').removeAttr("disabled");
+                    $('.tr_MerchantRepairCapacity').find('input,select').unFormValidator(false);
+                }
+
+            });
+
+            $('#Model_Merchant_Type').change();
+            $('#Model_Merchant_RepairCapacity').change();
+        });
+
+
+        function edit() {
+
+
+            art.dialog.confirm("确定要保存？", function () {
+                var l_Data = $("#form1").serializeArray();
+                l_Data.push({ name: "Model.Operate", value: operateType.submit });
+
+                $.lumos.postJson({
+                    isUseHandling: true,
+                    url: "../Merchant/Edit",
+                    data: l_Data,
+                    success: function (d) {
+                        if (d.result == resultType.success) {
+                            $.lumos.parentDialog().listTable.loadData();
+                            $.lumos.tips(d.message);
+                        }
+                        else {
+                            $.lumos.tips(d.message);
+                        }
+                    }
+                });
+            });
+
+
+            return false;
+        }
+
+        function getSalesmanUserDetails(obj) {
+
+            $('#lbl_Merchant_Salesman').text(obj.fullName + "(" + obj.userName + ")");
+            $('#Model_Merchant_SalesmanId').val(obj.id);
+        }
+
+    </script>
+}
+
+<form id="form1">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Model.Merchant.Id" value="@Model.Merchant.Id" />
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>商户基本信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t"><span class="required-symbol">*</span>商户类型：</td>
+            <td class="c">
+                <span>@(Html.initEnumeration<Lumos.Entity.Enumeration.MerchantType>(Lumos.Entity.Enumeration.InputType.Select, "Model.Merchant.Type", new { @class = "select-control", defaulttext = "请选择", selectedvalue = new Lumos.Entity.Enumeration.MerchantType[] { Model.Merchant.Type }, hidevalue = new Lumos.Entity.Enumeration.MerchantType[] { Lumos.Entity.Enumeration.MerchantType.Unknow } }))</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t"><span class="required-symbol">*</span>联系人：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.ContactName" id="Model_Merchant_ContactName" value="@Model.Merchant.ContactName" /></span>
+            </td>
+            <td class="t"><span class="required-symbol">*</span>联系电话：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.ContactPhoneNumber" id="Model_Merchant_ContactPhoneNumber" value="@Model.Merchant.ContactPhoneNumber" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t"><span class="required-symbol">*</span>所在地区：</td>
+            <td class="c">
+                <div style="position:relative;clear:both;">
+                    <span>
+                        <input name="Model.Merchant.Area" id="Model_Merchant_Area" autocomplete="off" type="text" value="@(Model.Merchant.Area==""?"请选择地区":Model.Merchant.Area)" class="city_input select-control inputFocus proCityQueryAll proCitySelAll" ov="请选择地区" style="padding:3px">
+                        <input name="Model.Merchant.AreaCode" id="Model_Merchant_AreaCode" type="text" value="@Model.Merchant.AreaCode" style="display:none">
+                    </span>
+                    <!--弹出省省市-->
+                    <div class="provinceCityAll">
+                        <div class="tabs clearfix">
+                            <ul class="">
+                                <li><a href="javascript:" class="current" tb="hotCityAll">热门城市</a></li>
+                                <li><a href="javascript:" tb="provinceAll">省份</a></li>
+                                <li><a href="javascript:" tb="cityAll" id="cityAll">城市</a></li>
+                                <li><a href="javascript:" tb="countyAll" id="countyAll">区县</a></li>
+                            </ul>
+                        </div>
+                        <div class="con">
+                            <div class="hotCityAll invis">
+                                <div class="pre"><a></a></div>
+                                <div class="list">
+                                    <ul>
+                                        <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+                                    </ul>
+                                </div>
+                                <div class="next"><a class="can"></a></div>
+                            </div>
+                            <div class="provinceAll invis">
+                                <div class="pre"><a></a></div>
+                                <div class="list">
+                                    <ul>
+                                        <!-- 					<li><a href="javascript:"  class="current">江西省</a></li> -->
+                                    </ul>
+                                </div>
+                                <div class="next"><a class="can"></a></div>
+                            </div>
+                            <div class="cityAll invis">
+                                <div class="pre"><a></a></div>
+                                <div class="list">
+                                    <ul>
+                                        <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+                                    </ul>
+                                </div>
+                                <div class="next"><a class="can"></a></div>
+                            </div>
+                            <div class="countyAll invis">
+                                <div class="pre"><a></a></div>
+                                <div class="list">
+                                    <ul></ul>
+                                </div>
+                                <div class="next"><a class="can"></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="t"><span class="required-symbol">*</span>联系地址：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.ContactAddress" id="Model_Merchant_ContactAddress" value="@Model.Merchant.ContactAddress" /></span>
+            </td>
+        </tr>
+        <tr class="tr_MerchantType_2" style="display:none">
+            <td class="t"><span class="required-symbol">*</span>维修能力：</td>
+            <td class="c">
+                <span>@(Html.initEnumeration<Lumos.Entity.Enumeration.RepairCapacity>(Lumos.Entity.Enumeration.InputType.Select, "Model.Merchant.RepairCapacity", new { @class = "select-control", defaulttext = "请选择", selectedvalue = new Lumos.Entity.Enumeration.RepairCapacity[] { Model.Merchant.RepairCapacity }, hidevalue = new Lumos.Entity.Enumeration.RepairCapacity[] { Lumos.Entity.Enumeration.RepairCapacity.Unknow, Lumos.Entity.Enumeration.RepairCapacity.NoRepair } }))</span>
+            </td>
+            <td class="t"></td>
+            <td class="c">
+                <span></span>
+            </td>
+        </tr>
+        <tr class="tr_MerchantType_3 tr_MerchantRepairCapacity" style="display:none">
+            <td class="t"><span class="required-symbol">*</span>定损公司：</td>
+            <td class="c" colspan="3">
+                @for (var i = 0; i < Model.CarInsuranceCompany.Count; i++)
+                {
+                    string checkeds = "";
+                    if (Model.MerchantEstimateCompany != null)
+                    {
+                        int[] estimateInsuranceCompanyIds = (from q in Model.MerchantEstimateCompany select q.InsuranceCompanyId).ToArray();
+
+                        if (estimateInsuranceCompanyIds != null)
+                        {
+                            if (estimateInsuranceCompanyIds.Contains(Model.CarInsuranceCompany[i].InsuranceCompanyId))
+                            {
+                                checkeds = "checked";
+                            }
+                        }
+                    }
+
+                    <span> <input id="Model_CarInsuranceCompany_InsuranceCompanyId_@i" @checkeds name="Model.EstimateInsuranceCompanyIds" type="checkbox" value="@Model.CarInsuranceCompany[i].InsuranceCompanyId" /><label for="Model_CarInsuranceCompany_InsuranceCompanyId_@i">@Model.CarInsuranceCompany[i].InsuranceCompanyName</label></span>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="t"></td>
+            <td class="c"></td>
+            <td class="t"><span class="required-symbol">*</span>业务员：</td>
+            <td class="c">
+
+                <span id="lbl_Merchant_Salesman">@(Model.Salesman == null ? "" : Model.Salesman.FullName + "(" + Model.Salesman.UserName + ")")</span>
+                <input type="hidden" class="input-control" name="Model.Merchant.SalesmanId" id="Model_Merchant_SalesmanId" value="@(Model.Salesman==null?"":Model.Salesman.Id.ToString())" />
+
+                <span> <input type="button" class="btn" id="btn_select_salesmanUser" value="选择" dialog-title="选择业务员" /></span>
+            </td>
+        </tr>
+    </table>
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>营业执照信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t"><span class="required-symbol">*</span>注册号：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_RegisterNo" id="Model_Merchant_YYZZ_RegisterNo" value="@Model.Merchant.YYZZ_RegisterNo" /></span>
+            </td>
+            <td class="t"><span class="required-symbol">*</span>商户名称：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_Name" id="Model_Merchant_YYZZ_Name" value="@Model.Merchant.YYZZ_Name" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">类型：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_Type" id="Model_Merchant_YYZZ_Type" value="@Model.Merchant.YYZZ_Type" /></span>
+            </td>
+            <td class="t">地址：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_Address" id="Model_Merchant_YYZZ_Address" value="@Model.Merchant.YYZZ_Address" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">有效期（开始）：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_OperatingPeriodStart" id="Model_Merchant_YYZZ_OperatingPeriodStart" value="@Model.Merchant.YYZZ_OperatingPeriodStart.ToUnifiedFormatDate()" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_Merchant_YYZZ_OperatingPeriodStart\')}' })" /></span>
+            </td>
+            <td class="t">有效期（结束）：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_OperatingPeriodEnd" id="Model_Merchant_YYZZ_OperatingPeriodEnd" value="@Model.Merchant.YYZZ_OperatingPeriodEnd.ToUnifiedFormatDate()" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_Merchant_YYZZ_OperatingPeriodStart\')}' })" /></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t"><span class="required-symbol">*</span>法人代表姓名：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_Name" id="Model_Merchant_FR_Name" value="@Model.Merchant.FR_Name" /></span>
+            </td>
+            <td class="t"><span class="required-symbol">*</span>身份证号码：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_IdCardNo" id="Model_Merchant_FR_IdCardNo" value="@Model.Merchant.FR_IdCardNo" /></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t">住址：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_Address" id="Model_Merchant_FR_Address" value="@Model.Merchant.FR_Address" /></span>
+            </td>
+            <td class="t">签发机关：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_IssuingAuthority" id="Model_Merchant_FR_IssuingAuthority" value="@Model.Merchant.FR_IssuingAuthority" /></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t">有效期（开始）：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_ValidPeriodStart" id="Model_Merchant_FR_ValidPeriodStart" value="@Model.Merchant.FR_ValidPeriodStart.ToUnifiedFormatDate()" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_Merchant_FR_ValidPeriodStart\')}' })" /></span>
+            </td>
+            <td class="t">有效期（结束）：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_ValidPeriodEnd" id="Model_Merchant_FR_ValidPeriodEnd" value="@Model.Merchant.FR_ValidPeriodEnd.ToUnifiedFormatDate()" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_Merchant_FR_ValidPeriodStart\')}' })" /></span>
+            </td>
+        </tr>
+    </table>
+
+
+    @for (int i = 0; i < Model.MerchantPosMachine.Count; i++)
+    {
+        <div class="gbr-row-title clearfix">
+            <div class="pull-left">
+                <h5>POS机信息</h5>
+            </div>
+            <div class="pull-right f-tb1-item-pull-right">
+                <h6></h6>
+            </div>
+        </div>
+        <input type="hidden" name="Model.MerchantPosMachine[@i].Id" value="@Model.MerchantPosMachine[i].Id" />
+        <table class="f-tb1-detail">
+            <tr>
+                <td class="t">设备ID：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].PosMachine.DeviceId</span>
+                </td>
+                <td class="t">机身号：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].PosMachine.FuselageNumber</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t">终端号：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].PosMachine.TerminalNumber</span>
+                </td>
+                <td class="t">版本号：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].PosMachine.Version</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t">押金：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].Deposit.ToPrice()</span><span class="moneyunit">元</span>
+                </td>
+                <td class="t">租金/每月：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].Rent.ToPrice()</span><span class="moneyunit">元</span>
+                </td>
+            </tr>
+        </table>
+
+    }
+
+    @for (int i = 0; i < Model.BankCard.Count; i++)
+    {
+        <div class="gbr-row-title clearfix">
+            <div class="pull-left">
+                <h5>银行卡信息</h5>
+            </div>
+            <div class="pull-right f-tb1-item-pull-right">
+                <h6></h6>
+            </div>
+        </div>
+        <input type="hidden" name="Model.BankCard[@i].Id" value="@Model.BankCard[i].Id" />
+        <table class="f-tb1-detail">
+            <tr>
+                <td class="t"><span class="required-symbol">*</span>开户行：</td>
+                <td class="c">
+                    <span><input type="text" class="input-control" name="Model.BankCard[@i].BankName" id="Model_BankCard_BankName_@i" value="@Model.BankCard[i].BankName" /></span>
+                </td>
+                <td class="t"><span class="required-symbol">*</span>持卡人：</td>
+                <td class="c">
+                    <span><input type="text" class="input-control" name="Model.BankCard[@i].BankAccountName" id="Model_BankCard_BankAccountName_@i" value="@Model.BankCard[i].BankAccountName" /></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t"><span class="required-symbol">*</span>开户账号：</td>
+                <td class="c" colspan="3">
+                    <span><input type="text" class="input-control" name="Model.BankCard[@i].BankAccountNo" id="Model_BankCard_BankAccountNo_@i" value="@Model.BankCard[i].BankAccountNo" /></span>
+                </td>
+            </tr>
+        </table>
+    }
+
+
+</form>

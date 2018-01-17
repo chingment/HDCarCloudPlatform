@@ -1,0 +1,21 @@
+﻿@model WebBack.Models.App.Order.InsOfferPayViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AppLayout.cshtml";
+}
+
+@section styles{
+    <style type="text/css">
+        body {
+            background-color: #fff;
+        }
+    </style>
+}
+
+<div class="vnotice">
+    <div class="vnotice-container">
+        <div class="item-con">
+            <img  src="@Model.OrderToCarInsureOfferCompany.PayUrl" style="width:200px;margin:0 auto;display:block;" />
+        </div>
+    </div>
+</div>

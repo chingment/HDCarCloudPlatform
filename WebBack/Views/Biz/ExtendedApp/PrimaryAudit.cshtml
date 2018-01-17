@@ -1,0 +1,144 @@
+﻿@model WebBack.Models.Biz.ExtendedApp.PrimaryAuditViewModel
+@{
+    ViewBag.Title = "PrimaryAudit";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        <!--
+        $(this).ready(function () {
+
+            var win = art.dialog.open.origin;
+            var status = $.lumos.getUrlParamValue("auditStatus");
+            if (status == @((int)Lumos.Entity.Enumeration.ExtendedAppAuditStatus.WaitAudit)) {
+                win.listTable.loadData();
+            }
+
+
+            @if (Model.IsHasOperater)
+            {
+                @Html.Raw("setTimeout(function () {art.dialog({ title: '提示', content: '用户【" + Model.OperaterName + "】正在审核', cancelVal:'退出',cancel: function () {art.dialog.close();}, lock: true, drag: false, dblclickClose: false }); }, 100);");
+            }
+
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_ExtendedApp_ImgUrl").formValidator({ onShow: "请输入！", onFocus: "不能为空,且不超过20个字符！", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 500, empty: { leftEmpty: false, emptyError: "不能为空！" }, onError: "请上传图标" });
+            $("#Model_ExtendedApp_Name").formValidator({ onShow: "请输入！", onFocus: "不能为空,且不超过20个字符！", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 10, empty: { leftEmpty: false, emptyError: "不能为空！" }, onError: "名称不能为空,且不超过10个字符！" });
+            $("#Model_ExtendedApp_LinkUrl").formValidator({ onShow: "请输入！", onFocus: "不能为空,且不超过20个字符！", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 500, empty: { leftEmpty: false, emptyError: "不能为空！" }, onError: "链接不能为空,且不超过20个字符！" });
+            $("#Model_ExtendedApp_Description").formValidator({ onShow: "&nbsp;", onFocus: "不超过500个字符", onCorrect: "&nbsp;", empty: true, onEmpty: "&nbsp;" }).inputValidator({ min: 5, max: 500, onError: "描述不能为空,不超过500个字符" });
+        });
+
+        function submit(operate, fun) {
+
+            var msg = "确定要保存？";
+            if (operate == operateType.submit) {
+                msg = "确定要提交？";
+            }
+
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+
+                art.dialog.confirm(msg, function () {
+                    var l_Data = $("#form1").serializeArray();
+                    l_Data.push({ name: "Model.Operate", value: operate });
+
+                    $.lumos.postJson({
+                        isUseHandling: true,
+                        url: "../ExtendedApp/PrimaryAudit",
+                        data: l_Data,
+                        success: function (d) {
+                            fun(d);
+
+                        }
+                    });
+                });
+            }
+
+            return false;
+        }
+        //-->
+    </script>
+}
+
+
+
+<form name="form1" method="post" id="form1">
+    @Html.AntiForgeryToken()
+
+    <input name="Model.BizProcessesAuditDetails.Id" type="hidden" value="@Model.BizProcessesAuditDetails.Id" />
+    <input name="Model.BizProcessesAuditDetails.BizProcessesAuditId" type="hidden" value="@Model.BizProcessesAuditDetails.BizProcessesAuditId" />
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>应用信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb" cellpadding="0" cellspacing="1">
+        <tr>
+            <td class="f-tb-t" style="width:50px;">
+                申请类型：
+            </td>
+            <td class="f-tb-c">
+                @Model.BizProcessesAudit.AduitType.GetCnName()
+            </td>
+        </tr>
+        <tr>
+            <td class="f-tb-t">
+                图标：
+            </td>
+            <td class="f-tb-c">
+
+                <span class="uploadimgbox" upload="false">
+                    <span class="uploadimg" inputname="Model.ExtendedApp.ImgUrl">
+                        <img src="@Model.ExtendedApp.ImgUrl" />
+                    </span>
+                    <span class="uploadimg-view" style="">预览</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="f-tb-t">
+                名称：
+            </td>
+            <td class="f-tb-c">
+                @Model.ExtendedApp.Name
+            </td>
+        </tr>
+        <tr>
+            <td class="f-tb-t">
+                链接：
+            </td>
+            <td class="f-tb-c">
+                @Model.ExtendedApp.LinkUrl
+            </td>
+        </tr>
+        <tr>
+            <td class="f-tb-t">
+                描述：
+            </td>
+            <td class="f-tb-c" style="white-space:normal;">
+                @Model.ExtendedApp.Description
+            </td>
+        </tr>
+    </table>
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>审核信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:100%">
+        <tr>
+            <td>
+                <textarea class="input-control" name="Model.BizProcessesAuditDetails.AuditComments" id="Model_BizProcessesAuditDetails_AuditComments" style="height:120px;width:95%;">@Model.BizProcessesAuditDetails.AuditComments</textarea>
+            </td>
+        </tr>
+    </table>
+</form>
+
+

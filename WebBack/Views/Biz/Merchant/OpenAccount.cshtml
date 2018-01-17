@@ -1,0 +1,339 @@
+﻿@model WebBack.Models.Biz.Merchant.OpenAccountViewModel
+@{
+    ViewBag.Title = "OpenAccount";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section scriptsbyend{
+    <script src="~/Scripts/AreaSelect/public.js"></script>
+    <script type="text/javascript">
+
+
+        $(this).ready(function () {
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { $.lumos.tips(msg); }, onSuccess: function () { return openAccount(); } });
+
+            $("#Model_Merchant_ContactName").formValidator().inputValidator({ min: 0, max: 100, onError: "[商户基本信息]联系人不能超过100个字符" });
+            $("#Model_Merchant_AreaCode").formValidator().inputValidator({ min: 0, onError: "请选择" });
+            $("#Model_Merchant_ContactPhoneNumber").formValidator().inputValidator({ min: 0, max: 11, onError: "[商户基本信息]联系人不能超过11个字符" });
+            $("#Model_Merchant_ContactAddress").formValidator().inputValidator({ min: 0, max: 200, onError: "[商户基本信息]联系地址不能超过200个字符" });
+
+            $("#Model_Merchant_YYZZ_RegisterNo").formValidator().inputValidator({ min: 0, max: 100, onError: "[营业执照信息]注册号不能过100个字符" });
+            $("#Model_Merchant_YYZZ_Name").formValidator().inputValidator({ min: 0, max: 100, onError: "[营业执照信息]商户名称不能过超过100个字符" });
+            $("#Model_Merchant_YYZZ_Type").formValidator().inputValidator({ min: 0, max: 100, onError: "[营业执照信息]类型不能过超过100个字符" });
+            $("#Model_Merchant_YYZZ_Address").formValidator().inputValidator({ min: 0, max: 200, onError: "[营业执照信息]地址不能过超过200个字符" });
+            $("#Model_Merchant_YYZZ_OperatingPeriodStart").formValidator({ empty: true }).regexValidator({ min: 0, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]有效期(开始)格式不正确,格式例子:2016-08-08" });;
+            $("#Model_Merchant_YYZZ_OperatingPeriodEnd").formValidator({ empty: true }).regexValidator({ min: 0, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]有效期(开始)格式不正确,格式例子:2016-08-08" });;
+
+            $("#Model_Merchant_FR_Name").formValidator().inputValidator({ min: 0, max: 100, onError: "[营业执照信息]法人姓名不能过超过100个字符" });
+            $("#Model_Merchant_FR_IdCardNo").formValidator().inputValidator({ min: 0, max: 18, onError: "请输入15或18位的身份证" }).functionValidator({ fun: isCardID });
+            $("#Model_Merchant_FR_Address").formValidator().inputValidator({ min: 0, max: 200, onError: "[营业执照信息]住址不能过超过200个字符" });
+            $("#Model_Merchant_FR_IssuingAuthority").formValidator().inputValidator({ min: 0, max: 100, onError: "[营业执照信息]法人身份证签发机关不能过超过100个字符" });
+            $("#Model_Merchant_FR_ValidPeriodStart").formValidator({ empty: true }).inputValidator({ min: 0, max: 20, onError: "[营业执照信息]法人身份证有效期(开始)不能为空" }).regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]法人身份证有效期格式不正确,格式例子:2016-08-08" });
+            $("#Model_Merchant_FR_ValidPeriodEnd").formValidator({ empty: true }).inputValidator({ min: 0, max: 20, onError: "[营业执照信息]法人身份证有效期(结束)不能为空" }).regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]法人身份证有效期格式不正确,格式例子:2016-08-08" });
+
+
+            $("#Model_MerchantPosMachine_PosMachineId").formValidator().inputValidator({ min: 1, max: 500, empty: { leftEmpty: false, emptyError: "请选择一台POS机" }, onError: "请选择一台POS机" });
+
+
+            $("#btn_select_pos").click(function () {
+
+                art.dialog.open('../Merchant/PosMachineList', {
+                    id: "openDialog565", title: '选择应用', width: '600px', height: '480px', lock: true, drag: false, cancelVal: '关闭', cancel: true
+                });
+
+            });
+
+
+
+        });
+
+        function openAccount() {
+            art.dialog.confirm(
+'确定要开户？',
+function () {
+    var postData = $("#form1").serializeArray();
+
+    $.lumos.postJson({
+        url: "../Merchant/OpenAccount",
+        data: postData,
+        success: function (d) {
+
+            if (d.result == resultType.success) {
+                $.lumos.parentDialog().listTable.loadData();
+                $.lumos.tips(d.message, true);
+            }
+            else {
+                $.lumos.tips(d.message);
+            }
+
+        }
+    });
+});
+            return false;
+        }
+
+        function getPosMachineDetails(obj) {
+            $('#Model_MerchantPosMachine_PosMachineId').val(obj.Id);
+            $('#Model_PosMachine_FuselageNumber').text(obj.FuselageNumber);
+            $('#Model_PosMachine_TerminalNumber').text(obj.TerminalNumber);
+            $('#Model_PosMachine_Version').text(obj.Version);
+            $('#Model_PosMachine_DeviceId').text(obj.DeviceId);
+            $('#Model_PosMachine_Deposit').text(obj.Deposit);
+            $('#Model_PosMachine_Rent').text(obj.Rent);
+        }
+
+        //-->
+    </script>
+}
+
+<form id="form1">
+    @Html.AntiForgeryToken()
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>商户基本信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户类型：</td>
+            <td class="c">
+                <span>@(Html.initEnumeration<Lumos.Entity.Enumeration.MerchantType>(Lumos.Entity.Enumeration.InputType.Select, "Model.Merchant.Type", new { @class = "select-control", defaulttext = "请选择", hidevalue = new Lumos.Entity.Enumeration.MerchantType[] { Lumos.Entity.Enumeration.MerchantType.Unknow } }))</span>
+            </td>
+            <td class="t">维修能力：</td>
+            <td class="c">
+                <span>@(Html.initEnumeration<Lumos.Entity.Enumeration.RepairCapacity>(Lumos.Entity.Enumeration.InputType.Select, "Model.Merchant.RepairCapacity", new { @class = "select-control", defaulttext = "请选择", hidevalue = new Lumos.Entity.Enumeration.RepairCapacity[] { Lumos.Entity.Enumeration.RepairCapacity.Unknow } }))</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.ContactName" id="Model_Merchant_ContactName" value="" /></span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.ContactPhoneNumber" id="Model_Merchant_ContactPhoneNumber" value="" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">所在地区：</td>
+            <td class="c">
+                <div style="position:relative;clear:both;">
+                    <span>
+                        <input name="Model.Merchant.Area" id="Model_Merchant_Area" autocomplete="off" type="text" value="请选择地区" class="city_input select-control inputFocus proCityQueryAll proCitySelAll" ov="请选择地区" style="padding:3px">
+                        <input name="Model.Merchant.AreaCode" id="Model_Merchant_AreaCode" type="text" style="display:none">
+                    </span>
+                    <!--弹出省省市-->
+                    <div class="provinceCityAll">
+                        <div class="tabs clearfix">
+                            <ul class="">
+                                <li><a href="javascript:" class="current" tb="hotCityAll">热门城市</a></li>
+                                <li><a href="javascript:" tb="provinceAll">省份</a></li>
+                                <li><a href="javascript:" tb="cityAll" id="cityAll">城市</a></li>
+                                <li><a href="javascript:" tb="countyAll" id="countyAll">区县</a></li>
+                            </ul>
+                        </div>
+                        <div class="con">
+                            <div class="hotCityAll invis">
+                                <div class="pre"><a></a></div>
+                                <div class="list">
+                                    <ul>
+                                        <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+                                    </ul>
+                                </div>
+                                <div class="next"><a class="can"></a></div>
+                            </div>
+                            <div class="provinceAll invis">
+                                <div class="pre"><a></a></div>
+                                <div class="list">
+                                    <ul>
+                                        <!-- 					<li><a href="javascript:"  class="current">江西省</a></li> -->
+                                    </ul>
+                                </div>
+                                <div class="next"><a class="can"></a></div>
+                            </div>
+                            <div class="cityAll invis">
+                                <div class="pre"><a></a></div>
+                                <div class="list">
+                                    <ul>
+                                        <!-- 					<li><a href="javascript:"  class="current">南京</a></li> -->
+                                    </ul>
+                                </div>
+                                <div class="next"><a class="can"></a></div>
+                            </div>
+                            <div class="countyAll invis">
+                                <div class="pre"><a></a></div>
+                                <div class="list">
+                                    <ul></ul>
+                                </div>
+                                <div class="next"><a class="can"></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="t">联系地址：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.ContactAddress" id="Model_Merchant_ContactAddress" value="" /></span>
+            </td>
+        </tr>
+    </table>
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>营业执照信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">注册号：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_RegisterNo" id="Model_Merchant_YYZZ_RegisterNo" value="" /></span>
+            </td>
+            <td class="t">商户名称：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_Name" id="Model_Merchant_YYZZ_Name" value="" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">类型：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_Type" id="Model_Merchant_YYZZ_Type" value="" /></span>
+            </td>
+            <td class="t">地址：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_Address" id="Model_Merchant_YYZZ_Address" value="" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">有效期（开始）：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_OperatingPeriodStart" id="Model_Merchant_YYZZ_OperatingPeriodStart" value="" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_Merchant_YYZZ_OperatingPeriodStart\')}' })" /></span>
+            </td>
+            <td class="t">有效期（结束）：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.YYZZ_OperatingPeriodStart" id="Model_Merchant_YYZZ_OperatingPeriodStart" value="" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_Merchant_YYZZ_OperatingPeriodStart\')}' })" /></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t">法人代表姓名：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_Name" id="Model_Merchant_FR_Name" value="" /></span>
+            </td>
+            <td class="t">身份证号码：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_IdCardNo" id="Model_Merchant_FR_IdCardNo" value="" /></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t">住址：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_Address" id="Model_Merchant_FR_Address" value="" /></span>
+            </td>
+            <td class="t">签发机关：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_IssuingAuthority" id="Model_Merchant_FR_IssuingAuthority" value="" /></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t">有效期（开始）：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_ValidPeriodStart" id="Model_Merchant_FR_ValidPeriodStart" value="" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_Merchant_FR_ValidPeriodStart\')}' })" /></span>
+            </td>
+            <td class="t">有效期（结束）：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.Merchant.FR_ValidPeriodEnd" id="Model_Merchant_FR_ValidPeriodEnd" value="" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_Merchant_FR_ValidPeriodStart\')}' })" /></span>
+            </td>
+        </tr>
+    </table>
+
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>POS机信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">POS机：</td>
+            <td class="c">
+                <input type="hidden" class="input-control" name="Model.MerchantPosMachine.PosMachineId" id="Model_MerchantPosMachine_PosMachineId" value="" />
+                <span>  <input type="button" class="btn btn-add" id="btn_select_pos" value="选择" /></span>
+            </td>
+            <td class="t"></td>
+            <td class="c">
+                <span id=""></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">设备ID：</td>
+            <td class="c">
+                <span id="Model_PosMachine_DeviceId"></span>
+            </td>
+            <td class="t">机身号：</td>
+            <td class="c">
+                <span id="Model_PosMachine_FuselageNumber"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">终端号：</td>
+            <td class="c">
+                <span id="Model_PosMachine_TerminalNumber"></span>
+            </td>
+            <td class="t">版本号：</td>
+            <td class="c">
+                <span id="Model_PosMachine_Version"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">押金：</td>
+            <td class="c">
+                <span id="Model_PosMachine_Deposit">0.00</span><span class="moneyunit">元</span>
+                @*<span><input type="text" class="input-control" name="Model.MerchantPosMachine.Deposit" id="Model_MerchantPosMachine_Deposit" value="" /></span>*@
+            </td>
+            <td class="t">租金：</td>
+            <td class="c">
+                <span id="Model_PosMachine_Rent">0.00</span><span class="moneyunit">元</span>
+                @*<input type="text" class="input-control" name="Model.MerchantPosMachine.Rent" id="Model_MerchantPosMachine_Rent" value="" />*@
+            </td>
+        </tr>
+    </table>
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>银行卡信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">开户行：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.BankCard.BankName" id="Model_BankCard_BankName" value="" /></span>
+            </td>
+            <td class="t">持卡人：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.BankCard.BankAccountName" id="Model_BankCard_BankAccountName" value="" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">开户账号：</td>
+            <td class="c" colspan="3">
+                <span><input type="text" class="input-control" name="Model.BankCard.BankAccountNo" id="Model_BankCard_BankAccountNo" value="" /></span>
+            </td>
+        </tr>
+    </table>
+</form>

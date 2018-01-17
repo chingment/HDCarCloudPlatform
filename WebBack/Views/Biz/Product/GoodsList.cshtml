@@ -1,0 +1,204 @@
+﻿
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_LayoutHomeIframeMainList.cshtml";
+}
+
+<script type="text/javascript">
+
+    var listTable;
+
+    $(document).ready(function () {
+        listTable = $("#list_table").loadDataTable({
+            url: "../Product/GetGoodsList",
+            pageIndex: 0,
+            searchParams: $("#form1").serializeArray(),
+            searchButtonId: "btn_Search",
+            containerId: "form1",
+            rowDataCombie: function (p_index, p_row) {
+
+                var l_offline = "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" operate=\\\"offline\\\"   class=\\\"a-btn a-btn-edit\\\"  >下架</a>")";
+                var l_edit = "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" operate=\\\"edit\\\"   class=\\\"a-btn a-btn-edit\\\"  >修改</a>")";
+                var l_view = "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" operate=\\\"view\\\"   class=\\\"a-btn a-btn-edit\\\"  >查看</a>")";
+                var l_StrRows = "";
+                l_StrRows += "<tr>";
+                l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
+
+                var banner = "<div> <img src=\"" + p_row.imgUrl + "\" style=\"width:50px;height:50px\"><div>";
+
+                l_StrRows += "<td class=\"overflow tipitem\">" + banner + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.name + "\">" + p_row.name + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.type + "\">" + p_row.type + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.price + "\">" + p_row.price + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.statusName + "\">" + p_row.statusName + "</td>";
+                l_StrRows += "<td class=\"operation\">";
+
+                if (p_row.status == 1) {
+                    l_StrRows += l_offline;
+                    l_StrRows += l_edit;
+                }
+                else {
+                    l_StrRows += l_view;
+                }
+
+                l_StrRows += "</td>";
+                l_StrRows += "</tr>";
+                return l_StrRows;
+            },
+            operate: {
+                "edit": function (obj) {
+                    var url = '/Biz/Product/EditGoods?id=' + obj.id;
+
+                    var title = '修改商品信息';
+                    var dialog = art.dialog.open(url, {
+                        id: "openDialog", title: title, width: '750px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '保存',
+                        button: [{
+                            name: '保存',
+                            callback: function () {
+                                this.iframe.contentWindow.submit(function (d) {
+                                    if (d.result == resultType.success) {
+                                        dialog.close();
+                                        listTable.loadData();
+                                    }
+                                    $.lumos.tips(d.message);
+                                });
+                                return false;
+                            },
+                            focus: true
+                        }, {
+                            name: '预览',
+                            callback: function () {
+                                this.iframe.contentWindow.preview();
+                                return false;
+                            }
+                        }]
+                    });
+                },
+                "offline": function (obj) {
+
+                    art.dialog.confirm(
+               "确定下架商品[" + obj.name + "]吗？",
+                    function () {
+
+                        var data = [];
+
+                        data.push({ name: "id", value: obj.id });
+
+                        $.lumos.postJson({
+                            url: "/Biz/Product/OffLine",
+                            data: data,
+                            success: function (d) {
+                                art.dialog.tips(d.message);
+                                listTable.loadData();
+                            }
+                        });
+
+                        return true;
+                    });
+                }
+            }
+        });
+
+        $("#btn_Add").click(function () {
+            var url = '/Biz/Product/AddGoods';
+            var title = '新建';
+            var dialog = art.dialog.open(url, {
+                id: "openDialog", title: title, width: '750px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true,
+                button: [{
+                    name: '确定',
+                    callback: function () {
+                        this.iframe.contentWindow.submit(function (d) {
+                            if (d.result == resultType.success) {
+                                dialog.close();
+                                listTable.loadData();
+                            }
+                            $.lumos.tips(d.message);
+                        });
+                        return false;
+                    },
+                    focus: true
+                }, {
+                    name: '预览',
+                    callback: function () {
+                        this.iframe.contentWindow.preview();
+                        return false;
+                    }
+                }]
+            });
+        });
+
+
+    });
+
+
+
+
+</script>
+
+<form id="form1" name="form1">
+    @Html.AntiForgeryToken()
+    <div class="search-bar">
+        <div class="filter">
+            <span class="filter-label">名称：</span>
+            <span class="filter-input">
+                <input type="text" class="input-control" name="Title" style="width:120px;" />
+            </span>
+        </div>
+        <div class="filter"><input type="button" class="btn btn-search" id="btn_Search" value="查询" /> </div>
+
+        <div class="filter" style="float:right">
+            <input type="button" class="btn btn-add" id="btn_Add" value="新建" />
+        </div>
+    </div>
+    <div class="list">
+        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:5%" class="no">
+                        序号
+                    </th>
+                    <th style="width:20%">
+                        图片
+                    </th>
+                    <th style="width:20%">
+                        名称
+                    </th>
+                    <th style="width:15%">
+                        类型
+                    </th>
+                    <th style="width:20%">
+                        价格
+                    </th>
+                    <th style="width:10%">
+                        状态
+                    </th>
+                    <th style="width:10%" class="operation">
+                        操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="8">
+                        <div class="pull-left">
+
+                        </div>
+                        <div class="pull-right pagination">
+                            <div class="pagination-info">
+
+                            </div>
+                            <div class="pagination-index">
+
+                            </div>
+                            <div class="pagination-goto">
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+

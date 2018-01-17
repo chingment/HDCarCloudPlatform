@@ -1,0 +1,356 @@
+﻿@model WebBack.Models.Biz.Order.ListViewModel
+@{
+    ViewBag.Title = "WaitPayList";
+    Layout = "~/Views/Shared/_LayoutHomeMainList.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        var listTable;
+
+        $(document).ready(function () {
+            listTable = $("#list_table").loadDataTable({
+                url: "../Order/GetList",
+                pageIndex: 0,
+                searchParams: $("#form1").serializeArray(),
+                searchButtonId: "btn_Search",
+                containerId: "form1",
+                rowDataCombie: function (p_index, p_row) {
+
+                    var l_StrRows = "";
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td>";
+                    l_StrRows += "<table style=\"width:100%\">"
+
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td colspan=\"2\">订单号：" + p_row.sn + "</td>";
+                    l_StrRows += "<td>" + p_row.product + "</td>";
+                    l_StrRows += "<td>" + p_row.statusName + "</td>";
+                    l_StrRows += "</tr>";
+
+
+
+                    for (var i = 0; i < p_row.orderField.length; i++) {
+
+                        l_StrRows += "<tr>";
+                        l_StrRows += "<td colspan=\"2\">" + p_row.orderField[i].field + "</td>";
+                        l_StrRows += "<td colspan=\"2\" style=\"text-align:right;padding-right:5px;\">" + p_row.orderField[i].value + "</td>";
+                        l_StrRows += "</tr>";
+                    }
+
+
+
+                    l_StrRows += "</tr>";
+
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td colspan=\"2\">" + p_row.remarks + "</td>";
+
+                    if (p_row.status == 1) {
+                        l_StrRows += "<td></td>";
+                        l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"details\">查看详情</a></td>";
+                    }
+                    if (p_row.status == 2) {
+                        if (p_row.productType == 2011 || p_row.productType == 2012) {
+                            if (p_row.followStatus == 1) {
+                                l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"follow\">查看详情</a></td>";
+                                l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"cancle\">取消订单</a></td>";
+                            }
+                            else if (p_row.followStatus == 2) {
+                                l_StrRows += "<td></td>";
+                                l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"details\">查看详情</a></td>";
+                            }
+                        }
+                        else if (p_row.productType == 2013) {
+                            if (p_row.followStatus == 2) {
+                                l_StrRows += "<td></td>";
+                                l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"follow\">上传订损单</a></td>";
+                            }
+                            else {
+                                l_StrRows += "<td></td>";
+                                l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"details\">查看详情</a></td>";
+                            }
+                        }
+                    }
+                    else if (p_row.status == 3) {
+
+
+                        if (p_row.productType == 2011 || p_row.productType == 2012) {
+                            l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"cancle\">取消订单</a></td>";
+                        }
+                        else {
+                            l_StrRows += "<td></td>";
+                        }
+                        l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"pay\">立即支付</a></td>";
+
+                    }
+                    else if (p_row.status == 4) {
+                        l_StrRows += "<td></td>";
+                        l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"details\">查看详情</a></td>";
+                    }
+                    else if (p_row.status == 5) {
+                        l_StrRows += "<td></td>";
+                        l_StrRows += "<td><a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit keyval\" operate=\"details\">查看详情</a></td>";
+                    }
+                    l_StrRows += "</tr>";
+
+
+                    l_StrRows += "</table>"
+                    l_StrRows += "</td>";
+                    l_StrRows += "</tr>";
+                    return l_StrRows;
+                },
+                operate: {
+                    "details": function (obj) {
+                        var url = "";
+                        var title = "";
+
+                        if (obj.productType == 2011 || obj.productType == 2012) {
+                            url = '../CarInsureOffer/Details?id=' + obj.id;
+                            title = '查看投保订单';
+                        }
+                        else if (obj.productType == 2013) {
+                            url = '../CarClaim/Details?id=' + obj.id;
+                            title = '查看理赔订单';
+                        }
+                        art.dialog.open(url, {
+                            id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true
+                        });
+                    },
+                    "follow": function (obj) {
+                        var url = "";
+                        var title = "";
+
+                        if (obj.productType == 2011 || obj.productType == 2012) {
+                            url = '../Order/CarInsureFollow?id=' + obj.id;
+                            title = '跟进投保订单';
+                            var dialog = art.dialog.open(url, {
+                                id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true,
+                                button: [{
+                                    name: '提交',
+                                    callback: function () {
+
+                                        this.iframe.contentWindow.submitCarInsureFollow(function (d) {
+                                            if (d.result == resultType.success) {
+                                                dialog.close();
+                                                listTable.loadData();
+                                            }
+                                            $.lumos.tips(d.message);
+                                        });
+
+
+                                        return false;
+                                    },
+                                    focus: true
+                                }, {
+                                    name: '取消',
+                                    callback: function () {
+
+                                        art.dialog.confirm('确定取消该订单？', function () {
+                                            var l_Data = $("#form1").serializeArray();
+                                            l_Data.push({ name: "Model.Sn", value: obj.Sn });
+
+                                            $.lumos.postJson({
+                                                isUseHandling: true,
+                                                url: "../Order/Cancle",
+                                                data: l_Data,
+                                                success: function (data) {
+
+                                                    $.lumos.tips(d.message);
+                                                    listTable.loadData();
+                                                }
+                                            });
+                                        });
+
+                                        return false;
+                                    }
+                                }]
+                            });
+                        }
+                        else if (obj.productType == 2013) {
+
+                            url = '../Order/CarClaimFollow?id=' + obj.id;
+                            title = '跟进理赔订单';
+                            art.dialog.open(url, {
+                                id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '提交', ok: function () {
+                                    this.iframe.contentWindow.submitCarClaimFollow(function (d) {
+                                        if (d.result == resultType.success) {
+                                            dialog.close();
+                                            listTable.loadData();
+                                        }
+                                        $.lumos.tips(d.message);
+                                    });
+
+                                    return false;
+                                }
+                            });
+                        }
+                    },
+                    "pay": function (obj) {
+
+
+                        var url = "";
+                        var title = "";
+
+                        if (obj.ProductType == 2011 || obj.ProductType == 2012) {
+                            url = '../Order/CarInsurePay?id=' + obj.Id;
+                            title = '支付投保订单';
+                            var dialog = art.dialog.open(url, {
+                                id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true,
+                                button: [{
+                                    name: '立即支付',
+                                    callback: function () {
+
+                                        this.iframe.contentWindow.submitCarInsurePay(function (d) {
+
+
+
+                                            $('#abc').val(JSON.stringify(d))
+                                            alert(JSON.stringify(d));
+
+                                            if (d.result == resultType.success) {
+                                                dialog.close();
+                                                listTable.loadData();
+                                            }
+                                            $.lumos.tips(d.message);
+                                        });
+
+
+                                        return false;
+                                    },
+                                    focus: true
+                                }, {
+                                    name: '取消',
+                                    callback: function () {
+
+                                        art.dialog.confirm('确定取消该订单？', function () {
+                                            var l_Data = $("#form1").serializeArray();
+                                            l_Data.push({ name: "Model.Sn", value: obj.Sn });
+
+                                            $.lumos.postJson({
+                                                isUseHandling: true,
+                                                url: "../Order/Cancle",
+                                                data: l_Data,
+                                                success: function (data) {
+
+                                                    $.lumos.tips(d.message);
+                                                    listTable.loadData();
+                                                }
+                                            });
+                                        });
+
+                                        return false;
+                                    }
+                                }]
+                            });
+                        }
+                        else if (obj.ProductType == 2013) {
+
+                            url = '../Order/CarClaimFollow?id=' + obj.Id;
+                            title = '跟进理赔订单';
+                            art.dialog.open(url, {
+                                id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '提交', ok: function () {
+                                    this.iframe.contentWindow.submitCarClaimFollow(function (d) {
+                                        if (d.result == resultType.success) {
+                                            dialog.close();
+                                            listTable.loadData();
+                                        }
+                                        $.lumos.tips(d.message);
+                                    });
+
+                                    return false;
+                                }
+                            });
+                        }
+
+
+                    },
+                    "cancle": function (obj) {
+
+                        art.dialog.confirm('确定取消该订单？', function () {
+                            var l_Data = $("#form1").serializeArray();
+                            l_Data.push({ name: "Model.Sn", value: obj.Sn });
+
+                            $.lumos.postJson({
+                                isUseHandling: true,
+                                url: "../Order/Cancle",
+                                data: l_Data,
+                                success: function (data) {
+
+                                    $.lumos.tips(d.message);
+                                    listTable.loadData();
+                                }
+                            });
+                        });
+                    }
+                }
+
+            });
+
+        });
+
+
+    </script>
+}
+
+<form id="form1" name="form1">
+
+    <textarea id="abc"></textarea>
+
+    @Html.AntiForgeryToken()
+    <input type="hidden" class="input-control" name="Status" value="@((int)Model.Status)" />
+
+    <div class="search-bar">
+        <div class="filter">
+            <span class="filter-label">订单号：</span>
+            <span class="filter-input">
+                <input type="text" class="input-control" name="Sn" style="width:120px;" />
+            </span>
+        </div>
+        <div class="filter">
+            <span class="filter-label">商户代码 ：</span>
+            <span class="filter-input">
+                <input type="text" class="input-control" name="ClientCode" style="width:120px;" />
+            </span>
+        </div>
+        <div class="filter">
+            <span class="filter-label">商户名称：</span>
+            <span class="filter-input">
+                <input type="text" class="input-control" name="ClientName" style="width:120px;" />
+            </span>
+        </div>
+        <div class="filter"><input type="button" class="btn btn-search" id="btn_Search" value="查询" /> </div>
+    </div>
+    <div class="list">
+        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0" style="width:100%">
+            <thead>
+                <tr>
+                    <th colspan="4" style="text-align:center;">
+                        @Html.Raw(Model.Status.GetCnName() + "订单列表")
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <div class="pull-left">
+
+                        </div>
+                        <div class="pull-right pagination">
+                            <div class="pagination-info">
+
+                            </div>
+                            <div class="pagination-index">
+
+                            </div>
+                            <div class="pagination-goto">
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>

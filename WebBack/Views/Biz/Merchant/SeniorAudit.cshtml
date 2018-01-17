@@ -1,0 +1,356 @@
+﻿@model WebBack.Models.Biz.Merchant.SeniorAuditViewModel
+@{
+    ViewBag.Title = "SeniorAudit";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section styles{
+
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+}
+
+@section scriptsbyend{
+    <script src="~/Scripts/AreaSelect/public.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var win = art.dialog.open.origin;
+            var status = $.lumos.getUrlParamValue("auditStatus");
+            if (status == @((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitSeniorAudit)) {
+                win.listTable.loadData();
+        }
+
+
+        @if (Model.IsHasOperater)
+        {
+                @Html.Raw("setTimeout(function () {art.dialog({ title: '提示', content: '用户【" + Model.OperaterName + "】正在审核', cancelVal:'退出',cancel: function () {art.dialog.close();}, lock: true, drag: false, dblclickClose: false }); }, 100);");
+        }
+
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_BizProcessesAudit_CurrentDetails_AuditComments").formValidator({ onShow: "", onFocus: "", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 500, onError: "意见不能为空,且不超过500个字符" });
+
+        });
+
+
+        function submit(operate, fun) {
+
+            var form = $("#form1");
+            var msg = "";
+
+            if (operate == operateType.save) {
+                msg = "确定要保存？";
+                $(form).find('*').setInputRequired(false);
+            }
+            else if (operate == operateType.reject) {
+                msg = "确定要驳回？";
+                $(form).find('*').setInputRequired(true);
+            }
+            else if (operate == operateType.submit) {
+                msg = "确定要归档？";
+                $(form).find('*').setInputRequired(true);
+            }
+
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+
+                art.dialog.confirm(msg, function () {
+                    var l_Data = $("#form1").serializeArray();
+                    l_Data.push({ name: "Model.Operate", value: operate });
+
+                    $.lumos.postJson({
+                        isUseHandling: true,
+                        url: "../Merchant/SeniorAudit",
+                        data: l_Data,
+                        success: function (data) {
+                            fun(data);
+
+                        }
+                    });
+                });
+            }
+
+            return false;
+
+        }
+
+    </script>
+}
+
+<form id="form1">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Model.Merchant.Id" value="@Model.Merchant.Id" />
+    <input name="Model.BizProcessesAudit.CurrentDetails.Id" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.Id" />
+    <input name="Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" />
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>商户基本信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t">商户类型：</td>
+            <td class="c">
+                <span>@Model.Merchant.Type.GetCnName()</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">所在地区：</td>
+            <td class="c">
+                <span>
+                    @Model.Merchant.Area
+                </span>
+            </td>
+            <td class="t">联系地址：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactAddress</span>
+            </td>
+        </tr>
+
+        @if (Model.Merchant.Type == Lumos.Entity.Enumeration.MerchantType.CarRepair)
+        {
+            <tr>
+                <td class="t">维修能力：</td>
+                <td class="c">
+                    <span>@Model.Merchant.RepairCapacity.GetCnName()</span>
+                </td>
+                <td class="t"></td>
+                <td class="c">
+                    <span></span>
+                </td>
+            </tr>
+        }
+
+        @if (Model.Merchant.RepairCapacity == Lumos.Entity.Enumeration.RepairCapacity.EstimateAndRepair)
+        {
+            <tr>
+                <td class="t">定损公司：</td>
+                <td class="c" colspan="3">
+
+                    @{
+                        string checkeds = "";
+                    }
+
+                    @for (var i = 0; i < Model.CarInsuranceCompany.Count; i++)
+                    {
+
+                        if (Model.MerchantEstimateCompany != null)
+                        {
+                            int[] estimateInsuranceCompanyIds = (from q in Model.MerchantEstimateCompany select q.InsuranceCompanyId).ToArray();
+
+                            if (estimateInsuranceCompanyIds != null)
+                            {
+                                if (estimateInsuranceCompanyIds.Contains(Model.CarInsuranceCompany[i].InsuranceCompanyId))
+                                {
+                                    checkeds += "<span style=\"padding-right:10px\">" + Model.CarInsuranceCompany[i].InsuranceCompanyName + "</span>";
+                                }
+                            }
+                        }
+                    }
+
+                    <span>@Html.Raw(checkeds)</span>
+                </td>
+            </tr>
+                        }
+
+        <tr>
+            <td class="t"></td>
+            <td class="c"></td>
+            <td class="t">业务员：</td>
+            <td class="c">
+                <span id="lbl_Merchant_Salesman">@(Model.Salesman == null ? "" : Model.Salesman.FullName + "(" + Model.Salesman.UserName + ")")</span>
+            </td>
+        </tr>
+    </table>
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>营业执照信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">注册号：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_RegisterNo</span>
+            </td>
+            <td class="t">商户名称：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">类型：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Type</span>
+            </td>
+            <td class="t">地址：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Address</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">有效期（开始）：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_OperatingPeriodStart.ToUnifiedFormatDate()</span>
+            </td>
+            <td class="t">有效期（结束）：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_OperatingPeriodStart.ToUnifiedFormatDate()</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t">法人代表姓名：</td>
+            <td class="c">
+                <span>@Model.Merchant.FR_Name</span>
+            </td>
+            <td class="t">身份证号码：</td>
+            <td class="c">
+                <span>@Model.Merchant.FR_IdCardNo</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t">住址：</td>
+            <td class="c">
+                <span>@Model.Merchant.FR_Address</span>
+            </td>
+            <td class="t">签发机关：</td>
+            <td class="c">
+                <span>@Model.Merchant.FR_IssuingAuthority</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t">有效期（开始）：</td>
+            <td class="c">
+                <span>@Model.Merchant.FR_ValidPeriodStart.ToUnifiedFormatDate()</span>
+            </td>
+            <td class="t">有效期（结束）：</td>
+            <td class="c">
+                <span>@Model.Merchant.FR_ValidPeriodEnd.ToUnifiedFormatDate()</span>
+            </td>
+        </tr>
+    </table>
+
+
+    @for (int i = 0; i < Model.MerchantPosMachine.Count; i++)
+    {
+        <div class="gbr-row-title clearfix">
+            <div class="pull-left">
+                <h5>POS机信息</h5>
+            </div>
+            <div class="pull-right f-tb1-item-pull-right">
+                <h6></h6>
+            </div>
+        </div>
+        <input type="hidden" name="Model.MerchantPosMachine[@i].Id" value="@Model.MerchantPosMachine[i].Id" />
+        <table class="f-tb1-detail">
+            <tr>
+                <td class="t">设备ID：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].PosMachine.DeviceId</span>
+                </td>
+                <td class="t">机身号：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].PosMachine.FuselageNumber</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t">终端号：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].PosMachine.TerminalNumber</span>
+                </td>
+                <td class="t">版本号：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].PosMachine.Version</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t">押金：</td>
+                <td class="c">
+                    <span>@Model.MerchantPosMachine[i].Deposit.ToPrice()</span><span class="moneyunit">元</span>
+                </td>
+                <td class="t">租金/每月：</td>
+                <td class="c">
+                    <span>   @Model.MerchantPosMachine[i].Rent.ToPrice()</span><span class="moneyunit">元</span>
+                </td>
+            </tr>
+        </table>
+    }
+
+    @for (int i = 0; i < Model.BankCard.Count; i++)
+    {
+        <div class="gbr-row-title clearfix">
+            <div class="pull-left">
+                <h5>银行卡信息</h5>
+            </div>
+            <div class="pull-right f-tb1-item-pull-right">
+                <h6></h6>
+            </div>
+        </div>
+        <input type="hidden" name="Model.BankCard[@i].Id" value="@Model.BankCard[i].Id" />
+        <table class="f-tb1-detail">
+            <tr>
+                <td class="t">开户行：</td>
+                <td class="c">
+                    <span>@Model.BankCard[i].BankName</span>
+                </td>
+                <td class="t">持卡人：</td>
+                <td class="c">
+                    <span>@Model.BankCard[i].BankAccountName</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t">开户账号：</td>
+                <td class="c" colspan="3">
+                    <span>@Model.BankCard[i].BankAccountNo</span>
+                </td>
+            </tr>
+        </table>
+    }
+
+    @Html.Partial("AuditFlowTrace", Model.BizProcessesAudit.HistoricalDetails)
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>意见</h5><span class="required-input">*</span>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+
+        </div>
+    </div>
+    <div>
+        <textarea class="input-control" name="Model.BizProcessesAudit.CurrentDetails.AuditComments" id="Model_BizProcessesAudit_CurrentDetails_AuditComments" style="height:120px;width:96%;">@Model.BizProcessesAudit.CurrentDetails.AuditComments</textarea>
+    </div>
+</form>
+

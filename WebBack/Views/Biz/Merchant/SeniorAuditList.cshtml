@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "SeniorAuditList";
+    Layout = "~/Views/Shared/_LayoutHomeIframeMainList.cshtml";
+}
+
+<script type="text/javascript">
+
+    var listTable;
+
+    $(document).ready(function () {
+        listTable = $("#list_table").loadDataTable({
+            url: "../Merchant/GetSeniorAuditList",
+            pageIndex: 0,
+            searchParams: $("#form1").serializeArray(),
+            searchButtonId: "btn_Search",
+            containerId: "form1",
+            rowDataCombie: function (p_index, p_row) {
+                var l_Strlimt = "";
+                l_Strlimt += "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" class=\\\"a-btn a-btn-edit\\\"  operate=\\\"audit\\\"  >审核</a>")";
+                var l_StrRows = "";
+                l_StrRows += "<tr>";
+                l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
+                l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.clientCode + "\"   >" + p_row.clientCode + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.type + "\">" + p_row.type + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.repairCapacity + "\">" + p_row.repairCapacity + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.area + "\">" + p_row.area + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
+                l_StrRows += "<td class=\"operation\">";
+                l_StrRows += l_Strlimt;
+                l_StrRows += "</td>";
+                l_StrRows += "</tr>";
+                return l_StrRows;
+            },
+            operate: {
+                "audit": function (obj) {
+
+
+
+                    function audit(obj) {
+                        var url = '../Merchant/SeniorAudit?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
+                        var title = '复审';
+                        var dialog = art.dialog.open(url, {
+                            id: "openDialog2",
+                            title: title,
+                            width: '800px',
+                            height: '600px',
+                            lock: true,
+                            drag: false,
+                            cancelVal: '关闭',
+                            cancel: true,
+                            button: [{
+                                name: '归档',
+                                callback: function () {
+
+                                    this.iframe.contentWindow.submit(operateType.submit, function (d) {
+                                        if (d.result == resultType.success) {
+                                            dialog.close();
+                                            listTable.loadData();
+                                        }
+                                        $.lumos.tips(d.message);
+                                    });
+                                    return false;
+                                },
+                                focus: true
+                            },{
+                                name: '驳回',
+                                callback: function () {
+
+                                    this.iframe.contentWindow.submit(operateType.reject, function (d) {
+                                        if (d.result == resultType.success) {
+                                            dialog.close();
+                                            listTable.loadData();
+                                        }
+                                        $.lumos.tips(d.message);
+                                    });
+                                    return false;
+                                }
+                            },
+                            {
+                                name: '暂存',
+                                callback: function () {
+
+                                    this.iframe.contentWindow.submit(operateType.save, function (s) {
+                                        $.lumos.tips(s.message);
+                                    });
+                                    return false;
+                                }
+                            }]
+                        });
+                    }
+
+
+
+                    if (obj.AuditStatus == @((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitSeniorAudit)) {
+                        art.dialog.confirm('您确定要处理商户代码为'+obj.clientCode+'的资料，确定后该资料由您来完善？', function () {
+                            audit(obj)
+                        });
+                    }
+                    else {
+                        audit(obj);
+                    }
+
+                }
+            },
+            refreshInterval: 60000,
+            success: function (data) {
+                $('#waitAuditCount').text(data.status.waitAuditCount);
+                $('#inAuditCount').text(data.status.inAuditCount);
+            }
+        });
+
+    });
+
+
+
+
+    function search(status) {
+        $("#AuditStatus").val(status);
+        listTable.loadData(0);
+    }
+
+
+</script>
+
+<form id="form1" name="form1">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="AuditStatus" id="AuditStatus" value="@((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitSeniorAudit)" />
+    <div class="search-bar status-bar">
+        <div class="filter">
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitSeniorAudit))" class="status-bar-btn selected">待审核<span class="waitAuditCount">(<span id="waitAuditCount">0</span>)</span></span>
+        </div>
+        <div class="filter">
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.MerchantAuditStatus.InSeniorAudit))" class="status-bar-btn">审核中<span class="inAuditCount"> (<span id="inAuditCount">0</span>)</span></span>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="list">
+        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:5%" class="no">
+                        序号
+                    </th>
+                    <th style="width:10%">
+                        商户代码
+                    </th>
+                    <th style="width:15%">
+                        商户名称
+                    </th>
+                    <th style="width:10%">
+                        类型
+                    </th>
+                    <th style="width:15%">
+                        维修能力
+                    </th>
+                    <th style="width:10%">
+                        所在地区
+                    </th>
+                    <th style="width:10%">
+                        联系人
+                    </th>
+                    <th style="width:10%">
+                        开户时间
+                    </th>
+                    <th style="width:10%" class="operation">
+                        操作
+                    </th>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="9">
+                        <div class="pull-left">
+
+                        </div>
+                        <div class="pull-right pagination">
+                            <div class="pagination-info">
+
+                            </div>
+                            <div class="pagination-index">
+
+                            </div>
+                            <div class="pagination-goto">
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+

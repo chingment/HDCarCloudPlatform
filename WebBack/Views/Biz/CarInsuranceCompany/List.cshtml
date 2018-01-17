@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_LayoutHomeIframeMainList.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        var listTable;
+
+        $(document).ready(function () {
+            listTable = $("#list_table").loadDataTable({
+                url: "../CarInsuranceCompany/GetList",
+                pageIndex: 0,
+                searchParams: $("#form1").serializeArray(),
+                searchButtonId: "btn_Search",
+                containerId: "form1",
+                rowDataCombie: function (p_index, p_row) {
+
+                    var l_StrRows = "";
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
+
+                    var app = "<div> <img src=\"" + p_row.insuranceCompanyImgUrl + "\" style=\"width:50px;height:50px\"><div>";
+                    l_StrRows += "<td class=\"overflow\" >" + app + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.name + "\">" + p_row.name + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.statusName + "\">" + p_row.statusName + "</td>";
+                    l_StrRows += "<td class=\"overflow\">";
+                    if (p_row.status == 3) {
+                        l_StrRows += "<a href=\"javascript:void(0)\"  operate=\"disable\" >恢复</a></td>";
+                    }
+                    else if (p_row.status == 2) {
+                        l_StrRows += "<a href=\"javascript:void(0)\"  operate=\"disable\" >停用</a></td>";
+                    }
+                    l_StrRows += "</td>";
+                    l_StrRows += "</tr>";
+                    return l_StrRows;
+                },
+                operate: {
+                    "disable ": function (obj) {
+                        var op = "停用";
+                        if (obj.status == 3) {
+                            op = "恢复";
+                        }
+
+                        art.dialog.confirm(
+        '确定' + op + obj.name + '？',
+        function () {
+            var l_Data = $("#form1").serializeArray();
+
+            l_Data.push({ name: "Id", value: obj.id });
+            $.lumos.postJson({
+                url: "../CarInsuranceCompany/Disable ",
+                data: l_Data,
+                success: function (d) {
+
+                    if (d.result == resultType.success) {
+                        listTable.loadData();
+                    }
+
+                    $.lumos.tips(d.message);
+
+                }
+            });
+        });
+                    }
+                }
+            });
+
+
+
+            $(".btn-apply").live('click', function () {
+
+                var title = '新增';
+                var url = '../CarInsuranceCompany/Add';
+
+                var dialog = art.dialog.open(url, {
+                    id: "openDialog", title: title, width: '700px', height: '400px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '确定', ok: function () {
+                        this.iframe.contentWindow.submit(function (d) {
+                            if (d.result == resultType.success) {
+                                dialog.close();
+                                listTable.loadData();
+                            }
+                            $.lumos.tips(d.message);
+                        });
+                        return false;
+                    }
+                });
+
+
+            });
+
+        });
+
+
+
+
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @Html.AntiForgeryToken()
+
+    <div class="search-bar">
+        <div class="filter">
+            <span class="filter-label">保险公司名称：</span>
+            <span class="filter-input">
+                <input type="text" class="input-control" name="Name" style="width:120px;" />
+            </span>
+        </div>
+
+        <div class="filter"><input type="button" class="btn btn-search" id="btn_Search" value="查询" /> </div>
+
+        <div class="filter" style="float:right">
+            <input type="button" class="btn btn-add btn-apply" id="btn_Add" opertion="add" value="新增" />
+        </div>
+
+
+    </div>
+    <div class="list">
+        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:5%" class="no">
+                        序号
+                    </th>
+                    <th style="width:45%">
+                        图标
+                    </th>
+                    <th style="width:30%">
+                        名称
+                    </th>
+                    <th style="width:15%">
+                        状态
+                    </th>
+                    <th style="width:5%">
+                        操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <div class="pull-left">
+
+                        </div>
+                        <div class="pull-right pagination">
+                            <div class="pagination-info">
+
+                            </div>
+                            <div class="pagination-index">
+
+                            </div>
+                            <div class="pagination-goto">
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+

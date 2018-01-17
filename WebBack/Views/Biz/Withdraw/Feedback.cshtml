@@ -1,0 +1,281 @@
+﻿@{
+    ViewBag.Title = "UploadFeedback";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+
+    <style type="text/css">
+        table.list-tb {
+            border: 0px;
+        }
+
+        table.list-tb thead tr th {
+            padding: 0px 10px;
+        }
+
+        table.list-tb tbody tr td {
+            border-top: 0px;
+            padding: 2px 10px;
+        }
+
+        table.list-tb tfoot tr td {
+            border: 0px;
+        }
+
+        table.list-tb .overflow {
+            white-space: nowrap;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        var listtable;
+        $(document).ready(function () {
+
+        });
+
+        function submit() {
+
+            var uploadInput = $('#markupload_file');
+            var uploadFileNameInput = $('.file-name');
+            var uploadFileName = $(uploadInput).val();//文件名
+            var uploadAcceptFileType = $(uploadInput).attr("filetype").toLowerCase();
+            var fileNameTxt = $(uploadFileNameInput).text();
+            if (uploadFileName == "" || fileNameTxt == "") {
+                $(uploadInput).val('');
+                $(uploadFileNameInput).text('');
+                art.dialog.alert('请您浏览选择上传的文件，格式为' + uploadAcceptFileType);
+                return false;
+            }
+
+            var uploadFileType = uploadFileName.substring(uploadFileName.lastIndexOf(".") + 1).toLowerCase();
+
+            var arrUploadAcceptFileType = new Array();
+            var uploadAcceptFileTypes = uploadAcceptFileType.split(',');
+            for (var i = 0; i < uploadAcceptFileTypes.length; i++) {
+                arrUploadAcceptFileType.push(uploadAcceptFileTypes[i])
+            }
+
+
+            var isAcceptFileType = false;
+            for (var i in arrUploadAcceptFileType) {
+                if (arrUploadAcceptFileType[i] == uploadFileType) {
+                    isAcceptFileType = true;
+                }
+            }
+
+            if (!isAcceptFileType) {
+                $(uploadInput).val('');
+                $(uploadFileNameInput).text('');
+                art.dialog.alert('您上传的文件格式不正确，请重新选择，格式为' + uploadAcceptFileType);
+                return;
+            }
+
+
+            var fileLen = $.lumos.getFileSize('markupload_file');
+            if (fileLen != -1) {
+                if (fileLen == 0) {
+                    $(uploadInput).val('');
+                    $(uploadFileNameInput).text('');
+                    art.dialog.alert('文件不存在或者文件的内容为空,请重新选择');
+                    return;
+                }
+                else if (fileLen > 50) {
+                    $(uploadInput).val('');
+                    $(uploadFileNameInput).text('');
+                    art.dialog.alert('文件大小不能超过50M,请重新选择');
+                    return;
+                }
+            }
+
+
+
+
+            art.dialog.confirm('确定要上传文件？', function () {
+                var p_d = art.dialog({
+                    title: '文件上传',
+                    content: '正在上传文件...请稍后！',
+                    cancel: false,
+                    lock: true,
+                    drag: false,
+                    dblclickClose: false
+                });
+
+                var form = $("#markupload_form");
+                $(form).ajaxSubmit({
+                    type: "post",
+                    dataType: "json",
+                    url: "/Withdraw/UploadFeedback",
+                    success: function (d) {
+                        p_d.close();
+                        $(uploadInput).val('');
+                        $(uploadFileNameInput).text('');
+                        if (d.result == resultType.success) {
+                            art.dialog.tips(d.message)
+                            $('#list_CutOffDetail').find("tbody tr").remove(); //删除所有行
+
+                            var l_StrRows = "";
+
+                            $.each(d.data, function (p_index, p_row) {
+
+                                l_StrRows += "<tr>";
+                                l_StrRows += "<td class=\"no\" >" + p_row.Num + "</td>";
+                                l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.clientCode + "\"   >" + p_row.clientCode + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactPhoneNumber + "\">" + p_row.contactPhoneNumber + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawBankName + "\">" + p_row.withdrawBankName + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawBankAccountName + "\">" + p_row.withdrawBankAccountName + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawBankAccountNo + "\">" + p_row.withdrawBankAccountNo + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawSn + "\">" + p_row.withdrawSn + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawAmount + "\">" + $.lumos.setDigitalFormat(p_row.withdrawAmount, 2) + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawFee + "\">" + $.lumos.setDigitalFormat(p_row.withdrawFee, 2) + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawAmountByAfterFee + "\">" + $.lumos.setDigitalFormat(p_row.withdrawAmountByAfterFee, 2) + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawSettlementStartTime + "\">" + p_row.withdrawSettlementStartTime + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawSettlementEndTime + "\">" + p_row.withdrawSettlementEndTime + "</td>";
+                         
+                                var s_Status = "";
+                                if (p_row.withdrawStatus == "处理中") {
+                                    s_Status = "<span style=\"padding: 5px; color: #10a139; \">处理中</span>";
+                                }
+                                else if (p_row.withdrawStatus == "成功") {
+                                    s_Status = "<span style=\"padding:5px;color:#0026ff\">成功</span>";
+                                }
+                                else if (p_row.withdrawStatus == "失败") {
+                                    s_Status = "<span style=\"padding:5px;color:#ff0000\">失败</span>";
+                                }
+                                l_StrRows += "<td class=\"overflow\" >" + s_Status + "</td>";
+                                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.withdrawFailureReason + "\">" + p_row.withdrawFailureReason + "</td>";
+                                l_StrRows += "</tr>";
+                            });
+                            $('#list_CutOffDetail').find("tbody").append(l_StrRows); //追加所有行
+                        }
+                        else {
+                            art.dialog.alert(d.message)
+                        }
+                    },
+                    error: function (err) {
+                        $(uploadInput).val('');
+                        $(uploadFileNameInput).text('');
+                        art.dialog.alert('上传文件发生错误,请尝试重新上传');
+                    }
+                });
+            });
+        }
+    </script>
+
+}
+<div class="gbr-row-title clearfix">
+    <div class="pull-left">
+        <h5>上传文件</h5>
+    </div>
+</div>
+
+<div style="margin:20px 0px;height:30px;">
+    <div class="markupload" style="position:relative;width:300px; height:33px; float:left;margin-right:20px ">
+        <div class="file-name" id="file_name"></div>
+        <div class="file-msg"></div>
+        <label class="file-browse" for="markupload_file">浏览..</label>
+        <div class='file-loading'>上传中...</div>
+        <form id='markupload_form' method='post' enctype="multipart/form-data" style="display:none;">
+            <input type='file' name='markupload_file' id='markupload_file' class="markupload-file" filetype="xls" accept='application/vnd.ms-excel'>
+        </form>
+    </div>
+    <input type="button" name="btn_Save" id="btn_Save" value="上传" style="float:left;margin-top:3px;" class="btn btn-save" onclick="submit()" />
+</div>
+<div class="clear"></div>
+<div class="gbr-row-title clearfix">
+    <div class="pull-left">
+        <h5>上传文件前预览</h5>
+    </div>
+</div>
+<div class="list">
+    <table>
+        <tr>
+            <td style="padding:5px 10px 0px 0px;">
+                <table id="list_CutOffDetail" class="list-tb excel" cellpadding="1" cellspacing="1" style="table-layout:auto">
+                    <thead>
+                        <tr>
+                            <th style="width:5%" rowspan="2" class="no">
+                                序号
+                            </th>
+                            <th colspan="4" style="text-align:center">商户信息</th>
+                            <th colspan="3" style="text-align:center">提现帐号信息</th>
+                            <th colspan="8" style="text-align:center">提现信息</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                商户代码
+                            </th>
+                            <th>
+                                商户名称
+                            </th>
+                            <th>
+                                联系人
+                            </th>
+                            <th>
+                                联系电话
+                            </th>
+                            <th>
+                                开户行
+                            </th>
+                            <th>
+                                持卡人
+                            </th>
+                            <th>
+                                开户帐号
+                            </th>
+                            <th>
+                                提现流水号
+                            </th>
+                            <th>
+                                提现金额
+                            </th>
+                            <th>
+                                手续费
+                            </th>
+                            <th>
+                                扣除手续费后的提现金额
+                            </th>
+                            <th>
+                                结算开始时间
+                            </th>
+                            <th>
+                                结算结束时间
+                            </th>
+                            <th>
+                                提现状态
+                            </th>
+                            <th>
+                                失败原因
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="16">
+                                <div class="pull-left">
+
+                                </div>
+                                <div class="pull-right pagination">
+                                    <div class="pagination-info">
+
+                                    </div>
+                                    <div class="pagination-index">
+
+                                    </div>
+                                    <div class="pagination-goto">
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</div>
+

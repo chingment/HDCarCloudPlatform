@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.Title = "UploadFeedback";
+    Layout = "~/Views/Shared/_LayoutHomeIframeMainList.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        var listCutOff;
+
+        $(document).ready(function () {
+
+            listCutOff = $("#list_cutoff").loadDataTable({
+                url: "../Withdraw/GetCutOffList",
+                pageIndex: 0,
+                searchParams: $("#form1").serializeArray(),
+                searchButtonId: "btn_Search",
+                containerId: "form1",
+                rowDataCombie: function (p_index, p_row) {
+                    var l_StrRows = "";
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.batchNo + "\"   >" + p_row.batchNo + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.amount + "\">" + $.lumos.convertMoney(p_row.amount) + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.amountByAfterFee + "\">" + $.lumos.convertMoney(p_row.amountByAfterFee) + "</td>";
+                    l_StrRows += "<td><span style=\"padding: 5px; color: #10a139; \">处理中(" + p_row.handingCount + ")</span><span style=\"padding:5px;color:#0026ff\">成功(" + p_row.successCount + ")</span><span style=\"padding:5px;color:#ff0000\">失败(" + p_row.failureCount + ")</span></td>";
+                    l_StrRows += "<td class=\"operation\">";
+                    l_StrRows += "<a href=\"javascript:void(0)\" class=\"a-btn\" operate=\"details\" >查看</a>";
+                    l_StrRows += "<a href=\"javascript:void(0)\" class=\"a-btn\"  operate=\"down\">下载</a>";
+                    l_StrRows += "<a href=\"javascript:void(0)\" class=\"a-btn\" operate=\"feedback\">反馈</a>";
+                    l_StrRows += "</td>";
+                    l_StrRows += "</tr>";
+                    return l_StrRows;
+                },
+                operate: {
+                    "details": function (obj) {
+                        var url = '../Withdraw/CutOffDetail?id=' + obj.id;
+
+                        var title = '查看截单详情';
+                        art.dialog.open(url, {
+                            id: "openDialog", title: title, width: '1000px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '下载', ok: function () {
+                                $.lumos.download('../Withdraw/DownloadCutOffDetail?id=' + obj.id, '', 'post');
+                                return false;
+                            }
+                        });
+                    },
+                    "down": function (obj) {
+                        $.lumos.download('../Withdraw/DownloadCutOffDetail?id=' + obj.id, '', 'post');
+                    },
+                    "feedback": function (obj) {
+                        var url = '../Withdraw/Feedback?id=' + obj.id;
+
+                        var title = '反馈';
+                        var dialog = art.dialog.open(url, {
+                            id: "openDialog", title: title, width: '1000px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '确定上传', ok: function () {
+
+                                var iframeContentWindow = this.iframe.contentWindow;
+                                var cutOffDetail = iframeContentWindow.$('#list_CutOffDetail');
+                                var cutOffDetailLen = $(cutOffDetail).find("tbody tr").length;
+                                if (cutOffDetailLen == 0) {
+                                    art.dialog.tips("没有可上传的数据,请先浏览上传数据");
+                                    return false;
+                                }
+
+                                art.dialog.confirm('再次确定要上传该文件<br>提示：点击确定后,数据将不可更改,请认真检查数据无误后上传？', function () {
+                                    var form = iframeContentWindow.$('#markupload_form');
+
+                                    var postData = $(form).serializeArray();
+
+                                    $.lumos.postJson({
+                                        isUseHandling: true,
+                                        url: "/Withdraw/ConfirmUploadFeedback?id=" + obj.id,
+                                        data: postData,
+                                        success: function (d) {
+
+    
+                                            if (d.result == resultType.success) {
+                                                listCutOff.loadData();
+                                                dialog.close();
+
+                                                $.lumos.tips(d.message);
+                                            }
+                                            else {
+                                                var dataContent = d.data;
+
+                                                if (typeof dataContent != 'undefined') {
+                                                    var msg = "";
+                                                    msg += "<h3>上传文件失败,完善以下信息后再次上传文件</h3>";
+                                                    for (var i = 0; i < dataContent.length; i++) {
+                                                        msg += "<span style='margin-left:5px;'>提现流水号为:" + dataContent[i].withdrawSn + ",存在以下错误</span>:<BR/>";
+
+                                                        var point = dataContent[i].point;
+                                                        for (var j = 0; j < point.length; j++) {
+                                                            msg += "<span style='margin-left:10px;'>" + point[j] + "</span>;<BR/>";
+                                                        }
+                                                        msg += "<BR/>";
+                                                    }
+                                                    art.dialog.alert(msg)
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                    return true;
+
+                                });
+
+                                return false;
+
+                            }
+                        });
+                    }
+                }
+            });
+
+        });
+
+
+    </script>
+}
+
+<form name="form1" method="post" action="#" id="form1">
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>截单历史</h5>
+        </div>
+        <div class="pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table id="list_cutoff" class="list-tb" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:15%">批次号</th>
+                <th style="width:15%">截单时间</th>
+                <th style="width:15%">总金额</th>
+                <th style="width:15%">实际总金额</th>
+                <th style="width:17%"></th>
+                <th style="width:8%" class="operation">操作</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pull-left">
+
+                    </div>
+                    <div class="pull-right pagination">
+                        <div class="pagination-info">
+
+                        </div>
+                        <div class="pagination-index">
+
+                        </div>
+                        <div class="pagination-goto">
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</form>
+

@@ -1,0 +1,206 @@
+﻿@model WebBack.Models.Biz.PosMachine.ChangeViewModel
+@{
+    ViewBag.Title = "Change";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section scriptsbyend{
+    <script src="~/Scripts/AreaSelect/public.js"></script>
+    <script type="text/javascript">
+
+
+        $(this).ready(function () {
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { $.lumos.tips(msg); }, onSuccess: function () { return change(); } });
+            $("#Model_ChangeHistory_NewPosMachineId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "选择一台新的POS机" });
+            $("#Model_ChangeHistory_Reason").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "原因不能为空,不超过500个字符" });
+
+            $("#btn_select_merchantPosMachine").click(function () {
+
+                art.dialog.open('../PosMachine/SparePosMachineList', {
+                    id: "openDialog565", title: '选择POS机', width: '600px', height: '520px', lock: true, drag: false, cancelVal: '关闭', cancel: true
+                });
+            });
+
+        });
+
+        function change() {
+
+            art.dialog.confirm(
+'确定要更换？',
+function () {
+    var postData = $("#form1").serializeArray();
+
+    $.lumos.postJson({
+        url: "../PosMachine/Change",
+        data: postData,
+        success: function (d) {
+
+            if (d.result == resultType.success) {
+                $.lumos.parentDialog().listTable.loadData();
+                $.lumos.tips(d.message, true);
+            }
+            else {
+                $.lumos.tips(d.message);
+            }
+
+        }
+    });
+});
+
+            return false;
+        }
+
+
+
+        function getPosMachineDetails(obj){
+
+            $('#Model_ChangeHistory_NewPosMachineId').val(obj.id);
+            $('#lbl_PosMachine_DeviceId').text(obj.deviceId);
+            $('#lbl_PosMachine_FuselageNumber').text(obj.fuselageNumber);
+            $('#lbl_PosMachine_TerminalNumber').text(obj.terminalNumber);
+            $('#lbl_PosMachine_Version').text(obj.version);
+            $('#lbl_PosMachine_Deposit').text(obj.deposit);
+            $('#lbl_PosMachine_Rent').text(obj.rent);
+        }
+
+        //-->
+    </script>
+}
+<form id="form1">
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>商户基本信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t">商户类型：</td>
+            <td class="c">
+                <span>@Model.Merchant.Type.GetCnName()</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">所在地区：</td>
+            <td class="c">
+                <span>
+                    @Model.Merchant.Area
+                </span>
+            </td>
+            <td class="t">联系地址：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactAddress</span>
+            </td>
+        </tr>
+    </table>
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>当前POS机信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">设备ID：</td>
+            <td class="c">
+                <span>@Model.OldPosMachine.DeviceId</span>
+            </td>
+            <td class="t">机身号：</td>
+            <td class="c">
+                <span>@Model.OldPosMachine.FuselageNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">终端号：</td>
+            <td class="c">
+                <span>@Model.OldPosMachine.TerminalNumber</span>
+            </td>
+            <td class="t">版本号：</td>
+            <td class="c">
+                <span>@Model.OldPosMachine.Version</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">押金：</td>
+            <td class="c">
+                <span>@Model.OldPosMachine.Deposit.ToPrice()</span><span class="moneyunit">元</span>
+            </td>
+            <td class="t">租金/每月：</td>
+            <td class="c">
+                <span>@Model.OldPosMachine.Rent.ToPrice()</span><span class="moneyunit">元</span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>选择新的POS机</h5>
+            <span><input type="button" class="btn btn-add" id="btn_select_merchantPosMachine" value="选择" /></span>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">设备ID：</td>
+            <td class="c">
+                <input name="Model.ChangeHistory.MerchantPosMachineId" type="hidden" value="@Model.ChangeHistory.MerchantPosMachineId" />
+                <input name="Model.ChangeHistory.NewPosMachineId" type="hidden" id="Model_ChangeHistory_NewPosMachineId" value="" />
+                <span id="lbl_PosMachine_DeviceId"></span>
+            </td>
+            <td class="t">机身号：</td>
+            <td class="c">
+                <span id="lbl_PosMachine_FuselageNumber"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">终端号：</td>
+            <td class="c">
+                <span id="lbl_PosMachine_TerminalNumber"></span>
+            </td>
+            <td class="t">版本号：</td>
+            <td class="c">
+                <span id="lbl_PosMachine_Version"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">押金：</td>
+            <td class="c">
+                <span id="lbl_PosMachine_Deposit"></span><span class="moneyunit">元</span>
+            </td>
+            <td class="t">租金/每月：</td>
+            <td class="c">
+                <span id="lbl_PosMachine_Rent"></span><span class="moneyunit">元</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">
+                原因：
+            </td>
+            <td class="c" style="white-space:normal;" colspan="3">
+                <textarea name="Model.ChangeHistory.Reason" rows="5" cols="42" id="Model_ChangeHistory_Reason" class="input-control"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>

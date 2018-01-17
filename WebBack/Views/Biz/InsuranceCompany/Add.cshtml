@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "add";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        <!--
+        $(this).ready(function () {
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); }});
+            $("#Model_InsuranceCompany_ImgUrl").formValidator({ onShow: "请输入！", onFocus: "不能为空,且不超过20个字符！", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 500, empty: { leftEmpty: false, emptyError: "不能为空！" }, onError: "请上传图标" });
+            $("#Model_InsuranceCompany_Name").formValidator({ onShow: "请输入！", onFocus: "不能为空,且不超过20个字符！", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 10, empty: { leftEmpty: false, emptyError: "不能为空！" }, onError: "名称不能为空,且不超过20个字符！" });
+         
+        });
+
+        function submit(fun) {
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+                art.dialog.confirm(
+                '确定提交？',
+                function () {
+                    var l_Data = $("#form1").serializeArray();
+                    $.lumos.postJson({
+                        url: "../InsuranceCompany/Add",
+                        data: l_Data,
+                        success: function (d) {
+                            fun(d)
+                        }
+                    });
+                });
+            }
+            return false;
+        }
+        //-->
+    </script>
+}
+
+
+<form name="form1" method="post" id="form1">
+    @Html.AntiForgeryToken()
+    <table class="f-tb" cellpadding="0" cellspacing="1">
+        <tr>
+            <td class="f-tb-t" style="width:50px;">
+                图标：
+            </td>
+            <td class="f-tb-c">
+                <span class="uploadimgbox" upload="true">
+                    <span class="uploadimg" inputname="Model.InsuranceCompany.ImgUrl" path="InsuranceCompany">
+                        <img src="" />
+                        <span class="uploadimg-click" style="">上传</span>
+                        <input id="Model_InsuranceCompany_ImgUrl" value="" name="Model.InsuranceCompany.ImgUrl" type="hidden" />
+                    </span>
+                    <span class="uploadimg-view" style="">预览</span>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="f-tb-t">
+                名称：
+            </td>
+            <td class="f-tb-c">
+                <input name="Model.InsuranceCompany.Name" type="text" id="Model_InsuranceCompany_Name" value="" class="input-control" style="width:250px;" />
+            </td>
+        </tr>
+        <tr style="display:none">
+            <td class="f-tb-t"></td>
+            <td class="f-tb-c">
+                <input type="submit" name="btn_Submit" id="btn_Submit" value="确定" class="btn btn-sure" />
+                <input type="button" name="btn_Cancle" id="btn_Cancle" value="关闭" class="btn btn-close dialog-close" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+

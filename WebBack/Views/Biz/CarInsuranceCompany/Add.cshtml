@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        var listTable;
+
+        $(document).ready(function () {
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_InsuranceCompanyId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择保险公司" });
+          
+            $("#btn_select_InsuranceCompany").click(function () {
+
+                art.dialog.open('../CarInsuranceCompany/InsuranceCompanyList', {
+                    id: "openDialog565", title: '选择应用', width: '600px', height: '480px', lock: true, drag: false, cancelVal: '关闭', cancel: true
+                });
+
+            });
+
+        });
+
+
+        function submit(fun) {
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+                art.dialog.confirm(
+                '确定要选择？',
+                function () {
+                    var l_Data = $("#form1").serializeArray();
+                    $.lumos.postJson({
+                        url: "../CarInsuranceCompany/Add?i=1",
+                        data: l_Data,
+                        success: function (d) {
+                            fun(d);
+                        }
+                    });
+                });
+            }
+
+            return false;
+        }
+
+        function getInsuranceCompanyDetails(obj) {
+            $('#Model_InsuranceCompanyId').val(obj.id);
+            $('#lbl_InsuranceCompanyName').text(obj.name);
+            $('#Model_InsuranceCompanyName').val(obj.name);
+            $('#Model_InsuranceCompanyImgUrl').val(obj.imgUrl);
+            $('#Model_InsuranceCompanyImgUrl_src').attr("src", obj.imgUrl);
+
+        }
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @Html.AntiForgeryToken()
+    <input id="Model_InsuranceCompanyId" value="" name="Model.InsuranceCompanyId" type="hidden" />
+    <input id="Model_InsuranceCompanyName" value="" name="Model.InsuranceCompanyName" type="hidden" />
+    <table class="f-tb" cellpadding="0" cellspacing="1">
+        <tr>
+            <td class="f-tb-t" style="width:50px;">
+                保险公司：
+            </td>
+            <td class="f-tb-c">
+                <span id="lbl_InsuranceCompanyName"></span>
+                <span>  <input type="button" class="btn btn-add" id="btn_select_InsuranceCompany" value="选择" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="f-tb-t" style="width:50px;">
+                图标：
+            </td>
+            <td class="f-tb-c">
+                <span class="uploadimgbox" upload="true">
+                    <span class="uploadimg" inputname="Model.InsuranceCompanyImgUrl" path="CarInsuranceCompany">
+                        <img src="" id="Model_InsuranceCompanyImgUrl_src" />
+                        <span class="uploadimg-click" style="">上传</span>
+                        <input id="Model_InsuranceCompanyImgUrl" value="" name="Model.InsuranceCompanyImgUrl" type="hidden" />
+                    </span>
+                    <span class="uploadimg-view" style="">预览</span>
+                </span>
+            </td>
+        </tr>
+        <tr style="display:none">
+            <td class="f-tb-t"></td>
+            <td class="f-tb-c">
+                <input type="submit" name="btn_Submit" id="btn_Submit" value="确定" class="btn btn-sure" />
+                <input type="button" name="btn_Cancle" id="btn_Cancle" value="关闭" class="btn btn-close dialog-close" />
+            </td>
+        </tr>
+    </table>
+
+
+
+
+    @*<div class="search-bar">
+            <div class="filter">
+                <span class="filter-label">保险公司名称：</span>
+                <span class="filter-input">
+                    <input type="text" class="input-control" name="Name" style="width:120px;" />
+                </span>
+            </div>
+
+            <div class="filter"><input type="button" class="btn btn-search" id="btn_Search" value="查询" /> </div>
+
+            @*<div class="filter" style="float:right">
+                    <input type="button" class="btn btn-add btn-apply" id="btn_Add" opertion="add" value="新增" />
+                </div>
+
+
+        </div>
+        <div class="list">
+            <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th style="width:5%" class="no">
+                            序号
+                        </th>
+                        <th style="width:45%">
+                            图标
+                        </th>
+                        <th style="width:45%">
+                            名称
+                        </th>
+                        <th style="width:5%">
+                            选择
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <div class="pull-left">
+
+                            </div>
+                            <div class="pull-right pagination">
+                                <div class="pagination-info">
+
+                                </div>
+                                <div class="pagination-index">
+
+                                </div>
+                                <div class="pagination-goto">
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>*@
+</form>
+

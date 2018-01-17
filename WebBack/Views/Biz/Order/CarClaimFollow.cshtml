@@ -1,0 +1,209 @@
+﻿@model WebBack.Models.Biz.Order.CarClaimFollowViewModel
+@{
+    ViewBag.Title = "CarClaimFollow";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+
+
+        function submitCarClaimFollow(fun) {
+
+            art.dialog.confirm('确定提交订单？', function () {
+                var l_Data = $("#form1").serializeArray();
+                $.lumos.postJson({
+                    isUseHandling: true,
+                    url: "../Order/SubmitEstimateList",
+                    data: l_Data,
+                    success: function (d) {
+                        fun(d);
+                    }
+                });
+            });
+        }
+
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @AntiForgery.GetHtml()
+
+    <input type="hidden" name="Model.OrderToCarClaim.Id" value="@Model.OrderToCarClaim.Id" />
+    <input type="hidden" name="Model.OrderToCarClaim.UserId" value="@Model.OrderToCarClaim.UserId" />
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>理赔需求信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t">商户名：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">地区：</td>
+            <td class="c">
+                <span>@Model.Merchant.Area</span>
+            </td>
+            <td class="t">联系地址</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactAddress</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">保险公司：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.InsuranceCompanyName</span>
+            </td>
+            <td class="t">车牌号码：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.CarPlateNo</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">对接人：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.HandPerson</span>
+            </td>
+            <td class="t">对接电话：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.HandPersonPhone</span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>维修厂信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ClientCode</span>
+            </td>
+            <td class="t">商户名：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">地区：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.Area</span>
+            </td>
+            <td class="t">联系地址</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ContactAddress</span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>定损单</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail" style="text-align:center">
+        <tr style="vertical-align:top">
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="true">
+                        <span class="uploadimg" inputname="Model.OrderToCarInsure.ZJ4_ImgUrl" path="CarInsure">
+                            <img src="@Model.OrderToCarClaim.EstimateListImgUrl" />
+                            <span class="uploadimg-click" style="">上传</span>
+                            <input id="Model_OrderToCarInsure_EstimateListImgUrl" value="@Model.OrderToCarClaim.EstimateListImgUrl" class="insureimgurl" name="Model.OrderToCarClaim.EstimateListImgUrl" type="hidden" />
+                        </span>
+                        <span class="uploadimg-view" style="">预览</span>
+                    </span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>复核定损金额</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">工时费：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.WorkingHoursPrice.ToPrice()</span>
+            </td>
+            <td class="t"></td>
+            <td class="c"></td>
+        </tr>
+        <tr>
+            <td class="t">配件费：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.AccessoriesPrice.ToPrice()</span>
+            </td>
+            <td class="t"></td>
+            <td class="c"></td>
+        </tr>
+    </table>
+
+    @Html.Partial("AuditFlowTrace", Model.BizProcessesAuditDetails)
+</form>
+

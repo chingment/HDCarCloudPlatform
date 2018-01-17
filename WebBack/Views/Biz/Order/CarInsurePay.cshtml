@@ -1,0 +1,449 @@
+﻿@model WebBack.Models.Biz.Order.CarInsurePayViewModel
+@{
+    ViewBag.Title = "CarInsureFollow";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $(":radio[name='Model.Params.OfferId']").formValidator({ onShow: "选择一家报价公司", onFocus: "选择一家报价公司", onCorrect: "&nbsp;" }).inputValidator({ min: 1, onError: "选择一家报价公司" });
+        });
+
+        function submitCarInsurePay(fun) {
+
+            //art.dialog.confirm('确定支付？', function () {
+            //    var l_Data = $("#form1").serializeArray();
+            //    l_Data.push({ name: "Model.Sn", value: obj.Sn });
+            //    l_Data.push({ name: "Model.Price", value: 10000 });
+            //    l_Data.push({ name: "Model.ProductType", value: obj.ProductType });
+            //    $.lumos.postJson({
+            //        isUseHandling: true,
+            //        url: "../Order/PayTest",
+            //        data: l_Data,
+            //        success: function (data) {
+
+
+            //        }
+            //    });
+            //});
+
+
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+                art.dialog.confirm('确定支付订单？', function () {
+                    var l_Data = $("#form1").serializeArray();
+                    var offerId = $(":radio[name='Model.Params.OfferId']:checked").val();
+
+                    l_Data.push({ name: "Model.Params", value: "{\"offerId\":\"" + offerId + "\"}" });
+                    $.lumos.postJson({
+                        isUseHandling: true,
+                        url: "../Order/PayConfirmTest",
+                        data: l_Data,
+                        success: function (d) {
+                            fun(d);
+                        }
+                    });
+                });
+            }
+        }
+
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @AntiForgery.GetHtml()
+    <input type="hidden" name="Model.OrderSn" value="@Model.OrderToCarInsure.Sn" />
+    <input type="hidden" name="Model.ProductType" value="@Model.OrderToCarInsure.ProductType" />
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>商户信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t">商户名：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>险种信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:5%" class="no">
+                    序号
+                </th>
+                <th style="width:20%">
+                    名称
+                </th>
+                <th style="width:20%">
+
+                </th>
+                <th style="width:20%">
+
+                </th>
+                <th style="width:20%">
+                    投保明细
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for (var i = 0; i < Model.OrderToCarInsureOfferKind.Count; i++)
+            {
+
+                <tr>
+                    <td class="no">@(i + 1)</td>
+                    <td class="overflow tipitem">@Model.OrderToCarInsureOfferKind[i].KindName</td>
+                    <td class="overflow tipitem">@(Model.OrderToCarInsureOfferKind[i].KindValue + Model.OrderToCarInsureOfferKind[i].KindUnit)</td>
+                    <td class="overflow">@(Model.OrderToCarInsureOfferKind[i].IsWaiverDeductible == true ? "不计入免赔额" : "")</td>
+                    <td class="overflow">@Model.OrderToCarInsureOfferKind[i].KindDetails</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>客户要求</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:96%">
+        <tr>
+            <td>
+                @Model.OrderToCarInsure.ClientRequire
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>证件图片</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+
+    <table class="f-tb1-detail" style="text-align:center">
+        <tr style="vertical-align:top">
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="false">
+                        <span class="uploadimg" path="CarInsure">
+                            <img src="@Model.OrderToCarInsure.CZ_CL_XSZ_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>车辆行驶证</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="false">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.CZ_SFZ_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>身份证</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="false">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.CCSJM_WSZM_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>车船税减免<br />或完税证明</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="false">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.YCZ_CLDJZ_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.YCZ_CLDJZ_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>验证照<br />或辆登记证</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="true">
+                        <span class="uploadimg" inputname="Model.OrderToCarInsure.ZJ1_ImgUrl" path="CarInsure">
+                            <img src="@Model.OrderToCarInsure.ZJ1_ImgUrl" />
+                            <span class="uploadimg-click" style="">上传</span>
+                            <input id="Model_OrderToCarInsure_ZJ1_ImgUrl" value="@Model.OrderToCarInsure.ZJ1_ImgUrl" class="insureimgurl" name="Model.OrderToCarInsure.ZJ1_ImgUrl" type="hidden" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.ZJ1_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>其他证件1</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="true">
+                        <span class="uploadimg" inputname="Model.OrderToCarInsure.ZJ2_ImgUrl" path="CarInsure">
+                            <img src="@Model.OrderToCarInsure.ZJ2_ImgUrl" />
+                            <span class="uploadimg-click" style="">上传</span>
+                            <input id="Model_OrderToCarInsure_ZJ2_ImgUrl" value="@Model.OrderToCarInsure.ZJ2_ImgUrl" class="insureimgurl" name="Model.OrderToCarInsure.ZJ2_ImgUrl" type="hidden" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.ZJ2_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>其他证件2</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="true">
+                        <span class="uploadimg" inputname="Model.OrderToCarInsure.ZJ3_ImgUrl" path="CarInsure">
+                            <img src="@Model.OrderToCarInsure.ZJ3_ImgUrl" />
+                            <span class="uploadimg-click" style="">上传</span>
+                            <input id="Model_OrderToCarInsure_ZJ3_ImgUrl" value="@Model.OrderToCarInsure.ZJ3_ImgUrl" class="insureimgurl" name="Model.OrderToCarInsure.ZJ3_ImgUrl" type="hidden" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.ZJ3_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>其他证件3</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="true">
+                        <span class="uploadimg" inputname="Model.OrderToCarInsure.ZJ4_ImgUrl" path="CarInsure">
+                            <img src="@Model.OrderToCarInsure.ZJ4_ImgUrl" />
+                            <span class="uploadimg-click" style="">上传</span>
+                            <input id="Model_OrderToCarInsure_ZJ4_ImgUrl" value="@Model.OrderToCarInsure.ZJ4_ImgUrl" class="insureimgurl" name="Model.OrderToCarInsure.ZJ4_ImgUrl" type="hidden" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.ZJ4_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>其他证件4</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>投保信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">车主姓名：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarOwner</span>
+            </td>
+            <td class="t">车主身份证号码：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarOwnerIdNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">车牌号码：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarPlateNo</span>
+            </td>
+            <td class="t">车辆使用性质：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarUserCharacter</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">品牌型号：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarModel</span>
+            </td>
+            <td class="t">车辆识别代号：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarVin</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">发动机号：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarEngineNo</span>
+            </td>
+            <td class="t">核定载人数：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarSeat</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t">车辆型号：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarVechicheType</span>
+            </td>
+            <td class="t">车辆注册日期：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.CarRegisterDate</span>
+            </td>
+            <td class="t"></td>
+            <td class="c"></td>
+        </tr>
+        <tr>
+            <td class="t">承保期间（开始）：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.PeriodStart.ToUnifiedFormatDate()</span>
+            </td>
+            <td class="t">承保期间（结束）：</td>
+            <td class="c">
+                <span>@Model.OrderToCarInsure.PeriodEnd.ToUnifiedFormatDate()</span>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>报价信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:5%" class="no">
+                    序号
+                </th>
+                <th style="width:10%">
+                    保险公司
+                </th>
+                <th style="width:15%">
+                    投保单图片
+                </th>
+                <th style="width:25%">
+                    投保单号
+                </th>
+                <th style="width:15%">
+                    交强险
+                </th>
+                <th style="width:15%">
+                    车船税
+                </th>
+                <th style="width:15%">
+                    商业险
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for (var i = 0; i < Model.OrderToCarInsureOfferCompany.Count; i++)
+            {
+                <tr>
+                    <td class="no">@(i + 1)</td>
+                    <td class="overflow tipitem">
+                        <input type="radio" name="Model.Params.OfferId" id="Model_Params_OfferId_@Model.OrderToCarInsureOfferCompany[i].Id" value="@Model.OrderToCarInsureOfferCompany[i].Id" />
+                        <label class="insurancecompanyname" for="Model_Params_OfferId_@Model.OrderToCarInsureOfferCompany[i].Id">@Model.OrderToCarInsureOfferCompany[i].InsuranceCompanyName</label>
+                    </td>
+                    <td>
+                        <span class="uploadimgbox" upload="false">
+                            <span class="uploadimg" inputname="Model.OrderToCarInsureOfferCompany[@i].InsureImgUrl">
+                                <img src="@Model.OrderToCarInsureOfferCompany[i].InsureImgUrl" />
+                            </span>
+                            <span class="uploadimg-view" style="">预览</span>
+                            <span class="insurancecompanyname" style="display:none">@Model.OrderToCarInsureOfferCompany[i].InsuranceCompanyName</span>
+                        </span>
+                    </td>
+                    <td class="overflow">
+                        @Model.OrderToCarInsureOfferCompany[i].InsuranceOrderId
+                    </td>
+                    <td class="overflow">
+                        @Model.OrderToCarInsureOfferCompany[i].CompulsoryPrice.ToPrice()
+                    </td>
+                    <td class="overflow">
+                        @Model.OrderToCarInsureOfferCompany[i].TravelTaxPrice.ToPrice()
+                    </td>
+                    <td class="overflow">
+                        @Model.OrderToCarInsureOfferCompany[i].CommercialPrice.ToPrice()
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @Html.Partial("AuditFlowTrace", Model.BizProcessesAuditDetails)
+
+
+</form>

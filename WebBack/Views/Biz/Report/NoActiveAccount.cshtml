@@ -1,0 +1,64 @@
+﻿@model WebBack.Models.Biz.Report.MerchantViewModel
+@{
+    ViewBag.Title = "Merchant";
+    Layout = "~/Views/Shared/_LayoutHomeMainReport.cshtml";
+}
+
+@section scripts{
+
+    <script type="text/javascript">
+
+
+        function GetParams(operate) {
+            var l_Data = $("#form1").serializeArray();
+            l_Data.push({ name: "Model.Operate", value: operate });
+
+            return l_Data;
+        }
+
+        var url = "../Report/NoActiveAccount";
+
+        function search() {
+            $.lumos.postJson({
+                url:url,
+                data: GetParams(operateType.search),
+                success: function (d) {
+                    $('#reporthtml').html(d.data.html);
+                }
+            });
+
+            return false;
+        }
+
+        function exportExcel() {
+            $.lumos.download(url, GetParams(operateType.exportExcel), 'post');
+        };
+
+    </script>
+}
+
+<div class="gbr-row">
+    <form id="form1" name="form1">
+        @Html.AntiForgeryToken()
+
+
+        <div class="search-bar">
+            <div class="filter">
+                <input type="button" value="查询" class="btn btn-search" />
+                <input type="button" value="导出" class="btn btn-export-excel" />
+
+            </div>
+
+            <div class="filter" style="float:right">
+
+            </div>
+        </div>
+
+
+        <div id="reporthtml">
+            @Html.Raw(Model.TableHtml)
+
+        </div>
+
+    </form>
+</div>

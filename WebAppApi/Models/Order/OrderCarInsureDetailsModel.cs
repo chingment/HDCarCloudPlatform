@@ -28,7 +28,7 @@ namespace WebAppApi.Models.Order
         {
             this.OfferCompany = new List<OrderCarInsureOfferCompanyModel>();
             this.OfferKind = new List<OrderToCarInsureOfferKindModel>();
-            this.ShippingAddressList = new List<string>();
+            this.RecipientAddressList = new List<string>();
             this.ZJ = new List<ZjModel>();
         }
         public int Id { get; set; }
@@ -68,15 +68,19 @@ namespace WebAppApi.Models.Order
 
         public string InsureImgUrl { get; set; }
 
-        public decimal CommercialAndTravelTaxPrice { get; set; }
+        public decimal CommercialPrice { get; set; }
+
+        public decimal TravelTaxPrice { get; set; }
 
         public decimal CompulsoryPrice { get; set; }
 
         public decimal Price { get; set; }
 
-        public List<string> ShippingAddressList { get; set; }
+        public List<string> RecipientAddressList { get; set; }
 
-        public string ShippingAddress { get; set; }
+        public string Recipient { get; set; }
+        public string RecipientAddress { get; set; }
+        public string RecipientPhoneNumber { get; set; }
 
         public string Remarks { get; set; }
 

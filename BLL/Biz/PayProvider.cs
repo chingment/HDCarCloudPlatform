@@ -171,9 +171,10 @@ namespace Lumos.BLL
                         orderToCarInsure.TravelTaxPrice = orderToCarInsureOfferCompany.TravelTaxPrice == null ? 0 : orderToCarInsureOfferCompany.TravelTaxPrice.Value;
                         orderToCarInsure.CompulsoryPrice = orderToCarInsureOfferCompany.CompulsoryPrice == null ? 0 : orderToCarInsureOfferCompany.CompulsoryPrice.Value;
 
-                        orderToCarInsure.ShippingPhoneNumber = payCarInsureConfirmParams.ShippingPhoneNumber;//收件人电话
 
-                        orderToCarInsure.ShippingAddress = payCarInsureConfirmParams.ShippingAddress;
+                        orderToCarInsure.Recipient = payCarInsureConfirmParams.Recipient;
+                        orderToCarInsure.RecipientPhoneNumber = payCarInsureConfirmParams.RecipientPhoneNumber;//收件人电话
+                        orderToCarInsure.RecipientAddress = payCarInsureConfirmParams.RecipientAddress;
                         orderToCarInsure.Price = orderToCarInsureOfferCompany.InsureTotalPrice.Value;
 
                         CurrentDb.SaveChanges();

@@ -50,9 +50,6 @@ namespace Lumos.Entity
         [MaxLength(1024)]
         public string ZJ4_ImgUrl { get; set; }
 
-        [MaxLength(1024)]
-        public string ClientRequire { get; set; }
-
         [MaxLength(128)]
         public string CarOwner { get; set; }
 

@@ -290,11 +290,21 @@ namespace WebAppApi.Controllers
                         orderCarInsureOfferCompanyModel.InsuranceOfferId = m.Id;
                         orderCarInsureOfferCompanyModel.InsuranceCompanyId = m.InsuranceCompanyId;
                         orderCarInsureOfferCompanyModel.InsuranceCompanyName = m.InsuranceCompanyName;
-                        orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl;
 
-                        if (m.CompulsoryPrice != null && m.TravelTaxPrice != null)
+
+                        if (m.InsuranceCompanyId == orderToCarInsure.InsuranceCompanyId)
                         {
-                            orderCarInsureOfferCompanyModel.CommercialAndTravelTaxPrice = m.CompulsoryPrice.Value + m.TravelTaxPrice.Value;
+                            orderCarInsureOfferCompanyModel.IsCheck = true;
+                        }
+
+                        if (m.CompulsoryPrice != null)
+                        {
+                            orderCarInsureOfferCompanyModel.CompulsoryPrice = m.CompulsoryPrice.Value;
+                        }
+
+                        if (m.TravelTaxPrice != null)
+                        {
+                            orderCarInsureOfferCompanyModel.TravelTaxPrice = m.TravelTaxPrice.Value;
                         }
 
                         if (m.CommercialPrice != null)
@@ -305,6 +315,42 @@ namespace WebAppApi.Controllers
                         if (m.InsureTotalPrice != null)
                         {
                             orderCarInsureOfferCompanyModel.InsureTotalPrice = m.InsureTotalPrice.Value;
+                        }
+
+                        switch (orderToCarInsure.Status)
+                        {
+                            case Enumeration.OrderStatus.Submitted:
+                                orderCarInsureOfferCompanyModel.description = "正在报价中";
+                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsuranceCompanyImgUrl;
+                                break;
+                            case Enumeration.OrderStatus.Follow:
+                                orderCarInsureOfferCompanyModel.description = "正在报价中";
+                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsuranceCompanyImgUrl;
+                                break;
+                            case Enumeration.OrderStatus.WaitPay:
+                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl;
+                                orderCarInsureOfferCompanyModel.description = string.Format(
+                                    "交强险：{0}，车船税：{1}，商业险：{2}，合计：{3}",
+                                    orderCarInsureOfferCompanyModel.CompulsoryPrice,
+                                    orderCarInsureOfferCompanyModel.TravelTaxPrice,
+                                      orderCarInsureOfferCompanyModel.CompulsoryPrice,
+                                       orderCarInsureOfferCompanyModel.InsureTotalPrice
+                                    );
+                                break;
+                            case Enumeration.OrderStatus.Completed:
+                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl;
+                                orderCarInsureOfferCompanyModel.description = string.Format(
+                         "交强险：{0}，车船税：{1}，商业险：{2}，合计：{3}",
+                         orderCarInsureOfferCompanyModel.CompulsoryPrice,
+                         orderCarInsureOfferCompanyModel.TravelTaxPrice,
+                           orderCarInsureOfferCompanyModel.CompulsoryPrice,
+                            orderCarInsureOfferCompanyModel.InsureTotalPrice
+                         );
+                                break;
+                            case Enumeration.OrderStatus.Cancled:
+                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl == null ? m.InsuranceCompanyImgUrl : m.InsureImgUrl;
+                                orderCarInsureOfferCompanyModel.description = "";
+                                break;
                         }
 
                         model.OfferCompany.Add(orderCarInsureOfferCompanyModel);
@@ -341,9 +387,12 @@ namespace WebAppApi.Controllers
                     model.InsuranceCompanyName = orderToCarInsure.InsuranceCompanyName;
                     model.InsureImgUrl = orderToCarInsure.InsureImgUrl;
 
-                    model.ShippingAddress = orderToCarInsure.ShippingAddress.NullToEmpty();
+                    model.Recipient = orderToCarInsure.Recipient.NullToEmpty();
+                    model.RecipientAddress = orderToCarInsure.RecipientAddress.NullToEmpty();
+                    model.RecipientPhoneNumber = orderToCarInsure.RecipientPhoneNumber.NullToEmpty();
 
-                    model.CommercialAndTravelTaxPrice = orderToCarInsure.CommercialPrice + orderToCarInsure.TravelTaxPrice;
+                    model.CommercialPrice = orderToCarInsure.CommercialPrice;
+                    model.TravelTaxPrice = orderToCarInsure.TravelTaxPrice;
                     model.CompulsoryPrice = orderToCarInsure.CompulsoryPrice;
                     model.Price = orderToCarInsure.Price;
 
@@ -399,8 +448,8 @@ namespace WebAppApi.Controllers
                     model.FollowStatus = orderToCarInsure.FollowStatus;
                     model.Remarks = orderToCarInsure.Remarks.NullToEmpty();
 
-                    model.ShippingAddressList.Add("地址1");
-                    model.ShippingAddressList.Add("地址2");
+                    model.RecipientAddressList.Add("地址1");
+                    model.RecipientAddressList.Add("地址2");
 
                 }
 

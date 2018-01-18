@@ -91,6 +91,7 @@ namespace WebAppApi.Controllers
                 OrderToCarInsureOfferCompany orderToCarInsureOfferCompany = new OrderToCarInsureOfferCompany();
                 orderToCarInsureOfferCompany.InsuranceCompanyId = insureOfferCompany.Id;
                 orderToCarInsureOfferCompany.InsuranceCompanyName = insureOfferCompany.Name;
+                orderToCarInsureOfferCompany.InsuranceCompanyImgUrl = insureOfferCompany.ImgUrl;
                 orderToCarInsureOfferCompanys.Add(orderToCarInsureOfferCompany);
             }
 

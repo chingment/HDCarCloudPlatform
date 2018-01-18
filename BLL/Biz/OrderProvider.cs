@@ -272,8 +272,6 @@ namespace Lumos.BLL
 
                         BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.CarInsureOfferDealtStatus.ClientFllow, "商户正在跟进");
 
-                        BizFactory.Sms.SendCarInsureOfferFollow(creator.Id, creator.PhoneNumber, l_orderToCarInsure.Sn);
-
                         result = new CustomJsonResult(ResultType.Success, "转给客户跟进成功");
 
                         break;
@@ -301,7 +299,7 @@ namespace Lumos.BLL
                         BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.CarInsureOfferDealtStep.Offer, l_bizProcessesAudit.Id, operater, bizProcessesAudit.CurrentDetails.AuditComments, "报价完成", this.DateTime);
                         BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, l_bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.OfferComplete);
 
-                        BizFactory.Sms.SendCarInsureOfferComplete(creator.Id, creator.PhoneNumber, l_orderToCarInsure.Sn, l_orderToCarInsure.CarOwner, l_orderToCarInsure.CarPlateNo);
+                        //BizFactory.Sms.SendCarInsureOfferComplete(creator.Id, creator.PhoneNumber, l_orderToCarInsure.Sn, l_orderToCarInsure.CarOwner, l_orderToCarInsure.CarPlateNo);
 
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;

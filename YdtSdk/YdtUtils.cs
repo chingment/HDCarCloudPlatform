@@ -63,8 +63,8 @@ namespace YdtSdk
 
             List<YdtInscarInquiryOffer> offerList = new List<YdtInscarInquiryOffer>();
 
-            order.ShippingAddress = "测试地址";
-            order.ShippingPhoneNumber = "13800138000";
+            order.RecipientAddress = "测试地址";
+            order.RecipientPhoneNumber = "13800138000";
 
 
             var au = YdtUtils.GetToken();
@@ -153,8 +153,8 @@ namespace YdtSdk
             insured.insuredFlag = 1;
             insured.name = order.CarOwner;
             insured.certNo = order.CarOwnerIdNumber;
-            insured.mobile = order.ShippingPhoneNumber;
-            insured.address = order.ShippingAddress;
+            insured.mobile = order.RecipientPhoneNumber;
+            insured.address = order.RecipientAddress;
 
             YdtUpload ydtUpdate_SFZ = new YdtUpload(au.token, au.session, "1", order.CZ_SFZ_ImgUrl);
             var ydtUpdateResult_SFZ = ydtApi.DoPostFile(ydtUpdate_SFZ, Path.GetFileName(order.CZ_SFZ_ImgUrl));

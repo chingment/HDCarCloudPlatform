@@ -48,9 +48,5 @@ namespace Lumos.Entity
 
         public decimal EstimatePrice { get; set; }
 
-        [MaxLength(1024)]
-        public string ClientRequire { get; set; }
-
-
     }
 }

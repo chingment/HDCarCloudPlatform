@@ -10,9 +10,12 @@ namespace Lumos.Entity
     {
         public int OfferId { get; set; }
 
-        public string ShippingAddress { get; set; }
 
-        public string ShippingPhoneNumber { get; set; }
+        public string Recipient { get; set; }
+
+        public string RecipientAddress { get; set; }
+
+        public string RecipientPhoneNumber { get; set; }
     }
 
     public class PayDepositRentConfirmParams

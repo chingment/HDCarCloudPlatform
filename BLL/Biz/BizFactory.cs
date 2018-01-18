@@ -80,13 +80,6 @@ namespace Lumos.BLL
             }
         }
 
-        public static OrderToCarInsureProvider OrderToCarInsure
-        {
-            get
-            {
-                return new OrderToCarInsureProvider();
-            }
-        }
 
         public static PayProvider Pay
         {

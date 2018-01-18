@@ -185,14 +185,14 @@ namespace WebAppApi.Controllers
 
             // model.Add("支付结果确认", PayConfirm());
 
-             model.Add("获取订单列表1", GetOrderList(userId, merchantId, 0, 0));
+            // model.Add("获取订单列表1", GetOrderList(userId, merchantId, 0, 0));
             //  model.Add("获取订单列表维修和定损", GetOrderList(1004, 23, 0, 0));
             //  model.Add("获取订单列表只定损", GetOrderList(1006, 25, 0, 0));
 
 
             // model.Add("获取应付订单", GetPayableList(userId, merchantId, 0));
             //  http://112.74.179.185/api/Order/GetDetails?productType=2013&merchantId=20&userId=1001&orderId=66
-            //     model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 115, Enumeration.ProductType.InsureForCarForInsure));
+                 model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 818, Enumeration.ProductType.InsureForCarForInsure));
             //     model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));
 
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 87));
@@ -217,7 +217,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取续保列表", GetCarServiceRenewalList(userId, merchantId, 0));
 
 
-             model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
+           //  model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
             //  model.Add("获取更多推荐产品", GetMoreRecommend(userId, merchantId, 1));
 
 
@@ -233,7 +233,7 @@ namespace WebAppApi.Controllers
 
 
 
-            //  model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+             // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //  model.Add("提交续保单", SubmitRenewal(userId));
             //  model.Add("提交理赔需求1", SubmitClaim(userId, "邱大文", Enumeration.RepairsType.EstimateRepair));
             //  model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));
@@ -839,10 +839,10 @@ namespace WebAppApi.Controllers
         public string SubmitInsure(int userId, int merchantId, int posMachineId)
         {
 
-            //string base64string1 = GetImagesBase64String(@"d:\a.jpg");
-            //string base64string2 = GetImagesBase64String(@"d:\b.jpg");
-            //string base64string3 = GetImagesBase64String(@"d:\c.jpg");
-            //string base64string4 = GetImagesBase64String(@"d:\d.jpg");
+            string base64string1 = GetImagesBase64String(@"d:\a.png");
+            string base64string2 = GetImagesBase64String(@"d:\a.png");
+            string base64string3 = GetImagesBase64String(@"d:\a.png");
+            string base64string4 = GetImagesBase64String(@"d:\a.png");
 
             SubmitInsureModel model = new SubmitInsureModel();
             model.UserId = userId;
@@ -886,17 +886,17 @@ namespace WebAppApi.Controllers
             }
 
 
-            //ImageModel CZ_CL_XSZ_Img = new ImageModel() { Type = ".jpg", Data = base64string1 };
-            //ImageModel CZ_SFZ_Img = new ImageModel() { Type = ".jpg", Data = base64string2 };
-            //ImageModel CCSJM_WSZM_Img = new ImageModel() { Type = ".jpg", Data = base64string3 };
-            //ImageModel YCZ_CLDJZ_Img = new ImageModel() { Type = ".jpg", Data = base64string4 };
+            ImageModel CZ_CL_XSZ_Img = new ImageModel() { Type = ".jpg", Data = base64string1 };
+            ImageModel CZ_SFZ_Img = new ImageModel() { Type = ".jpg", Data = base64string2 };
+            ImageModel CCSJM_WSZM_Img = new ImageModel() { Type = ".jpg", Data = base64string3 };
+            ImageModel YCZ_CLDJZ_Img = new ImageModel() { Type = ".jpg", Data = base64string4 };
 
-            //model.ImgData = new Dictionary<string, ImageModel>();
+            model.ImgData = new Dictionary<string, ImageModel>();
 
-            //model.ImgData.Add("CZ_CL_XSZ_Img", CZ_CL_XSZ_Img);
-            //model.ImgData.Add("CZ_SFZ_Img", CZ_SFZ_Img);
-            //model.ImgData.Add("CCSJM_WSZM_Img", CCSJM_WSZM_Img);
-            //model.ImgData.Add("YCZ_CLDJZ_Img", YCZ_CLDJZ_Img);
+            model.ImgData.Add("CZ_CL_XSZ_Img", CZ_CL_XSZ_Img);
+            model.ImgData.Add("CZ_SFZ_Img", CZ_SFZ_Img);
+            model.ImgData.Add("CCSJM_WSZM_Img", CCSJM_WSZM_Img);
+            model.ImgData.Add("YCZ_CLDJZ_Img", YCZ_CLDJZ_Img);
 
             string signStr = Signature.Compute(key, secret, timespan, a1);
 

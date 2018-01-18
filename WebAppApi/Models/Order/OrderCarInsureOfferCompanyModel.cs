@@ -15,12 +15,17 @@ namespace WebAppApi.Models.Order
 
         public string InsureImgUrl { get; set; }
 
-        public decimal CommercialAndTravelTaxPrice { get; set; }
+        public decimal CommercialPrice { get; set; }
+
+        public decimal TravelTaxPrice { get; set; }
 
         public decimal CompulsoryPrice { get; set; }
 
         public decimal InsureTotalPrice { get; set; }
 
+        public string description { get; set; }
+
+        public bool IsCheck{ get; set; }
 
     }
 }

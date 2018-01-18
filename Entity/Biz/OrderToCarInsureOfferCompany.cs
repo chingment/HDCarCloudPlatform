@@ -45,7 +45,7 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string InsuranceCompanyName { get; set; }
 
-        [NotMapped]
+        [MaxLength(512)]
         public string InsuranceCompanyImgUrl { get; set; }
 
     }

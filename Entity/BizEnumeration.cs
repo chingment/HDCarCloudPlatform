@@ -64,7 +64,7 @@ namespace Lumos.Entity
             [Remark("报价中")]
             InOffer = 2,
             [Remark("报价完成")]
-            OfferComplete = 2,
+            OfferComplete = 3,
             [Remark("客户跟进")]
             ClientFllow = 3,
             [Remark("后台取消订单")]

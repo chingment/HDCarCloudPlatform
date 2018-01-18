@@ -24,7 +24,8 @@ namespace WebAppApi.Controllers
                          select new { o.Id, o.Sn, o.ProductType, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus }
                          );
 
-            if (status == Enumeration.OrderStatus.Submitted || status == Enumeration.OrderStatus.Follow || status == Enumeration.OrderStatus.WaitPay || status == Enumeration.OrderStatus.Cancled)
+
+            if (status != Enumeration.OrderStatus.Unknow)
             {
                 order = order.Where(m => m.Status == status);
             }
@@ -375,7 +376,6 @@ namespace WebAppApi.Controllers
                         }
                     }
                     #endregion
-
 
                     #region 车主
                     model.CarOwner = orderToCarInsure.CarOwner.NullToEmpty();

@@ -28,10 +28,10 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-       // private string host = "http://localhost:16665";
-        private string host = "http://112.74.179.185";
+        private string host = "http://localhost:16665";
+        //private string host = "http://112.74.179.185";
 
-       // private string host = "https://www.ins-uplink.cn";
+        // private string host = "https://www.ins-uplink.cn";
 
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
@@ -86,8 +86,8 @@ namespace WebAppApi.Controllers
                     queryStr.Append("&").Append(key).Append("=").Append(value);
                 }
             }
-            
-            
+
+
 
             string s = queryStr.ToString().Substring(1, queryStr.Length - 1);
 
@@ -192,7 +192,7 @@ namespace WebAppApi.Controllers
 
             // model.Add("获取应付订单", GetPayableList(userId, merchantId, 0));
             //  http://112.74.179.185/api/Order/GetDetails?productType=2013&merchantId=20&userId=1001&orderId=66
-                 model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 818, Enumeration.ProductType.InsureForCarForInsure));
+            model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 818, Enumeration.ProductType.InsureForCarForInsure));
             //     model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));
 
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 87));
@@ -217,7 +217,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取续保列表", GetCarServiceRenewalList(userId, merchantId, 0));
 
 
-           //  model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
+            //  model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
             //  model.Add("获取更多推荐产品", GetMoreRecommend(userId, merchantId, 1));
 
 
@@ -233,7 +233,7 @@ namespace WebAppApi.Controllers
 
 
 
-             // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+             model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //  model.Add("提交续保单", SubmitRenewal(userId));
             //  model.Add("提交理赔需求1", SubmitClaim(userId, "邱大文", Enumeration.RepairsType.EstimateRepair));
             //  model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));
@@ -893,10 +893,10 @@ namespace WebAppApi.Controllers
 
             model.ImgData = new Dictionary<string, ImageModel>();
 
-            model.ImgData.Add("CZ_CL_XSZ_Img", CZ_CL_XSZ_Img);
-            model.ImgData.Add("CZ_SFZ_Img", CZ_SFZ_Img);
-            model.ImgData.Add("CCSJM_WSZM_Img", CCSJM_WSZM_Img);
-            model.ImgData.Add("YCZ_CLDJZ_Img", YCZ_CLDJZ_Img);
+            //model.ImgData.Add("CZ_CL_XSZ_Img", CZ_CL_XSZ_Img);
+            //model.ImgData.Add("CZ_SFZ_Img", CZ_SFZ_Img);
+            //model.ImgData.Add("CCSJM_WSZM_Img", CCSJM_WSZM_Img);
+            //model.ImgData.Add("YCZ_CLDJZ_Img", YCZ_CLDJZ_Img);
 
             string signStr = Signature.Compute(key, secret, timespan, a1);
 
@@ -949,7 +949,7 @@ namespace WebAppApi.Controllers
 
 
             model.InsureKind = insureKindModel;
-    
+
 
             string a1 = JsonConvert.SerializeObject(model);
 
@@ -969,9 +969,9 @@ namespace WebAppApi.Controllers
             model.ImgData = new Dictionary<string, ImageModel>();
 
             model.ImgData.Add("CZ_CL_XSZ_Img", CZ_CL_XSZ_Img);
-           // model.ImgData.Add("CZ_SFZ_Img", CZ_SFZ_Img);
-         //   model.ImgData.Add("CCSJM_WSZM_Img", CCSJM_WSZM_Img);
-          //  model.ImgData.Add("YCZ_CLDJZ_Img", YCZ_CLDJZ_Img);
+            // model.ImgData.Add("CZ_SFZ_Img", CZ_SFZ_Img);
+            //   model.ImgData.Add("CCSJM_WSZM_Img", CCSJM_WSZM_Img);
+            //  model.ImgData.Add("YCZ_CLDJZ_Img", YCZ_CLDJZ_Img);
 
             string signStr = Signature.Compute(key, secret, timespan, a1);
 

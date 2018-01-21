@@ -209,6 +209,7 @@
     <Compile Include="Controllers\Biz\PosMachineController.cs" />
     <Compile Include="Controllers\Biz\ProductController.cs" />
     <Compile Include="Controllers\Biz\ReportController.cs" />
+    <Compile Include="Controllers\Biz\TalentDemandController.cs" />
     <Compile Include="Controllers\Biz\TestController.cs" />
     <Compile Include="Controllers\Biz\TransactionsController.cs" />
     <Compile Include="Controllers\Biz\WithdrawController.cs" />
@@ -292,6 +293,9 @@
     <Compile Include="Models\Biz\Report\ReportModel.cs" />
     <Compile Include="Models\Biz\Report\SalesmanPosViewModel.cs" />
     <Compile Include="Models\Biz\Report\WithdrawViewModel.cs" />
+    <Compile Include="Models\Biz\TalentDemand\TalentDemandSearchCondition.cs" />
+    <Compile Include="Models\Biz\TalentDemand\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\TalentDemand\VerifyOrderViewModel.cs" />
     <Compile Include="Models\Biz\Transactions\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\Withdraw\CutOffDetailsSearchCondition.cs" />
     <Compile Include="Models\Biz\Withdraw\CutOffSearchCondition.cs" />
@@ -1325,6 +1329,7 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\toolbar\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\wysiwygarea\" />
+    <Folder Include="Views\TalentDemand\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

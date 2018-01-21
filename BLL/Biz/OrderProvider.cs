@@ -435,7 +435,7 @@ namespace Lumos.BLL
                 var l_orderToCarClaim = CurrentDb.OrderToCarClaim.Where(m => m.Id == orderToCarClaim.Id).FirstOrDefault();
 
                 l_orderToCarClaim.HandMerchantId = estimateMerchantId;
-                l_orderToCarClaim.HandMerchantType = Enumeration.MerchantType.CarRepair;
+                l_orderToCarClaim.HandMerchantType = Enumeration.HandMerchantType.Supply;
 
                 l_orderToCarClaim.Remarks = orderToCarClaim.Remarks;
 
@@ -488,7 +488,7 @@ namespace Lumos.BLL
                         estimateOrderToCarClaim.CreateTime = this.DateTime;
 
                         estimateOrderToCarClaim.HandMerchantId = l_orderToCarClaim.MerchantId;
-                        estimateOrderToCarClaim.HandMerchantType = Enumeration.MerchantType.CarSales;
+                        estimateOrderToCarClaim.HandMerchantType = Enumeration.HandMerchantType.Demand;
 
 
                         estimateOrderToCarClaim.Remarks = estimateMerchantRemarks;//告知维修厂备注
@@ -796,5 +796,174 @@ namespace Lumos.BLL
             return result;
         }
 
+
+        public CustomJsonResult SubmitTalentDemand(int operater, int userId, int merchantId,Enumeration.WorkJob workJob, int quantity)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                //用户信息
+                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+                //商户信息
+                var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
+
+              
+                //2011为车险理赔
+                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.TalentDemand).FirstOrDefault();
+
+                var order = new OrderToTalentDemand();
+                order.ProductId = product.Id;
+                order.ProductType = product.Type;
+                order.ProductName = product.Name;
+                order.MerchantId = merchant.Id;
+                //order.MerchantPosMachineId = merchant.MerchantPosMachineId;
+                order.UserId = merchant.UserId;
+
+
+                order.WorkJob = workJob;
+                order.Quantity = quantity;
+
+                order.Status = Enumeration.OrderStatus.Submitted;
+                order.SubmitTime = this.DateTime;
+                order.CreateTime = this.DateTime;
+                order.Creator = operater;
+                CurrentDb.OrderToTalentDemand.Add(order);
+                CurrentDb.SaveChanges();
+                order.Sn = Sn.Build(SnType.TalentDemand, order.Id);
+
+                //状态改为待核实
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.TalentDemand, order.Id, Enumeration.TalentDemandDealtStatus.WaitVerifyOrder, "");
+                BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.Submit, bizProcessesAudit.Id, operater, order.ClientRequire, "商户提交人才需求", this.DateTime);
+
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, "提交成功");
+            }
+
+
+            return result;
+        }
+
+        public CustomJsonResult VerifyTalentDemand(int operater, Enumeration.OperateType operate, OrderToTalentDemand order, string remarks, BizProcessesAudit bizProcessesAudit)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            //using (TransactionScope ts = new TransactionScope())
+            //{
+
+            //    var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.CurrentDetails.BizProcessesAuditId && (m.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer || m.Status == (int)Enumeration.CarInsureOfferDealtStatus.InOffer)).FirstOrDefault();
+
+            //    if (bizProcessesAudit == null)
+            //    {
+            //        return new CustomJsonResult(ResultType.Success, "该订单已经处理完成");
+            //    }
+
+            //    if (bizProcessesAudit.Auditor != null)
+            //    {
+            //        if (bizProcessesAudit.Auditor.Value != operater)
+            //        {
+            //            return new CustomJsonResult(ResultType.Failure, "该订单其他用户正在处理");
+            //        }
+            //    }
+
+
+            //    var l_orderToCarClaim = CurrentDb.OrderToCarClaim.Where(m => m.Id == orderToCarClaim.Id).FirstOrDefault();
+
+            //    l_orderToCarClaim.HandMerchantId = estimateMerchantId;
+            //    l_orderToCarClaim.HandMerchantType = Enumeration.HandMerchantType.Supply;
+
+            //    l_orderToCarClaim.Remarks = orderToCarClaim.Remarks;
+
+            //    bizProcessesAudit.CurrentDetails.AuditComments = orderToCarClaim.Remarks;
+
+            //    switch (operate)
+            //    {
+            //        case Enumeration.OperateType.Save:
+
+            //            result = new CustomJsonResult(ResultType.Success, "保存成功");
+
+            //            BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.CarClaimDealtStep.VerifyOrder, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, null);
+
+            //            break;
+            //        case Enumeration.OperateType.Cancle:
+
+            //            l_orderToCarClaim.Status = Enumeration.OrderStatus.Cancled;
+            //            l_orderToCarClaim.CancleTime = this.DateTime;
+
+            //            BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.CarClaimDealtStep.VerifyOrder, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员撤销订单", this.DateTime);
+
+            //            BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.CarInsureOfferDealtStatus.StaffCancle);
+
+            //            result = new CustomJsonResult(ResultType.Success, "撤销成功");
+
+            //            break;
+            //        case Enumeration.OperateType.Submit:
+
+            //            l_orderToCarClaim.Status = Enumeration.OrderStatus.Follow;
+
+            //            l_orderToCarClaim.FollowStatus = (int)Enumeration.OrderToCarClaimFollowStatus.WaitEstimate;
+
+
+            //            var merchant = CurrentDb.Merchant.Where(m => m.Id == l_orderToCarClaim.HandMerchantId).FirstOrDefault();
+
+            //            var estimateOrderToCarClaim = new OrderToCarClaim();
+            //            estimateOrderToCarClaim.RepairsType = l_orderToCarClaim.RepairsType;
+            //            estimateOrderToCarClaim.MerchantId = merchant.Id;
+            //            estimateOrderToCarClaim.MerchantPosMachineId = l_orderToCarClaim.MerchantPosMachineId;
+            //            estimateOrderToCarClaim.UserId = merchant.UserId;
+            //            estimateOrderToCarClaim.HandPerson = l_orderToCarClaim.HandPerson;
+            //            estimateOrderToCarClaim.HandPersonPhone = l_orderToCarClaim.HandPersonPhone;
+            //            estimateOrderToCarClaim.InsuranceCompanyId = l_orderToCarClaim.InsuranceCompanyId;
+            //            estimateOrderToCarClaim.InsuranceCompanyName = l_orderToCarClaim.InsuranceCompanyName;
+            //            estimateOrderToCarClaim.CarPlateNo = l_orderToCarClaim.CarPlateNo;
+            //            estimateOrderToCarClaim.Status = Enumeration.OrderStatus.Follow;
+            //            estimateOrderToCarClaim.FollowStatus = (int)Enumeration.OrderToCarClaimFollowStatus.WaitUploadEstimateList;
+            //            estimateOrderToCarClaim.SubmitTime = this.DateTime;
+            //            estimateOrderToCarClaim.Creator = operater;
+            //            estimateOrderToCarClaim.CreateTime = this.DateTime;
+
+            //            estimateOrderToCarClaim.HandMerchantId = l_orderToCarClaim.MerchantId;
+            //            estimateOrderToCarClaim.HandMerchantType = Enumeration.HandMerchantType.Demand;
+
+
+            //            estimateOrderToCarClaim.Remarks = estimateMerchantRemarks;//告知维修厂备注
+
+
+            //            estimateOrderToCarClaim.ProductId = l_orderToCarClaim.ProductId;
+            //            estimateOrderToCarClaim.ProductName = l_orderToCarClaim.ProductName;
+            //            estimateOrderToCarClaim.ProductType = l_orderToCarClaim.ProductType;
+            //            estimateOrderToCarClaim.PId = l_orderToCarClaim.Id;
+            //            estimateOrderToCarClaim.ClientRequire = l_orderToCarClaim.ClientRequire;
+
+
+            //            estimateOrderToCarClaim.HandOrderId = l_orderToCarClaim.Id;
+
+            //            CurrentDb.OrderToCarClaim.Add(estimateOrderToCarClaim);
+            //            CurrentDb.SaveChanges();
+            //            estimateOrderToCarClaim.Sn = Sn.Build(SnType.CarClaim, estimateOrderToCarClaim.Id);
+
+            //            l_orderToCarClaim.HandOrderId = estimateOrderToCarClaim.Id;
+
+            //            BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.CarClaimDealtStep.VerifyOrder, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员派单完成", this.DateTime);
+
+            //            BizFactory.BizProcessesAudit.ChangeCarClaimDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.CarClaimDealtStatus.FllowUploadEstimateListImg, "等待商户上传定损单");
+
+            //            result = new CustomJsonResult(ResultType.Success, "提交成功");
+            //            break;
+
+            //    }
+
+
+
+            //    CurrentDb.SaveChanges();
+            //    ts.Complete();
+            //}
+
+            return result;
+
+        }
     }
 }

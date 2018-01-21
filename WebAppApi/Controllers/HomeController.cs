@@ -28,8 +28,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
-        //private string host = "http://112.74.179.185";
+        //private string host = "http://localhost:16665";
+        private string host = "http://112.74.179.185";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -185,7 +185,7 @@ namespace WebAppApi.Controllers
 
             // model.Add("支付结果确认", PayConfirm());
 
-            // model.Add("获取订单列表1", GetOrderList(userId, merchantId, 0, 0));
+             model.Add("获取订单列表1", GetOrderList(userId, merchantId, 0, 0));
             //  model.Add("获取订单列表维修和定损", GetOrderList(1004, 23, 0, 0));
             //  model.Add("获取订单列表只定损", GetOrderList(1006, 25, 0, 0));
 
@@ -233,7 +233,7 @@ namespace WebAppApi.Controllers
 
 
 
-             model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+           //  model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //  model.Add("提交续保单", SubmitRenewal(userId));
             //  model.Add("提交理赔需求1", SubmitClaim(userId, "邱大文", Enumeration.RepairsType.EstimateRepair));
             //  model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));

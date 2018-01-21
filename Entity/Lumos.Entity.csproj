@@ -65,7 +65,6 @@
     <Compile Include="Biz\BankCard.cs" />
     <Compile Include="Biz\BizProcessesAudit.cs" />
     <Compile Include="Biz\BizProcessesAuditDetails.cs" />
-    <Compile Include="Biz\CarInsuranceClaim.cs" />
     <Compile Include="Biz\CarInsuranceCompany.cs" />
     <Compile Include="Biz\CarInsuranceExpireDate.cs" />
     <Compile Include="Biz\CarInsuranceExpireDateSearchHis.cs" />
@@ -91,6 +90,7 @@
     <Compile Include="Biz\PayTestModel.cs" />
     <Compile Include="Biz\PosMachine.cs" />
     <Compile Include="Biz\Product.cs" />
+    <Compile Include="Biz\OrderToTalentDemand .cs" />
     <Compile Include="Sys\SysOpenIdInfo.cs" />
     <Compile Include="Biz\Transactions.cs" />
     <Compile Include="Biz\Withdraw.cs" />

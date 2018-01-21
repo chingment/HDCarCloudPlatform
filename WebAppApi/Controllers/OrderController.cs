@@ -107,7 +107,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarClaim.CarPlateNo.NullToEmpty()));
 
                                 var merchant = CurrentDb.Merchant.Where(q => q.Id == orderToCarClaim.HandMerchantId).FirstOrDefault();
-                                if (orderToCarClaim.HandMerchantType == Enumeration.MerchantType.CarRepair)
+                                if (orderToCarClaim.HandMerchantType == Enumeration.HandMerchantType.Supply)
                                 {
                                     orderModel.OrderField.Add(new OrderField("对接维修厂", merchant.YYZZ_Name.NullToEmpty()));
                                 }
@@ -498,7 +498,19 @@ namespace WebAppApi.Controllers
                             merchantModel.Contact = handMerchant.ContactName;
                             merchantModel.ContactAddress = handMerchant.YYZZ_Address;
                             merchantModel.ContactPhone = handMerchant.ContactPhoneNumber;
-                            model.EstimateMerchant = merchantModel;
+
+                            string headTitle = "";
+                            if (orderToCarEstimate.HandMerchantType== Enumeration.HandMerchantType.Demand)
+                            {
+                                headTitle = "维修厂";
+                            }
+                            else if(orderToCarEstimate.HandMerchantType == Enumeration.HandMerchantType.Supply)
+                            {
+                                headTitle = "对接商家";
+                            }
+
+                            merchantModel.HeadTitle = headTitle;
+                            model.HandMerchant = merchantModel;
 
                         }
 

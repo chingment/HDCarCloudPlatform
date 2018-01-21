@@ -49,6 +49,9 @@ namespace System
         public const string 扩展应用初审 = "Biz9002";
         public const string 扩展应用复审 = "Biz9003";
 
+        public const string 人才需求核实 = "Biz10001";
+
+
         public const string 保险公司设置 = "BizA001";
         public const string 车险保险公司设置 = "BizA002";
 

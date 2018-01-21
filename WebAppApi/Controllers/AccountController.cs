@@ -220,7 +220,7 @@ namespace WebAppApi.Controllers
                 }
             
                 carInsKindModel.IsHasDetails = carKind.IsHasDetails;
-
+                carInsKindModel.IsCheck = carKind.IsCheck;
                 carInsKindModels.Add(carInsKindModel);
             }
 

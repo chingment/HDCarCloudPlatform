@@ -15,7 +15,7 @@ namespace Lumos.Entity
 
         public int InsuranceCompanyId { get; set; }
 
-        public Enumeration.MerchantType HandMerchantType { get; set; }
+        public Enumeration.HandMerchantType HandMerchantType { get; set; }
 
         public int? HandMerchantId { get; set; }
 

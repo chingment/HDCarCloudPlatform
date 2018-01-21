@@ -17,13 +17,16 @@ namespace WebAppApi.Models.Order
         public string ContactPhone { get; set; }
 
         public string ContactAddress { get; set; }
+
+        public string HeadTitle { get; set; }
+
     }
 
     public class OrderCarClaimDetailsModel
     {
         public OrderCarClaimDetailsModel()
         {
-            this.EstimateMerchant = new MerchantModel();
+            this.HandMerchant = new MerchantModel();
         }
 
         public int Id { get; set; }
@@ -60,7 +63,7 @@ namespace WebAppApi.Models.Order
 
         public string EstimateListImgUrl { get; set; }
 
-        public MerchantModel EstimateMerchant { get; set; }
+        public MerchantModel HandMerchant { get; set; }
 
 
         public decimal AccessoriesPrice { get; set; }

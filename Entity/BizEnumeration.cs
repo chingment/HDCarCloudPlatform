@@ -130,6 +130,36 @@ namespace Lumos.Entity
 
         }
 
+        public enum TalentDemandDealtStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("等待核实")]
+            WaitVerifyOrder = 1,
+            [Remark("核实需求")]
+            InVerifyOrder = 2,
+            [Remark("后台取消订单")]
+            StaffCancle = 3,
+            [Remark("客户取消订单")]
+            ClientCancle = 4,
+            [Remark("完成")]
+            Complete = 5
+        }
+
+
+        public enum TalentDemandDealtStep
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("提交订单")]
+            Submit = 1,
+            [Remark("核实需求")]
+            VerifyOrder = 2,
+            [Remark("完成")]
+            Complete = 3
+
+        }
+
 
         public enum MerchantAuditStatus
         {
@@ -232,24 +262,24 @@ namespace Lumos.Entity
             Unknow = 0,
             [Remark("商品")]
             Goods = 1,
-            [Remark("汽车用品")]
-            GoodsForCar = 101,
-            [Remark("机油")]
-            GoodsForCarForMachineOil = 1011,
-            [Remark("轮胎")]
-            GoodsForCarForTyre = 1012,
-            [Remark("座垫")]
-            GoodsForCarForCushion = 1013,
-            [Remark("香水")]
-            GoodsForCarForPerfume = 1014,
-            [Remark("空气净化")]
-            GoodsForCarForAirPurge = 1015,
-            [Remark("方向盘套")]
-            GoodsForCarForSteeringWheelCover = 1016,
-            [Remark("座套")]
-            GoodsForCarForSeatCover = 1017,
-            [Remark("头枕")]
-            GoodsForCarForHeadPillow = 1018,
+            //[Remark("汽车用品")]
+            //GoodsForCar = 101,
+            //[Remark("机油")]
+            //GoodsForCarForMachineOil = 1011,
+            //[Remark("轮胎")]
+            //GoodsForCarForTyre = 1012,
+            //[Remark("座垫")]
+            //GoodsForCarForCushion = 1013,
+            //[Remark("香水")]
+            //GoodsForCarForPerfume = 1014,
+            //[Remark("空气净化")]
+            //GoodsForCarForAirPurge = 1015,
+            //[Remark("方向盘套")]
+            //GoodsForCarForSteeringWheelCover = 1016,
+            //[Remark("座套")]
+            //GoodsForCarForSeatCover = 1017,
+            //[Remark("头枕")]
+            //GoodsForCarForHeadPillow = 1018,
             [Remark("保险")]
             Insure = 2,
             [Remark("车险")]
@@ -260,12 +290,14 @@ namespace Lumos.Entity
             //InsureForCarForRenewal = 2012,
             [Remark("车险理赔")]
             InsureForCarForClaim = 2013,
-            [Remark("保险通")]
-            InsureForPopular = 202,
+            //[Remark("保险通")]
+            //InsureForPopular = 202,
             [Remark("POS机押金租金")]
             PosMachineDepositRent = 301,
             [Remark("POS机租金")]
             PosMachineRent = 302,
+            [Remark("人才输送")]
+            TalentDemand = 401
 
         }
 
@@ -387,7 +419,9 @@ namespace Lumos.Entity
             [Remark("商户资料审核")]
             MerchantAudit = 6,
             [Remark("佣金审核")]
-            CommissionRateAudit = 7
+            CommissionRateAudit = 7,
+            [Remark("人才输送")]
+            TalentDemand = 8
         }
 
         public enum MerchantStatus
@@ -412,6 +446,16 @@ namespace Lumos.Entity
             CarRepair = 2,
             [Remark("美容店")]
             CarBeauty = 3
+        }
+     
+        public enum HandMerchantType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("需求方")]
+            Demand = 1,
+            [Remark("维修方")]
+            Supply = 2,
         }
 
 
@@ -594,6 +638,16 @@ namespace Lumos.Entity
             Unknow = 0,
             [Remark("车管家")]
             Cgj = 1
+        }
+
+        public enum WorkJob
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("洗车")]
+            XiChe = 1,
+           [Remark("修车")]
+            XiuChe = 2
         }
     }
 }

@@ -49,5 +49,7 @@ namespace Lumos.Entity
 
         public DateTime? LastUpdateTime { get; set; }
 
+        public bool IsCheck { get; set; }
+
     }
 }

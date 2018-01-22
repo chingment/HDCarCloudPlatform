@@ -13,6 +13,9 @@ namespace Lumos.Entity
     {
         public Enumeration.WorkJob WorkJob { get; set; }
 
+        [MaxLength(128)]
+        public String WorkJobName { get; set; }
+
         public int Quantity { get; set; }
 
     }

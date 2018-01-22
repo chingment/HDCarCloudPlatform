@@ -24,6 +24,7 @@ namespace WebAppApi.Controllers
 
             OrderToCarInsure orderToCarInsure = new OrderToCarInsure();
 
+            orderToCarInsure.UserId = model.UserId;
             orderToCarInsure.MerchantId = model.MerchantId;
             orderToCarInsure.MerchantPosMachineId = model.PosMachineId;
             orderToCarInsure.InsurePlanId = model.InsurePlanId;
@@ -107,7 +108,7 @@ namespace WebAppApi.Controllers
                 orderToCarInsureOfferKinds.Add(orderToCarInsureOfferKind);
             }
 
-            IResult result = BizFactory.Order.SubmitCarInsure(model.UserId, model.UserId, orderToCarInsure, orderToCarInsureOfferCompanys, orderToCarInsureOfferKinds);
+            IResult result = BizFactory.Order.SubmitCarInsure(model.UserId, orderToCarInsure, orderToCarInsureOfferCompanys, orderToCarInsureOfferKinds);
 
             return new APIResponse(result);
 

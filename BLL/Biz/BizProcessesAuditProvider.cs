@@ -559,6 +559,122 @@ namespace Lumos.BLL
             return bizProcessesAudit;
         }
 
+
+        public BizProcessesAudit ChangeTalentDemandDealtStatus(int operater, int bizProcessesAuditId, Enumeration.TalentDemandDealtStatus changestatus, string description = null, DateTime? endTime = null)
+        {
+
+            var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
+            if (bizProcessesAudit != null)
+            {
+                if (bizProcessesAudit.EndTime == null)
+                {
+                    if (
+                       bizProcessesAudit.Status != (int)Enumeration.TalentDemandDealtStatus.Complete
+                        && bizProcessesAudit.Status != (int)Enumeration.TalentDemandDealtStatus.ClientCancle
+                           && bizProcessesAudit.Status != (int)Enumeration.TalentDemandDealtStatus.StaffCancle
+                        )
+                    {
+                        Enumeration.TalentDemandDealtStatus old_Status = (Enumeration.TalentDemandDealtStatus)bizProcessesAudit.Status;
+                        bizProcessesAudit.Mender = operater;
+                        bizProcessesAudit.LastUpdateTime = DateTime.Now;
+
+
+                        if (endTime != null)
+                        {
+                            bizProcessesAudit.EndTime = endTime.Value;
+                        }
+
+                        if (changestatus == Enumeration.TalentDemandDealtStatus.WaitVerifyOrder)
+                        {
+
+                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.VerifyOrder).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                            if (bizProcessesAuditDetails == null)
+                            {
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.WaitVerifyOrder;
+                                bizProcessesAudit.Auditor = null;
+
+                            }
+                            else
+                            {
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InVerifyOrder;
+                                bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
+
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarClaimDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, null);
+                            }
+
+                        }
+                        else if (changestatus == Enumeration.TalentDemandDealtStatus.InVerifyOrder)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InVerifyOrder;
+                            if (bizProcessesAudit.Auditor == null)
+                            {
+                                bizProcessesAudit.Auditor = operater;
+
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.TalentDemandDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, null);
+
+                            }
+
+                        }
+
+                        else if (changestatus == Enumeration.TalentDemandDealtStatus.ClientCancle)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.ClientCancle;
+                            bizProcessesAudit.Auditor = operater;
+
+                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, null);
+
+                        }
+                        else if (changestatus == Enumeration.TalentDemandDealtStatus.StaffCancle)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.StaffCancle;
+                            bizProcessesAudit.Auditor = operater;
+                            bizProcessesAudit.EndTime = this.DateTime;
+
+                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, null);
+                        }
+                        else if (changestatus == Enumeration.TalentDemandDealtStatus.Complete)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.Complete;
+                            bizProcessesAudit.Auditor = operater;
+                            bizProcessesAudit.EndTime = this.DateTime;
+
+                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, null);
+
+                        }
+                    }
+
+                    CurrentDb.SaveChanges();
+                }
+
+
+                var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderByDescending(m => m.AuditTime).ToList();
+
+                bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
+
+
+                Enumeration.TalentDemandDealtStep merchantAuditStep = Enumeration.TalentDemandDealtStep.Unknow;
+                if (changestatus == Enumeration.TalentDemandDealtStatus.WaitVerifyOrder || changestatus == Enumeration.TalentDemandDealtStatus.InVerifyOrder)
+                {
+                    merchantAuditStep = Enumeration.TalentDemandDealtStep.VerifyOrder;
+                }
+                var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                if (currentDetails != null)
+                {
+                    bizProcessesAudit.CurrentDetails = currentDetails;
+
+                    var auditComments = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep && m.AuditComments != null).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                    if (auditComments != null)
+                    {
+                        bizProcessesAudit.CurrentDetails.AuditComments = auditComments.AuditComments;
+                    }
+                }
+
+
+            }
+
+            return bizProcessesAudit;
+        }
+
         public void ChangeAuditDetails(Enumeration.OperateType operate, object auditStep, int bizProcessesAuditId, int operater, string auditComments, string description, DateTime? auditTime = null)
         {
             DateTime nowDate = DateTime.Now;

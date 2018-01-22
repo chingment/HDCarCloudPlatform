@@ -97,7 +97,7 @@
                             });
                         }
 
-                        if (obj.DealtStatus == @((int)Lumos.Entity.Enumeration.CarClaimDealtStatus.WaitVerifyOrder)) {
+                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.CarClaimDealtStatus.WaitVerifyOrder)) {
                             art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
 
                                 dealt(obj)

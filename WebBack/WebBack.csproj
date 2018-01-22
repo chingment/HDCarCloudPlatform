@@ -1304,6 +1304,10 @@
     <Content Include="Views\Biz\Order\ConfirmPayList.cshtml" />
     <Content Include="Views\App\Order\InsOfferPay.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\Add.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\Details.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\List.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\VerifyOrder.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\VerifyOrderList.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

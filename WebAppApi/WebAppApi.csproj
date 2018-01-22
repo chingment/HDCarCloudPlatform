@@ -237,10 +237,11 @@
     <Compile Include="Models\ExtendedAppModel.cs" />
     <Compile Include="Models\Fund\BalanceResultModel.cs" />
     <Compile Include="Models\ImageModel.cs" />
-    <Compile Include="Models\Order\OrderCarInsureModel.cs" />
     <Compile Include="Models\Order\OrderCarInsureOfferCompanyModel.cs" />
     <Compile Include="Models\Order\OrderPosDepositRentDetailsModel.cs" />
     <Compile Include="Models\Order\OrderPosRentDetailsModel.cs" />
+    <Compile Include="Models\Order\OrderTalentDemandDetailsModel.cs" />
+    <Compile Include="Models\Order\SubmitTalentDemandModel.cs" />
     <Compile Include="Models\Order\OrderToCarInsureOfferKindModel.cs" />
     <Compile Include="Models\Order\PayModel.cs" />
     <Compile Include="Models\CarService\SubmitFollowInsureModel.cs" />

@@ -73,6 +73,13 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("对接人", string.Format("{0},{1}", orderToCarClaim.HandPerson.NullToEmpty(), orderToCarClaim.HandPersonPhone.NullToEmpty())));
                                 orderModel.OrderField.Add(new OrderField("状态", "请稍侯，理赔呼叫中"));
                                 break;
+                            case Enumeration.ProductType.TalentDemand:
+
+                                var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
+                                orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
+                                orderModel.OrderField.Add(new OrderField("状态", "核实需求中"));
+                                break;
                         }
                         #endregion
 
@@ -125,6 +132,13 @@ namespace WebAppApi.Controllers
                                 }
 
                                 orderModel.OrderField.Add(new OrderField("进度", followStatus.GetCnName()));
+                                break;
+                            case Enumeration.ProductType.TalentDemand:
+
+                                var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
+                                orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
+                                orderModel.OrderField.Add(new OrderField("状态", "核实需求中"));
                                 break;
                         }
 
@@ -219,6 +233,13 @@ namespace WebAppApi.Controllers
 
 
                                 break;
+                            case Enumeration.ProductType.TalentDemand:
+
+                                var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
+                                orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
+
+                                break;
                         }
                         #endregion
 
@@ -248,6 +269,12 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("对接人", orderToCarClaim.HandPerson.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
 
+                                break;
+                            case Enumeration.ProductType.TalentDemand:
+                                var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
+                                orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
+                                orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
                         }
 
@@ -485,7 +512,7 @@ namespace WebAppApi.Controllers
                     model.Status = orderToCarEstimate.Status;
                     model.FollowStatus = orderToCarEstimate.FollowStatus;
                     model.StatusName = orderToCarEstimate.Status.GetCnName();
-                    model.Remark = orderToCarEstimate.Remarks;
+                    model.Remarks = orderToCarEstimate.Remarks;
 
                     if (orderToCarEstimate.HandMerchantId != null)
                     {
@@ -502,11 +529,11 @@ namespace WebAppApi.Controllers
                             string headTitle = "";
                             if (orderToCarEstimate.HandMerchantType== Enumeration.HandMerchantType.Demand)
                             {
-                                headTitle = "维修厂";
+                                headTitle = "对接商家";
                             }
                             else if(orderToCarEstimate.HandMerchantType == Enumeration.HandMerchantType.Supply)
                             {
-                                headTitle = "对接商家";
+                                headTitle = "维修厂";
                             }
 
                             merchantModel.HeadTitle = headTitle;
@@ -523,6 +550,7 @@ namespace WebAppApi.Controllers
             }
             else if (productType == Enumeration.ProductType.PosMachineDepositRent)
             {
+                #region  PosMachineDepositRent
                 OrderPosDepositRentDetailsModel model = new OrderPosDepositRentDetailsModel();
                 var orderToDepositRent = CurrentDb.OrderToDepositRent.Where(m => m.Id == orderId).FirstOrDefault();
                 if (orderToDepositRent != null)
@@ -537,9 +565,11 @@ namespace WebAppApi.Controllers
                 }
                 APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
                 return new APIResponse(result);
+                #endregion 
             }
             else if (productType == Enumeration.ProductType.PosMachineRent)
             {
+                #region PosMachineRent
                 OrderPosRentDetailsModel model = new OrderPosRentDetailsModel();
                 var orderToRent = CurrentDb.OrderToDepositRent.Where(m => m.Id == orderId).FirstOrDefault();
                 if (orderToRent != null)
@@ -554,6 +584,33 @@ namespace WebAppApi.Controllers
 
                 APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
                 return new APIResponse(result);
+                #endregion
+            }
+            else if (productType == Enumeration.ProductType.TalentDemand)
+            {
+                #region TalentDemand
+                OrderTalentDemandDetailsModel model = new OrderTalentDemandDetailsModel();
+                var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(m => m.Id == orderId).FirstOrDefault();
+                if (orderToTalentDemand != null)
+                {
+                    model.Id = orderToTalentDemand.Id;
+                    model.Sn = orderToTalentDemand.Sn;
+                    model.SubmitTime = orderToTalentDemand.SubmitTime;
+                    model.CompleteTime = orderToTalentDemand.CompleteTime;
+                    model.PayTime = orderToTalentDemand.PayTime;
+                    model.CancleTime = orderToTalentDemand.CancleTime;
+                    model.Status = orderToTalentDemand.Status;
+                    model.StatusName = orderToTalentDemand.Status.GetCnName();
+                    model.FollowStatus = orderToTalentDemand.FollowStatus;
+                    model.Remarks = orderToTalentDemand.Remarks.NullToEmpty();
+
+                    model.Quantity = orderToTalentDemand.Quantity;
+                    model.WorkJob = orderToTalentDemand.WorkJob.GetCnName();
+                }
+
+                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
+                return new APIResponse(result);
+                #endregion
             }
             else
             {
@@ -590,6 +647,20 @@ namespace WebAppApi.Controllers
             IResult result = BizFactory.Pay.ResultNotify(model.UserId, ResultNotifyParty.App, model);
 
             return new APIResponse(result);
+        }
+
+        [HttpPost]
+        public APIResponse SubmitTalentDemand(SubmitTalentDemandModel model)
+        {
+            OrderToTalentDemand orderToTalentDemand = new OrderToTalentDemand();
+            orderToTalentDemand.UserId = model.UserId;
+            orderToTalentDemand.MerchantId = model.MerchantId;
+            orderToTalentDemand.MerchantPosMachineId = model.PosMachineId;
+            orderToTalentDemand.WorkJob = model.WorkJob;
+            orderToTalentDemand.Quantity = model.Quantity;
+            IResult result = BizFactory.Order.SubmitTalentDemand(model.UserId, orderToTalentDemand);
+            return new APIResponse(result);
+
         }
 
 

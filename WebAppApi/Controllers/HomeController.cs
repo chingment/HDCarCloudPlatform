@@ -19,6 +19,7 @@ using WebAppApi.Models;
 using WebAppApi.Models.Account;
 using WebAppApi.Models.BankCard;
 using WebAppApi.Models.CarService;
+using WebAppApi.Models.Order;
 using WebAppApi.Models.Withdraw;
 
 namespace WebAppApi.Controllers
@@ -28,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
-        private string host = "http://112.74.179.185";
+        private string host = "http://localhost:16665";
+        //private string host = "http://112.74.179.185";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -179,20 +180,23 @@ namespace WebAppApi.Controllers
             int userId = 1027;
             int merchantId = 20;
             int posMachineId = 2;
+
+            model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+
             //model.Add("支付结果", PayResultNotify());
             // model.Add("易办事销账", YBSReceiveNotify());
 
 
             // model.Add("支付结果确认", PayConfirm());
 
-             model.Add("获取订单列表1", GetOrderList(userId, merchantId, 0, 0));
+            //  model.Add("获取订单列表1", GetOrderList(userId, merchantId, 0, 0));
             //  model.Add("获取订单列表维修和定损", GetOrderList(1004, 23, 0, 0));
             //  model.Add("获取订单列表只定损", GetOrderList(1006, 25, 0, 0));
 
 
             // model.Add("获取应付订单", GetPayableList(userId, merchantId, 0));
             //  http://112.74.179.185/api/Order/GetDetails?productType=2013&merchantId=20&userId=1001&orderId=66
-            model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 818, Enumeration.ProductType.InsureForCarForInsure));
+            //  model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 818, Enumeration.ProductType.InsureForCarForInsure));
             //     model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));
 
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 87));
@@ -233,7 +237,7 @@ namespace WebAppApi.Controllers
 
 
 
-           //  model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+            //  model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //  model.Add("提交续保单", SubmitRenewal(userId));
             //  model.Add("提交理赔需求1", SubmitClaim(userId, "邱大文", Enumeration.RepairsType.EstimateRepair));
             //  model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));
@@ -1413,6 +1417,33 @@ namespace WebAppApi.Controllers
             return result;
         }
 
+
+        public string SubmitTalentDemand(int userId, int merchantId, int posMachineId)
+        {
+
+            SubmitTalentDemandModel model1 = new SubmitTalentDemandModel();
+            model1.UserId = userId;
+            model1.Quantity = 2;
+            model1.WorkJob = Enumeration.WorkJob.XiChe;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+     
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/SubmitTalentDemand", a1, headers1);
+
+            return respon_data4;
+
+        }
 
     }
 }

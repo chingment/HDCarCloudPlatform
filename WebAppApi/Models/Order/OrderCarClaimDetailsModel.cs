@@ -74,6 +74,6 @@ namespace WebAppApi.Models.Order
 
         public decimal Price { get; set; }
 
-        public string Remark { get; set; }
+        public string Remarks { get; set; }
     }
 }

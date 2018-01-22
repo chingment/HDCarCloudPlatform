@@ -94,7 +94,7 @@
 
 
 
-                    if (obj.AuditStatus == @((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitSeniorAudit)) {
+                    if (obj.auditStatus == @((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitSeniorAudit)) {
                         art.dialog.confirm('您确定要处理商户代码为'+obj.clientCode+'的资料，确定后该资料由您来完善？', function () {
                             audit(obj)
                         });

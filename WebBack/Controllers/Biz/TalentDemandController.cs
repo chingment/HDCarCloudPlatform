@@ -53,7 +53,7 @@ namespace WebBack.Controllers.Biz
                         (sn.Length == 0 || o.Sn.Contains(sn)) &&
                             (clientCode.Length == 0 || m.ClientCode.Contains(clientCode)) &&
                                 (clientCode.Length == 0 || m.YYZZ_Name.Contains(clientCode))
-                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, o.Status, o.CreateTime });
+                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, o.Status, o.CreateTime });
 
             int total = query.Count();
 
@@ -72,7 +72,9 @@ namespace WebBack.Controllers.Biz
                     item.Sn,
                     item.YYZZ_Name,
                     item.Quantity,
-                    WorkJob=item.WorkJob.GetCnName(),
+                    item.ContactName,
+                    item.ContactPhoneNumber,
+                    WorkJob =item.WorkJob.GetCnName(),
                     item.ProductName,
                     item.SubmitTime,
                     Status = item.Status.GetCnName()
@@ -94,10 +96,10 @@ namespace WebBack.Controllers.Biz
                          join o in CurrentDb.OrderToTalentDemand on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.CarClaim
+                         where b.AduitType == Enumeration.BizProcessesAuditType.TalentDemand
 
 
-                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
+                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name,m.ContactName,m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
             if (condition.DealtStatus == Enumeration.TalentDemandDealtStatus.WaitVerifyOrder)
             {
@@ -126,7 +128,9 @@ namespace WebBack.Controllers.Biz
                     item.ClientCode,
                     item.Sn,
                     item.YYZZ_Name,
-                    WorkJob=item.WorkJob.GetCnName(),
+                    item.ContactName,
+                    item.ContactPhoneNumber,
+                    WorkJob =item.WorkJob.GetCnName(),
                     item.Quantity,
                     item.ProductName,
                     item.SubmitTime,
@@ -146,7 +150,7 @@ namespace WebBack.Controllers.Biz
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.Order.VerifyTalentDemand(this.CurrentUserId, model.Operate, model.OrderToTalentDemand,"" , model.BizProcessesAudit);
+            reuslt = BizFactory.Order.VerifyTalentDemand(this.CurrentUserId, model.Operate, model.OrderToTalentDemand , model.BizProcessesAudit);
 
             return reuslt;
         }

@@ -1,9 +1,8 @@
 ﻿
 @{
-    ViewBag.Title = "VerifyAmountList";
+    ViewBag.Title = "DealtList";
     Layout = "~/Views/Shared/_LayoutHomeIframeMainList.cshtml";
 }
-
 @section scripts{
     <script type="text/javascript">
 
@@ -11,7 +10,7 @@
 
         $(document).ready(function () {
             listTable = $("#list_table").loadDataTable({
-                url: "../CarClaim/GetVerifyAmountList",
+                url: "/Biz/TalentDemand/GetVerifyOrderList",
                 pageIndex: 0,
                 searchParams: $("#form1").serializeArray(),
                 searchButtonId: "btn_Search",
@@ -25,10 +24,10 @@
                     l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.sn + "\"   >" + p_row.sn + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\">" + p_row.clientCode + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.insuranceCompanyName + "\">" + p_row.insuranceCompanyName + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.handPerson + "\">" + p_row.handPerson + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.handPersonPhone + "\">" + p_row.handPersonPhone + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.carPlateNo + "\">" + p_row.carPlateNo + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactPhoneNumber + "\">" + p_row.contactPhoneNumber + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.workJob + "\">" + p_row.workJob + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.quantity + "\">" + p_row.quantity + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.submitTime + "\">" + p_row.submitTime + "</td>";
                     l_StrRows += "<td class=\"operation\">";
                     l_StrRows += l_Strlimt;
@@ -45,21 +44,21 @@
                     "dealt": function (obj) {
 
                         function dealt(obj) {
-                            var url = '../CarClaim/VerifyAmount?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
-                            var title = '处理理赔订单-' + obj.sn;
+                            var url = '/Biz/TalentDemand/VerifyOrder?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
+                            var title = '处理订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",
                                 title: title,
-                                width: '800px',
+                                width: '900px',
                                 height: '600px',
                                 lock: true,
                                 drag: false,
                                 cancelVal: '关闭',
                                 cancel: true,
                                 button: [{
-                                    name: '确定',
+                                    name: '核实正确',
                                     callback: function () {
-                                        
+
                                         this.iframe.contentWindow.submit(operateType.submit, function (d) {
                                             if (d.result == resultType.success) {
                                                 dialog.close();
@@ -72,10 +71,14 @@
                                     focus: true
                                 },
                                 {
-                                    name: '暂存',
+                                    name: '撤销',
                                     callback: function () {
 
-                                        this.iframe.contentWindow.submit(operateType.save, function (d) {
+                                        this.iframe.contentWindow.submit(operateType.cancle, function (d) {
+                                            if (d.result == resultType.success) {
+                                                dialog.close();
+                                                listTable.loadData();
+                                            }
                                             $.lumos.tips(d.message);
                                         });
                                         return false;
@@ -84,7 +87,7 @@
                             });
                         }
 
-                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.CarClaimDealtStatus.WaitVerifyAmount)) {
+                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerifyOrder)) {
                             art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
 
                                 dealt(obj)
@@ -115,13 +118,13 @@
 
 <form id="form1" name="form1">
     @Html.AntiForgeryToken()
-    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.CarClaimDealtStatus.WaitVerifyAmount)" />
+    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerifyOrder)" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.CarClaimDealtStatus.WaitVerifyAmount))" class="status-bar-btn selected">待核实<span class="waitVerifyOrderCount">(<span id="waitVerifyOrderCount">0</span>)</span></span>
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerifyOrder))" class="status-bar-btn selected">待核实<span class="waitVerifyOrderCount">(<span id="waitVerifyOrderCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.CarClaimDealtStatus.InVerifyAmount))" class="status-bar-btn">核实中<span class="inVerifyOrderCount"> (<span id="inVerifyOrderCount">0</span>)</span></span>
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.InVerifyOrder))" class="status-bar-btn">核实中<span class="inVerifyOrderCount"> (<span id="inVerifyOrderCount">0</span>)</span></span>
         </div>
         <div class="clear"></div>
     </div>
@@ -138,20 +141,20 @@
                     <th style="width:10%">
                         商户代码
                     </th>
-                    <th style="width:10%">
+                    <th style="width:15%">
                         商户名称
                     </th>
                     <th style="width:10%">
-                        保险公司
+                        商户联系人
                     </th>
                     <th style="width:10%">
-                        对接人
+                        联系电话
+                    </th>
+                    <th style="width:15%">
+                        需求工种
                     </th>
                     <th style="width:10%">
-                        对接电话
-                    </th>
-                    <th style="width:10%">
-                        车牌号码
+                        人数
                     </th>
                     <th style="width:10%">
                         提交时间
@@ -185,4 +188,3 @@
         </table>
     </div>
 </form>
-

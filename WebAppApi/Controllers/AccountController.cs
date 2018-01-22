@@ -177,7 +177,7 @@ namespace WebAppApi.Controllers
             var carInsCompanys = (from u in CurrentDb.CarInsuranceCompany
                                   join r in CurrentDb.InsuranceCompany on u.InsuranceCompanyId equals r.Id
                                   where u.Status == Enumeration.CarInsuranceCompanyStatus.Normal
-                                  select new { r.Id, r.Name, u.InsuranceCompanyImgUrl,u.CanClaims,u.CanInsure, u.Priority }).Distinct().OrderByDescending(m => m.Priority);
+                                  select new { r.Id, r.Name, u.InsuranceCompanyImgUrl, u.CanClaims, u.CanInsure, u.Priority }).Distinct().OrderByDescending(m => m.Priority);
 
             List<CarInsCompanyModel> carInsCompanyModels = new List<CarInsCompanyModel>();
 
@@ -218,7 +218,7 @@ namespace WebAppApi.Controllers
                 {
                     carInsKindModel.InputOption = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(carKind.InputOption);
                 }
-            
+
                 carInsKindModel.IsHasDetails = carKind.IsHasDetails;
                 carInsKindModel.IsCheck = carKind.IsCheck;
                 carInsKindModels.Add(carInsKindModel);
@@ -248,7 +248,7 @@ namespace WebAppApi.Controllers
 
                 var carKindIds = carInsurePlanKinds.Where(m => m.CarInsurePlanId == carInsurePlan.Id).Select(m => m.CarKindId).ToArray();
 
-                var carInsurePlanKindParentKindIds = carKinds.Where(m => carKindIds.Contains(m.Id)&&m.PId==0).Select(m=>m.Id).ToList();
+                var carInsurePlanKindParentKindIds = carKinds.Where(m => carKindIds.Contains(m.Id) && m.PId == 0).Select(m => m.Id).ToList();
 
                 List<CarInsPlanKindParentModel> carInsPlanKindParentModels = new List<CarInsPlanKindParentModel>();
 
@@ -274,7 +274,22 @@ namespace WebAppApi.Controllers
 
             #endregion
 
- 
+            #region 人才输送工种
+
+            List<TalentDemandWorkJobModel> talentDemandWorkJobModel = new List<TalentDemandWorkJobModel>();
+            foreach (Enumeration.WorkJob t in Enum.GetValues(typeof(Enumeration.WorkJob)))
+            {
+                int id = Convert.ToInt32(t);
+                if (id != 0)
+                {
+                    Enum en = (Enum)Enum.Parse(t.GetType(), id.ToString());
+                    string name = en.GetCnName();
+
+                    talentDemandWorkJobModel.Add(new TalentDemandWorkJobModel { Id = id, Name = name });
+                }
+            }
+            model.TalentDemandWorkJob = talentDemandWorkJobModel;
+            #endregion
 
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
             return new APIResponse(result);

@@ -17,5 +17,7 @@ namespace WebAppApi.Models.Account
         public List<CarInsKindModel> CarInsKind { get; set; }
 
         public List<CarInsCompanyModel> CarInsCompany { get; set; }
+
+        public List<TalentDemandWorkJobModel> TalentDemandWorkJob { get; set; }
     }
 }

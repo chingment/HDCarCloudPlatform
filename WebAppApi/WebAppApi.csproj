@@ -214,6 +214,7 @@
     <Compile Include="Models\Account\PersonalResultModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\SalesmanLoginResultModel.cs" />
+    <Compile Include="Models\Account\TalentDemandWorkJobModel.cs" />
     <Compile Include="Models\BankCard\BankCardModel.cs" />
     <Compile Include="Models\BankCard\BindBankCardModel.cs" />
     <Compile Include="Models\BankCard\RemoveBankCardModel.cs" />

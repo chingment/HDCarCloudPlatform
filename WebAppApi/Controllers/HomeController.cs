@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
-        //private string host = "http://112.74.179.185";
+        //private string host = "http://localhost:16665";
+        private string host = "http://112.74.179.185";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -182,7 +182,7 @@ namespace WebAppApi.Controllers
             int posMachineId = 2;
 
             model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-
+            model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
             //model.Add("支付结果", PayResultNotify());
             // model.Add("易办事销账", YBSReceiveNotify());
 

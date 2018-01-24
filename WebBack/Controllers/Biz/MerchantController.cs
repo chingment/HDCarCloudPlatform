@@ -81,11 +81,6 @@ namespace WebBack.Controllers.Biz
             return View(model);
         }
 
-        public ViewResult WithdrawDetails(int id)
-        {
-            Models.Biz.Withdraw.DetailsViewModel model = new Models.Biz.Withdraw.DetailsViewModel(id);
-            return View(model);
-        }
 
         public ViewResult TransactionsDetails(int id)
         {
@@ -105,7 +100,7 @@ namespace WebBack.Controllers.Biz
                         where (fuselageNumber.Length == 0 || p.FuselageNumber.Contains(fuselageNumber)) &&
                                 (terminalNumber.Length == 0 || p.TerminalNumber.Contains(terminalNumber)) &&
                                 p.IsUse == false
-                        select new { p.Id, p.FuselageNumber, p.TerminalNumber, p.CreateTime, p.Version, p.DeviceId, p.Deposit, p.Rent });
+                        select new { p.Id, p.FuselageNumber, p.TerminalNumber, p.CreateTime, p.Version, p.DeviceId });
 
             int total = list.Count();
 
@@ -177,12 +172,6 @@ namespace WebBack.Controllers.Biz
             }
 
             return deviceId;
-        }
-
-        [HttpPost]
-        public JsonResult OpenAccount(OpenAccountViewModel model)
-        {
-            return BizFactory.Merchant.OpenAccount(this.CurrentUserId, model.Merchant, model.MerchantPosMachine, model.BankCard);
         }
 
         public JsonResult GetList(MerchantSearchCondition condition)
@@ -394,48 +383,7 @@ namespace WebBack.Controllers.Biz
             return BizFactory.Merchant.SeniorAudit(this.CurrentUserId, model.Operate, model.Merchant.Id, model.BizProcessesAudit);
         }
 
-        public JsonResult GetWithdrawList(Models.Biz.Withdraw.WithdrawSearchCondition condition)
-        {
-
-            var query = (from m in CurrentDb.Withdraw
-                         join u in CurrentDb.Merchant on m.MerchantId equals u.Id
-                         where
-                           m.UserId == condition.UserId
-                         select new { m.Id, m.Sn, u.ClientCode, m.Amount, m.AmountByAfterFee, m.Fee, m.SettlementStartTime, m.Status, m.CreateTime });
-
-
-            int pageIndex = condition.PageIndex;
-            int pageSize = 10;
-
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
-
-            int total = query.Count();
-
-
-            List<object> olist = new List<object>();
-
-            foreach (var item in query)
-            {
-                olist.Add(new
-                {
-                    item.Id,
-                    item.Sn,
-                    item.ClientCode,
-                    Amount = item.Amount.ToPrice(),
-                    AmountByAfterFee = item.AmountByAfterFee.ToPrice(),
-                    Fee = item.Fee.ToPrice(),
-                    Status = item.Status.GetCnName(),
-                    item.SettlementStartTime
-                });
-            }
-
-
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = olist };
-
-            return Json(ResultType.Success, pageEntity, "");
-        }
-
-        public JsonResult GetTransactionsList(Models.Biz.Withdraw.WithdrawSearchCondition condition)
+        public JsonResult GetTransactionsList(Models.Biz.Transactions.TransactionsSearchCondition condition)
         {
 
             var q = (from u in CurrentDb.Transactions

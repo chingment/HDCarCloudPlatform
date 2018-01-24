@@ -13,14 +13,6 @@
             $("#Model_PosMachine_FuselageNumber").formValidator().inputValidator({ min: 1, max: 100, onError: "机身号不能为空，且不超过100个字符" });
             $("#Model_PosMachine_TerminalNumber").formValidator().inputValidator({ min: 1, max: 100, onError: "机终端号不能为空，且不超过100个字符" });
             $("#Model_PosMachine_Version").formValidator().inputValidator({ min: 1, max: 100, onError: "版本号不能为空不超过，且不超过100个字符" });
-            $("#Model_PosMachine_Deposit").formValidator().inputValidator({ type: "number", min: 0.01, max: 10000, onError: "押金不能为空，金额范围在0.01~10000.00之间" });
-            $("#Model_PosMachine_Rent").formValidator().inputValidator({ type: "number", min: 0.01, max: 10000, onError: "租金不能为空，金额范围在0.01~10000.00之间" });
-
-            $("#Model_PosMachine_Deposit").decimalInput(2);
-            $("#Model_PosMachine_Rent").decimalInput(2);
-
-
-
         });
 
         function edit() {
@@ -75,18 +67,6 @@ function () {
             <td class="f-tb-c"><input name="Model.PosMachine.TerminalNumber" class="input-control" type="text" id="Model_PosMachine_TerminalNumber" style="width: 150px;" value="@Model.PosMachine.TerminalNumber" /></td>
             <td class="f-tb-t">版本号：</td>
             <td class="f-tb-c"><input name="Model.PosMachine.Version" class="input-control" type="text" id="Model_PosMachine_Version" style="width: 150px;" value="@Model.PosMachine.Version" /></td>
-        </tr>
-        <tr>
-            <td class="f-tb-t"><span class="required-symbol">*</span>押金：</td>
-            <td class="f-tb-c">
-                <span><input type="text" class="input-control" name="Model.PosMachine.Deposit" id="Model_PosMachine_Deposit"  style="width: 150px;" value="@Model.PosMachine.Deposit" /></span>
-                <span class="moneyunit">元</span>
-            </td>
-            <td class="f-tb-t"><span class="required-symbol">*</span>租金/每月：</td>
-            <td class="f-tb-c">
-                <input type="text" class="input-control" name="Model.PosMachine.Rent" id="Model_PosMachine_Rent" style="width: 150px;" value="@Model.PosMachine.Rent" />
-                <span class="moneyunit">元</span>
-             </td>
         </tr>
     </table>
 

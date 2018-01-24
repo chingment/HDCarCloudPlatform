@@ -460,220 +460,220 @@ namespace WebBack.Controllers.Biz
             }
         }
 
-        public ActionResult DepositRent(DepositRentViewModel model)
-        {
-            StringBuilder sbTable = new StringBuilder();
-            sbTable.Append("<table class='list-tb' cellspacing='0' cellpadding='0'>");
-            sbTable.Append("<thead>");
-            sbTable.Append("<tr>");
-            sbTable.Append("<th>商户代码</th>");
-            sbTable.Append("<th>商户名称</th>");
-            sbTable.Append("<th>POS机ID</th>");
-            sbTable.Append("<th>地址</th>");
-            sbTable.Append("<th>联系人</th>");
-            sbTable.Append("<th>联系电话</th>");
-            sbTable.Append("<th>订单号</th>");
-            sbTable.Append("<th>押金</th>");
-            sbTable.Append("<th>租期(月)</th>");
-            sbTable.Append("<th>租金/月</th>");
-            sbTable.Append("<th>到期日期</th>");
-            sbTable.Append("<th>合计租金</th>");
-            sbTable.Append("<th>状态</th>");
-            sbTable.Append("<th>缴费时间</th>");
-            sbTable.Append("<th>合计</th>");
-            sbTable.Append("</tr>");
-            sbTable.Append("</thead>");
-            sbTable.Append("<tbody>");
-            sbTable.Append("{content}");
-            sbTable.Append("</tbody>");
-            sbTable.Append("</table>");
+        //public ActionResult DepositRent(DepositRentViewModel model)
+        //{
+        //    StringBuilder sbTable = new StringBuilder();
+        //    sbTable.Append("<table class='list-tb' cellspacing='0' cellpadding='0'>");
+        //    sbTable.Append("<thead>");
+        //    sbTable.Append("<tr>");
+        //    sbTable.Append("<th>商户代码</th>");
+        //    sbTable.Append("<th>商户名称</th>");
+        //    sbTable.Append("<th>POS机ID</th>");
+        //    sbTable.Append("<th>地址</th>");
+        //    sbTable.Append("<th>联系人</th>");
+        //    sbTable.Append("<th>联系电话</th>");
+        //    sbTable.Append("<th>订单号</th>");
+        //    sbTable.Append("<th>押金</th>");
+        //    sbTable.Append("<th>租期(月)</th>");
+        //    sbTable.Append("<th>租金/月</th>");
+        //    sbTable.Append("<th>到期日期</th>");
+        //    sbTable.Append("<th>合计租金</th>");
+        //    sbTable.Append("<th>状态</th>");
+        //    sbTable.Append("<th>缴费时间</th>");
+        //    sbTable.Append("<th>合计</th>");
+        //    sbTable.Append("</tr>");
+        //    sbTable.Append("</thead>");
+        //    sbTable.Append("<tbody>");
+        //    sbTable.Append("{content}");
+        //    sbTable.Append("</tbody>");
+        //    sbTable.Append("</table>");
 
-            if (Request.HttpMethod == "GET")
-            {
-                #region GET
-                sbTable.Replace("{content}", "<tr><td colspan=\"15\"></td></tr>");
+        //    if (Request.HttpMethod == "GET")
+        //    {
+        //        #region GET
+        //        sbTable.Replace("{content}", "<tr><td colspan=\"15\"></td></tr>");
 
-                model.TableHtml = sbTable.ToString();
-                return View(model);
+        //        model.TableHtml = sbTable.ToString();
+        //        return View(model);
 
-                #endregion
-            }
-            else
-            {
-                #region POST
-                StringBuilder sql = new StringBuilder("select b.ClientCode,b.YYZZ_Name,c.DeviceId, b.YYZZ_Address, b.ContactName,b.ContactPhoneNumber,d.Sn, c.Deposit,e.RentMonths,e.MonthlyRent,e.RentDueDate, e.RentTotal,d.[Status], d.PayTime,d.Price from  MerchantPosMachine a ");
-                sql.Append(" inner join Merchant b on a.MerchantId=b.Id inner join PosMachine c on a.PosMachineId=c.Id ");
-                sql.Append(" inner join  [Order]  d  on  b.Id=d.MerchantId  inner join OrderToDepositRent e on d.Id=e.Id ");
+        //        #endregion
+        //    }
+        //    else
+        //    {
+        //        #region POST
+        //        StringBuilder sql = new StringBuilder("select b.ClientCode,b.YYZZ_Name,c.DeviceId, b.YYZZ_Address, b.ContactName,b.ContactPhoneNumber,d.Sn, c.Deposit,e.RentMonths,e.MonthlyRent,e.RentDueDate, e.RentTotal,d.[Status], d.PayTime,d.Price from  MerchantPosMachine a ");
+        //        sql.Append(" inner join Merchant b on a.MerchantId=b.Id inner join PosMachine c on a.PosMachineId=c.Id ");
+        //        sql.Append(" inner join  [Order]  d  on  b.Id=d.MerchantId  inner join OrderToDepositRent e on d.Id=e.Id ");
 
-                sql.Append(" where d.ProductType=" + (int)Enumeration.ProductType.PosMachineDepositRent + " ");
-
-
-
-                if (!string.IsNullOrEmpty(model.ClientCode))
-                {
-                    sql.Append(" and  b.ClientCode='" + model.ClientCode + "'");
-                }
-                if (model.StartTime != null)
-                {
-                    sql.Append(" and  d.PayTime >='" + CommonUtils.ConverToShortDateStart(model.StartTime.Value) + "'"); ;
-                }
-                if (model.EndTime != null)
-                {
-                    sql.Append(" and  d.PayTime <='" + CommonUtils.ConverToShortDateEnd(model.EndTime.Value) + "'");
-                }
-
-                sql.Append(" order by d.SubmitTime desc ");
-
-
-                DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToStringDataTable();
-                StringBuilder sbTableContent = new StringBuilder();
-                for (int r = 0; r < dtData.Rows.Count; r++)
-                {
-                    sbTableContent.Append("<tr>");
-                    for (int c = 0; c < dtData.Columns.Count; c++)
-                    {
-                        string td_value = "";
-
-                        switch (c)
-                        {
-                            case 12:
-                                td_value = GetOrderStatusName(dtData.Rows[r][c].ToString().Trim());
-                                break;
-                            default:
-                                td_value = dtData.Rows[r][c].ToString().Trim();
-                                break;
-                        }
-
-                        sbTableContent.Append("<td>" + td_value + "</td>");
-
-                    }
-
-                    sbTableContent.Append("</tr>");
-                }
-
-                sbTable.Replace("{content}", sbTableContent.ToString());
-
-                ReportTable reportTable = new ReportTable(sbTable.ToString());
-
-                if (model.Operate == Enumeration.OperateType.Serach)
-                {
-                    return Json(ResultType.Success, reportTable, "");
-                }
-                else
-                {
-                    NPOIExcelHelper.HtmlTable2Excel(reportTable.Html, "商户押金租金报表");
-
-                    return Json(ResultType.Success, "");
-                }
-                #endregion
-            }
-        }
-
-        public ActionResult Rent(DepositRentViewModel model)
-        {
-            StringBuilder sbTable = new StringBuilder();
-            sbTable.Append("<table class='list-tb' cellspacing='0' cellpadding='0'>");
-            sbTable.Append("<thead>");
-            sbTable.Append("<tr>");
-            sbTable.Append("<th>商户代码</th>");
-            sbTable.Append("<th>商户名称</th>");
-            sbTable.Append("<th>POS机ID</th>");
-            sbTable.Append("<th>地址</th>");
-            sbTable.Append("<th>联系人</th>");
-            sbTable.Append("<th>联系电话</th>");
-            sbTable.Append("<th>续期(月)</th>");
-            sbTable.Append("<th>租金/月</th>");
-            sbTable.Append("<th>到期日期</th>");
-            sbTable.Append("<th>状态</th>");
-            sbTable.Append("<th>缴费时间</th>");
-            sbTable.Append("<th>合计</th>");
-            sbTable.Append("</tr>");
-            sbTable.Append("</thead>");
-            sbTable.Append("<tbody>");
-            sbTable.Append("{content}");
-            sbTable.Append("</tbody>");
-            sbTable.Append("</table>");
-
-            if (Request.HttpMethod == "GET")
-            {
-                #region GET
-                sbTable.Replace("{content}", "<tr><td colspan=\"12\"></td></tr>");
-
-                model.TableHtml = sbTable.ToString();
-                return View(model);
-
-                #endregion
-            }
-            else
-            {
-                #region POST
-                StringBuilder sql = new StringBuilder("select b.ClientCode,b.YYZZ_Name,c.DeviceId, b.YYZZ_Address, b.ContactName,b.ContactPhoneNumber,e.RentMonths,e.MonthlyRent,e.RentDueDate,d.[Status], d.PayTime,d.Price from  MerchantPosMachine a ");
-                sql.Append(" inner join Merchant b on a.MerchantId=b.Id inner join PosMachine c on a.PosMachineId=c.Id ");
-                sql.Append(" inner join  [Order]  d  on  b.Id=d.MerchantId  inner join OrderToDepositRent e on d.Id=e.Id ");
-
-                sql.Append(" where d.ProductType=" + (int)Enumeration.ProductType.PosMachineRent + " ");
+        //        sql.Append(" where d.ProductType=" + (int)Enumeration.ProductType.PosMachineDepositRent + " ");
 
 
 
-                if (!string.IsNullOrEmpty(model.ClientCode))
-                {
-                    sql.Append(" and  b.ClientCode='" + model.ClientCode + "'");
-                }
-                if (model.StartTime != null)
-                {
-                    sql.Append(" and  d.PayTime >='" + CommonUtils.ConverToShortDateStart(model.StartTime.Value) + "'"); ;
-                }
-                if (model.EndTime != null)
-                {
-                    sql.Append(" and  d.PayTime <='" + CommonUtils.ConverToShortDateEnd(model.EndTime.Value) + "'");
-                }
+        //        if (!string.IsNullOrEmpty(model.ClientCode))
+        //        {
+        //            sql.Append(" and  b.ClientCode='" + model.ClientCode + "'");
+        //        }
+        //        if (model.StartTime != null)
+        //        {
+        //            sql.Append(" and  d.PayTime >='" + CommonUtils.ConverToShortDateStart(model.StartTime.Value) + "'"); ;
+        //        }
+        //        if (model.EndTime != null)
+        //        {
+        //            sql.Append(" and  d.PayTime <='" + CommonUtils.ConverToShortDateEnd(model.EndTime.Value) + "'");
+        //        }
 
-                sql.Append(" order by d.SubmitTime desc ");
+        //        sql.Append(" order by d.SubmitTime desc ");
 
 
-                DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToStringDataTable();
-                StringBuilder sbTableContent = new StringBuilder();
-                for (int r = 0; r < dtData.Rows.Count; r++)
-                {
-                    sbTableContent.Append("<tr>");
-                    for (int c = 0; c < dtData.Columns.Count; c++)
-                    {
-                        string td_value = "";
+        //        DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToStringDataTable();
+        //        StringBuilder sbTableContent = new StringBuilder();
+        //        for (int r = 0; r < dtData.Rows.Count; r++)
+        //        {
+        //            sbTableContent.Append("<tr>");
+        //            for (int c = 0; c < dtData.Columns.Count; c++)
+        //            {
+        //                string td_value = "";
 
-                        switch (c)
-                        {
-                            case 9:
-                                td_value = GetOrderStatusName(dtData.Rows[r][c].ToString().Trim());
-                                break;
-                            default:
-                                td_value = dtData.Rows[r][c].ToString().Trim();
-                                break;
-                        }
+        //                switch (c)
+        //                {
+        //                    case 12:
+        //                        td_value = GetOrderStatusName(dtData.Rows[r][c].ToString().Trim());
+        //                        break;
+        //                    default:
+        //                        td_value = dtData.Rows[r][c].ToString().Trim();
+        //                        break;
+        //                }
 
-                        sbTableContent.Append("<td>" + td_value + "</td>");
+        //                sbTableContent.Append("<td>" + td_value + "</td>");
 
-                    }
+        //            }
 
-                    sbTableContent.Append("</tr>");
-                }
+        //            sbTableContent.Append("</tr>");
+        //        }
 
-                sbTable.Replace("{content}", sbTableContent.ToString());
+        //        sbTable.Replace("{content}", sbTableContent.ToString());
 
-                ReportTable reportTable = new ReportTable(sbTable.ToString());
+        //        ReportTable reportTable = new ReportTable(sbTable.ToString());
 
-                if (model.Operate == Enumeration.OperateType.Serach)
-                {
-                    return Json(ResultType.Success, reportTable, "");
-                }
-                else
-                {
-                    NPOIExcelHelper.HtmlTable2Excel(reportTable.Html, "商户租金报表");
+        //        if (model.Operate == Enumeration.OperateType.Serach)
+        //        {
+        //            return Json(ResultType.Success, reportTable, "");
+        //        }
+        //        else
+        //        {
+        //            NPOIExcelHelper.HtmlTable2Excel(reportTable.Html, "商户押金租金报表");
 
-                    return Json(ResultType.Success, "");
-                }
-                #endregion
-            }
-        }
+        //            return Json(ResultType.Success, "");
+        //        }
+        //        #endregion
+        //    }
+        //}
+
+        //public ActionResult Rent(DepositRentViewModel model)
+        //{
+        //    StringBuilder sbTable = new StringBuilder();
+        //    sbTable.Append("<table class='list-tb' cellspacing='0' cellpadding='0'>");
+        //    sbTable.Append("<thead>");
+        //    sbTable.Append("<tr>");
+        //    sbTable.Append("<th>商户代码</th>");
+        //    sbTable.Append("<th>商户名称</th>");
+        //    sbTable.Append("<th>POS机ID</th>");
+        //    sbTable.Append("<th>地址</th>");
+        //    sbTable.Append("<th>联系人</th>");
+        //    sbTable.Append("<th>联系电话</th>");
+        //    sbTable.Append("<th>续期(月)</th>");
+        //    sbTable.Append("<th>租金/月</th>");
+        //    sbTable.Append("<th>到期日期</th>");
+        //    sbTable.Append("<th>状态</th>");
+        //    sbTable.Append("<th>缴费时间</th>");
+        //    sbTable.Append("<th>合计</th>");
+        //    sbTable.Append("</tr>");
+        //    sbTable.Append("</thead>");
+        //    sbTable.Append("<tbody>");
+        //    sbTable.Append("{content}");
+        //    sbTable.Append("</tbody>");
+        //    sbTable.Append("</table>");
+
+        //    if (Request.HttpMethod == "GET")
+        //    {
+        //        #region GET
+        //        sbTable.Replace("{content}", "<tr><td colspan=\"12\"></td></tr>");
+
+        //        model.TableHtml = sbTable.ToString();
+        //        return View(model);
+
+        //        #endregion
+        //    }
+        //    else
+        //    {
+        //        #region POST
+        //        StringBuilder sql = new StringBuilder("select b.ClientCode,b.YYZZ_Name,c.DeviceId, b.YYZZ_Address, b.ContactName,b.ContactPhoneNumber,e.RentMonths,e.MonthlyRent,e.RentDueDate,d.[Status], d.PayTime,d.Price from  MerchantPosMachine a ");
+        //        sql.Append(" inner join Merchant b on a.MerchantId=b.Id inner join PosMachine c on a.PosMachineId=c.Id ");
+        //        sql.Append(" inner join  [Order]  d  on  b.Id=d.MerchantId  inner join OrderToDepositRent e on d.Id=e.Id ");
+
+        //        sql.Append(" where d.ProductType=" + (int)Enumeration.ProductType.PosMachineRent + " ");
+
+
+
+        //        if (!string.IsNullOrEmpty(model.ClientCode))
+        //        {
+        //            sql.Append(" and  b.ClientCode='" + model.ClientCode + "'");
+        //        }
+        //        if (model.StartTime != null)
+        //        {
+        //            sql.Append(" and  d.PayTime >='" + CommonUtils.ConverToShortDateStart(model.StartTime.Value) + "'"); ;
+        //        }
+        //        if (model.EndTime != null)
+        //        {
+        //            sql.Append(" and  d.PayTime <='" + CommonUtils.ConverToShortDateEnd(model.EndTime.Value) + "'");
+        //        }
+
+        //        sql.Append(" order by d.SubmitTime desc ");
+
+
+        //        DataTable dtData = DatabaseFactory.GetIDBOptionBySql().GetDataSet(sql.ToString()).Tables[0].ToStringDataTable();
+        //        StringBuilder sbTableContent = new StringBuilder();
+        //        for (int r = 0; r < dtData.Rows.Count; r++)
+        //        {
+        //            sbTableContent.Append("<tr>");
+        //            for (int c = 0; c < dtData.Columns.Count; c++)
+        //            {
+        //                string td_value = "";
+
+        //                switch (c)
+        //                {
+        //                    case 9:
+        //                        td_value = GetOrderStatusName(dtData.Rows[r][c].ToString().Trim());
+        //                        break;
+        //                    default:
+        //                        td_value = dtData.Rows[r][c].ToString().Trim();
+        //                        break;
+        //                }
+
+        //                sbTableContent.Append("<td>" + td_value + "</td>");
+
+        //            }
+
+        //            sbTableContent.Append("</tr>");
+        //        }
+
+        //        sbTable.Replace("{content}", sbTableContent.ToString());
+
+        //        ReportTable reportTable = new ReportTable(sbTable.ToString());
+
+        //        if (model.Operate == Enumeration.OperateType.Serach)
+        //        {
+        //            return Json(ResultType.Success, reportTable, "");
+        //        }
+        //        else
+        //        {
+        //            NPOIExcelHelper.HtmlTable2Excel(reportTable.Html, "商户租金报表");
+
+        //            return Json(ResultType.Success, "");
+        //        }
+        //        #endregion
+        //    }
+        //}
 
         public ActionResult SalesmanPos(SalesmanPosViewModel model)
         {

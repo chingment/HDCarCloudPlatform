@@ -18,5 +18,9 @@ namespace Lumos.Entity
 
         public int Quantity { get; set; }
 
+        public DateTime? UseStartTime { get; set; }
+
+        public DateTime? UseEndTime { get; set; }
+
     }
 }

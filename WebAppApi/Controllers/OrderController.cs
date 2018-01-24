@@ -210,26 +210,15 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("合计", orderToCarClaim.Price.ToF2Price()));
 
                                 break;
-                            case Enumeration.ProductType.PosMachineDepositRent:
+                            case Enumeration.ProductType.PosMachineServiceFee:
                                 orderModel.Remarks = string.Format("合计:{0}", m.Price);//押金和租金
 
-                                var orderToDepositRent = CurrentDb.OrderToDepositRent.Where(c => c.Id == m.Id).FirstOrDefault();
+                                var orderToDepositRent = CurrentDb.OrderToServiceFee.Where(c => c.Id == m.Id).FirstOrDefault();
 
-                                orderModel.OrderField.Add(new OrderField("押金", orderToDepositRent.Deposit.ToF2Price()));
-                                orderModel.OrderField.Add(new OrderField("租金", orderToDepositRent.RentTotal.ToF2Price()));
-                                orderModel.OrderField.Add(new OrderField("续期", orderToDepositRent.RentMonths + "个月"));
-                                orderModel.OrderField.Add(new OrderField("到期日期", orderToDepositRent.RentDueDate.ToUnifiedFormatDate()));
-
-
-                                break;
-                            case Enumeration.ProductType.PosMachineRent:
-                                orderModel.Remarks = string.Format("合计:{0}", m.Price);//押金和租金
-
-                                var orderToRent = CurrentDb.OrderToDepositRent.Where(c => c.Id == m.Id).FirstOrDefault();
-
-                                orderModel.OrderField.Add(new OrderField("租金", orderToRent.RentTotal.ToF2Price()));
-                                orderModel.OrderField.Add(new OrderField("续期", orderToRent.RentMonths + "个月"));
-                                orderModel.OrderField.Add(new OrderField("到期日期", orderToRent.RentDueDate.ToUnifiedFormatDate()));
+                                //orderModel.OrderField.Add(new OrderField("押金", orderToDepositRent.Deposit.ToF2Price()));
+                                //orderModel.OrderField.Add(new OrderField("租金", orderToDepositRent.RentTotal.ToF2Price()));
+                                //orderModel.OrderField.Add(new OrderField("续期", orderToDepositRent.RentMonths + "个月"));
+                                //orderModel.OrderField.Add(new OrderField("到期日期", orderToDepositRent.RentDueDate.ToUnifiedFormatDate()));
 
 
                                 break;
@@ -548,43 +537,24 @@ namespace WebAppApi.Controllers
                 return new APIResponse(result);
                 #endregion
             }
-            else if (productType == Enumeration.ProductType.PosMachineDepositRent)
+            else if (productType == Enumeration.ProductType.PosMachineServiceFee)
             {
                 #region  PosMachineDepositRent
                 OrderPosDepositRentDetailsModel model = new OrderPosDepositRentDetailsModel();
-                var orderToDepositRent = CurrentDb.OrderToDepositRent.Where(m => m.Id == orderId).FirstOrDefault();
-                if (orderToDepositRent != null)
+                var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Id == orderId).FirstOrDefault();
+                if (orderToServiceFee != null)
                 {
-                    model.Id = orderToDepositRent.Id;
-                    model.Sn = orderToDepositRent.Sn;
-                    model.Deposit = string.Format("{0}元", orderToDepositRent.Deposit);
-                    model.RentDueDate = orderToDepositRent.RentDueDate.ToUnifiedFormatDate();
-                    model.RentMonths = string.Format("{0}个月", orderToDepositRent.RentMonths);
-                    model.RentTotal = string.Format("{0}元", orderToDepositRent.RentTotal);
-                    model.Price = string.Format("{0}元", orderToDepositRent.Price);
+                    model.Id = orderToServiceFee.Id;
+                    model.Sn = orderToServiceFee.Sn;
+                    //model.Deposit = string.Format("{0}元", orderToDepositRent.Deposit);
+                    //model.RentDueDate = orderToDepositRent.RentDueDate.ToUnifiedFormatDate();
+                    //model.RentMonths = string.Format("{0}个月", orderToDepositRent.RentMonths);
+                    //model.RentTotal = string.Format("{0}元", orderToDepositRent.RentTotal);
+                    //model.Price = string.Format("{0}元", orderToDepositRent.Price);
                 }
                 APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
                 return new APIResponse(result);
                 #endregion 
-            }
-            else if (productType == Enumeration.ProductType.PosMachineRent)
-            {
-                #region PosMachineRent
-                OrderPosRentDetailsModel model = new OrderPosRentDetailsModel();
-                var orderToRent = CurrentDb.OrderToDepositRent.Where(m => m.Id == orderId).FirstOrDefault();
-                if (orderToRent != null)
-                {
-                    model.Id = orderToRent.Id;
-                    model.Sn = orderToRent.Sn;
-                    model.RentDueDate = orderToRent.RentDueDate.ToUnifiedFormatDate();
-                    model.RentMonths = string.Format("{0}个月", orderToRent.RentMonths);
-                    model.RentTotal = string.Format("{0}元", orderToRent.RentTotal);
-                    model.Price = string.Format("{0}元", orderToRent.Price);
-                }
-
-                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
-                return new APIResponse(result);
-                #endregion
             }
             else if (productType == Enumeration.ProductType.TalentDemand)
             {
@@ -658,6 +628,8 @@ namespace WebAppApi.Controllers
             orderToTalentDemand.MerchantPosMachineId = model.PosMachineId;
             orderToTalentDemand.WorkJob = model.WorkJob;
             orderToTalentDemand.Quantity = model.Quantity;
+            orderToTalentDemand.UseEndTime = model.UseEndTime;
+            orderToTalentDemand.UseStartTime = model.UseStartTime;
             IResult result = BizFactory.Order.SubmitTalentDemand(model.UserId, orderToTalentDemand);
             return new APIResponse(result);
 

@@ -292,10 +292,8 @@ namespace Lumos.Entity
             InsureForCarForClaim = 2013,
             //[Remark("保险通")]
             //InsureForPopular = 202,
-            [Remark("POS机押金租金")]
-            PosMachineDepositRent = 301,
-            [Remark("POS机租金")]
-            PosMachineRent = 302,
+            [Remark("POS机服务费")]
+            PosMachineServiceFee = 301,
             [Remark("人才输送")]
             TalentDemand = 401
 
@@ -523,18 +521,6 @@ namespace Lumos.Entity
             DepositRent = 11,
             [Remark("租金")]
             Rent = 12
-        }
-
-        public enum CommissionRateType
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("全线通")]
-            Uplink = 1,
-            [Remark("易办事")]
-            YiBanShi = 2,
-            [Remark("保险公司")]
-            InsuranceCompany = 3
         }
 
         public enum CommissionRateAuditStatus

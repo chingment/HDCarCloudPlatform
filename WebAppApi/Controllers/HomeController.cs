@@ -17,10 +17,8 @@ using System.Web;
 using System.Web.Mvc;
 using WebAppApi.Models;
 using WebAppApi.Models.Account;
-using WebAppApi.Models.BankCard;
 using WebAppApi.Models.CarService;
 using WebAppApi.Models.Order;
-using WebAppApi.Models.Withdraw;
 
 namespace WebAppApi.Controllers
 {
@@ -113,229 +111,83 @@ namespace WebAppApi.Controllers
 
         public ActionResult Index()
         {
-            // string a11 = Lumos.BLL.Sn.Build(Lumos.BLL.SnType.CarClaim, 2);
             ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-            //HttpRequestClient.Send("" + host + "/api/CarService/SubmitInsure");
-
-
-            //HttpRequestClient.Send("http://localhost:4405/Api/Values/1");
-            //HttpRequestClient.Send(""+host+ "/Api/Values/SubitData");
-
-            //HttpRequestClient.Send("" + host + "/api/Values/SubmitInsure");
-
-            //HttpRequestClient.Send("" + host + "/api/CarService/SubmitInsure");
-
-            //string a = "";
-            //sendFileData("" + host + "/api/CarService/SubmitInsure", "D:\\a.png", 1, "sadaadd",out a);
-
-            //AALzgEBtj/d3PYsCj5qZ7Qaqm4p2vWHJOArC1qPhlX8TKohYOE26Hf9QU/GYMwAhLg==
-
-            // string add = BulidOpendId("56032", "test", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC");
-
-            // decimal a = GetDecimal(1.174m);
-            // decimal a1 = GetDecimal(1.175m);
-            // decimal a2 = GetDecimal(1.177m);
-
-            //http://www.ys16888.com/yscar_wx/pos/redirect/pos_login.do?key=test&timestamp=1488265033&openId=0C528B67CCBEC807756E33702436B420&sign=7AA66D1A6D2AF9BAC72338D5C49A1E25,不需要URL Encode
-
-
-            // Dictionary<string, string> testUrlP = new Dictionary<string, string>();
-            // testUrlP.Add("key", key);
-            // testUrlP.Add("timestamp", timespan.ToString());
-
-
-            // string opendId = BulidOpendId("56032", key, secret);
-
-            //testUrlP.Add("openId", opendId);
-
-            //string signStr = Md5Signature.Compute(key, secret, timespan, opendId);
-
-
-            //   string abc = AnXin.GetCertInfoByImagePath("identityCard", @"D:\UplinkCarServicePlatform\UplinkCarServicePlatform\WebAppApi\xmlModel\身份证.jpg");
-
-            // string ou = "";
-            // string ou2 = "75c2caf1-dfcc-4f6f-8994-565ea1bc79f2";
-            //string a = PassWordHelper.HashPassword("123456");
-            // bool b = PassWordHelper.VerifyHashedPassword(a, "123456");
-
-            // 1482942631
-            // Signature.IsRequestTimeout(1482912188);
-            //string signStr = Signature.Compute("test", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC", 1482913508, "userId=1&type=1");
-
-            // http://112.74.179.185/api/account/Personal?deviceId=864895023160011&merchantId=20&userId=1001
-
-            // TestSubmitInsure();
-
-            //PayResultNotify(1107, 122, "I170303230200000175", 175);
-
-            //PayResultNotify(1108, 123, "C170304002300000000", 177);
 
             Dictionary<string, string> model = new Dictionary<string, string>();
 
-            string userName = "uplink";
-            string passWord = "888888";
+            string userName = "15989287032";
+            string passWord = "123456";
             string newPassWord = "888888";
-            string deviceId = "86961202370070312";
+            string deviceId = "87377332911A2";
             int userId = 1027;
             int merchantId = 20;
             int posMachineId = 2;
 
-            model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+            //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
+
+
+            //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+            //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
+            //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
+            //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
+            //model.Add("获取订单", GetOrder(15, 1, 0));
+            //model.Add("提交理赔需求1", SubmitClaim(userId, "邱大文", Enumeration.RepairsType.EstimateRepair));
+            //model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));
+            //model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 818, Enumeration.ProductType.InsureForCarForInsure));
+            //model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));
+
+            model.Add("登录接口", Login(userName, passWord, "869612023700703"));
+            //model.Add("获取忘记密码短信", GetForgetPwdCode("uplink1", "15989287032"));
+            //model.Add("修改密码", ChangePassword(15, "123456", "123456"));
+            // model.Add("重置密码接口", ResetPassword(userName, newPassWord, "382001", "5e04ef95-ac41-43a9-942d-a2b41758aef2"));
+           // model.Add("注册账号", GetCreateAccountCode("15989287032"));
+            //model.Add("支付结果确认", PayConfirm());
             //model.Add("支付结果", PayResultNotify());
-            // model.Add("易办事销账", YBSReceiveNotify());
+            //model.Add("易办事销账", YBSReceiveNotify());
 
 
-            // model.Add("支付结果确认", PayConfirm());
-
-            //  model.Add("获取订单列表1", GetOrderList(userId, merchantId, 0, 0));
-            //  model.Add("获取订单列表维修和定损", GetOrderList(1004, 23, 0, 0));
-            //  model.Add("获取订单列表只定损", GetOrderList(1006, 25, 0, 0));
 
 
-            // model.Add("获取应付订单", GetPayableList(userId, merchantId, 0));
-            //  http://112.74.179.185/api/Order/GetDetails?productType=2013&merchantId=20&userId=1001&orderId=66
-            //  model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 818, Enumeration.ProductType.InsureForCarForInsure));
-            //     model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));
-
-            //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 87));
-            //   model.Add("提交理赔定损单2", SubmitEstimateList(1108, 177));
-
-
-            //  model.Add("修改密码", ChangePassword(15, "123456", "123456"));
-
-            // model.Add("登录接口", Login(userName, passWord, "869612023700703"));
-
-            ///model.Add("检查用户是否存在", CheckUserName("uplink"));
-            ///
-            //  model.Add("获取忘记密码短信", GetForgetPwdCode("uplink1", "15989287032"));
-
-
-            // model.Add("获取添加子账户短信", GetAddChildAccountCode(userId, "15989287032"));
-
+            //model.Add("提交续保单", SubmitRenewal(userId));
+            //model.Add("获取订单列表1", GetOrderList(userId, merchantId, 0, 0));
+            //model.Add("获取订单列表维修和定损", GetOrderList(1004, 23, 0, 0));
+            //model.Add("获取订单列表只定损", GetOrderList(1006, 25, 0, 0));
+            //model.Add("获取应付订单", GetPayableList(userId, merchantId, 0));
+            //model.Add("检查用户是否存在", CheckUserName("uplink"));
+            //model.Add("获取添加子账户短信", GetAddChildAccountCode(userId, "15989287032"));
             //model.Add("添加子账户", AddChildAccount(userId, merchantId, "邱庆文", "15989287032", "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790"));
             //model.Add("获取子账户列表", GetChildAccountList(userId, merchantId,0));
-
-
-            // model.Add("获取续保列表", GetCarServiceRenewalList(userId, merchantId, 0));
-
-
-            //  model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
-            //  model.Add("获取更多推荐产品", GetMoreRecommend(userId, merchantId, 1));
-
-
-            //model.Add("重置密码接口", ResetPassword(userName, newPassWord, "382001", "5e04ef95-ac41-43a9-942d-a2b41758aef2"));
-
-            //  model.Add("获取保险方案", GetInsurePlan(userId));
+            //model.Add("获取续保列表", GetCarServiceRenewalList(userId, merchantId, 0));
+            //model.Add("获取更多推荐产品", GetMoreRecommend(userId, merchantId, 1));
+            //model.Add("获取保险方案", GetInsurePlan(userId));
             //model.Add("获取保险方案详情1", GetInsurePlanKind(1,1));
             //model.Add("获取保险方案详情2", GetInsurePlanKind(1, 2));
             //model.Add("获取保险方案详情3", GetInsurePlanKind(1, 3));
             //model.Add("获取保险方案详情4", GetInsurePlanKind(1, 4));
-            // model.Add("获取保险方案详情5", GetInsurePlanKind(1, 5));
+            //model.Add("获取保险方案详情5", GetInsurePlanKind(1, 5));
             //model.Add("获取车险公司", GetInsuranceCompany(1));
-
-
-
-            //  model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
-            //  model.Add("提交续保单", SubmitRenewal(userId));
-            //  model.Add("提交理赔需求1", SubmitClaim(userId, "邱大文", Enumeration.RepairsType.EstimateRepair));
-            //  model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));
-            //  model.Add("获取我的信息", GetPersonal(1001, 20, "00000000000000"));
-            //  model.Add("提现申请", WithdrawApply(userId, 1));
-            //  model.Add("资金明细", GetTransactions(userId, merchantId, 0));
-            //  model.Add("获取余额", GetBalance(userId, merchantId));
-
-            //  model.Add("提现申请", WithdrawApply(userId, 1));
-            //  model.Add("提现申请确认", WithdrawApplyConfirm(userId, 1));
-            //  model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
-            //  model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
-            //  model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
-            //  model.Add("获取订单", GetOrder(15, 1, 0));
-
-
-            //  model.Add("获取Banner", GetBannerList(1,Enumeration.BannerType.MainHomeTop));
-            //  model.Add("获取Banner详细", GetBannerDetails("4"));
-
-            // model.Add("获取全部服务", GetExtendedAppList(ExtendedAppType.All));
-
-
-
-            //  model.Add("获取全部服务", GetExtendedAppList(ExtendedAppType.All));
-
-            //  model.Add("获取车务服务", GetExtendedAppList(ExtendedAppType.MainHomeCarService));
-
-            //  model.Add("获取推荐服务", GetExtendedAppList(ExtendedAppType.MainHomeRecommend));
-
-
-            //   model.Add("获取推荐商品", ProductGetHomeRecommend(1,20,1));
-
-
-            //  model.Add("获取商品", ProductGetList(1, 20, 101, 0,1));
-
-            //model.Add("获取Banner", GetBannerList(Enumeration.BannerType.MainHomeTop));
-
+            //model.Add("获取我的信息", GetPersonal(1001, 20, "00000000000000"));
+            //model.Add("提现申请", WithdrawApply(userId, 1));
+            //model.Add("资金明细", GetTransactions(userId, merchantId, 0));
+            //model.Add("获取余额", GetBalance(userId, merchantId));
+            //model.Add("提现申请", WithdrawApply(userId, 1));
+            //model.Add("提现申请确认", WithdrawApplyConfirm(userId, 1));
+            //model.Add("获取Banner", GetBannerList(1,Enumeration.BannerType.MainHomeTop));
             //model.Add("获取Banner详细", GetBannerDetails("4"));
-
+            //model.Add("获取全部服务", GetExtendedAppList(ExtendedAppType.All));
+            //model.Add("获取全部服务", GetExtendedAppList(ExtendedAppType.All));
+            //model.Add("获取车务服务", GetExtendedAppList(ExtendedAppType.MainHomeCarService));
+            //model.Add("获取推荐服务", GetExtendedAppList(ExtendedAppType.MainHomeRecommend));
+            //model.Add("获取推荐商品", ProductGetHomeRecommend(1,20,1));
+            //model.Add("获取商品", ProductGetList(1, 20, 101, 0,1));
+            //model.Add("获取Banner", GetBannerList(Enumeration.BannerType.MainHomeTop));
+            //model.Add("获取Banner详细", GetBannerDetails("4"));
             //model.Add("获取银行列表", GetBankList());
-
             //model.Add("获取银行卡列表", GetBankCardList(userId, merchantId));
-
-
             //model.Add("绑定银行卡", BindBankCard(userId, merchantId));
-
             //model.Add("解绑银行卡", RemoveBankCard(1,userId));
-            //string body_data = "";
 
-            //HttpUtil http = new HttpUtil();
-            //int a = int.Parse("Dasd");
-
-            //DateTime now = DateTime.Now;
-            //var timesSpan = (now - new DateTime(1970, 1, 1, 0, 0, 0));
-
-            //Dictionary<string, string> parames = new Dictionary<string, string>();
-            //parames.Add("id", "1110");
-
-
-
-            //string signStr = Signature.Compute("DSDADS3423424DFF", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC", (long)timesSpan.TotalSeconds, Signature.GetQueryData(parames));
-
-            //Dictionary<string, string> headers = new Dictionary<string, string>();
-            //headers.Add("key", "DSDADS3423424DFF");
-            //headers.Add("timestamp", ((long)timesSpan.TotalSeconds).ToString());
-            //headers.Add("sign", signStr);
-
-
-            //// string respon_data1 = http.HttpGet("http://localhost:1664/api/Banner/GetDetails?id=1110", headers);
-            ////string respon_data2 = http.HttpGet("http://localhost:1664/api/Banner/GetList", headers);
-
-
-            ////LoginModel model = new LoginModel();
-            ////model.UserName = "ching";
-            ////model.Password = "123456";
-            ////string a = JsonConvert.SerializeObject(model);
-            ////string respon_data3 = http.HttpPostJson("http://localhost:1664/api/Account/Login", Newtonsoft.Json.JsonConvert.SerializeObject(model), headers);
-
-
-            //LoginModel model1 = new LoginModel();
-            //model1.UserName = "chkhhkjhhhing01";
-            //model1.Password = "12345jggjgjhjghggjg6";
-            //model1.FuselageNumber = "das";
-            //string a1 = JsonConvert.SerializeObject(model1);
-
-            //string signStr1 = Signature.Compute("DSDADS3423424DFF", "6ZB97cdVz211O08EKZ6yriAYrHXFBowC", timespan, a1);
-
-            //Dictionary<string, string> headers1 = new Dictionary<string, string>();
-            //headers1.Add("key", "DSDADS3423424DFF");
-            //headers1.Add("timestamp", ((long)timesSpan.TotalSeconds).ToString());
-            //headers1.Add("sign", signStr1);
-
-            //// string a1 = "a1=das&a2=323";
-
-            //string respon_data4 = http.HttpPostJson("http://localhost:1664/api/Account/Login", a1, headers1);
-
-            //// string a5 = "a1=das&a2=323";
-            ////  string respon_data5 = http.HttpPostJson("http://localhost:1664/api/Account/Login", a1, headers);
 
 
             return View(model);
@@ -540,6 +392,28 @@ namespace WebAppApi.Controllers
 
         }
 
+        public string GetCreateAccountCode(string userName)
+        {
+            WebAppApi.Models.Sms.GetCreateAccountCodeModel model = new WebAppApi.Models.Sms.GetCreateAccountCodeModel();
+            model.Phone = userName;
+
+            string a1 = JsonConvert.SerializeObject(model);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/Sms/GetCreateAccountCode", a1, headers);
+
+            return result;
+
+        }
+
+
         public string GetForgetPwdCode(string userName, string phone)
         {
             WebAppApi.Models.Sms.GetForgetPwdCodeModel model = new WebAppApi.Models.Sms.GetForgetPwdCodeModel();
@@ -564,50 +438,54 @@ namespace WebAppApi.Controllers
 
         public string GetAddChildAccountCode(int userId, string phone)
         {
-            WebAppApi.Models.Sms.GetAddChildAccountCodeModel model = new WebAppApi.Models.Sms.GetAddChildAccountCodeModel();
-            model.UserId = userId;
-            model.AccountPhone = phone;
-            string a1 = JsonConvert.SerializeObject(model);
+            //WebAppApi.Models.Sms.GetAddChildAccountCodeModel model = new WebAppApi.Models.Sms.GetAddChildAccountCodeModel();
+            //model.UserId = userId;
+            //model.AccountPhone = phone;
+            //string a1 = JsonConvert.SerializeObject(model);
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
+            //string signStr = Signature.Compute(key, secret, timespan, a1);
 
 
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("key", key);
-            headers.Add("timestamp", timespan.ToString());
-            headers.Add("sign", signStr);
-            HttpUtil http = new HttpUtil();
-            string result = http.HttpPostJson("" + host + "/api/Sms/GetAddChildAccountCode", a1, headers);
+            //Dictionary<string, string> headers = new Dictionary<string, string>();
+            //headers.Add("key", key);
+            //headers.Add("timestamp", timespan.ToString());
+            //headers.Add("sign", signStr);
+            //HttpUtil http = new HttpUtil();
+            //string result = http.HttpPostJson("" + host + "/api/Sms/GetAddChildAccountCode", a1, headers);
 
-            return result;
+            //return result;
+
+            return null;
 
         }
 
 
         public string AddChildAccount(int userId, int merchantId, string fullName, string phone, string token, string validCode)
         {
-            AddChildAccountModel model = new AddChildAccountModel();
-            model.AccountFullName = fullName;
-            model.MerchantId = merchantId;
-            model.UserId = userId;
-            model.AccountPhone = phone;
-            model.AccountPassword = "888888";
-            model.Token = token;
-            model.ValidCode = validCode;
+            //AddChildAccountModel model = new AddChildAccountModel();
+            //model.AccountFullName = fullName;
+            //model.MerchantId = merchantId;
+            //model.UserId = userId;
+            //model.AccountPhone = phone;
+            //model.AccountPassword = "888888";
+            //model.Token = token;
+            //model.ValidCode = validCode;
 
-            string a1 = JsonConvert.SerializeObject(model);
+            //string a1 = JsonConvert.SerializeObject(model);
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
+            //string signStr = Signature.Compute(key, secret, timespan, a1);
 
 
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("key", key);
-            headers.Add("timestamp", timespan.ToString());
-            headers.Add("sign", signStr);
-            HttpUtil http = new HttpUtil();
-            string result = http.HttpPostJson("" + host + "/api/Account/AddChildAccount", a1, headers);
+            //Dictionary<string, string> headers = new Dictionary<string, string>();
+            //headers.Add("key", key);
+            //headers.Add("timestamp", timespan.ToString());
+            //headers.Add("sign", signStr);
+            //HttpUtil http = new HttpUtil();
+            //string result = http.HttpPostJson("" + host + "/api/Account/AddChildAccount", a1, headers);
 
-            return result;
+            //return result;
+
+            return null;
 
         }
 
@@ -703,48 +581,52 @@ namespace WebAppApi.Controllers
         public string BindBankCard(int userId, int merchantId)
         {
 
-            BindBankCardModel model = new BindBankCardModel();
-            model.UserId = userId;
-            model.MerchantId = merchantId;
-            model.BankId = 1;
-            model.BankAccountPhone = "15989287032";
-            model.BankAccountName = "邱庆文";
-            model.BankAccountNo = "545553232321";
-            string a1 = JsonConvert.SerializeObject(model);
+            //BindBankCardModel model = new BindBankCardModel();
+            //model.UserId = userId;
+            //model.MerchantId = merchantId;
+            //model.BankId = 1;
+            //model.BankAccountPhone = "15989287032";
+            //model.BankAccountName = "邱庆文";
+            //model.BankAccountNo = "545553232321";
+            //string a1 = JsonConvert.SerializeObject(model);
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
+            //string signStr = Signature.Compute(key, secret, timespan, a1);
 
 
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("key", key);
-            headers.Add("timestamp", timespan.ToString());
-            headers.Add("sign", signStr);
-            HttpUtil http = new HttpUtil();
-            string result = http.HttpPostJson("" + host + "/api/BankCard/Bind", a1, headers);
+            //Dictionary<string, string> headers = new Dictionary<string, string>();
+            //headers.Add("key", key);
+            //headers.Add("timestamp", timespan.ToString());
+            //headers.Add("sign", signStr);
+            //HttpUtil http = new HttpUtil();
+            //string result = http.HttpPostJson("" + host + "/api/BankCard/Bind", a1, headers);
 
-            return result;
+            //return result;
+
+            return null;
 
         }
 
         public string RemoveBankCard(int id, int userId)
         {
 
-            RemoveBankCardModel model = new RemoveBankCardModel();
-            model.UserId = userId;
-            model.Id = 1;
-            string a1 = JsonConvert.SerializeObject(model);
+            //RemoveBankCardModel model = new RemoveBankCardModel();
+            //model.UserId = userId;
+            //model.Id = 1;
+            //string a1 = JsonConvert.SerializeObject(model);
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
+            //string signStr = Signature.Compute(key, secret, timespan, a1);
 
 
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("key", key);
-            headers.Add("timestamp", timespan.ToString());
-            headers.Add("sign", signStr);
-            HttpUtil http = new HttpUtil();
-            string result = http.HttpPostJson("" + host + "/api/BankCard/Remove", a1, headers);
+            //Dictionary<string, string> headers = new Dictionary<string, string>();
+            //headers.Add("key", key);
+            //headers.Add("timestamp", timespan.ToString());
+            //headers.Add("sign", signStr);
+            //HttpUtil http = new HttpUtil();
+            //string result = http.HttpPostJson("" + host + "/api/BankCard/Remove", a1, headers);
 
-            return result;
+            //return result;
+
+            return null;
 
         }
 
@@ -1071,27 +953,29 @@ namespace WebAppApi.Controllers
         public string WithdrawApply(int userId, int bankCardId)
         {
 
-            WithdrawApplyModel model1 = new WithdrawApplyModel();
-            model1.UserId = userId;
-            model1.BankCardId = bankCardId;
-            model1.Confirm = true;
-            Random r = new Random();
-            int num = r.Next(1, 100);
-            model1.Amount = num;
-            string a1 = JsonConvert.SerializeObject(model1);
+            //WithdrawApplyModel model1 = new WithdrawApplyModel();
+            //model1.UserId = userId;
+            //model1.BankCardId = bankCardId;
+            //model1.Confirm = true;
+            //Random r = new Random();
+            //int num = r.Next(1, 100);
+            //model1.Amount = num;
+            //string a1 = JsonConvert.SerializeObject(model1);
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
+            //string signStr = Signature.Compute(key, secret, timespan, a1);
 
-            Dictionary<string, string> headers1 = new Dictionary<string, string>();
-            headers1.Add("key", key);
-            headers1.Add("timestamp", (timespan.ToString()).ToString());
-            headers1.Add("sign", signStr);
+            //Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            //headers1.Add("key", key);
+            //headers1.Add("timestamp", (timespan.ToString()).ToString());
+            //headers1.Add("sign", signStr);
 
-            // string a1 = "a1=das&a2=323";
-            HttpUtil http = new HttpUtil();
-            string respon_data4 = http.HttpPostJson("" + host + "/api/Withdraw/Apply", a1, headers1);
+            //// string a1 = "a1=das&a2=323";
+            //HttpUtil http = new HttpUtil();
+            //string respon_data4 = http.HttpPostJson("" + host + "/api/Withdraw/Apply", a1, headers1);
 
-            return respon_data4;
+            //return respon_data4;
+
+            return null;
 
         }
 
@@ -1099,27 +983,29 @@ namespace WebAppApi.Controllers
         public string WithdrawApplyConfirm(int userId, int bankCardId)
         {
 
-            WithdrawApplyModel model1 = new WithdrawApplyModel();
-            model1.UserId = userId;
-            model1.BankCardId = bankCardId;
-            model1.Confirm = true;
-            Random r = new Random();
-            int num = r.Next(1, 100);
-            model1.Amount = num;
-            string a1 = JsonConvert.SerializeObject(model1);
+            //WithdrawApplyModel model1 = new WithdrawApplyModel();
+            //model1.UserId = userId;
+            //model1.BankCardId = bankCardId;
+            //model1.Confirm = true;
+            //Random r = new Random();
+            //int num = r.Next(1, 100);
+            //model1.Amount = num;
+            //string a1 = JsonConvert.SerializeObject(model1);
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
+            //string signStr = Signature.Compute(key, secret, timespan, a1);
 
-            Dictionary<string, string> headers1 = new Dictionary<string, string>();
-            headers1.Add("key", key);
-            headers1.Add("timestamp", (timespan.ToString()).ToString());
-            headers1.Add("sign", signStr);
+            //Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            //headers1.Add("key", key);
+            //headers1.Add("timestamp", (timespan.ToString()).ToString());
+            //headers1.Add("sign", signStr);
 
-            // string a1 = "a1=das&a2=323";
-            HttpUtil http = new HttpUtil();
-            string respon_data4 = http.HttpPostJson("" + host + "/api/Withdraw/Apply", a1, headers1);
+            //// string a1 = "a1=das&a2=323";
+            //HttpUtil http = new HttpUtil();
+            //string respon_data4 = http.HttpPostJson("" + host + "/api/Withdraw/Apply", a1, headers1);
 
-            return respon_data4;
+            //return respon_data4;
+
+            return null;
 
         }
 
@@ -1427,7 +1313,7 @@ namespace WebAppApi.Controllers
             model1.WorkJob = Enumeration.WorkJob.XiChe;
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;
-     
+
             string a1 = JsonConvert.SerializeObject(model1);
 
             string signStr = Signature.Compute(key, secret, timespan, a1);

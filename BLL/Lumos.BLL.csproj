@@ -77,9 +77,8 @@
     <Compile Include="Biz\ApplyPosProvider.cs" />
     <Compile Include="Biz\AppSettingsProvider.cs" />
     <Compile Include="BaseProvider.cs" />
-    <Compile Include="Biz\Calculate\CalculateCarClaimPayPrice.cs" />
-    <Compile Include="Biz\Calculate\CalculateRent201702.cs" />
-    <Compile Include="Biz\Calculate\CalculateWithdrawFee.cs" />
+    <Compile Include="Biz\Backup\Provider111.cs" />
+    <Compile Include="Biz\Calculate\CalculateServiceFee.cs" />
     <Compile Include="Biz\CarInsuranceCompanyProvider.cs" />
     <Compile Include="Biz\CarInsurePlanProvider.cs" />
     <Compile Include="Biz\ExtendedAppProvder.cs" />
@@ -97,8 +96,6 @@
     <Compile Include="Biz\Task\ITask.cs" />
     <Compile Include="Biz\Task\Launcher.cs" />
     <Compile Include="Biz\Task\TaskForMerchantTransactionsCheck.cs" />
-    <Compile Include="Biz\Task\TaskForMerchantOpenAccount.cs" />
-    <Compile Include="Biz\WithdrawProvider.cs" />
     <Compile Include="Biz\YbsProvider.cs" />
     <Compile Include="Factory..cs" />
     <Compile Include="LoginManager.cs" />

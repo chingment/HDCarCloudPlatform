@@ -212,7 +212,6 @@
     <Compile Include="Controllers\Biz\TalentDemandController.cs" />
     <Compile Include="Controllers\Biz\TestController.cs" />
     <Compile Include="Controllers\Biz\TransactionsController.cs" />
-    <Compile Include="Controllers\Biz\WithdrawController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\App\BannerController.cs" />
@@ -297,11 +296,7 @@
     <Compile Include="Models\Biz\TalentDemand\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\TalentDemand\VerifyOrderViewModel.cs" />
     <Compile Include="Models\Biz\Transactions\DetailsViewModel.cs" />
-    <Compile Include="Models\Biz\Withdraw\CutOffDetailsSearchCondition.cs" />
-    <Compile Include="Models\Biz\Withdraw\CutOffSearchCondition.cs" />
-    <Compile Include="Models\Biz\Withdraw\CutOffAmountByTimePeriod.cs" />
-    <Compile Include="Models\Biz\Withdraw\DetailsViewModel.cs" />
-    <Compile Include="Models\Biz\Withdraw\WithdrawSearchCondition.cs" />
+    <Compile Include="Models\Biz\Transactions\TransactionsSearchCondition.cs" />
     <Compile Include="Models\Home\ChangePasswordModel.cs" />
     <Compile Include="Models\Home\LoginModel.cs" />
     <Compile Include="Models\SearchCondition.cs" />
@@ -1228,8 +1223,6 @@
     <Content Include="Views\Biz\InsuranceCompany\Add.cshtml" />
     <Content Include="Views\Biz\InsuranceCompany\Edit.cshtml" />
     <Content Include="Views\Biz\InsuranceCompany\List.cshtml" />
-    <Content Include="Views\Biz\Withdraw\Dealt.cshtml" />
-    <Content Include="Views\Biz\Withdraw\Feedback.cshtml" />
     <Content Include="Views\Sys\Banner\BannerList.cshtml" />
     <Content Include="Views\Sys\Banner\AddBanner.cshtml" />
     <Content Include="Scripts\ckeditor\plugins\scayt\LICENSE.md" />
@@ -1411,8 +1404,6 @@
     <Content Include="Views\Biz\PosMachine\Edit.cshtml" />
     <Content Include="Views\Biz\Merchant\List.cshtml" />
     <Content Include="Views\Biz\Merchant\Edit.cshtml" />
-    <Content Include="Views\Biz\Merchant\OpenAccountList.cshtml" />
-    <Content Include="Views\Biz\Merchant\OpenAccount.cshtml" />
     <Content Include="Views\Biz\Merchant\PrimaryAuditList.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\List.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\DealtList.cshtml" />
@@ -1431,9 +1422,6 @@
     <Content Include="Views\Biz\ExtendedApp\OffList.cshtml" />
     <Content Include="Views\Biz\Merchant\EditList.cshtml" />
     <Content Include="Views\Biz\Merchant\Details.cshtml" />
-    <Content Include="Views\Biz\Withdraw\List.cshtml" />
-    <Content Include="Views\Biz\Withdraw\Details.cshtml" />
-    <Content Include="Views\Biz\Withdraw\CutOff.cshtml" />
     <Content Include="Views\Biz\CarClaim\VerifyOrderList.cshtml" />
     <Content Include="Views\Biz\CarClaim\VerifyOrder.cshtml" />
     <Content Include="Views\Biz\Merchant\PosMachineList.cshtml" />
@@ -1446,7 +1434,6 @@
     <Content Include="Views\Biz\Merchant\SeniorAudit.cshtml" />
     <Content Include="Views\Biz\CarClaim\VerifyAmountList.cshtml" />
     <Content Include="Views\Biz\CarClaim\VerifyAmount.cshtml" />
-    <Content Include="Views\Biz\Withdraw\CutOffDetail.cshtml" />
     <Content Include="Views\Shared\AuditFlowTrace.cshtml" />
     <None Include="Properties\PublishProfiles\WE.pubxml" />
   </ItemGroup>

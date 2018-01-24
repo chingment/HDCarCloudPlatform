@@ -42,7 +42,7 @@ namespace WebBack.Models.Biz.CarInsureOffer
                 insurePlanKindModel.InputUnit = carKind.InputUnit;
                 if (!string.IsNullOrEmpty(carKind.InputValue))
                 {
-                    insurePlanKindModel.InputValue = Newtonsoft.Json.JsonConvert.DeserializeObject(carKind.InputValue);
+                    //insurePlanKindModel.InputValue = Newtonsoft.Json.JsonConvert.DeserializeObject(carKind.InputValue);
                 }
 
                 insurePlanKindModel.IsHasDetails = carKind.IsHasDetails;

@@ -58,17 +58,11 @@ namespace Lumos.DAL
 
         public IDbSet<OrderToTalentDemand> OrderToTalentDemand { get; set; }
         
-        public IDbSet<OrderToDepositRent> OrderToDepositRent { get; set; }
+        public IDbSet<OrderToServiceFee> OrderToServiceFee { get; set; }
 
         public IDbSet<BizProcessesAudit> BizProcessesAudit { get; set; }
 
         public IDbSet<BizProcessesAuditDetails> BizProcessesAuditDetails { get; set; }
-
-        public IDbSet<Withdraw> Withdraw { get; set; }
-
-        public IDbSet<WithdrawCutOff> WithdrawCutOff { get; set; }
-
-        public IDbSet<WithdrawCutOffDetails> WithdrawCutOffDetails { get; set; }
 
         public IDbSet<Fund> Fund { get; set; }
 

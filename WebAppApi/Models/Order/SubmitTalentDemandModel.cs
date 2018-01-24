@@ -16,5 +16,9 @@ namespace WebAppApi.Models.Order
         public Lumos.Entity.Enumeration.WorkJob WorkJob { get; set; }
 
         public int Quantity { get; set; }
+
+        public DateTime? UseStartTime { get; set; }
+
+        public DateTime? UseEndTime { get; set; }
     }
 }

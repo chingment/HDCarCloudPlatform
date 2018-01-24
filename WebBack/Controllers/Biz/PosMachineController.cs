@@ -198,10 +198,9 @@ namespace WebBack.Controllers.Biz
             var query = (from m in CurrentDb.PosMachine
 
                          where (fuselageNumber.Length == 0 || m.FuselageNumber.Contains(fuselageNumber)) &&
-                                 (deviceId.Length == 0 || m.DeviceId.Contains(deviceId)) &&
-                                 m.IsSpare == true
+                                 (deviceId.Length == 0 || m.DeviceId.Contains(deviceId)) 
                                  && m.IsUse == false
-                         select new { m.Id, m.DeviceId, m.FuselageNumber, m.TerminalNumber, m.Version, m.CreateTime, m.Deposit, m.Rent });
+                         select new { m.Id, m.DeviceId, m.FuselageNumber, m.TerminalNumber, m.Version, m.CreateTime });
 
             int total = query.Count();
 
@@ -222,9 +221,7 @@ namespace WebBack.Controllers.Biz
                     item.FuselageNumber,
                     item.TerminalNumber,
                     item.Version,
-                    item.CreateTime,
-                    Deposit = item.Deposit.ToPrice(),
-                    Rent = item.Rent.ToPrice(),
+                    item.CreateTime
                 });
 
 
@@ -421,19 +418,6 @@ namespace WebBack.Controllers.Biz
                     posMachine.FuselageNumber = fuselageNumber;
                     posMachine.TerminalNumber = terminalNumber;
                     posMachine.Version = version;
-                    posMachine.IsSpare = isSpare;
-                    posMachine.Deposit = decimal.Parse(deposit);
-                    posMachine.Rent = decimal.Parse(rent);
-
-                    if (isSpare)
-                    {
-                        posMachine.IsAutoBuildAccount = false;
-                    }
-                    else
-                    {
-                        posMachine.IsAutoBuildAccount = true;
-                    }
-
                     posMachines.Add(posMachine);
                 }
 

@@ -1,6 +1,7 @@
 ﻿using Lumos.DAL;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
+using Lumos.Entity.AppApi;
 using Lumos.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,32 @@ namespace Lumos.BLL
 {
     public class MerchantProvider : BaseProvider
     {
-        public CustomJsonResult OpenAccount(int operater, Merchant merchant, MerchantPosMachine merchantPosMachine, BankCard bankCard)
+        public CustomJsonResult CreateAccount(int operater, string token, string validCode, string userName, string password, string deviceId)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
+                //var code = CurrentDb.SysSmsSendHistory.Where(m => m.Token == token && m.ValidCode == validCode && m.IsUse == false && m.ExpireTime >= DateTime.Now).FirstOrDefault();
+                //if (code == null)
+                //{
+                //    return new CustomJsonResult(ResultType.Failure, "验证码错误");
+                //}
+
+                //code.IsUse = true;
+
+                var isExists = CurrentDb.Users.Where(m => m.UserName == userName).FirstOrDefault();
+
+                if (isExists != null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, "账号已经存在");
+                }
+
+
+
                 var sysClientUser = new SysClientUser();
-                sysClientUser.UserName = Guid.NewGuid().ToString().Replace("-", "");
-                sysClientUser.PasswordHash = PassWordHelper.HashPassword("888888");
+                sysClientUser.UserName = userName;
+                sysClientUser.PasswordHash = PassWordHelper.HashPassword(password);
                 sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
                 sysClientUser.RegisterTime = this.DateTime;
                 sysClientUser.CreateTime = this.DateTime;
@@ -34,49 +52,44 @@ namespace Lumos.BLL
                 CurrentDb.SaveChanges();
 
                 var clientCode = CurrentDb.SysClientCode.Where(m => m.Id == sysClientUser.Id).FirstOrDefault();
-                if (clientCode == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, "开户失败，原因获取不到商户代码 ");
-                }
 
-                sysClientUser.ClientCode = clientCode.Code;
-                sysClientUser.UserName = clientCode.Code;
-
+                var merchant = new Merchant();
                 merchant.ClientCode = clientCode.Code;
                 merchant.UserId = sysClientUser.Id;
-
-                if (string.IsNullOrEmpty(merchant.Area))
-                {
-                    merchant.Area = null;
-                    merchant.AreaCode = null;
-                }
-
-
                 merchant.CreateTime = this.DateTime;
                 merchant.Creator = operater;
                 merchant.Status = Enumeration.MerchantStatus.WaitFill;
                 CurrentDb.Merchant.Add(merchant);
                 CurrentDb.SaveChanges();
 
+                sysClientUser.ClientCode = clientCode.Code;
                 sysClientUser.MerchantId = merchant.Id;
 
-
-                var posMachine = CurrentDb.PosMachine.Where(m => m.Id == merchantPosMachine.PosMachineId).FirstOrDefault();
-                if (posMachine == null)
+                var posMachine = CurrentDb.PosMachine.Where(m => m.DeviceId == deviceId).FirstOrDefault();
+                if (posMachine != null)
                 {
-                    return new CustomJsonResult(ResultType.Failure, "开户失败，找不到POS机");
+                    if (posMachine.IsUse)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, "当前POS已被注册");
+                    }
+
+                    posMachine.IsUse = true;
+                    posMachine.Mender = operater;
+                    posMachine.LastUpdateTime = this.DateTime;
+                    CurrentDb.SaveChanges();
+                }
+                else
+                {
+                    posMachine = new PosMachine();
+                    posMachine.DeviceId = deviceId;
+                    posMachine.Creator = operater;
+                    posMachine.CreateTime = this.DateTime;
+                    CurrentDb.PosMachine.Add(posMachine);
+                    CurrentDb.SaveChanges();
                 }
 
-                if (posMachine.IsUse)
-                {
-                    return new CustomJsonResult(ResultType.Failure, "开户失败，POS机已经被使用");
-                }
 
-                posMachine.IsUse = true;
-                posMachine.LastUpdateTime = this.DateTime;
-                posMachine.Mender = operater;
-                CurrentDb.SaveChanges();
-
+                var bankCard = new BankCard();
                 bankCard.MerchantId = merchant.Id;
                 bankCard.UserId = merchant.UserId;
                 bankCard.CreateTime = this.DateTime;
@@ -84,34 +97,47 @@ namespace Lumos.BLL
                 CurrentDb.BankCard.Add(bankCard);
                 CurrentDb.SaveChanges();
 
+                CalculateServiceFee calculateServiceFee = new CalculateServiceFee();
+
+                var merchantPosMachine = new MerchantPosMachine();
                 merchantPosMachine.BankCardId = bankCard.Id;
                 merchantPosMachine.UserId = sysClientUser.Id;
                 merchantPosMachine.MerchantId = merchant.Id;
+                merchantPosMachine.PosMachineId = posMachine.Id;
+                merchantPosMachine.Deposit = calculateServiceFee.Deposit;
+                merchantPosMachine.MobileTrafficFee = calculateServiceFee.MobileTrafficFee;
                 merchantPosMachine.Status = Enumeration.MerchantPosMachineStatus.NoActive;
                 merchantPosMachine.CreateTime = this.DateTime;
                 merchantPosMachine.Creator = operater;
-                merchantPosMachine.Deposit = posMachine.Deposit;
-                merchantPosMachine.Rent = posMachine.Rent;
                 CurrentDb.MerchantPosMachine.Add(merchantPosMachine);
+                CurrentDb.SaveChanges();
 
-
-                Fund fund = new Fund();
-                fund.UserId = sysClientUser.Id;
-                fund.Arrearage = 0;
-                fund.Balance = 0;
-                fund.CreateTime = this.DateTime;
-                fund.Creator = operater;
-                fund.MerchantId = merchant.Id;
-                CurrentDb.Fund.Add(fund);
+                var orderToServiceFee = new OrderToServiceFee();
+                orderToServiceFee.MerchantId = merchant.Id;
+                orderToServiceFee.MerchantPosMachineId = merchantPosMachine.Id;
+                orderToServiceFee.UserId = sysClientUser.Id;
+                orderToServiceFee.SubmitTime = this.DateTime;
+                orderToServiceFee.ProductType = Enumeration.ProductType.PosMachineServiceFee;
+                orderToServiceFee.ProductName = Enumeration.ProductType.PosMachineServiceFee.GetCnName();
+                orderToServiceFee.ProductId = (int)Enumeration.ProductType.PosMachineServiceFee;
+                orderToServiceFee.Deposit = calculateServiceFee.Deposit;
+                orderToServiceFee.MobileTrafficFee = calculateServiceFee.MobileTrafficFee;
+                orderToServiceFee.PriceVersion = calculateServiceFee.Version;
+                orderToServiceFee.Price = calculateServiceFee.Deposit + calculateServiceFee.MobileTrafficFee;
+                orderToServiceFee.Status = Enumeration.OrderStatus.WaitPay;
+                orderToServiceFee.CreateTime = this.DateTime;
+                orderToServiceFee.Creator = operater;
+                CurrentDb.OrderToServiceFee.Add(orderToServiceFee);
+                CurrentDb.SaveChanges();
+                orderToServiceFee.Sn = Sn.Build(SnType.DepositRent, orderToServiceFee.Id);
 
                 //暂定在这里开启
-                BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, merchant.Id, Enumeration.MerchantAuditStatus.WaitPrimaryAudit, "");
-
+                //BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, merchant.Id, Enumeration.MerchantAuditStatus.WaitPrimaryAudit, "");
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, "开户成功");
+                result = new CustomJsonResult(ResultType.Success, "注册成功");
             }
 
             return result;
@@ -420,50 +446,6 @@ namespace Lumos.BLL
 
         }
 
-        public CustomJsonResult AddChildAccount(int operater, int userId, string fullName, string phoneNumber)
-        {
-
-            CustomJsonResult result = new CustomJsonResult();
-
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var masterAccount = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
-                var subAccount = new SysClientUser();
-                subAccount.UserName = Guid.NewGuid().ToString().Replace("-", "");
-                subAccount.PasswordHash = PassWordHelper.HashPassword("888888");
-                subAccount.SecurityStamp = Guid.NewGuid().ToString();
-                subAccount.RegisterTime = this.DateTime;
-                subAccount.CreateTime = this.DateTime;
-                subAccount.Creator = operater;
-                subAccount.ClientAccountType = Enumeration.ClientAccountType.SubAccount;
-                subAccount.MerchantId = masterAccount.MerchantId;
-                subAccount.FullName = fullName;
-                subAccount.PhoneNumber = phoneNumber;
-                subAccount.Status = Enumeration.UserStatus.Normal;
-
-                CurrentDb.SysClientUser.Add(subAccount);
-                CurrentDb.SaveChanges();
-
-                var clientCode = CurrentDb.SysClientCode.Where(m => m.Id == subAccount.Id).FirstOrDefault();
-                if (clientCode == null)
-                {
-                    return new CustomJsonResult(ResultType.Failure, "开户失败，原因获取不到商户代码 ");
-                }
-
-                subAccount.ClientCode = clientCode.Code;
-                subAccount.UserName = clientCode.Code;
-
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
-
-                result = new CustomJsonResult(ResultType.Success, "开户成功");
-                result.Data = subAccount;
-            }
-
-            return result;
-        }
-
         public CustomJsonResult ReturnPosMachine(int operater, MerchantPosMachine pMerchantPosMachine)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -486,118 +468,39 @@ namespace Lumos.BLL
             return new CustomJsonResult(ResultType.Success, "登记成功");
         }
 
-        public OrderDepositRentInfo GetDepositRentOrder(int merchantId, int merchantPosMachineId)
+        public OrderConfirmInfo GetOrderConfirmInfoByServiceFee(string orderSn)
         {
-            var merchant = CurrentDb.Merchant.Where(m => m.Id == merchantId).FirstOrDefault();
+            OrderConfirmInfo yOrder = new OrderConfirmInfo();
 
-            var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.MerchantId == merchantId && m.Id == merchantPosMachineId).FirstOrDefault();
+            var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Sn == orderSn).FirstOrDefault();
+            orderToServiceFee.ExpiryTime = this.DateTime.AddYears(1);
 
-            var orderToDepositRent = CurrentDb.OrderToDepositRent.Where(m => m.MerchantId == merchantId && m.MerchantPosMachineId == merchantPosMachineId && m.ProductType == Enumeration.ProductType.PosMachineDepositRent).FirstOrDefault();
+            yOrder.transName = "消费";
+            yOrder.productName = orderToServiceFee.ProductName;
+            yOrder.amount = orderToServiceFee.Price.ToF2Price().Replace(".", "").PadLeft(12, '0');
 
-
-            CalculateRent calculateRent = new CalculateRent(merchantPosMachine.Rent);
-
-            if (orderToDepositRent == null)
+            yOrder.confirmField.Add(new OrderField("订单编号", orderToServiceFee.Sn.NullToEmpty()));
+            if (orderToServiceFee.Deposit > 0)
             {
-                orderToDepositRent = new OrderToDepositRent();
-                orderToDepositRent.MerchantId = merchantId;
-                orderToDepositRent.MerchantPosMachineId = merchantPosMachineId;
-                orderToDepositRent.UserId = merchantPosMachine.UserId;
-                orderToDepositRent.CreateTime = this.DateTime;
-                orderToDepositRent.Creator = 0;
-                orderToDepositRent.SubmitTime = this.DateTime;
-                orderToDepositRent.ProductType = Enumeration.ProductType.PosMachineDepositRent;
-                orderToDepositRent.ProductName = Enumeration.ProductType.PosMachineDepositRent.GetCnName();
-                orderToDepositRent.ProductId = (int)Enumeration.ProductType.PosMachineDepositRent;
-
-                orderToDepositRent.Deposit = merchantPosMachine.Deposit;
-
-                orderToDepositRent.RentMonths = 3;
-                orderToDepositRent.MonthlyRent = calculateRent.MonthlyRent;
-                orderToDepositRent.RentTotal = calculateRent.GetRent(orderToDepositRent.RentMonths);
-                orderToDepositRent.RentVersion = calculateRent.Version;
-
-                orderToDepositRent.Price = merchantPosMachine.Deposit + orderToDepositRent.RentTotal;
-                orderToDepositRent.Status = Enumeration.OrderStatus.WaitPay;
-                CurrentDb.OrderToDepositRent.Add(orderToDepositRent);
-                CurrentDb.SaveChanges();
-                orderToDepositRent.Sn = Sn.Build(SnType.DepositRent, orderToDepositRent.Id);
-                CurrentDb.SaveChanges();
+                yOrder.confirmField.Add(new OrderField("押金", string.Format("{0}元", orderToServiceFee.Deposit.ToF2Price())));
             }
-
-            OrderDepositRentInfo orderDepositRentInfo = new OrderDepositRentInfo();
-
-            orderDepositRentInfo.Id = orderToDepositRent.Id;
-            orderDepositRentInfo.Sn = orderToDepositRent.Sn;
-            orderDepositRentInfo.Product = orderToDepositRent.ProductName;
-            orderDepositRentInfo.ProductType = orderToDepositRent.ProductType;
-            orderDepositRentInfo.Status = orderToDepositRent.Status;
-            orderDepositRentInfo.StatusName = orderToDepositRent.Status.GetCnName();
-            orderDepositRentInfo.Deposit = orderToDepositRent.Deposit;
-            orderDepositRentInfo.MonthlyRent = calculateRent.MonthlyRent;
-            orderDepositRentInfo.Remarks = calculateRent.Remark;
-            orderDepositRentInfo.MerchantCode = merchant.ClientCode;
+            yOrder.confirmField.Add(new OrderField("流量费", string.Format("{0}元", orderToServiceFee.MobileTrafficFee.ToF2Price())));
+            yOrder.confirmField.Add(new OrderField("到期时间", orderToServiceFee.ExpiryTime.ToUnifiedFormatDate()));
+            yOrder.confirmField.Add(new OrderField("支付金额", string.Format("{0}元", orderToServiceFee.Price.NullToEmpty())));
 
 
-            return orderDepositRentInfo;
-        }
+            #region 支持的支付方式
+            int[] payMethods = new int[1] { 1 };
 
-        public OrderDepositRentInfo GetRentOrder(int merchantId, int merchantPosMachineId)
-        {
-            OrderDepositRentInfo orderDepositRentInfo = new OrderDepositRentInfo();
-
-            var merchant = CurrentDb.Merchant.Where(m => m.Id == merchantId).FirstOrDefault();
-
-            var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.Id == merchantPosMachineId && m.MerchantId == merchantId).FirstOrDefault();
-
-            var orderToRent = CurrentDb.OrderToDepositRent.Where(m => m.MerchantId == merchantId && m.MerchantPosMachineId == merchantPosMachineId && m.ProductType == Enumeration.ProductType.PosMachineRent && m.Status == Enumeration.OrderStatus.WaitPay).FirstOrDefault();
-
-            CalculateRent calculateRent = new CalculateRent(merchantPosMachine.Rent);
-
-            if (orderToRent == null)
+            foreach (var payWayId in payMethods)
             {
-                orderToRent = new OrderToDepositRent();
-                orderToRent.MerchantId = merchant.Id;
-                orderToRent.MerchantPosMachineId = merchantPosMachineId;
-                orderToRent.UserId = merchantPosMachine.UserId;
-                orderToRent.CreateTime = this.DateTime;
-                orderToRent.Creator = 0;
-                orderToRent.SubmitTime = this.DateTime;
-                orderToRent.ProductType = Enumeration.ProductType.PosMachineRent;
-                orderToRent.ProductName = Enumeration.ProductType.PosMachineRent.GetCnName();
-                orderToRent.ProductId = (int)Enumeration.ProductType.PosMachineRent;
-
-                orderToRent.Deposit = 0;
-
-                orderToRent.RentMonths = 3;
-                orderToRent.MonthlyRent = calculateRent.MonthlyRent;
-                orderToRent.RentTotal = calculateRent.GetRent(orderToRent.RentMonths);
-                orderToRent.RentVersion = calculateRent.Version;
-
-                orderToRent.Price = orderToRent.RentTotal;
-                orderToRent.Status = Enumeration.OrderStatus.WaitPay;
-                CurrentDb.OrderToDepositRent.Add(orderToRent);
-                CurrentDb.SaveChanges();
-                orderToRent.Sn = Sn.Build(SnType.DepositRent, orderToRent.Id);
-                CurrentDb.SaveChanges();
+                var payWay = new PayWay();
+                payWay.id = payWayId;
+                yOrder.payMethod.Add(payWay);
             }
+            #endregion
 
-
-
-
-            orderDepositRentInfo.Id = orderToRent.Id;
-            orderDepositRentInfo.Sn = orderToRent.Sn;
-            orderDepositRentInfo.Product = orderToRent.ProductName;
-            orderDepositRentInfo.ProductType = orderToRent.ProductType;
-            orderDepositRentInfo.Status = orderToRent.Status;
-            orderDepositRentInfo.StatusName = orderToRent.Status.GetCnName();
-            orderDepositRentInfo.MonthlyRent = calculateRent.MonthlyRent;
-            orderDepositRentInfo.Remarks = calculateRent.Remark;
-            orderDepositRentInfo.MerchantCode = merchant.ClientCode;
-            orderDepositRentInfo.RentDueDate = merchantPosMachine.RentDueDate.ToUnifiedFormatDate();
-
-
-            return orderDepositRentInfo;
+            return yOrder;
         }
 
     }

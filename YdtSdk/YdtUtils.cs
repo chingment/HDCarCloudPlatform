@@ -275,7 +275,7 @@ namespace YdtSdk
                     OfferImgModel offerImgModel = new OfferImgModel();
                     offerImgModel.Company = insCompany.PrintName;
                     offerImgModel.OfferTime = DateTime.Now;
-                    offerImgModel.Offerer = "全线通";
+                    offerImgModel.Offerer = "";
 
                     OfferImgCarInfo offerImgCarInfo = new OfferImgCarInfo();
                     offerImgCarInfo.CarOwner = order.CarOwner;

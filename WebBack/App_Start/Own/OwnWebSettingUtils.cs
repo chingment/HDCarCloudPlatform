@@ -41,7 +41,7 @@ namespace WebBack
         /// <returns></returns>
         public static string GetWebName()
         {
-            return "全线通云平台";
+            return "车险平台";
         }
 
         /// <summary>

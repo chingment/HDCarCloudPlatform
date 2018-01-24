@@ -13,22 +13,18 @@ using WebAppApi.Models;
 using WebAppApi.Models.Account;
 using WebAppApi.Models.Banner;
 using WebAppApi.Models.CarService;
-using WebAppApi.Models.Product;
 
 namespace WebAppApi.Controllers
 {
     public class AccountController : BaseApiController
     {
-        [HttpGet]
-        public APIResponse CheckUserName(string userName)
-        {
-            var clientUser = CurrentDb.SysClientUser.Where(m => m.UserName == userName).FirstOrDefault();
-            if (clientUser == null)
-            {
-                return ResponseResult(ResultType.Failure, ResultCode.FailureUserNameNotExists, "用户名不存在");
-            }
 
-            return ResponseResult(ResultType.Success, ResultCode.Success, "有效用户名");
+        public APIResponse Create(CreateModel model)
+        {
+            IResult result = BizFactory.Merchant.CreateAccount(0, model.Token, model.ValidCode, model.UserName, model.UserName, model.DeviceId);
+
+            return new APIResponse(result);
+
         }
 
         [HttpPost]
@@ -116,12 +112,6 @@ namespace WebAppApi.Controllers
             SalesmanLoginResultModel resultModel = new SalesmanLoginResultModel(salesman, model.DeviceId, this.SalesmanMerchantId);
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "登录成功", resultModel);
-        }
-
-        public APIResponse Edit()
-        {
-            APIResult result = new APIResult() { Result = ResultType.Exception, Code = ResultCode.Failure, Message = "NULL" };
-            return new APIResponse(result);
         }
 
         [HttpPost]

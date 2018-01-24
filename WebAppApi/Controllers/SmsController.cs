@@ -39,5 +39,28 @@ namespace WebAppApi.Controllers
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", resultModel);
         }
 
+        [HttpPost]
+        public APIResponse GetCreateAccountCode(GetCreateAccountCodeModel model)
+        {
+            var clientUser = CurrentDb.SysClientUser.Where(m => m.UserName == model.Phone).FirstOrDefault();
+            if (clientUser != null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该手机号已经存在");
+            }
+            string token = "";
+            string validCode = "";
+            IResult isSuccess = BizFactory.Sms.SendCreateAccountCode(0, model.Phone, out validCode, out token);
+            if (isSuccess.Result != ResultType.Success)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "获取短信失败");
+            }
+
+            GetCreateAccountCodeResultModel resultModel = new GetCreateAccountCodeResultModel();
+            resultModel.Phone = model.Phone;
+            resultModel.ValidCode = validCode;
+            resultModel.Token = token;
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", resultModel);
+        }
     }
 }

@@ -14,9 +14,9 @@ namespace Lumos.BLL
         {
             YbsMerchantModel model = new YbsMerchantModel();
             model.merchant_id = "861440348161109";
-            model.ybs_mer_code = "uplink";
+            model.ybs_mer_code = "";
             model.biz_code = "000002";
-            model.merchant_name = "全线通服务";
+            model.merchant_name = "";
             return model;
         }
 
@@ -25,9 +25,9 @@ namespace Lumos.BLL
         {
             YbsMerchantModel model = new YbsMerchantModel();
             model.merchant_id = "861440348161109";
-            model.ybs_mer_code = "uplink";
+            model.ybs_mer_code = "";
             model.biz_code = "000001";
-            model.merchant_name = "全线通服务";
+            model.merchant_name = "";
             return model;
         }
 

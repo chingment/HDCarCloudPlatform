@@ -592,8 +592,6 @@ namespace Lumos.BLL
                         estimateOrderToCarClaim.AccessoriesPrice = l_orderToCarClaim.AccessoriesPrice;
 
 
-                        CalculateCarClaimPayPrice calculateCarClaimPayPrice = new CalculateCarClaimPayPrice(l_orderToCarClaim.WorkingHoursPrice, l_orderToCarClaim.AccessoriesPrice);
-
                         estimateOrderToCarClaim.EstimatePrice = l_orderToCarClaim.EstimatePrice;
                         estimateOrderToCarClaim.Remarks = orderToCarClaim.Remarks;
 
@@ -607,14 +605,14 @@ namespace Lumos.BLL
 
                             estimateOrderToCarClaim.Status = Enumeration.OrderStatus.WaitPay;
                             estimateOrderToCarClaim.FollowStatus = (int)Enumeration.OrderToCarClaimFollowStatus.WaitPayCommission;
-                            estimateOrderToCarClaim.Price = calculateCarClaimPayPrice.PayPrice;//应付金额
+                            estimateOrderToCarClaim.Price =0;//应付金额
 
                         }
                         else if (l_orderToCarClaim.RepairsType == Enumeration.RepairsType.Estimate)
                         {
                             l_orderToCarClaim.Status = Enumeration.OrderStatus.WaitPay;
                             l_orderToCarClaim.FollowStatus = (int)Enumeration.OrderToCarClaimFollowStatus.WaitPayCommission;
-                            l_orderToCarClaim.Price = calculateCarClaimPayPrice.PayPrice;//应付金额
+                            l_orderToCarClaim.Price =0;//应付金额
 
                             estimateOrderToCarClaim.Status = Enumeration.OrderStatus.Follow;
                             estimateOrderToCarClaim.FollowStatus = (int)Enumeration.OrderToCarClaimFollowStatus.WaitPayCommission;

@@ -20,66 +20,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $("#list_withdraws").loadDataTable({
-                url: "/Merchant/GetWithdrawList",
-                pageIndex: 0,
-                searchParams: $("#form_withdraws").serializeArray(),
-                searchButtonId: "btn_Search",
-                containerId: "form_withdraws",
-                isShowLoading: false,
-                rowDataCombie: function (p_index, p_row) {
-                    var l_Strlimt = "";
-                    l_Strlimt += "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" operate=\\\"details\\\"   class=\\\"a-btn a-btn-edit\\\"  >查看</a>")";
-                    var l_StrRows = "";
-                    l_StrRows += "<tr>";
-                    l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.sn + "\"   >" + p_row.sn + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.amount + "\">" + p_row.amount + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.amountByAfterFee + "\">" + p_row.amountByAfterFee + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.fee + "\">" + p_row.fee + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.status + "\">" + p_row.status + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.settlementStartTime + "\">" + p_row.settlementStartTime + "</td>";
-                    l_StrRows += "<td class=\"operation\">";
-                    l_StrRows += l_Strlimt;
-                    l_StrRows += "</td>";
-                    l_StrRows += "</tr>";
-                    return l_StrRows;
-                },
-                operate: {
-                    "details": function (obj) {
-                        var url = '/Biz/Withdraw/Details?id=' + obj.id;
-                        var title = '查看提现记录';
-                        art.dialog.open(url, { title: title, width: '650px', height: '500px', lock: true, drag: false, cancelVal: '关闭', cancel: true });
-                    }
-                }
-            });
 
-            $("#form_transactions").loadDataTable({
-                url: "../Merchant/GetTransactionsList",
-                pageIndex: 0,
-                searchParams: $("#form_transactions").serializeArray(),
-                searchButtonId: "btn_Search",
-                containerId: "form_transactions",
-                isShowLoading: false,
-                rowDataCombie: function (p_index, p_row) {
-                    var l_StrRows = "";
-                    l_StrRows += "<tr>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.sn + "\">" + p_row.sn + "</td>";
-                    l_StrRows += "<td class=\"overflow\" >" + p_row.type + "</td>";
-                    l_StrRows += "<td class=\"overflow\" >" + p_row.changeAmount + "</td>";
-                    l_StrRows += "<td class=\"overflow\" >" + p_row.balance + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
-                    l_StrRows += "<td class=\"operation\"><a href=\"javascript:void(0)\" operate=\"details\" class=\"a-btn\">查看</a></td>";
-                    l_StrRows += "</tr>";
-                    return l_StrRows;
-                },
-                operate: {
-                    "details": function (obj) {
-                        var url = '/Biz/Transactions/Details?id=' + obj.id;
-                        var title = '查看资金流水';
-                        art.dialog.open(url, { title: title, width: '550px', height: '350px', lock: true, drag: false, cancelVal: '关闭', cancel: true });
-                    }
-                }
-            });
 
         });
     </script>
@@ -309,9 +250,9 @@
                             <td class="c">
                                 <span>@Model.MerchantPosMachine[i].Deposit.ToPrice()</span><span class="moneyunit">元</span>
                             </td>
-                            <td class="t">租金/每月：</td>
+                            <td class="t">流量费（年）：</td>
                             <td class="c">
-                                <span>@Model.MerchantPosMachine[i].Rent.ToPrice()</span><span class="moneyunit">元</span>
+                                <span>@Model.MerchantPosMachine[i].MobileTrafficFee.ToPrice()</span><span class="moneyunit">元</span>
                             </td>
                         </tr>
                     </table>

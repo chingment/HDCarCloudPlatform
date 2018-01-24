@@ -43,11 +43,11 @@ namespace MySDK
             try
             {
 
-                request.SignName = "全线通信息";//"管理控制台中配置的短信签名（状态必须是验证通过）"
+                request.SignName = "";//"管理控制台中配置的短信签名（状态必须是验证通过）"
                 request.TemplateCode = template;//管理控制台中配置的审核通过的短信模板的模板CODE（状态必须是验证通过）"
                 request.RecNum = mobile;//"接收号码，多个号码可以逗号分隔"
                 request.ParamString = smsparam;//短信模板中的变量；数字需要转换为字符串；个人用户每个变量长度必须小于15个字符。"
-                SingleSendSmsResponse httpResponse = client.GetAcsResponse(request);
+                //SingleSendSmsResponse httpResponse = client.GetAcsResponse(request);
 
 
                 sendHistory.Result = Enumeration.SysSmsSendResult.Success;

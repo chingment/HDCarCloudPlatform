@@ -31,10 +31,6 @@ namespace Lumos.Entity
 
         public bool IsUse { get; set; }
 
-        public decimal Deposit { get; set; }
-
-        public decimal Rent { get; set; }
-
         public int Creator { get; set; }
 
         public DateTime CreateTime { get; set; }
@@ -43,9 +39,5 @@ namespace Lumos.Entity
 
         public DateTime? LastUpdateTime { get; set; }
 
-        public bool IsSpare { get; set; }
-
-        //是否能生成商户账号，当是IsSpare 为 false,则为true,当更换流程 旧机器 为false
-        public bool IsAutoBuildAccount { get; set; }
     }
 }

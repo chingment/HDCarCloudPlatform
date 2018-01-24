@@ -24,15 +24,6 @@ namespace Lumos.BLL
             posMachine.Creator = operater;
             posMachine.IsUse = false;
 
-            if (posMachine.IsSpare == true)
-            {
-                posMachine.IsAutoBuildAccount = false;
-            }
-            else
-            {
-                posMachine.IsAutoBuildAccount = true;
-            }
-
             CurrentDb.PosMachine.Add(posMachine);
             CurrentDb.SaveChanges();
 
@@ -47,8 +38,6 @@ namespace Lumos.BLL
             if (l_posMachine == null)
                 return new CustomJsonResult(ResultType.Failure, "不存在");
 
-            l_posMachine.Deposit = posMachine.Deposit;
-            l_posMachine.Rent = posMachine.Rent;
             l_posMachine.FuselageNumber = posMachine.FuselageNumber;
             l_posMachine.TerminalNumber = posMachine.TerminalNumber;
             l_posMachine.Version = posMachine.Version;
@@ -71,11 +60,10 @@ namespace Lumos.BLL
 
                 var oldPosMachine = CurrentDb.PosMachine.Where(m => m.Id == merchantPosMachine.PosMachineId).FirstOrDefault();
 
-                var newPosMachine = CurrentDb.PosMachine.Where(m => m.Id == changeHistory.NewPosMachineId && m.IsSpare == true).FirstOrDefault();
+                var newPosMachine = CurrentDb.PosMachine.Where(m => m.Id == changeHistory.NewPosMachineId).FirstOrDefault();
 
 
                 oldPosMachine.IsUse = false;
-                oldPosMachine.IsAutoBuildAccount = false;
                 oldPosMachine.LastUpdateTime = this.DateTime;
                 oldPosMachine.Mender = operater;
 

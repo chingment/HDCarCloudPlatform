@@ -72,7 +72,7 @@ namespace WebBack.Controllers.Biz
                                 (userName.Length == 0 || m.ClientCode.Contains(userName)) &&
                                 m.SalesmanId == null&&
                                 !arrNoInDeviceId.Contains(p.DeviceId)
-                        select new { mp.Id, m.ClientCode, p.FuselageNumber, p.TerminalNumber, p.CreateTime, p.Version, p.DeviceId, p.Deposit, p.Rent });
+                        select new { mp.Id, m.ClientCode, p.FuselageNumber, p.TerminalNumber, p.CreateTime, p.Version, p.DeviceId });
 
             int total = list.Count();
 

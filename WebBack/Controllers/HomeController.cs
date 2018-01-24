@@ -68,12 +68,14 @@ namespace WebBack.Controllers
         {
             Log.Info("测试");
 
+            //BizFactory.Merchant.CreateAccount(0,"","", "15989287032", "123456", "87377332911A2");
+
             //SmsHelper.Send("SMS_44380432", "{\"customer\":\"邱庆文\"}", "15989287032");
 
             //int? avdfa = EntityFunctions.DiffDays(DateTime.Parse("2017-05-11 00:00:00.000"), DateTime.Now);
 
             //DateTime periodMax = DateTime.Now.AddDays(30);
-           // int ab = CurrentDb.OrderToCarInsure.Where(m => m.MerchantId == 122 && m.Status == Enumeration.OrderStatus.Completed && periodMax > m.PeriodEnd.Value).Count();
+            // int ab = CurrentDb.OrderToCarInsure.Where(m => m.MerchantId == 122 && m.Status == Enumeration.OrderStatus.Completed && periodMax > m.PeriodEnd.Value).Count();
 
             Session["WebBackLoginVerifyCode"] = null;
             if (Request.IsAuthenticated)

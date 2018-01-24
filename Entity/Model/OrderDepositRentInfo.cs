@@ -26,13 +26,13 @@ namespace Lumos.Entity
 
         public decimal Deposit { get; set; }
 
-        public decimal MonthlyRent { get; set; }
+        public decimal MobileTrafficFee { get; set; }
 
         public string Remarks { get; set; }
 
         public string MerchantCode { get; set; }
 
-        public string RentDueDate { get; set; }
+        public string ExpiryTime  { get; set; }
 
     }
 }

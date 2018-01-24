@@ -80,6 +80,16 @@
                 <span>@Model.OrderToTalentDemand.Quantity</span>
             </td>
         </tr>
+        <tr>
+            <td class="t">开始时间：</td>
+            <td class="c">
+                <span>@Model.OrderToTalentDemand.UseStartTime.ToUnifiedFormatDate()</span>
+            </td>
+            <td class="t" >结束时间：</td>
+            <td class="c">
+                <span>@Model.OrderToTalentDemand.UseEndTime.ToUnifiedFormatDate()</span>
+            </td>
+        </tr>
     </table>
 
     <div class="gbr-row-title clearfix">

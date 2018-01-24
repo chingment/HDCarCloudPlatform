@@ -53,7 +53,7 @@ namespace Lumos.BLL
         }
 
 
-        public CustomJsonResult SendAddChildAccountCode(int operater, string phone, out string validcode, out string token)
+        public CustomJsonResult SendCreateAccountCode(int operater, string phone, out string validcode, out string token)
         {
             validcode = BuildValidCode();
             int seconds = 120;

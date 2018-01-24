@@ -11,29 +11,7 @@ using System.Web.Mvc;
 namespace WebAppApi.Controllers
 {
 
-    //public class CrossoffAccountResponeBody
-    //{
-    //    public string serialnumber { get; set; }
 
-    //    public string transactioncode { get; set; }
-
-    //    public string datetime { get; set; }
-
-    //    public string merchantcode { get; set; }
-
-    //    public string money { get; set; }
-
-    //    public string paymentnumber { get; set; }
-
-    //    public string state { get; set; }
-
-    //    public string channel { get; set; }
-
-    //    public string terminalnumber { get; set; }
-
-    //    public string bankcardnumber { get; set; }
-
-    //}
 
     public class CrossoffAccountRequestBody
     {

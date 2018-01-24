@@ -30,9 +30,9 @@ namespace Lumos.Entity
 
         public DateTime? ReturnTime { get; set; }
 
-        public decimal Rent { get; set; }
+        public decimal MobileTrafficFee { get; set; }
 
-        public DateTime? RentDueDate { get; set; }
+        public DateTime? ExpiryTime  { get; set; }
 
         public Enumeration.MerchantPosMachineStatus Status { get; set; }
 

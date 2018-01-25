@@ -28,6 +28,8 @@ namespace Lumos.Entity
 
         public bool CanClaims { get; set; }
 
+        public bool CanApplyLossAssess { get; set; }
+
         public string PayWays { get; set; }
 
         public int Creator { get; set; }

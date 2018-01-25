@@ -21,7 +21,7 @@ namespace WebAppApi.Controllers
 
         public APIResponse Create(CreateModel model)
         {
-            IResult result = BizFactory.Merchant.CreateAccount(0, model.Token, model.ValidCode, model.UserName, model.UserName, model.DeviceId);
+            IResult result = BizFactory.Merchant.CreateAccount(0, model.Token, model.ValidCode, model.UserName, model.Password, model.DeviceId);
 
             return new APIResponse(result);
 
@@ -138,7 +138,7 @@ namespace WebAppApi.Controllers
         }
 
         [HttpGet]
-        public APIResponse Home(int userId, int merchantId)
+        public APIResponse Home(int userId, int merchantId,int posMachineId)
         {
 
             HomeModel model = new HomeModel();
@@ -167,7 +167,7 @@ namespace WebAppApi.Controllers
             var carInsCompanys = (from u in CurrentDb.CarInsuranceCompany
                                   join r in CurrentDb.InsuranceCompany on u.InsuranceCompanyId equals r.Id
                                   where u.Status == Enumeration.CarInsuranceCompanyStatus.Normal
-                                  select new { r.Id, r.Name, u.InsuranceCompanyImgUrl, u.CanClaims, u.CanInsure, u.Priority }).Distinct().OrderByDescending(m => m.Priority);
+                                  select new { r.Id, r.Name, u.InsuranceCompanyImgUrl, u.CanClaims, u.CanInsure,u.CanApplyLossAssess, u.Priority }).Distinct().OrderByDescending(m => m.Priority);
 
             List<CarInsCompanyModel> carInsCompanyModels = new List<CarInsCompanyModel>();
 
@@ -179,6 +179,7 @@ namespace WebAppApi.Controllers
                 carInsCompanyModel.ImgUrl = carInsCompany.InsuranceCompanyImgUrl;
                 carInsCompanyModel.CanClaims = carInsCompany.CanClaims;
                 carInsCompanyModel.CanInsure = carInsCompany.CanInsure;
+                carInsCompanyModel.CanApplyLossAssess = carInsCompany.CanApplyLossAssess;
                 carInsCompanyModels.Add(carInsCompanyModel);
             }
 

@@ -295,7 +295,9 @@ namespace Lumos.Entity
             [Remark("POS机服务费")]
             PosMachineServiceFee = 301,
             [Remark("人才输送")]
-            TalentDemand = 401
+            TalentDemand = 401,
+            [Remark("申请定损点")]
+            ApplyLossAssess = 501
 
         }
 

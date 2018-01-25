@@ -27,10 +27,10 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
-        private string host = "http://112.74.179.185";
+        private string host = "http://localhost:16665";
+        //private string host = "http://112.74.179.185";
 
-        // private string host = "https://www.ins-uplink.cn";
+       // private string host = "https://www.ins-uplink.cn";
 
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
@@ -115,17 +115,19 @@ namespace WebAppApi.Controllers
 
             Dictionary<string, string> model = new Dictionary<string, string>();
 
-            string userName = "15989287032";
+            string userName = "15989287035";
             string passWord = "123456";
             string newPassWord = "888888";
-            string deviceId = "87377332911A2";
+            string deviceId = "87377332911A215";
             int userId = 1027;
             int merchantId = 20;
             int posMachineId = 2;
 
             //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-            model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
+            //model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
 
+            model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
+            model.Add("登录接口", Login(userName, passWord, deviceId));
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
@@ -137,11 +139,11 @@ namespace WebAppApi.Controllers
             //model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 818, Enumeration.ProductType.InsureForCarForInsure));
             //model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));
 
-            model.Add("登录接口", Login(userName, passWord, "869612023700703"));
+            //model.Add("登录接口", Login(userName, passWord, "869612023700703"));
             //model.Add("获取忘记密码短信", GetForgetPwdCode("uplink1", "15989287032"));
             //model.Add("修改密码", ChangePassword(15, "123456", "123456"));
             // model.Add("重置密码接口", ResetPassword(userName, newPassWord, "382001", "5e04ef95-ac41-43a9-942d-a2b41758aef2"));
-           // model.Add("注册账号", GetCreateAccountCode("15989287032"));
+            // model.Add("注册账号", GetCreateAccountCode("15989287032"));
             //model.Add("支付结果确认", PayConfirm());
             //model.Add("支付结果", PayResultNotify());
             //model.Add("易办事销账", YBSReceiveNotify());
@@ -460,32 +462,29 @@ namespace WebAppApi.Controllers
         }
 
 
-        public string AddChildAccount(int userId, int merchantId, string fullName, string phone, string token, string validCode)
+        public string AddAccount(string userName, string password, string token, string validCode,string deviceId)
         {
-            //AddChildAccountModel model = new AddChildAccountModel();
-            //model.AccountFullName = fullName;
-            //model.MerchantId = merchantId;
-            //model.UserId = userId;
-            //model.AccountPhone = phone;
-            //model.AccountPassword = "888888";
-            //model.Token = token;
-            //model.ValidCode = validCode;
+            CreateModel model = new CreateModel();
+            model.UserName = userName;
+            model.Password = password;
+            model.Token = token;
+            model.ValidCode = validCode;
+            model.DeviceId = deviceId;
 
-            //string a1 = JsonConvert.SerializeObject(model);
+            string a1 = JsonConvert.SerializeObject(model);
 
-            //string signStr = Signature.Compute(key, secret, timespan, a1);
+            string signStr = Signature.Compute(key, secret, timespan, a1);
 
 
-            //Dictionary<string, string> headers = new Dictionary<string, string>();
-            //headers.Add("key", key);
-            //headers.Add("timestamp", timespan.ToString());
-            //headers.Add("sign", signStr);
-            //HttpUtil http = new HttpUtil();
-            //string result = http.HttpPostJson("" + host + "/api/Account/AddChildAccount", a1, headers);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/Account/Create", a1, headers);
 
-            //return result;
+            return result;
 
-            return null;
 
         }
 

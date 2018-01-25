@@ -16,7 +16,7 @@ namespace WebAppApi.Controllers
     public class OrderController : BaseApiController
     {
         [HttpGet]
-        public APIResponse GetList(int userId, int merchantId, int pageIndex, Enumeration.OrderStatus status)
+        public APIResponse GetList(int userId, int merchantId, int posMachineId, int pageIndex, Enumeration.OrderStatus status)
         {
             var order = (from o in CurrentDb.Order
                          where o.MerchantId == merchantId
@@ -286,7 +286,7 @@ namespace WebAppApi.Controllers
         }
 
         [HttpGet]
-        public APIResponse GetDetails(int userId, int merchantId, int orderId, Enumeration.ProductType productType)
+        public APIResponse GetDetails(int userId, int merchantId, int posMachineId, int orderId, Enumeration.ProductType productType)
         {
             if (productType == Enumeration.ProductType.InsureForCarForInsure)
             {
@@ -516,11 +516,11 @@ namespace WebAppApi.Controllers
                             merchantModel.ContactPhone = handMerchant.ContactPhoneNumber;
 
                             string headTitle = "";
-                            if (orderToCarEstimate.HandMerchantType== Enumeration.HandMerchantType.Demand)
+                            if (orderToCarEstimate.HandMerchantType == Enumeration.HandMerchantType.Demand)
                             {
                                 headTitle = "对接商家";
                             }
-                            else if(orderToCarEstimate.HandMerchantType == Enumeration.HandMerchantType.Supply)
+                            else if (orderToCarEstimate.HandMerchantType == Enumeration.HandMerchantType.Supply)
                             {
                                 headTitle = "维修厂";
                             }

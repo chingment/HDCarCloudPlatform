@@ -12,5 +12,7 @@ namespace WebAppApi.Models.Sms
         public string ValidCode { get; set; }
 
         public string Token { get; set; }
+
+        public int Seconds { get; set; }
     }
 }

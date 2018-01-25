@@ -53,10 +53,10 @@ namespace Lumos.BLL
         }
 
 
-        public CustomJsonResult SendCreateAccountCode(int operater, string phone, out string validcode, out string token)
+        public CustomJsonResult SendCreateAccountCode(int operater, string phone, out string validcode, out string token ,out int seconds)
         {
             validcode = BuildValidCode();
-            int seconds = 120;
+            seconds = 120;
             CustomJsonResult result = SmsHelper.Send("SMS_49340095f", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
             return result;
         }

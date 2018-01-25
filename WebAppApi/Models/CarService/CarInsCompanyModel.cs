@@ -17,5 +17,7 @@ namespace WebAppApi.Models.CarService
         public bool CanInsure { get; set; }
         //能理赔
         public bool CanClaims { get; set; }
+        //能申请定损点
+        public bool CanApplyLossAssess { get; set; }
     }
 }

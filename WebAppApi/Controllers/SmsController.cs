@@ -49,7 +49,8 @@ namespace WebAppApi.Controllers
             }
             string token = "";
             string validCode = "";
-            IResult isSuccess = BizFactory.Sms.SendCreateAccountCode(0, model.Phone, out validCode, out token);
+            int seconds = 0;
+            IResult isSuccess = BizFactory.Sms.SendCreateAccountCode(0, model.Phone, out validCode, out token,out seconds);
             if (isSuccess.Result != ResultType.Success)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "获取短信失败");
@@ -59,6 +60,7 @@ namespace WebAppApi.Controllers
             resultModel.Phone = model.Phone;
             resultModel.ValidCode = validCode;
             resultModel.Token = token;
+            resultModel.Seconds = seconds;
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", resultModel);
         }

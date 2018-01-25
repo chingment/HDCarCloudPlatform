@@ -73,7 +73,7 @@ namespace Lumos.BLL
                         return new CustomJsonResult(ResultType.Failure, "当前POS已被注册");
                     }
 
-                    posMachine.IsUse = true;
+                    posMachine.IsUse = false;
                     posMachine.Mender = operater;
                     posMachine.LastUpdateTime = this.DateTime;
                     CurrentDb.SaveChanges();

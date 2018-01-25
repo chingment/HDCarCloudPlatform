@@ -455,7 +455,7 @@ namespace Lumos.BLL
             if (merchantPosMachine != null)
                 return new CustomJsonResult(ResultType.Failure, "找不到要注销的POS机");
 
-            if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Normal || merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Rentdue)
+            if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Normal || merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Expiry)
                 return new CustomJsonResult(ResultType.Failure, "该POS的状态不允许注销");
 
 

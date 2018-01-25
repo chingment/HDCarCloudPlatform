@@ -20,12 +20,8 @@ namespace Lumos.Entity
             Normal = 1,
             [Remark("未激活")]
             NoActive = 2,
-            [Remark("租金到期")]
-            Rentdue = 3,
-            [Remark("已注销")]
-            Return = 4,
-            [Remark("账号与设备好不匹配")]
-            NotMatch = 5
+            [Remark("到期")]
+            Expiry = 3
         }
 
         public enum ExtendedAppType
@@ -447,7 +443,7 @@ namespace Lumos.Entity
             [Remark("美容店")]
             CarBeauty = 3
         }
-     
+
         public enum HandMerchantType
         {
             [Remark("未知")]
@@ -634,7 +630,7 @@ namespace Lumos.Entity
             Unknow = 0,
             [Remark("洗车")]
             XiChe = 1,
-           [Remark("修车")]
+            [Remark("修车")]
             XiuChe = 2
         }
     }

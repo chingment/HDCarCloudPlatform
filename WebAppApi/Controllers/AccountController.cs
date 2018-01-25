@@ -82,15 +82,57 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，用户密码错误");
             }
 
-            ClientLoginResultModel resultModel = new ClientLoginResultModel(clientUser, model.DeviceId);
-            if (resultModel == null)
+            var posMachine = CurrentDb.PosMachine.Where(m => m.DeviceId == model.DeviceId).FirstOrDefault();
+
+            if (posMachine == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备与用户不匹配");
             }
 
-            if (resultModel.PosMachineStatus == Enumeration.MerchantPosMachineStatus.NotMatch)
+            var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.UserId == clientUser.Id && m.MerchantId == clientUser.MerchantId && m.PosMachineId == posMachine.Id).FirstOrDefault();
+
+            if (merchantPosMachine == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备与用户不匹配");
+            }
+
+            if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Unknow)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，用户状态异常");
+            }
+
+            ClientLoginResultModel resultModel = new ClientLoginResultModel();
+
+            if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Normal)
+            {
+                resultModel.Status = ClientLoginStatus.Normal;
+            }
+            else if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.NoActive)
+            {
+                resultModel.Status = ClientLoginStatus.NoActive;
+            }
+            else if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Expiry)
+            {
+                resultModel.Status = ClientLoginStatus.Expiry;
+            }
+            else if (merchantPosMachine.ExpiryTime < DateTime.Now)
+            {
+                resultModel.Status = ClientLoginStatus.Expiry;
+                merchantPosMachine.Status = Enumeration.MerchantPosMachineStatus.Expiry;
+                CurrentDb.SaveChanges();
+            }
+
+            resultModel.UserId = clientUser.Id;
+            resultModel.UserName = clientUser.UserName;
+            resultModel.MerchantId = clientUser.MerchantId;
+            resultModel.MerchantCode = clientUser.ClientCode;
+            resultModel.IsTestAccount = clientUser.IsTestAccount;
+            resultModel.PosMachineId = posMachine.Id;
+
+            var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.UserId == clientUser.Id && m.Status == Enumeration.OrderStatus.WaitPay).FirstOrDefault();
+            if (orderToServiceFee != null)
+            {
+                resultModel.OrderInfo = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee.Sn);
             }
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "登录成功", resultModel);
@@ -138,7 +180,7 @@ namespace WebAppApi.Controllers
         }
 
         [HttpGet]
-        public APIResponse Home(int userId, int merchantId,int posMachineId)
+        public APIResponse Home(int userId, int merchantId, int posMachineId)
         {
 
             HomeModel model = new HomeModel();
@@ -167,7 +209,7 @@ namespace WebAppApi.Controllers
             var carInsCompanys = (from u in CurrentDb.CarInsuranceCompany
                                   join r in CurrentDb.InsuranceCompany on u.InsuranceCompanyId equals r.Id
                                   where u.Status == Enumeration.CarInsuranceCompanyStatus.Normal
-                                  select new { r.Id, r.Name, u.InsuranceCompanyImgUrl, u.CanClaims, u.CanInsure,u.CanApplyLossAssess, u.Priority }).Distinct().OrderByDescending(m => m.Priority);
+                                  select new { r.Id, r.Name, u.InsuranceCompanyImgUrl, u.CanClaims, u.CanInsure, u.CanApplyLossAssess, u.Priority }).Distinct().OrderByDescending(m => m.Priority);
 
             List<CarInsCompanyModel> carInsCompanyModels = new List<CarInsCompanyModel>();
 

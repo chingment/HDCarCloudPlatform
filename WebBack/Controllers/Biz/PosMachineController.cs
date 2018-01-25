@@ -118,8 +118,7 @@ namespace WebBack.Controllers.Biz
                         join p in CurrentDb.PosMachine on mp.PosMachineId equals p.Id
                         join m in CurrentDb.Merchant on mp.MerchantId equals m.Id
                         where (fuselageNumber.Length == 0 || p.FuselageNumber.Contains(fuselageNumber)) &&
-                                (deviceId.Length == 0 || p.DeviceId.Contains(deviceId)) &&
-                                mp.Status == Enumeration.MerchantPosMachineStatus.Return
+                                (deviceId.Length == 0 || p.DeviceId.Contains(deviceId)) 
                         select new { m.ClientCode, m.YYZZ_Name, p.Id, p.DeviceId, mp.Deposit, mp.ReturnDeposit, mp.DepositPayTime, mp.ReturnTime, });
 
             int total = list.Count();
@@ -147,7 +146,7 @@ namespace WebBack.Controllers.Biz
                                  (deviceId.Length == 0 || p.DeviceId.Contains(deviceId)) &&
                                 (mp.Status == Enumeration.MerchantPosMachineStatus.Normal ||
                                   mp.Status == Enumeration.MerchantPosMachineStatus.NoActive ||
-                                  mp.Status == Enumeration.MerchantPosMachineStatus.Rentdue
+                                  mp.Status == Enumeration.MerchantPosMachineStatus.Expiry
                                   )
 
                          select new { m.ClientCode, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, mp.Deposit, mp.DepositPayTime, p.DeviceId, p.FuselageNumber, p.TerminalNumber, p.Version, m.CreateTime, mp.Status });
@@ -246,7 +245,7 @@ namespace WebBack.Controllers.Biz
                                  (deviceId.Length == 0 || p.DeviceId.Contains(deviceId)) &&
                                 (mp.Status == Enumeration.MerchantPosMachineStatus.Normal ||
                                   mp.Status == Enumeration.MerchantPosMachineStatus.NoActive ||
-                                  mp.Status == Enumeration.MerchantPosMachineStatus.Rentdue
+                                  mp.Status == Enumeration.MerchantPosMachineStatus.Expiry
                                   )
 
                          select new { mp.Id, m.ClientCode, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, mp.Deposit, mp.DepositPayTime, p.DeviceId, p.FuselageNumber, p.TerminalNumber, p.Version, m.CreateTime, mp.Status });

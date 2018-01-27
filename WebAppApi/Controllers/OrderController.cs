@@ -611,13 +611,13 @@ namespace WebAppApi.Controllers
             return new APIResponse(result);
         }
 
-        [HttpPost]
-        public APIResponse PayResultNotify(PayResultModel model)
-        {
-            IResult result = BizFactory.Pay.ResultNotify(model.UserId, ResultNotifyParty.App, model);
+        //[HttpPost]
+        //public APIResponse PayResultNotify(PayResultModel model)
+        //{
+        //    IResult result = BizFactory.Pay.ResultNotify(model.UserId, ResultNotifyParty.App, model);
 
-            return new APIResponse(result);
-        }
+        //    return new APIResponse(result);
+        //}
 
         [HttpPost]
         public APIResponse SubmitTalentDemand(SubmitTalentDemandModel model)

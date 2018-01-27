@@ -76,6 +76,7 @@
     <Compile Include="Biz\Fund.cs" />
     <Compile Include="Biz\MerchantEstimateCompany.cs" />
     <Compile Include="Biz\MerchantPosMachineChangeHistory.cs" />
+    <Compile Include="Biz\MinShun_ReceiveNotifyLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyByStaffLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
     <Compile Include="Biz\OrderToApplyLossAssess .cs" />

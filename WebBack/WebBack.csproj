@@ -333,6 +333,7 @@
     <None Include="log4net.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="qyzdj.html" />
     <Content Include="Images\bg_login1.jpg" />
     <Content Include="Scripts\AreaSelect\public.js" />
     <Content Include="Scripts\AreaSelect\queryAllAreas.js" />

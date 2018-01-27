@@ -163,7 +163,7 @@ namespace WebAppApi
 
                 //long app_timestamp = long.Parse(app_timestamp_s);
 
-                //string signStr = Signature.Compute(app_key, app_secret, app_timestamp, app_data);
+              //string signStr = Signature.Compute(app_key, app_secret, app_timestamp, app_data);
 
                 ////Log.Info("app_key:" + app_key);
                 ////Log.Info("app_secret:" + app_secret);

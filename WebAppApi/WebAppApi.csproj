@@ -199,7 +199,7 @@
     <Compile Include="Controllers\HttpRequestClient .cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
-    <Compile Include="Controllers\YBSController.cs" />
+    <Compile Include="Controllers\MinShunController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

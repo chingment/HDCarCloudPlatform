@@ -222,7 +222,7 @@ namespace WebAppApi.Controllers
 
         public string YBSReceiveNotify()
         {
-            CrossoffAccountRequest model = new CrossoffAccountRequest();
+            //CrossoffAccountRequest model = new CrossoffAccountRequest();
 
 
             // string a1 = JsonConvert.SerializeObject(model);
@@ -241,6 +241,8 @@ namespace WebAppApi.Controllers
             string result = http.HttpPostJson("" + host + "/api/YBS/ReceiveNotify", a1, headers);
 
             return result;
+
+
 
         }
 

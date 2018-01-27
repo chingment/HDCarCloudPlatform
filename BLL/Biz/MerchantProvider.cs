@@ -475,6 +475,9 @@ namespace Lumos.BLL
             var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Sn == orderSn).FirstOrDefault();
             orderToServiceFee.ExpiryTime = this.DateTime.AddYears(1);
 
+            yOrder.OrderId = orderToServiceFee.Id;
+            yOrder.OrderSn = orderToServiceFee.Sn;
+            yOrder.remarks = orderToServiceFee.Remarks;
             yOrder.transName = "消费";
             yOrder.productName = orderToServiceFee.ProductName;
             yOrder.amount = orderToServiceFee.Price.ToF2Price().Replace(".", "").PadLeft(12, '0');

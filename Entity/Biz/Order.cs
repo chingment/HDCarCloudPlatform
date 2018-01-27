@@ -52,7 +52,7 @@ namespace Lumos.Entity
 
         public DateTime SubmitTime { get; set; }
 
-        public Enumeration.PayWay PayWay { get; set; }
+        public Enumeration.OrderPayWay PayWay { get; set; }
 
         public DateTime? PayTime { get; set; }
 

@@ -384,7 +384,7 @@ namespace Lumos.Entity
         }
 
 
-        public enum PayWay
+        public enum OrderPayWay
         {
             [Remark("未知")]
             Unknow = 0,
@@ -632,6 +632,18 @@ namespace Lumos.Entity
             XiChe = 1,
             [Remark("修车")]
             XiuChe = 2
+        }
+
+        public enum PayResultNotifyParty
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("民顺")]
+            MinShunNotifyUrl = 1,
+            [Remark("后台确认")]
+            MinShunOrderQueryApi = 2,
+            [Remark("后台确认")]
+            Staff = 3
         }
     }
 }

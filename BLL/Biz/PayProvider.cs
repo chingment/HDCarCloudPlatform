@@ -10,71 +10,6 @@ using System.Transactions;
 
 namespace Lumos.BLL
 {
-    public class YiBanShiOrderInfo
-    {
-        public string order_no { get; set; }
-
-        public string company { get; set; }
-
-        public string product_type { get; set; }
-
-        public string customer_id_type { get; set; }
-
-        public string customer_id { get; set; }
-
-        public string customer_sex { get; set; }
-
-        public string customer_name { get; set; }
-
-        public string customer_mobile_no { get; set; }
-
-        public string customer_birthdate { get; set; }
-
-        public string teacct { get; set; }
-
-        public string car_type { get; set; }
-
-        public string car_license { get; set; }
-
-        public string car_frame_no { get; set; }
-
-        public string payer_id_type { get; set; }
-
-        public string payer_id { get; set; }
-
-        public string payer_name { get; set; }
-
-        public string payer_mobile_no { get; set; }
-
-        public string payer_address { get; set; }
-
-        public string ybs_mer_code { get; set; }
-
-        public string merchant_id { get; set; }
-
-        public string merchant_name { get; set; }
-
-        public string phone_no { get; set; }
-
-        public string cashier_id { get; set; }
-
-        public string teller_id { get; set; }
-
-        //商业险金额
-        public string ci_amt { get; set; }
-
-        //交强险金额
-        public string tci_amt { get; set; }
-
-        //车船税金额
-        public string vvt_amt { get; set; }
-
-        public string biz_code { get; set; }
-
-        public string pay_type { get; set; }
-
-    }
-
     public class OrderConfirmInfo
     {
         public OrderConfirmInfo()
@@ -129,6 +64,29 @@ namespace Lumos.BLL
             return Math.Round(d, 2);
         }
 
+        public CustomJsonResult ResultQuery(int operater, PayQueryParams pms)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).First();
+
+            if (order == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
+            }
+
+            PayQueryResult resultData = new PayQueryResult();
+
+            resultData.OrderSn = order.Sn;
+            resultData.Status = (int)order.Status;
+            resultData.Remarks = order.Status.GetCnName();
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
+
+            return result;
+        }
+
+
         public CustomJsonResult Confirm(int operater, PayConfirmModel model)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -176,7 +134,7 @@ namespace Lumos.BLL
                     switch (notifyParty)
                     {
                         case Enumeration.PayResultNotifyParty.MinShunNotifyUrl:
-                            result = MinShun_ResultNotify(operater, (MinShun_ReceiveNotifyLog)model);
+                            result = MinShun_ResultNotify(operater, (OrderPayReceiveNotifyByMinShunLog)model);
                             break;
                         case Enumeration.PayResultNotifyParty.MinShunOrderQueryApi:
                             //result = YBS_ResultNotify(operater, (MinShun_ReceiveNotifyLog)model);
@@ -266,7 +224,7 @@ namespace Lumos.BLL
         //    return result;
         //}
 
-        private CustomJsonResult MinShun_ResultNotify(int operater, MinShun_ReceiveNotifyLog receiveNotifyLog)
+        private CustomJsonResult MinShun_ResultNotify(int operater, OrderPayReceiveNotifyByMinShunLog receiveNotifyLog)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -280,6 +238,7 @@ namespace Lumos.BLL
 
                     if (order == null)
                     {
+                        CurrentDb.OrderPayReceiveNotifyByMinShunLog.Add(receiveNotifyLog);
                         CurrentDb.SaveChanges();
                         ts.Complete();
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应的订单号");
@@ -295,7 +254,7 @@ namespace Lumos.BLL
                         }
                     }
 
-                    CurrentDb.MinShun_ReceiveNotifyLog.Add(receiveNotifyLog);
+                    CurrentDb.OrderPayReceiveNotifyByMinShunLog.Add(receiveNotifyLog);
                     CurrentDb.SaveChanges();
 
                     ts.Complete();

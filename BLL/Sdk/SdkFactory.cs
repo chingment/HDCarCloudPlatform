@@ -15,5 +15,13 @@ namespace Lumos.BLL
                 return new FangWeiProvider();
             }
         }
+
+        public static MinShunPayProvider MinShunPay
+        {
+            get
+            {
+                return new MinShunPayProvider();
+            }
+        }
     }
 }

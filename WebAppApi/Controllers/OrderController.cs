@@ -611,13 +611,12 @@ namespace WebAppApi.Controllers
             return new APIResponse(result);
         }
 
-        //[HttpPost]
-        //public APIResponse PayResultNotify(PayResultModel model)
-        //{
-        //    IResult result = BizFactory.Pay.ResultNotify(model.UserId, ResultNotifyParty.App, model);
-
-        //    return new APIResponse(result);
-        //}
+        [HttpPost]
+        public APIResponse PayResultQuery(PayQueryParams pms)
+        {
+            IResult result = BizFactory.Pay.ResultQuery(pms.UserId, pms);
+            return new APIResponse(result);
+        }
 
         [HttpPost]
         public APIResponse SubmitTalentDemand(SubmitTalentDemandModel model)
@@ -635,6 +634,11 @@ namespace WebAppApi.Controllers
 
         }
 
-
+        [HttpPost]
+        public APIResponse QrCodeDownload(QrCodeDownloadParams pms)
+        {
+            IResult result = SdkFactory.MinShunPay.QrCodeDownload(pms.UserId, pms);
+            return new APIResponse(result);
+        }
     }
 }

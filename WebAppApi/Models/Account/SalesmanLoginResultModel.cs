@@ -50,6 +50,5 @@ namespace WebAppApi.Models.Account
 
         public string MerchantCode { get; set; }
 
-        public OrderDepositRentInfo OrderInfo { get; set; }
     }
 }

@@ -44,18 +44,19 @@ namespace WebAppApi.Controllers
             Log.Info("ReceiveNotify：" + postData);
 
 
-            MinShun_ReceiveNotifyLog receiveNotifyLog = new MinShun_ReceiveNotifyLog();
+            OrderPayReceiveNotifyByMinShunLog receiveNotifyLog = new OrderPayReceiveNotifyByMinShunLog();
 
             receiveNotifyLog.OrderId = model.orderId;
             receiveNotifyLog.Mercid = model.mercid;
             receiveNotifyLog.Termid = model.termid;
             receiveNotifyLog.Txnamt = model.txnamt;
             receiveNotifyLog.ResultCode = model.result_code;
-            receiveNotifyLog.ResultCodeName =GetResultCodeName(model.result_code);
+            receiveNotifyLog.ResultCodeName = GetResultCodeName(model.result_code);
             receiveNotifyLog.ResultMsg = model.result_msg;
             receiveNotifyLog.Sign = model.sign;
             receiveNotifyLog.MwebUrl = null;
             receiveNotifyLog.NotifyParty = Enumeration.PayResultNotifyParty.MinShunNotifyUrl;
+            receiveNotifyLog.NotifyPartyName = Enumeration.PayResultNotifyParty.MinShunNotifyUrl.GetCnName();
             receiveNotifyLog.Creator = 0;
             receiveNotifyLog.CreateTime = DateTime.Now;
 
@@ -68,7 +69,7 @@ namespace WebAppApi.Controllers
         public string GetResultCodeName(string resultcode)
         {
             string name = "";
-            switch(resultcode)
+            switch (resultcode)
             {
                 case "00":
                     name = "成功";

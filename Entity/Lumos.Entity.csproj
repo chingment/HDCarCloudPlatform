@@ -58,8 +58,13 @@
     <Compile Include="..\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppApi\CodeDownloadResult.cs" />
     <Compile Include="AppApi\OrderField.cs" />
     <Compile Include="AppApi\OrderModel.cs" />
+    <Compile Include="AppApi\PayQueryParams.cs" />
+    <Compile Include="AppApi\PayQueryResult.cs" />
+    <Compile Include="AppApi\QrCodeDownloadParams.cs" />
+    <Compile Include="AppApi\QrCodeDownloadResult.cs" />
     <Compile Include="BizEnumeration.cs" />
     <Compile Include="Biz\Bank.cs" />
     <Compile Include="Biz\BankCard.cs" />
@@ -76,7 +81,7 @@
     <Compile Include="Biz\Fund.cs" />
     <Compile Include="Biz\MerchantEstimateCompany.cs" />
     <Compile Include="Biz\MerchantPosMachineChangeHistory.cs" />
-    <Compile Include="Biz\MinShun_ReceiveNotifyLog.cs" />
+    <Compile Include="Biz\OrderPayReceiveNotifyByMinShunLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyByStaffLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
     <Compile Include="Biz\OrderToApplyLossAssess .cs" />
@@ -101,8 +106,6 @@
     <Compile Include="DBNullCreationConverter.cs" />
     <Compile Include="EnumerationTypeConverter.cs" />
     <Compile Include="Model\InsurePlanKindModel.cs" />
-    <Compile Include="Model\YbsMerchantModel.cs" />
-    <Compile Include="Model\YBS_CrossoffAccountRespone.cs" />
     <Compile Include="PageEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemarkAttribute.cs" />
@@ -132,7 +135,6 @@
     <Compile Include="Sys\SysUserRole.cs" />
     <Compile Include="Sys\SysVerifyEmail.cs" />
     <Compile Include="Sys\SysBanner.cs" />
-    <Compile Include="Model\OrderDepositRentInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

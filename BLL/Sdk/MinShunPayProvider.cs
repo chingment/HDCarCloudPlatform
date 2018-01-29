@@ -5,16 +5,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lumos.Mvc;
+using Lumos.Entity.AppApi;
 
-namespace Lumos.BLL.Sdk
+namespace Lumos.BLL
 {
     public class MinShunPayProvider : BaseProvider
     {
-        public void CodeDownload(int orderId, Enumeration.OrderPayWay payway)
+        public CustomJsonResult QrCodeDownload(int operater, QrCodeDownloadParams pms)
         {
-            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
+            CustomJsonResult result = new CustomJsonResult();
 
-            order.PayWay = payway;
+            var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).FirstOrDefault();
+            if (order == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
+            }
+
+
+            order.PayWay = pms.PayWay;
 
             MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
 
@@ -22,8 +31,8 @@ namespace Lumos.BLL.Sdk
             orderInfo.Price = order.Price;
             orderInfo.Remark = "";
             orderInfo.SubmitTime = order.SubmitTime;
-            orderInfo.TermId = "";
-            orderInfo.SpbillIp = "";
+            orderInfo.TermId = pms.TermId;
+            orderInfo.SpbillIp = pms.SpbillIp;
 
             if (order.PayWay == Enumeration.OrderPayWay.Wechat)
             {
@@ -35,9 +44,19 @@ namespace Lumos.BLL.Sdk
             }
 
             var codeDownload_result = MinShunPayUtil.CodeDownload(orderInfo);
+            if (string.IsNullOrEmpty(codeDownload_result.MWEB_URL))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成支付二维码失败");
+            }
 
 
+            QrCodeDownloadResult resultData = new QrCodeDownloadResult();
+            resultData.OrderSn = order.Sn;
+            resultData.MwebUrl = order.Sn;
 
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
+
+            return result;
         }
     }
 }

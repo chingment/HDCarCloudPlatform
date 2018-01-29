@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Lumos.Entity
 {
-    [Table("MinShun_ReceiveNotifyLog")]
-    public class MinShun_ReceiveNotifyLog
+    [Table("OrderPayReceiveNotifyByMinShunLog")]
+    public class OrderPayReceiveNotifyByMinShunLog
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -25,5 +25,7 @@ namespace Lumos.Entity
         public DateTime CreateTime { get; set; }
 
         public Enumeration.PayResultNotifyParty NotifyParty { get; set; }
+
+        public string NotifyPartyName { get; set; }
     }
 }

@@ -97,13 +97,6 @@ namespace Lumos.BLL
             }
         }
 
-        public static YbsProvider Ybs
-        {
-            get
-            {
-                return new YbsProvider();
-            }
-        }
 
         public static CarInsurePlanProvider CarInsurePlan
         {

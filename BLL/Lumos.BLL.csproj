@@ -96,7 +96,6 @@
     <Compile Include="Biz\Task\ITask.cs" />
     <Compile Include="Biz\Task\Launcher.cs" />
     <Compile Include="Biz\Task\TaskForMerchantTransactionsCheck.cs" />
-    <Compile Include="Biz\YbsProvider.cs" />
     <Compile Include="Factory..cs" />
     <Compile Include="LoginManager.cs" />
     <Compile Include="OrderSn.cs" />

@@ -46,7 +46,7 @@ namespace Lumos.BLL
 
             string dateTime = DateTime.Now.ToString("yyMMddHHmm");
 
-            string sId = id.ToString().PadLeft(8, '0');
+            string sId = id.ToString().PadLeft(9, '0');
 
             string sn = prefix + dateTime + sId;
 

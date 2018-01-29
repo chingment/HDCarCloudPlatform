@@ -26,12 +26,13 @@ namespace MinShunPaySdk
 
     public class MinShunPayApi : IMinShunPayApi
     {
-        public string serverUrl = "http://14.29.111.142:8092";
+        public string _serverUrl = "http://14.29.111.142:8092";
+        public string _signkey = "";
 
-
-        public MinShunPayApi()
+        public MinShunPayApi(string serverUrl,string signkey)
         {
-
+            _serverUrl = serverUrl;
+            _signkey = signkey;
         }
 
         public string GetServerUrl(string serverurl, string apiname)
@@ -42,15 +43,14 @@ namespace MinShunPaySdk
         public T  DoPost<T>(IMinShunPayApiPostRequest<T> request) where T : MinShunPayApiBaseResult
         {
 
-            string realServerUrl = GetServerUrl(this.serverUrl, request.ApiName);
+            string realServerUrl = GetServerUrl(this._serverUrl, request.ApiName);
             WebUtils webUtils = new WebUtils();
 
 
             string signdata = TdsPayUtil.GetSignData(request.UrlParameters);
 
-            string signkey = "36B4D6A3FBF116B5D740AFC1C39FC314";
 
-            string sign = TdsPayUtil.GetShaSign(signdata + signkey);
+            string sign = TdsPayUtil.GetShaSign(signdata + _signkey);
 
             request.UrlParameters.Add("sign", sign);
 

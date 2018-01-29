@@ -9,7 +9,7 @@ namespace MinShunPaySdk
     public class PayQuery_Request : IMinShunPayApiPostRequest<PayQuery_Result>
     {
         private Dictionary<string, string> _urlParameters = new Dictionary<string, string>();
-
+        private string _signkey = "";
 
         public Dictionary<string, string> UrlParameters
         {
@@ -20,6 +20,14 @@ namespace MinShunPaySdk
             set
             {
                 _urlParameters = value;
+            }
+        }
+
+        public string SignKey
+        {
+            get
+            {
+                return _signkey;
             }
         }
 

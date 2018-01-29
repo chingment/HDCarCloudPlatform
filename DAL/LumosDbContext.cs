@@ -71,7 +71,7 @@ namespace Lumos.DAL
         public IDbSet<SalesmanApplyPosRecord> SalesmanApplyPosRecord { get; set; }
 
 
-        public IDbSet<OrderPayReceiveNotifyByMinShunLog> OrderPayReceiveNotifyByMinShunLog { get; set; }
+        public IDbSet<OrderPayResultNotifyByMinShunLog> OrderPayResultNotifyByMinShunLog { get; set; }
 
         public IDbSet<CarInsuranceExpireDate> CarInsuranceExpireDate { get; set; }
 

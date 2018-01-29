@@ -28,8 +28,8 @@ namespace Lumos.BLL
             MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
 
             orderInfo.OrderId = order.Sn;
-            orderInfo.Price = order.Price;
-            orderInfo.Remark = "";
+            orderInfo.Price = 0.01m;
+            orderInfo.Remark = "测试商品";
             orderInfo.SubmitTime = order.SubmitTime;
             orderInfo.TermId = pms.TermId;
             orderInfo.SpbillIp = pms.SpbillIp;
@@ -52,7 +52,10 @@ namespace Lumos.BLL
 
             QrCodeDownloadResult resultData = new QrCodeDownloadResult();
             resultData.OrderSn = order.Sn;
-            resultData.MwebUrl = order.Sn;
+            resultData.MwebUrl = codeDownload_result.MWEB_URL;
+            resultData.PayWay = order.PayWay;
+
+            CurrentDb.SaveChanges();
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
 

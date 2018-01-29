@@ -3,6 +3,7 @@ using log4net;
 using Lumos.Common;
 using Lumos.DAL;
 using Lumos.Entity;
+using Lumos.Entity.AppApi;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -27,8 +28,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
-        private string host = "http://112.74.179.185";
+        private string host = "http://localhost:16665";
+        //private string host = "http://112.74.179.185";
 
        // private string host = "https://www.ins-uplink.cn";
 
@@ -119,15 +120,19 @@ namespace WebAppApi.Controllers
             string passWord = "123456";
             string newPassWord = "888888";
             string deviceId = "87377332911A215";
-            int userId = 1027;
-            int merchantId = 20;
+            int userId = 1003;
+            int merchantId = 2;
             int posMachineId = 2;
 
             //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             //model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
 
-            model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
-            model.Add("登录接口", Login(userName, passWord, deviceId));
+            //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
+            //model.Add("登录接口", Login(userName, passWord, deviceId));
+
+            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D1704181434000000062"));
+            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D1704181434000000062"));
+
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
@@ -1327,6 +1332,61 @@ namespace WebAppApi.Controllers
             // string a1 = "a1=das&a2=323";
             HttpUtil http = new HttpUtil();
             string respon_data4 = http.HttpPostJson("" + host + "/api/Order/SubmitTalentDemand", a1, headers1);
+
+            return respon_data4;
+
+        }
+
+        public string QrCodeDownload(int userId, int merchantId, int posMachineId,string ordersn)
+        {
+
+            QrCodeDownloadParams model1 = new QrCodeDownloadParams();
+            model1.UserId = userId;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+            model1.OrderSn = ordersn;
+            model1.TermId = "90117998";
+            model1.PayWay = Enumeration.OrderPayWay.Wechat;
+            model1.SpbillIp = "127.0.0.1";
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/QrCodeDownload", a1, headers1);
+
+            return respon_data4;
+
+        }
+
+        public string PayResultQuery(int userId, int merchantId, int posMachineId, string ordersn)
+        {
+
+            PayQueryParams model1 = new PayQueryParams();
+            model1.UserId = userId;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+            model1.OrderSn = ordersn;
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/PayResultQuery", a1, headers1);
 
             return respon_data4;
 

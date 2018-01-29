@@ -13,5 +13,6 @@ namespace MinShunPaySdk
         Dictionary<string, string> UrlParameters { get; set; }
 
         object PostData { get; set; }
+
     }
 }

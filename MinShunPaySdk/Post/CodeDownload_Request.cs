@@ -39,6 +39,7 @@ namespace MinShunPaySdk
             _urlParameters.Add("orderDate", param.orderDate);
             _urlParameters.Add("orderTime", param.orderTime);
 
+
             //_urlParameters.Add
 
             //this.PostData = postdata;

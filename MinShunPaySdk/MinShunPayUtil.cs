@@ -22,17 +22,19 @@ namespace MinShunPaySdk
         public readonly static string notify_url = "http://112.74.179.185/Api/MinShun/ReceiveNotify";
         public readonly static string partnerId = "160010";
         public readonly static string mercid = "894440155416002";
+        public readonly static string signkey = "36B4D6A3FBF116B5D740AFC1C39FC314";
+        public readonly static string serverUrl = "http://14.29.111.142:8092";
 
         public static CodeDownload_Result CodeDownload(MinShunPayOrderInfo order)
         {
-            MinShunPayApi api = new MinShunPayApi();
+            MinShunPayApi api = new MinShunPayApi(serverUrl,signkey);
 
             CodeDownload_Params param = new CodeDownload_Params();
             param.partnerId = partnerId;
             param.tranCod = "0700";
             param.mercid = mercid;
             param.tranType = order.TranType;//微信：180000 ,支付宝：280000
-            param.txnamt = (order.Price * 100).ToString();
+            param.txnamt = ((int)(order.Price * 100)).ToString();
             param.orderId = order.OrderId;
             param.termid = order.TermId;
             param.spbill_ip = order.SpbillIp;
@@ -51,7 +53,7 @@ namespace MinShunPaySdk
 
         public static void PayQuery(MinShunPayOrderInfo order)
         {
-            MinShunPayApi api = new MinShunPayApi();
+            MinShunPayApi api = new MinShunPayApi(serverUrl, signkey);
 
             CodeDownload_Params param = new CodeDownload_Params();
             param.partnerId = partnerId;

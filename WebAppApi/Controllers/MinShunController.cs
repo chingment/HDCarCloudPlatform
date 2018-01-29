@@ -44,7 +44,7 @@ namespace WebAppApi.Controllers
             Log.Info("ReceiveNotify：" + postData);
 
 
-            OrderPayReceiveNotifyByMinShunLog receiveNotifyLog = new OrderPayReceiveNotifyByMinShunLog();
+            OrderPayResultNotifyByMinShunLog receiveNotifyLog = new OrderPayResultNotifyByMinShunLog();
 
             receiveNotifyLog.OrderId = model.orderId;
             receiveNotifyLog.Mercid = model.mercid;

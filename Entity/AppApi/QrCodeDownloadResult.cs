@@ -11,5 +11,7 @@ namespace Lumos.Entity.AppApi
         public string OrderSn { get; set; }
 
         public string MwebUrl { get; set; }
+
+        public Enumeration.OrderPayWay PayWay { get; set; }
     }
 }

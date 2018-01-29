@@ -34,27 +34,44 @@ namespace MinShunPaySdkTest
             Console.WriteLine("拼接的代签名sign数据:{0}", sign);
 
 
+            MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
 
-            MinShunPayApi api = new MinShunPayApi();
+            orderInfo.OrderId = "D1705311427000002891";
+            orderInfo.Price = 0.01m;
+            orderInfo.Remark = "测试";
+            orderInfo.SubmitTime = DateTime.Now;
+            orderInfo.TranType = "180000";
+            orderInfo.TermId = "90117998";
+            orderInfo.SpbillIp = "127.0.0.1";
 
-            CodeDownload_Params param = new CodeDownload_Params();
 
-            param.partnerId = "160010";
-            param.tranCod = "0700";
-            param.tranType = "180000";//微信：180000 ,支付宝：280000
-            param.txnamt = "1";
-            param.orderId = "610000000A0000000002";
-            param.mercid = "894440155416002";
-            param.termid = "90117998";
-            param.spbill_ip = "127.0.0.1";
-            param.notify_url = "http://14.29.111.142/posm/wft_notify.tran";
-            param.remark = "1";
-            param.orderDate = "20170810";
-            param.orderTime = "121212";
 
-            CodeDownload_Request rquest = new CodeDownload_Request(param);
+            var result = MinShunPayUtil.CodeDownload(orderInfo);
 
-            var b = api.DoPost(rquest);
+
+            //MinShunPayApi api = new MinShunPayApi();
+
+            //CodeDownload_Params param = new CodeDownload_Params();
+
+            //param.partnerId = "160010";
+            //param.tranCod = "0700";
+            //param.tranType = "180000";//微信：180000 ,支付宝：280000
+            //param.txnamt = "1";
+            //param.orderId = "D170531142700000281";
+            //param.mercid = "894440155416002";
+            //param.termid = "90117998";
+            //param.spbill_ip = "127.0.0.1";
+            //param.notify_url = "http://14.29.111.142/posm/wft_notify.tran";
+            //param.remark = "1";
+            //param.orderDate = "20170810";
+            //param.orderTime = "121212";
+
+            //CodeDownload_Request rquest = new CodeDownload_Request(param);
+
+            //var b = api.DoPost(rquest);
+
+
+
 
         }
     }

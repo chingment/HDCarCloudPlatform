@@ -134,7 +134,7 @@ namespace Lumos.BLL
                     switch (notifyParty)
                     {
                         case Enumeration.PayResultNotifyParty.MinShunNotifyUrl:
-                            result = MinShun_ResultNotify(operater, (OrderPayReceiveNotifyByMinShunLog)model);
+                            result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
                             break;
                         case Enumeration.PayResultNotifyParty.MinShunOrderQueryApi:
                             //result = YBS_ResultNotify(operater, (MinShun_ReceiveNotifyLog)model);
@@ -224,7 +224,7 @@ namespace Lumos.BLL
         //    return result;
         //}
 
-        private CustomJsonResult MinShun_ResultNotify(int operater, OrderPayReceiveNotifyByMinShunLog receiveNotifyLog)
+        private CustomJsonResult MinShun_ResultNotify(int operater, OrderPayResultNotifyByMinShunLog receiveNotifyLog)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -238,7 +238,7 @@ namespace Lumos.BLL
 
                     if (order == null)
                     {
-                        CurrentDb.OrderPayReceiveNotifyByMinShunLog.Add(receiveNotifyLog);
+                        CurrentDb.OrderPayResultNotifyByMinShunLog.Add(receiveNotifyLog);
                         CurrentDb.SaveChanges();
                         ts.Complete();
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应的订单号");
@@ -254,7 +254,7 @@ namespace Lumos.BLL
                         }
                     }
 
-                    CurrentDb.OrderPayReceiveNotifyByMinShunLog.Add(receiveNotifyLog);
+                    CurrentDb.OrderPayResultNotifyByMinShunLog.Add(receiveNotifyLog);
                     CurrentDb.SaveChanges();
 
                     ts.Complete();

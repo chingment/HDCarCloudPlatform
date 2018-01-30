@@ -80,6 +80,17 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
                                 orderModel.OrderField.Add(new OrderField("状态", "核实需求中"));
                                 break;
+                            case Enumeration.ProductType.PosMachineServiceFee:
+
+                                var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(c => c.Id == m.Id).FirstOrDefault();
+                                if (orderToServiceFee.Deposit > 0)
+                                {
+                                    orderModel.OrderField.Add(new OrderField("押金", orderToServiceFee.Deposit.ToF2Price()));
+                                }
+
+                                orderModel.OrderField.Add(new OrderField("流量费", orderToServiceFee.MobileTrafficFee.ToF2Price()));
+
+                                break;
                         }
                         #endregion
 
@@ -174,6 +185,18 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("定损单总价", string.Format("{0}元", orderToCarClaim.EstimatePrice.ToF2Price())));
 
                                 break;
+                            case Enumeration.ProductType.PosMachineServiceFee:
+
+                                var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(c => c.Id == m.Id).FirstOrDefault();
+                                if (orderToServiceFee.Deposit > 0)
+                                {
+                                    orderModel.OrderField.Add(new OrderField("押金", orderToServiceFee.Deposit.ToF2Price()));
+                                }
+
+                                orderModel.OrderField.Add(new OrderField("流量费", orderToServiceFee.MobileTrafficFee.ToF2Price()));
+
+
+                                break;
                         }
                         orderModel.StatusName = "待支付";
 
@@ -210,24 +233,23 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("合计", orderToCarClaim.Price.ToF2Price()));
 
                                 break;
-                            case Enumeration.ProductType.PosMachineServiceFee:
-                                orderModel.Remarks = string.Format("合计:{0}", m.Price);//押金和租金
-
-                                var orderToDepositRent = CurrentDb.OrderToServiceFee.Where(c => c.Id == m.Id).FirstOrDefault();
-
-                                //orderModel.OrderField.Add(new OrderField("押金", orderToDepositRent.Deposit.ToF2Price()));
-                                //orderModel.OrderField.Add(new OrderField("租金", orderToDepositRent.RentTotal.ToF2Price()));
-                                //orderModel.OrderField.Add(new OrderField("续期", orderToDepositRent.RentMonths + "个月"));
-                                //orderModel.OrderField.Add(new OrderField("到期日期", orderToDepositRent.RentDueDate.ToUnifiedFormatDate()));
-
-
-                                break;
                             case Enumeration.ProductType.TalentDemand:
 
                                 var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
 
+                                break;
+                            case Enumeration.ProductType.PosMachineServiceFee:
+
+                                var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(c => c.Id == m.Id).FirstOrDefault();
+                                if (orderToServiceFee.Deposit > 0)
+                                {
+                                    orderModel.OrderField.Add(new OrderField("押金", orderToServiceFee.Deposit.ToF2Price()));
+                                }
+
+                                orderModel.OrderField.Add(new OrderField("流量费", orderToServiceFee.MobileTrafficFee.ToF2Price()));
+                                orderModel.OrderField.Add(new OrderField("到期时间", orderToServiceFee.ExpiryTime.ToUnifiedFormatDate()));
                                 break;
                         }
                         #endregion
@@ -546,11 +568,23 @@ namespace WebAppApi.Controllers
                 {
                     model.Id = orderToServiceFee.Id;
                     model.Sn = orderToServiceFee.Sn;
-                    //model.Deposit = string.Format("{0}元", orderToDepositRent.Deposit);
-                    //model.RentDueDate = orderToDepositRent.RentDueDate.ToUnifiedFormatDate();
-                    //model.RentMonths = string.Format("{0}个月", orderToDepositRent.RentMonths);
-                    //model.RentTotal = string.Format("{0}元", orderToDepositRent.RentTotal);
-                    //model.Price = string.Format("{0}元", orderToDepositRent.Price);
+                    model.Status = orderToServiceFee.Status;
+                    model.StatusName = orderToServiceFee.Status.GetCnName();
+                    model.Remarks = orderToServiceFee.Remarks;
+                    model.SubmitTime = orderToServiceFee.SubmitTime;
+                    model.CompleteTime = orderToServiceFee.CompleteTime;
+                    model.PayTime = orderToServiceFee.PayTime;
+                    model.CancleTime = orderToServiceFee.CancleTime;
+                    model.Price = orderToServiceFee.Price.ToF2Price();
+
+                    if (orderToServiceFee.Deposit > 0)
+                    {
+                        model.Deposit = orderToServiceFee.Deposit.ToF2Price();
+                    }
+
+                    model.MobileTrafficFee =orderToServiceFee.MobileTrafficFee.ToF2Price();
+                    model.ExpiryTime = orderToServiceFee.ExpiryTime.ToUnifiedFormatDate();
+
                 }
                 APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
                 return new APIResponse(result);
@@ -611,7 +645,7 @@ namespace WebAppApi.Controllers
             return new APIResponse(result);
         }
 
-        [HttpPost]
+        [HttpGet]
         public APIResponse PayResultQuery(PayQueryParams pms)
         {
             IResult result = BizFactory.Pay.ResultQuery(pms.UserId, pms);

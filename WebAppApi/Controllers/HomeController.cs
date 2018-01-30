@@ -130,8 +130,8 @@ namespace WebAppApi.Controllers
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             //model.Add("登录接口", Login(userName, passWord, deviceId));
 
-            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D1801251124000009451"));
-            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D1801251124000009451"));
+            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D1801251124000009456"));
+            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D1801251124000009456"));
 
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
@@ -1366,18 +1366,24 @@ namespace WebAppApi.Controllers
 
         }
 
-        public string PayResultQuery(int userId, int merchantId, int posMachineId, string ordersn)
+        public string PayResultQuery(int userId, int merchantId, int posMachineId, string orderSn)
         {
 
-            PayQueryParams model1 = new PayQueryParams();
-            model1.UserId = userId;
-            //model1.MerchantId = merchantId;
-            //model1.PosMachineId = posMachineId;
-            model1.OrderSn = ordersn;
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("UserId", userId.ToString());
+            parames.Add("MerchantId", merchantId.ToString());
+            parames.Add("PosMachineId", posMachineId.ToString());
+            parames.Add("OrderSn", orderSn);
 
-            string a1 = JsonConvert.SerializeObject(model1);
+            //PayQueryParams model1 = new PayQueryParams();
+            //model1.UserId = userId;
+            ////model1.MerchantId = merchantId;
+            ////model1.PosMachineId = posMachineId;
+            //model1.OrderSn = ordersn;
 
-            string signStr = Signature.Compute(key, secret, timespan, a1);
+            //string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
 
             Dictionary<string, string> headers1 = new Dictionary<string, string>();
             headers1.Add("key", key);
@@ -1386,7 +1392,7 @@ namespace WebAppApi.Controllers
 
             // string a1 = "a1=das&a2=323";
             HttpUtil http = new HttpUtil();
-            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/PayResultQuery", a1, headers1);
+            string respon_data4 = http.HttpGet("" + host + "/api/Order/PayResultQuery?userId="+ userId.ToString()+ "&merchantId="+ merchantId.ToString() + "&posMachineId="+ posMachineId.ToString()+ "&orderSn="+ orderSn, headers1);
 
             return respon_data4;
 

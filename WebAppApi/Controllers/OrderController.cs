@@ -646,8 +646,14 @@ namespace WebAppApi.Controllers
         }
 
         [HttpGet]
-        public APIResponse PayResultQuery(PayQueryParams pms)
+        public APIResponse PayResultQuery(int userId,int merchantId,int posMachineId,string orderSn)
         {
+            PayQueryParams pms = new PayQueryParams();
+            pms.UserId = userId;
+            pms.MerchantId = merchantId;
+            pms.PosMachineId = posMachineId;
+            pms.OrderSn = orderSn;
+
             IResult result = BizFactory.Pay.ResultQuery(pms.UserId, pms);
             return new APIResponse(result);
         }

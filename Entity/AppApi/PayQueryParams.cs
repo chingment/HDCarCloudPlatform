@@ -10,9 +10,9 @@ namespace Lumos.Entity.AppApi
     {
         public int UserId { get; set; }
 
-        //public int MerchantId { get; set; }
+        public int MerchantId { get; set; }
 
-        //public int PosMachineId { get; set; }
+        public int PosMachineId { get; set; }
 
         public string OrderSn { get; set; }
     }

@@ -51,7 +51,7 @@ namespace MinShunPaySdk
         }
 
 
-        public static void PayQuery(MinShunPayOrderInfo order)
+        public static CodeDownload_Result PayQuery(MinShunPayOrderInfo order)
         {
             MinShunPayApi api = new MinShunPayApi(serverUrl, signkey);
 
@@ -60,7 +60,7 @@ namespace MinShunPaySdk
             param.tranCod = "0700";
             param.mercid = mercid;
             param.tranType = order.TranType;//微信：180000 ,支付宝：280000
-            param.txnamt = (order.Price * 100).ToString();
+            param.txnamt = ((int)(order.Price * 100)).ToString();
             param.orderId = order.OrderId;
             param.termid = order.TermId;
             param.spbill_ip = order.SpbillIp;
@@ -69,6 +69,13 @@ namespace MinShunPaySdk
             param.orderDate = order.SubmitTime.ToString("yyyyMMdd");
             param.orderTime = order.SubmitTime.ToString("HHmmdd");
 
+            CodeDownload_Request rquest = new CodeDownload_Request(param);
+
+            var b = api.DoPost(rquest);
+
+            return b;
+
         }
+
     }
 }

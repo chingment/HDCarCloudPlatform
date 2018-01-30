@@ -137,13 +137,14 @@ namespace Lumos.BLL
                             result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
                             break;
                         case Enumeration.PayResultNotifyParty.MinShunOrderQueryApi:
-                            //result = YBS_ResultNotify(operater, (MinShun_ReceiveNotifyLog)model);
+                            result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
                             break;
                         case Enumeration.PayResultNotifyParty.Staff:
                             result = Staff_ResultNotify(operater, (OrderPayResultNotifyByStaffLog)model);
                             break;
                     }
 
+                    CurrentDb.SaveChanges();
                     ts.Complete();
                 }
             }
@@ -157,72 +158,6 @@ namespace Lumos.BLL
             return result;
 
         }
-
-        //private CustomJsonResult App_ResultNotify(int operater, PayResultModel model)
-        //{
-        //    CustomJsonResult result = new CustomJsonResult();
-
-        //    try
-        //    {
-        //        using (TransactionScope ts = new TransactionScope())
-        //        {
-        //            OrderPayResultNotifyLog resultLog = new OrderPayResultNotifyLog();
-        //            resultLog.SysOrderId = model.OrderId;
-        //            resultLog.SysOrderSn = model.OrderSn;
-        //            resultLog.CreateTime = this.DateTime;
-        //            resultLog.Creator = model.UserId;
-
-        //            if (model.Params.Result == PayResultType.Success)
-        //            {
-        //                resultLog.Result = "1";
-        //                resultLog.OrderNo = model.Params.MerchantInfo.order_no.NullStringToNullObject();
-        //                resultLog.MerchantId = model.Params.MerchantId.NullStringToNullObject();
-        //                resultLog.Amount = model.Params.Amount.NullStringToNullObject();
-        //                resultLog.TerminalId = model.Params.TerminalId.NullStringToNullObject();
-        //                resultLog.MerchantNo = model.Params.MerchantNo.NullStringToNullObject();
-        //                resultLog.BatchNo = model.Params.BatchNo.NullStringToNullObject();
-        //                resultLog.MerchantName = model.Params.MerchantName.NullStringToNullObject();
-        //                resultLog.Issue = model.Params.Issue.NullStringToNullObject();
-        //                resultLog.TraceNo = model.Params.TraceNo.NullStringToNullObject();
-        //                resultLog.ReferenceNo = model.Params.ReferenceNo.NullStringToNullObject();
-        //                resultLog.Type = model.Params.Type.NullStringToNullObject();
-        //                resultLog.CardNo = model.Params.CardNo.NullStringToNullObject();
-
-        //                switch (model.ProductType)
-        //                {
-        //                    case Enumeration.ProductType.PosMachineServiceFee:
-        //                        result = PayServiceFeeCompleted(operater, model.OrderSn);
-        //                        break;
-        //                }
-
-        //            }
-        //            else if (model.Params.Result == PayResultType.Failure)
-        //            {
-
-        //                resultLog.Result = "2";
-        //                resultLog.FailureReason = model.Params.FailureReason;
-
-        //                Log.WarnFormat("订单:{0},支付失败，原因：{1}", model.OrderSn, model.Params.FailureReason);
-
-        //                result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "支付失败");
-        //            }
-
-        //            CurrentDb.OrderPayResultNotifyLog.Add(resultLog);
-        //            CurrentDb.SaveChanges();
-
-        //            ts.Complete();
-
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.ErrorFormat("订单号({0})结果反馈发生异常，原因：{1}", model.OrderSn, ex.StackTrace);
-
-        //        result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付失败");
-        //    }
-
-        //    return result;
-        //}
 
         private CustomJsonResult MinShun_ResultNotify(int operater, OrderPayResultNotifyByMinShunLog receiveNotifyLog)
         {
@@ -262,7 +197,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.ErrorFormat("订单号({0})结果反馈发生异常，易办事调用原因：{1}", receiveNotifyLog.OrderId, ex.StackTrace);
+                Log.ErrorFormat("订单号({0})结果反馈发生异常，原因：{1}", receiveNotifyLog.OrderId, ex.StackTrace);
 
                 result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付失败");
             }

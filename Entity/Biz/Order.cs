@@ -84,5 +84,9 @@ namespace Lumos.Entity
 
         [MaxLength(128)]
         public string PriceVersion { get; set; }
+
+        public string TermId { get; set; }
+
+        public string SpbillIp { get; set; }
     }
 }

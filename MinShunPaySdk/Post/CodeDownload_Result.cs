@@ -8,6 +8,7 @@ namespace MinShunPaySdk
 {
     public class CodeDownload_Result: MinShunPayApiBaseResult
     {
+        public string MERCID { get; set; }
         public string MWEB_URL { get; set; }
         public string TERMID { get; set; }
         public string ORDERID { get; set; }

@@ -62,6 +62,7 @@
     <Compile Include="AppApi\OrderField.cs" />
     <Compile Include="AppApi\OrderModel.cs" />
     <Compile Include="AppApi\PayQueryParams.cs" />
+    <Compile Include="AppApi\PayQueryParams2.cs" />
     <Compile Include="AppApi\PayQueryResult.cs" />
     <Compile Include="AppApi\QrCodeDownloadParams.cs" />
     <Compile Include="AppApi\QrCodeDownloadResult.cs" />

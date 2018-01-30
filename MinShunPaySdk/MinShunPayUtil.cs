@@ -27,7 +27,7 @@ namespace MinShunPaySdk
 
         public static CodeDownload_Result CodeDownload(MinShunPayOrderInfo order)
         {
-            MinShunPayApi api = new MinShunPayApi(serverUrl,signkey);
+            MinShunPayApi api = new MinShunPayApi(serverUrl, signkey);
 
             CodeDownload_Params param = new CodeDownload_Params();
             param.partnerId = partnerId;
@@ -76,6 +76,10 @@ namespace MinShunPaySdk
             return b;
 
         }
+
+
+
+
 
     }
 }

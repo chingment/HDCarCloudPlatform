@@ -144,52 +144,52 @@ namespace WebAppApi
                 actionContext.ActionArguments[key] = monitorApiLog;
 
                 //检查必要的参数
-                //if (app_key == null || app_sign == null || app_timestamp_s == null)
-                //{
-                //    APIResult result = new APIResult(ResultType.Failure, ResultCode.FailureSign, "缺少必要参数");
-                //    actionContext.Response = new APIResponse(result);
-                //    return;
-                //}
+                if (app_key == null || app_sign == null || app_timestamp_s == null)
+                {
+                    APIResult result = new APIResult(ResultType.Failure, ResultCode.FailureSign, "缺少必要参数");
+                    actionContext.Response = new APIResponse(result);
+                    return;
+                }
 
-                ////检查key是否在数据库中存在
-                //string app_secret = SysFactory.AppKeySecret.GetSecret(app_key);
+                //检查key是否在数据库中存在
+                string app_secret = SysFactory.AppKeySecret.GetSecret(app_key);
 
-                //if (app_secret == null)
-                //{
-                //    APIResult result = new APIResult(ResultType.Failure, ResultCode.FailureSign, "应用程序Key,存在错误");
-                //    actionContext.Response = new APIResponse(result);
-                //    return;
-                //}
+                if (app_secret == null)
+                {
+                    APIResult result = new APIResult(ResultType.Failure, ResultCode.FailureSign, "应用程序Key,存在错误");
+                    actionContext.Response = new APIResponse(result);
+                    return;
+                }
 
-                //long app_timestamp = long.Parse(app_timestamp_s);
+                long app_timestamp = long.Parse(app_timestamp_s);
 
-              //string signStr = Signature.Compute(app_key, app_secret, app_timestamp, app_data);
+                string signStr = Signature.Compute(app_key, app_secret, app_timestamp, app_data);
 
-                ////Log.Info("app_key:" + app_key);
-                ////Log.Info("app_secret:" + app_secret);
-                ////Log.Info("app_timestamp:" + app_timestamp);
-                ////Log.Info("app_data:" + app_data);
-                ////Log.Info("signStr:" + signStr);
-                ////Log.Info("app_sign:" + app_sign);
-
-
-                //if (Signature.IsRequestTimeout(app_timestamp))
-                //{
-                //    APIResult result = new APIResult(ResultType.Failure, ResultCode.FailureSign, "请求已超时");
-                //    actionContext.Response = new APIResponse(result);
-                //    return;
-                //}
+                //Log.Info("app_key:" + app_key);
+                //Log.Info("app_secret:" + app_secret);
+                //Log.Info("app_timestamp:" + app_timestamp);
+                //Log.Info("app_data:" + app_data);
+                //Log.Info("signStr:" + signStr);
+                //Log.Info("app_sign:" + app_sign);
 
 
+                if (Signature.IsRequestTimeout(app_timestamp))
+                {
+                    APIResult result = new APIResult(ResultType.Failure, ResultCode.FailureSign, "请求已超时");
+                    actionContext.Response = new APIResponse(result);
+                    return;
+                }
 
 
-                //if (signStr != app_sign)
-                //{
-                //    Log.Warn("API签名错误");
-                //    APIResult result = new APIResult(ResultType.Failure, ResultCode.FailureSign, "签名错误");
-                //    actionContext.Response = new APIResponse(result);
-                //    return;
-                //}
+
+
+                if (signStr != app_sign)
+                {
+                    Log.Warn("API签名错误");
+                    APIResult result = new APIResult(ResultType.Failure, ResultCode.FailureSign, "签名错误");
+                    actionContext.Response = new APIResponse(result);
+                    return;
+                }
 
                 base.OnActionExecuting(actionContext);
             }

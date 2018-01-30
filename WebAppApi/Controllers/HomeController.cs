@@ -1370,10 +1370,10 @@ namespace WebAppApi.Controllers
         {
 
             Dictionary<string, string> parames = new Dictionary<string, string>();
-            parames.Add("UserId", userId.ToString());
-            parames.Add("MerchantId", merchantId.ToString());
-            parames.Add("PosMachineId", posMachineId.ToString());
-            parames.Add("OrderSn", orderSn);
+            parames.Add("userId", userId.ToString());
+            parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
+            parames.Add("orderSn", orderSn);
 
             //PayQueryParams model1 = new PayQueryParams();
             //model1.UserId = userId;

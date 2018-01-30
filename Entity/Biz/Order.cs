@@ -88,5 +88,7 @@ namespace Lumos.Entity
         public string TermId { get; set; }
 
         public string SpbillIp { get; set; }
+
+        //public bool IsPayQuery { get; set; }
     }
 }

@@ -60,7 +60,39 @@ namespace WebAppApi.Controllers
             receiveNotifyLog.Creator = 0;
             receiveNotifyLog.CreateTime = DateTime.Now;
 
-            IResult result = BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunNotifyUrl, receiveNotifyLog);
+            IResult result = null;
+
+
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add("orderId", model.orderId);
+            dic.Add("mercid", model.mercid);
+            dic.Add("termid", model.termid);
+            dic.Add("txnamt", model.txnamt);
+            dic.Add("result_code", model.result_code);
+            dic.Add("result_msg", model.result_msg);
+
+            if (SdkFactory.MinShunPay.CheckSign(dic, model.sign))
+            {
+                result = BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunNotifyUrl, receiveNotifyLog);
+
+                if (result.Result == ResultType.Success)
+                {
+                    Log.Info("ReceiveNotify->success,通知成功");
+
+                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "success");
+                }
+                else
+                {
+                    Log.Warn("ReceiveNotify->fail, 通知失败");
+
+                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "fail,通知失败");
+                }
+            }
+            else
+            {
+                Log.Error("ReceiveNotify->fail,验证签名失败");
+                result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, " fail,验证签名失败");
+            }
 
             return new APIResponse(result);
         }

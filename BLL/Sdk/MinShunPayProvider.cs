@@ -102,7 +102,7 @@ namespace Lumos.BLL
                 receiveNotifyLog.Termid = payQuery_result.TERMID;
                 receiveNotifyLog.Txnamt = payQuery_result.TXNAMT;
                 receiveNotifyLog.ResultCode = payQuery_result.RESULT_CODE;
-                receiveNotifyLog.ResultCodeName =GetResultCodeName(payQuery_result.RESULT_CODE);
+                receiveNotifyLog.ResultCodeName = GetResultCodeName(payQuery_result.RESULT_CODE);
                 receiveNotifyLog.ResultMsg = payQuery_result.RESULT_MSG;
                 receiveNotifyLog.Sign = payQuery_result.SIGN;
                 receiveNotifyLog.MwebUrl = payQuery_result.MWEB_URL;
@@ -114,6 +114,19 @@ namespace Lumos.BLL
 
 
             return receiveNotifyLog;
+        }
+
+
+        public bool CheckSign(Dictionary<string, string> dic, string sign)
+        {
+            string signdata = TdsPayUtil.GetSignData(dic);
+
+            if (signdata == sign)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public string GetResultCodeName(string resultcode)

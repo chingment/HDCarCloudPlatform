@@ -77,11 +77,11 @@ namespace Lumos.Common
                 sb.Append(this.Data);
             }
 
-            // Log.Info("签名原始数据:" + sb.ToString());
+             Log.Info("签名原始数据:" + sb.ToString());
 
             //将字符串中字符按升序排序
             var sortStr = string.Concat(sb.ToString().OrderBy(c => c));
-            //  Log.Info("签名排序后数据:" + sortStr);
+              Log.Info("签名排序后数据:" + sortStr);
             return sortStr;
         }
 
@@ -102,13 +102,13 @@ namespace Lumos.Common
 
             string str = sb.ToString();
 
-            //Log.Info("HASH数据后:" + str);
+            Log.Info("HASH数据后:" + str);
 
             var input2 = Encoding.UTF8.GetBytes(str);
 
             var output = Convert.ToBase64String(input2);
 
-            //  Log.Info("BASE64数据后:" + output);
+              Log.Info("BASE64数据后:" + output);
 
             return output;
         }

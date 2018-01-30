@@ -638,9 +638,9 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("民顺")]
+            [Remark("民顺主动通知")]
             MinShunNotifyUrl = 1,
-            [Remark("后台确认")]
+            [Remark("定时任务查询民顺接口")]
             MinShunOrderQueryApi = 2,
             [Remark("后台确认")]
             Staff = 3

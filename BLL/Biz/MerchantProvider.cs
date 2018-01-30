@@ -114,7 +114,7 @@ namespace Lumos.BLL
 
                 var orderToServiceFee = new OrderToServiceFee();
                 orderToServiceFee.MerchantId = merchant.Id;
-                orderToServiceFee.MerchantPosMachineId = merchantPosMachine.Id;
+                orderToServiceFee.PosMachineId = posMachine.Id;
                 orderToServiceFee.UserId = sysClientUser.Id;
                 orderToServiceFee.SubmitTime = this.DateTime;
                 orderToServiceFee.ProductType = Enumeration.ProductType.PosMachineServiceFee;

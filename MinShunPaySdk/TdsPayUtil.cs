@@ -41,11 +41,14 @@ namespace MinShunPaySdk
             });
 
 
-            foreach(var kv in kvs)
+            foreach (var kv in kvs)
             {
-                resStr = resStr + TdsPayUtil.UrlEncode(kv.Value);
+                if (!string.IsNullOrEmpty(kv.Value))
+                {
+                    resStr = resStr + TdsPayUtil.UrlEncode(kv.Value);
+                }
             }
-          
+
 
 
             //// 第二步：把所有参数名和参数值串在一起

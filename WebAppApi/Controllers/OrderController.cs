@@ -664,7 +664,7 @@ namespace WebAppApi.Controllers
             OrderToTalentDemand orderToTalentDemand = new OrderToTalentDemand();
             orderToTalentDemand.UserId = model.UserId;
             orderToTalentDemand.MerchantId = model.MerchantId;
-            orderToTalentDemand.MerchantPosMachineId = model.PosMachineId;
+            orderToTalentDemand.PosMachineId = model.PosMachineId;
             orderToTalentDemand.WorkJob = model.WorkJob;
             orderToTalentDemand.Quantity = model.Quantity;
             orderToTalentDemand.UseEndTime = model.UseEndTime;

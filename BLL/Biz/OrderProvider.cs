@@ -29,7 +29,7 @@ namespace Lumos.BLL
 
 
                 order.MerchantId = merchant.Id;
-                order.MerchantPosMachineId = orderToCarInsure.MerchantPosMachineId;
+                order.PosMachineId = orderToCarInsure.PosMachineId;
                 order.UserId = merchant.UserId;
                 order.ProductId = product.Id;
                 order.ProductName = product.Name;
@@ -336,7 +336,7 @@ namespace Lumos.BLL
                 orderToCarClaim.ProductType = product.Type;
                 orderToCarClaim.ProductName = product.Name;
                 orderToCarClaim.MerchantId = merchant.Id;
-                orderToCarClaim.MerchantPosMachineId = orderToCarClaim.MerchantPosMachineId;
+                orderToCarClaim.PosMachineId = orderToCarClaim.PosMachineId;
                 orderToCarClaim.UserId = merchant.UserId;
                 orderToCarClaim.InsuranceCompanyName = insuranceCompany.Name;
                 orderToCarClaim.Status = Enumeration.OrderStatus.Submitted;
@@ -475,7 +475,7 @@ namespace Lumos.BLL
                         var estimateOrderToCarClaim = new OrderToCarClaim();
                         estimateOrderToCarClaim.RepairsType = l_orderToCarClaim.RepairsType;
                         estimateOrderToCarClaim.MerchantId = merchant.Id;
-                        estimateOrderToCarClaim.MerchantPosMachineId = l_orderToCarClaim.MerchantPosMachineId;
+                        estimateOrderToCarClaim.PosMachineId = l_orderToCarClaim.PosMachineId;
                         estimateOrderToCarClaim.UserId = merchant.UserId;
                         estimateOrderToCarClaim.HandPerson = l_orderToCarClaim.HandPerson;
                         estimateOrderToCarClaim.HandPersonPhone = l_orderToCarClaim.HandPersonPhone;
@@ -700,7 +700,7 @@ namespace Lumos.BLL
 
                 var newOrder = new OrderToCarInsure();
                 newOrder.MerchantId = oldOrder.MerchantId;
-                newOrder.MerchantPosMachineId = oldOrder.MerchantPosMachineId;
+                newOrder.PosMachineId = oldOrder.PosMachineId;
                 newOrder.UserId = oldOrder.UserId;
                 newOrder.ProductId = oldOrder.ProductId;
                 newOrder.ProductName = oldOrder.ProductName;

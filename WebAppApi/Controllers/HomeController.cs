@@ -130,8 +130,8 @@ namespace WebAppApi.Controllers
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             //model.Add("登录接口", Login(userName, passWord, deviceId));
 
-            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D1801251124000009456"));
-            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D1801251124000009456"));
+            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D1801251124000009457"));
+            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D1801251124000009457"));
 
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));

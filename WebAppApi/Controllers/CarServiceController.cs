@@ -26,7 +26,7 @@ namespace WebAppApi.Controllers
 
             orderToCarInsure.UserId = model.UserId;
             orderToCarInsure.MerchantId = model.MerchantId;
-            orderToCarInsure.MerchantPosMachineId = model.PosMachineId;
+            orderToCarInsure.PosMachineId = model.PosMachineId;
             orderToCarInsure.InsurePlanId = model.InsurePlanId;
             orderToCarInsure.ProductType = model.Type;
 
@@ -168,7 +168,7 @@ namespace WebAppApi.Controllers
             }
 
             OrderToCarClaim orderToCarClaim = new OrderToCarClaim();
-            orderToCarClaim.MerchantPosMachineId = model.PosMachineId;
+            orderToCarClaim.PosMachineId = model.PosMachineId;
             orderToCarClaim.RepairsType = model.RepairsType;
             orderToCarClaim.CarPlateNo = model.CarLicenseNumber;
             orderToCarClaim.HandPerson = model.HandPerson;

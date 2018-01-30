@@ -21,7 +21,7 @@ namespace Lumos.Entity
 
         public int MerchantId { get; set; }
 
-        public int MerchantPosMachineId { get; set; }
+        public int PosMachineId { get; set; }
 
         public int UserId { get; set; }
 

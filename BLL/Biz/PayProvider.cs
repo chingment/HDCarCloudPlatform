@@ -298,7 +298,7 @@ namespace Lumos.BLL
                 CurrentDb.SaveChanges();
 
 
-                var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.MerchantId == orderToServiceFee.MerchantId && m.Id == orderToServiceFee.MerchantPosMachineId).FirstOrDefault();
+                var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.MerchantId == orderToServiceFee.MerchantId && m.PosMachineId == orderToServiceFee.PosMachineId).FirstOrDefault();
                 merchantPosMachine.ExpiryTime = orderToServiceFee.ExpiryTime;
                 merchantPosMachine.Status = Enumeration.MerchantPosMachineStatus.Normal;
                 merchantPosMachine.LastUpdateTime = this.DateTime;

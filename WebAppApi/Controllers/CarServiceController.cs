@@ -14,6 +14,7 @@ using WebAppApi.Models.CarService;
 
 namespace WebAppApi.Controllers
 {
+    [BaseAuthorizeAttribute]
     public class CarServiceController : BaseApiController
     {
 

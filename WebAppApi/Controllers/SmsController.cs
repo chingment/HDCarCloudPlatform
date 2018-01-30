@@ -11,6 +11,7 @@ using WebAppApi.Models.Sms;
 
 namespace WebAppApi.Controllers
 {
+    [BaseAuthorizeAttribute]
     public class SmsController : BaseApiController
     {
         [HttpPost]

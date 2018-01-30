@@ -12,7 +12,6 @@ using WebAppApi.Models;
 namespace WebAppApi
 {
 
-    [BaseAuthorizeAttribute]
     public class BaseApiController : ApiController
     {
         private APIResult _result = new APIResult();

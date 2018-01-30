@@ -81,7 +81,7 @@ namespace WebAppApi.Controllers
                 {
                     Log.Info("ReceiveNotify->success,通知成功");
 
-                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "success");
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
                 }
                 else
                 {

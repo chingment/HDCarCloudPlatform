@@ -17,6 +17,7 @@ namespace WebAppApi.Controllers
         MainHomeRecommend = 3
     }
 
+    [BaseAuthorizeAttribute]
     public class ExtendedAppController : BaseApiController
     {
         [HttpGet]

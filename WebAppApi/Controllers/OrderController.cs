@@ -13,6 +13,7 @@ using Lumos.Entity.AppApi;
 
 namespace WebAppApi.Controllers
 {
+    [BaseAuthorizeAttribute]
     public class OrderController : BaseApiController
     {
         [HttpGet]

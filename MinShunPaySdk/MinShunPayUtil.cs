@@ -79,7 +79,21 @@ namespace MinShunPaySdk
 
 
 
+        public static bool CheckSign(Dictionary<string, string> dic, string sign)
+        {
 
+            string signdata = TdsPayUtil.GetSignData(dic);
+
+
+            string _sign = TdsPayUtil.GetShaSign(signdata + signkey);
+
+            if (_sign == sign)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
     }
 }

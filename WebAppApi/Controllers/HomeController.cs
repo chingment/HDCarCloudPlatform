@@ -1,5 +1,6 @@
 ﻿using AnXinSdk;
 using log4net;
+using Lumos.BLL;
 using Lumos.Common;
 using Lumos.DAL;
 using Lumos.Entity;
@@ -31,7 +32,7 @@ namespace WebAppApi.Controllers
         //private string host = "http://localhost:16665";
         private string host = "http://112.74.179.185";
 
-       // private string host = "https://www.ins-uplink.cn";
+        // private string host = "https://www.ins-uplink.cn";
 
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
@@ -112,6 +113,8 @@ namespace WebAppApi.Controllers
 
         public ActionResult Index()
         {
+
+
             ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
             Dictionary<string, string> model = new Dictionary<string, string>();
@@ -469,7 +472,7 @@ namespace WebAppApi.Controllers
         }
 
 
-        public string AddAccount(string userName, string password, string token, string validCode,string deviceId)
+        public string AddAccount(string userName, string password, string token, string validCode, string deviceId)
         {
             CreateModel model = new CreateModel();
             model.UserName = userName;
@@ -1337,7 +1340,7 @@ namespace WebAppApi.Controllers
 
         }
 
-        public string QrCodeDownload(int userId, int merchantId, int posMachineId,string ordersn)
+        public string QrCodeDownload(int userId, int merchantId, int posMachineId, string ordersn)
         {
 
             QrCodeDownloadParams model1 = new QrCodeDownloadParams();
@@ -1392,7 +1395,7 @@ namespace WebAppApi.Controllers
 
             // string a1 = "a1=das&a2=323";
             HttpUtil http = new HttpUtil();
-            string respon_data4 = http.HttpGet("" + host + "/api/Order/PayResultQuery?userId="+ userId.ToString()+ "&merchantId="+ merchantId.ToString() + "&posMachineId="+ posMachineId.ToString()+ "&orderSn="+ orderSn, headers1);
+            string respon_data4 = http.HttpGet("" + host + "/api/Order/PayResultQuery?userId=" + userId.ToString() + "&merchantId=" + merchantId.ToString() + "&posMachineId=" + posMachineId.ToString() + "&orderSn=" + orderSn, headers1);
 
             return respon_data4;
 

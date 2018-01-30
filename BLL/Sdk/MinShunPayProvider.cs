@@ -119,14 +119,7 @@ namespace Lumos.BLL
 
         public bool CheckSign(Dictionary<string, string> dic, string sign)
         {
-            string signdata = TdsPayUtil.GetSignData(dic);
-
-            if (signdata == sign)
-            {
-                return true;
-            }
-
-            return false;
+            return MinShunPayUtil.CheckSign(dic, sign);
         }
 
         public string GetResultCodeName(string resultcode)

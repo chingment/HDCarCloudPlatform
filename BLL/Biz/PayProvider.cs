@@ -68,7 +68,7 @@ namespace Lumos.BLL
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).First();
+            var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).FirstOrDefault();
 
             if (order == null)
             {
@@ -78,6 +78,7 @@ namespace Lumos.BLL
             PayQueryResult resultData = new PayQueryResult();
 
             resultData.OrderSn = order.Sn;
+            resultData.ProductType = order.ProductType;
             resultData.Status = (int)order.Status;
             resultData.Remarks = order.Status.GetCnName();
 

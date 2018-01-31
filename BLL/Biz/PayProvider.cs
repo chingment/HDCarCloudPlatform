@@ -68,6 +68,8 @@ namespace Lumos.BLL
         {
             CustomJsonResult result = new CustomJsonResult();
 
+
+
             var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).FirstOrDefault();
 
             if (order == null)
@@ -169,8 +171,9 @@ namespace Lumos.BLL
                 using (TransactionScope ts = new TransactionScope())
                 {
 
+                    string orderId = receiveNotifyLog.OrderId.Substring(0, receiveNotifyLog.OrderId.Length - 1);
 
-                    var order = CurrentDb.Order.Where(m => m.Sn == receiveNotifyLog.OrderId).FirstOrDefault();
+                    var order = CurrentDb.Order.Where(m => m.Sn == orderId).FirstOrDefault();
 
                     if (order == null)
                     {
@@ -295,7 +298,7 @@ namespace Lumos.BLL
                 UplinkFundTrans.CreateTime = this.DateTime;
                 CurrentDb.Transactions.Add(UplinkFundTrans);
                 CurrentDb.SaveChanges();
-                UplinkFundTrans.Sn = Sn.Build(SnType.Transactions, UplinkFundTrans.Id);
+                UplinkFundTrans.Sn = Sn.Build(SnType.Transactions, UplinkFundTrans.Id).Sn;
                 CurrentDb.SaveChanges();
 
 

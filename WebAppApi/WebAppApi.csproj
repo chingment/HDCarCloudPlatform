@@ -216,6 +216,7 @@
     <Compile Include="Models\CarService\CarInsKindModel.cs" />
     <Compile Include="Models\CarService\CarInsPlanKindParentModel.cs" />
     <Compile Include="Models\CarService\ReInsureOfferModel.cs" />
+    <Compile Include="Models\Order\OrderApplyLossAssessDetailsModel.cs" />
     <Compile Include="Models\Order\CancleModel.cs" />
     <Compile Include="Models\Order\OrderCarClaimDetailsModel.cs" />
     <Compile Include="Models\Order\OrderCarInsureDetailsModel.cs" />

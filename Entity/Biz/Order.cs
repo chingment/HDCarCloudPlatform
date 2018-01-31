@@ -19,6 +19,12 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string Sn { get; set; }
 
+        [MaxLength(128)]
+        public string TradeSnByWechat { get; set; }
+
+        [MaxLength(128)]
+        public string TradeSnByAlipay { get; set; }
+
         public int MerchantId { get; set; }
 
         public int PosMachineId { get; set; }

@@ -92,6 +92,14 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("流量费", orderToServiceFee.MobileTrafficFee.ToF2Price()));
 
                                 break;
+                            case Enumeration.ProductType.ApplyLossAssess:
+
+                                var orderToApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("保险公司", orderToApplyLossAssess.InsuranceCompanyName));
+                                orderModel.OrderField.Add(new OrderField("申请时间", orderToApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime()));
+
+                                break;
                         }
                         #endregion
 
@@ -583,7 +591,7 @@ namespace WebAppApi.Controllers
                         model.Deposit = orderToServiceFee.Deposit.ToF2Price();
                     }
 
-                    model.MobileTrafficFee =orderToServiceFee.MobileTrafficFee.ToF2Price();
+                    model.MobileTrafficFee = orderToServiceFee.MobileTrafficFee.ToF2Price();
                     model.ExpiryTime = orderToServiceFee.ExpiryTime.ToUnifiedFormatDate();
 
                 }
@@ -611,6 +619,32 @@ namespace WebAppApi.Controllers
 
                     model.Quantity = orderToTalentDemand.Quantity;
                     model.WorkJob = orderToTalentDemand.WorkJob.GetCnName();
+                }
+
+                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
+                return new APIResponse(result);
+                #endregion
+            }
+            else if (productType == Enumeration.ProductType.ApplyLossAssess)
+            {
+                #region ApplyLossAssess
+                OrderApplyLossAssessDetailsModel model = new OrderApplyLossAssessDetailsModel();
+                var orderApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(m => m.Id == orderId).FirstOrDefault();
+                if (orderApplyLossAssess != null)
+                {
+                    model.Id = orderApplyLossAssess.Id;
+                    model.Sn = orderApplyLossAssess.Sn;
+                    model.SubmitTime = orderApplyLossAssess.SubmitTime.ToUnifiedFormatDateTime();
+                    model.CompleteTime = orderApplyLossAssess.CompleteTime.ToUnifiedFormatDateTime();
+                    model.PayTime = orderApplyLossAssess.PayTime.ToUnifiedFormatDateTime();
+                    model.CancleTime = orderApplyLossAssess.CancleTime.ToUnifiedFormatDateTime();
+                    model.Status = orderApplyLossAssess.Status;
+                    model.StatusName = orderApplyLossAssess.Status.GetCnName();
+                    model.FollowStatus = orderApplyLossAssess.FollowStatus;
+                    model.Remarks = orderApplyLossAssess.Remarks.NullToEmpty();
+
+                    model.InsuranceCompanyName = orderApplyLossAssess.InsuranceCompanyName;
+                    model.ApplyTime = orderApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime();
                 }
 
                 APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
@@ -647,7 +681,7 @@ namespace WebAppApi.Controllers
         }
 
         [HttpGet]
-        public APIResponse PayResultQuery(int userId,int merchantId,int posMachineId,string orderSn)
+        public APIResponse PayResultQuery(int userId, int merchantId, int posMachineId, string orderSn)
         {
             PayQueryParams pms = new PayQueryParams();
             pms.UserId = userId;

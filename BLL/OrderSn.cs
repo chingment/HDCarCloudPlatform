@@ -12,16 +12,24 @@ namespace Lumos.BLL
         Withdraw = 2,
         Transactions = 3,
         CarClaim = 4,
-        DepositRent = 5,
+        ServiceFee = 5,
         TalentDemand = 6,
         ApplyLossAssess = 7
+    }
+
+    public class SnModel
+    {
+        public string Sn { get; set; }
+        public string TradeSnByWechat { get; set; }
+        public string TradeSnByAlipay { get; set; }
     }
 
     public class Sn
     {
 
-        public static string Build(SnType type, int id)
+        public static SnModel Build(SnType type, int id)
         {
+            SnModel model = new SnModel();
             string prefix = "";
             switch (type)
             {
@@ -37,7 +45,7 @@ namespace Lumos.BLL
                 case SnType.Transactions:
                     prefix = "T";
                     break;
-                case SnType.DepositRent:
+                case SnType.ServiceFee:
                     prefix = "D";
                     break;
                 case SnType.TalentDemand:
@@ -50,11 +58,14 @@ namespace Lumos.BLL
 
             string dateTime = DateTime.Now.ToString("yyMMddHHmm");
 
-            string sId = id.ToString().PadLeft(9, '0');
+            string sId = id.ToString().PadLeft(8, '0');
 
             string sn = prefix + dateTime + sId;
 
-            return sn;
+            model.Sn = sn;
+            model.TradeSnByWechat = string.Format("{0}W", sn);
+            model.TradeSnByAlipay = string.Format("{0}A", sn);
+            return model;
         }
     }
 }

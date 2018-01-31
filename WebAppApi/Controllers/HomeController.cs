@@ -128,15 +128,16 @@ namespace WebAppApi.Controllers
             int posMachineId = 217;
 
 
-            model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
+           // model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             //model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             //model.Add("登录接口", Login(userName, passWord, deviceId));
 
-            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D1801251124000009467"));
-            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D1801251124000009467"));
+            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D180125112400000947", Enumeration.OrderPayWay.Wechat));
+            model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180125112400000947", Enumeration.OrderPayWay.Alipay));
+            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D180125112400000947"));
 
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
@@ -1342,7 +1343,7 @@ namespace WebAppApi.Controllers
 
         }
 
-        public string QrCodeDownload(int userId, int merchantId, int posMachineId, string ordersn)
+        public string QrCodeDownload(int userId, int merchantId, int posMachineId, string ordersn, Enumeration.OrderPayWay payway)
         {
 
             QrCodeDownloadParams model1 = new QrCodeDownloadParams();
@@ -1351,7 +1352,7 @@ namespace WebAppApi.Controllers
             //model1.PosMachineId = posMachineId;
             model1.OrderSn = ordersn;
             model1.TermId = "90117998";
-            model1.PayWay = Enumeration.OrderPayWay.Alipay;
+            model1.PayWay = payway;
             model1.SpbillIp = "127.0.0.1";
 
             string a1 = JsonConvert.SerializeObject(model1);

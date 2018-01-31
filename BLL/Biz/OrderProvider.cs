@@ -71,8 +71,12 @@ namespace Lumos.BLL
                 order.AutoCancelByHour = 24;
                 CurrentDb.OrderToCarInsure.Add(order);
                 CurrentDb.SaveChanges();
-                order.Sn = Sn.Build(SnType.CarInsure, order.Id);
 
+                SnModel snModel = Sn.Build(SnType.CarInsure, order.Id);
+
+                order.Sn = snModel.Sn;
+                order.TradeSnByWechat = snModel.TradeSnByWechat;
+                order.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
 
                 if (orderToCarInsureOfferCompany != null)
@@ -345,7 +349,13 @@ namespace Lumos.BLL
                 orderToCarClaim.Creator = operater;
                 CurrentDb.OrderToCarClaim.Add(orderToCarClaim);
                 CurrentDb.SaveChanges();
-                orderToCarClaim.Sn = Sn.Build(SnType.CarClaim, orderToCarClaim.Id);
+
+                SnModel snModel = Sn.Build(SnType.CarClaim, orderToCarClaim.Id);
+
+                orderToCarClaim.Sn = snModel.Sn;
+                orderToCarClaim.TradeSnByWechat = snModel.TradeSnByWechat;
+                orderToCarClaim.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
 
                 //状态改为待核实
                 BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.CarClaim, orderToCarClaim.Id, Enumeration.CarClaimDealtStatus.WaitVerifyOrder, "");
@@ -506,7 +516,14 @@ namespace Lumos.BLL
 
                         CurrentDb.OrderToCarClaim.Add(estimateOrderToCarClaim);
                         CurrentDb.SaveChanges();
-                        estimateOrderToCarClaim.Sn = Sn.Build(SnType.CarClaim, estimateOrderToCarClaim.Id);
+
+                        SnModel snModel = Sn.Build(SnType.CarClaim, estimateOrderToCarClaim.Id);
+
+                        estimateOrderToCarClaim.Sn = snModel.Sn;
+                        estimateOrderToCarClaim.TradeSnByWechat = snModel.TradeSnByWechat;
+                        estimateOrderToCarClaim.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
+
 
                         l_orderToCarClaim.HandOrderId = estimateOrderToCarClaim.Id;
 
@@ -741,7 +758,13 @@ namespace Lumos.BLL
                 newOrder.AutoCancelByHour = 24;
                 CurrentDb.OrderToCarInsure.Add(newOrder);
                 CurrentDb.SaveChanges();
-                newOrder.Sn = Sn.Build(SnType.CarInsure, newOrder.Id);
+
+                SnModel snModel = Sn.Build(SnType.CarInsure, newOrder.Id);
+
+                newOrder.Sn = snModel.Sn;
+                newOrder.TradeSnByWechat = snModel.TradeSnByWechat;
+                newOrder.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
 
 
 
@@ -822,7 +845,15 @@ namespace Lumos.BLL
                 orderToTalentDemand.Creator = operater;
                 CurrentDb.OrderToTalentDemand.Add(orderToTalentDemand);
                 CurrentDb.SaveChanges();
-                orderToTalentDemand.Sn = Sn.Build(SnType.TalentDemand, orderToTalentDemand.Id);
+
+
+
+                SnModel snModel = Sn.Build(SnType.TalentDemand, orderToTalentDemand.Id);
+
+                orderToTalentDemand.Sn = snModel.Sn;
+                orderToTalentDemand.TradeSnByWechat = snModel.TradeSnByWechat;
+                orderToTalentDemand.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
 
                 //状态改为待核实
                 BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.TalentDemand, orderToTalentDemand.Id, Enumeration.TalentDemandDealtStatus.WaitVerifyOrder, "");
@@ -944,7 +975,12 @@ namespace Lumos.BLL
                 orderToApplyLossAssess.Creator = operater;
                 CurrentDb.OrderToApplyLossAssess.Add(orderToApplyLossAssess);
                 CurrentDb.SaveChanges();
-                orderToApplyLossAssess.Sn = Sn.Build(SnType.ApplyLossAssess, orderToApplyLossAssess.Id);
+
+                SnModel snModel = Sn.Build(SnType.ApplyLossAssess, orderToApplyLossAssess.Id);
+
+                orderToApplyLossAssess.Sn = snModel.Sn;
+                orderToApplyLossAssess.TradeSnByWechat = snModel.TradeSnByWechat;
+                orderToApplyLossAssess.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
                 //状态改为待核实
                 BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.ApplyLossAssess, orderToApplyLossAssess.Id, Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder, "");

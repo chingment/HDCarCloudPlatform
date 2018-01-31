@@ -129,7 +129,12 @@ namespace Lumos.BLL
                 orderToServiceFee.Creator = operater;
                 CurrentDb.OrderToServiceFee.Add(orderToServiceFee);
                 CurrentDb.SaveChanges();
-                orderToServiceFee.Sn = Sn.Build(SnType.DepositRent, orderToServiceFee.Id);
+
+                SnModel snModel = Sn.Build(SnType.ServiceFee, orderToServiceFee.Id);
+                orderToServiceFee.Sn = snModel.Sn;
+                orderToServiceFee.TradeSnByWechat = snModel.TradeSnByWechat;
+                orderToServiceFee.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
 
                 //暂定在这里开启
                 //BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, merchant.Id, Enumeration.MerchantAuditStatus.WaitPrimaryAudit, "");

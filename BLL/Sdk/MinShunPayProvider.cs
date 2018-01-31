@@ -21,6 +21,10 @@ namespace Lumos.BLL
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
             }
+            if (order.Status == Enumeration.OrderStatus.Completed)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经支付成功");
+            }
 
 
             order.PayWay = pms.PayWay;
@@ -30,7 +34,6 @@ namespace Lumos.BLL
 
             MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
 
-            orderInfo.OrderId = order.Sn;
             orderInfo.Price = 0.01m;
             orderInfo.Remark = "测试商品";
             orderInfo.SubmitTime = order.SubmitTime;
@@ -40,10 +43,12 @@ namespace Lumos.BLL
             if (order.PayWay == Enumeration.OrderPayWay.Wechat)
             {
                 orderInfo.TranType = "180000";
+                orderInfo.OrderId = order.TradeSnByWechat;
             }
             else if (order.PayWay == Enumeration.OrderPayWay.Alipay)
             {
                 orderInfo.TranType = "280000";
+                orderInfo.OrderId = order.TradeSnByAlipay;
             }
             else
             {
@@ -70,12 +75,11 @@ namespace Lumos.BLL
         }
 
 
-        public OrderPayResultNotifyByMinShunLog PayQuery(int operater, OrderToServiceFee pms)
+        public OrderPayResultNotifyByMinShunLog PayQuery(int operater, Order pms)
         {
 
             MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
 
-            orderInfo.OrderId = pms.Sn;
             orderInfo.Price = 0.01m;
             orderInfo.Remark = pms.Remarks;
             orderInfo.SubmitTime = pms.SubmitTime;
@@ -85,10 +89,12 @@ namespace Lumos.BLL
             if (pms.PayWay == Enumeration.OrderPayWay.Wechat)
             {
                 orderInfo.TranType = "180020";
+                orderInfo.OrderId = pms.TradeSnByWechat;
             }
             else if (pms.PayWay == Enumeration.OrderPayWay.Alipay)
             {
                 orderInfo.TranType = "280020";
+                orderInfo.OrderId = pms.TradeSnByAlipay;
             }
 
             OrderPayResultNotifyByMinShunLog receiveNotifyLog = null;

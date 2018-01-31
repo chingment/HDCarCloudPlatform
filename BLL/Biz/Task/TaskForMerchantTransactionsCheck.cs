@@ -58,22 +58,19 @@ namespace Lumos.BLL.Biz.Task
 
                         break;
                     case Enumeration.ProductType.PosMachineServiceFee:
-                        var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Sn == order.Sn).FirstOrDefault();
-                        if (orderToServiceFee != null)
+
+                        var receiveNotifyLog = SdkFactory.MinShunPay.PayQuery(0, order);
+
+                        if (receiveNotifyLog == null)
                         {
-
-                            var receiveNotifyLog = SdkFactory.MinShunPay.PayQuery(0, orderToServiceFee);
-
-                            if (receiveNotifyLog == null)
-                            {
-                                Log.WarnFormat("订单编号:{0}，查询不到支付记录", order.Sn);
-                            }
-                            else
-                            {
-                                BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunOrderQueryApi, receiveNotifyLog);
-                            }
-
+                            Log.WarnFormat("订单编号:{0}，查询不到支付记录", order.Sn);
                         }
+                        else
+                        {
+                            BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunOrderQueryApi, receiveNotifyLog);
+                        }
+
+
 
                         break;
                 }

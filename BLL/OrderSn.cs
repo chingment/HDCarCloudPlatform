@@ -13,7 +13,8 @@ namespace Lumos.BLL
         Transactions = 3,
         CarClaim = 4,
         DepositRent = 5,
-        TalentDemand=6
+        TalentDemand = 6,
+        ApplyLossAssess = 7
     }
 
     public class Sn
@@ -41,6 +42,9 @@ namespace Lumos.BLL
                     break;
                 case SnType.TalentDemand:
                     prefix = "M";
+                    break;
+                case SnType.ApplyLossAssess:
+                    prefix = "L";
                     break;
             }
 

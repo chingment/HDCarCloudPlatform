@@ -36,11 +36,11 @@ namespace MinShunPaySdkTest
 
             MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
 
-            orderInfo.OrderId = "D1705311427000002891";
+            orderInfo.OrderId = "D1801251123000009465";
             orderInfo.Price = 0.01m;
             orderInfo.Remark = "测试";
             orderInfo.SubmitTime = DateTime.Now;
-            orderInfo.TranType = "180000";
+            orderInfo.TranType = "280000";
             orderInfo.TermId = "90117998";
             orderInfo.SpbillIp = "127.0.0.1";
 

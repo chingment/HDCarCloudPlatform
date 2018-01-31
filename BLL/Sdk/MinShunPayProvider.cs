@@ -45,6 +45,10 @@ namespace Lumos.BLL
             {
                 orderInfo.TranType = "280000";
             }
+            else
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "不支持该支付方式");
+            }
 
             var codeDownload_result = MinShunPayUtil.CodeDownload(orderInfo);
             if (string.IsNullOrEmpty(codeDownload_result.MWEB_URL))

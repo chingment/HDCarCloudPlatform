@@ -198,6 +198,7 @@
     <Compile Include="Controllers\App\HelpController.cs" />
     <Compile Include="Controllers\App\OrderController.cs" />
     <Compile Include="Controllers\App\ServiceKitController.cs" />
+    <Compile Include="Controllers\Biz\ApplyLossAssessController.cs" />
     <Compile Include="Controllers\Biz\ApplyPosController.cs" />
     <Compile Include="Controllers\Biz\CarClaimController.cs" />
     <Compile Include="Controllers\Biz\CarInsuranceCompanyController.cs" />
@@ -244,6 +245,9 @@
     <Compile Include="Models\App\Order\InsOfferPayViewModel.cs" />
     <Compile Include="Models\App\ServiceKit\CarInsExpireDateViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
+    <Compile Include="Models\Biz\ApplyLossAssess\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\ApplyLossAssess\ApplyLossAssessSearchCondition.cs" />
+    <Compile Include="Models\Biz\ApplyLossAssess\VerifyOrderViewModel.cs" />
     <Compile Include="Models\Biz\ApplyPos\ApplyModel.cs" />
     <Compile Include="Models\Biz\ApplyPos\ApplyPosSearchCondition.cs" />
     <Compile Include="Models\Biz\CarClaim\CarClaimSearchCondition.cs" />
@@ -1302,6 +1306,10 @@
     <Content Include="Views\Biz\TalentDemand\List.cshtml" />
     <Content Include="Views\Biz\TalentDemand\VerifyOrder.cshtml" />
     <Content Include="Views\Biz\TalentDemand\VerifyOrderList.cshtml" />
+    <Content Include="Views\Biz\ApplyLossAssess\Details.cshtml" />
+    <Content Include="Views\Biz\ApplyLossAssess\List.cshtml" />
+    <Content Include="Views\Biz\ApplyLossAssess\VerifyOrder.cshtml" />
+    <Content Include="Views\Biz\ApplyLossAssess\VerifyOrderList.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

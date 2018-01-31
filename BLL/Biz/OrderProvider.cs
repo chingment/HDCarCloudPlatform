@@ -605,14 +605,14 @@ namespace Lumos.BLL
 
                             estimateOrderToCarClaim.Status = Enumeration.OrderStatus.WaitPay;
                             estimateOrderToCarClaim.FollowStatus = (int)Enumeration.OrderToCarClaimFollowStatus.WaitPayCommission;
-                            estimateOrderToCarClaim.Price =0;//应付金额
+                            estimateOrderToCarClaim.Price = 0;//应付金额
 
                         }
                         else if (l_orderToCarClaim.RepairsType == Enumeration.RepairsType.Estimate)
                         {
                             l_orderToCarClaim.Status = Enumeration.OrderStatus.WaitPay;
                             l_orderToCarClaim.FollowStatus = (int)Enumeration.OrderToCarClaimFollowStatus.WaitPayCommission;
-                            l_orderToCarClaim.Price =0;//应付金额
+                            l_orderToCarClaim.Price = 0;//应付金额
 
                             estimateOrderToCarClaim.Status = Enumeration.OrderStatus.Follow;
                             estimateOrderToCarClaim.FollowStatus = (int)Enumeration.OrderToCarClaimFollowStatus.WaitPayCommission;
@@ -862,10 +862,10 @@ namespace Lumos.BLL
                 }
 
 
-                var l_orderToCarClaim = CurrentDb.OrderToTalentDemand.Where(m => m.Id == orderToTalentDemand.Id).FirstOrDefault();
+                var l_orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(m => m.Id == orderToTalentDemand.Id).FirstOrDefault();
 
-      
-                l_orderToCarClaim.Remarks = orderToTalentDemand.Remarks;
+
+                l_orderToTalentDemand.Remarks = orderToTalentDemand.Remarks;
 
                 bizProcessesAudit.CurrentDetails.AuditComments = orderToTalentDemand.Remarks;
 
@@ -880,8 +880,8 @@ namespace Lumos.BLL
                         break;
                     case Enumeration.OperateType.Cancle:
 
-                        l_orderToCarClaim.Status = Enumeration.OrderStatus.Cancled;
-                        l_orderToCarClaim.CancleTime = this.DateTime;
+                        l_orderToTalentDemand.Status = Enumeration.OrderStatus.Cancled;
+                        l_orderToTalentDemand.CancleTime = this.DateTime;
 
                         BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员撤销订单", this.DateTime);
 
@@ -892,14 +892,136 @@ namespace Lumos.BLL
                         break;
                     case Enumeration.OperateType.Submit:
 
-                        l_orderToCarClaim.Status = Enumeration.OrderStatus.Completed;
-                        l_orderToCarClaim.CompleteTime = this.DateTime;
-                        l_orderToCarClaim.FollowStatus = 1;
+                        l_orderToTalentDemand.Status = Enumeration.OrderStatus.Completed;
+                        l_orderToTalentDemand.CompleteTime = this.DateTime;
+                        l_orderToTalentDemand.FollowStatus = 1;
 
 
                         BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员派单完成", this.DateTime);
 
                         BizFactory.BizProcessesAudit.ChangeTalentDemandDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.TalentDemandDealtStatus.Complete, "核实正确");
+
+                        result = new CustomJsonResult(ResultType.Success, "提交成功");
+                        break;
+
+                }
+
+
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+            }
+
+            return result;
+
+        }
+
+
+        public CustomJsonResult SubmitApplyLossAssess(int operater, OrderToApplyLossAssess orderToApplyLossAssess)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                //用户信息
+                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToApplyLossAssess.UserId).FirstOrDefault();
+                //商户信息
+                var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
+
+                var insuranceCompany = CurrentDb.InsuranceCompany.Where(m => m.Id == orderToApplyLossAssess.InsuranceCompanyId).FirstOrDefault();
+
+
+                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.ApplyLossAssess).FirstOrDefault();
+
+                orderToApplyLossAssess.ProductId = product.Id;
+                orderToApplyLossAssess.ProductType = product.Type;
+                orderToApplyLossAssess.ProductName = product.Name;
+                orderToApplyLossAssess.InsuranceCompanyName = insuranceCompany.Name;
+                orderToApplyLossAssess.Status = Enumeration.OrderStatus.Submitted;
+                orderToApplyLossAssess.ApplyTime = this.DateTime;
+                orderToApplyLossAssess.SubmitTime = this.DateTime;
+                orderToApplyLossAssess.CreateTime = this.DateTime;
+                orderToApplyLossAssess.Creator = operater;
+                CurrentDb.OrderToApplyLossAssess.Add(orderToApplyLossAssess);
+                CurrentDb.SaveChanges();
+                orderToApplyLossAssess.Sn = Sn.Build(SnType.ApplyLossAssess, orderToApplyLossAssess.Id);
+
+                //状态改为待核实
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.ApplyLossAssess, orderToApplyLossAssess.Id, Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder, "");
+                BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.ApplyLossAssessDealtStep.Submit, bizProcessesAudit.Id, operater, orderToApplyLossAssess.ClientRequire, "商户提交定损点申请需求", this.DateTime);
+
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, "提交成功");
+            }
+
+
+            return result;
+        }
+
+        public CustomJsonResult VerifyApplyLossAssess(int operater, Enumeration.OperateType operate, OrderToApplyLossAssess orderToApplyLossAssess, BizProcessesAudit bizProcessesAudit)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.CurrentDetails.BizProcessesAuditId && (m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder || m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder)).FirstOrDefault();
+
+                if (bizProcessesAudit == null)
+                {
+                    return new CustomJsonResult(ResultType.Success, "该订单已经处理完成");
+                }
+
+                if (bizProcessesAudit.Auditor != null)
+                {
+                    if (bizProcessesAudit.Auditor.Value != operater)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, "该订单其他用户正在处理");
+                    }
+                }
+
+
+                var l_orderToApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(m => m.Id == orderToApplyLossAssess.Id).FirstOrDefault();
+
+
+                l_orderToApplyLossAssess.Remarks = orderToApplyLossAssess.Remarks;
+
+                bizProcessesAudit.CurrentDetails.AuditComments = l_orderToApplyLossAssess.Remarks;
+
+                switch (operate)
+                {
+                    case Enumeration.OperateType.Save:
+
+                        result = new CustomJsonResult(ResultType.Success, "保存成功");
+
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.ApplyLossAssessDealtStep.VerifyOrder, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, null);
+
+                        break;
+                    case Enumeration.OperateType.Cancle:
+
+                        l_orderToApplyLossAssess.Status = Enumeration.OrderStatus.Cancled;
+                        l_orderToApplyLossAssess.CancleTime = this.DateTime;
+
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员撤销订单", this.DateTime);
+
+                        BizFactory.BizProcessesAudit.ChangeApplyLossAssessDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.ApplyLossAssessDealtStatus.StaffCancle);
+
+                        result = new CustomJsonResult(ResultType.Success, "撤销成功");
+
+                        break;
+                    case Enumeration.OperateType.Submit:
+
+                        l_orderToApplyLossAssess.Status = Enumeration.OrderStatus.Completed;
+                        l_orderToApplyLossAssess.CompleteTime = this.DateTime;
+                        l_orderToApplyLossAssess.FollowStatus = 1;
+
+
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员派单完成", this.DateTime);
+
+                        BizFactory.BizProcessesAudit.ChangeApplyLossAssessDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.ApplyLossAssessDealtStatus.Complete, "核实正确");
 
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;

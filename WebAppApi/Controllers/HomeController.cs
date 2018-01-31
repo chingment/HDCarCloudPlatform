@@ -127,14 +127,16 @@ namespace WebAppApi.Controllers
             int merchantId = 231;
             int posMachineId = 217;
 
+
+            model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             //model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             //model.Add("登录接口", Login(userName, passWord, deviceId));
 
-            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D1801251124000009463"));
-            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D1801251124000009463"));
+            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D1801251124000009467"));
+            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D1801251124000009467"));
 
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
@@ -1349,7 +1351,7 @@ namespace WebAppApi.Controllers
             //model1.PosMachineId = posMachineId;
             model1.OrderSn = ordersn;
             model1.TermId = "90117998";
-            model1.PayWay = Enumeration.OrderPayWay.Wechat;
+            model1.PayWay = Enumeration.OrderPayWay.Alipay;
             model1.SpbillIp = "127.0.0.1";
 
             string a1 = JsonConvert.SerializeObject(model1);
@@ -1396,6 +1398,33 @@ namespace WebAppApi.Controllers
             // string a1 = "a1=das&a2=323";
             HttpUtil http = new HttpUtil();
             string respon_data4 = http.HttpGet("" + host + "/api/Order/PayResultQuery?userId=" + userId.ToString() + "&merchantId=" + merchantId.ToString() + "&posMachineId=" + posMachineId.ToString() + "&orderSn=" + orderSn, headers1);
+
+            return respon_data4;
+
+        }
+
+
+        public string SubmittApplyLossAssess(int userId, int merchantId, int posMachineId)
+        {
+
+            SubmitApplyLossAssessModel model1 = new SubmitApplyLossAssessModel();
+            model1.UserId = userId;
+            model1.InsuranceCompanyId = 2;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/SubmitApplyLossAssess", a1, headers1);
 
             return respon_data4;
 

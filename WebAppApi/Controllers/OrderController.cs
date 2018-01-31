@@ -676,6 +676,19 @@ namespace WebAppApi.Controllers
         }
 
         [HttpPost]
+        public APIResponse SubmitApplyLossAssess(SubmitApplyLossAssessModel model)
+        {
+            OrderToApplyLossAssess orderToApplyLossAssess = new OrderToApplyLossAssess();
+            orderToApplyLossAssess.UserId = model.UserId;
+            orderToApplyLossAssess.MerchantId = model.MerchantId;
+            orderToApplyLossAssess.PosMachineId = model.PosMachineId;
+            orderToApplyLossAssess.InsuranceCompanyId = model.InsuranceCompanyId;
+            IResult result = BizFactory.Order.SubmitApplyLossAssess(model.UserId, orderToApplyLossAssess);
+            return new APIResponse(result);
+
+        }
+
+        [HttpPost]
         public APIResponse QrCodeDownload(QrCodeDownloadParams pms)
         {
             IResult result = SdkFactory.MinShunPay.QrCodeDownload(pms.UserId, pms);

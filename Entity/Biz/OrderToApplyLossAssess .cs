@@ -13,7 +13,8 @@ namespace Lumos.Entity
     {
         public int InsuranceCompanyId { get; set; }
 
-        public int InsuranceCompanyName { get; set; }
+        [MaxLength(128)]
+        public string InsuranceCompanyName { get; set; }
 
         public DateTime? ApplyTime { get; set; }
     }

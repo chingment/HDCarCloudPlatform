@@ -57,7 +57,9 @@ namespace Lumos.DAL
         public IDbSet<OrderToCarClaim> OrderToCarClaim { get; set; }
 
         public IDbSet<OrderToTalentDemand> OrderToTalentDemand { get; set; }
-        
+
+        public IDbSet<OrderToApplyLossAssess> OrderToApplyLossAssess { get; set; }
+
         public IDbSet<OrderToServiceFee> OrderToServiceFee { get; set; }
 
         public IDbSet<BizProcessesAudit> BizProcessesAudit { get; set; }

@@ -98,6 +98,7 @@ namespace WebAppApi.Controllers
 
                                 orderModel.OrderField.Add(new OrderField("保险公司", orderToApplyLossAssess.InsuranceCompanyName));
                                 orderModel.OrderField.Add(new OrderField("申请时间", orderToApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime()));
+                                orderModel.OrderField.Add(new OrderField("状态", "核实需求中"));
 
                                 break;
                         }
@@ -260,6 +261,14 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("流量费", orderToServiceFee.MobileTrafficFee.ToF2Price()));
                                 orderModel.OrderField.Add(new OrderField("到期时间", orderToServiceFee.ExpiryTime.ToUnifiedFormatDate()));
                                 break;
+                            case Enumeration.ProductType.ApplyLossAssess:
+
+                                var orderToApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("保险公司", orderToApplyLossAssess.InsuranceCompanyName));
+                                orderModel.OrderField.Add(new OrderField("申请时间", orderToApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime()));
+
+                                break;
                         }
                         #endregion
 
@@ -294,6 +303,14 @@ namespace WebAppApi.Controllers
                                 var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
+                                orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
+                                break;
+                            case Enumeration.ProductType.ApplyLossAssess:
+
+                                var orderToApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("保险公司", orderToApplyLossAssess.InsuranceCompanyName));
+                                orderModel.OrderField.Add(new OrderField("申请时间", orderToApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime()));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
                         }

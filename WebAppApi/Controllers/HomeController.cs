@@ -1,4 +1,4 @@
-﻿using AnXinSdk;
+﻿
 using log4net;
 using Lumos.BLL;
 using Lumos.Common;

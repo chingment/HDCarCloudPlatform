@@ -1344,10 +1344,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AnXin\AnXinSdk.csproj">
-      <Project>{800d66cc-1dd8-4691-a2ae-acd9c2097e1c}</Project>
-      <Name>AnXinSdk</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BLL\Lumos.BLL.csproj">
       <Project>{640a898e-2b63-4a12-ac93-2c61d718cc6c}</Project>
       <Name>Lumos.BLL</Name>
@@ -1375,10 +1371,6 @@
     <ProjectReference Include="..\MySDK\MySDK.csproj">
       <Project>{8479fcaf-4aef-40d4-b76d-246282522fb7}</Project>
       <Name>MySDK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YdtSdk\YdtSdk.csproj">
-      <Project>{539b0cc5-1802-4a6c-b081-c7e35071d21c}</Project>
-      <Name>YdtSdk</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -309,10 +309,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AnXin\AnXinSdk.csproj">
-      <Project>{800d66cc-1dd8-4691-a2ae-acd9c2097e1c}</Project>
-      <Name>AnXinSdk</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BLL\Lumos.BLL.csproj">
       <Project>{640a898e-2b63-4a12-ac93-2c61d718cc6c}</Project>
       <Name>Lumos.BLL</Name>

@@ -75,15 +75,15 @@
     <Compile Include="SmsHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DAL\Lumos.DAL.csproj">
+    <ProjectReference Include="..\Lumos.DAL\Lumos.DAL.csproj">
       <Project>{0e039414-2a2e-48b4-8db7-c4346106fa68}</Project>
       <Name>Lumos.DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Entity\Lumos.Entity.csproj">
+    <ProjectReference Include="..\Lumos.Entity\Lumos.Entity.csproj">
       <Project>{c19704c7-7d89-42e8-9f15-d8c1a1a0c525}</Project>
       <Name>Lumos.Entity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MVC\Lumos.Mvc.csproj">
+    <ProjectReference Include="..\Lumos.MVC\Lumos.Mvc.csproj">
       <Project>{ed113ad7-1b20-4b05-8961-9b701e51734c}</Project>
       <Name>Lumos.Mvc</Name>
     </ProjectReference>

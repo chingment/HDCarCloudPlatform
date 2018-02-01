@@ -124,7 +124,7 @@
     <Compile Include="LumosDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Entity\Lumos.Entity.csproj">
+    <ProjectReference Include="..\Lumos.Entity\Lumos.Entity.csproj">
       <Project>{c19704c7-7d89-42e8-9f15-d8c1a1a0c525}</Project>
       <Name>Lumos.Entity</Name>
     </ProjectReference>

@@ -82,6 +82,58 @@ namespace WebBack.Controllers.Biz
             return View(model);
         }
 
+
+        public ViewResult ReSetNoActive(string userName, string deviceId)
+        {
+            ViewBag.Status = ReSetNoActiveS(userName, deviceId);
+            return View();
+        }
+
+
+        private string ReSetNoActiveS(string userName, string deviceId)
+        {
+            var user = CurrentDb.Users.Where(m => m.UserName == userName).FirstOrDefault();
+
+            if (user == null)
+            {
+                return "用户不存在（SysUser）";
+            }
+
+            var pos = CurrentDb.PosMachine.Where(m => m.DeviceId == deviceId).FirstOrDefault();
+            if (pos == null)
+            {
+                return "设备ID不存在（PosMachine）";
+            }
+
+            var merpos = CurrentDb.MerchantPosMachine.Where(m => m.UserId == user.Id && m.PosMachineId == pos.Id).FirstOrDefault();
+
+            if (merpos == null)
+            {
+                return "找不到对应的商户机器对应记录（MerchantPosMachine）";
+            }
+
+            var order = CurrentDb.Order.Where(m => m.ProductType == Enumeration.ProductType.PosMachineServiceFee && m.UserId == user.Id).FirstOrDefault();
+
+            if (order == null)
+            {
+                return "找不到对应的商户机器对应的订单号（Order）";
+            }
+
+            merpos.Status = Enumeration.MerchantPosMachineStatus.NoActive;
+
+            order.Status = Enumeration.OrderStatus.WaitPay;
+
+            SnModel snModel = Sn.Build(Lumos.BLL.SnType.ServiceFee, order.Id);
+            order.Sn = snModel.Sn;
+
+            order.TradeSnByWechat = snModel.TradeSnByWechat;
+            order.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
+            CurrentDb.SaveChanges();
+
+            return "重置未激活状态成功";
+        }
+
         public JsonResult GetList(PosMachineSearchCondition condition)
         {
 
@@ -118,7 +170,7 @@ namespace WebBack.Controllers.Biz
                         join p in CurrentDb.PosMachine on mp.PosMachineId equals p.Id
                         join m in CurrentDb.Merchant on mp.MerchantId equals m.Id
                         where (fuselageNumber.Length == 0 || p.FuselageNumber.Contains(fuselageNumber)) &&
-                                (deviceId.Length == 0 || p.DeviceId.Contains(deviceId)) 
+                                (deviceId.Length == 0 || p.DeviceId.Contains(deviceId))
                         select new { m.ClientCode, m.YYZZ_Name, p.Id, p.DeviceId, mp.Deposit, mp.ReturnDeposit, mp.DepositPayTime, mp.ReturnTime, });
 
             int total = list.Count();
@@ -197,7 +249,7 @@ namespace WebBack.Controllers.Biz
             var query = (from m in CurrentDb.PosMachine
 
                          where (fuselageNumber.Length == 0 || m.FuselageNumber.Contains(fuselageNumber)) &&
-                                 (deviceId.Length == 0 || m.DeviceId.Contains(deviceId)) 
+                                 (deviceId.Length == 0 || m.DeviceId.Contains(deviceId))
                                  && m.IsUse == false
                          select new { m.Id, m.DeviceId, m.FuselageNumber, m.TerminalNumber, m.Version, m.CreateTime });
 

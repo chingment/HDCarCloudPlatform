@@ -1310,6 +1310,7 @@
     <Content Include="Views\Biz\ApplyLossAssess\List.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\VerifyOrder.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\VerifyOrderList.cshtml" />
+    <Content Include="Views\PosMachine\ReSetNoActive.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
-        //private string host = "http://112.74.179.185";
+        //private string host = "http://localhost:16665";
+        private string host = "http://112.74.179.185";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -115,6 +115,28 @@ namespace WebAppApi.Controllers
         {
 
 
+            //string aa = "{\"sign\":\"7baca0f788404905f55e28bf28f54df51fb4181a\",\"result_code\":\"00\",\"mercid\":\"894440155416002\",\"result_msg\":\"成功\",\"termid\":\"90117998\",\"txnamt\":\"1\",\"orderId\":\"D180202165700000007W\"}";
+
+            //ReceiveNotifyModel model1 = JsonConvert.DeserializeObject<ReceiveNotifyModel>(aa);
+
+            //OrderPayResultNotifyByMinShunLog receiveNotifyLog = new OrderPayResultNotifyByMinShunLog();
+
+            //receiveNotifyLog.OrderId = model1.orderId;
+            //receiveNotifyLog.Mercid = model1.mercid;
+            //receiveNotifyLog.Termid = model1.termid;
+            //receiveNotifyLog.Txnamt = model1.txnamt;
+            //receiveNotifyLog.ResultCode = model1.result_code;
+            //receiveNotifyLog.ResultCodeName = SdkFactory.MinShunPay.GetResultCodeName(model1.result_code);
+            //receiveNotifyLog.ResultMsg = model1.result_msg;
+            //receiveNotifyLog.Sign = model1.sign;
+            //receiveNotifyLog.MwebUrl = null;
+            //receiveNotifyLog.NotifyParty = Enumeration.PayResultNotifyParty.MinShunNotifyUrl;
+            //receiveNotifyLog.NotifyPartyName = Enumeration.PayResultNotifyParty.MinShunNotifyUrl.GetCnName();
+            //receiveNotifyLog.Creator = 0;
+            //receiveNotifyLog.CreateTime = DateTime.Now;
+
+            //BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunNotifyUrl, receiveNotifyLog);
+
             ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
             Dictionary<string, string> model = new Dictionary<string, string>();
@@ -124,20 +146,20 @@ namespace WebAppApi.Controllers
             string newPassWord = "888888";
             string deviceId = "87377332911A215";
             int userId = 1010;
-            int merchantId = 3;
+            int merchantId = 3; 
             int posMachineId = 43;
 
 
-            model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
-            model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-            model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId));
+            //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
+           // model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+            //model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             //model.Add("登录接口", Login(userName, passWord, deviceId));
 
-           // model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D180125112400000947", Enumeration.OrderPayWay.Wechat));
-           // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180125112400000947", Enumeration.OrderPayWay.Alipay));
-           // model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D180125112400000947"));
+            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D180202174100000007", Enumeration.OrderPayWay.Wechat));
+            model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180202174100000007", Enumeration.OrderPayWay.Alipay));
+            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D180202174100000007"));
 
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));

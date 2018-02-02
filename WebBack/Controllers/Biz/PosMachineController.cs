@@ -105,7 +105,7 @@ namespace WebBack.Controllers.Biz
                 return "设备ID不存在（PosMachine）";
             }
 
-            var merpos = CurrentDb.MerchantPosMachine.Where(m => m.UserId == user.Id && m.PosMachineId == pos.Id).FirstOrDefault();
+            var merpos = CurrentDb.MerchantPosMachine.Where(m => m.UserId == user.Id).FirstOrDefault();
 
             if (merpos == null)
             {
@@ -119,6 +119,8 @@ namespace WebBack.Controllers.Biz
                 return "找不到对应的商户机器对应的订单号（Order）";
             }
 
+            merpos.MerchantId = merpos.MerchantId;
+            merpos.PosMachineId = pos.Id;
             merpos.Status = Enumeration.MerchantPosMachineStatus.NoActive;
 
             order.Status = Enumeration.OrderStatus.WaitPay;
@@ -128,6 +130,8 @@ namespace WebBack.Controllers.Biz
 
             order.TradeSnByWechat = snModel.TradeSnByWechat;
             order.TradeSnByAlipay = snModel.TradeSnByAlipay;
+            order.MerchantId = merpos.MerchantId;
+            order.PosMachineId = pos.Id;
 
             CurrentDb.SaveChanges();
 

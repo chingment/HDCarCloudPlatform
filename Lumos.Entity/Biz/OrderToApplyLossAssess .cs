@@ -17,5 +17,7 @@ namespace Lumos.Entity
         public string InsuranceCompanyName { get; set; }
 
         public DateTime? ApplyTime { get; set; }
+
+        public bool IsAgreeService { get; set; }
     }
 }

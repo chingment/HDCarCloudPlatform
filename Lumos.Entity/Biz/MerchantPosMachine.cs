@@ -50,5 +50,6 @@ namespace Lumos.Entity
         [NotMapped]
         public PosMachine PosMachine { get; set; }
 
+
     }
 }

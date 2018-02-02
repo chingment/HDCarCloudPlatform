@@ -45,13 +45,13 @@ namespace WebAppApi.Models.Order
 
         public string StatusName { get; set; }
 
-        public DateTime SubmitTime { get; set; }
+        public string SubmitTime { get; set; }
 
-        public DateTime? CompleteTime { get; set; }
+        public string CompleteTime { get; set; }
 
-        public DateTime? CancleTime { get; set; }
+        public string CancleTime { get; set; }
 
-        public DateTime? PayTime { get; set; }
+        public string PayTime { get; set; }
 
         public string CarOwner { get; set; }
 
@@ -68,13 +68,13 @@ namespace WebAppApi.Models.Order
 
         public string InsureImgUrl { get; set; }
 
-        public decimal CommercialPrice { get; set; }
+        public string CommercialPrice { get; set; }
 
-        public decimal TravelTaxPrice { get; set; }
+        public string TravelTaxPrice { get; set; }
 
-        public decimal CompulsoryPrice { get; set; }
+        public string CompulsoryPrice { get; set; }
 
-        public decimal Price { get; set; }
+        public string Price { get; set; }
 
         public List<string> RecipientAddressList { get; set; }
 

@@ -102,8 +102,8 @@ namespace Lumos.BLL
                 {
                     case Enumeration.ProductType.PosMachineServiceFee:
                         #region 服务费
-
-                        yOrder = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(model.OrderSn);
+                        var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Sn == model.OrderSn).FirstOrDefault();
+                        yOrder = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "确认成功", yOrder);
                         #endregion
@@ -232,7 +232,7 @@ namespace Lumos.BLL
                         {
                             case Enumeration.ProductType.PosMachineServiceFee:
 
-                                result = PayServiceFeeCompleted(operater, order.Sn);
+                                //result = PayServiceFeeCompleted(operater, order.Sn);
 
                                 break;
                         }
@@ -315,6 +315,11 @@ namespace Lumos.BLL
                 orderToServiceFee.LastUpdateTime = this.DateTime;
                 orderToServiceFee.Mender = operater;
 
+
+                if (orderToServiceFee.Deposit > 0)
+                {
+                    BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, orderToServiceFee.MerchantId, Enumeration.MerchantAuditStatus.WaitPrimaryAudit, "");
+                }
 
 
                 CurrentDb.SaveChanges();

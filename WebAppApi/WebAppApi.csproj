@@ -229,8 +229,7 @@
     <Compile Include="Models\ExtendedAppModel.cs" />
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\Order\OrderCarInsureOfferCompanyModel.cs" />
-    <Compile Include="Models\Order\OrderPosDepositRentDetailsModel.cs" />
-    <Compile Include="Models\Order\OrderPosRentDetailsModel.cs" />
+    <Compile Include="Models\Order\OrderServiceFeeDetailsModel.cs" />
     <Compile Include="Models\Order\OrderTalentDemandDetailsModel.cs" />
     <Compile Include="Models\Order\SubmitApplyLossAssessModel.cs" />
     <Compile Include="Models\Order\SubmitTalentDemandModel.cs" />

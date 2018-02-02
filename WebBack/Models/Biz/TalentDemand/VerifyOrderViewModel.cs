@@ -23,7 +23,7 @@ namespace WebBack.Models.Biz.TalentDemand
 
         public VerifyOrderViewModel(int id)
         {
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeTalentDemandDealtStatus(this.Operater, id, Enumeration.TalentDemandDealtStatus.InVerifyOrder);
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeTalentDemandDealtStatus(this.Operater, id, Enumeration.TalentDemandDealtStatus.InVerifyOrder, "后台人员正在处理中");
             if (bizProcessesAudit != null)
             {
                 _bizProcessesAudit = bizProcessesAudit;

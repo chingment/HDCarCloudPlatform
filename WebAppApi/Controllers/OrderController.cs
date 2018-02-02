@@ -455,10 +455,10 @@ namespace WebAppApi.Controllers
                     model.RecipientAddress = orderToCarInsure.RecipientAddress.NullToEmpty();
                     model.RecipientPhoneNumber = orderToCarInsure.RecipientPhoneNumber.NullToEmpty();
 
-                    model.CommercialPrice = orderToCarInsure.CommercialPrice;
-                    model.TravelTaxPrice = orderToCarInsure.TravelTaxPrice;
-                    model.CompulsoryPrice = orderToCarInsure.CompulsoryPrice;
-                    model.Price = orderToCarInsure.Price;
+                    model.CommercialPrice = orderToCarInsure.CommercialPrice.ToF2Price();
+                    model.TravelTaxPrice = orderToCarInsure.TravelTaxPrice.ToF2Price();
+                    model.CompulsoryPrice = orderToCarInsure.CompulsoryPrice.ToF2Price();
+                    model.Price = orderToCarInsure.Price.ToF2Price();
 
                     #region 证件
 
@@ -503,10 +503,10 @@ namespace WebAppApi.Controllers
                     }
                     #endregion
 
-                    model.SubmitTime = orderToCarInsure.SubmitTime;
-                    model.CompleteTime = orderToCarInsure.CompleteTime;
-                    model.PayTime = orderToCarInsure.PayTime;
-                    model.CancleTime = orderToCarInsure.CancleTime;
+                    model.SubmitTime = orderToCarInsure.SubmitTime.ToUnifiedFormatDateTime(); 
+                    model.CompleteTime = orderToCarInsure.CompleteTime.ToUnifiedFormatDateTime();
+                    model.PayTime = orderToCarInsure.PayTime.ToUnifiedFormatDateTime();
+                    model.CancleTime = orderToCarInsure.CancleTime.ToUnifiedFormatDateTime();
                     model.Status = orderToCarInsure.Status;
                     model.StatusName = orderToCarInsure.Status.GetCnName();
                     model.FollowStatus = orderToCarInsure.FollowStatus;
@@ -538,14 +538,14 @@ namespace WebAppApi.Controllers
                     model.InsuranceCompanyName = orderToCarEstimate.InsuranceCompanyName;
                     model.InsuranceCompanyId = orderToCarEstimate.InsuranceCompanyId;
                     model.EstimateListImgUrl = orderToCarEstimate.EstimateListImgUrl;
-                    model.SubmitTime = orderToCarEstimate.SubmitTime;
-                    model.CompleteTime = orderToCarEstimate.CompleteTime;
-                    model.PayTime = orderToCarEstimate.PayTime;
-                    model.CancleTime = orderToCarEstimate.CancleTime;
-                    model.AccessoriesPrice = orderToCarEstimate.AccessoriesPrice;
-                    model.WorkingHoursPrice = orderToCarEstimate.WorkingHoursPrice;
-                    model.EstimatePrice = orderToCarEstimate.EstimatePrice;
-                    model.Price = orderToCarEstimate.Price;
+                    model.SubmitTime = orderToCarEstimate.SubmitTime.ToUnifiedFormatDateTime();
+                    model.CompleteTime = orderToCarEstimate.CompleteTime.ToUnifiedFormatDateTime();
+                    model.PayTime = orderToCarEstimate.PayTime.ToUnifiedFormatDateTime();
+                    model.CancleTime = orderToCarEstimate.CancleTime.ToUnifiedFormatDateTime();
+                    model.AccessoriesPrice = orderToCarEstimate.AccessoriesPrice.ToF2Price();
+                    model.WorkingHoursPrice = orderToCarEstimate.WorkingHoursPrice.ToF2Price();
+                    model.EstimatePrice = orderToCarEstimate.EstimatePrice.ToF2Price();
+                    model.Price = orderToCarEstimate.Price.ToF2Price();
                     model.Status = orderToCarEstimate.Status;
                     model.FollowStatus = orderToCarEstimate.FollowStatus;
                     model.StatusName = orderToCarEstimate.Status.GetCnName();
@@ -588,7 +588,7 @@ namespace WebAppApi.Controllers
             else if (productType == Enumeration.ProductType.PosMachineServiceFee)
             {
                 #region  PosMachineDepositRent
-                OrderPosDepositRentDetailsModel model = new OrderPosDepositRentDetailsModel();
+                OrderServiceFeeDetailsModel model = new OrderServiceFeeDetailsModel();
                 var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Id == orderId).FirstOrDefault();
                 if (orderToServiceFee != null)
                 {
@@ -597,10 +597,10 @@ namespace WebAppApi.Controllers
                     model.Status = orderToServiceFee.Status;
                     model.StatusName = orderToServiceFee.Status.GetCnName();
                     model.Remarks = orderToServiceFee.Remarks;
-                    model.SubmitTime = orderToServiceFee.SubmitTime;
-                    model.CompleteTime = orderToServiceFee.CompleteTime;
-                    model.PayTime = orderToServiceFee.PayTime;
-                    model.CancleTime = orderToServiceFee.CancleTime;
+                    model.SubmitTime = orderToServiceFee.SubmitTime.ToUnifiedFormatDateTime();
+                    model.CompleteTime = orderToServiceFee.CompleteTime.ToUnifiedFormatDateTime();
+                    model.PayTime = orderToServiceFee.PayTime.ToUnifiedFormatDateTime();
+                    model.CancleTime = orderToServiceFee.CancleTime.ToUnifiedFormatDateTime();
                     model.Price = orderToServiceFee.Price.ToF2Price();
 
                     if (orderToServiceFee.Deposit > 0)
@@ -625,10 +625,10 @@ namespace WebAppApi.Controllers
                 {
                     model.Id = orderToTalentDemand.Id;
                     model.Sn = orderToTalentDemand.Sn;
-                    model.SubmitTime = orderToTalentDemand.SubmitTime;
-                    model.CompleteTime = orderToTalentDemand.CompleteTime;
-                    model.PayTime = orderToTalentDemand.PayTime;
-                    model.CancleTime = orderToTalentDemand.CancleTime;
+                    model.SubmitTime = orderToTalentDemand.SubmitTime.ToUnifiedFormatDateTime();
+                    model.CompleteTime = orderToTalentDemand.CompleteTime.ToUnifiedFormatDateTime();
+                    model.PayTime = orderToTalentDemand.PayTime.ToUnifiedFormatDateTime();
+                    model.CancleTime = orderToTalentDemand.CancleTime.ToUnifiedFormatDateTime();
                     model.Status = orderToTalentDemand.Status;
                     model.StatusName = orderToTalentDemand.Status.GetCnName();
                     model.FollowStatus = orderToTalentDemand.FollowStatus;
@@ -636,6 +636,8 @@ namespace WebAppApi.Controllers
 
                     model.Quantity = orderToTalentDemand.Quantity;
                     model.WorkJob = orderToTalentDemand.WorkJob.GetCnName();
+                    model.UseStartTime = orderToTalentDemand.UseStartTime.ToUnifiedFormatDateTime();
+                    model.UseEndTime = orderToTalentDemand.UseEndTime.ToUnifiedFormatDateTime();
                 }
 
                 APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
@@ -734,6 +736,7 @@ namespace WebAppApi.Controllers
             orderToApplyLossAssess.MerchantId = model.MerchantId;
             orderToApplyLossAssess.PosMachineId = model.PosMachineId;
             orderToApplyLossAssess.InsuranceCompanyId = model.InsuranceCompanyId;
+            orderToApplyLossAssess.IsAgreeService = model.IsAgreeService;
             IResult result = BizFactory.Order.SubmitApplyLossAssess(model.UserId, orderToApplyLossAssess);
             return new APIResponse(result);
 

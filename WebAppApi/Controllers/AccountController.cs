@@ -133,7 +133,7 @@ namespace WebAppApi.Controllers
             var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.UserId == clientUser.Id && m.Status == Enumeration.OrderStatus.WaitPay).FirstOrDefault();
             if (orderToServiceFee != null)
             {
-                resultModel.OrderInfo = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee.Sn);
+                resultModel.OrderInfo = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee);
             }
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "登录成功", resultModel);
@@ -324,6 +324,16 @@ namespace WebAppApi.Controllers
             }
             model.TalentDemandWorkJob = talentDemandWorkJobModel;
             #endregion
+
+
+            #region 检查流量费 是否到期后，需支付的订单
+            var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.UserId == userId && m.MerchantId == merchantId && m.PosMachineId == posMachineId && m.Status == Enumeration.OrderStatus.WaitPay).FirstOrDefault();
+            if (orderToServiceFee != null)
+            {
+                model.OrderInfo = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee);
+            }
+            #endregion
+
 
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
             return new APIResponse(result);

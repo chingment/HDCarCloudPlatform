@@ -136,9 +136,6 @@ namespace Lumos.BLL
                 orderToServiceFee.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
 
-                //暂定在这里开启
-                //BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, merchant.Id, Enumeration.MerchantAuditStatus.WaitPrimaryAudit, "");
-
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -473,11 +470,11 @@ namespace Lumos.BLL
             return new CustomJsonResult(ResultType.Success, "登记成功");
         }
 
-        public OrderConfirmInfo GetOrderConfirmInfoByServiceFee(string orderSn)
+        public OrderConfirmInfo GetOrderConfirmInfoByServiceFee(OrderToServiceFee orderToServiceFee)
         {
             OrderConfirmInfo yOrder = new OrderConfirmInfo();
 
-            var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Sn == orderSn).FirstOrDefault();
+
             orderToServiceFee.ExpiryTime = this.DateTime.AddYears(1);
 
             yOrder.OrderId = orderToServiceFee.Id;

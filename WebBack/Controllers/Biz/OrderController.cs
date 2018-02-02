@@ -72,7 +72,8 @@ namespace WebBack.Controllers.Biz
 
             if (status != Enumeration.OrderStatus.Unknow)
             {
-                query = query.Where(m => m.Status == status && (((int)m.ProductType).ToString().StartsWith("201")));
+                //&& (((int)m.ProductType).ToString().StartsWith("201"))
+                query = query.Where(m => m.Status == status );
             }
 
             int total = query.Count();

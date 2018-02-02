@@ -540,7 +540,6 @@
             var handling;
 
 
-
             $.ajax({
                 type: "Post",
                 dataType: "json",
@@ -861,6 +860,7 @@
             //alert(JSON.stringify(searchparams))
             // alert(currentPageIndex)
             var loading;
+            var loadingtip = $(_thisTable).find('.load-tip');
             var l_StrRows = ""; //行数据
 
             $.lumos.postJson({
@@ -871,12 +871,15 @@
                 data: _searchParams,
                 beforeSend: function (XMLHttpRequest) {
                     if (isShowLoading) {
-                        loading = art.dialog.loading("正在加载", 120000);
+                        $(loadingtip).show();
+                        $(loadingtip).text("正在加载...")
+                        // loading = art.dialog.loading("正在加载", 120000);
                     }
                 },
                 complete: function (XMLHttpRequest, status) {
                     if (isShowLoading) {
-                        loading.close();
+                        $(loadingtip).hide();
+                        // loading.close();
                     }
                     if (status == 'timeout') {
                         art.dialog.tips("网络请求超时,请重新打开页面");
@@ -1322,7 +1325,6 @@
                 dataType: "json",
                 success: function (d) {
 
-
                     p_d.close();
                     var file = $(_this)
                     file.after(file.clone().val(""));
@@ -1331,7 +1333,6 @@
                     if (d.result == resultType.success) {
 
                         var imgObject = d.data;
-
 
 
                         if (imgObject.originalPath.length > 0) {
@@ -1345,7 +1346,7 @@
                             }
 
                             $(comefrom).find('img').attr("bigsrc", imgObject.originalPath);
-                            $(comefrom).find("input[type=hidden]").val(imgObject.originalPath);//上传成功后把新文件名保存到hidden控件中
+                            $($(comefrom).find("input[type=hidden]")[0]).val(imgObject.originalPath);//上传成功后把新文件名保存到hidden控件中
 
                             _success(d);
                         }
@@ -1709,6 +1710,7 @@ $(document).ready(function () {
     $("#btn_close,.btn-close,.dialog-close").on("click", function () {
         $.lumos.closeDialog();
     });
+
 
 });
 

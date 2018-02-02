@@ -210,6 +210,7 @@
     <Compile Include="Controllers\Biz\PosMachineController.cs" />
     <Compile Include="Controllers\Biz\ProductController.cs" />
     <Compile Include="Controllers\Biz\ReportController.cs" />
+    <Compile Include="Controllers\Biz\ServiceFeeController.cs" />
     <Compile Include="Controllers\Biz\TalentDemandController.cs" />
     <Compile Include="Controllers\Biz\TestController.cs" />
     <Compile Include="Controllers\Biz\TransactionsController.cs" />
@@ -296,6 +297,7 @@
     <Compile Include="Models\Biz\Report\ReportModel.cs" />
     <Compile Include="Models\Biz\Report\SalesmanPosViewModel.cs" />
     <Compile Include="Models\Biz\Report\WithdrawViewModel.cs" />
+    <Compile Include="Models\Biz\ServiceFee\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\TalentDemand\TalentDemandSearchCondition.cs" />
     <Compile Include="Models\Biz\TalentDemand\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\TalentDemand\VerifyOrderViewModel.cs" />
@@ -1310,7 +1312,8 @@
     <Content Include="Views\Biz\ApplyLossAssess\List.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\VerifyOrder.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\VerifyOrderList.cshtml" />
-    <Content Include="Views\PosMachine\ReSetNoActive.cshtml" />
+    <Content Include="Views\Biz\PosMachine\ReSetNoActive.cshtml" />
+    <Content Include="Views\Biz\ServiceFee\Details.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -1336,7 +1339,7 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\toolbar\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\wysiwygarea\" />
-    <Folder Include="Views\TalentDemand\" />
+    <Folder Include="Views\ServiceFee\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -1430,7 +1433,6 @@
     <Content Include="Views\Biz\CarClaim\List.cshtml" />
     <Content Include="Views\Biz\CarClaim\Details.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\Details.cshtml" />
-    <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Views\Biz\Merchant\PrimaryAudit.cshtml" />
     <Content Include="Views\Biz\Merchant\SeniorAuditList.cshtml" />
     <Content Include="Views\Biz\Merchant\SeniorAudit.cshtml" />

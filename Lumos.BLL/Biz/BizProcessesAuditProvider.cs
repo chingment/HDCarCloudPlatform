@@ -701,7 +701,7 @@ namespace Lumos.BLL
                                 bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InVerifyOrder;
                                 bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.TalentDemandDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, null);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.TalentDemandDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
                             }
 
                         }
@@ -712,7 +712,7 @@ namespace Lumos.BLL
                             {
                                 bizProcessesAudit.Auditor = operater;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.TalentDemandDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, null);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.TalentDemandDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
 
                             }
 
@@ -723,7 +723,7 @@ namespace Lumos.BLL
                             bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.ClientCancle;
                             bizProcessesAudit.Auditor = operater;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, null);
+                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
 
                         }
                         else if (changestatus == Enumeration.TalentDemandDealtStatus.StaffCancle)
@@ -732,7 +732,7 @@ namespace Lumos.BLL
                             bizProcessesAudit.Auditor = operater;
                             bizProcessesAudit.EndTime = this.DateTime;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, null);
+                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
                         }
                         else if (changestatus == Enumeration.TalentDemandDealtStatus.Complete)
                         {
@@ -740,7 +740,7 @@ namespace Lumos.BLL
                             bizProcessesAudit.Auditor = operater;
                             bizProcessesAudit.EndTime = this.DateTime;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, null);
+                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
 
                         }
                     }
@@ -816,7 +816,7 @@ namespace Lumos.BLL
                                 bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder;
                                 bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, null);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
                             }
 
                         }
@@ -827,7 +827,7 @@ namespace Lumos.BLL
                             {
                                 bizProcessesAudit.Auditor = operater;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, null);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
 
                             }
 
@@ -838,7 +838,7 @@ namespace Lumos.BLL
                             bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.ClientCancle;
                             bizProcessesAudit.Auditor = operater;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, null);
+                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
 
                         }
                         else if (changestatus == Enumeration.ApplyLossAssessDealtStatus.StaffCancle)
@@ -847,7 +847,7 @@ namespace Lumos.BLL
                             bizProcessesAudit.Auditor = operater;
                             bizProcessesAudit.EndTime = this.DateTime;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, null);
+                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
                         }
                         else if (changestatus == Enumeration.ApplyLossAssessDealtStatus.Complete)
                         {
@@ -855,7 +855,7 @@ namespace Lumos.BLL
                             bizProcessesAudit.Auditor = operater;
                             bizProcessesAudit.EndTime = this.DateTime;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, null);
+                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
 
                         }
                     }

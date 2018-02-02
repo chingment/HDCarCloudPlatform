@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lumos.BLL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,5 +19,7 @@ namespace WebAppApi.Models.Account
         public List<CarInsCompanyModel> CarInsCompany { get; set; }
 
         public List<TalentDemandWorkJobModel> TalentDemandWorkJob { get; set; }
+
+        public OrderConfirmInfo OrderInfo { get; set; }
     }
 }

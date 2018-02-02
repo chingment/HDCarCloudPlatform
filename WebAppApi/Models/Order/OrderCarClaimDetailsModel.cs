@@ -53,26 +53,26 @@ namespace WebAppApi.Models.Order
 
         public string StatusName { get; set; }
 
-        public DateTime SubmitTime { get; set; }
+        public string SubmitTime { get; set; }
 
-        public DateTime? CompleteTime { get; set; }
+        public string CompleteTime { get; set; }
 
-        public DateTime? CancleTime { get; set; }
+        public string CancleTime { get; set; }
 
-        public DateTime? PayTime { get; set; }
+        public string PayTime { get; set; }
 
         public string EstimateListImgUrl { get; set; }
 
         public MerchantModel HandMerchant { get; set; }
 
 
-        public decimal AccessoriesPrice { get; set; }
+        public string AccessoriesPrice { get; set; }
 
-        public decimal WorkingHoursPrice { get; set; }
+        public string WorkingHoursPrice { get; set; }
 
-        public decimal EstimatePrice { get; set; }
+        public string EstimatePrice { get; set; }
 
-        public decimal Price { get; set; }
+        public string Price { get; set; }
 
         public string Remarks { get; set; }
     }

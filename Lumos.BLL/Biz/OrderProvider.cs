@@ -928,7 +928,7 @@ namespace Lumos.BLL
                         l_orderToTalentDemand.FollowStatus = 1;
 
 
-                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员派单完成", this.DateTime);
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.TalentDemandDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员核实正确", this.DateTime);
 
                         BizFactory.BizProcessesAudit.ChangeTalentDemandDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.TalentDemandDealtStatus.Complete, "核实正确");
 
@@ -1055,7 +1055,7 @@ namespace Lumos.BLL
                         l_orderToApplyLossAssess.FollowStatus = 1;
 
 
-                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员派单完成", this.DateTime);
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员核实正确", this.DateTime);
 
                         BizFactory.BizProcessesAudit.ChangeApplyLossAssessDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.ApplyLossAssessDealtStatus.Complete, "核实正确");
 

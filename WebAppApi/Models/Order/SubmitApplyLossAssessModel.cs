@@ -14,5 +14,7 @@ namespace WebAppApi.Models.Order
         public int PosMachineId { get; set; }
 
         public int InsuranceCompanyId { get; set; }
+
+        public bool IsAgreeService { get; set; }
     }
 }

@@ -77,6 +77,7 @@ namespace WebBack.Controllers.Biz
                     item.ContactPhoneNumber,
                     item.InsuranceCompanyId,
                     item.InsuranceCompanyName,
+                    item.ApplyTime,
                     Status = item.Status.GetCnName()
                 });
             }
@@ -96,7 +97,7 @@ namespace WebBack.Controllers.Biz
                          join o in CurrentDb.OrderToApplyLossAssess on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.TalentDemand
+                         where b.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess
 
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.InsuranceCompanyId, o.InsuranceCompanyName, o.ApplyTime, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
@@ -134,6 +135,7 @@ namespace WebBack.Controllers.Biz
                     item.ContactPhoneNumber,
                     item.InsuranceCompanyId,
                     item.InsuranceCompanyName,
+                    item.ApplyTime,
                     DealtStatus = item.Status
                 });
             }

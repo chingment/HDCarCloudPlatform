@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
-        private string host = "http://112.74.179.185";
+        private string host = "http://localhost:16665";
+        //private string host = "http://112.74.179.185";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -123,21 +123,21 @@ namespace WebAppApi.Controllers
             string passWord = "123456";
             string newPassWord = "888888";
             string deviceId = "87377332911A215";
-            int userId = 1200;
-            int merchantId = 231;
-            int posMachineId = 217;
+            int userId = 1010;
+            int merchantId = 3;
+            int posMachineId = 43;
 
 
-           // model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
-            //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-            //model.Add("获取主页数据", GetAccoutHome(userId, merchantId));
+            model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
+            model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+            model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             //model.Add("登录接口", Login(userName, passWord, deviceId));
 
-            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D180125112400000947", Enumeration.OrderPayWay.Wechat));
-            model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180125112400000947", Enumeration.OrderPayWay.Alipay));
-            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D180125112400000947"));
+           // model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D180125112400000947", Enumeration.OrderPayWay.Wechat));
+           // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180125112400000947", Enumeration.OrderPayWay.Alipay));
+           // model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D180125112400000947"));
 
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
@@ -320,12 +320,12 @@ namespace WebAppApi.Controllers
         }
 
 
-        public string GetAccoutHome(int userId, int merchantId)
+        public string GetAccoutHome(int userId, int merchantId,int posMachineId)
         {
             Dictionary<string, string> parames = new Dictionary<string, string>();
             parames.Add("userId", userId.ToString());
             parames.Add("merchantId", merchantId.ToString());
-
+            parames.Add("posMachineId", posMachineId.ToString());
             string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
 
             Dictionary<string, string> headers = new Dictionary<string, string>();
@@ -333,7 +333,7 @@ namespace WebAppApi.Controllers
             headers.Add("timestamp", timespan.ToString());
             headers.Add("sign", signStr);
             HttpUtil http = new HttpUtil();
-            string result = http.HttpGet("" + host + "/api/Account/Home?userId=" + userId + "&merchantId=" + merchantId, headers);
+            string result = http.HttpGet("" + host + "/api/Account/Home?userId=" + userId + "&merchantId=" + merchantId+ "&posMachineId="+ posMachineId, headers);
 
             return result;
 

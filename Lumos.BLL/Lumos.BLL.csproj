@@ -90,6 +90,7 @@
     <Compile Include="Biz\PayProvider.cs" />
     <Compile Include="Biz\PosMachineProvider.cs" />
     <Compile Include="Biz\ProductProvider.cs" />
+    <Compile Include="Biz\Task\TaskForMerchant.cs" />
     <Compile Include="Sdk\FangWeiProvider.cs" />
     <Compile Include="Biz\SmsProvider.cs" />
     <Compile Include="Biz\Task\BaseProgram.cs" />

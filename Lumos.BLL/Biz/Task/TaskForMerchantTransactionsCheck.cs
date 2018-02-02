@@ -12,20 +12,8 @@ using System.Transactions;
 
 namespace Lumos.BLL.Biz.Task
 {
-    class TaskForMerchantTransactionsCheck : BaseProvider, ITask
+    public class TaskForMerchantTransactionsCheck : BaseProvider, ITask
     {
-
-        public string BulidOpendId(string merchantCode, string key, string secret)
-        {
-
-            byte[] result = Encoding.Default.GetBytes(merchantCode + key + secret);    //tbPass为输入密码的文本框  
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] output = md5.ComputeHash(result);
-            string s_output = BitConverter.ToString(output).Replace("-", "");
-
-            return s_output;
-        }
-
         public CustomJsonResult Run()
         {
             CustomJsonResult result = new CustomJsonResult();

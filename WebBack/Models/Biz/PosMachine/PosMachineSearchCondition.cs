@@ -16,5 +16,7 @@ namespace WebBack.Models.Biz.PosMachine
         public string TerminalNumber { get; set; }
 
         public string NoInDeviceIds { get; set; }
+
+        public int AgentId { get; set; }
 }
 }

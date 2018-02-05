@@ -11,41 +11,36 @@ namespace Lumos.BLL
 {
     public class ApplyPosProvider : BaseProvider
     {
-        public CustomJsonResult Apply(int operater, int salesmanId, int[] merchantPosMachineIds)
+        public CustomJsonResult Apply(int operater,int agentId, int salesmanId, int[] posMachineIds)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                if (merchantPosMachineIds != null)
+                if (posMachineIds != null)
                 {
+                    var salesman = CurrentDb.SysSalesmanUser.Where(m => m.Id == salesmanId).FirstOrDefault();
+                    var agent = CurrentDb.SysAgentUser.Where(m => m.Id == agentId).FirstOrDefault();
 
-                    foreach (var id in merchantPosMachineIds)
+                    foreach (var id in posMachineIds)
                     {
-                        var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.Id == id).FirstOrDefault();
-                        var merchant = CurrentDb.Merchant.Where(m => m.Id == merchantPosMachine.MerchantId).FirstOrDefault();
-                        if (merchant.SalesmanId != null)
-                        {
-                            var salesman = CurrentDb.SysSalesmanUser.Where(m => m.Id == merchant.SalesmanId.Value).FirstOrDefault();
-                            var posMachine = CurrentDb.PosMachine.Where(m => m.Id == merchantPosMachine.PosMachineId).FirstOrDefault();
-                            return new CustomJsonResult(ResultType.Failure, string.Format("POS机({0})已被业务员({1})领用，请移除后再次确定提交", posMachine.DeviceId, salesman.FullName));
-                        }
-
-                        merchantPosMachine.Mender = operater;
-                        merchantPosMachine.LastUpdateTime = this.DateTime;
-
-
-                        merchant.SalesmanId = salesmanId;
-                        merchant.Mender = operater;
-                        merchant.LastUpdateTime = this.DateTime;
+                        var posMachine = CurrentDb.PosMachine.Where(m => m.Id == id).FirstOrDefault();
+                        posMachine.AgentId = agent.Id;
+                        posMachine.AgentName = agent.FullName;
+                        posMachine.SalesmanId = salesman.Id;
+                        posMachine.SalesmanName = salesman.FullName;
+                        posMachine.Mender = operater;
+                        posMachine.LastUpdateTime = this.DateTime;
 
                         CurrentDb.SaveChanges();
 
                         SalesmanApplyPosRecord salesmanApplyPosRecord = new SalesmanApplyPosRecord();
-                        salesmanApplyPosRecord.MerchantId = merchantPosMachine.MerchantId;
-                        salesmanApplyPosRecord.UserId = merchantPosMachine.UserId;
-                        salesmanApplyPosRecord.PosMachineId = merchantPosMachine.PosMachineId;
-                        salesmanApplyPosRecord.SalesmanId = salesmanId;
+                        salesmanApplyPosRecord.PosMachineId = posMachine.Id;
+                        salesmanApplyPosRecord.PosMachineDeviceId = posMachine.DeviceId;
+                        salesmanApplyPosRecord.AgentId = agent.Id;
+                        salesmanApplyPosRecord.AgentName = agent.FullName;
+                        salesmanApplyPosRecord.SalesmanId = salesman.Id;
+                        salesmanApplyPosRecord.SalesmanName = salesman.FullName;
                         salesmanApplyPosRecord.CreateTime = this.DateTime;
                         salesmanApplyPosRecord.Creator = operater;
                         CurrentDb.SalesmanApplyPosRecord.Add(salesmanApplyPosRecord);

@@ -17,11 +17,18 @@ namespace Lumos.Entity
 
         public int SalesmanId { get; set; }
 
-        public int UserId { get; set; }
+        [MaxLength(128)]
+        public string SalesmanName { get; set; }
 
-        public int MerchantId { get; set; }
+        public int AgentId { get; set; }
+
+        [MaxLength(128)]
+        public string AgentName { get; set; }
 
         public int PosMachineId { get; set; }
+
+        [MaxLength(128)]
+        public string PosMachineDeviceId { get; set; }
 
         public int Creator { get; set; }
 

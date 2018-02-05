@@ -316,9 +316,28 @@ namespace Lumos.BLL
                 orderToServiceFee.Mender = operater;
 
 
+                var merchant = CurrentDb.Merchant.Where(m => m.Id == orderToServiceFee.MerchantId).FirstOrDefault();
+                var posMachine = CurrentDb.PosMachine.Where(m => m.Id == orderToServiceFee.PosMachineId).FirstOrDefault();
+
+                if (orderToServiceFee.SalesmanId != null)
+                {
+                    orderToServiceFee.SalesmanId = posMachine.SalesmanId;
+                }
+                if (orderToServiceFee.AgentId != null)
+                {
+                    orderToServiceFee.AgentId = posMachine.AgentId;
+                }
+
                 if (orderToServiceFee.Deposit > 0)
                 {
+                    merchant.SalesmanId = posMachine.SalesmanId;
+                    merchant.AgentId = posMachine.AgentId;
+
+                    posMachine.IsUse = true;
+
                     BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, orderToServiceFee.MerchantId, Enumeration.MerchantAuditStatus.WaitPrimaryAudit, "");
+
+                    CurrentDb.SaveChanges();
                 }
 
 

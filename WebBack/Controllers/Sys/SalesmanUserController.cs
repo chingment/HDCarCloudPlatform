@@ -42,10 +42,11 @@ namespace WebBack.Controllers.Sys
         public JsonResult GetList(SalesmanUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
+                        join p in CurrentDb.SysAgentUser on u.AgentId equals p.Id
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
                         (condition.FullName == null || u.FullName.Contains(condition.FullName)) &&
                         u.IsDelete == false
-                        select new { u.Id, u.UserName, u.FullName, u.Email, u.PhoneNumber, u.CreateTime, u.IsDelete });
+                        select new { u.Id, u.UserName, u.FullName, u.Email, u.PhoneNumber, u.CreateTime, u.IsDelete, AgentName = p.FullName, AgentId = p.Id });
 
             int total = list.Count();
 
@@ -62,10 +63,11 @@ namespace WebBack.Controllers.Sys
         public JsonResult GetSelectList(SalesmanUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
+                        join p in CurrentDb.SysAgentUser on u.AgentId equals p.Id
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
                         (condition.FullName == null || u.FullName.Contains(condition.FullName)) &&
-                        u.IsDelete == false
-                        select new { u.Id, u.UserName, u.FullName, u.Email, u.PhoneNumber, u.CreateTime, u.IsDelete });
+                        u.IsDelete == false 
+                        select new { u.Id, u.UserName, u.FullName, u.Email, u.PhoneNumber, u.CreateTime, u.IsDelete, AgentName = p.FullName, AgentId = p.Id });
 
             int total = list.Count();
 
@@ -84,7 +86,10 @@ namespace WebBack.Controllers.Sys
         public JsonResult Add(AddViewModel model)
         {
             SysSalesmanUser user = new SysSalesmanUser();
-            user.UserName = string.Format("YW{0}", model.SysSalesmanUser.UserName);
+
+            var agent = CurrentDb.SysAgentUser.Where(m => m.Id == model.SysSalesmanUser.AgentId).FirstOrDefault();
+
+            user.UserName = string.Format("{0}{1}", agent.UserName, model.SysSalesmanUser.UserName);
             user.FullName = model.SysSalesmanUser.FullName;
             user.PasswordHash = "888888";
             user.Email = model.SysSalesmanUser.Email;

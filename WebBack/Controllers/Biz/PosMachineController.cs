@@ -150,7 +150,7 @@ namespace WebBack.Controllers.Biz
                         where (fuselageNumber.Length == 0 || p.FuselageNumber.Contains(fuselageNumber)) &&
                                 (deviceId.Length == 0 || p.DeviceId.Contains(deviceId)) &&
                                  (terminalNumber.Length == 0 || p.TerminalNumber.Contains(terminalNumber))
-                        select new { p.Id, p.DeviceId, p.FuselageNumber, p.TerminalNumber, IsUse = (p.IsUse == true ? "是" : "否"), p.CreateTime, p.Version });
+                        select new { p.Id, p.DeviceId, p.FuselageNumber, p.TerminalNumber,p.AgentName, IsUse = (p.IsUse == true ? "是" : "否"), p.CreateTime, p.Version });
 
             int total = list.Count();
 

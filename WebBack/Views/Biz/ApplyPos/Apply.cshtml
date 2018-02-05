@@ -24,7 +24,13 @@
 
             $("#btn_select_merchantPosMachine").click(function () {
 
-                art.dialog.open('../ApplyPos/PosMachineList', {
+                var agentId = $('#Model_AgentId').val();
+                if (agentId == '') {
+                    art.dialog.tips('请先选择业务人员');
+                    return;
+                }
+
+                art.dialog.open('../ApplyPos/PosMachineList?agentId='+agentId, {
                     id: "openDialog565", title: '选择POS机', width: '600px', height: '520px', lock: true, drag: false, cancelVal: '关闭', cancel: true
                 });
 
@@ -81,7 +87,6 @@ function () {
                 mpArr.push(obj);
                 var l_StrRows = "";
                 l_StrRows += "<tr>";
-                l_StrRows += "<td>" + obj.clientCode + "</td>";
                 l_StrRows += "<td>" + obj.deviceId + "</td>";
                 l_StrRows += "<td class=\"operation\">";
                 l_StrRows += "<input name=\"Model.MerchantPosMachineIds\" type=\"hidden\" value=\"" + obj.id + "\"  />";
@@ -115,6 +120,9 @@ function () {
             $('#lbl_FullName').text(obj.fullName);
             $('#lbl_PhoneNumber').text(obj.phoneNumber);
             $('#lbl_Email').text(obj.email);
+            $('#lbl_AgentName').text(obj.agentName);
+            $('#Model_AgentId').val(obj.agentId);
+
         }
 
         //-->
@@ -138,7 +146,6 @@ function () {
         <tr>
             <td class="t">用户名：</td>
             <td class="c">
-
                 <span id="lbl_UserName"></span>
                 <input name="Model.SalesmanId" type="hidden" id="Model_SalesmanId" />
                 <span> <input type="button" class="btn" id="btn_select_salesmanUser" value="选择" dialog-title="选择业务员" /></span>
@@ -146,6 +153,17 @@ function () {
             <td class="t">姓名：</td>
             <td class="c">
                 <span id="lbl_FullName"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">代理商：</td>
+            <td class="c">
+                <input name="Model.AgentId" type="hidden" id="Model_AgentId" />
+                <span id="lbl_AgentName"></span>
+            </td>
+            <td class="t"></td>
+            <td class="c">
+             
             </td>
         </tr>
         <tr>
@@ -171,9 +189,6 @@ function () {
         <thead>
             <tr>
                 <th style="width:45%">
-                    账号
-                </th>
-                <th style="width:45%">
                     设备ID
                 </th>
                 <th style="width:10%" class="operation">
@@ -184,7 +199,7 @@ function () {
         <tbody></tbody>
         <tfoot>
             <tr>
-                <td colspan="3" style="text-align:center;"><span>  <input type="button" class="btn btn-add" id="btn_select_merchantPosMachine" value="选择POS机" /></span></td>
+                <td colspan="2" style="text-align:center;"><span>  <input type="button" class="btn btn-add" id="btn_select_merchantPosMachine" value="选择POS机" /></span></td>
             </tr>
         </tfoot>
     </table>

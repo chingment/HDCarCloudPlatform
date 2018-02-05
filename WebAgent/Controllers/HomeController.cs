@@ -66,7 +66,7 @@ namespace WebAgent.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-            Session["WebBackLoginVerifyCode"] = null;
+            Session["WebAgentLoginVerifyCode"] = null;
             if (Request.IsAuthenticated)
             {
                 if (Request.QueryString["out"] == null)
@@ -92,7 +92,7 @@ namespace WebAgent.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [CheckVerifyCode("WebBackLoginVerifyCode")]
+        [CheckVerifyCode("WebAgentLoginVerifyCode")]
         public JsonResult Login(LoginModel model)
         {
             GoToViewModel gotoViewModel = new GoToViewModel();

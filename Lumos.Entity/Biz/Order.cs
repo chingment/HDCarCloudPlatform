@@ -95,6 +95,10 @@ namespace Lumos.Entity
 
         public string SpbillIp { get; set; }
 
+        public int? SalesmanId { get; set; }
+
+        public int? AgentId { get; set; }
+
         //public bool IsPayQuery { get; set; }
     }
 }

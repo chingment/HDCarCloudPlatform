@@ -31,18 +31,14 @@ namespace Lumos.BLL
                 order.MerchantId = merchant.Id;
                 order.PosMachineId = orderToCarInsure.PosMachineId;
                 order.UserId = merchant.UserId;
+                order.SalesmanId = merchant.SalesmanId ?? 0;
+                order.AgentId = merchant.AgentId ?? 0;
                 order.ProductId = product.Id;
                 order.ProductName = product.Name;
-
-
                 order.ProductType = product.Type;
-
                 order.ClientRequire = orderToCarInsure.ClientRequire;
-
-
                 order.InsuranceCompanyId = orderToCarInsure.InsuranceCompanyId;
                 order.InsuranceCompanyName = orderToCarInsure.InsuranceCompanyName;
-
                 order.CarOwner = orderToCarInsure.CarOwner;
                 order.CarOwnerIdNumber = orderToCarInsure.CarOwnerIdNumber;
                 order.CarOwnerAddress = orderToCarInsure.CarOwnerAddress;
@@ -54,8 +50,6 @@ namespace Lumos.BLL
                 order.CarVechicheType = orderToCarInsure.CarVechicheType;
                 order.CarRegisterDate = orderToCarInsure.CarRegisterDate;
                 order.CarIssueDate = orderToCarInsure.CarIssueDate;
-
-
                 order.InsurePlanId = orderToCarInsure.InsurePlanId;
                 order.CZ_CL_XSZ_ImgUrl = orderToCarInsure.CZ_CL_XSZ_ImgUrl;
                 order.CZ_SFZ_ImgUrl = orderToCarInsure.CZ_SFZ_ImgUrl;
@@ -187,6 +181,7 @@ namespace Lumos.BLL
                 {
                     return new CustomJsonResult(ResultType.Failure, "该订单已经被取消");
                 }
+
 
 
                 l_orderToCarInsure.CarOwner = orderToCarInsure.CarOwner;
@@ -336,6 +331,9 @@ namespace Lumos.BLL
                 //2011为车险理赔
                 var product = CurrentDb.Product.Where(m => m.Id == 2013).FirstOrDefault();
 
+
+                orderToCarClaim.SalesmanId = merchant.SalesmanId ?? 0;
+                orderToCarClaim.AgentId = merchant.AgentId ?? 0;
                 orderToCarClaim.ProductId = product.Id;
                 orderToCarClaim.ProductType = product.Type;
                 orderToCarClaim.ProductName = product.Name;
@@ -484,6 +482,8 @@ namespace Lumos.BLL
 
                         var estimateOrderToCarClaim = new OrderToCarClaim();
                         estimateOrderToCarClaim.RepairsType = l_orderToCarClaim.RepairsType;
+                        estimateOrderToCarClaim.SalesmanId = merchant.SalesmanId ?? 0;
+                        estimateOrderToCarClaim.AgentId = merchant.AgentId ?? 0;
                         estimateOrderToCarClaim.MerchantId = merchant.Id;
                         estimateOrderToCarClaim.PosMachineId = l_orderToCarClaim.PosMachineId;
                         estimateOrderToCarClaim.UserId = merchant.UserId;
@@ -834,7 +834,8 @@ namespace Lumos.BLL
                 //2011为车险理赔
                 var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.TalentDemand).FirstOrDefault();
 
-
+                orderToTalentDemand.SalesmanId = merchant.SalesmanId ?? 0;
+                orderToTalentDemand.AgentId = merchant.AgentId ?? 0;
                 orderToTalentDemand.ProductId = product.Id;
                 orderToTalentDemand.ProductType = product.Type;
                 orderToTalentDemand.ProductName = product.Name;
@@ -964,6 +965,8 @@ namespace Lumos.BLL
 
                 var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.ApplyLossAssess).FirstOrDefault();
 
+                orderToApplyLossAssess.SalesmanId = merchant.SalesmanId ?? 0;
+                orderToApplyLossAssess.AgentId = merchant.AgentId ?? 0;
                 orderToApplyLossAssess.ProductId = product.Id;
                 orderToApplyLossAssess.ProductType = product.Type;
                 orderToApplyLossAssess.ProductName = product.Name;

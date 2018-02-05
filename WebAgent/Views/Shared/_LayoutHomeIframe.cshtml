@@ -124,7 +124,8 @@
             vertical-align: top;
             text-align: center;
         }
-             .tipnumcount2 {
+
+        .tipnumcount2 {
             font-size: 12px;
             color: #fff;
             background: #ff9900;
@@ -261,7 +262,7 @@
                                         <li>
                                             @using (Html.BeginForm("LogOff", "Home", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
                                             {
-                                                @Html.AntiForgeryToken()
+                                                //@Html.AntiForgeryToken()
                                             }
                                             <a href="javascript:document.getElementById('logoutForm').submit()">退出</a>
                                         </li>
@@ -284,32 +285,35 @@
                             <ul class="navmenu-left">
                                 @if (Request.IsAuthenticated)
                                 {
+                                    <li class="parent">
+                                        <span><span class="icon icon_navmenu_level1_common"></span><span>业务员管理</span></span>
+                                        <ul class="children">
 
-                                    var menuLevel1 = from c in menus where c.PId == 1 select c;
-                                    foreach (var menuLevel1Child in menuLevel1)
-                                    {
-                                        <li class="parent">
-                                            <span><span class="icon icon_navmenu_level1_common"></span><span>@menuLevel1Child.Name</span></span>
-                                            <ul class="children">
-                                                @{
-                                                    var menuLevel2 = from c in menus where c.PId == menuLevel1Child.Id select c;
-                                                    if (menuLevel2 != null)
-                                                    {
-                                                        foreach (var menuLevel2Child in menuLevel2)
-                                                        {
-                                                            <li>
-                                                                <a gotopage="@menuLevel2Child.Url" target="iframeMain">
-                                                                    <span class="icon"></span><span>@menuLevel2Child.Name</span>
-                                                                </a>
-                                                            </li>
-                                                        }
-                                                    }
-                                                }
+                                            <li>
+                                                <a gotopage="/SalesmanUser/List" target="iframeMain">
+                                                    <span class="icon"></span><span>业务员设置</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a gotopage="/ApplyPos/List" target="iframeMain">
+                                                    <span class="icon"></span><span>业务员申领POS机登记</span>
+                                                </a>
+                                            </li>
 
-                                            </ul>
-                                        </li>
-                                                        }
-                                                    }
+                                        </ul>
+                                    </li>
+                                    <li class="parent">
+                                        <span><span class="icon icon_navmenu_level1_common"></span><span>POS机管理</span></span>
+                                        <ul class="children">
+
+                                            <li>
+                                                <a gotopage="/PosMachine/List" target="iframeMain">
+                                                    <span class="icon"></span><span>POS机查看</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
                             </ul>
                         </dd>
                         <dd class="content-right">

@@ -1,0 +1,188 @@
+﻿
+@{
+    ViewBag.Title = "Apply";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+
+}
+@section scriptsbyend{
+    <script src="~/Scripts/AreaSelect/public.js"></script>
+    <script type="text/javascript">
+
+
+        $(this).ready(function () {
+
+            $("#btn_select_merchantPosMachine").click(function () {
+
+                art.dialog.open('../ApplyPos/PosMachineList', {
+                    id: "openDialog565", title: '选择POS机', width: '600px', height: '520px', lock: true, drag: false, cancelVal: '关闭', cancel: true
+                });
+
+            });
+
+        });
+
+        function apply() {
+
+            var salesmanId = $('#Model_SalesmanId').val();
+            if (salesmanId == '') {
+                art.dialog.tips('请选择业务员人员');
+                return;
+            }
+
+            if (mpArr.length == 0) {
+                art.dialog.tips('至少选择一台POS机');
+                return;
+            }
+
+            art.dialog.confirm(
+'确定要登记？',
+function () {
+    var postData = $("#form1").serializeArray();
+
+    $.lumos.postJson({
+        url: "../ApplyPos/Apply",
+        data: postData,
+        success: function (d) {
+
+            if (d.result == resultType.success) {
+                $.lumos.parentDialog().listTable.loadData();
+                $.lumos.tips(d.message, true);
+            }
+            else {
+                $.lumos.tips(d.message);
+            }
+
+        }
+    });
+});
+            return false;
+        }
+
+        var mpStruct = { id: "" };
+        var mpArr = [];
+
+        function getPosMachineDetails(obj) {
+
+            var id = $.lumos.jsonHelper.getDetail(mpArr, "id", obj.id);
+
+            if (id == null) {
+
+                mpArr.push(obj);
+                var l_StrRows = "";
+                l_StrRows += "<tr>";
+                l_StrRows += "<td>" + obj.deviceId + "</td>";
+                l_StrRows += "<td class=\"operation\">";
+                l_StrRows += "<input name=\"Model.PosMachineIds\" type=\"hidden\" value=\"" + obj.id + "\"  />";
+                l_StrRows += "<a href=\"javascript:void(0)\" class=\"a-btn\" onclick=\"deletePosMachine(this," + obj.id + ")\">移除</a>"
+                l_StrRows += "</td>";
+                l_StrRows += "</td>";
+                l_StrRows += "</tr>";
+
+
+                $('#list_pos_table tbody').append(l_StrRows)
+            }
+        }
+
+        function deletePosMachine(o, id) {
+
+            art.dialog.confirm(
+'确定要移除设备ID为的POS机？',
+function () {
+    $(o).parent().parent().remove();
+
+    $.lumos.jsonHelper.del(mpArr, "id", id);
+
+    return true;
+});
+        }
+
+        function getSalesmanUserDetails(obj) {
+
+            $('#Model_SalesmanId').val(obj.id);
+            $('#lbl_UserName').text(obj.userName);
+            $('#lbl_FullName').text(obj.fullName);
+            $('#lbl_PhoneNumber').text(obj.phoneNumber);
+            $('#lbl_Email').text(obj.email);
+        }
+
+        //-->
+    </script>
+}
+
+<form id="form1">
+    @Html.AntiForgeryToken()
+
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>业务员信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">用户名：</td>
+            <td class="c">
+
+                <span id="lbl_UserName"></span>
+                <input name="Model.SalesmanId" type="hidden" id="Model_SalesmanId" />
+                <span> <input type="button" class="btn" id="btn_select_salesmanUser" value="选择" dialog-title="选择业务员" /></span>
+            </td>
+            <td class="t">姓名：</td>
+            <td class="c">
+                <span id="lbl_FullName"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">手机：</td>
+            <td class="c">
+                <span id="lbl_PhoneNumber"></span>
+            </td>
+            <td class="t">邮件：</td>
+            <td class="c">
+                <span id="lbl_Email"></span>
+            </td>
+        </tr>
+    </table>
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>POS机信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table id="list_pos_table" class="list-tb" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:45%">
+                    设备ID
+                </th>
+                <th style="width:10%" class="operation">
+                    操作
+                </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" style="text-align:center;"><span>  <input type="button" class="btn btn-add" id="btn_select_merchantPosMachine" value="选择POS机" /></span></td>
+            </tr>
+        </tfoot>
+    </table>
+</form>
+

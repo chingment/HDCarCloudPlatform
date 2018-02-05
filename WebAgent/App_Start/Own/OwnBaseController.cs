@@ -231,7 +231,7 @@ namespace WebAgent
                     if (Request.IsAuthenticated)
                     {
                         var userId = User.Identity.GetUserId<int>();
-                        var user = CurrentDb.SysStaffUser.Where(m => m.Id == userId).FirstOrDefault();
+                        var user = CurrentDb.SysAgentUser.Where(m => m.Id == userId).FirstOrDefault();
                         if (user == null)
                         {
                             Response.Redirect(OwnWebSettingUtils.GetLoginPage() + "?out=0");

@@ -125,8 +125,7 @@ namespace WebBack.Controllers.Biz
                          join c in CurrentDb.OrderToCarInsure on o.Id equals c.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
                          where o.PId == null && c.InsuranceCompanyName != null &&
-                         o.ProductType == Enumeration.ProductType.InsureForCarForInsure
-                         &&
+
                          o.Status == Enumeration.OrderStatus.WaitPay
                          &&
                          (clientCode.Length == 0 || m.ClientCode.Contains(clientCode)) &&

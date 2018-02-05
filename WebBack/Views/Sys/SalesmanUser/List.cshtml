@@ -21,10 +21,10 @@
                 var l_StrRows = "";
                 l_StrRows += "<tr>";
                 l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
-                l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.userName + "\"   >" + p_row.userName + "</td>";
+                l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.agentName + "\"   >" + p_row.agentName + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.userName + "\"   >" + p_row.userName + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.fullName + "\">" + p_row.fullName + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.phoneNumber + "\">" + p_row.phoneNumber + "</td>";
-                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.email + "\">" + p_row.email + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
                 l_StrRows += "<td class=\"operation\">";
                 l_StrRows += l_Strlimt;
@@ -98,6 +98,9 @@
                         序号
                     </th>
                     <th style="width:15%">
+                        代理商
+                    </th>
+                    <th style="width:15%">
                         用户名
                     </th>
                     <th style="width:15%">
@@ -105,9 +108,6 @@
                     </th>
                     <th style="width:15%">
                         手机
-                    </th>
-                    <th style="width:15%">
-                        邮箱
                     </th>
                     <th style="width:15%">
                         创建时间

@@ -9,5 +9,7 @@ namespace WebBack.Models.Sys.SalesmanUser
     {
         public string UserName { get; set; }
         public string FullName { get; set; }
+
+        public int AgentId { get; set; }
     }
 }

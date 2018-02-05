@@ -36,15 +36,10 @@ namespace WebBack.Controllers.Biz
 
             string deviceId = condition.DeviceId.ToSearchString();
             string userName = condition.UserName.ToSearchString();
-            var list = (from mp in CurrentDb.SalesmanApplyPosRecord
-                        join p in CurrentDb.PosMachine on mp.PosMachineId equals p.Id
-                        join m in CurrentDb.Merchant on mp.MerchantId equals m.Id
-
-                        join u in CurrentDb.SysSalesmanUser on mp.SalesmanId equals u.Id
+            var list = (from p in CurrentDb.SalesmanApplyPosRecord
                         where
-                                (deviceId.Length == 0 || p.DeviceId.Contains(deviceId)) &&
-                                  (userName.Length == 0 || m.ClientCode.Contains(userName))
-                        select new { m.ClientCode, m.YYZZ_Name, p.Id, p.DeviceId, u.FullName, mp.CreateTime });
+                                (deviceId.Length == 0 || p.PosMachineDeviceId.Contains(deviceId))
+                        select new { p.Id, p.PosMachineDeviceId, p.SalesmanName, p.AgentName, p.CreateTime });
 
             int total = list.Count();
 
@@ -65,14 +60,13 @@ namespace WebBack.Controllers.Biz
 
             string deviceId = condition.DeviceId.ToSearchString();
             string userName = condition.UserName.ToSearchString();
-            var list = (from mp in CurrentDb.MerchantPosMachine
-                        join m in CurrentDb.Merchant on mp.MerchantId equals m.Id
-                        join p in CurrentDb.PosMachine on mp.PosMachineId equals p.Id
+            var list = (from p in CurrentDb.PosMachine
                         where (deviceId.Length == 0 || p.DeviceId.Contains(deviceId)) &&
-                                (userName.Length == 0 || m.ClientCode.Contains(userName)) &&
-                                m.SalesmanId == null&&
+                                p.SalesmanId == null &&
                                 !arrNoInDeviceId.Contains(p.DeviceId)
-                        select new { mp.Id, m.ClientCode, p.FuselageNumber, p.TerminalNumber, p.CreateTime, p.Version, p.DeviceId });
+                                &&
+                                p.AgentId == condition.AgentId
+                        select new { p.Id, p.FuselageNumber, p.TerminalNumber, p.CreateTime, p.Version, p.DeviceId, p.AgentId });
 
             int total = list.Count();
 
@@ -92,7 +86,7 @@ namespace WebBack.Controllers.Biz
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            result = BizFactory.ApplyPos.Apply(this.CurrentUserId, model.SalesmanId, model.MerchantPosMachineIds);
+            result = BizFactory.ApplyPos.Apply(this.CurrentUserId, model.AgentId, model.SalesmanId, model.MerchantPosMachineIds);
 
             return result;
         }

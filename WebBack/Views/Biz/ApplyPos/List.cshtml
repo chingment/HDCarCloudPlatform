@@ -22,9 +22,9 @@
                 var l_StrRows = "";
                 l_StrRows += "<tr>";
                 l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
-                l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.fullName + "\"   >" + p_row.fullName + "</td>";
-                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\"   >" + p_row.clientCode + "</td>";
-                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.deviceId + "\">" + p_row.deviceId + "</td>";
+                l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.salesmanName + "\"   >" + p_row.salesmanName + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.agentName + "\"   >" + p_row.agentName + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.posMachineDeviceId + "\">" + p_row.posMachineDeviceId + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
                 l_StrRows += "</tr>";
                 return l_StrRows;
@@ -104,7 +104,7 @@
                         业务员
                     </th>
                     <th style="width:15%">
-                        账号
+                        代理商
                     </th>
                     <th style="width:15%">
                         设备ID

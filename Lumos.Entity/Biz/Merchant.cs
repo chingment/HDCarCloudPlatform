@@ -93,6 +93,8 @@ namespace Lumos.Entity
 
         public int? SalesmanId { get; set; }
 
+        public int? AgentId { get;set; }
+
         public int? FollowUserId { get; set; }
     }
 }

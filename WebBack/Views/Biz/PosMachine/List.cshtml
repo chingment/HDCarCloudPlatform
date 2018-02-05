@@ -24,6 +24,7 @@
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.fuselageNumber + "\"   >" + p_row.fuselageNumber + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.terminalNumber + "\">" + p_row.terminalNumber + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.version + "\">" + p_row.version + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.agentName + "\">" + p_row.agentName + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.isUse + "\">" + p_row.isUse + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
                 l_StrRows += "<td class=\"operation\">";
@@ -124,13 +125,16 @@
                     <th style="width:15%">
                         终端号
                     </th>
-                    <th style="width:15%">
+                    <th style="width:10%">
                         版本号
+                    </th>
+                    <th style="width:10%">
+                        代理商
                     </th>
                     <th style="width:10%">
                         已使用
                     </th>
-                    <th style="width:15%">
+                    <th style="width:10%">
                         登记时间
                     </th>
                     <th style="width:10%" class="operation">
@@ -141,7 +145,7 @@
             <tbody></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="8">
+                    <td colspan="9">
                         <div class="pull-left">
                             <span class="load-tip"></span>
                         </div>

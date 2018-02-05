@@ -42,23 +42,23 @@
 
                         if (obj.productType == 2011 || obj.productType == 2012) {
                             url = '/Biz/CarInsureOffer/Details?id=' + obj.id;
-                            title = '查看投保订单';
+                            title = '查看订单';
                         }
                         else if (obj.productType == 2013) {
                             url = '/Biz/CarClaim/Details?id=' + obj.id;
-                            title = '查看理赔订单';
+                            title = '查看订单';
                         }
                         else if (obj.productType == 401) {
                             url = '/Biz/TalentDemand/Details?id=' + obj.id;
-                            title = '查看理赔订单';
+                            title = '查看订单';
                         }
                         else if (obj.productType == 501) {
                             url = '/Biz/ApplyLossAssess/Details?id=' + obj.id;
-                            title = '查看理赔订单';
+                            title = '查看订单';
                         }
                         else if (obj.productType == 301) {
                             url = '/Biz/ServiceFee/Details?id=' + obj.id;
-                            title = '查看理赔订单';
+                            title = '查看订单';
                         }
                         art.dialog.open(url, {
                             id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true

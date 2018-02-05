@@ -23,7 +23,6 @@
                     l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
                     l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.sn + "\"   >" + p_row.sn + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.productName + "\">" + p_row.productName + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.insuranceCompanyName + "\">" + p_row.insuranceCompanyName + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\">" + p_row.clientCode + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.status + "\">" + p_row.status + "</td>";
@@ -40,20 +39,30 @@
                         var title = "";
 
                         if (obj.productType == 2011 || obj.productType == 2012) {
-                            url = '../CarInsureOffer/Details?id=' + obj.id;
-                            title = '确认支付投保订单';
+                            url = '/Biz/CarInsureOffer/Details?id=' + obj.id;
+                            title = '查看订单';
                         }
                         else if (obj.productType == 2013) {
-                            url = '../CarClaim/Details?id=' + obj.id;
-                            title = '确认支付理赔订单';
+                            url = '/Biz/CarClaim/Details?id=' + obj.id;
+                            title = '查看订单';
+                        }
+                        else if (obj.productType == 401) {
+                            url = '/Biz/TalentDemand/Details?id=' + obj.id;
+                            title = '查看订单';
+                        }
+                        else if (obj.productType == 501) {
+                            url = '/Biz/ApplyLossAssess/Details?id=' + obj.id;
+                            title = '查看订单';
+                        }
+                        else if (obj.productType == 301) {
+                            url = '/Biz/ServiceFee/Details?id=' + obj.id;
+                            title = '查看订单';
                         }
 
                         art.dialog.open(url, {
                             id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '确认已支付', ok: function () {
 
-
-
-                                var message = "订单号：" + obj.sn + "<br/>车牌号码：" + obj.carPlateNo + "<br/>车主姓名：" + obj.carOwner + "<br/>保险公司：" + obj.insuranceCompanyName + "<br/>保单保费：" + obj.price + "<br/>确定该客户已经支付保单吗？一旦确认将无法变更结果，请慎重执行";
+                                var message = "订单号：" + obj.sn + "，确定该客户已经支付保单吗？一旦确认将无法变更结果，请慎重执行";
                                 art.dialog.confirm(message, function () {
                                     $.lumos.postJson({
                                         url: "../Order/ConfirmPay",
@@ -124,9 +133,6 @@
                         订单号
                     </th>
                     <th style="width:15%">
-                        保险公司
-                    </th>
-                    <th style="width:15%">
                         类型
                     </th>
                     <th style="width:15%">
@@ -149,7 +155,7 @@
             <tbody></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="9">
+                    <td colspan="8">
                         <div class="pull-left">
                             <span class="load-tip"></span>
                         </div>

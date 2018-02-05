@@ -231,9 +231,7 @@ namespace Lumos.BLL
                         switch (order.ProductType)
                         {
                             case Enumeration.ProductType.PosMachineServiceFee:
-
-                                //result = PayServiceFeeCompleted(operater, order.Sn);
-
+                                result = PayServiceFeeCompleted(operater, order.Sn);
                                 break;
                         }
 
@@ -253,7 +251,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.ErrorFormat("订单号({0})结果反馈发生异常，易办事调用原因：{1}", notifyLog.OrderSn, ex.StackTrace);
+                Log.ErrorFormat("后台订单支付确认订单号({0})结果反馈发生异常，原因：{1}", notifyLog.OrderSn, ex.StackTrace);
 
                 result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付失败");
             }

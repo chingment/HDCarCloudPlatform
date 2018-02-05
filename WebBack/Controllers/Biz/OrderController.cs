@@ -122,10 +122,9 @@ namespace WebBack.Controllers.Biz
             Enumeration.OrderStatus status = condition.Status;
 
             var query = (from o in CurrentDb.Order
-                         join c in CurrentDb.OrderToCarInsure on o.Id equals c.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where o.PId == null && c.InsuranceCompanyName != null &&
-
+                         where
+                       
                          o.Status == Enumeration.OrderStatus.WaitPay
                          &&
                          (clientCode.Length == 0 || m.ClientCode.Contains(clientCode)) &&
@@ -133,14 +132,9 @@ namespace WebBack.Controllers.Biz
                                  (sn.Length == 0 || o.Sn.Contains(sn))
 
 
-                         select new { o.Id, m.ClientCode, m.YYZZ_Name, o.Sn, o.ProductType, o.ProductName, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, o.ContactPhoneNumber, o.Contact, c.InsuranceCompanyName, c.CarOwner, c.CarPlateNo }
+                         select new { o.Id, m.ClientCode, m.YYZZ_Name, o.Sn, o.ProductType, o.ProductName, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, o.ContactPhoneNumber, o.Contact}
                         );
 
-
-            if (status != Enumeration.OrderStatus.Unknow)
-            {
-                query = query.Where(m => m.Status == status && (((int)m.ProductType).ToString().StartsWith("201")));
-            }
 
             int total = query.Count();
 
@@ -164,9 +158,6 @@ namespace WebBack.Controllers.Biz
                     item.ProductType,
                     item.SubmitTime,
                     Status = item.Status.GetCnName(),
-                    item.InsuranceCompanyName,
-                    item.CarPlateNo,
-                    item.CarOwner,
                     item.Price
                 });
             }

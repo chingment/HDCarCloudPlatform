@@ -66,7 +66,7 @@ namespace WebBack.Controllers.Sys
                         join p in CurrentDb.SysAgentUser on u.AgentId equals p.Id
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
                         (condition.FullName == null || u.FullName.Contains(condition.FullName)) &&
-                        u.IsDelete == false 
+                        u.IsDelete == false
                         select new { u.Id, u.UserName, u.FullName, u.Email, u.PhoneNumber, u.CreateTime, u.IsDelete, AgentName = p.FullName, AgentId = p.Id });
 
             int total = list.Count();
@@ -90,6 +90,7 @@ namespace WebBack.Controllers.Sys
             var agent = CurrentDb.SysAgentUser.Where(m => m.Id == model.SysSalesmanUser.AgentId).FirstOrDefault();
 
             user.UserName = string.Format("{0}{1}", agent.UserName, model.SysSalesmanUser.UserName);
+            user.AgentId = agent.Id;
             user.FullName = model.SysSalesmanUser.FullName;
             user.PasswordHash = "888888";
             user.Email = model.SysSalesmanUser.Email;

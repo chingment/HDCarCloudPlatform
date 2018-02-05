@@ -22,6 +22,8 @@ namespace Lumos.BLL
 
         public string OrderSn { get; set; }
 
+        public Enumeration.ProductType productType { get; set; }
+
         public string productName { get; set; }
 
         public string transName { get; set; }
@@ -281,7 +283,7 @@ namespace Lumos.BLL
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未在就绪支付状态");
                 }
 
-                var UplinkFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.Uplink).FirstOrDefault();
+                var UplinkFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.HaoYiLian).FirstOrDefault();
                 UplinkFund.Balance += orderToServiceFee.Price;
                 UplinkFund.Mender = operater;
                 UplinkFund.LastUpdateTime = this.DateTime;
@@ -302,12 +304,17 @@ namespace Lumos.BLL
 
                 var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.MerchantId == orderToServiceFee.MerchantId && m.PosMachineId == orderToServiceFee.PosMachineId).FirstOrDefault();
                 merchantPosMachine.ExpiryTime = this.DateTime.AddYears(1);
-                merchantPosMachine.ActiveTime = this.DateTime;
+
+                if (merchantPosMachine.ActiveTime == null)
+                {
+                    merchantPosMachine.ActiveTime = this.DateTime;
+                }
+
                 merchantPosMachine.Status = Enumeration.MerchantPosMachineStatus.Normal;
                 merchantPosMachine.LastUpdateTime = this.DateTime;
                 merchantPosMachine.Mender = operater;
 
-
+                orderToServiceFee.ExpiryTime = this.DateTime.AddYears(1);
                 orderToServiceFee.Status = Enumeration.OrderStatus.Completed;
                 orderToServiceFee.PayTime = this.DateTime;
                 orderToServiceFee.CompleteTime = this.DateTime;

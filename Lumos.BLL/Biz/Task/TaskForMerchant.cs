@@ -15,7 +15,9 @@ namespace Lumos.BLL.Biz.Task
             CustomJsonResult result = new CustomJsonResult();
 
 
-            var merchantPosMachines = CurrentDb.MerchantPosMachine.Where(m => m.ExpiryTime < DateTime.Now).ToList();
+            var merchantPosMachines = CurrentDb.MerchantPosMachine.Where(m => m.ExpiryTime < DateTime.Now && m.Status == Enumeration.MerchantPosMachineStatus.Normal).ToList();
+
+            Log.InfoFormat("到期的机器数量有：{0}", merchantPosMachines.Count);
 
             foreach (var merchantPosMachine in merchantPosMachines)
             {
@@ -24,6 +26,7 @@ namespace Lumos.BLL.Biz.Task
                 var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Status == Enumeration.OrderStatus.WaitPay && m.ProductType == Entity.Enumeration.ProductType.PosMachineServiceFee && m.UserId == merchantPosMachine.UserId && m.MerchantId == merchantPosMachine.MerchantId && m.PosMachineId == merchantPosMachine.PosMachineId).FirstOrDefault();
                 if (orderToServiceFee == null)
                 {
+
                     CalculateServiceFee calculateServiceFee = new CalculateServiceFee();
 
                     orderToServiceFee = new OrderToServiceFee();
@@ -50,6 +53,7 @@ namespace Lumos.BLL.Biz.Task
                     orderToServiceFee.TradeSnByWechat = snModel.TradeSnByWechat;
                     orderToServiceFee.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
+                    Log.InfoFormat("生成待支付订单号：{0}", orderToServiceFee.Sn);
                 }
 
                 CurrentDb.SaveChanges();

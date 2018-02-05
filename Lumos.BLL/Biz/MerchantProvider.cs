@@ -481,6 +481,7 @@ namespace Lumos.BLL
             yOrder.OrderSn = orderToServiceFee.Sn;
             yOrder.remarks = orderToServiceFee.Remarks;
             yOrder.transName = "消费";
+            yOrder.productType = orderToServiceFee.ProductType;
             yOrder.productName = orderToServiceFee.ProductName;
             yOrder.amount = orderToServiceFee.Price.ToF2Price().Replace(".", "").PadLeft(12, '0');
 

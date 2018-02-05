@@ -28,10 +28,10 @@ namespace Lumos.Entity
 
         public enum UserAccount
         {
-            Uplink = 1,
-            YiBanShi = 2,
-            WithdrawFee = 3,
-            WithdrawFundPool = 4
+            HaoYiLian = 1,
+            //YiBanShi = 2,
+            //WithdrawFee = 3,
+            //WithdrawFundPool = 4
         }
         public enum BannerType
         {

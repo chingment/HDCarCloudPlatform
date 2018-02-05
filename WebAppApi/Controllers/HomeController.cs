@@ -152,7 +152,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
            // model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-            //model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId));
+            model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             //model.Add("登录接口", Login(userName, passWord, deviceId));

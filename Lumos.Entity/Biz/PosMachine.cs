@@ -39,5 +39,9 @@ namespace Lumos.Entity
 
         public DateTime? LastUpdateTime { get; set; }
 
+        public int AgentId { get; set; }
+
+        public string AgentName { get; set; }
+
     }
 }

@@ -123,6 +123,19 @@
 
             });
 
+            $('#btn_select_agentUser').live('click', function () {
+                var dialogtitle = "选择商量商";
+
+                var l_title = $(this).attr("dialog-title")
+                if (typeof l_title != 'undefined') {
+                    dialogtitle = l_title;
+                }
+                art.dialog.open('../AgentUser/SelectList', {
+                    id: "openDialog565", title: l_title, width: '600px', height: '480px', lock: true, drag: false, cancelVal: '关闭', cancel: true
+                });
+
+            });
+
 
         });
 

@@ -23,7 +23,7 @@ namespace Lumos.BLL
             posMachine.CreateTime = this.DateTime;
             posMachine.Creator = operater;
             posMachine.IsUse = false;
-
+           
             CurrentDb.PosMachine.Add(posMachine);
             CurrentDb.SaveChanges();
 
@@ -38,6 +38,8 @@ namespace Lumos.BLL
             if (l_posMachine == null)
                 return new CustomJsonResult(ResultType.Failure, "不存在");
 
+            l_posMachine.AgentId = posMachine.AgentId;
+            l_posMachine.AgentName = posMachine.AgentName;
             l_posMachine.FuselageNumber = posMachine.FuselageNumber;
             l_posMachine.TerminalNumber = posMachine.TerminalNumber;
             l_posMachine.Version = posMachine.Version;

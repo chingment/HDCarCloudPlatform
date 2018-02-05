@@ -61,6 +61,8 @@ namespace Lumos.DAL.AuthorizeRelay
 
         public IDbSet<SysSalesmanUser> SysSalesmanUser { get; set; }
 
+        public IDbSet<SysAgentUser> SysAgentUser { get; set; }
+
         public IDbSet<SysClientCode> SysClientCode { get; set; }
 
         public IDbSet<SysVerifyEmail> SysVerifyEmail { get; set; }

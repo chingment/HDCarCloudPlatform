@@ -99,6 +99,7 @@
     <Compile Include="Biz\PosMachine.cs" />
     <Compile Include="Biz\Product.cs" />
     <Compile Include="Biz\OrderToTalentDemand .cs" />
+    <Compile Include="Sys\SysAgentUser.cs" />
     <Compile Include="Sys\SysOpenIdInfo.cs" />
     <Compile Include="Biz\Transactions.cs" />
     <Compile Include="Biz\YBS_ReceiveNotifyLog.cs" />

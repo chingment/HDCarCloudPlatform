@@ -219,6 +219,7 @@
     <Compile Include="Controllers\App\BannerController.cs" />
     <Compile Include="Controllers\App\ProductController.cs" />
     <Compile Include="App_Start\Own\NPOIExcelHelper.cs" />
+    <Compile Include="Controllers\Sys\AgentUserController.cs" />
     <Compile Include="Controllers\Sys\BannerController.cs" />
     <Compile Include="Controllers\Sys\LogViewController.cs" />
     <Compile Include="Controllers\Sys\MachineKeyController.cs" />
@@ -307,6 +308,9 @@
     <Compile Include="Models\Home\LoginModel.cs" />
     <Compile Include="Models\SearchCondition.cs" />
     <Compile Include="Models\App\Product\GoodsDetailsViewModel.cs" />
+    <Compile Include="Models\Sys\AgentUser\AddViewModel.cs" />
+    <Compile Include="Models\Sys\AgentUser\EditViewModel.cs" />
+    <Compile Include="Models\Sys\AgentUser\AgentUserSearchCondition.cs" />
     <Compile Include="Models\Sys\Banner\AddBannerViewModel.cs" />
     <Compile Include="Models\Sys\Banner\BannerDetailsViewModel.cs" />
     <Compile Include="Models\Sys\Banner\BannerSearchCondition.cs" />
@@ -1314,6 +1318,10 @@
     <Content Include="Views\Biz\ApplyLossAssess\VerifyOrderList.cshtml" />
     <Content Include="Views\Biz\PosMachine\ReSetNoActive.cshtml" />
     <Content Include="Views\Biz\ServiceFee\Details.cshtml" />
+    <Content Include="Views\Sys\AgentUser\Add.cshtml" />
+    <Content Include="Views\Sys\AgentUser\Edit.cshtml" />
+    <Content Include="Views\Sys\AgentUser\List.cshtml" />
+    <Content Include="Views\Sys\AgentUser\SelectList.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

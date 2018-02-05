@@ -59,9 +59,6 @@ namespace WebBack.Controllers.Sys
         }
 
 
-
-
-
         public JsonResult GetSelectList(SalesmanUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
@@ -80,7 +77,6 @@ namespace WebBack.Controllers.Sys
 
             return Json(ResultType.Success, pageEntity, "");
         }
-
 
 
         [HttpPost]

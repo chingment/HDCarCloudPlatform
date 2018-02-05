@@ -102,8 +102,9 @@ namespace WebBack.Controllers.Biz
             var pos = CurrentDb.PosMachine.Where(m => m.DeviceId == deviceId).FirstOrDefault();
             if (pos == null)
             {
-                return "设备ID不存在（PosMachine）";
+                return "设备不存在（PosMachine）";
             }
+
 
             var merpos = CurrentDb.MerchantPosMachine.Where(m => m.UserId == user.Id).FirstOrDefault();
 
@@ -402,9 +403,7 @@ namespace WebBack.Controllers.Biz
                 exportCheckErrorPoint.CheckCellTitle(rowTitle.GetCell(1), "机身号");
                 exportCheckErrorPoint.CheckCellTitle(rowTitle.GetCell(2), "终端号");
                 exportCheckErrorPoint.CheckCellTitle(rowTitle.GetCell(3), "版本号");
-                exportCheckErrorPoint.CheckCellTitle(rowTitle.GetCell(4), "押金");
-                exportCheckErrorPoint.CheckCellTitle(rowTitle.GetCell(5), "租金");
-                exportCheckErrorPoint.CheckCellTitle(rowTitle.GetCell(6), "是否为备用机");
+                exportCheckErrorPoint.CheckCellTitle(rowTitle.GetCell(4), "代理商");
 
                 if (exportCheckErrorPoint.TitleHasError)
                 {
@@ -429,9 +428,8 @@ namespace WebBack.Controllers.Biz
                     string fuselageNumber = row.GetCell(1) == null ? "" : row.GetCell(1).ToString();
                     string terminalNumber = row.GetCell(2) == null ? "" : row.GetCell(2).ToString();
                     string version = row.GetCell(3) == null ? "" : row.GetCell(3).ToString();
-                    string deposit = row.GetCell(4) == null ? "" : row.GetCell(4).ToString();
-                    string rent = row.GetCell(5) == null ? "" : row.GetCell(5).ToString();
-                    bool isSpare = row.GetCell(6) == null ? false : (row.GetCell(6).ToString() == "是" ? true : false);
+                    string agent = row.GetCell(4) == null ? "" : row.GetCell(4).ToString();
+
 
                     if (string.IsNullOrEmpty(deviceId))
                     {
@@ -458,22 +456,30 @@ namespace WebBack.Controllers.Biz
                         exportCheckErrorPoint.AddPoint(deviceId, "版本号不能为空，且不能超过100个字符");
                     }
 
-                    if (!CommonUtils.IsDecimal(deposit))
+
+                    if (string.IsNullOrEmpty(agent) || agent.Length > 100)
                     {
-                        exportCheckErrorPoint.AddPoint(deviceId, "押金必须数字格式,且整数位最多16位,小数位最多2位");
+                        exportCheckErrorPoint.AddPoint(agent, "代理商不能为空，且不能超过100个字符");
                     }
 
-                    if (!CommonUtils.IsDecimal(rent))
+                    var agentUser = CurrentDb.SysAgentUser.Where(m => m.FullName == agent).FirstOrDefault();
+                    if (agent == null)
                     {
-                        exportCheckErrorPoint.AddPoint(deviceId, "租金必须数字格式,且整数位最多16位,小数位最多2位");
+                        exportCheckErrorPoint.AddPoint(agent, "代理商名称:" + agent + "，不存在");
+                    }
+                    else
+                    {
+                        PosMachine posMachine = new PosMachine();
+                        posMachine.DeviceId = deviceId;
+                        posMachine.FuselageNumber = fuselageNumber;
+                        posMachine.TerminalNumber = terminalNumber;
+                        posMachine.Version = version;
+                        posMachine.AgentId = agentUser.Id;
+                        posMachine.AgentName = agentUser.FullName;
+                        posMachines.Add(posMachine);
                     }
 
-                    PosMachine posMachine = new PosMachine();
-                    posMachine.DeviceId = deviceId;
-                    posMachine.FuselageNumber = fuselageNumber;
-                    posMachine.TerminalNumber = terminalNumber;
-                    posMachine.Version = version;
-                    posMachines.Add(posMachine);
+
                 }
 
 
@@ -491,7 +497,6 @@ namespace WebBack.Controllers.Biz
                         if (old != null)
                         {
                             exportCheckErrorPoint.AddPoint(old.DeviceId, "设备ID号:" + posMachine.DeviceId + "，已经存在");
-
                         }
                     }
 

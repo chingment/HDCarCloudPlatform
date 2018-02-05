@@ -192,12 +192,18 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\ApplyLossAssessController.cs" />
     <Compile Include="Controllers\ApplyPosController.cs" />
+    <Compile Include="Controllers\CarClaimController.cs" />
+    <Compile Include="Controllers\CarInsureOfferController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="App_Start\Own\NPOIExcelHelper.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PosMachineController.cs" />
     <Compile Include="Controllers\SalesmanUserController.cs" />
+    <Compile Include="Controllers\ServiceFeeController.cs" />
+    <Compile Include="Controllers\TalentDemandController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -212,11 +218,19 @@
     <Compile Include="App_Start\Own\OwnOperateTipUtils.cs" />
     <Compile Include="App_Start\Own\OwnStaticResource.cs" />
     <Compile Include="App_Start\Own\OwnStatisticsTrackerAttribute.cs" />
+    <Compile Include="Models\ApplyLossAssess\ApplyLossAssessSearchCondition.cs" />
+    <Compile Include="Models\ApplyLossAssess\DetailsViewModel.cs" />
     <Compile Include="Models\ApplyPos\ApplyModel.cs" />
     <Compile Include="Models\ApplyPos\ApplyPosSearchCondition.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
+    <Compile Include="Models\CarClaim\CarClaimSearchCondition.cs" />
+    <Compile Include="Models\CarClaim\DetailsViewModel.cs" />
+    <Compile Include="Models\CarInsureOffer\CarInsureOfferSearchCondition.cs" />
+    <Compile Include="Models\CarInsureOffer\DetailsViewModel.cs" />
     <Compile Include="Models\Home\ChangePasswordModel.cs" />
     <Compile Include="Models\Home\LoginModel.cs" />
+    <Compile Include="Models\Order\ListViewModel.cs" />
+    <Compile Include="Models\Order\OrderSearchCondition.cs" />
     <Compile Include="Models\PosMachine\ChangeViewModel.cs" />
     <Compile Include="Models\PosMachine\DetailsViewModel.cs" />
     <Compile Include="Models\PosMachine\PosMachineSearchCondition.cs" />
@@ -224,6 +238,9 @@
     <Compile Include="Models\SalesmanUser\EditViewModel.cs" />
     <Compile Include="Models\SalesmanUser\SalesmanUserSearchCondition.cs" />
     <Compile Include="Models\SearchCondition.cs" />
+    <Compile Include="Models\ServiceFee\DetailsViewModel.cs" />
+    <Compile Include="Models\TalentDemand\DetailsViewModel.cs" />
+    <Compile Include="Models\TalentDemand\TalentDemandSearchCondition.cs" />
     <Compile Include="Models\UpLoadFileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -255,6 +272,16 @@
     <Content Include="Views\ApplyPos\PosMachineList.cshtml" />
     <Content Include="Views\PosMachine\Details.cshtml" />
     <Content Include="Views\PosMachine\List.cshtml" />
+    <Content Include="Views\ApplyLossAssess\Details.cshtml" />
+    <Content Include="Views\ApplyLossAssess\List.cshtml" />
+    <Content Include="Views\CarClaim\Details.cshtml" />
+    <Content Include="Views\CarClaim\List.cshtml" />
+    <Content Include="Views\CarInsureOffer\Details.cshtml" />
+    <Content Include="Views\CarInsureOffer\List.cshtml" />
+    <Content Include="Views\ServiceFee\Details.cshtml" />
+    <Content Include="Views\TalentDemand\Details.cshtml" />
+    <Content Include="Views\TalentDemand\List.cshtml" />
+    <Content Include="Views\Order\List.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

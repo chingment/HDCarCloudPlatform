@@ -301,7 +301,8 @@ namespace Lumos.BLL
 
 
                 var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.MerchantId == orderToServiceFee.MerchantId && m.PosMachineId == orderToServiceFee.PosMachineId).FirstOrDefault();
-                merchantPosMachine.ExpiryTime = orderToServiceFee.ExpiryTime;
+                merchantPosMachine.ExpiryTime = this.DateTime.AddYears(1);
+                merchantPosMachine.ActiveTime = this.DateTime;
                 merchantPosMachine.Status = Enumeration.MerchantPosMachineStatus.Normal;
                 merchantPosMachine.LastUpdateTime = this.DateTime;
                 merchantPosMachine.Mender = operater;
@@ -317,11 +318,11 @@ namespace Lumos.BLL
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == orderToServiceFee.MerchantId).FirstOrDefault();
                 var posMachine = CurrentDb.PosMachine.Where(m => m.Id == orderToServiceFee.PosMachineId).FirstOrDefault();
 
-                if (orderToServiceFee.SalesmanId != null)
+                if (orderToServiceFee.SalesmanId == null)
                 {
                     orderToServiceFee.SalesmanId = posMachine.SalesmanId;
                 }
-                if (orderToServiceFee.AgentId != null)
+                if (orderToServiceFee.AgentId == null)
                 {
                     orderToServiceFee.AgentId = posMachine.AgentId;
                 }

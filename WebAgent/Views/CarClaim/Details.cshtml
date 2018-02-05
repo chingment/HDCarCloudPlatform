@@ -1,0 +1,195 @@
+﻿@model WebAgent.Models.CarClaim.DetailsViewModel
+@{
+    ViewBag.Title = "Dealt";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+
+}
+
+
+<form id="form1" name="form1">
+    @AntiForgery.GetHtml()
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>理赔需求信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t">商户名：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">地区：</td>
+            <td class="c">
+                <span>@Model.Merchant.Area</span>
+            </td>
+            <td class="t">联系地址</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactAddress</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">保险公司：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.InsuranceCompanyName</span>
+            </td>
+            <td class="t">车牌号码：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.CarPlateNo</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">对接人：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.HandPerson</span>
+            </td>
+            <td class="t">对接电话：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.HandPersonPhone</span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>维修厂信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ClientCode</span>
+            </td>
+            <td class="t">商户名：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">地区：</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.Area</span>
+            </td>
+            <td class="t">联系地址</td>
+            <td class="c">
+                <span>@Model.EstimateMerchant.ContactAddress</span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>定损单</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail" style="text-align:center">
+        <tr style="vertical-align:top">
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="false">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarClaim.EstimateListImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="">预览</span>
+                    </span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>复核定损金额</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">工时费：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.WorkingHoursPrice.ToPrice()</span>
+            </td>
+            <td class="t"></td>
+            <td class="c"></td>
+        </tr>
+        <tr>
+            <td class="t">配件费：</td>
+            <td class="c">
+                <span>@Model.OrderToCarClaim.AccessoriesPrice.ToPrice()</span>
+            </td>
+            <td class="t"></td>
+            <td class="c"></td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>流程跟踪</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <ul>
+        @if (Model.BizProcessesAuditDetails != null)
+        {
+            foreach (var auditDetail in Model.BizProcessesAuditDetails)
+            {
+                <li style="line-height:18px;"><span>@auditDetail.CreateTime.ToUnifiedFormatDateTime()</span><span style="margin-left:10px;">@auditDetail.Description</span></li>
+            }
+        }
+    </ul>
+</form>

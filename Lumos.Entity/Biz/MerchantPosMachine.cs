@@ -24,7 +24,7 @@ namespace Lumos.Entity
 
         public decimal Deposit { get; set; }
 
-        public DateTime? DepositPayTime { get; set; }
+        public DateTime? ActiveTime { get; set; }
 
         public decimal? ReturnDeposit { get; set; }
 

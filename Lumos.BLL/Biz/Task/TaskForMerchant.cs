@@ -54,9 +54,9 @@ namespace Lumos.BLL.Biz.Task
                     orderToServiceFee.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
                     Log.InfoFormat("生成待支付订单号：{0}", orderToServiceFee.Sn);
-
-                    SysFactory.SysItemCacheUpdateTime.UpdateUser(orderToServiceFee.UserId);
                 }
+
+                SysFactory.SysItemCacheUpdateTime.UpdateUser(orderToServiceFee.UserId);
 
                 CurrentDb.SaveChanges();
 

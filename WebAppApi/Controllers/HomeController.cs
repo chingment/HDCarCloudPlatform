@@ -356,7 +356,7 @@ namespace WebAppApi.Controllers
             headers.Add("timestamp", timespan.ToString());
             headers.Add("sign", signStr);
             HttpUtil http = new HttpUtil();
-            string result = http.HttpGet("" + host + "/api/Account/Home?userId=" + userId + "&merchantId=" + merchantId+ "&posMachineId="+ posMachineId+ "&datetime="+datetime.ToUnifiedFormatDateTime(), headers);
+            string result = http.HttpGet("" + host + "/api/Account/Home?userId=" + userId + "&merchantId=" + merchantId+ "&posMachineId="+ posMachineId+ "&datetime="+ HttpUtility.UrlEncode(datetime.ToUnifiedFormatDateTime(), UTF8Encoding.UTF8).ToUpper(), headers);
 
             return result;
 

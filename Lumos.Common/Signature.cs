@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Lumos.Common
 {
@@ -162,7 +163,7 @@ namespace Lumos.Common
             while (dem.MoveNext())
             {
                 string key = dem.Current.Key;
-                string value = dem.Current.Value;
+                string value = HttpUtility.UrlEncode(dem.Current.Value, UTF8Encoding.UTF8).ToUpper();
                 if (!string.IsNullOrEmpty(key))
                 {
                     queryStr.Append("&").Append(key).Append("=").Append(value);

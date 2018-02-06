@@ -106,6 +106,7 @@
     <Compile Include="Sys\SysAppKeySecretProvider.cs" />
     <Compile Include="Sys\SysBannerProvider.cs" />
     <Compile Include="Sys\SysFactory.cs" />
+    <Compile Include="Sys\SysItemCacheUpdateTimeProvider.cs" />
     <Compile Include="Sys\SysUserProvider.cs" />
   </ItemGroup>
   <ItemGroup>

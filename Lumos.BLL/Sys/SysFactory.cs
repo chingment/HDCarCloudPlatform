@@ -31,5 +31,13 @@ namespace Lumos.BLL
                 return new SysBannerProvider();
             }
         }
+
+        public static SysItemCacheUpdateTimeProvider SysItemCacheUpdateTime
+        {
+            get
+            {
+                return new SysItemCacheUpdateTimeProvider();
+            }
+        }
     }
 }

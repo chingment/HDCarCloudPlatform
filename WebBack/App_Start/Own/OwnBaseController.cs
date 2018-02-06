@@ -216,14 +216,16 @@ namespace WebBack
 
             SetTrackID();
 
+            ILog log = LogManager.GetLogger(CommonSetting.LoggerAccessWeb);
+            log.Info(FormatUtils.AccessWeb(User.Identity.GetUserId<int>(), User.Identity.GetUserName()));
+
             if (!filterContext.HttpContext.Request.IsAjaxRequest())
             {
                 CurrentDb.SysPageAccessRecord.Add(new SysPageAccessRecord() { UserId = User.Identity.GetUserId<int>(), AccessTime = DateTime.Now, PageUrl = filterContext.HttpContext.Request.Url.AbsolutePath, Ip = CommonUtils.GetIP() });
                 CurrentDb.SaveChanges();
             }
 
-            ILog log = LogManager.GetLogger(CommonSetting.LoggerAccessWeb);
-            log.Info(FormatUtils.AccessWeb(User.Identity.GetUserId<int>(), User.Identity.GetUserName()));
+
 
             bool skipAuthorization = filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), inherit: true) || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), inherit: true);
             if (!skipAuthorization)

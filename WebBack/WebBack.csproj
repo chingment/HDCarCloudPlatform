@@ -1254,7 +1254,6 @@
     <Content Include="Views\Sys\Banner\EditBanner.cshtml" />
     <Content Include="Views\Sys\Banner\BannerDetails.cshtml" />
     <Content Include="Views\Biz\Product\AppGoodsDetails.cshtml" />
-    <Content Include="Views\App\Help\WithdrawRule.cshtml" />
     <Content Include="Views\Biz\Report\Withdraw.cshtml" />
     <Content Include="Views\Shared\_LayoutHomeMainReport.cshtml" />
     <Content Include="Views\Biz\Report\Merchant.cshtml" />
@@ -1263,15 +1262,6 @@
     <Content Include="Views\Biz\Transactions\Details.cshtml" />
     <Content Include="Views\Biz\Order\CarInsureFollow.cshtml" />
     <Content Include="Views\Biz\Order\CarClaimFollow.cshtml" />
-    <Content Include="xmlModel\下载.jpg" />
-    <Content Include="xmlModel\保单详情查询请求报文.xml" />
-    <Content Include="xmlModel\保费计算请求报文_混合.xml" />
-    <Content Include="xmlModel\图文识别.xml" />
-    <Content Include="xmlModel\承保请求报文.xml" />
-    <Content Include="xmlModel\投保服务请求报文.xml" />
-    <Content Include="xmlModel\车型查询请求报文.xml" />
-    <Content Include="xmlModel\车辆信息查询请求报文.xml" />
-    <Content Include="xmlModel\驾使证正面.jpg" />
     <Content Include="Static\ExcelTemplate\POS机信登记表.xls" />
     <Content Include="Views\Biz\PosMachine\ExportAdd.cshtml" />
     <Content Include="Views\Biz\PosMachine\ReturnList.cshtml" />
@@ -1279,7 +1269,6 @@
     <Content Include="Views\Biz\PosMachine\MerchantPosMachineList.cshtml" />
     <Content Include="Views\Shared\UpLoadFile.cshtml" />
     <Content Include="Views\Biz\PosMachine\ExportReturn.cshtml" />
-    <Content Include="Static\ExcelTemplate\POS机信注销表.xls" />
     <Content Include="Views\Biz\Report\NoActiveAccount.cshtml" />
     <Content Include="Views\App\ExtendedApp\ComingSoon.cshtml" />
     <Content Include="Views\Biz\Product\EditGoods.cshtml" />
@@ -1306,7 +1295,6 @@
     <Content Include="Views\App\CarInsureOffer\OfferImg.cshtml" />
     <Content Include="Views\App\ServiceKit\CarInsExpireDate.cshtml" />
     <Content Include="Views\Biz\Order\ConfirmPayList.cshtml" />
-    <Content Include="Views\App\Order\InsOfferPay.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\Add.cshtml" />
     <Content Include="Views\Biz\TalentDemand\Details.cshtml" />
     <Content Include="Views\Biz\TalentDemand\List.cshtml" />
@@ -1347,7 +1335,6 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\toolbar\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\wysiwygarea\" />
-    <Folder Include="Views\ServiceFee\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

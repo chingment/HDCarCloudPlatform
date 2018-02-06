@@ -10,6 +10,9 @@ namespace WebAppApi.Models.Account
 {
     public class HomeModel
     {
+
+        public DateTime LastUpdateTime { get; set; }
+
         public List<BannerImageModel> Banner { get; set; }
 
         public List<CarInsPlanModel> CarInsPlan { get; set; }

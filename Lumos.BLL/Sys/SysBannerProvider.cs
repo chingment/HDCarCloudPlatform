@@ -52,6 +52,8 @@ namespace Lumos.BLL
                 CurrentDb.SysBanner.Add(sysBanner);
                 CurrentDb.SaveChanges();
 
+                SysFactory.SysItemCacheUpdateTime.Update(Enumeration.SysItemCacheType.Banner);
+
                 ts.Complete();
             }
 
@@ -104,7 +106,10 @@ namespace Lumos.BLL
                         break;
                 }
 
+
                 CurrentDb.SaveChanges();
+
+                SysFactory.SysItemCacheUpdateTime.Update(Enumeration.SysItemCacheType.Banner);
 
                 ts.Complete();
             }

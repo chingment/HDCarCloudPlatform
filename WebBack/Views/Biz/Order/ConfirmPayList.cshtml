@@ -62,7 +62,7 @@
                         art.dialog.open(url, {
                             id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '确认已支付', ok: function () {
 
-                                var message = "订单号：" + obj.sn + "，确定该客户已经支付保单吗？一旦确认将无法变更结果，请慎重执行";
+                                var message = "订单号：" + obj.sn + "，确定该客户已经支付订单吗？一旦确认将无法变更结果，请慎重执行";
                                 art.dialog.confirm(message, function () {
                                     $.lumos.postJson({
                                         url: "../Order/ConfirmPay",

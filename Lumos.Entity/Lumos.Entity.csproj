@@ -131,6 +131,7 @@
     <Compile Include="Sys\SysRolePermission.cs" />
     <Compile Include="Sys\SysRoleMenu.cs" />
     <Compile Include="Sys\SysUser.cs" />
+    <Compile Include="Sys\SysItemCacheUpdateTime.cs" />
     <Compile Include="Sys\SysUserClaim.cs" />
     <Compile Include="Sys\SysUserLoginHistory .cs" />
     <Compile Include="Sys\SysUserLoginProvider.cs" />

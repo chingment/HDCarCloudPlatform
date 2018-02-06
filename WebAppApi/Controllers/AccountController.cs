@@ -181,10 +181,18 @@ namespace WebAppApi.Controllers
         }
 
         [HttpGet]
-        public APIResponse Home(int userId, int merchantId, int posMachineId)
+        public APIResponse Home(int userId, int merchantId, int posMachineId, DateTime? datetime)
         {
 
             HomeModel model = new HomeModel();
+
+            DateTime? lastUpdateTime;
+            if (!SysFactory.SysItemCacheUpdateTime.CanGetData(userId, datetime, out lastUpdateTime))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "没有最新的数据");
+            }
+
+            model.LastUpdateTime = lastUpdateTime.Value;
 
             #region 获取bannder
             var banner = CurrentDb.SysBanner.Where(m => m.Type == Enumeration.BannerType.MainHomeTop && m.Status == Enumeration.SysBannerStatus.Release).ToList();

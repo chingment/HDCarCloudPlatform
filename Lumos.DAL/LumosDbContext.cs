@@ -82,6 +82,9 @@ namespace Lumos.DAL
 
         public IDbSet<OrderPayResultNotifyByStaffLog> OrderPayResultNotifyByStaffLog { get; set; }
 
+
+        public IDbSet<SysItemCacheUpdateTime>  SysItemCacheUpdateTime { get; set; }
+
         //public FxDbContext()
         //    : base("DefaultConnection")
         //{

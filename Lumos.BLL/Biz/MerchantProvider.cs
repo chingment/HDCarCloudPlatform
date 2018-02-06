@@ -136,6 +136,17 @@ namespace Lumos.BLL
                 orderToServiceFee.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
 
+
+                var sysItemCacheUpdateTime = new SysItemCacheUpdateTime();
+
+                sysItemCacheUpdateTime.Name = sysClientUser.UserName;
+                sysItemCacheUpdateTime.Type = Enumeration.SysItemCacheType.User;
+                sysItemCacheUpdateTime.ReferenceId = sysClientUser.Id;
+                sysItemCacheUpdateTime.Creator = operater;
+                sysItemCacheUpdateTime.CreateTime = this.DateTime;
+                sysItemCacheUpdateTime.Mender = operater;
+                sysItemCacheUpdateTime.LastUpdateTime = this.DateTime;
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 

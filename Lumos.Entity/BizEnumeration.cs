@@ -678,5 +678,17 @@ namespace Lumos.Entity
             [Remark("后台确认")]
             Staff = 3
         }
+
+        public enum SysItemCacheType
+        {
+            Unknow = 0,
+            User = 1,
+            Banner = 2,
+            CarInsCompanys = 3,
+            CarKinds = 4,
+            TalentDemandWorkJob = 5,
+        }
+
+
     }
 }

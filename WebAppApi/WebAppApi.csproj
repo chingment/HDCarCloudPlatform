@@ -208,9 +208,8 @@
     <Compile Include="Models\Account\CreateModel.cs" />
     <Compile Include="Models\Account\HomeModel.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
-    <Compile Include="Models\Account\ClientLoginResultModel.cs" />
+    <Compile Include="Models\Account\LoginResultModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
-    <Compile Include="Models\Account\SalesmanLoginResultModel.cs" />
     <Compile Include="Models\Account\TalentDemandWorkJobModel.cs" />
     <Compile Include="Models\Banner\BannerModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />

@@ -19,6 +19,8 @@ namespace WebBack.Models.Biz.Merchant
 
         private Lumos.Entity.SysSalesmanUser _salesman;
 
+        private Lumos.Entity.SysAgentUser _agent;
+
         public int[] EstimateInsuranceCompanyIds
         {
             get; set;
@@ -96,6 +98,18 @@ namespace WebBack.Models.Biz.Merchant
             }
         }
 
+        public Lumos.Entity.SysAgentUser Agent
+        {
+            get
+            {
+                return _agent;
+            }
+            set
+            {
+                _agent = value;
+            }
+        }
+
         public EditViewModel()
         {
 
@@ -114,6 +128,15 @@ namespace WebBack.Models.Biz.Merchant
                     if (salesman != null)
                     {
                         _salesman = salesman;
+                    }
+                }
+
+                if (_merchant.AgentId != null)
+                {
+                    var agent = CurrentDb.SysAgentUser.Where(m => m.Id == _merchant.AgentId).FirstOrDefault();
+                    if (agent != null)
+                    {
+                        _agent = agent;
                     }
                 }
 

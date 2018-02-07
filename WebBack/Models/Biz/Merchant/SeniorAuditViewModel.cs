@@ -19,6 +19,8 @@ namespace WebBack.Models.Biz.Merchant
 
         private SysSalesmanUser _salesman;
 
+        private SysAgentUser _agent;
+
         private List<Lumos.Entity.MerchantEstimateCompany> _merchantEstimateCompany = new List<Lumos.Entity.MerchantEstimateCompany>();
 
         private List<Lumos.Entity.CarInsuranceCompany> _carInsuranceCompany = new List<Lumos.Entity.CarInsuranceCompany>();
@@ -84,6 +86,18 @@ namespace WebBack.Models.Biz.Merchant
             }
         }
 
+        public SysAgentUser Agent
+        {
+            get
+            {
+                return _agent;
+            }
+            set
+            {
+                _agent = value;
+            }
+        }
+
         public List<Lumos.Entity.MerchantEstimateCompany> MerchantEstimateCompany
         {
             get
@@ -124,13 +138,21 @@ namespace WebBack.Models.Biz.Merchant
 
                 if (merchant.SalesmanId != null)
                 {
-                    var salesman = CurrentDb.SysSalesmanUser.Where(m => m.Id == _merchant.SalesmanId).FirstOrDefault();
+                    var salesman = CurrentDb.SysSalesmanUser.Where(m => m.Id == merchant.SalesmanId).FirstOrDefault();
                     if (salesman != null)
                     {
                         _salesman = salesman;
                     }
                 }
 
+                if (merchant.AgentId != null)
+                {
+                    var agent = CurrentDb.SysAgentUser.Where(m => m.Id == merchant.AgentId).FirstOrDefault();
+                    if (agent != null)
+                    {
+                        _agent = agent;
+                    }
+                }
 
                 if (merchant != null)
                 {

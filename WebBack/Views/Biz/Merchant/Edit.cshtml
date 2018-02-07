@@ -20,6 +20,7 @@
             $("#Model_Merchant_ContactPhoneNumber").formValidator().inputValidator({ min: 11, max: 11, onError: "[商户信息]联系电话只能输入11位的手机号码" });
             $("#Model_Merchant_AreaCode").formValidator().inputValidator({ min: 1, onError: "请选择地区" });
             $("#Model_Merchant_ContactAddress").formValidator().inputValidator({ min: 1, max: 100, onError: "[商户信息]联系地址不能为空,且不超过100个字符" });
+            $("#Model_Merchant_AgentId").formValidator().inputValidator({ min: 1, max: 500, empty: { leftEmpty: false, emptyError: "请选择代理商" }, onError: "请选择代理商" });
             $("#Model_Merchant_SalesmanId").formValidator().inputValidator({ min: 1, max: 500, empty: { leftEmpty: false, emptyError: "请选择业务员" }, onError: "请选择业务员" });
 
             $("#Model_Merchant_RepairCapacity").formValidator().inputValidator({ min: 1, max: 500, onError: "请选择维修能力" });
@@ -118,6 +119,12 @@
 
             $('#lbl_Merchant_Salesman').text(obj.fullName + "(" + obj.userName + ")");
             $('#Model_Merchant_SalesmanId').val(obj.id);
+        }
+
+        function getAgentUserDetails(obj) {
+
+            $('#lbl_Merchant_Agent').text(obj.fullName + "(" + obj.userName + ")");
+            $('#Model_Merchant_AgentId').val(obj.id);
         }
 
     </script>
@@ -251,15 +258,23 @@
             </td>
         </tr>
         <tr>
-            <td class="t"></td>
-            <td class="c"></td>
+            <td class="t"><span class="required-symbol">*</span>代理商：</td>
+            <td class="c">
+
+                <span id="lbl_Agent_Salesman">@(Model.Agent == null ? "" : Model.Agent.FullName + "(" + Model.Agent.UserName + ")")</span>
+                <input type="hidden" class="input-control" name="Model.Merchant.AgentId" id="Model_Merchant_AgentId" value="@(Model.Agent==null?"":Model.Agent.Id.ToString())" />
+
+                <span> <input type="button" class="btn" id="btn_select_agentUser" value="选择" dialog-title="选择代理商" /></span>
+
+
+            </td>
             <td class="t"><span class="required-symbol">*</span>业务员：</td>
             <td class="c">
 
                 <span id="lbl_Merchant_Salesman">@(Model.Salesman == null ? "" : Model.Salesman.FullName + "(" + Model.Salesman.UserName + ")")</span>
                 <input type="hidden" class="input-control" name="Model.Merchant.SalesmanId" id="Model_Merchant_SalesmanId" value="@(Model.Salesman==null?"":Model.Salesman.Id.ToString())" />
 
-                <span> <input type="button" class="btn" id="btn_select_salesmanUser" value="选择" dialog-title="选择业务员" /></span>
+                <span> <input type="button" class="btn" id="btn_select_salesmanUser" requiredinput="Model_Merchant_AgentId" value="选择" dialog-title="选择业务员" /></span>
             </td>
         </tr>
     </table>

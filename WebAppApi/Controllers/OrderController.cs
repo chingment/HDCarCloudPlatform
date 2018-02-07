@@ -715,6 +715,12 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse SubmitTalentDemand(SubmitTalentDemandModel model)
         {
+            //业务人员模拟数据
+            if (model.MerchantId == this.SalesmanMerchantId)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
+            }
+
             OrderToTalentDemand orderToTalentDemand = new OrderToTalentDemand();
             orderToTalentDemand.UserId = model.UserId;
             orderToTalentDemand.MerchantId = model.MerchantId;
@@ -731,6 +737,12 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse SubmitApplyLossAssess(SubmitApplyLossAssessModel model)
         {
+            //业务人员模拟数据
+            if (model.MerchantId == this.SalesmanMerchantId)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
+            }
+
             OrderToApplyLossAssess orderToApplyLossAssess = new OrderToApplyLossAssess();
             orderToApplyLossAssess.UserId = model.UserId;
             orderToApplyLossAssess.MerchantId = model.MerchantId;

@@ -46,6 +46,8 @@ namespace WebBack.Controllers.Sys
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
                         (condition.FullName == null || u.FullName.Contains(condition.FullName)) &&
                         u.IsDelete == false
+                        &&
+                        u.AgentId == condition.AgentId
                         select new { u.Id, u.UserName, u.FullName, u.Email, u.PhoneNumber, u.CreateTime, u.IsDelete, AgentName = p.FullName, AgentId = p.Id });
 
             int total = list.Count();

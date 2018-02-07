@@ -180,8 +180,8 @@
                         }
 
         <tr>
-            <td class="t"></td>
-            <td class="c"></td>
+            <td class="t">代理商：</td>
+            <td class="c"><span id="lbl_Merchant_Agent">@(Model.Agent == null ? "" : Model.Agent.FullName + "(" + Model.Agent.UserName + ")")</span></td>
             <td class="t">业务员：</td>
             <td class="c">
                 <span id="lbl_Merchant_Salesman">@(Model.Salesman == null ? "" : Model.Salesman.FullName + "(" + Model.Salesman.UserName + ")")</span>

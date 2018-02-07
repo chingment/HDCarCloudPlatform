@@ -68,6 +68,7 @@ namespace Lumos.BLL
                 var posMachine = CurrentDb.PosMachine.Where(m => m.DeviceId == deviceId).FirstOrDefault();
                 if (posMachine != null)
                 {
+
                     if (posMachine.IsUse)
                     {
                         return new CustomJsonResult(ResultType.Failure, "当前POS已被注册");
@@ -80,6 +81,7 @@ namespace Lumos.BLL
                 }
                 else
                 {
+
                     posMachine = new PosMachine();
                     posMachine.DeviceId = deviceId;
                     posMachine.Creator = operater;
@@ -147,6 +149,7 @@ namespace Lumos.BLL
                 sysItemCacheUpdateTime.Mender = operater;
                 sysItemCacheUpdateTime.LastUpdateTime = this.DateTime;
 
+                CurrentDb.SysItemCacheUpdateTime.Add(sysItemCacheUpdateTime);
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -169,7 +172,6 @@ namespace Lumos.BLL
                     return new CustomJsonResult(ResultType.Failure, "不存在该商户");
                 }
 
-                l_Merchant.SalesmanId = merchant.SalesmanId;
                 l_Merchant.Type = merchant.Type;
                 if (l_Merchant.Type == Enumeration.MerchantType.CarRepair)
                 {
@@ -196,7 +198,8 @@ namespace Lumos.BLL
                 l_Merchant.FR_IssuingAuthority = merchant.FR_IssuingAuthority;
                 l_Merchant.FR_ValidPeriodStart = merchant.FR_ValidPeriodStart;
                 l_Merchant.FR_ValidPeriodEnd = merchant.FR_ValidPeriodEnd;
-
+                l_Merchant.SalesmanId = merchant.SalesmanId;
+                l_Merchant.AgentId = merchant.AgentId;
                 if (string.IsNullOrEmpty(merchant.Area))
                 {
                     l_Merchant.Area = null;

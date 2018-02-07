@@ -19,10 +19,10 @@ namespace WebAppApi.Models.Account
         Expiry = 3
     }
 
-    public class ClientLoginResultModel : BaseViewModel
+    public class LoginResultModel : BaseViewModel
     {
 
-        public ClientLoginResultModel()
+        public LoginResultModel()
         {
 
         }

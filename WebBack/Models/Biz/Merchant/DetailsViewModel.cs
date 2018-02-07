@@ -23,6 +23,8 @@ namespace WebBack.Models.Biz.Merchant
 
         private Lumos.Entity.SysSalesmanUser _salesman;
 
+        private SysAgentUser _agent;
+
         public Lumos.Entity.SysSalesmanUser Salesman
         {
             get
@@ -32,6 +34,18 @@ namespace WebBack.Models.Biz.Merchant
             set
             {
                 _salesman = value;
+            }
+        }
+
+        public SysAgentUser Agent
+        {
+            get
+            {
+                return _agent;
+            }
+            set
+            {
+                _agent = value;
             }
         }
 
@@ -131,6 +145,16 @@ namespace WebBack.Models.Biz.Merchant
                         _salesman = salesman;
                     }
                 }
+
+                if (_merchant.AgentId != null)
+                {
+                    var agent = CurrentDb.SysAgentUser.Where(m => m.Id == _merchant.AgentId).FirstOrDefault();
+                    if (agent != null)
+                    {
+                        _agent = agent;
+                    }
+                }
+
 
                 var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.MerchantId == merchant.Id).ToList();
                 if (merchantPosMachine != null)

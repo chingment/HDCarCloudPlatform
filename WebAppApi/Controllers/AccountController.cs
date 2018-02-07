@@ -59,7 +59,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse Login(LoginModel model)
         {
-            if (model.UserName.IndexOf("YW") > -1)
+            if (model.UserName.IndexOf("AG") > -1)
             {
                 return SalesmanLogin(model);
             }
@@ -102,7 +102,7 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，用户状态异常");
             }
 
-            ClientLoginResultModel resultModel = new ClientLoginResultModel();
+            LoginResultModel resultModel = new LoginResultModel();
 
             if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Normal)
             {
@@ -152,7 +152,16 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，用户密码错误");
             }
 
-            SalesmanLoginResultModel resultModel = new SalesmanLoginResultModel(salesman, model.DeviceId, this.SalesmanMerchantId);
+            LoginResultModel resultModel = new LoginResultModel();
+
+            DateTime nowDate = DateTime.Now;
+            resultModel.UserId = salesman.Id;
+            resultModel.MerchantId = this.SalesmanMerchantId;
+            resultModel.PosMachineId = 0;
+            resultModel.UserName = salesman.UserName;
+            resultModel.MerchantCode = "88888888";
+            resultModel.IsTestAccount = true;
+            resultModel.Status = ClientLoginStatus.Normal;
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "登录成功", resultModel);
         }

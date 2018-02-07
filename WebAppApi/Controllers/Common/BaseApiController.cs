@@ -17,7 +17,7 @@ namespace WebAppApi
         private APIResult _result = new APIResult();
         private LumosDbContext _currentDb;
 
-        private int _salesmanMerchantId = -1;
+        private int _salesmanMerchantId = 0;
 
         public int SalesmanMerchantId
         {

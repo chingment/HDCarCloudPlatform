@@ -35,11 +35,17 @@ namespace Lumos.BLL
         {
 
             updateTime = CurrentDb.SysItemCacheUpdateTime.Where(m => (m.Type == Entity.Enumeration.SysItemCacheType.Banner || m.Type == Entity.Enumeration.SysItemCacheType.CarInsCompanys || m.Type == Entity.Enumeration.SysItemCacheType.CarKinds
-            || m.Type == Entity.Enumeration.SysItemCacheType.TalentDemandWorkJob) || (m.Type == Entity.Enumeration.SysItemCacheType.User && m.ReferenceId == userId)).Max(m => m.LastUpdateTime);
+            || m.Type == Entity.Enumeration.SysItemCacheType.TalentDemandWorkJob || m.Type == Entity.Enumeration.SysItemCacheType.ExtendedApp) || (m.Type == Entity.Enumeration.SysItemCacheType.User && m.ReferenceId == userId)).Max(m => m.LastUpdateTime);
 
 
 
-            if (updateTime == lastUpdateTime)
+            if (lastUpdateTime == null)
+                return true;
+
+            if (updateTime == null)
+                return true;
+
+            if (updateTime.ToUnifiedFormatDateTime() == lastUpdateTime.ToUnifiedFormatDateTime())
             {
                 return false;
             }

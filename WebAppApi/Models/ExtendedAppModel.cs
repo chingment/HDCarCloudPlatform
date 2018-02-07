@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lumos.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,5 +19,7 @@ namespace WebAppApi.Models
         public string AppKey { get; set; }
 
         public string AppSecret { get; set; }
+
+        public Enumeration.ExtendedAppType Type { get; set; }
     }
 }

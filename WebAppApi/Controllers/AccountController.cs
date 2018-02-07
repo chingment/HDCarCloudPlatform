@@ -333,7 +333,6 @@ namespace WebAppApi.Controllers
             model.TalentDemandWorkJob = talentDemandWorkJobModel;
             #endregion
 
-
             #region 检查流量费 是否到期后，需支付的订单
             var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.UserId == userId && m.MerchantId == merchantId && m.PosMachineId == posMachineId && m.Status == Enumeration.OrderStatus.WaitPay).FirstOrDefault();
             if (orderToServiceFee != null)
@@ -342,6 +341,26 @@ namespace WebAppApi.Controllers
             }
             #endregion
 
+            #region 第三方服务
+            var extendedApps = CurrentDb.ExtendedApp.Where(m => m.IsDisplay == true).ToList();
+
+            List<ExtendedAppModel> extendedAppModel = new List<ExtendedAppModel>();
+
+            foreach (var m in extendedApps)
+            {
+                ExtendedAppModel appModel = new ExtendedAppModel();
+                appModel.Id = m.Id;
+                appModel.Name = m.Name;
+                appModel.ImgUrl = m.ImgUrl;
+                appModel.LinkUrl = m.LinkUrl;
+                appModel.AppKey = m.AppKey;
+                appModel.AppSecret = m.AppSecret;
+                appModel.Type = m.Type;
+                extendedAppModel.Add(appModel);
+            }
+
+            model.ExtendedApp = extendedAppModel;
+            #endregion 
 
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
             return new APIResponse(result);

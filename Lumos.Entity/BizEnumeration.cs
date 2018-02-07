@@ -27,8 +27,9 @@ namespace Lumos.Entity
         public enum ExtendedAppType
         {
             Unknow = 0,
-            CarService = 1,
-            ThirdPartyApp = 2
+            HaoYiLianService = 1,
+            ThirdPartyApp = 2,
+            CarInsService = 3
         }
 
         public enum ExtendedAppAuditStatus
@@ -687,6 +688,7 @@ namespace Lumos.Entity
             CarInsCompanys = 3,
             CarKinds = 4,
             TalentDemandWorkJob = 5,
+            ExtendedApp = 6,
         }
 
 

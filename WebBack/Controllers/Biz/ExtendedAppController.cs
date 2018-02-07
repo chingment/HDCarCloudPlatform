@@ -153,7 +153,7 @@ namespace WebBack.Controllers.Biz
             string name = condition.Name.ToSearchString();
             var query = (from e in CurrentDb.ExtendedApp
                          where
-                          e.Type!= Enumeration.ExtendedAppType.CarService&&
+                          e.Type!= Enumeration.ExtendedAppType.HaoYiLianService&&
                                  (name.Length == 0 || e.Name.Contains(name))
                                  && e.IsDisplay == true
                          select new { e.Id, e.ImgUrl, e.LinkUrl, e.Name, e.CreateTime, e.Description });

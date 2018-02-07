@@ -24,5 +24,7 @@ namespace WebAppApi.Models.Account
         public List<TalentDemandWorkJobModel> TalentDemandWorkJob { get; set; }
 
         public OrderConfirmInfo OrderInfo { get; set; }
+
+        public List<ExtendedAppModel> ExtendedApp { get; set; }
     }
 }

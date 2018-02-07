@@ -102,7 +102,6 @@
     <Compile Include="Sys\SysAgentUser.cs" />
     <Compile Include="Sys\SysOpenIdInfo.cs" />
     <Compile Include="Biz\Transactions.cs" />
-    <Compile Include="Biz\YBS_ReceiveNotifyLog.cs" />
     <Compile Include="EnumerationRemarkConverter.cs" />
     <Compile Include="IpInfo.cs" />
     <Compile Include="DBNullCreationConverter.cs" />

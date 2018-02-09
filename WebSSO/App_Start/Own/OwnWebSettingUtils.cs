@@ -23,7 +23,7 @@ namespace WebSSO
         /// <returns></returns>
         public static string GetWebName()
         {
-            return "车险代理商平台";
+            return "登录";
         }
 
         /// <summary>

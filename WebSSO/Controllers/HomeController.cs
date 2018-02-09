@@ -58,6 +58,23 @@ namespace WebSSO.Controllers
                 }
             }
 
+            if (string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                switch (result.User.Type)
+                {
+                    case Enumeration.UserType.Staff:
+                        model.ReturnUrl = "http://localhost:12060?token=";
+                        break;
+                    case Enumeration.UserType.Client:
+                        break;
+                    case Enumeration.UserType.Agent:
+                        model.ReturnUrl = "http://localhost:12068/";
+                        break;
+                    case Enumeration.UserType.Salesman:
+                        break;
+                }
+            }
+
             gotoViewModel.Url = model.ReturnUrl;
             return Json(ResultType.Success, gotoViewModel, OwnOperateTipUtils.LOGIN_SUCCESS);
 

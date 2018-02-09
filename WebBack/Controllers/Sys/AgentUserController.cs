@@ -10,7 +10,7 @@ using WebBack.Models.Sys.AgentUser;
 
 namespace WebBack.Controllers.Sys
 {
-    public class AgentUserController : WebBackController
+    public class AgentUserController : OwnBaseController
     {
         #region 视图
 

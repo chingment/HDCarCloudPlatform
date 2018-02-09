@@ -12,7 +12,7 @@ using WebAgent.Models.Order;
 namespace WebAgent.Controllers
 {
 
-    public class OrderController : WebBackController
+    public class OrderController : OwnBaseController
     {
 
 

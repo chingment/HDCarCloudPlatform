@@ -10,7 +10,7 @@ using WebAgent.Models.ApplyLossAssess;
 
 namespace WebAgent.Controllers.Biz
 {
-    public class ApplyLossAssessController : WebBackController
+    public class ApplyLossAssessController : OwnBaseController
     {
         public ViewResult List()
         {

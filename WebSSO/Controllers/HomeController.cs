@@ -20,7 +20,7 @@ using System.Data.Entity.Core.Objects;
 namespace WebSSO.Controllers
 {
 
-    public class HomeController : WebBackController
+    public class HomeController : OwnBaseController
     {
         [AllowAnonymous]
         public ActionResult Login()

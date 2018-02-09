@@ -10,7 +10,7 @@ using WebAgent.Models.ApplyPos;
 
 namespace WebAgent.Controllers.Biz
 {
-    public class ApplyPosController : WebBackController
+    public class ApplyPosController : OwnBaseController
     {
 
         public ViewResult List()

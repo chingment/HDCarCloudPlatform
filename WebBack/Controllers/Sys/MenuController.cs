@@ -12,7 +12,7 @@ using WebBack.Models.Sys.Menu;
 namespace WebBack.Controllers.Sys
 {
     [OwnAuthorize(PermissionCode.菜单管理)]
-    public class MenuController : WebBackController
+    public class MenuController : OwnBaseController
     {
 
         public ActionResult List()

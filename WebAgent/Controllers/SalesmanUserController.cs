@@ -10,7 +10,7 @@ using WebAgent.Models.SalesmanUser;
 
 namespace WebAgent.Controllers
 {
-    public class SalesmanUserController : WebBackController
+    public class SalesmanUserController : OwnBaseController
     {
         #region 视图
 

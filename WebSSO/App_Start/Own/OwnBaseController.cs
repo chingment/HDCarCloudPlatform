@@ -29,136 +29,9 @@ namespace WebSSO
     [OwnException]
     [OwnAuthorize]
     [ValidateInput(false)]
-    public abstract class WebBackController : BaseController
+    public abstract class OwnBaseController : BaseController
     {
-        #region 公共的方法
-        public string ConvertToZTreeJson(object obj, string idField, string pIdField, string nameField, string IconSkinField, params int[] isCheckedIds)
-        {
-            StringBuilder Json = new StringBuilder();
-            Json.Append("[");
-            Type t = obj.GetType();
-            foreach (var model in (object[])obj)
-            {
-                Type t1 = model.GetType();
-                Json.Append("{");
-                foreach (PropertyInfo p in t1.GetProperties())
-                {
-                    string name = p.Name.Trim().ToLower();
-                    object value = p.GetValue(model, null);
-                    if (name == idField.ToLower())
-                    {
-                        Json.Append("\"id\":" + JsonConvert.SerializeObject(value) + ",\"open\":true,");
-                        int v = int.Parse(value.ToString());
-                        if (isCheckedIds.Contains(v))
-                        {
-                            Json.Append("\"checked\":true,");
-                        }
-                    }
-                    else if (name == pIdField.Trim().ToLower())
-                    {
-                        Json.Append("\"pId\":" + JsonConvert.SerializeObject(value) + ",");
-
-                        if (value == null || value.ToString() == "")
-                        {
-                            Json.Append("\"iconSkin\":\"" + IconSkinField + "\" ");
-                            Json.Append(",");
-                        }
-                        else
-                        {
-                            Json.Append("\"iconSkin\":\"" + IconSkinField + "s\" ");
-                            Json.Append(",");
-                        }
-
-                    }
-                    else if (name == nameField.Trim().ToLower())
-                    {
-                        Json.Append("\"name\":" + JsonConvert.SerializeObject(value) + ",");
-
-                    }
-                    else
-                    {
-                        Json.Append("\"" + p.Name + "\":" + JsonConvert.SerializeObject(value) + ",");
-                    }
-                }
-                if (Json.Length > 2)
-                {
-                    Json.Remove(Json.Length - 1, 1);
-                }
-                Json.Append("},");
-            }
-            if (Json.Length > 2)
-            {
-                Json.Remove(Json.Length - 1, 1);
-            }
-            Json.Append("]");
-            return Json.ToString();
-        }
-
-        public string ConvertToZTreeJson2(object obj, string idField, string pIdField, string nameField, string IconSkinField, params int[] isCheckedIds)
-        {
-            StringBuilder Json = new StringBuilder();
-            Json.Append("[");
-            Type t = obj.GetType();
-            foreach (var model in (object[])obj)
-            {
-                Type t1 = model.GetType();
-                Json.Append("{");
-                foreach (PropertyInfo p in t1.GetProperties())
-                {
-                    string name = p.Name.Trim().ToLower();
-                    object value = p.GetValue(model, null);
-                    if (name == idField.ToLower())
-                    {
-                        Json.Append("\"id\":" + JsonConvert.SerializeObject(value) + ",");
-                        int v = int.Parse(value.ToString());
-                        if (isCheckedIds.Contains(v))
-                        {
-                            Json.Append("\"checked\":true,");
-                        }
-                    }
-                    else if (name == pIdField.Trim().ToLower())
-                    {
-                        Json.Append("\"pId\":0,");
-
-                        if (value == null || value.ToString() == "")
-                        {
-                            Json.Append("\"iconSkin\":\"" + IconSkinField + "\" ");
-                            Json.Append(",");
-                        }
-                        else
-                        {
-                            Json.Append("\"iconSkin\":\"" + IconSkinField + "s\" ");
-                            Json.Append(",");
-                        }
-
-                    }
-                    else if (name == nameField.Trim().ToLower())
-                    {
-                        Json.Append("\"name\":" + JsonConvert.SerializeObject(value) + ",");
-
-                    }
-                    else
-                    {
-                        Json.Append("\"" + p.Name + "\":" + JsonConvert.SerializeObject(value) + ",");
-                    }
-                }
-                if (Json.Length > 2)
-                {
-                    Json.Remove(Json.Length - 1, 1);
-                }
-                Json.Append("},");
-            }
-            if (Json.Length > 2)
-            {
-                Json.Remove(Json.Length - 1, 1);
-            }
-            Json.Append("]");
-            return Json.ToString();
-        }
-
-
-        #endregion 公共的方法
-
+ 
         private LumosDbContext _currentDb;
 
         public LumosDbContext CurrentDb
@@ -202,7 +75,7 @@ namespace WebSSO
                 LogicalThreadContext.Properties["trackid"] = this.Session.SessionID;
         }
 
-        public WebBackController()
+        public OwnBaseController()
         {
             _currentDb = new LumosDbContext();
             var identity = new AspNetIdentiyAuthorizeRelay<SysUser>();

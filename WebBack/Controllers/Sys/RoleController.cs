@@ -13,7 +13,7 @@ using WebBack.Models.Sys.Role;
 namespace WebBack.Controllers.Sys
 {
     [OwnAuthorize(PermissionCode.角色管理)]
-    public class RoleController : WebBackController
+    public class RoleController : OwnBaseController
     {
         #region 视图
         public ViewResult List()

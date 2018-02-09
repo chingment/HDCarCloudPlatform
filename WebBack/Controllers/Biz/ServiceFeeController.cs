@@ -7,7 +7,7 @@ using WebBack.Models.Biz.ServiceFee;
 
 namespace WebBack.Controllers.Biz
 {
-    public class ServiceFeeController : WebBackController
+    public class ServiceFeeController : OwnBaseController
     {
         public ViewResult Details(int id)
         {

@@ -15,7 +15,7 @@ using System.Transactions;
 
 namespace WebBack.Controllers.Biz
 {
-    public class PosMachineController : WebBackController
+    public class PosMachineController : OwnBaseController
     {
         //
         // GET: /PosMachine/

@@ -18,7 +18,7 @@ using System.Text;
 namespace WebSSO.Controllers
 {
 
-    public class CommonController : WebBackController
+    public class CommonController : OwnBaseController
     {
         /// <summary>
         /// 获取验证码的图片 使用方式 请求url:/Common/GetImgVerifyCode?name=sessionname

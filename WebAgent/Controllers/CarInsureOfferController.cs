@@ -11,7 +11,7 @@ using WebAgent.Models.CarInsureOffer;
 
 namespace WebAgent.Controllers.Biz
 {
-    public class CarInsureOfferController : WebBackController
+    public class CarInsureOfferController : OwnBaseController
     {
         public ViewResult List()
         {

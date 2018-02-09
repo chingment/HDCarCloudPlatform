@@ -11,7 +11,7 @@ using WebBack.Models.Biz.CarInsureOffer;
 
 namespace WebBack.Controllers.Biz
 {
-    public class CarInsureOfferController : WebBackController
+    public class CarInsureOfferController : OwnBaseController
     {
         public ViewResult List()
         {

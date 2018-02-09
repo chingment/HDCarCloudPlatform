@@ -10,7 +10,7 @@ using WebBack.Models.Sys.Banner;
 
 namespace WebBack.Controllers.Sys
 {
-    public class BannerController : WebBackController
+    public class BannerController : OwnBaseController
     {
         // GET: Banner
         public ViewResult BannerList()

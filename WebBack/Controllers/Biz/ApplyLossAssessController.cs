@@ -10,7 +10,7 @@ using WebBack.Models.Biz.ApplyLossAssess;
 
 namespace WebBack.Controllers.Biz
 {
-    public class ApplyLossAssessController : WebBackController
+    public class ApplyLossAssessController : OwnBaseController
     {
         public ViewResult List()
         {

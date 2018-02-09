@@ -12,7 +12,7 @@ using WebBack.Models.Biz.Order;
 namespace WebBack.Controllers.Biz
 {
     [OwnAuthorize(PermissionCode.订单查询)]
-    public class OrderController : WebBackController
+    public class OrderController : OwnBaseController
     {
         public ViewResult CarInsureFollow(int id)
         {

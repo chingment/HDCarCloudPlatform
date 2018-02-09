@@ -35,7 +35,7 @@ namespace WebBack.Controllers.Biz
         }
     }
 
-    public class ReportController : WebBackController
+    public class ReportController : OwnBaseController
     {
 
 

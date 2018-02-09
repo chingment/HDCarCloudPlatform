@@ -8,7 +8,7 @@ using WebBack.Models.Sys.LogView;
 
 namespace WebBack.Controllers.Sys
 {
-    public class LogViewController : WebBackController
+    public class LogViewController : OwnBaseController
     {
         protected FileInfo[] Files;
         protected DirectoryInfo[] Dirs;

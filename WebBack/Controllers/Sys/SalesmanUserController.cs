@@ -10,7 +10,7 @@ using WebBack.Models.Sys.SalesmanUser;
 
 namespace WebBack.Controllers.Sys
 {
-    public class SalesmanUserController : WebBackController
+    public class SalesmanUserController : OwnBaseController
     {
         #region 视图
 

@@ -20,7 +20,7 @@ using System.Data.Entity.Core.Objects;
 namespace WebAgent.Controllers
 {
 
-    public class HomeController : WebBackController
+    public class HomeController : OwnBaseController
     {
         public static string ToHexString(byte[] bytes)
         {

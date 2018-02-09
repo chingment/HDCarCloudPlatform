@@ -11,7 +11,7 @@ using Lumos.BLL;
 
 namespace WebBack.Controllers.Biz
 {
-    public class MerchantController : WebBackController
+    public class MerchantController : OwnBaseController
     {
         // GET: Merchant
         public ViewResult OpenAccountList()

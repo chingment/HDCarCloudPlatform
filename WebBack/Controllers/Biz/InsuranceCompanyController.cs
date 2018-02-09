@@ -14,7 +14,7 @@ using WebBack.Models;
 namespace WebBack.Controllers.Biz
 {
     [OwnAuthorize(PermissionCode.保险公司设置)]
-    public class InsuranceCompanyController : WebBackController
+    public class InsuranceCompanyController : OwnBaseController
     {
         //
         // GET: /InsuranceCompany/

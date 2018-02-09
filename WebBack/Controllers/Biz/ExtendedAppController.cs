@@ -11,7 +11,7 @@ using Lumos.BLL;
 
 namespace WebBack.Controllers.Biz
 {
-    public class ExtendedAppController : WebBackController
+    public class ExtendedAppController : OwnBaseController
     {
         // GET: ExtendedApp
 

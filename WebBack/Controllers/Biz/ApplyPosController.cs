@@ -10,7 +10,7 @@ using WebBack.Models.Biz.ApplyPos;
 
 namespace WebBack.Controllers.Biz
 {
-    public class ApplyPosController : WebBackController
+    public class ApplyPosController : OwnBaseController
     {
         [OwnAuthorize(PermissionCode.业务人员申领POS机登记)]
         public ViewResult List()

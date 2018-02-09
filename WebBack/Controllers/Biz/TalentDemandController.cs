@@ -10,7 +10,7 @@ using WebBack.Models.Biz.TalentDemand;
 
 namespace WebBack.Controllers.Biz
 {
-    public class TalentDemandController : WebBackController
+    public class TalentDemandController : OwnBaseController
     {
         public ViewResult List()
         {

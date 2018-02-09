@@ -18,7 +18,7 @@ using System.Text;
 namespace WebAgent.Controllers
 {
 
-    public class CommonController : WebBackController
+    public class CommonController : OwnBaseController
     {
         [HttpPost]
         public ActionResult CkEditorUpLoadFile()

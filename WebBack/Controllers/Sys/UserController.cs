@@ -12,7 +12,7 @@ using Lumos.Mvc;
 namespace WebBack.Controllers.Sys
 {
     [OwnAuthorize(PermissionCode.所有用户管理)]
-    public class UserController : WebBackController
+    public class UserController : OwnBaseController
     {
 
         #region 视图

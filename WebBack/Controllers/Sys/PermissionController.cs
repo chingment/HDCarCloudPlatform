@@ -15,7 +15,7 @@ using System.Web.Mvc;
 namespace WebBack.Controllers.Sys
 {
 
-    public class PermissionController : WebBackController
+    public class PermissionController : OwnBaseController
     {
     
         public ViewResult Index()

@@ -29,7 +29,7 @@ namespace WebAgent
     [OwnException]
     [OwnAuthorize]
     [ValidateInput(false)]
-    public abstract class WebBackController : BaseController
+    public abstract class OwnBaseController : BaseController
     {
         #region 公共的方法
         public string ConvertToZTreeJson(object obj, string idField, string pIdField, string nameField, string IconSkinField, params int[] isCheckedIds)
@@ -202,7 +202,7 @@ namespace WebAgent
                 LogicalThreadContext.Properties["trackid"] = this.Session.SessionID;
         }
 
-        public WebBackController()
+        public OwnBaseController()
         {
             _currentDb = new LumosDbContext();
             var identity = new AspNetIdentiyAuthorizeRelay<SysUser>();

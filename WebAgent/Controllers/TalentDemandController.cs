@@ -10,7 +10,7 @@ using WebAgent.Models.TalentDemand;
 
 namespace WebAgent.Controllers.Biz
 {
-    public class TalentDemandController : WebBackController
+    public class TalentDemandController : OwnBaseController
     {
         public ViewResult List()
         {

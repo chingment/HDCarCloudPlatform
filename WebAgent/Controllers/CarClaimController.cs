@@ -11,7 +11,7 @@ using WebAgent.Models.CarClaim;
 
 namespace WebAgent.Controllers.Biz
 {
-    public class CarClaimController : WebBackController
+    public class CarClaimController : OwnBaseController
     {
 
         public ViewResult List()

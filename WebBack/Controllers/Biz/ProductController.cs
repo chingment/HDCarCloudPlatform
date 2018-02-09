@@ -11,7 +11,7 @@ using WebBack.Models.Biz.Product;
 namespace WebBack.Controllers.Biz
 {
     [OwnAuthorize(PermissionCode.商品设置)]
-    public class ProductController : WebBackController
+    public class ProductController : OwnBaseController
     {
         // GET: Prodcut
         public ViewResult GoodsList()

@@ -47,6 +47,7 @@ namespace Lumos.BLL
                 sysClientUser.Creator = operater;
                 sysClientUser.ClientAccountType = Enumeration.ClientAccountType.MasterAccount;
                 sysClientUser.Status = Enumeration.UserStatus.Normal;
+                sysClientUser.Type = Enumeration.UserType.Client;
 
                 CurrentDb.SysClientUser.Add(sysClientUser);
                 CurrentDb.SaveChanges();

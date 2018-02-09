@@ -1,32 +1,23 @@
 ﻿using Lumos.Common;
-using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
-using log4net;
-using Microsoft.AspNet.Identity;
-using System.Web.Mvc;
-using WebSSO.Models.Home;
 using Lumos.Mvc;
-using System;
-using System.Reflection;
-using System.Diagnostics;
-using System.Collections.Generic;
 using Lumos.BLL;
-using System.Security.Cryptography;
-using System.Text;
-using MySDK;
-using System.Linq;
-using System.Data.Entity.Core.Objects;
-
+using WebSSO.Models.Home;
+using System.Web.Mvc;
 namespace WebSSO.Controllers
 {
 
     public class HomeController : OwnBaseController
     {
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
             Session["WebSSOLoginVerifyCode"] = null;
-            return View();
+
+            LoginModel model = new LoginModel();
+            model.ReturnUrl = returnUrl;
+
+            return View(model);
         }
 
         /// <summary>
@@ -44,10 +35,9 @@ namespace WebSSO.Controllers
             gotoViewModel.Url = OwnWebSettingUtils.GetLoginPage();
 
 
-            LoginManager<SysAgentUser> loginWebBack = new LoginManager<SysAgentUser>();
+            LoginManager<SysUser> loginManager = new LoginManager<SysUser>();
 
-            var result = loginWebBack.SignIn(model.UserName, model.Password, CommonUtils.GetIP(), Enumeration.LoginType.Website);
-
+            var result = loginManager.SignIn(model.UserName, model.Password, CommonUtils.GetIP(), Enumeration.LoginType.Website);
 
             if (result.ResultType == Enumeration.LoginResult.Failure)
             {

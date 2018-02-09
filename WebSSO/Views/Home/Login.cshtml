@@ -1,4 +1,5 @@
-﻿@{
+﻿@model WebSSO.Models.Home.LoginModel
+@{
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
@@ -8,7 +9,7 @@
             background-color: transparent;
         }
 
-        .gbr-footer, .gbr-footer a, .gbr-footer a:visited,.gbr-footer .copyright {
+        .gbr-footer, .gbr-footer a, .gbr-footer a:visited, .gbr-footer .copyright {
             color: #fff;
         }
     </style>
@@ -43,6 +44,9 @@
 <div class="gbr-row gbr-row-login">
     <form id="form1" onsubmit="return login()">
         @Html.AntiForgeryToken()
+
+        <input type="hidden" id="txt_ReturnUrl" name="ReturnUrl" value="@Model.ReturnUrl" />
+
         <div class="h-form-container login-box">
             <div class="h-message">
                 <span id="lbl_Message"></span>
@@ -86,8 +90,8 @@
             var msgObj = $("#lbl_Message");
             $(msgObj).text("");
             var userName = $("#txt_UserName").val().replace(/(^\s*)|(\s*$)/g, "");
-            var passWord=$("#txt_Password").val();
-            var verifyCode=$("#txt_VerifyCode").val().replace(/(^\s*)|(\s*$)/g, "");
+            var passWord = $("#txt_Password").val();
+            var verifyCode = $("#txt_VerifyCode").val().replace(/(^\s*)|(\s*$)/g, "");
 
             if (userName.length == 0) {
                 $(msgObj).text("用户名不能为空");
@@ -104,12 +108,12 @@
                 return false;
             }
             else {
-                if(verifyCode.length!=4){
+                if (verifyCode.length != 4) {
                     $(msgObj).text("验证码必须为四位字符");
                     return false;
                 }
             }
-            $("#btn_Login").attr("disabled","disabled");
+            $("#btn_Login").attr("disabled", "disabled");
             $.ajax({
                 type: "post",
                 url: "/Home/Login",

@@ -116,5 +116,7 @@ namespace Lumos.Entity
         /// </summary>
         public DateTime? LastUpdateTime { get; set; }
 
+        public Enumeration.UserType Type { get; set; }
+
     }
 }

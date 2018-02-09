@@ -197,12 +197,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\Own\OwnAuthorizeAttribute.cs" />
     <Compile Include="App_Start\Own\OwnCheckVerifyCodeAttribute.cs" />
     <Compile Include="App_Start\Own\OwnWebSettingUtils.cs" />
     <Compile Include="App_Start\Own\OwnBaseController.cs" />
     <Compile Include="App_Start\Own\OwnExceptionAttribute.cs" />
-    <Compile Include="App_Start\Own\OwnNoResubmitAttribute.cs" />
     <Compile Include="App_Start\Own\OwnOperateTipUtils.cs" />
     <Compile Include="App_Start\Own\OwnStaticResource.cs" />
     <Compile Include="App_Start\Own\OwnStatisticsTrackerAttribute.cs" />

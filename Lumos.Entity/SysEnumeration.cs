@@ -58,13 +58,6 @@ namespace Lumos.Entity
             Disable = 2
         }
 
-        public enum UserType
-        {
-            Unknow = 0,
-            Formal = 1,
-            Test = 2
-        }
-
         public enum ClientAccountType
         {
             Unknow = 0,
@@ -77,6 +70,15 @@ namespace Lumos.Entity
             Unknow = 0,
             Normal = 1,
             Disable = 2
+        }
+
+        public enum UserType
+        {
+            Unknow = 0,
+            Staff = 1,
+            Client = 2,
+            Agent = 3,
+            Salesman = 4
         }
 
         /// <summary>

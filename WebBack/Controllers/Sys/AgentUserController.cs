@@ -94,7 +94,7 @@ namespace WebBack.Controllers.Sys
             user.Status = Enumeration.UserStatus.Normal;
             user.Creator = this.CurrentUserId;
             user.CreateTime = DateTime.Now;
-
+            user.Type = Enumeration.UserType.Agent;
             var identiy = new AspNetIdentiyAuthorizeRelay<SysAgentUser>();
 
 

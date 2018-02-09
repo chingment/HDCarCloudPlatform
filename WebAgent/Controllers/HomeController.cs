@@ -96,8 +96,7 @@ namespace WebAgent.Controllers
         public JsonResult Login(LoginModel model)
         {
             GoToViewModel gotoViewModel = new GoToViewModel();
-            gotoViewModel.Url = OwnWebSettingUtils.GetLoginPage();
-
+           
 
             LoginManager<SysAgentUser> loginWebBack = new LoginManager<SysAgentUser>();
 

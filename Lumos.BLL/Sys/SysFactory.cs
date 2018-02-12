@@ -39,5 +39,13 @@ namespace Lumos.BLL
                 return new SysItemCacheUpdateTimeProvider();
             }
         }
+
+        public static AuthorizeRelayProvider AuthorizeRelay
+        {
+            get
+            {
+                return new AuthorizeRelayProvider();
+            }
+        }
     }
 }

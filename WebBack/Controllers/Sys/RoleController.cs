@@ -1,8 +1,8 @@
-﻿using Lumos.Common;
+﻿using Lumos.BLL;
+using Lumos.Common;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
 using Lumos.Mvc;
-using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +36,7 @@ namespace WebBack.Controllers.Sys
         #region 方法
         public JsonResult GetRoleTree()
         {
-            object json = ConvertToZTreeJson2(CurrentDb.Roles.ToArray(), "id", "pid", "name", "role");
+            object json = ConvertToZTreeJson2(CurrentDb.SysRole.ToArray(), "id", "pid", "name", "role");
             return Json(ResultType.Success, json);
         }
 
@@ -49,14 +49,12 @@ namespace WebBack.Controllers.Sys
 
         public JsonResult GetRoleMenuTreeList(int roleId)
         {
-
-            var identity = new AspNetIdentiyAuthorizeRelay<SysUser>();
-            var roleMenus = identity.GetRoleMenus(roleId);
+            var roleMenus = SysFactory.AuthorizeRelay.GetRoleMenus(roleId);
             var isCheckedIds = from p in roleMenus select p.Id;
-
             object json = ConvertToZTreeJson(CurrentDb.SysMenu.OrderByDescending(m => m.Priority).ToArray(), "id", "pid", "name", "menu", isCheckedIds.ToArray());
 
             return Json(ResultType.Success, json);
+
         }
 
         public JsonResult GetRoleUserList(RoleUserSearchCondition condition)
@@ -77,7 +75,7 @@ namespace WebBack.Controllers.Sys
 
 
             var list = (from ur in CurrentDb.SysUserRole
-                        join r in CurrentDb.Roles on ur.RoleId equals r.Id
+                        join r in CurrentDb.SysRole on ur.RoleId equals r.Id
                         join u in CurrentDb.SysStaffUser on ur.UserId equals u.Id
                         where ur.RoleId == condition.RoleId &&
                             (userName.Length == 0 || u.UserName.Contains(userName)) &&
@@ -139,28 +137,14 @@ namespace WebBack.Controllers.Sys
         [ValidateAntiForgeryToken]
         public JsonResult AddUserToRole(int roleId, int[] userIds)
         {
-            var identityWebBack = new AspNetIdentiyAuthorizeRelay<SysUser>();
-            foreach (int userId in userIds)
-            {
-                identityWebBack.AddUserToRole(this.CurrentUserId, userId, roleId);
-            }
-
-            return Json(ResultType.Success, OwnOperateTipUtils.SELECT_SUCCESS);
+            return SysFactory.AuthorizeRelay.AddUserToRole(this.CurrentUserId, roleId, userIds);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult RemoveUserFromRole(int roleId, int[] userIds)
         {
-
-            var identityWebBack = new AspNetIdentiyAuthorizeRelay<SysUser>();
-
-            foreach (int userId in userIds)
-            {
-                identityWebBack.RemoveUserFromRole(this.CurrentUserId, roleId, userId);
-            }
-
-            return Json(ResultType.Success, OwnOperateTipUtils.REMOVE_SUCCESS);
+            return SysFactory.AuthorizeRelay.RemoveUserFromRole(this.CurrentUserId, roleId, userIds);
         }
 
 
@@ -168,10 +152,7 @@ namespace WebBack.Controllers.Sys
         [ValidateAntiForgeryToken]
         public JsonResult SaveRoleMenu(int roleId, int[] menuIds)
         {
-            var identity = new AspNetIdentiyAuthorizeRelay<SysUser>();
-            identity.SaveRoleMenu(this.CurrentUserId, roleId, menuIds);
-
-            return Json(ResultType.Success, OwnOperateTipUtils.SAVE_SUCCESS);
+            return SysFactory.AuthorizeRelay.SaveRoleMenu(this.CurrentUserId, roleId, menuIds);
         }
 
 
@@ -179,16 +160,7 @@ namespace WebBack.Controllers.Sys
         [ValidateAntiForgeryToken]
         public JsonResult Add(AddViewModel model)
         {
-            var identityWebBack = new AspNetIdentiyAuthorizeRelay<SysUser>();
-            if (!identityWebBack.RoleExists(model.SysRole.Name))
-            {
-                identityWebBack.CreateRole(this.CurrentUserId, model.SysRole);
-                return Json(ResultType.Success, OwnOperateTipUtils.ADD_SUCCESS);
-            }
-            else
-            {
-                return Json(ResultType.Failure, OwnOperateTipUtils.ROLE_EXISTS);
-            }
+            return SysFactory.AuthorizeRelay.CreateRole(this.CurrentUserId, model.SysRole);
         }
 
 
@@ -196,15 +168,7 @@ namespace WebBack.Controllers.Sys
         [ValidateAntiForgeryToken]
         public JsonResult Edit(EditViewModel model)
         {
-
-            var identityWebBack = new AspNetIdentiyAuthorizeRelay<SysUser>();
-
-            var isExxistRoleName = CurrentDb.Roles.Where(m => m.Name == model.SysRole.Name && m.Id != model.SysRole.Id).FirstOrDefault();
-            if (isExxistRoleName != null)
-                return Json(ResultType.Failure, OwnOperateTipUtils.ROLE_EXISTS);
-            identityWebBack.UpdateRole(this.CurrentUserId, model.SysRole);
-
-            return Json(ResultType.Success, OwnOperateTipUtils.UPDATE_SUCCESS);
+            return SysFactory.AuthorizeRelay.UpdateRole(this.CurrentUserId, model.SysRole);
         }
 
 
@@ -212,12 +176,7 @@ namespace WebBack.Controllers.Sys
         [ValidateAntiForgeryToken]
         public JsonResult Delete(int[] ids)
         {
-
-            var identityWebBack = new AspNetIdentiyAuthorizeRelay<SysUser>();
-
-            identityWebBack.DeleteRole(this.CurrentUserId, ids);
-
-            return Json(ResultType.Success, OwnOperateTipUtils.DELETE_SUCCESS);
+            return SysFactory.AuthorizeRelay.DeleteRole(this.CurrentUserId, ids);
         }
 
         #endregion

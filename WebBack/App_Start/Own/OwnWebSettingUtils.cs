@@ -12,9 +12,13 @@ namespace WebBack
         /// 获取登录的页面
         /// </summary>
         /// <returns></returns>
-        public static string GetLoginPage()
+        public static string GetLoginPage(string returnUrl = "")
         {
-            return "/Home/Login";
+            string server = System.Configuration.ConfigurationManager.AppSettings["custom:LoginServerUrl"];
+           // string loginUrl = string.Format("{0}?returnUrl={1}", server, HttpUtility.UrlEncode(returnUrl));
+
+            string loginUrl = string.Format("{0}", server);
+            return loginUrl;
         }
 
         /// <summary>

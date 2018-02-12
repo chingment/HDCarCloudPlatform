@@ -1,11 +1,6 @@
 ﻿@{
     Layout = null;
-
-    var menus = User.Identity.GetUserMenus();
 }
-
-@using Microsoft.AspNet.Identity;
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +65,7 @@
 
             setInterval("reinitIframe()", 200);
 
-            setInterval("getMessageTipCount()", 5000);
+            //setInterval("getMessageTipCount()", 5000);
 
         });
 
@@ -202,11 +197,9 @@
                     </ul>
                     <ul class="content-right btn-dropdownmenu">
 
-                        @if (Request.IsAuthenticated)
+                        @if (OwnRequest.IsLogin())
                         {
-                            if (Request.QueryString["out"] == null)
-                            {
-                                if (User.Identity.UserHasMenu(menus, "/Biz/CarClaim/VerifyOrderList"))
+                                if (OwnRequest.IsInMenu("/Biz/CarClaim/VerifyOrderList"))
                                 {
                                     <li>
                                         <a href="/Biz/CarClaim/VerifyOrderList" target="iframeMain">
@@ -218,7 +211,7 @@
                                     </li>
                                 }
 
-                                if (User.Identity.UserHasMenu(menus, "/Biz/CarClaim/VerifyAmountList"))
+                                if (OwnRequest.IsInMenu("/Biz/CarClaim/VerifyAmountList"))
                                 {
                                     <li>
                                         <a href="/Biz/CarClaim/VerifyAmountList" target="iframeMain">
@@ -230,7 +223,7 @@
                                     </li>
                                 }
 
-                                if (User.Identity.UserHasMenu(menus, "/Biz/CarInsureOffer/DealtList"))
+                                if (OwnRequest.IsInMenu("/Biz/CarInsureOffer/DealtList"))
                                 {
                                     <li>
                                         <a href="/Biz/CarInsureOffer/DealtList" target="iframeMain">
@@ -252,7 +245,7 @@
                                 <li class="parent">
                                     <a href="javascript:void(0)" class="directory">
                                         <span class="title">
-                                            欢迎您,@User.Identity.GetHiddenUserName()
+                                            欢迎您,@OwnRequest.GetUserNameWithSymbol()
                                         </span>
                                         <span class="more"></span>
                                     </a>
@@ -267,7 +260,6 @@
                                         </li>
                                     </ul>
                                 </li>
-                            }
                         }
                     </ul>
                     <div class="clear"></div>
@@ -282,9 +274,10 @@
                     <dl>
                         <dd class="content-left">
                             <ul class="navmenu-left">
-                                @if (Request.IsAuthenticated)
+                                @if (OwnRequest.IsLogin())
                                 {
 
+                                    var menus = OwnRequest.GetMenus();
                                     var menuLevel1 = from c in menus where c.PId == 1 select c;
                                     foreach (var menuLevel1Child in menuLevel1)
                                     {

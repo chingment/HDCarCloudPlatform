@@ -49,12 +49,12 @@
 
             $("#abtn-editPwd").toggle(function () {
                 $("#lbl_Password").hide();
-                $("#Model_SysStaffUser_PasswordHash").show();
+                $("#Model_SysStaffUser_Password").show();
                 $(this).text("取消");
             }, function () {
                 $("#lbl_Password").show();
-                $("#Model_SysStaffUser_PasswordHash").hide();
-                $("#Model_SysStaffUser_PasswordHash").val("");
+                $("#Model_SysStaffUser_Password").hide();
+                $("#Model_SysStaffUser_Password").val("");
                 $(this).text("修改");
             }
             );
@@ -114,9 +114,9 @@ function () {
                 <td class="f-tb-c">
                     <label id="lbl_Password">******</label>
 
-                    <input name="Model.SysStaffUser.PasswordHash" class="input-control" autocomplete="off" type="password" id="Model_SysStaffUser_PasswordHash" style="width: 150px;display:none;" />
+                    <input name="Model.SysStaffUser.Password" class="input-control" autocomplete="off" type="password" id="Model_SysStaffUser_Password" style="width: 150px;display:none;" />
                     <a class="a-btn" id="abtn-editPwd" href="javascript:void(0)">修改</a>
-                    <span id="Model_SysStaffUser_PasswordHashTip"></span>
+                    <span id="Model_SysStaffUser_PasswordTip"></span>
                 </td>
             </tr>
             <tr>

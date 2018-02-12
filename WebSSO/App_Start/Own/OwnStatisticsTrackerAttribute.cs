@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.AspNet.Identity;
 using System.Reflection;
 using log4net;
 using Lumos.Common;
@@ -39,7 +38,7 @@ namespace WebSSO
                 return 0;
             }
 
-            int userId=HttpContext.Current.User.Identity.GetUserId<int>();
+            int userId=0;
             return userId;
         }
 

@@ -14,7 +14,7 @@ namespace Lumos.BLL
                 return "";
 
             string fullName = "";
-            var user = CurrentDb.Users.Where(m => m.Id == id).FirstOrDefault();
+            var user = CurrentDb.SysUser.Where(m => m.Id == id).FirstOrDefault();
             if (user != null)
             {
                 fullName = user.FullName;

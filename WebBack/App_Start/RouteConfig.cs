@@ -17,14 +17,14 @@ namespace WebBack
             routes.MapRoute(
          name: "App_Default",
          url: "App/{controller}/{action}/{id}",
-         defaults: new { controller = "Home", action = "Login", id = UrlParameter.Optional },
+         defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
          namespaces:new string[] { "WebBack.Controllers.App" }
       );
 
             routes.MapRoute(
                    name: "Biz_Default",
                    url: "Biz/{controller}/{action}/{id}",
-                   defaults: new { controller = "Home", action = "Login", id = UrlParameter.Optional },
+                   defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
                  namespaces: new string[] { "WebBack.Controllers.Biz" }
                    );
 
@@ -33,14 +33,14 @@ namespace WebBack
             routes.MapRoute(
                name: "Sys_Default",
                url: "Sys/{controller}/{action}/{id}",
-               defaults: new { controller = "Home", action = "Login", id = UrlParameter.Optional },
+               defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
                    namespaces: new string[] { "WebBack.Controllers.Sys" }
             );
 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Login", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
 

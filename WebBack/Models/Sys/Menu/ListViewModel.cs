@@ -1,4 +1,5 @@
-﻿using Lumos.DAL.AuthorizeRelay;
+﻿using Lumos.BLL;
+using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
 using System;
 using System.Collections.Generic;
@@ -25,9 +26,10 @@ namespace WebBack.Models.Sys.Menu
 
         public ListViewModel()
         {
-            var identity = new AspNetIdentiyAuthorizeRelay<SysUser>();
-            var sysPermission = identity.GetPermissionList(new PermissionCode());
+            var sysPermission = SysFactory.AuthorizeRelay.GetPermissionList(new PermissionCode());
+
             _sysPermission = sysPermission;
+
         }
     }
 }

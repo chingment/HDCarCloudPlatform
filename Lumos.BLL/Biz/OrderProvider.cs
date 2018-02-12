@@ -252,7 +252,7 @@ namespace Lumos.BLL
 
                 }
 
-                var creator = CurrentDb.Users.Where(m => m.Id == l_orderToCarInsure.Creator).FirstOrDefault();
+                var creator = CurrentDb.SysUser.Where(m => m.Id == l_orderToCarInsure.Creator).FirstOrDefault();
 
                 switch (operate)
                 {

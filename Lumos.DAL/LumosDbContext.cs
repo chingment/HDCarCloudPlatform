@@ -1,6 +1,5 @@
 ﻿using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -109,18 +108,18 @@ namespace Lumos.DAL
             context.Database.ExecuteSqlCommand("DBCC CHECKIDENT ('SysUser', RESEED," + userIdAutoNum + " )");
 
             //初始用户
-            context.SysStaffUser.Add(new SysStaffUser() { Id = userIdAutoNum, UserName = "admin", SecurityStamp = "61c7b4a2-4197-4d32-b9a5-629425fc2000", FullName = "李珊", PasswordHash = "AD5hJcUUIJ4NxikOI2O1ChwVgoGYwPXDxGHp+nSIX8GHEeQw5h0C9mECSFyXeo/kCw==", IsDelete = false, Status = Enumeration.UserStatus.Normal, IsModifyDefaultPwd = false, Creator = 0, CreateTime = DateTime.Now, PhoneNumberConfirmed = false, TwoFactorEnabled = false, LockoutEnabled = false, AccessFailedCount = 0, RegisterTime = DateTime.Now });
+            context.SysStaffUser.Add(new SysStaffUser() { Id = userIdAutoNum, UserName = "admin", SecurityStamp = "61c7b4a2-4197-4d32-b9a5-629425fc2000", FullName = "李珊", PasswordHash = "AD5hJcUUIJ4NxikOI2O1ChwVgoGYwPXDxGHp+nSIX8GHEeQw5h0C9mECSFyXeo/kCw==", IsDelete = false, Status = Enumeration.UserStatus.Normal, Creator = 0, CreateTime = DateTime.Now, RegisterTime = DateTime.Now });
 
             //初始角色
-            context.Roles.Add(new SysRole() { Id = 1, Name = "角色", PId = 0, Description = "" });
-            context.Roles.Add(new SysRole() { Id = 2, Name = "角色1", PId = 1, Description = "" });
-            context.Roles.Add(new SysRole() { Id = 3, Name = "角色2", PId = 1, Description = "" });
-            context.Roles.Add(new SysRole() { Id = 4, Name = "角色3", PId = 2, Description = "" });
-            context.Roles.Add(new SysRole() { Id = 5, Name = "角色4", PId = 2, Description = "" });
-            context.Roles.Add(new SysRole() { Id = 6, Name = "角色5", PId = 6, Description = "" });
-            context.Roles.Add(new SysRole() { Id = 7, Name = "角色6", PId = 1, Description = "" });
+            //context.Roles.Add(new SysRole() { Id = 1, Name = "角色", PId = 0, Description = "" });
+            //context.Roles.Add(new SysRole() { Id = 2, Name = "角色1", PId = 1, Description = "" });
+            //context.Roles.Add(new SysRole() { Id = 3, Name = "角色2", PId = 1, Description = "" });
+            //context.Roles.Add(new SysRole() { Id = 4, Name = "角色3", PId = 2, Description = "" });
+            //context.Roles.Add(new SysRole() { Id = 5, Name = "角色4", PId = 2, Description = "" });
+            //context.Roles.Add(new SysRole() { Id = 6, Name = "角色5", PId = 6, Description = "" });
+            //context.Roles.Add(new SysRole() { Id = 7, Name = "角色6", PId = 1, Description = "" });
             //初始角色用户
-            context.SysUserRole.Add(new SysUserRole() { UserId = 1, RoleId = userIdAutoNum });
+            //context.SysUserRole.Add(new SysUserRole() { UserId = 1, RoleId = userIdAutoNum });
 
             List<SysMenu> sysMenus = new List<SysMenu>();
             //初始菜单

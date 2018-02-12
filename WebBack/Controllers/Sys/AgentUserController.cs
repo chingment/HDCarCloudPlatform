@@ -1,4 +1,6 @@
-﻿using Lumos.DAL.AuthorizeRelay;
+﻿using Lumos.BLL;
+using Lumos.DAL;
+using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
 using Lumos.Mvc;
 using System;
@@ -86,53 +88,29 @@ namespace WebBack.Controllers.Sys
             SysAgentUser user = new SysAgentUser();
             user.UserName = string.Format("AG{0}", model.SysAgentUser.UserName);
             user.FullName = model.SysAgentUser.FullName;
-            user.PasswordHash = "888888";
+            user.PasswordHash = PassWordHelper.HashPassword("888888");
             user.Email = model.SysAgentUser.Email;
             user.PhoneNumber = model.SysAgentUser.PhoneNumber;
-            user.IsModifyDefaultPwd = false;
             user.IsDelete = false;
             user.Status = Enumeration.UserStatus.Normal;
-            user.Creator = this.CurrentUserId;
-            user.CreateTime = DateTime.Now;
             user.Type = Enumeration.UserType.Agent;
-            var identiy = new AspNetIdentiyAuthorizeRelay<SysAgentUser>();
 
-
-            if (identiy.UserExists(user.UserName.Trim()))
-                return Json(ResultType.Failure, OwnOperateTipUtils.USER_EXISTS);
-
-
-            bool r = identiy.CreateUser(this.CurrentUserId, user, null);
-            if (!r)
-                return Json(ResultType.Failure, OwnOperateTipUtils.ADD_FAILURE);
-
-
-
-            return Json(ResultType.Success, OwnOperateTipUtils.ADD_SUCCESS);
-
+            return SysFactory.AuthorizeRelay.CreateUser<SysAgentUser>(this.CurrentUserId, user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult Edit(EditViewModel model)
         {
-
-            var identiy = new AspNetIdentiyAuthorizeRelay<SysAgentUser>();
-            SysAgentUser user = identiy.GetUser(model.SysAgentUser.Id);
-
+            SysAgentUser user = new SysAgentUser();
+            user.Id = model.SysAgentUser.Id;
+            user.Password = model.SysAgentUser.Password;
             user.FullName = model.SysAgentUser.FullName;
             user.Email = model.SysAgentUser.Email;
             user.PhoneNumber = model.SysAgentUser.PhoneNumber;
-            user.Mender = this.CurrentUserId;
-            user.LastUpdateTime = DateTime.Now;
 
+            return SysFactory.AuthorizeRelay.UpdateUser<SysAgentUser>(this.CurrentUserId, user);
 
-            bool r = identiy.UpdateUser(this.CurrentUserId, user, model.SysAgentUser.PasswordHash);
-            if (!r)
-            {
-                return Json(ResultType.Failure, OwnOperateTipUtils.UPDATE_FAILURE);
-            }
-            return Json(ResultType.Success, OwnOperateTipUtils.UPDATE_SUCCESS);
         }
     }
 }

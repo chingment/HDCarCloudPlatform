@@ -30,7 +30,7 @@ namespace WebBack.Models.Sys.User
 
         public DetailsViewModel(int id)
         {
-            var sysUser = CurrentDb.Users.Where(m => m.Id == id).FirstOrDefault();
+            var sysUser = CurrentDb.SysUser.Where(m => m.Id == id).FirstOrDefault();
             if (sysUser != null)
             {
                 _sysUser = sysUser;

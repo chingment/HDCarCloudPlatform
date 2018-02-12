@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.AspNet.Identity;
 using System.Reflection;
 using log4net;
 using Lumos.Common;
@@ -23,24 +22,7 @@ namespace WebAgent
 
         public int GetUserId()
         {
-            if(HttpContext.Current==null)
-            {
-                return 0;
-            }
-
-            if(HttpContext.Current.User==null)
-            {
-                return 0;
-            }
-
-
-            if(HttpContext.Current.User.Identity==null)
-            {
-                return 0;
-            }
-
-            int userId=HttpContext.Current.User.Identity.GetUserId<int>();
-            return userId;
+            return OwnRequest.GetCurrentUserId();
         }
 
         #region Action时间监控

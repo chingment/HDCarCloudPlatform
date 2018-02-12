@@ -29,7 +29,7 @@ namespace Lumos.BLL
 
                 //code.IsUse = true;
 
-                var isExists = CurrentDb.Users.Where(m => m.UserName == userName).FirstOrDefault();
+                var isExists = CurrentDb.SysUser.Where(m => m.UserName == userName).FirstOrDefault();
 
                 if (isExists != null)
                 {

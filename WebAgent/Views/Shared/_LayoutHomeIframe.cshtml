@@ -1,11 +1,6 @@
 ﻿@{
     Layout = null;
-
-    var menus = User.Identity.GetUserMenus();
 }
-
-@using Microsoft.AspNet.Identity;
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -203,57 +198,19 @@
                     </ul>
                     <ul class="content-right btn-dropdownmenu">
 
-                        @if (Request.IsAuthenticated)
+                        @if (OwnRequest.IsLogin())
                         {
-                            if (Request.QueryString["out"] == null)
-                            {
-                                if (User.Identity.UserHasMenu(menus, "/Biz/CarClaim/VerifyOrderList"))
-                                {
-                                    <li>
-                                        <a href="/Biz/CarClaim/VerifyOrderList" target="iframeMain">
-                                            理赔需求核实
-                                            <span id="lbl_WaitCarClaimVerifyOrderCount" class="tipnumcount">
-                                                0
-                                            </span>
-                                        </a>
-                                    </li>
-                                }
-
-                                if (User.Identity.UserHasMenu(menus, "/Biz/CarClaim/VerifyAmountList"))
-                                {
-                                    <li>
-                                        <a href="/Biz/CarClaim/VerifyAmountList" target="iframeMain">
-                                            理赔金额核实
-                                            <span id="lbl_WaitCarClaimVerifyAmonuntCount" class="tipnumcount">
-                                                0
-                                            </span>
-                                        </a>
-                                    </li>
-                                }
-
-                                if (User.Identity.UserHasMenu(menus, "/Biz/CarInsureOffer/DealtList"))
-                                {
-                                    <li>
-                                        <a href="/Biz/CarInsureOffer/DealtList" target="iframeMain">
-                                            投保报价
-                                            <span id="lbl_WaitCarInOfferCount" class="tipnumcount">
-                                                0
-                                            </span>
-                                        </a>
-                                    </li>
-                                }
-
-                                <li>
-                                    <a href="/home/main" target="iframeMain">
-                                        <span class="title">
-                                            主界面
-                                        </span>
-                                    </a>
-                                </li>
+                            <li>
+                                <a href="/home/main" target="iframeMain">
+                                    <span class="title">
+                                        主界面
+                                    </span>
+                                </a>
+                            </li>
                                 <li class="parent">
                                     <a href="javascript:void(0)" class="directory">
                                         <span class="title">
-                                            欢迎您,@User.Identity.GetHiddenUserName()
+                                            欢迎您,@OwnRequest.GetUserNameWithSymbol()
                                         </span>
                                         <span class="more"></span>
                                     </a>
@@ -262,13 +219,13 @@
                                         <li>
                                             @using (Html.BeginForm("LogOff", "Home", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
                                             {
-                                                //@Html.AntiForgeryToken()
+                                                @Html.AntiForgeryToken()
                                             }
                                             <a href="javascript:document.getElementById('logoutForm').submit()">退出</a>
                                         </li>
                                     </ul>
                                 </li>
-                            }
+
                         }
                     </ul>
                     <div class="clear"></div>
@@ -283,7 +240,7 @@
                     <dl>
                         <dd class="content-left">
                             <ul class="navmenu-left">
-                                @if (Request.IsAuthenticated)
+                                @if (OwnRequest.IsLogin())
                                 {
                                     <li class="parent">
                                         <span><span class="icon icon_navmenu_level1_common"></span><span>业务员管理</span></span>

@@ -1,4 +1,5 @@
-﻿using Lumos.Common;
+﻿using Lumos.BLL;
+using Lumos.Common;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
 using Lumos.Mvc;
@@ -62,23 +63,20 @@ namespace WebBack.Controllers.Sys
         [ValidateAntiForgeryToken]
         public JsonResult Add(AddViewModel model)
         {
-            var identity = new AspNetIdentiyAuthorizeRelay<SysUser>();
-            identity.CreateMenu(this.CurrentUserId, model.SysMenu, model.SysMenu.Permission);
-            return Json(ResultType.Success, OwnOperateTipUtils.ADD_SUCCESS);
+            return SysFactory.AuthorizeRelay.CreateMenu(this.CurrentUserId, model.SysMenu, model.SysMenu.Permission);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult Edit(EditViewModel model)
         {
-            int menuId = model.SysMenu.Id;
-            SysMenu menu = CurrentDb.SysMenu.Find(menuId);
+            var menu = new SysMenu();
+            menu.Id = model.SysMenu.Id;
             menu.Name = model.SysMenu.Name;
             menu.Url = model.SysMenu.Url;
             menu.Description = model.SysMenu.Description;
-            var identityWebBack = new AspNetIdentiyAuthorizeRelay<SysUser>();
-            identityWebBack.UpdateMenu(this.CurrentUserId, menu, model.SysMenu.Permission);
-            return Json(ResultType.Success, OwnOperateTipUtils.UPDATE_SUCCESS);
+
+            return SysFactory.AuthorizeRelay.UpdateMenu(this.CurrentUserId, model.SysMenu, model.SysMenu.Permission);
 
         }
 
@@ -86,11 +84,7 @@ namespace WebBack.Controllers.Sys
         [ValidateAntiForgeryToken]
         public JsonResult Delete(int[] ids)
         {
-            var identity = new AspNetIdentiyAuthorizeRelay<SysUser>();
-
-            identity.DeleteMenu(this.CurrentUserId, ids);
-
-            return Json(ResultType.Success, OwnOperateTipUtils.DELETE_SUCCESS);
+            return SysFactory.AuthorizeRelay.DeleteMenu(this.CurrentUserId, ids);
         }
 
         [HttpPost]
@@ -113,7 +107,7 @@ namespace WebBack.Controllers.Sys
                     }
                 }
             }
-            return Json(ResultType.Success, OwnOperateTipUtils.UPDATE_SUCCESS);
+            return Json(ResultType.Success, "保存成功");
 
         }
 

@@ -4,6 +4,9 @@ using Lumos.Mvc;
 using Lumos.BLL;
 using WebSSO.Models.Home;
 using System.Web.Mvc;
+using Lumos.Session;
+using System;
+
 namespace WebSSO.Controllers
 {
 
@@ -32,12 +35,8 @@ namespace WebSSO.Controllers
         public JsonResult Login(LoginModel model)
         {
             GoToViewModel gotoViewModel = new GoToViewModel();
-            gotoViewModel.Url = OwnWebSettingUtils.GetLoginPage();
 
-
-            LoginManager<SysUser> loginManager = new LoginManager<SysUser>();
-
-            var result = loginManager.SignIn(model.UserName, model.Password, CommonUtils.GetIP(), Enumeration.LoginType.Website);
+            var result = SysFactory.AuthorizeRelay.SignIn(model.UserName, model.Password, CommonUtils.GetIP(), Enumeration.LoginType.Website);
 
             if (result.ResultType == Enumeration.LoginResult.Failure)
             {
@@ -63,19 +62,36 @@ namespace WebSSO.Controllers
                 switch (result.User.Type)
                 {
                     case Enumeration.UserType.Staff:
-                        model.ReturnUrl = "http://localhost:12060?token=";
+                        model.ReturnUrl = System.Configuration.ConfigurationManager.AppSettings["custom:WebBackUrl"];
                         break;
                     case Enumeration.UserType.Client:
                         break;
                     case Enumeration.UserType.Agent:
-                        model.ReturnUrl = "http://localhost:12068/";
+                        model.ReturnUrl = System.Configuration.ConfigurationManager.AppSettings["custom:WebAgentUrl"];
                         break;
                     case Enumeration.UserType.Salesman:
                         break;
                 }
             }
 
-            gotoViewModel.Url = model.ReturnUrl;
+            if (model.ReturnUrl.IndexOf("?") < 0)
+            {
+                model.ReturnUrl += "?";
+            }
+            else
+            {
+                model.ReturnUrl += "&";
+            }
+
+            UserInfo userInfo = new UserInfo();
+            userInfo.UserId = result.User.Id;
+            userInfo.UserName = result.User.UserName;
+            userInfo.Token = Guid.NewGuid().ToString().Replace("-", "");
+
+            SSOUtil.SetUserInfo(userInfo);
+
+            gotoViewModel.Url = string.Format("{0}token={1}", model.ReturnUrl, userInfo.Token);
+
             return Json(ResultType.Success, gotoViewModel, OwnOperateTipUtils.LOGIN_SUCCESS);
 
         }

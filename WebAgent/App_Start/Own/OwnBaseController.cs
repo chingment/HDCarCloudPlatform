@@ -12,8 +12,6 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
 using System.IO;
@@ -205,7 +203,6 @@ namespace WebAgent
         public OwnBaseController()
         {
             _currentDb = new LumosDbContext();
-            var identity = new AspNetIdentiyAuthorizeRelay<SysUser>();
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -216,29 +213,13 @@ namespace WebAgent
 
             if (!filterContext.HttpContext.Request.IsAjaxRequest())
             {
-                CurrentDb.SysPageAccessRecord.Add(new SysPageAccessRecord() { UserId = User.Identity.GetUserId<int>(), AccessTime = DateTime.Now, PageUrl = filterContext.HttpContext.Request.Url.AbsolutePath, Ip = CommonUtils.GetIP() });
+                CurrentDb.SysPageAccessRecord.Add(new SysPageAccessRecord() { UserId = this.CurrentUserId, AccessTime = DateTime.Now, PageUrl = filterContext.HttpContext.Request.Url.AbsolutePath, Ip = CommonUtils.GetIP() });
                 CurrentDb.SaveChanges();
             }
 
             ILog log = LogManager.GetLogger(CommonSetting.LoggerAccessWeb);
-            log.Info(FormatUtils.AccessWeb(User.Identity.GetUserId<int>(), User.Identity.GetUserName()));
+            log.Info(FormatUtils.AccessWeb(this.CurrentUserId, ""));
 
-            bool skipAuthorization = filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), inherit: true) || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), inherit: true);
-            if (!skipAuthorization)
-            {
-                if (filterContext.HttpContext.Request.Url.AbsolutePath.IndexOf(OwnWebSettingUtils.GetLoginPage()) == -1)
-                {
-                    if (Request.IsAuthenticated)
-                    {
-                        var userId = User.Identity.GetUserId<int>();
-                        var user = CurrentDb.SysAgentUser.Where(m => m.Id == userId).FirstOrDefault();
-                        if (user == null)
-                        {
-                            Response.Redirect(OwnWebSettingUtils.GetLoginPage() + "?out=0");
-                        }
-                    }
-                }
-            }
 
         }
 
@@ -246,7 +227,7 @@ namespace WebAgent
         {
             get
             {
-                return User.Identity.GetUserId<int>();
+                return OwnRequest.GetCurrentUserId();
             }
         }
 

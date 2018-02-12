@@ -36,12 +36,6 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.1.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.1.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -131,9 +125,7 @@
     <Compile Include="Sys\SysRoleMenu.cs" />
     <Compile Include="Sys\SysUser.cs" />
     <Compile Include="Sys\SysItemCacheUpdateTime.cs" />
-    <Compile Include="Sys\SysUserClaim.cs" />
     <Compile Include="Sys\SysUserLoginHistory .cs" />
-    <Compile Include="Sys\SysUserLoginProvider.cs" />
     <Compile Include="Sys\SysUserRole.cs" />
     <Compile Include="Sys\SysVerifyEmail.cs" />
     <Compile Include="Sys\SysBanner.cs" />

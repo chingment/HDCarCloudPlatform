@@ -1,6 +1,5 @@
 ﻿using Lumos.DAL;
 using Lumos.Entity;
-using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -33,7 +32,7 @@ namespace WebBack.Models
         {
             get
             {
-                return HttpContext.Current.User.Identity.GetUserId<int>();
+                return 0;
             }
         }
 

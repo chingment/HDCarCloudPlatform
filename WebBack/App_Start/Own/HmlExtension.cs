@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Text;
 using System.Security.Cryptography;
+using WebBack;
 
 namespace System.Web
 {
@@ -54,7 +55,6 @@ namespace System.Web
 
             return new HtmlString(sb.ToString());
         }
-
 
         public static IHtmlString initEnumeration<T>(this HtmlHelper helper, Enumeration.InputType inputType, string name, object htmlAttributes = null)
         {
@@ -266,5 +266,24 @@ namespace System.Web
             return new MvcHtmlString(sb.ToString());
         }
 
+
+        public static IHtmlString IsInPermission(this HtmlHelper helper, object value, params string[] permissions)
+        {
+            if (permissions == null)
+                return helper.Raw(value);
+
+            if (permissions.Length == 0)
+                return helper.Raw(value);
+
+            bool isHas = OwnRequest.IsInPermission(permissions);
+            if (isHas)
+            {
+                return helper.Raw(value);
+            }
+            else
+            {
+                return helper.Raw("");
+            }
+        }
     }
 }

@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
-using Microsoft.AspNet.Identity;
 using Lumos.Entity;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Common;
 using WebBack.Models.Sys.StaffUser;
 using Lumos.Mvc;
+using Lumos.DAL;
+using Lumos.BLL;
 
 namespace WebBack.Controllers.Sys
 {
@@ -83,7 +84,7 @@ namespace WebBack.Controllers.Sys
         public JsonResult GetUserRoleTree(int userId = 0)
         {
             var isCheckedIds = CurrentDb.SysUserRole.Where(x => x.UserId == userId).Select(x => x.RoleId);
-            object json = ConvertToZTreeJson2(CurrentDb.Roles.ToArray(), "id", "pid", "name", "role", isCheckedIds.ToArray());
+            object json = ConvertToZTreeJson2(CurrentDb.SysRole.ToArray(), "id", "pid", "name", "role", isCheckedIds.ToArray());
 
             return Json(ResultType.Success, json);
         }
@@ -93,75 +94,39 @@ namespace WebBack.Controllers.Sys
         public JsonResult Add(AddViewModel model)
         {
 
-            SysStaffUser user = new SysStaffUser();
+            var user = new SysStaffUser();
             user.UserName = string.Format("UP{0}", model.SysStaffUser.UserName);
             user.FullName = model.SysStaffUser.FullName;
-            user.PasswordHash = model.SysStaffUser.PasswordHash;
+            user.PasswordHash = PassWordHelper.HashPassword(model.SysStaffUser.Password);
             user.Email = model.SysStaffUser.Email;
-            user.IsModifyDefaultPwd = false;
+            user.PhoneNumber = model.SysStaffUser.PhoneNumber;
+            user.Type = Enumeration.UserType.Staff;
             user.IsDelete = false;
             user.Status = Enumeration.UserStatus.Normal;
-            user.Creator = this.CurrentUserId;
-            user.CreateTime = DateTime.Now;
-            user.Type = Enumeration.UserType.Staff;
             int[] userRoleIds = model.UserRoleIds;
 
-
-            var identiy = new AspNetIdentiyAuthorizeRelay<SysStaffUser>();
-
-
-            if (identiy.UserExists(user.UserName.Trim()))
-                return Json(ResultType.Failure, OwnOperateTipUtils.USER_EXISTS);
-
-
-            bool r = identiy.CreateUser(this.CurrentUserId, user, model.UserRoleIds);
-            if (!r)
-                return Json(ResultType.Failure, OwnOperateTipUtils.ADD_FAILURE);
-
-
-
-            return Json(ResultType.Success, OwnOperateTipUtils.ADD_SUCCESS);
-
+            return SysFactory.AuthorizeRelay.CreateUser<SysStaffUser>(this.CurrentUserId, user, userRoleIds);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult Edit(EditViewModel model)
         {
-
-            var identiy = new AspNetIdentiyAuthorizeRelay<SysStaffUser>();
-            SysStaffUser user = identiy.GetUser(model.SysStaffUser.Id);
-
+            var user = new SysStaffUser();
+            user.Id = model.SysStaffUser.Id;
+            user.Password = model.SysStaffUser.Password;
             user.FullName = model.SysStaffUser.FullName;
             user.Email = model.SysStaffUser.Email;
             user.PhoneNumber = model.SysStaffUser.PhoneNumber;
-            user.Mender = this.CurrentUserId;
-            user.LastUpdateTime = DateTime.Now;
             int[] userRoleIds = model.UserRoleIds;
-
-            bool r = identiy.UpdateUser(this.CurrentUserId, user, model.SysStaffUser.PasswordHash, model.UserRoleIds);
-            if (!r)
-            {
-                return Json(ResultType.Failure, OwnOperateTipUtils.UPDATE_FAILURE);
-            }
-            return Json(ResultType.Success, OwnOperateTipUtils.UPDATE_SUCCESS);
+            return SysFactory.AuthorizeRelay.UpdateUser<SysStaffUser>(this.CurrentUserId, user, userRoleIds);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult Delete(int[] userIds)
         {
-
-            var identiy = new AspNetIdentiyAuthorizeRelay<SysStaffUser>();
-
-            var reusult = identiy.DeleteUser(this.CurrentUserId, userIds);
-
-            if (!reusult)
-            {
-                return Json(ResultType.Failure, OwnOperateTipUtils.DELETE_FAILURE);
-            }
-
-            return Json(ResultType.Success, OwnOperateTipUtils.DELETE_SUCCESS);
+            return SysFactory.AuthorizeRelay.DeleteUser(this.CurrentUserId, userIds);
         }
 
     }

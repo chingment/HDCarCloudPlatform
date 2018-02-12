@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Owin.Security;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -13,14 +10,17 @@ using System.Runtime.Remoting.Messaging;
 using Lumos.Entity;
 using System.Reflection;
 using System.Security.Cryptography;
+using Lumos.Mvc;
+using System.Transactions;
+
 namespace Lumos.DAL.AuthorizeRelay
 {
-    public class LoginResult<TUser> where TUser : SysUser
+    public class LoginResult
     {
 
         private Enumeration.LoginResult _ResultType;
         private Enumeration.LoginResultTip _ResultTip;
-        private TUser _User;
+        private SysUser _User;
 
         public Enumeration.LoginResult ResultType
         {
@@ -40,7 +40,7 @@ namespace Lumos.DAL.AuthorizeRelay
         }
 
 
-        public TUser User
+        public SysUser User
         {
             get
             {
@@ -59,7 +59,7 @@ namespace Lumos.DAL.AuthorizeRelay
             this._ResultTip = tip;
         }
 
-        public LoginResult(Enumeration.LoginResult type, Enumeration.LoginResultTip tip, TUser user)
+        public LoginResult(Enumeration.LoginResult type, Enumeration.LoginResultTip tip, SysUser user)
         {
             this._ResultType = type;
             this._ResultTip = tip;
@@ -68,55 +68,13 @@ namespace Lumos.DAL.AuthorizeRelay
 
     }
 
-    public class AspNetIdentiyAuthorizeRelay<TUser> where TUser : SysUser
+    public class AuthorizeRelay
     {
-
-        #region 属性和变量
-        private static SysRoleManager _roleManager;
-        private static SysUserManager<TUser> _userManager;
-
-
-        public SysRoleManager RoleManager
-        {
-            get
-            {
-                return _roleManager;
-            }
-        }
-
-        public SysUserManager<TUser> UserManager
-        {
-            get
-            {
-                return _userManager;
-            }
-        }
-
-
         private AuthorizeRelayDbContext _db;
 
-        public AuthorizeRelayDbContext Db
+        public AuthorizeRelay()
         {
-            get
-            {
-                return _db;
-            }
-        }
-        #endregion
-
-        public AspNetIdentiyAuthorizeRelay()
-        {
-
             _db = new AuthorizeRelayDbContext();
-            _roleManager = new SysRoleManager(new RoleStore<SysRole, int, SysUserRole>(_db));
-            _userManager = new SysUserManager<TUser>(new UserStore<TUser, SysRole, int, SysUserLoginProvider, SysUserRole, SysUserClaim>(_db));
-        }
-
-        public AspNetIdentiyAuthorizeRelay(AuthorizeRelayDbContext db)
-        {
-            _db = db;
-            _roleManager = new SysRoleManager(new RoleStore<SysRole, int, SysUserRole>(_db));
-            _userManager = new SysUserManager<TUser>(new UserStore<TUser, SysRole, int, SysUserLoginProvider, SysUserRole, SysUserClaim>(_db));
         }
 
         private void AddOperateHistory(int operater, Enumeration.OperateType operateType, int referenceId, string content)
@@ -131,15 +89,6 @@ namespace Lumos.DAL.AuthorizeRelay
             operateHistory.Creator = operater;
             _db.SysOperateHistory.Add(operateHistory);
             _db.SaveChanges();
-        }
-
-        #region 登录和注销
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.Current.GetOwinContext().Authentication;
-            }
         }
 
         private object CloneObject(object o)
@@ -158,38 +107,40 @@ namespace Lumos.DAL.AuthorizeRelay
             return p;
         }
 
-        public LoginResult<TUser> Login(string userName, string password, DateTime loginTime, string loginIp)
+        public LoginResult SignIn(string userName, string password, DateTime loginTime, string loginIp)
         {
-            LoginResult<TUser> result = new LoginResult<TUser>();
+            LoginResult result = new LoginResult();
 
             userName = userName.Trim();
-            var user = _userManager.FindByName<TUser, int>(userName);
+            var user = _db.SysUser.Where(m => m.UserName == userName).FirstOrDefault();
 
             if (user == null)
             {
-                result = new LoginResult<TUser>(Enumeration.LoginResult.Failure, Enumeration.LoginResultTip.UserNotExist);
+                result = new LoginResult(Enumeration.LoginResult.Failure, Enumeration.LoginResultTip.UserNotExist);
             }
 
             else
             {
-                var lastUserInfo = CloneObject(user) as TUser;
-                user = _userManager.Find<TUser, int>(userName, password);
-                if (user == null)
+                var lastUserInfo = CloneObject(user) as SysUser;
+
+                bool isFlag = PassWordHelper.VerifyHashedPassword(user.PasswordHash, password);
+
+                if (!isFlag)
                 {
-                    result = new LoginResult<TUser>(Enumeration.LoginResult.Failure, Enumeration.LoginResultTip.UserPasswordIncorrect, lastUserInfo);
+                    result = new LoginResult(Enumeration.LoginResult.Failure, Enumeration.LoginResultTip.UserPasswordIncorrect, lastUserInfo);
                 }
                 else
                 {
 
                     if (user.Status == Enumeration.UserStatus.Disable)
                     {
-                        result = new LoginResult<TUser>(Enumeration.LoginResult.Failure, Enumeration.LoginResultTip.UserDisabled, lastUserInfo);
+                        result = new LoginResult(Enumeration.LoginResult.Failure, Enumeration.LoginResultTip.UserDisabled, lastUserInfo);
                     }
                     else
                     {
                         if (user.IsDelete)
                         {
-                            result = new LoginResult<TUser>(Enumeration.LoginResult.Failure, Enumeration.LoginResultTip.UserDeleted, lastUserInfo);
+                            result = new LoginResult(Enumeration.LoginResult.Failure, Enumeration.LoginResultTip.UserDeleted, lastUserInfo);
                         }
                         else
                         {
@@ -197,12 +148,7 @@ namespace Lumos.DAL.AuthorizeRelay
                             user.LastLoginIp = loginIp;
                             _db.SaveChanges();
 
-                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                            var identity = _userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
-                            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, identity);
-
-
-                            result = new LoginResult<TUser>(Enumeration.LoginResult.Success, Enumeration.LoginResultTip.VerifyPass, lastUserInfo);
+                            result = new LoginResult(Enumeration.LoginResult.Success, Enumeration.LoginResultTip.VerifyPass, lastUserInfo);
 
                         }
                     }
@@ -213,29 +159,15 @@ namespace Lumos.DAL.AuthorizeRelay
             return result;
         }
 
-        public void SignOut()
+        public bool UserNameIsExists(string username)
         {
-            AuthenticationManager.SignOut();
-        }
-        #endregion
+            var sysUser = _db.SysUser.Where(m => m.UserName == username).FirstOrDefault();
+            if (sysUser == null)
+                return false;
 
-        #region 用户相关
-        /// <summary>
-        /// 通过用户ID获取用户信息
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public TUser GetUser(int id)
-        {
-
-            return _userManager.FindById<TUser, int>(id);
+            return true;
         }
 
-        /// <summary>
-        /// 获取用户的所有菜单
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public List<SysMenu> GetUserMenus(int userId)
         {
             List<SysMenu> listMenu = new List<SysMenu>();
@@ -257,15 +189,9 @@ namespace Lumos.DAL.AuthorizeRelay
             return listMenu;
         }
 
-        /// <summary>
-        /// 获取用户的所有权限
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public List<string> GetUserPermissions(int userId)
         {
             List<string> list = new List<string>();
-
 
             var model = (from sysMenuPermission in _db.SysMenuPermission
                          where
@@ -286,34 +212,42 @@ namespace Lumos.DAL.AuthorizeRelay
             return list;
         }
 
-
-        public bool UserExists(string username)
+        public CustomJsonResult CreateUser<T>(int operater, T user, params int[] roleIds) where T : SysUser
         {
-            var idResult = _db.Users.Where(m => m.UserName == username).FirstOrDefault();
-            if (idResult != null)
-                return true;
+            CustomJsonResult result = new CustomJsonResult();
 
-            return false;
-        }
+            var isExistUserName = _db.SysUser.Where(m => m.UserName == user.UserName).FirstOrDefault();
 
-
-
-        /// <summary>
-        /// 创建用户
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public bool CreateUser(int operater, TUser user, params int[] roleIds)
-        {
-            user.CreateTime = DateTime.Now;
-            user.RegisterTime = DateTime.Now;
-            user.Status = Enumeration.UserStatus.Normal;
-
-            var result = _userManager.Create<TUser, int>(user, user.PasswordHash);
-
-            if (result.Succeeded)
+            if (isExistUserName != null)
             {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该用户名已经存在");
+            }
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                user.Creator = operater;
+                user.CreateTime = DateTime.Now;
+                user.RegisterTime = DateTime.Now;
+                user.Status = Enumeration.UserStatus.Normal;
+                user.SecurityStamp = Guid.NewGuid().ToString().Replace("-", "");
+
+
+
+                if (typeof(T) == typeof(SysSalesmanUser))
+                {
+                    _db.SysSalesmanUser.Add(user as SysSalesmanUser);
+                }
+                else if (typeof(T) == typeof(SysAgentUser))
+                {
+                    _db.SysAgentUser.Add(user as SysAgentUser);
+                }
+                else if (typeof(T) == typeof(SysStaffUser))
+                {
+                    _db.SysStaffUser.Add(user as SysStaffUser);
+                }
+
+                _db.SaveChanges();
+
                 List<SysUserRole> userRoleList = _db.SysUserRole.Where(m => m.UserId == user.Id).ToList();
                 foreach (var userRole in userRoleList)
                 {
@@ -333,31 +267,83 @@ namespace Lumos.DAL.AuthorizeRelay
                         }
                     }
                 }
-                _db.SaveChanges();
 
                 AddOperateHistory(operater, Enumeration.OperateType.New, user.Id, string.Format("新建用户{0}(ID:{1})", user.UserName, user.Id));
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
+
+                _db.SaveChanges();
+                ts.Complete();
             }
 
-            return result.Succeeded;
+            return result;
         }
 
-        /// <summary>
-        /// 修改用户
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public bool UpdateUser(int operater, TUser user, string password, int[] roleIds)
+        public CustomJsonResult UpdateUser<T>(int operater, T user, int[] roleIds) where T : SysUser
         {
-            if (!string.IsNullOrWhiteSpace(password))
-            {
-                user.PasswordHash = _userManager.PasswordHasher.HashPassword(password);
-            }
+            CustomJsonResult result = new CustomJsonResult();
 
-            var result = _userManager.Update<TUser, int>(user);
-
-            if (result.Succeeded)
+            using (TransactionScope ts = new TransactionScope())
             {
+                if (typeof(T) == typeof(SysSalesmanUser))
+                {
+
+                    var sysSalesmanUser = _db.SysSalesmanUser.Where(m => m.Id == user.Id).FirstOrDefault();
+
+                    if (sysSalesmanUser != null)
+                    {
+                        if (!string.IsNullOrEmpty(user.Password))
+                        {
+                            sysSalesmanUser.PasswordHash = PassWordHelper.HashPassword(user.Password);
+                        }
+                        sysSalesmanUser.FullName = user.FullName;
+                        sysSalesmanUser.Email = user.Email;
+                        sysSalesmanUser.PhoneNumber = user.PhoneNumber;
+                        sysSalesmanUser.LastUpdateTime = DateTime.Now;
+                        sysSalesmanUser.Mender = operater;
+                        _db.SaveChanges();
+                    }
+
+                }
+                else if (typeof(T) == typeof(SysAgentUser))
+                {
+                    var sysAgentUser = _db.SysAgentUser.Where(m => m.Id == user.Id).FirstOrDefault();
+
+                    if (sysAgentUser != null)
+                    {
+                        if (!string.IsNullOrEmpty(user.Password))
+                        {
+                            sysAgentUser.PasswordHash = PassWordHelper.HashPassword(user.Password);
+                        }
+                        sysAgentUser.FullName = user.FullName;
+                        sysAgentUser.Email = user.Email;
+                        sysAgentUser.PhoneNumber = user.PhoneNumber;
+                        sysAgentUser.LastUpdateTime = DateTime.Now;
+                        sysAgentUser.Mender = operater;
+                        _db.SaveChanges();
+                    }
+
+                }
+                else if (typeof(T) == typeof(SysStaffUser))
+                {
+                    var sysStaffUser = _db.SysStaffUser.Where(m => m.Id == user.Id).FirstOrDefault();
+
+                    if (sysStaffUser != null)
+                    {
+                        if (!string.IsNullOrEmpty(user.Password))
+                        {
+                            sysStaffUser.PasswordHash = PassWordHelper.HashPassword(user.Password);
+                        }
+                        sysStaffUser.FullName = user.FullName;
+                        sysStaffUser.Email = user.Email;
+                        sysStaffUser.PhoneNumber = user.PhoneNumber;
+                        sysStaffUser.LastUpdateTime = DateTime.Now;
+                        sysStaffUser.Mender = operater;
+                        _db.SaveChanges();
+                    }
+
+                }
+
                 List<SysUserRole> userRoleList = _db.SysUserRole.Where(m => m.UserId == user.Id).ToList();
 
                 foreach (var userRole in userRoleList)
@@ -378,55 +364,30 @@ namespace Lumos.DAL.AuthorizeRelay
                         }
                     }
                 }
-                _db.SaveChanges();
+
 
                 AddOperateHistory(operater, Enumeration.OperateType.Update, user.Id, string.Format("修改用户{0}(ID:{1})", user.UserName, user.Id));
 
-            }
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "修改成功");
 
-            return result.Succeeded;
+                _db.SaveChanges();
+                ts.Complete();
+            }
+            return result;
         }
 
-        public bool UpdateUser(int operater, TUser user, string password)
-        {
-            if (!string.IsNullOrWhiteSpace(password))
-            {
-                user.PasswordHash = _userManager.PasswordHasher.HashPassword(password);
-            }
-
-            var result = _userManager.Update<TUser, int>(user);
-
-
-
-            _db.SaveChanges();
-
-            AddOperateHistory(operater, Enumeration.OperateType.Update, user.Id, string.Format("修改用户{0}(ID:{1})", user.UserName, user.Id));
-
-
-
-            return result.Succeeded;
-        }
-
-
-
-        /// <summary>
-        /// 删除用户
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public bool DeleteUser(int operater, int[] userIds)
+        public CustomJsonResult DeleteUser(int operater, int[] userIds)
         {
             if (userIds == null)
-                return false;
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到用户");
 
             if (userIds.Length <= 0)
-                return false;
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到用户");
 
 
             foreach (int userId in userIds)
             {
-                SysUser user = _db.Users.Find(userId);
+                SysUser user = _db.SysUser.Find(userId);
                 user.IsDelete = true;
                 user.Mender = operater;
                 user.LastUpdateTime = DateTime.Now;
@@ -442,85 +403,88 @@ namespace Lumos.DAL.AuthorizeRelay
                 AddOperateHistory(operater, Enumeration.OperateType.Delete, user.Id, string.Format("删除用户{0}(ID:{1})", user.UserName, user.Id));
             }
 
-            return true;
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
         }
 
-        /// <summary>
-        /// 修改密码或重置密码 当oldpassword为null的时候为重置密码
-        /// </summary>
-        /// <param name="userId">用户id</param>
-        /// <param name="oldpassword">旧密码</param>
-        /// <param name="newpassword">新密码</param>
-        /// <returns></returns>
-        public bool ChangePassword(int operater, int userId, string oldpassword, string newpassword)
+        public CustomJsonResult ChangePassword(int operater, int userId, string oldpassword, string newpassword)
         {
-            TUser user = GetUser(userId);
 
-            var isFlag = _userManager.CheckPassword(user, oldpassword);
-            if (!isFlag)
+            var sysUser = _db.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+            if (sysUser != null)
             {
-                return false;
+
+                if(!PassWordHelper.VerifyHashedPassword(sysUser.PasswordHash,oldpassword))
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "旧密码不正确");
+                }
+
+                sysUser.PasswordHash = PassWordHelper.HashPassword(newpassword);
+                sysUser.Mender = operater;
+                sysUser.LastUpdateTime = DateTime.Now;
+
+                _db.SaveChanges();
             }
 
 
-            var result = _userManager.ChangePassword(userId, oldpassword, newpassword);
-
-            AddOperateHistory(operater, Enumeration.OperateType.Delete, userId, string.Format("修改用户{0}(ID:{1})密码", user.UserName, user.Id));
-
-            return result.Succeeded;
-
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "修改成功");
         }
 
         public bool ResetPassword(int operater, int userId, string password)
         {
-            SysUser user = GetUser(userId);
-            user.PasswordHash = null;
-            user.Mender = operater;
-            user.LastUpdateTime = DateTime.Now;
-            _db.SaveChanges();
+            //SysUser user = GetUser(userId);
+            //user.PasswordHash = null;
+            //user.Mender = operater;
+            //user.LastUpdateTime = DateTime.Now;
+            //_db.SaveChanges();
 
-            IdentityResult result = _userManager.AddPassword(userId, password);
-            return result.Succeeded;
+            //IdentityResult result = _userManager.AddPassword(userId, password);
+            //return result.Succeeded;
+
+            return true;
 
         }
 
-
-
-
-        #endregion 用户相关
-
-        #region 角色相关
-
-        /// <summary>
-        /// 判断角色名称是否存在
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool RoleExists(string name)
+        public CustomJsonResult CreateRole(int operater, SysRole role)
         {
-            return _roleManager.RoleExists(name);
-        }
+            var isExistName = _db.SysRole.Where(m => m.Name == role.Name).FirstOrDefault();
 
-        /// <summary>
-        /// 创建角色
-        /// </summary>
-        /// <param name="role"></param>
-        /// <returns></returns>
-        public bool CreateRole(int operater, SysRole role)
-        {
+            if (isExistName != null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该用户名已经存在");
+            }
+
             role.PId = 0;
             role.CreateTime = DateTime.Now;
             role.Creator = operater;
-            var idResult = _roleManager.Create(role);
+            _db.SysRole.Add(role);
+            _db.SaveChanges();
             AddOperateHistory(operater, Enumeration.OperateType.New, role.Id, string.Format("新建角色{0}(ID:{1})", role.Name, role.Id));
-            return idResult.Succeeded;
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
         }
 
-        /// <summary>
-        /// 删除角色 删除角色菜单 删除角色用户 删除角色权限
-        /// </summary>
-        /// <param name="roleId"></param>
-        public void DeleteRole(int operater, int[] ids)
+        public CustomJsonResult UpdateRole(int operater, SysRole sysRole)
+        {
+            var isExistRoleName = _db.SysRole.Where(m => m.Name == sysRole.Name && m.Id != sysRole.Id).FirstOrDefault();
+            if (isExistRoleName != null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "角色名字已经存在");
+            }
+
+            var _sysRole = _db.SysRole.Where(m => m.Id == sysRole.Id).FirstOrDefault();
+
+            _sysRole.Name = sysRole.Name;
+            _sysRole.Description = sysRole.Description;
+            _sysRole.LastUpdateTime = DateTime.Now;
+            _sysRole.Mender = operater;
+
+            AddOperateHistory(operater, Enumeration.OperateType.Update, _sysRole.Id, string.Format("修改角色{0}(ID:{1})", _sysRole.Name, _sysRole.Id));
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "修改成功");
+        }
+
+        public CustomJsonResult DeleteRole(int operater, int[] ids)
         {
 
             if (ids != null)
@@ -532,7 +496,7 @@ namespace Lumos.DAL.AuthorizeRelay
                     var roleMenus = _db.SysRoleMenu.Where(u => u.RoleId == id).Distinct();
 
 
-                    var role = _db.Roles.Find(id);
+                    var role = _db.SysRole.Find(id);
 
                     foreach (var user in roleUsers)
                     {
@@ -545,76 +509,46 @@ namespace Lumos.DAL.AuthorizeRelay
                     }
 
 
-                    _db.Roles.Remove(role);
+                    _db.SysRole.Remove(role);
                     _db.SaveChanges();
 
                     AddOperateHistory(operater, Enumeration.OperateType.Delete, role.Id, string.Format("删除角色{0}(ID:{1})", role.Name, role.Id));
                 }
 
             }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
         }
 
-        /// <summary>
-        /// 更新角色
-        /// </summary>
-        /// <param name="roleId"></param>
-        public bool UpdateRole(int operater, SysRole sysRole)
+        public CustomJsonResult AddUserToRole(int operater, int roleId, int[] userIds)
         {
-            bool isSucceed = false;
-            var _sysRole = _roleManager.FindById(sysRole.Id);
-            if (_sysRole != null)
+            foreach (int userId in userIds)
             {
-                _sysRole.Name = sysRole.Name;
-                _sysRole.Description = sysRole.Description;
-                _sysRole.LastUpdateTime = DateTime.Now;
-                _sysRole.Mender = operater;
-                isSucceed = _roleManager.Update(_sysRole).Succeeded;
+                _db.SysUserRole.Add(new SysUserRole { UserId = userId, RoleId = roleId });
+                _db.SaveChanges();
 
-                AddOperateHistory(operater, Enumeration.OperateType.Update, _sysRole.Id, string.Format("修改角色{0}(ID:{1})", _sysRole.Name, _sysRole.Id));
+                AddOperateHistory(operater, Enumeration.OperateType.Update, roleId, string.Format("添加用户(ID：{0})到角色(ID:{1})", userId, roleId));
+            }
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
+        }
+
+        public CustomJsonResult RemoveUserFromRole(int operater, int roleId, int[] userIds)
+        {
+            foreach (int userId in userIds)
+            {
+                SysUserRole userRole = _db.SysUserRole.Find(roleId, userId);
+                _db.SysUserRole.Remove(userRole);
+                _db.SaveChanges();
+
+
+                AddOperateHistory(operater, Enumeration.OperateType.Update, roleId, string.Format("移除用户(ID：{0})所在的角色(ID:{1})", userId, roleId));
 
             }
-            return isSucceed;
+
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "移除成功");
         }
 
-        /// <summary>
-        /// 添加用户到角色
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="roleName"></param>
-        /// <returns></returns>
-        public bool AddUserToRole(int operater, int userId, int roleId)
-        {
-            _db.SysUserRole.Add(new SysUserRole { UserId = userId, RoleId = roleId });
-            _db.SaveChanges();
-
-
-            AddOperateHistory(operater, Enumeration.OperateType.Update, roleId, string.Format("添加用户(ID：{0})到角色(ID:{1})", userId, roleId));
-
-            return true;
-        }
-
-
-        /// <summary>
-        /// 清楚用户所在的角色
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="roleName"></param>
-        public void RemoveUserFromRole(int operater, int roleId, int userId)
-        {
-            SysUserRole userRole = _db.SysUserRole.Find(roleId, userId);
-            _db.SysUserRole.Remove(userRole);
-            _db.SaveChanges();
-
-            AddOperateHistory(operater, Enumeration.OperateType.Update, roleId, string.Format("移除用户(ID：{0})所在的角色(ID:{1})", userId, roleId));
-
-        }
-
-
-        /// <summary>
-        /// 获取角色的菜单
-        /// </summary>
-        /// <param name="roleId"></param>
-        /// <returns></returns>
         public List<SysMenu> GetRoleMenus(int roleId)
         {
             var model = from c in _db.SysMenu
@@ -625,13 +559,7 @@ namespace Lumos.DAL.AuthorizeRelay
             return model.ToList();
         }
 
-        /// <summary>
-        /// 添加菜单到角色
-        /// </summary>
-        /// <param name="menuId"></param>
-        /// <param name="roleId"></param>
-        /// <returns></returns>
-        public bool SaveRoleMenu(int operater, int roleId, int[] menuIds)
+        public CustomJsonResult SaveRoleMenu(int operater, int roleId, int[] menuIds)
         {
 
             List<SysRoleMenu> roleMenuList = _db.SysRoleMenu.Where(r => r.RoleId == roleId).ToList();
@@ -654,13 +582,10 @@ namespace Lumos.DAL.AuthorizeRelay
 
             AddOperateHistory(operater, Enumeration.OperateType.Update, roleId, string.Format("保存角色(ID:{0})菜单", roleId));
 
-            return true;
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
         }
 
-        #endregion 角色相关
-
-        #region 菜单相关
-        public int CreateMenu(int operater, SysMenu sysMenu, string[] perssionId)
+        public CustomJsonResult CreateMenu(int operater, SysMenu sysMenu, string[] perssionId)
         {
             sysMenu.Creator = operater;
             sysMenu.CreateTime = DateTime.Now;
@@ -678,20 +603,19 @@ namespace Lumos.DAL.AuthorizeRelay
 
             AddOperateHistory(operater, Enumeration.OperateType.New, sysMenu.Id, string.Format("新建菜单(ID:{0})", sysMenu.Id));
 
-            return sysMenu.Id;
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "添加成功");
         }
 
-        /// <summary>
-        /// 更新菜单
-        /// </summary>
-        /// <param name="id"></param>
-        public void UpdateMenu(int operater, SysMenu sysMenu, string[] perssions)
+        public CustomJsonResult UpdateMenu(int operater, SysMenu sysMenu, string[] perssions)
         {
-            sysMenu.Mender = operater;
-            sysMenu.LastUpdateTime = DateTime.Now;
-            _db.Entry(sysMenu).State = EntityState.Modified;
 
+            var _sysMenu = _db.SysMenu.Where(m => m.Id == sysMenu.Id).FirstOrDefault();
 
+            _sysMenu.Name = sysMenu.Name;
+            _sysMenu.Url = sysMenu.Url;
+            _sysMenu.Description = sysMenu.Description;
+            _sysMenu.Mender = operater;
+            _sysMenu.LastUpdateTime = DateTime.Now;
 
             var sysMenuPermission = _db.SysMenuPermission.Where(r => r.MenuId == sysMenu.Id).ToList();
             foreach (var m in sysMenuPermission)
@@ -712,13 +636,11 @@ namespace Lumos.DAL.AuthorizeRelay
 
             _db.SaveChanges();
 
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "修改成功");
+
         }
 
-        /// <summary>
-        /// 删除菜单
-        /// </summary>
-        /// <param name="id"></param>
-        public void DeleteMenu(int operater, int[] ids)
+        public CustomJsonResult DeleteMenu(int operater, int[] ids)
         {
             if (ids != null)
             {
@@ -741,11 +663,8 @@ namespace Lumos.DAL.AuthorizeRelay
                 }
             }
 
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "删除成功");
         }
-
-        #endregion 菜单相关
-
-        #region 权限相关
 
         public List<SysPermission> GetPermissionList(PermissionCode permission)
         {
@@ -785,6 +704,5 @@ namespace Lumos.DAL.AuthorizeRelay
             return list;
         }
 
-        #endregion
     }
 }

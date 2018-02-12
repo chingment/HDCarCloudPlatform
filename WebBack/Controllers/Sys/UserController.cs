@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
-using Microsoft.AspNet.Identity;
 using Lumos.Entity;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Common;
@@ -34,7 +33,7 @@ namespace WebBack.Controllers.Sys
 
         public JsonResult GetList(UserSearchCondition condition)
         {
-            var list = (from u in CurrentDb.Users
+            var list = (from u in CurrentDb.SysUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
                         (condition.FullName == null || u.FullName.Contains(condition.FullName)) &&
                         u.IsDelete == false

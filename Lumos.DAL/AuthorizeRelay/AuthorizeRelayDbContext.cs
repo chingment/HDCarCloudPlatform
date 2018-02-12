@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
@@ -13,7 +12,7 @@ using System.Configuration;
 
 namespace Lumos.DAL.AuthorizeRelay
 {
-    public class AuthorizeRelayDbContext : IdentityDbContext<SysUser, SysRole, int, SysUserLoginProvider, SysUserRole, SysUserClaim>
+    public class AuthorizeRelayDbContext : DbContext
     {
 
         //使用自定义连接串
@@ -35,6 +34,10 @@ namespace Lumos.DAL.AuthorizeRelay
             return this.Database.SqlQuery<DateTime>("select getdate()").FirstOrDefault();
         }
 
+        public IDbSet<SysUser> SysUser { get; set; }
+
+        public IDbSet<SysRole> SysRole { get; set; }
+
         public IDbSet<SysMenu> SysMenu { get; set; }
 
         public IDbSet<SysPermission> SysPermission { get; set; }
@@ -47,11 +50,7 @@ namespace Lumos.DAL.AuthorizeRelay
 
         public IDbSet<SysUserRole> SysUserRole { get; set; }
 
-        public IDbSet<SysUserLoginProvider> SysUserLoginProvider { get; set; }
-
         public IDbSet<SysUserLoginHistory> SysUserLoginHistory { get; set; }
-
-        public IDbSet<SysUserClaim> SysUserClaim { get; set; }
 
         public IDbSet<SysStaffUser> SysStaffUser { get; set; }
 
@@ -99,8 +98,6 @@ namespace Lumos.DAL.AuthorizeRelay
             modelBuilder.Entity<SysUser>().ToTable("SysUser");
             modelBuilder.Entity<SysUserRole>().HasKey(r => new { r.RoleId, r.UserId }).ToTable("SysUserRole");
             modelBuilder.Entity<SysRole>().ToTable("SysRole");
-            modelBuilder.Entity<SysUserLoginProvider>().ToTable("SysUserLoginProvider");
-            modelBuilder.Entity<SysUserClaim>().ToTable("SysUserClaim");
         }
 
 

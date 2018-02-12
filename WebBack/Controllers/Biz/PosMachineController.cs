@@ -92,7 +92,7 @@ namespace WebBack.Controllers.Biz
 
         private string ReSetNoActiveS(string userName, string deviceId)
         {
-            var user = CurrentDb.Users.Where(m => m.UserName == userName).FirstOrDefault();
+            var user = CurrentDb.SysUser.Where(m => m.UserName == userName).FirstOrDefault();
 
             if (user == null)
             {

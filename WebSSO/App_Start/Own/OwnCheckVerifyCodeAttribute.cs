@@ -89,18 +89,21 @@ namespace WebSSO
         {
             if (filterContext.Result != null)
             {
+                string result = filterContext.Result.ToString();
 
                 ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-                log.Info(filterContext.Result.ToString());
+                log.Info(result);
 
-
-                CustomJsonResult result = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult>(filterContext.Result.ToString());
-
-                if (result.Result == ResultType.Success)
+                if (result != "System.Web.Mvc.EmptyResult")
                 {
-                    if (!string.IsNullOrEmpty(this.SessionName))
+                    CustomJsonResult j_result = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult>(filterContext.Result.ToString());
+
+                    if (j_result.Result == ResultType.Success)
                     {
-                        filterContext.HttpContext.Session[this.SessionName] = null;
+                        if (!string.IsNullOrEmpty(this.SessionName))
+                        {
+                            filterContext.HttpContext.Session[this.SessionName] = null;
+                        }
                     }
                 }
             }

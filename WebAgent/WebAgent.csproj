@@ -215,7 +215,6 @@
     <None Include="log4net.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="qyzdj.html" />
     <Content Include="Views\Shared\_AppLayout.cshtml" />
     <Content Include="Views\Shared\_LayoutHomeMainReport.cshtml" />
     <Content Include="Views\Shared\UpLoadFile.cshtml" />
@@ -289,6 +288,10 @@
     <ProjectReference Include="..\Lumos.MVC\Lumos.Mvc.csproj">
       <Project>{ed113ad7-1b20-4b05-8961-9b701e51734c}</Project>
       <Name>Lumos.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lumos.Redis\Lumos.Redis.csproj">
+      <Project>{c165e6a0-dd43-4aa1-94b1-d4bf5420a80d}</Project>
+      <Name>Lumos.Redis</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lumos\Lumos.csproj">
       <Project>{27883666-32aa-447f-aa1f-6128b76fbee8}</Project>

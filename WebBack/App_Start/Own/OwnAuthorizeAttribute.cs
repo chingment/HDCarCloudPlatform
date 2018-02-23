@@ -74,6 +74,8 @@ namespace WebBack
                     messageBox.Type = MessageBoxTip.Exception;
                     messageBox.Title = "您没有权限访问,可能链接超时";
                     messageBox.Content = "请重新<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetLoginPage(returnUrl) + "'\">登录</a>后打开";
+                    messageBox.IsTop = true;
+
                     string masterName = "_Layout";
 
                     filterContext.Result = new ViewResult { ViewName = "MessageBox", MasterName = masterName, ViewData = new ViewDataDictionary { Model = messageBox } };
@@ -92,7 +94,6 @@ namespace WebBack
                 messageBox.No = Guid.NewGuid().ToString();
                 messageBox.Type = MessageBoxTip.Exception;
                 messageBox.Title = "您没有权限访问,可能链接超时";
-
                 if (!filterContext.HttpContext.Request.IsAuthenticated)
                 {
                     messageBox.Content = "请重新<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetLoginPage(returnUrl) + "'\">登录</a>后打开";

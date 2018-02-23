@@ -360,7 +360,7 @@
 
                 if (_isTop) {
 
-                    $('#gbr_main_content', window.top.document).html(errorHtml);
+                    $('body', window.top.document).html(errorHtml);
 
                     var list = window.top.art.dialog.list;
                     for (var i in list) {

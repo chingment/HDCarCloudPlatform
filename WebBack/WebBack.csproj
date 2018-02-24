@@ -152,12 +152,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\Own\OwnRequest.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\AppApiHelper.cs" />
-    <Compile Include="Controllers\App\CarInsureOfferController.cs" />
     <Compile Include="Controllers\App\ExtendedAppController.cs" />
-    <Compile Include="Controllers\App\HelpController.cs" />
-    <Compile Include="Controllers\App\OrderController.cs" />
-    <Compile Include="Controllers\App\ServiceKitController.cs" />
     <Compile Include="Controllers\Biz\ApplyLossAssessController.cs" />
     <Compile Include="Controllers\Biz\ApplyPosController.cs" />
     <Compile Include="Controllers\Biz\CarClaimController.cs" />
@@ -177,7 +172,6 @@
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\App\BannerController.cs" />
-    <Compile Include="Controllers\App\ProductController.cs" />
     <Compile Include="App_Start\Own\NPOIExcelHelper.cs" />
     <Compile Include="Controllers\Sys\AgentUserController.cs" />
     <Compile Include="Controllers\Sys\BannerController.cs" />
@@ -301,7 +295,6 @@
     <None Include="log4net.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="qyzdj.html" />
     <Content Include="Scripts\AreaSelect\public.js" />
     <Content Include="Scripts\AreaSelect\queryAllAreas.js" />
     <Content Include="Scripts\AreaSelect\queryAllProvinces.js" />
@@ -1276,9 +1269,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Web.sitemap">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.sitemap" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,16 +11,8 @@ namespace WebAppApi
 {
 
 
-    public class AppApiExceptionAttribute : ExceptionFilterAttribute
+    public class APIExceptionAttribute : ExceptionFilterAttribute
     {
-        /// <summary>
-
-        /// 异常
-
-        /// </summary>
-
-        /// <param name="filterContext"></param>
-
         public override void OnException(HttpActionExecutedContext actionExecutedContext)
         {
             ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

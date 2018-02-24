@@ -17,7 +17,7 @@ using WebAppApi.Models.CarService;
 namespace WebAppApi.Controllers
 {
     [BaseAuthorizeAttribute]
-    public class AccountController : BaseApiController
+    public class AccountController : OwnBaseApiController
     {
 
         public APIResponse Create(CreateModel model)

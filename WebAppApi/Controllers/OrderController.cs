@@ -14,7 +14,7 @@ using Lumos.Entity.AppApi;
 namespace WebAppApi.Controllers
 {
     [BaseAuthorizeAttribute]
-    public class OrderController : BaseApiController
+    public class OrderController : OwnBaseApiController
     {
         [HttpGet]
         public APIResponse GetList(int userId, int merchantId, int posMachineId, int pageIndex, Enumeration.OrderStatus status)

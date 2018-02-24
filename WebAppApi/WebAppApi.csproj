@@ -132,6 +132,12 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\Own\APIResponse.cs" />
+    <Compile Include="App_Start\Own\APIResult.cs" />
+    <Compile Include="App_Start\Own\APIExceptionAttribute.cs" />
+    <Compile Include="App_Start\Own\OwnBaseApiController.cs" />
+    <Compile Include="App_Start\Own\OwnBaseAuthorizeAttribute.cs" />
+    <Compile Include="App_Start\Own\MonitorApiLog.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -149,15 +155,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\CarServiceController.cs" />
-    <Compile Include="Controllers\Common\ApiAuthorizeAttribute.cs" />
-    <Compile Include="Controllers\Common\APIResponse.cs" />
-    <Compile Include="Controllers\Common\APIResult.cs" />
-    <Compile Include="Controllers\Common\AppApiExceptionAttribute.cs" />
-    <Compile Include="Controllers\Common\AppHandleErrorAttribute.cs" />
-    <Compile Include="Controllers\Common\BaseApiController.cs" />
-    <Compile Include="Controllers\Common\BaseAuthorizeAttribute.cs" />
-    <Compile Include="Controllers\Common\MonitorApiLog.cs" />
     <Compile Include="Controllers\ExtendedAppController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HttpRequestClient .cs" />

@@ -12,7 +12,7 @@ using WebAppApi.Models;
 namespace WebAppApi
 {
 
-    public class BaseApiController : ApiController
+    public class OwnBaseApiController : BaseApiController
     {
         private APIResult _result = new APIResult();
         private LumosDbContext _currentDb;
@@ -67,7 +67,7 @@ namespace WebAppApi
                 LogicalThreadContext.Properties["trackid"] = Guid.NewGuid().ToString("N");
         }
 
-        public BaseApiController()
+        public OwnBaseApiController()
         {
             SetTrackID();
             _currentDb = new LumosDbContext();
@@ -159,24 +159,5 @@ namespace WebAppApi
 
             return remarks;
         }
-
-        public string GetLinkUrl(string clienCode, string linkUrl)
-        {
-            string slinkUrl = "";
-
-            if (linkUrl.IndexOf('?') > -1)
-            {
-                slinkUrl = linkUrl + "&clientcode=" + clienCode;
-            }
-            else
-            {
-                slinkUrl = linkUrl + "?clientcode=" + clienCode;
-            }
-
-            return slinkUrl;
-
-
-        }
-
     }
 }

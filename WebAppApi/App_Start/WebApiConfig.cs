@@ -87,7 +87,7 @@ namespace WebAppApi
         public static void Register(HttpConfiguration config)
         {
 
-            config.Filters.Add(new AppApiExceptionAttribute());
+            config.Filters.Add(new APIExceptionAttribute());
 
             // Web API routes
             config.MapHttpAttributeRoutes();

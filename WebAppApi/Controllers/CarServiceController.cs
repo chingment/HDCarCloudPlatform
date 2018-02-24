@@ -15,7 +15,7 @@ using WebAppApi.Models.CarService;
 namespace WebAppApi.Controllers
 {
     [BaseAuthorizeAttribute]
-    public class CarServiceController : BaseApiController
+    public class CarServiceController : OwnBaseApiController
     {
 
         //提交投保单

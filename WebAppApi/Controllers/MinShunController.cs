@@ -31,7 +31,7 @@ namespace WebAppApi.Controllers
     }
 
 
-    public class MinShunController : BaseApiController
+    public class MinShunController : OwnBaseApiController
     {
 
         [HttpPost]

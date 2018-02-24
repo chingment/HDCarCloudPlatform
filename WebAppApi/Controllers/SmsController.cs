@@ -12,7 +12,7 @@ using WebAppApi.Models.Sms;
 namespace WebAppApi.Controllers
 {
     [BaseAuthorizeAttribute]
-    public class SmsController : BaseApiController
+    public class SmsController : OwnBaseApiController
     {
         [HttpPost]
         public APIResponse GetForgetPwdCode(GetForgetPwdCodeModel model)

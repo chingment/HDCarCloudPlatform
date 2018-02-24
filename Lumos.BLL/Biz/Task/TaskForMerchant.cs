@@ -15,7 +15,7 @@ namespace Lumos.BLL.Biz.Task
             CustomJsonResult result = new CustomJsonResult();
 
 
-            var merchantPosMachines = CurrentDb.MerchantPosMachine.Where(m => m.ExpiryTime < DateTime.Now && m.Status == Enumeration.MerchantPosMachineStatus.Normal).ToList();
+            var merchantPosMachines = CurrentDb.MerchantPosMachine.Where(m => m.ExpiryTime < DateTime.Now).ToList();
 
             Log.InfoFormat("到期的机器数量有：{0}", merchantPosMachines.Count);
 

@@ -266,6 +266,9 @@ namespace Lumos.BLL
                 var user = CurrentDb.SysClientUser.Where(m => m.Id == l_Merchant.UserId).FirstOrDefault();
                 user.PhoneNumber = merchant.ContactPhoneNumber;
 
+
+                SysFactory.SysItemCacheUpdateTime.UpdateUser(l_Merchant.UserId);
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 

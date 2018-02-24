@@ -163,7 +163,6 @@
     <Compile Include="Controllers\CarInsureOfferController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="App_Start\Own\NPOIExcelHelper.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PosMachineController.cs" />
     <Compile Include="Controllers\SalesmanUserController.cs" />
@@ -178,7 +177,7 @@
     <Compile Include="App_Start\Own\OwnWebSettingUtils.cs" />
     <Compile Include="App_Start\Own\OwnBaseController.cs" />
     <Compile Include="App_Start\Own\OwnExceptionAttribute.cs" />
-    <Compile Include="App_Start\Own\HmlExtension.cs" />
+    <Compile Include="App_Start\Own\OwnHmlExtension.cs" />
     <Compile Include="App_Start\Own\OwnNoResubmitAttribute.cs" />
     <Compile Include="App_Start\Own\OwnStaticResource.cs" />
     <Compile Include="App_Start\Own\OwnStatisticsTrackerAttribute.cs" />

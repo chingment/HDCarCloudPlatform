@@ -7,7 +7,6 @@ using System.Web.Mvc;
 
 namespace System.Web
 {
-
     public static class StaticResourceServerScripts
     {
         public static IHtmlString Render(string path)

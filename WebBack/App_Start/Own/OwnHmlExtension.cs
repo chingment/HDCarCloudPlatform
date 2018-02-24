@@ -6,18 +6,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Text;
 using System.Security.Cryptography;
-using WebAgent;
+using WebBack;
 
 namespace System.Web
 {
-    //public enum InputType{
-
-    //    Select=0,
-    //    CheckBox=1,
-    //    Radio=2
-    //}
-
-    public static class HmlExtension
+    public static class OwnHmlExtension
     {
         public static string Encrypt(string plaintext)
         {
@@ -55,7 +48,6 @@ namespace System.Web
 
             return new HtmlString(sb.ToString());
         }
-
 
         public static IHtmlString initEnumeration<T>(this HtmlHelper helper, Enumeration.InputType inputType, string name, object htmlAttributes = null)
         {

@@ -34,6 +34,11 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
+        public ViewResult ListByNoUse()
+        {
+            return View();
+        }
+
         [OwnAuthorize(PermissionCode.POS机登记信息)]
         public ViewResult Add()
         {
@@ -71,7 +76,7 @@ namespace WebBack.Controllers.Biz
                         where (fuselageNumber.Length == 0 || p.FuselageNumber.Contains(fuselageNumber)) &&
                                 (deviceId.Length == 0 || p.DeviceId.Contains(deviceId)) &&
                                  (terminalNumber.Length == 0 || p.TerminalNumber.Contains(terminalNumber))
-                        select new { p.Id, p.DeviceId, p.FuselageNumber, p.TerminalNumber,p.AgentName, IsUse = (p.IsUse == true ? "是" : "否"), p.CreateTime, p.Version });
+                        select new { p.Id, p.DeviceId, p.FuselageNumber, p.TerminalNumber, p.AgentName, IsUse = (p.IsUse == true ? "是" : "否"), p.CreateTime, p.Version });
 
             int total = list.Count();
 
@@ -196,6 +201,50 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
+        public JsonResult GetListByNoUse(PosMachineSearchCondition condition)
+        {
+
+            string fuselageNumber = condition.FuselageNumber.ToSearchString();
+            string deviceId = condition.DeviceId.ToSearchString();
+            var query = (from m in CurrentDb.PosMachine
+
+                         where (fuselageNumber.Length == 0 || m.FuselageNumber.Contains(fuselageNumber)) &&
+                                 (deviceId.Length == 0 || m.DeviceId.Contains(deviceId))
+                                 && m.IsUse == false
+                         select new { m.Id, m.DeviceId, m.FuselageNumber, m.TerminalNumber, m.Version, m.CreateTime });
+
+            int total = query.Count();
+
+            int pageIndex = condition.PageIndex;
+            int pageSize = 10;
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+
+            List<object> list = new List<object>();
+
+            foreach (var item in query)
+            {
+
+                list.Add(new
+                {
+                    item.Id,
+                    item.DeviceId,
+                    item.FuselageNumber,
+                    item.TerminalNumber,
+                    item.Version,
+                    item.CreateTime
+                });
+
+
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list };
+
+            return Json(ResultType.Success, pageEntity, "");
+        }
+
+
         [OwnAuthorize(PermissionCode.POS机登记信息)]
         [HttpPost]
         public JsonResult Add(AddViewModel model)
@@ -212,9 +261,9 @@ namespace WebBack.Controllers.Biz
         }
 
         [HttpPost]
-        public JsonResult Change(ChangeViewModel model)
+        public JsonResult Change(ChangeModel model)
         {
-            return BizFactory.PosMachine.Change(this.CurrentUserId, model.ChangeHistory);
+            return BizFactory.PosMachine.Change(this.CurrentUserId, model.MerchantId, model.OldPosMachineId, model.NewPosMachineId);
         }
 
         [OwnAuthorize(PermissionCode.POS机登记信息)]

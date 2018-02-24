@@ -3486,6 +3486,7 @@ ul.ztree.zTreeDragUL {
 
 .f-tb1-detail {
 	width: 100%;
+ table-layout: fixed;
 }
 
 

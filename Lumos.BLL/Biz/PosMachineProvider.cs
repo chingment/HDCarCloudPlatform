@@ -23,7 +23,7 @@ namespace Lumos.BLL
             posMachine.CreateTime = this.DateTime;
             posMachine.Creator = operater;
             posMachine.IsUse = false;
-           
+
             CurrentDb.PosMachine.Add(posMachine);
             CurrentDb.SaveChanges();
 
@@ -50,19 +50,19 @@ namespace Lumos.BLL
             return new CustomJsonResult(ResultType.Success, "保存成功");
         }
 
-        public CustomJsonResult Change(int operater, MerchantPosMachineChangeHistory changeHistory)
+        public CustomJsonResult Change(int operater, int merchantId, int oldPosMachineId, int newPosMachineId)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                //todo 什么条件允许注销
-                var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.Id == changeHistory.MerchantPosMachineId).FirstOrDefault();
+
+                var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.MerchantId == merchantId && m.PosMachineId == oldPosMachineId).FirstOrDefault();
 
 
-                var oldPosMachine = CurrentDb.PosMachine.Where(m => m.Id == merchantPosMachine.PosMachineId).FirstOrDefault();
+                var oldPosMachine = CurrentDb.PosMachine.Where(m => m.Id == oldPosMachineId).FirstOrDefault();
 
-                var newPosMachine = CurrentDb.PosMachine.Where(m => m.Id == changeHistory.NewPosMachineId).FirstOrDefault();
+                var newPosMachine = CurrentDb.PosMachine.Where(m => m.Id == newPosMachineId).FirstOrDefault();
 
 
                 oldPosMachine.IsUse = false;
@@ -80,7 +80,7 @@ namespace Lumos.BLL
                 merchantPosMachine.Mender = operater;
 
 
-                //   MerchantPosMachineChangeHistory changeHistory = new MerchantPosMachineChangeHistory();
+                MerchantPosMachineChangeHistory changeHistory = new MerchantPosMachineChangeHistory();
 
                 changeHistory.UserId = merchantPosMachine.UserId;
                 changeHistory.MerchantId = merchantPosMachine.MerchantId;

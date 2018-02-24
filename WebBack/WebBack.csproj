@@ -232,6 +232,7 @@
     <Compile Include="Models\Biz\Order\OrderSearchCondition.cs" />
     <Compile Include="Models\Biz\Order\PayTestModel.cs" />
     <Compile Include="Models\Biz\PosMachine\AddViewModel.cs" />
+    <Compile Include="Models\Biz\PosMachine\ChangeModel.cs" />
     <Compile Include="Models\Biz\PosMachine\ChangeViewModel.cs" />
     <Compile Include="Models\Biz\PosMachine\EditViewModel.cs" />
     <Compile Include="Models\Biz\ExtendedApp\ExtendedAppSearchCondition.cs" />
@@ -1243,6 +1244,7 @@
     <Content Include="Views\Sys\AgentUser\Edit.cshtml" />
     <Content Include="Views\Sys\AgentUser\List.cshtml" />
     <Content Include="Views\Sys\AgentUser\SelectList.cshtml" />
+    <Content Include="Views\Biz\PosMachine\ListByNoUse.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

@@ -16,7 +16,7 @@
 
             $("#btn_select_merchantPosMachine").click(function () {
 
-                art.dialog.open('../PosMachine/SparePosMachineList', {
+                art.dialog.open('../PosMachine/ListByNoUse', {
                     id: "openDialog565", title: '选择POS机', width: '600px', height: '520px', lock: true, drag: false, cancelVal: '关闭', cancel: true
                 });
             });
@@ -52,9 +52,9 @@ function () {
 
 
 
-        function getPosMachineDetails(obj){
+        function getPosMachineDetails(obj) {
 
-            $('#Model_ChangeHistory_NewPosMachineId').val(obj.id);
+            $('#Model_NewPosMachineId').val(obj.id);
             $('#lbl_PosMachine_DeviceId').text(obj.deviceId);
             $('#lbl_PosMachine_FuselageNumber').text(obj.fuselageNumber);
             $('#lbl_PosMachine_TerminalNumber').text(obj.terminalNumber);
@@ -155,8 +155,9 @@ function () {
         <tr>
             <td class="t">设备ID：</td>
             <td class="c">
-                <input name="Model.ChangeHistory.MerchantPosMachineId" type="hidden" value="@Model.ChangeHistory.MerchantPosMachineId" />
-                <input name="Model.ChangeHistory.NewPosMachineId" type="hidden" id="Model_ChangeHistory_NewPosMachineId" value="" />
+                <input name="Model.MerchantId" type="hidden" value="@Model.Merchant.Id" />
+                <input name="Model.OldPosMachineId" type="hidden" value="@Model.OldPosMachine.Id" />
+                <input name="Model.NewPosMachineId" type="hidden" id="Model_NewPosMachineId" value="" />
                 <span id="lbl_PosMachine_DeviceId"></span>
             </td>
             <td class="t">机身号：</td>
@@ -175,7 +176,7 @@ function () {
             </td>
         </tr>
         <tr>
-            <td class="t">
+            <td class="t" style="vertical-align:top;">
                 原因：
             </td>
             <td class="c" style="white-space:normal;" colspan="3">

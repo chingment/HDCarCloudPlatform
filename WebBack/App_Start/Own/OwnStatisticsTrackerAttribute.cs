@@ -22,24 +22,7 @@ namespace WebBack
 
         public int GetUserId()
         {
-            if(HttpContext.Current==null)
-            {
-                return 0;
-            }
-
-            if(HttpContext.Current.User==null)
-            {
-                return 0;
-            }
-
-
-            if(HttpContext.Current.User.Identity==null)
-            {
-                return 0;
-            }
-
-            int userId=0;
-            return userId;
+            return OwnRequest.GetCurrentUserId();
         }
 
         #region Action时间监控

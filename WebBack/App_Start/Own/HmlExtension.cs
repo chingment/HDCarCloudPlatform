@@ -10,13 +10,6 @@ using WebBack;
 
 namespace System.Web
 {
-    //public enum InputType{
-
-    //    Select=0,
-    //    CheckBox=1,
-    //    Radio=2
-    //}
-
     public static class HmlExtension
     {
         public static string Encrypt(string plaintext)

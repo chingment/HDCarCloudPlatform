@@ -367,7 +367,7 @@
         <table class="f-tb1-detail">
             <tr>
                 <td class="t">设备ID：</td>
-                <td class="c">
+                <td class="c" style="width:250px">
                     <span>@Model.MerchantPosMachine[i].PosMachine.DeviceId</span>
                 </td>
                 <td class="t">机身号：</td>
@@ -393,6 +393,16 @@
                 <td class="t">流量费（年）：</td>
                 <td class="c">
                     <span>@Model.MerchantPosMachine[i].MobileTrafficFee.ToPrice()</span><span class="moneyunit">元</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t">状态：</td>
+                <td class="c">
+                    <span>@(Html.initEnumeration<Lumos.Entity.Enumeration.MerchantPosMachineStatus>(Lumos.Entity.Enumeration.InputType.Select, "Model.MerchantPosMachine[" + i + "].Status", new { @class = "select-control", defaulttext = "请选择", selectedvalue = new Lumos.Entity.Enumeration.MerchantPosMachineStatus[] { Model.MerchantPosMachine[i].Status }, hidevalue = new Lumos.Entity.Enumeration.MerchantPosMachineStatus[] { Lumos.Entity.Enumeration.MerchantPosMachineStatus.Unknow } }))</span>
+                </td>
+                <td class="t">过期时间：</td>
+                <td class="c">
+                    <span><input type="text" class="input-control" name="Model.MerchantPosMachine[@i].ExpiryTime" id="Model_MerchantPosMachine_ExpiryTime_@i" value="@Model.MerchantPosMachine[i].ExpiryTime.ToUnifiedFormatDate()" onclick="WdatePicker()" /></span>
                 </td>
             </tr>
         </table>

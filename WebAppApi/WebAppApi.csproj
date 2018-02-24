@@ -127,7 +127,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ExtendedApp\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -174,6 +173,7 @@
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\TalentDemandWorkJobModel.cs" />
     <Compile Include="Models\Banner\BannerModel.cs" />
+    <Compile Include="Models\Banner\DetailsViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\CarService\CarInsKindModel.cs" />
     <Compile Include="Models\CarService\CarInsPlanKindParentModel.cs" />
@@ -242,6 +242,8 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Views\Banner\Details.cshtml" />
+    <Content Include="Views\Shared\_AppLayout.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

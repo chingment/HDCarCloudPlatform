@@ -13,6 +13,10 @@ namespace WebAppApi.Controllers
 {
     public class BannerController : Controller
     {
-  
+        public ViewResult Details(int id)
+        {
+            DetailsViewModel model = new DetailsViewModel(id);
+            return View(model);
+        }
     }
 }

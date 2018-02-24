@@ -152,7 +152,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\Own\OwnRequest.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\App\ExtendedAppController.cs" />
     <Compile Include="Controllers\Biz\ApplyLossAssessController.cs" />
     <Compile Include="Controllers\Biz\ApplyPosController.cs" />
     <Compile Include="Controllers\Biz\CarClaimController.cs" />
@@ -171,7 +170,6 @@
     <Compile Include="Controllers\Biz\TransactionsController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\App\BannerController.cs" />
     <Compile Include="App_Start\Own\NPOIExcelHelper.cs" />
     <Compile Include="Controllers\Sys\AgentUserController.cs" />
     <Compile Include="Controllers\Sys\BannerController.cs" />
@@ -196,9 +194,6 @@
     <Compile Include="App_Start\Own\OwnNoResubmitAttribute.cs" />
     <Compile Include="App_Start\Own\OwnStaticResource.cs" />
     <Compile Include="App_Start\Own\OwnStatisticsTrackerAttribute.cs" />
-    <Compile Include="Models\App\Banner\DetailsViewModel.cs" />
-    <Compile Include="Models\App\Order\InsOfferPayViewModel.cs" />
-    <Compile Include="Models\App\ServiceKit\CarInsExpireDateViewModel.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\Biz\ApplyLossAssess\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\ApplyLossAssess\ApplyLossAssessSearchCondition.cs" />
@@ -260,7 +255,6 @@
     <Compile Include="Models\Home\ChangePasswordModel.cs" />
     <Compile Include="Models\Home\LoginModel.cs" />
     <Compile Include="Models\SearchCondition.cs" />
-    <Compile Include="Models\App\Product\GoodsDetailsViewModel.cs" />
     <Compile Include="Models\Sys\AgentUser\AddViewModel.cs" />
     <Compile Include="Models\Sys\AgentUser\EditViewModel.cs" />
     <Compile Include="Models\Sys\AgentUser\AgentUserSearchCondition.cs" />
@@ -1195,9 +1189,6 @@
     <Content Include="Scripts\ckfinder\userfiles\.htaccess" />
     <Content Include="Views\Biz\CarInsuranceCompany\InsuranceCompanyList.cshtml" />
     <Content Include="Views\Sys\StaffUser\SelectList.cshtml" />
-    <Content Include="Views\App\Product\GoodsDetails.cshtml" />
-    <Content Include="Views\App\Banner\Details.cshtml" />
-    <Content Include="Views\Shared\_AppLayout.cshtml" />
     <Content Include="Views\Sys\Banner\TypeList.cshtml" />
     <Content Include="Views\Biz\Product\GoodsList.cshtml" />
     <Content Include="Views\Biz\Product\AddGoods.cshtml" />
@@ -1214,13 +1205,9 @@
     <Content Include="Views\Biz\Order\CarClaimFollow.cshtml" />
     <Content Include="Static\ExcelTemplate\POS机信登记表.xls" />
     <Content Include="Views\Biz\PosMachine\ExportAdd.cshtml" />
-    <Content Include="Views\Biz\PosMachine\ReturnList.cshtml" />
-    <Content Include="Views\Biz\PosMachine\Return.cshtml" />
     <Content Include="Views\Biz\PosMachine\MerchantPosMachineList.cshtml" />
     <Content Include="Views\Shared\UpLoadFile.cshtml" />
-    <Content Include="Views\Biz\PosMachine\ExportReturn.cshtml" />
     <Content Include="Views\Biz\Report\NoActiveAccount.cshtml" />
-    <Content Include="Views\App\ExtendedApp\ComingSoon.cshtml" />
     <Content Include="Views\Biz\Product\EditGoods.cshtml" />
     <Content Include="Views\Biz\Order\CarInsurePay.cshtml" />
     <Content Include="Views\Sys\SalesmanUser\Add.cshtml" />
@@ -1237,13 +1224,10 @@
     <Content Include="Views\Biz\CarInsureOffer\Cancle.cshtml" />
     <Content Include="Views\Biz\PosMachine\ChangeList.cshtml" />
     <Content Include="Views\Biz\PosMachine\Change.cshtml" />
-    <Content Include="Views\Biz\PosMachine\SparePosMachineList.cshtml" />
     <Content Include="Views\Biz\Report\PosList.cshtml" />
     <Content Include="Views\Shared\_LayoutHomeIframe.cshtml" />
     <Content Include="Views\Shared\_LayoutHomeIframeMainList.cshtml" />
     <Content Include="Views\Home\Main.cshtml" />
-    <Content Include="Views\App\CarInsureOffer\OfferImg.cshtml" />
-    <Content Include="Views\App\ServiceKit\CarInsExpireDate.cshtml" />
     <Content Include="Views\Biz\Order\ConfirmPayList.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\Add.cshtml" />
     <Content Include="Views\Biz\TalentDemand\Details.cshtml" />
@@ -1254,7 +1238,6 @@
     <Content Include="Views\Biz\ApplyLossAssess\List.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\VerifyOrder.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\VerifyOrderList.cshtml" />
-    <Content Include="Views\Biz\PosMachine\ReSetNoActive.cshtml" />
     <Content Include="Views\Biz\ServiceFee\Details.cshtml" />
     <Content Include="Views\Sys\AgentUser\Add.cshtml" />
     <Content Include="Views\Sys\AgentUser\Edit.cshtml" />
@@ -1273,7 +1256,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\App\CarInsureOffer\" />
     <Folder Include="Scripts\ckeditor\samples\assets\inlineall\" />
     <Folder Include="Scripts\ckeditor\samples\assets\outputxhtml\" />
     <Folder Include="Scripts\ckeditor\samples\assets\uilanguages\" />

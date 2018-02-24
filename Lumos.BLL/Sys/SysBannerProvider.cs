@@ -15,7 +15,7 @@ namespace Lumos.BLL
         {
             string linkUrl = "";
 
-            linkUrl = string.Format("{0}/App/Banner/Details/{1}", BizFactory.AppSettings.WebAppServerUrl, id);
+            linkUrl = string.Format("{0}/Banner/Details/{1}", BizFactory.AppSettings.WebAppServerUrl, id);
 
             return linkUrl;
         }

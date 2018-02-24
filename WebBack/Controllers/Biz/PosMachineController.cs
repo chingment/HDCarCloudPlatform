@@ -24,29 +24,12 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
-        public ViewResult ReturnList()
-        {
-            return View();
-        }
-
         public ViewResult ChangeList()
         {
             return View();
         }
 
-
-
         public ViewResult MerchantPosMachineList()
-        {
-            return View();
-        }
-
-        public ViewResult SparePosMachineList()
-        {
-            return View();
-        }
-
-        public ViewResult Return()
         {
             return View();
         }
@@ -63,11 +46,6 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
-        public ViewResult ExportReturn()
-        {
-            return View();
-        }
-
         public ViewResult Change(int id)
         {
             ChangeViewModel model = new ChangeViewModel(id);
@@ -80,63 +58,6 @@ namespace WebBack.Controllers.Biz
         {
             EditViewModel model = new EditViewModel(id);
             return View(model);
-        }
-
-
-        public ViewResult ReSetNoActive(string userName, string deviceId)
-        {
-            ViewBag.Status = ReSetNoActiveS(userName, deviceId);
-            return View();
-        }
-
-
-        private string ReSetNoActiveS(string userName, string deviceId)
-        {
-            var user = CurrentDb.SysUser.Where(m => m.UserName == userName).FirstOrDefault();
-
-            if (user == null)
-            {
-                return "用户不存在（SysUser）";
-            }
-
-            var pos = CurrentDb.PosMachine.Where(m => m.DeviceId == deviceId).FirstOrDefault();
-            if (pos == null)
-            {
-                return "设备不存在（PosMachine）";
-            }
-
-
-            var merpos = CurrentDb.MerchantPosMachine.Where(m => m.UserId == user.Id).FirstOrDefault();
-
-            if (merpos == null)
-            {
-                return "找不到对应的商户机器对应记录（MerchantPosMachine）";
-            }
-
-            var order = CurrentDb.Order.Where(m => m.ProductType == Enumeration.ProductType.PosMachineServiceFee && m.UserId == user.Id).FirstOrDefault();
-
-            if (order == null)
-            {
-                return "找不到对应的商户机器对应的订单号（Order）";
-            }
-
-            merpos.MerchantId = merpos.MerchantId;
-            merpos.PosMachineId = pos.Id;
-            merpos.Status = Enumeration.MerchantPosMachineStatus.NoActive;
-
-            order.Status = Enumeration.OrderStatus.WaitPay;
-
-            SnModel snModel = Sn.Build(Lumos.BLL.SnType.ServiceFee, order.Id);
-            order.Sn = snModel.Sn;
-
-            order.TradeSnByWechat = snModel.TradeSnByWechat;
-            order.TradeSnByAlipay = snModel.TradeSnByAlipay;
-            order.MerchantId = merpos.MerchantId;
-            order.PosMachineId = pos.Id;
-
-            CurrentDb.SaveChanges();
-
-            return "重置未激活状态成功";
         }
 
         public JsonResult GetList(PosMachineSearchCondition condition)
@@ -157,32 +78,6 @@ namespace WebBack.Controllers.Biz
             int pageIndex = condition.PageIndex;
             int pageSize = 10;
             list = list.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
-
-
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list };
-
-            return Json(ResultType.Success, pageEntity, "");
-        }
-
-
-        public JsonResult GetReturnList(PosMachineSearchCondition condition)
-        {
-
-
-            string fuselageNumber = condition.FuselageNumber.ToSearchString();
-            string deviceId = condition.DeviceId.ToSearchString();
-            var list = (from mp in CurrentDb.MerchantPosMachine
-                        join p in CurrentDb.PosMachine on mp.PosMachineId equals p.Id
-                        join m in CurrentDb.Merchant on mp.MerchantId equals m.Id
-                        where (fuselageNumber.Length == 0 || p.FuselageNumber.Contains(fuselageNumber)) &&
-                                (deviceId.Length == 0 || p.DeviceId.Contains(deviceId))
-                        select new { m.ClientCode, m.YYZZ_Name, p.Id, p.DeviceId, mp.Deposit, mp.ReturnDeposit, mp.ActiveTime, mp.ReturnTime, });
-
-            int total = list.Count();
-
-            int pageIndex = condition.PageIndex;
-            int pageSize = 10;
-            list = list.OrderByDescending(r => r.ReturnTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
 
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list };
@@ -234,50 +129,6 @@ namespace WebBack.Controllers.Biz
                     item.Version,
                     item.CreateTime,
                     StatusName = item.Status.GetCnName(),
-                });
-
-
-            }
-
-
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list };
-
-            return Json(ResultType.Success, pageEntity, "");
-        }
-
-        public JsonResult GetSparePosMachineList(PosMachineSearchCondition condition)
-        {
-
-
-            string fuselageNumber = condition.FuselageNumber.ToSearchString();
-            string deviceId = condition.DeviceId.ToSearchString();
-            var query = (from m in CurrentDb.PosMachine
-
-                         where (fuselageNumber.Length == 0 || m.FuselageNumber.Contains(fuselageNumber)) &&
-                                 (deviceId.Length == 0 || m.DeviceId.Contains(deviceId))
-                                 && m.IsUse == false
-                         select new { m.Id, m.DeviceId, m.FuselageNumber, m.TerminalNumber, m.Version, m.CreateTime });
-
-            int total = query.Count();
-
-            int pageIndex = condition.PageIndex;
-            int pageSize = 10;
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
-
-
-            List<object> list = new List<object>();
-
-            foreach (var item in query)
-            {
-
-                list.Add(new
-                {
-                    item.Id,
-                    item.DeviceId,
-                    item.FuselageNumber,
-                    item.TerminalNumber,
-                    item.Version,
-                    item.CreateTime
                 });
 
 
@@ -355,7 +206,7 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.POS机登记信息)]
         [HttpPost]
 
-        public JsonResult Edit(AddViewModel model)
+        public JsonResult Edit(EditViewModel model)
         {
             return BizFactory.PosMachine.Edit(this.CurrentUserId, model.PosMachine);
         }

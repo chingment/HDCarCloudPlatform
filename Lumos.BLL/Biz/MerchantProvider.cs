@@ -234,18 +234,18 @@ namespace Lumos.BLL
                     }
                 }
 
-                //foreach (var m in merchantPosMachine)
-                //{
-                //    var l_MerchantPosMachine = CurrentDb.MerchantPosMachine.Where(q => q.Id == q.Id && q.MerchantId == l_Merchant.Id).FirstOrDefault();
-                //    if (l_MerchantPosMachine != null)
-                //    {
-                //        l_MerchantPosMachine.Deposit = m.Deposit;
-                //        l_MerchantPosMachine.Rent = m.Rent;
-                //        l_MerchantPosMachine.Mender = operater;
-                //        l_MerchantPosMachine.LastUpdateTime = this.DateTime;
-                //        CurrentDb.SaveChanges();
-                //    }
-                //}
+                foreach (var m in merchantPosMachine)
+                {
+                    var l_MerchantPosMachine = CurrentDb.MerchantPosMachine.Where(q => q.Id == m.Id && q.MerchantId == l_Merchant.Id).FirstOrDefault();
+                    if (l_MerchantPosMachine != null)
+                    {
+                        l_MerchantPosMachine.Status = m.Status;
+                        l_MerchantPosMachine.ExpiryTime = m.ExpiryTime;
+                        l_MerchantPosMachine.Mender = operater;
+                        l_MerchantPosMachine.LastUpdateTime = this.DateTime;
+                        CurrentDb.SaveChanges();
+                    }
+                }
 
 
                 foreach (var m in bankCard)

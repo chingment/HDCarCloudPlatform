@@ -17,34 +17,6 @@ namespace WebBack
     /// </summary>
     public class OwnExceptionAttribute : FilterAttribute, IExceptionFilter
     {
-        private string _Message = "An exception error occurred";
-        public string Message
-        {
-            get
-            {
-                return _Message;
-            }
-            set
-            {
-                _Message = value;
-            }
-        }
-
-
-        private string _ErrorUrl = "~/Error.htm";
-        public string ErrorUrl
-        {
-            get
-            {
-                return _ErrorUrl;
-            }
-            set
-            {
-                _ErrorUrl = value;
-            }
-        }
-
-
         void IExceptionFilter.OnException(ExceptionContext filterContext)
         {
 
@@ -64,16 +36,16 @@ namespace WebBack
             MessageBoxModel messageBox = new MessageBoxModel();
             messageBox.No = Guid.NewGuid().ToString();
             messageBox.Type = MessageBoxTip.Exception;
-            messageBox.Title = "抱歉,访问出错";
-           // messageBox.Content = "<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetHomePage() + "'\">返回主页</a>";
+            messageBox.Title = "温馨提示";
+            messageBox.Content = "[Own]抱歉,访问出错";
             messageBox.IsTop = false;
             messageBox.IsPopup = true;
+
             if (OwnWebSettingUtils.CanViewErrorStackTrace())
             {
                 messageBox.ErrorStackTrace = CommonUtils.ToHtml(filterContext.Exception.Message + "\r\n" + filterContext.Exception.StackTrace);
             }
 
-            //判断是否异步调用
             if (isAjaxRequest)
             {
                 CustomJsonResult jsonResult = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, messageBox.Title, messageBox);
@@ -84,17 +56,12 @@ namespace WebBack
             }
             else
             {
-
-
                 filterContext.Result = new ViewResult { ViewName = "MessageBox", MasterName = "_Layout", ViewData = new ViewDataDictionary { Model = messageBox } };
             }
-
 
             filterContext.ExceptionHandled = true;
 
             log.Error("发生异常错误[编号:" + messageBox.No + "]", filterContext.Exception);
-
-
         }
 
 

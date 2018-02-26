@@ -1368,7 +1368,7 @@ span.img-verify-change:hover {
 }
 
 .messagebox dd {
-	margin-left: 120px;
+	padding-left: 120px;
 	height: 100px;
 	background-color: #edfed0;
 }

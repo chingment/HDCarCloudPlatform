@@ -21,19 +21,20 @@ namespace WebAgent
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            var request = filterContext.RequestContext.HttpContext.Request;
+            var response = filterContext.RequestContext.HttpContext.Response;
+            var isAjaxRequest = request.IsAjaxRequest();
+            var userAgent = request.UserAgent;
+            var returnUrl = isAjaxRequest == true ? request.UrlReferrer.AbsoluteUri : request.Url.AbsoluteUri;
+
             bool skipAuthorization = filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), inherit: true) || filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), inherit: true);
             if (skipAuthorization)
             {
                 return;
             }
 
-            var request = filterContext.RequestContext.HttpContext.Request;
-            var response = filterContext.RequestContext.HttpContext.Response;
-            bool isAjaxRequest = request.IsAjaxRequest();
-            string userAgent = request.UserAgent;
-            string returnUrl = isAjaxRequest == true ? request.UrlReferrer.AbsoluteUri : request.Url.AbsoluteUri;
-
             string token = request.QueryString["token"];
+
             if (token != null)
             {
                 HttpCookie cookie_session = request.Cookies[OwnRequest.SESSION_NAME];
@@ -52,18 +53,16 @@ namespace WebAgent
 
             if (userInfo == null)
             {
-                if (token == null)
+                if (isAjaxRequest)
                 {
                     MessageBoxModel messageBox = new MessageBoxModel();
                     messageBox.No = Guid.NewGuid().ToString();
                     messageBox.Type = MessageBoxTip.Exception;
-                    messageBox.Title = "您没有权限访问,可能链接超时";
-                    messageBox.Content = "请重新<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetLoginPage(returnUrl) + "'\">登录</a>后打开";
+                    messageBox.Title = "温馨提示";
+                    messageBox.Content = "请先<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetLoginPage(returnUrl) + "'\">登录</a>后打开";
                     messageBox.IsTop = true;
 
-                    string masterName = "_Layout";
-
-                    filterContext.Result = new ViewResult { ViewName = "MessageBox", MasterName = masterName, ViewData = new ViewDataDictionary { Model = messageBox } };
+                    filterContext.Result = new ViewResult { ViewName = "MessageBox", MasterName = "_Layout", ViewData = new ViewDataDictionary { Model = messageBox } };
                 }
                 else
                 {

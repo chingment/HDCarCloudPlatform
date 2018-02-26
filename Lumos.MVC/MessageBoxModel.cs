@@ -8,9 +8,10 @@ namespace Lumos.Mvc
 {
     public enum MessageBoxTip
     {
-        Success = 1,
-        Failure = 2,
-        Exception = 3
+        Warn = 1,
+        Success = 2,
+        Failure = 3,
+        Exception = 4
     }
 
     public class MessageBoxModel

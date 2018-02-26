@@ -12,10 +12,12 @@ using WebBack.Models.Sys.SalesmanUser;
 
 namespace WebBack.Controllers.Sys
 {
+
     public class SalesmanUserController : OwnBaseController
     {
         #region 视图
 
+        [OwnAuthorize(PermissionCode.业务人员设置)]
         public ViewResult List()
         {
             return View();
@@ -26,12 +28,14 @@ namespace WebBack.Controllers.Sys
             return View();
         }
 
+        [OwnAuthorize(PermissionCode.业务人员设置)]
         public ViewResult Add()
         {
             AddViewModel model = new AddViewModel();
             return View();
         }
 
+        [OwnAuthorize(PermissionCode.业务人员设置)]
         public ViewResult Edit(int id)
         {
             EditViewModel model = new EditViewModel(id);
@@ -41,6 +45,7 @@ namespace WebBack.Controllers.Sys
 
         #endregion
 
+        [OwnAuthorize(PermissionCode.业务人员设置)]
         public JsonResult GetList(SalesmanUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
@@ -82,7 +87,7 @@ namespace WebBack.Controllers.Sys
             return Json(ResultType.Success, pageEntity, "");
         }
 
-
+        [OwnAuthorize(PermissionCode.业务人员设置)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult Add(AddViewModel model)
@@ -104,6 +109,7 @@ namespace WebBack.Controllers.Sys
             return SysFactory.AuthorizeRelay.CreateUser<SysSalesmanUser>(this.CurrentUserId, user);
         }
 
+        [OwnAuthorize(PermissionCode.业务人员设置)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult Edit(EditViewModel model)

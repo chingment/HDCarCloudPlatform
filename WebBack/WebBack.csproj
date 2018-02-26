@@ -151,6 +151,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\Own\OwnRequest.cs" />
+    <Compile Include="App_Start\Own\OwnResponse.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\Biz\ApplyLossAssessController.cs" />
     <Compile Include="Controllers\Biz\ApplyPosController.cs" />

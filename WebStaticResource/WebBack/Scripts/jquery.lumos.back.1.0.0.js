@@ -333,7 +333,7 @@
             errorHtml += '   </dl>';
 
 
-            if (_errorStackTrace != "") {
+            if (_errorStackTrace != "" && _errorStackTrace != "null") {
                 errorHtml += '<div class=\"errorstacktrace\">';
                 errorHtml += _errorStackTrace;
                 errorHtml += '</div>';
@@ -346,14 +346,15 @@
             errorHtml += '</div>';
 
             if (_isPopup) {
-                art.dialog({
+                window.top.art.dialog({
                     content: errorHtml,
                     cancelVal: '关闭',
                     title: '提示',
                     width: "500px",
                     height: "100px",
                     cancel: true,
-                    padding: _padding
+                    padding: _padding,
+                    lock: true
                 });
             }
             else {

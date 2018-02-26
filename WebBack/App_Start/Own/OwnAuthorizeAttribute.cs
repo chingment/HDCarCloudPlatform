@@ -19,6 +19,7 @@ namespace WebBack
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
     public class OwnAuthorizeAttribute : ActionFilterAttribute
     {
+        public string[] _permissions;
 
         public OwnAuthorizeAttribute(params string[] permissions)
         {
@@ -26,13 +27,11 @@ namespace WebBack
             {
                 if (permissions.Length > 0)
                 {
-                    this.Permissions = permissions;
+                    _permissions = permissions;
                 }
             }
 
         }
-
-        public string[] Permissions { get; set; }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -49,6 +48,7 @@ namespace WebBack
             string returnUrl = isAjaxRequest == true ? request.UrlReferrer.AbsoluteUri : request.Url.AbsoluteUri;
 
             string token = request.QueryString["token"];
+
             if (token != null)
             {
                 HttpCookie cookie_session = request.Cookies[OwnRequest.SESSION_NAME];
@@ -67,41 +67,40 @@ namespace WebBack
 
             if (userInfo == null)
             {
-                if (token == null)
+                MessageBoxModel messageBox = new MessageBoxModel();
+                messageBox.No = Guid.NewGuid().ToString();
+                messageBox.Type = MessageBoxTip.Failure;
+                messageBox.Title = "温馨提示";
+                messageBox.Content = "请先<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetLoginPage(returnUrl) + "'\">登录</a>后打开";
+                messageBox.IsTop = true;
+
+                if (isAjaxRequest)
                 {
-                    MessageBoxModel messageBox = new MessageBoxModel();
-                    messageBox.No = Guid.NewGuid().ToString();
-                    messageBox.Type = MessageBoxTip.Exception;
-                    messageBox.Title = "您没有权限访问,可能链接超时";
-                    messageBox.Content = "请重新<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetLoginPage(returnUrl) + "'\">登录</a>后打开";
-                    messageBox.IsTop = true;
-
-                    string masterName = "_Layout";
-
-                    filterContext.Result = new ViewResult { ViewName = "MessageBox", MasterName = masterName, ViewData = new ViewDataDictionary { Model = messageBox } };
+                    CustomJsonResult jsonResult = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, messageBox.Title, messageBox);
+                    jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+                    filterContext.Result = jsonResult;
+                    filterContext.Result.ExecuteResult(filterContext);
+                    filterContext.HttpContext.Response.End();
                 }
                 else
                 {
-                    filterContext.Result = new RedirectResult(OwnWebSettingUtils.GetLoginPage(returnUrl));
+                    filterContext.Result = new ViewResult { ViewName = "MessageBox", MasterName = "_Layout", ViewData = new ViewDataDictionary { Model = messageBox } };
                 }
 
                 return;
             }
 
-            if (Permissions != null)
+            if (_permissions != null)
             {
                 MessageBoxModel messageBox = new MessageBoxModel();
                 messageBox.No = Guid.NewGuid().ToString();
-                messageBox.Type = MessageBoxTip.Exception;
-                messageBox.Title = "您没有权限访问,可能链接超时";
-                if (!filterContext.HttpContext.Request.IsAuthenticated)
-                {
-                    messageBox.Content = "请重新<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetLoginPage(returnUrl) + "'\">登录</a>后打开";
-                }
+                messageBox.Type = MessageBoxTip.Warn;
+                messageBox.Title = "温馨提示";
+                messageBox.Content = "您没有权限";
 
-                bool IsHasPermission = OwnRequest.IsInPermission(Permissions);
+                bool isHasPermission = OwnRequest.IsInPermission(_permissions);
 
-                if (!IsHasPermission)
+                if (!isHasPermission)
                 {
                     if (isAjaxRequest)
                     {
@@ -110,14 +109,13 @@ namespace WebBack
                         filterContext.Result = jsonResult;
                         filterContext.Result.ExecuteResult(filterContext);
                         filterContext.HttpContext.Response.End();
-                        return;
                     }
                     else
                     {
-                        string masterName = "_Layout";
-                        filterContext.Result = new ViewResult { ViewName = "MessageBox", MasterName = masterName, ViewData = new ViewDataDictionary { Model = messageBox } };
-                        return;
+                        filterContext.Result = new ViewResult { ViewName = "MessageBox", MasterName = "_Layout", ViewData = new ViewDataDictionary { Model = messageBox } };
                     }
+
+                    return;
                 }
             }
 

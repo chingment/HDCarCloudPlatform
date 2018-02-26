@@ -43,17 +43,17 @@ namespace WebSSO.Controllers
 
                 if (result.ResultTip == Enumeration.LoginResultTip.UserNotExist || result.ResultTip == Enumeration.LoginResultTip.UserPasswordIncorrect)
                 {
-                    return Json(ResultType.Failure, gotoViewModel, OwnOperateTipUtils.LOGIN_USERNAMEORPASSWORDINCORRECT);
+                    return Json(ResultType.Failure, gotoViewModel, "用户名或密码不正确");
                 }
 
                 if (result.ResultTip == Enumeration.LoginResultTip.UserDisabled)
                 {
-                    return Json(ResultType.Failure, gotoViewModel, OwnOperateTipUtils.LOGIN_ACCOUNT_DISABLED);
+                    return Json(ResultType.Failure, gotoViewModel, "账户被禁用");
                 }
 
                 if (result.ResultTip == Enumeration.LoginResultTip.UserDeleted)
                 {
-                    return Json(ResultType.Failure, gotoViewModel, OwnOperateTipUtils.LOGIN_ACCOUNT_DELETE);
+                    return Json(ResultType.Failure, gotoViewModel, "账户被删除");
                 }
             }
 
@@ -92,7 +92,7 @@ namespace WebSSO.Controllers
 
             gotoViewModel.Url = string.Format("{0}token={1}", model.ReturnUrl, userInfo.Token);
 
-            return Json(ResultType.Success, gotoViewModel, OwnOperateTipUtils.LOGIN_SUCCESS);
+            return Json(ResultType.Success, gotoViewModel, "登录成功");
 
         }
     }

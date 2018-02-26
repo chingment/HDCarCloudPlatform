@@ -27,10 +27,6 @@ namespace WebSSO
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            //Database.SetInitializer<LumosDbContext>(new FxContextDatabaseInitializerForCreateDatabaseIfNotExists());
-            //Database.SetInitializer<LumosDbContext>(new FxContextDatabaseInitializerForDropCreateDatabaseAlways());
-
-
             //扩展
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngineExtension());

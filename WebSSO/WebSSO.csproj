@@ -154,6 +154,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\Own\OwnWebSettingUtils.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -161,10 +162,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="App_Start\Own\OwnCheckVerifyCodeAttribute.cs" />
-    <Compile Include="App_Start\Own\OwnWebSettingUtils.cs" />
     <Compile Include="App_Start\Own\OwnBaseController.cs" />
     <Compile Include="App_Start\Own\OwnExceptionAttribute.cs" />
-    <Compile Include="App_Start\Own\OwnOperateTipUtils.cs" />
     <Compile Include="App_Start\Own\OwnStaticResource.cs" />
     <Compile Include="App_Start\Own\OwnStatisticsTrackerAttribute.cs" />
     <Compile Include="Models\Home\LoginModel.cs" />
@@ -187,9 +186,6 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.sitemap">
-      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -243,7 +239,6 @@
     <None Include="Properties\PublishProfiles\mipb.pubxml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\MessageBox.cshtml" />
     <Content Include="Views\web.config" />
     <None Include="Properties\PublishProfiles\WE.pubxml" />

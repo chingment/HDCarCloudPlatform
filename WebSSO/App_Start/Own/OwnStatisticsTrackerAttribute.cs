@@ -20,28 +20,6 @@ namespace WebSSO
         private readonly string Key = "_thisOnActionMonitorLog_";
         ILog log = log4net.LogManager.GetLogger(CommonSetting.LoggerStatisticsTracker);
 
-        public int GetUserId()
-        {
-            if(HttpContext.Current==null)
-            {
-                return 0;
-            }
-
-            if(HttpContext.Current.User==null)
-            {
-                return 0;
-            }
-
-
-            if(HttpContext.Current.User.Identity==null)
-            {
-                return 0;
-            }
-
-            int userId=0;
-            return userId;
-        }
-
         #region Action时间监控
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -57,7 +35,6 @@ namespace WebSSO
             MonLog.RequestTime = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.ffff", DateTimeFormatInfo.InvariantInfo));
             MonLog.ControllerName = filterContext.RouteData.Values["controller"] as string;
             MonLog.ActionName = filterContext.RouteData.Values["action"] as string;
-            MonLog.UserId = GetUserId();
             filterContext.Controller.ViewData[Key] = MonLog;
         }
         public override void OnActionExecuted(ActionExecutedContext filterContext)
@@ -66,7 +43,6 @@ namespace WebSSO
             MonLog.ResponseTime = DateTime.Now;
             MonLog.FormCollections = filterContext.HttpContext.Request.Form;//form表单提交的数据
             MonLog.QueryCollections = filterContext.HttpContext.Request.QueryString;//Url 参数
-            MonLog.UserId = GetUserId();
             log.Info(MonLog.GetRequestInfo());
         }
         #endregion

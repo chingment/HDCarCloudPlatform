@@ -19,8 +19,6 @@ namespace WebSSO
                 defaults: new { controller = "Home", action = "Login", id = UrlParameter.Optional }
             );
 
-
-
         }
     }
 }

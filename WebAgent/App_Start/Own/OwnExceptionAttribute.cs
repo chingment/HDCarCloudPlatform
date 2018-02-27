@@ -40,7 +40,7 @@ namespace WebAgent
             messageBox.Content = "[Own]抱歉,访问出错";
             messageBox.IsTop = false;
             messageBox.IsPopup = true;
-            if (OwnWebSettingUtils.CanViewErrorStackTrace())
+            if (CommonUtils.CanViewErrorStackTrace())
             {
                 messageBox.ErrorStackTrace = CommonUtils.ToHtml(filterContext.Exception.Message + "\r\n" + filterContext.Exception.StackTrace);
             }

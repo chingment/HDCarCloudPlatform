@@ -57,31 +57,29 @@ namespace WebSSO.Controllers
                 }
             }
 
-            if (string.IsNullOrEmpty(model.ReturnUrl))
+            string host = "";
+            string returnUrl = "";
+
+
+            switch (result.User.Type)
             {
-                switch (result.User.Type)
-                {
-                    case Enumeration.UserType.Staff:
-                        model.ReturnUrl = System.Configuration.ConfigurationManager.AppSettings["custom:WebBackUrl"];
-                        break;
-                    case Enumeration.UserType.Client:
-                        break;
-                    case Enumeration.UserType.Agent:
-                        model.ReturnUrl = System.Configuration.ConfigurationManager.AppSettings["custom:WebAgentUrl"];
-                        break;
-                    case Enumeration.UserType.Salesman:
-                        break;
-                }
+                case Enumeration.UserType.Staff:
+                    host = System.Configuration.ConfigurationManager.AppSettings["custom:WebBackUrl"];
+                    //returnUrl = string.Format("{0}?returnUrl={1}", host, model.ReturnUrl);
+                    returnUrl = string.Format("{0}", host);
+                    break;
+                case Enumeration.UserType.Client:
+                    break;
+                case Enumeration.UserType.Agent:
+                    host = System.Configuration.ConfigurationManager.AppSettings["custom:WebAgentUrl"];
+                    //returnUrl = string.Format("{0}?returnUrl={1}", host, model.ReturnUrl);
+                    returnUrl = string.Format("{0}", host);
+                    break;
+                case Enumeration.UserType.Salesman:
+                    break;
             }
 
-            if (model.ReturnUrl.IndexOf("?") < 0)
-            {
-                model.ReturnUrl += "?";
-            }
-            else
-            {
-                model.ReturnUrl += "&";
-            }
+
 
             UserInfo userInfo = new UserInfo();
             userInfo.UserId = result.User.Id;
@@ -90,7 +88,7 @@ namespace WebSSO.Controllers
 
             SSOUtil.SetUserInfo(userInfo);
 
-            gotoViewModel.Url = string.Format("{0}token={1}", model.ReturnUrl, userInfo.Token);
+            gotoViewModel.Url = string.Format("{0}?token={1}", returnUrl, userInfo.Token);
 
             return Json(ResultType.Success, gotoViewModel, "登录成功");
 

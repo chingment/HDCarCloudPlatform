@@ -41,7 +41,7 @@ namespace WebBack
             messageBox.IsTop = false;
             messageBox.IsPopup = true;
 
-            if (OwnWebSettingUtils.CanViewErrorStackTrace())
+            if (CommonUtils.CanViewErrorStackTrace())
             {
                 messageBox.ErrorStackTrace = CommonUtils.ToHtml(filterContext.Exception.Message + "\r\n" + filterContext.Exception.StackTrace);
             }

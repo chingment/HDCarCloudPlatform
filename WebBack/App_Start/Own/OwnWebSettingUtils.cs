@@ -15,7 +15,7 @@ namespace WebBack
         public static string GetLoginPage(string returnUrl = "")
         {
             string server = System.Configuration.ConfigurationManager.AppSettings["custom:LoginServerUrl"];
-           // string loginUrl = string.Format("{0}?returnUrl={1}", server, HttpUtility.UrlEncode(returnUrl));
+            //string loginUrl = string.Format("{0}?returnUrl={1}", server, HttpUtility.UrlEncode(returnUrl));
 
             string loginUrl = string.Format("{0}", server);
             return loginUrl;
@@ -46,27 +46,6 @@ namespace WebBack
         public static string GetWebName()
         {
             return "车险平台";
-        }
-
-        /// <summary>
-        /// 是否能查看错误日志的堆栈
-        /// </summary>
-        /// <returns></returns>
-        public static bool CanViewErrorStackTrace()
-        {
-            string[] canViewIp = new string[] { "127.0.0.1", "::1" };
-
-
-            string ip = CommonUtils.GetIP();
-
-            if (canViewIp.Contains(ip))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 }

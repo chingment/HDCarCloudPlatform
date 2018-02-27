@@ -806,6 +806,24 @@ namespace Lumos.Common
             return string.Format("{0}/{1}", url, logo);
 
         }
+
+
+        public static bool CanViewErrorStackTrace()
+        {
+            string[] canViewIp = new string[] { "127.0.0.1", "::1" };
+
+
+            string ip = CommonUtils.GetIP();
+
+            if (canViewIp.Contains(ip))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
 

@@ -29,5 +29,7 @@ namespace Lumos.Mvc
         public string ErrorStackTrace { get; set; }
 
         public bool IsTop { get; set; }
+
+        public string GoToUrl { get; set; }
     }
 }

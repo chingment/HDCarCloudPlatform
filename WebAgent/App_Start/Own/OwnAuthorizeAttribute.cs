@@ -59,6 +59,7 @@ namespace WebAgent
                     messageBox.No = Guid.NewGuid().ToString();
                     messageBox.Type = MessageBoxTip.Exception;
                     messageBox.Title = "温馨提示";
+                    messageBox.GoToUrl = OwnWebSettingUtils.GetLoginPage(returnUrl);
                     messageBox.Content = "请先<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetLoginPage(returnUrl) + "'\">登录</a>后打开";
                     messageBox.IsTop = true;
 

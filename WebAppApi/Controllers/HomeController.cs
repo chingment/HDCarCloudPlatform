@@ -145,9 +145,9 @@ namespace WebAppApi.Controllers
             string passWord = "123456";
             string newPassWord = "888888";
             string deviceId = "861097039013879";
-            int userId = 1010;
-            int merchantId = 3;
-            int posMachineId = 143;
+            int userId = 1216;
+            int merchantId = 242;
+            int posMachineId = 149;
 
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
@@ -155,11 +155,11 @@ namespace WebAppApi.Controllers
            // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
-            model.Add("登录接口", Login(userName, passWord, deviceId));
+           // model.Add("登录接口", Login(userName, passWord, deviceId));
 
             //model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Wechat));
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
-            //model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D180205111300000007"));
+            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
@@ -169,7 +169,7 @@ namespace WebAppApi.Controllers
             //model.Add("获取订单", GetOrder(15, 1, 0));
             //model.Add("提交理赔需求1", SubmitClaim(userId, "邱大文", Enumeration.RepairsType.EstimateRepair));
             //model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));
-            //model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, 818, Enumeration.ProductType.InsureForCarForInsure));
+            model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, posMachineId, 1255, Enumeration.ProductType.PosMachineServiceFee));
             //model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));
 
             //model.Add("登录接口", Login(userName, passWord, "869612023700703"));
@@ -1318,12 +1318,13 @@ namespace WebAppApi.Controllers
 
 
 
-        public string GetOrderDetails(int userId, int merchantId, int orderId, Enumeration.ProductType productType)
+        public string GetOrderDetails(int userId, int merchantId,int posMachineId,  int orderId, Enumeration.ProductType productType)
         {
 
             Dictionary<string, string> parames = new Dictionary<string, string>();
             parames.Add("userId", userId.ToString());
             parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
             parames.Add("orderId", orderId.ToString());
             parames.Add("productType", ((int)productType).ToString());
             string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
@@ -1333,7 +1334,7 @@ namespace WebAppApi.Controllers
             headers.Add("timestamp", timespan.ToString());
             headers.Add("sign", signStr);
             HttpUtil http = new HttpUtil();
-            string result = http.HttpGet("" + host + "/api/Order/GetDetails?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&orderId=" + orderId + "&productType=" + ((int)productType).ToString(), headers);
+            string result = http.HttpGet("" + host + "/api/Order/GetDetails?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&posMachineId="+ posMachineId + "&orderId=" + orderId + "&productType=" + ((int)productType).ToString(), headers);
 
             return result;
         }

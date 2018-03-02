@@ -141,10 +141,10 @@ namespace WebAppApi.Controllers
 
             Dictionary<string, string> model = new Dictionary<string, string>();
 
-            string userName = "15989287035";
+            string userName = "15989287031";
             string passWord = "123456";
             string newPassWord = "888888";
-            string deviceId = "87377332911A215";
+            string deviceId = "861097039013879";
             int userId = 1010;
             int merchantId = 3;
             int posMachineId = 143;
@@ -152,10 +152,10 @@ namespace WebAppApi.Controllers
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             // model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-            model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
+           // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
-            //model.Add("登录接口", Login(userName, passWord, deviceId));
+            model.Add("登录接口", Login(userName, passWord, deviceId));
 
             //model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Wechat));
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));

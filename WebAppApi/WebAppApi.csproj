@@ -160,6 +160,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HttpRequestClient .cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Controllers\MinShunController.cs" />
     <Compile Include="Global.asax.cs">
@@ -244,6 +245,8 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Views\Banner\Details.cshtml" />
     <Content Include="Views\Shared\_AppLayout.cshtml" />
+    <Content Include="Views\Resource\yonggongxieyi.cshtml" />
+    <Content Include="Views\Resource\lipeixieyi.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

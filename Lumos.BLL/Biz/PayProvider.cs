@@ -86,6 +86,22 @@ namespace Lumos.BLL
             resultData.Status = (int)order.Status;
             resultData.Remarks = order.Status.GetCnName();
 
+
+            PrintDataModel printData = new PrintDataModel();
+
+            printData.MerchantName = "好易联";
+            printData.MerchantCode = "354422";
+            printData.ProductName = order.ProductName;
+            printData.TradeType = "消费";
+            printData.TradeNo = order.Sn;
+            printData.TradePayMethod = order.PayWay.GetCnName();
+            printData.TradeAmount = order.Price.ToF2Price();
+            printData.TradeDateTime = order.PayTime.ToUnifiedFormatDateTime();
+            printData.ServiceHotline = "4400000000";
+
+            resultData.PrintData = printData;
+
+
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
 
             return result;

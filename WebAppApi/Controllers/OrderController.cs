@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Web.Http;
 using WebAppApi.Models.Order;
 using Lumos.Entity.AppApi;
+using WebAppApi.Models;
 
 namespace WebAppApi.Controllers
 {
@@ -503,7 +504,7 @@ namespace WebAppApi.Controllers
                     }
                     #endregion
 
-                    model.SubmitTime = orderToCarInsure.SubmitTime.ToUnifiedFormatDateTime(); 
+                    model.SubmitTime = orderToCarInsure.SubmitTime.ToUnifiedFormatDateTime();
                     model.CompleteTime = orderToCarInsure.CompleteTime.ToUnifiedFormatDateTime();
                     model.PayTime = orderToCarInsure.PayTime.ToUnifiedFormatDateTime();
                     model.CancleTime = orderToCarInsure.CancleTime.ToUnifiedFormatDateTime();
@@ -611,7 +612,22 @@ namespace WebAppApi.Controllers
                     model.MobileTrafficFee = orderToServiceFee.MobileTrafficFee.ToF2Price();
                     model.ExpiryTime = orderToServiceFee.ExpiryTime.ToUnifiedFormatDate();
 
+                    PrintDataModel printData = new PrintDataModel();
+
+                    printData.MerchantName = "好易联";
+                    printData.MerchantCode = "354422";
+                    printData.ProductName = orderToServiceFee.ProductName;
+                    printData.TradeType = "消费";
+                    printData.TradeNo = orderToServiceFee.Sn;
+                    printData.TradePayMethod = orderToServiceFee.PayWay.GetCnName();
+                    printData.TradeAmount = orderToServiceFee.Price.ToF2Price();
+                    printData.TradeDateTime = orderToServiceFee.PayTime.ToUnifiedFormatDateTime();
+                    printData.ServiceHotline = "4400000000";
+
+                    model.PrintData = printData;
                 }
+
+
                 APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
                 return new APIResponse(result);
                 #endregion 

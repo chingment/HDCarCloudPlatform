@@ -15,5 +15,7 @@ namespace Lumos.Entity.AppApi
         public string Remarks { get; set; }
 
         public Enumeration.ProductType ProductType { get; set; }
+
+        public PrintDataModel PrintData { get; set; }
     }
 }

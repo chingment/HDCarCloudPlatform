@@ -1,4 +1,5 @@
 ﻿using Lumos.Entity;
+using Lumos.Entity.AppApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace WebAppApi.Models.Order
         public string MobileTrafficFee { get; set; }
 
         public string ExpiryTime { get; set; }
+
+        public PrintDataModel PrintData { get; set; }
 
     }
 }

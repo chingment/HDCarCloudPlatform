@@ -1609,10 +1609,10 @@
 
 
         opts = $.extend({
-            beforeClick: function (index) { return true; }
+            click: function (index) { return true; }
         }, opts || {});
 
-        var _beforeClick = opts.beforeClick;
+        var _click = opts.click;
 
 
 
@@ -1628,13 +1628,14 @@
                 $(_tabitems).removeClass("selected");
                 $(_tabitems).eq(index).addClass("selected");
                 $(_tabcontents).hide();
-                $(_tabcontents).eq(index).show()
+                $(_tabcontents).eq(index).show();
+                $(_tabs).attr("index", index);
             }
 
             $(_tabitems).unbind('click').click(function () {
 
                 var index = $(this).index();
-                var isflag = _beforeClick(index);
+                var isflag = _click(index);
                 if (!isflag)
                     return
                 var disabled = $(this).hasClass("disabled");
@@ -1657,7 +1658,13 @@
 
         });
 
+        this.click = function () {
+            var index = parseInt($(_tabs).attr("index"));
+            _click(index);
+        };
 
+        return this;
+		
     }
 
 })(jQuery);

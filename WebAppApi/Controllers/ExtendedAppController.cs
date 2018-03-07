@@ -11,7 +11,14 @@ namespace WebAppApi.Controllers
         // GET: ExtendedApp
         public ActionResult GoTo(int userId, int merchantId, int posMachineId, int appId)
         {
-            return Redirect("http://www.baidu.com");
+            string server = System.Configuration.ConfigurationManager.AppSettings["custom:WebAppServerUrl"];
+            string url = string.Format("{0}{1}", server, "/ExtendedApp/ComeInSoon");
+            return Redirect(url);
+        }
+
+        public ActionResult ComeInSoon()
+        {
+            return View();
         }
     }
 }

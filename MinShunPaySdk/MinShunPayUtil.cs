@@ -17,12 +17,16 @@ namespace MinShunPaySdk
         public DateTime SubmitTime { get; set; }
     }
 
+
     public static class MinShunPayUtil
     {
         public readonly static string notify_url = "http://112.74.179.185/Api/MinShun/ReceiveNotify";
-        public readonly static string partnerId = "160010";
-        public readonly static string mercid = "894440155416002";
-        public readonly static string signkey = "36B4D6A3FBF116B5D740AFC1C39FC314";
+        public readonly static string partnerId = "96883248";
+        public readonly static string mercid = "101540281129";
+        public readonly static string signkey = "f9824a0350c89503c7c394f6f43b532c";
+        //public readonly static string partnerId = "160010";
+        //public readonly static string mercid = "894440155416002";
+        //public readonly static string signkey = "36B4D6A3FBF116B5D740AFC1C39FC314";
         public readonly static string serverUrl = "http://14.29.111.142:8092";
 
         public static CodeDownload_Result CodeDownload(MinShunPayOrderInfo order)

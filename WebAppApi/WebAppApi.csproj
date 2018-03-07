@@ -247,6 +247,7 @@
     <Content Include="Views\Shared\_AppLayout.cshtml" />
     <Content Include="Views\Resource\yonggongxieyi.cshtml" />
     <Content Include="Views\Resource\lipeixieyi.cshtml" />
+    <Content Include="Views\ExtendedApp\ComeInSoon.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

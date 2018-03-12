@@ -154,6 +154,9 @@ namespace Lumos.BLL
                 {
                     switch (notifyParty)
                     {
+                        case Enumeration.PayResultNotifyParty.AppNotify:
+                            result = App_ResultNotify(operater, (OrderPayResultNotifyByAppLog)model);
+                            break;
                         case Enumeration.PayResultNotifyParty.MinShunNotifyUrl:
                             result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
                             break;
@@ -179,6 +182,60 @@ namespace Lumos.BLL
             return result;
 
         }
+
+        private CustomJsonResult App_ResultNotify(int operater, OrderPayResultNotifyByAppLog receiveNotifyLog)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            try
+            {
+                using (TransactionScope ts = new TransactionScope())
+                {
+
+                    var order = CurrentDb.Order.Where(m => m.Sn == receiveNotifyLog.Order).FirstOrDefault();
+
+                    if (order == null)
+                    {
+                        if (string.IsNullOrEmpty(receiveNotifyLog.Order))
+                        {
+                            receiveNotifyLog.Creator = 0;
+                            receiveNotifyLog.CreateTime = DateTime.Now;
+                            CurrentDb.OrderPayResultNotifyByAppLog.Add(receiveNotifyLog);
+                            CurrentDb.SaveChanges();
+                            ts.Complete();
+                        }
+
+                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应的订单号");
+                    }
+                    receiveNotifyLog.MerchantId = order.MerchantId;
+                    receiveNotifyLog.PosMachineId = order.PosMachineId;
+                    receiveNotifyLog.UserId = order.UserId;
+                    receiveNotifyLog.Creator = 0;
+                    receiveNotifyLog.CreateTime = DateTime.Now;
+                    switch (order.ProductType)
+                    {
+                        case Enumeration.ProductType.PosMachineServiceFee:
+                            result = PayServiceFeeCompleted(operater, order.Sn);
+                            break;
+                    }
+
+
+                    CurrentDb.OrderPayResultNotifyByAppLog.Add(receiveNotifyLog);
+                    CurrentDb.SaveChanges();
+
+                    ts.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.ErrorFormat("订单号({0})结果反馈发生异常，原因：{1}", receiveNotifyLog.Order, ex.StackTrace);
+
+                result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付通知失败");
+            }
+
+            return result;
+        }
+
 
         private CustomJsonResult MinShun_ResultNotify(int operater, OrderPayResultNotifyByMinShunLog receiveNotifyLog)
         {

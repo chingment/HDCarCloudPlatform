@@ -776,5 +776,13 @@ namespace WebAppApi.Controllers
             IResult result = SdkFactory.MinShunPay.QrCodeDownload(pms.UserId, pms);
             return new APIResponse(result);
         }
+
+        [HttpPost]
+        public APIResponse PayResultNotify(OrderPayResultNotifyByAppLog model)
+        {
+            IResult result = BizFactory.Pay.ResultNotify(model.UserId, Enumeration.PayResultNotifyParty.AppNotify, model);
+
+            return new APIResponse(result);
+        }
     }
 }

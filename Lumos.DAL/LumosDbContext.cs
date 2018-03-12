@@ -74,6 +74,8 @@ namespace Lumos.DAL
 
         public IDbSet<OrderPayResultNotifyByMinShunLog> OrderPayResultNotifyByMinShunLog { get; set; }
 
+        public IDbSet<OrderPayResultNotifyByAppLog> OrderPayResultNotifyByAppLog { get; set; }
+
         public IDbSet<CarInsuranceExpireDate> CarInsuranceExpireDate { get; set; }
 
 

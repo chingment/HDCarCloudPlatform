@@ -677,7 +677,9 @@ namespace Lumos.Entity
             [Remark("定时任务查询民顺接口")]
             MinShunOrderQueryApi = 2,
             [Remark("后台确认")]
-            Staff = 3
+            Staff = 3,
+            [Remark("App主动通知")]
+            AppNotify = 4
         }
 
         public enum SysItemCacheType

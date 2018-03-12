@@ -6,25 +6,6 @@ using System.Threading.Tasks;
 
 namespace Lumos.Entity
 {
-    public class PayCarInsureConfirmParams
-    {
-        public int OfferId { get; set; }
-
-
-        public string Recipient { get; set; }
-
-        public string RecipientAddress { get; set; }
-
-        public string RecipientPhoneNumber { get; set; }
-    }
-
-    public class PayDepositRentConfirmParams
-    {
-        public int RentMonths { get; set; }
-
-    }
-
-
     public class PayConfirmModel
     {
 

@@ -24,13 +24,13 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string CardNo { get; set; }
         [MaxLength(128)]
-        public string BatchNo { get; set; }
-        [MaxLength(128)]
         public string TraceNo { get; set; }
         [MaxLength(128)]
-        public string IssBankNo { get; set; }
+        public string ShopId { get; set; }
         [MaxLength(128)]
-        public string AcqCode { get; set; }
+        public string ShopName { get; set; }
+        [MaxLength(128)]
+        public string BatchNo { get; set; }
         [MaxLength(128)]
         public string RefNo { get; set; }
         [MaxLength(128)]
@@ -40,11 +40,7 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string TransTime { get; set; }
         [MaxLength(128)]
-        public string PosSN { get; set; }
-        [MaxLength(128)]
-        public string Version { get; set; }
-        [MaxLength(128)]
-        public string PosModel { get; set; }
+        public string PosId { get; set; }
         [MaxLength(128)]
         public string OrderSn { get; set; }
         public int Creator { get; set; }

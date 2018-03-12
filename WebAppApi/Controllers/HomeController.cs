@@ -293,15 +293,10 @@ namespace WebAppApi.Controllers
             model.CardNo = "1";
             model.BatchNo = "1";
             model.TraceNo = "1";
-            model.IssBankNo = "1";
-            model.AcqCode = "1";
             model.RefNo = "1";
             model.AuthCode = "1";
             model.TransDate = "1";
             model.TransTime = "1";
-            model.PosSN = "1";
-            model.Version = "1";
-            model.PosModel = "1";
             model.OrderSn = orderSn;
             model.CreateTime = DateTime.Now;
             model.Creator = 0;

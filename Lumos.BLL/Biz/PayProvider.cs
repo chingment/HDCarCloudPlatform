@@ -192,18 +192,18 @@ namespace Lumos.BLL
                 using (TransactionScope ts = new TransactionScope())
                 {
 
-                    var order = CurrentDb.Order.Where(m => m.Sn == receiveNotifyLog.Order).FirstOrDefault();
+                    var order = CurrentDb.Order.Where(m => m.Sn == receiveNotifyLog.OrderSn).FirstOrDefault();
 
                     if (order == null)
                     {
-                        if (string.IsNullOrEmpty(receiveNotifyLog.Order))
+                        if (!string.IsNullOrEmpty(receiveNotifyLog.OrderSn))
                         {
                             receiveNotifyLog.Creator = 0;
                             receiveNotifyLog.CreateTime = DateTime.Now;
                             CurrentDb.OrderPayResultNotifyByAppLog.Add(receiveNotifyLog);
                             CurrentDb.SaveChanges();
-                            ts.Complete();
                         }
+                        ts.Complete();
 
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应的订单号");
                     }
@@ -228,7 +228,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.ErrorFormat("订单号({0})结果反馈发生异常，原因：{1}", receiveNotifyLog.Order, ex.StackTrace);
+                Log.ErrorFormat("订单号({0})结果反馈发生异常，原因：{1}", receiveNotifyLog.OrderSn, ex.StackTrace);
 
                 result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付通知失败");
             }
@@ -342,6 +342,11 @@ namespace Lumos.BLL
             {
                 var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Sn == orderSn).FirstOrDefault();
 
+                if (orderToServiceFee == null)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "找不到订单号");
+                }
 
                 if (orderToServiceFee.Status == Enumeration.OrderStatus.Completed)
                 {

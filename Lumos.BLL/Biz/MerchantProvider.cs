@@ -501,8 +501,11 @@ namespace Lumos.BLL
             yOrder.transName = "消费";
             yOrder.productType = orderToServiceFee.ProductType;
             yOrder.productName = orderToServiceFee.ProductName;
-            yOrder.amount = orderToServiceFee.Price.ToF2Price().Replace(".", "").PadLeft(12, '0');
 
+            //yOrder.amount = int.Parse((orderToServiceFee.Price * 100).ToString()).ToString();
+
+            yOrder.amount = "1";
+        
             yOrder.confirmField.Add(new OrderField("订单编号", orderToServiceFee.Sn.NullToEmpty()));
             if (orderToServiceFee.Deposit > 0)
             {

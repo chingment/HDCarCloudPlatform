@@ -152,15 +152,16 @@ namespace WebAppApi.Controllers
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             // model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-           // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
+            // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
-           // model.Add("登录接口", Login(userName, passWord, deviceId));
+            // model.Add("登录接口", Login(userName, passWord, deviceId));
 
             //model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Wechat));
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
-            model.Add("获取支付结果", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
+           // model.Add("获取支付结果查询", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
+            model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "D180310214100001287"));
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
@@ -169,7 +170,7 @@ namespace WebAppApi.Controllers
             //model.Add("获取订单", GetOrder(15, 1, 0));
             //model.Add("提交理赔需求1", SubmitClaim(userId, "邱大文", Enumeration.RepairsType.EstimateRepair));
             //model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));
-            model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, posMachineId, 1255, Enumeration.ProductType.PosMachineServiceFee));
+            //model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, posMachineId, 1255, Enumeration.ProductType.PosMachineServiceFee));
             //model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));
 
             //model.Add("登录接口", Login(userName, passWord, "869612023700703"));
@@ -279,14 +280,36 @@ namespace WebAppApi.Controllers
 
         }
 
-        public string PayResultNotify(int userId, int merchantId, string orderSn, int orderId)
+        public string PayResultNotify(int userId, int merchantId,int posMachineId, string orderSn)
         {
-            PayResultModel model = new PayResultModel();
+            OrderPayResultNotifyByAppLog model = new OrderPayResultNotifyByAppLog();
 
 
-            // string a1 = JsonConvert.SerializeObject(model);
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
+            model.UserId = userId;
+            model.TransResult = "1";
+            model.Amount = "1";
+            model.CardNo = "1";
+            model.BatchNo = "1";
+            model.TraceNo = "1";
+            model.IssBankNo = "1";
+            model.AcqCode = "1";
+            model.RefNo = "1";
+            model.AuthCode = "1";
+            model.TransDate = "1";
+            model.TransTime = "1";
+            model.PosSN = "1";
+            model.Version = "1";
+            model.PosModel = "1";
+            model.OrderSn = orderSn;
+            model.CreateTime = DateTime.Now;
+            model.Creator = 0;
+            string a1 = JsonConvert.SerializeObject(model);
 
-            string a1 = "{\"productType\":\"2013\",\"merchantId\":\"" + merchantId + "\",\"userId\":\"" + userId + "\",\"orderSn\":\"" + orderSn + "\",\"orderId\":\"" + orderId + "\",\"params\":{\"merchantId\":\"861440360120020\",\"amount\":\"000000414000\",\"terminalId\":\"9999999B\",\"batchNo\":\"000001\",\"merchantName\":\"银联测试商户\",\"issue\":\"null\",\"merchantNo\":\"null\",\"traceNo\":\"000017\",\"failureReason\":\"\",\"referenceNo\":\"022310580194\",\"type\":\"\",\"result\":\"1\",\"cardNo\":\"6212263602044931384\",\"merchantInfo\":{\"order_no\":\"" + orderSn + "\",\"insurance_company\":\"平安保险\",\"insurance_type\":\"\",\"customer_id_type\":\"01\",\"customer_id\":\"a\",\"customer_sex\":\"\",\"customer_name\":\"a\",\"customer_mobile_no\":\"\",\"customer_birthdate\":\"\",\"insurance_order_no\":\"aaa\",\"car_type\":\"a\",\"car_license\":\"a\",\"car_frame_no\":\"\",\"payer_id_type\":\"\",\"payer_id\":\"\",\"payer_name\":\"\",\"payer_mobile_no\":\"\",\"payer_address\":\"\",\"ybs_mer_code\":\"000567\",\"merchant_id\":\"861440360120020\",\"merchant_name\":\"\",\"phone_no\":\"\",\"cashier_id\":\"\",\"teller_id\":\"45567\"}}";
+
+
+            //string a1 = "{\"productType\":\"2013\",\"merchantId\":\"" + merchantId + "\",\"userId\":\"" + userId + "\",\"orderSn\":\"" + orderSn + "\",\"orderId\":\"" + orderId + "\",\"params\":{\"merchantId\":\"861440360120020\",\"amount\":\"000000414000\",\"terminalId\":\"9999999B\",\"batchNo\":\"000001\",\"merchantName\":\"银联测试商户\",\"issue\":\"null\",\"merchantNo\":\"null\",\"traceNo\":\"000017\",\"failureReason\":\"\",\"referenceNo\":\"022310580194\",\"type\":\"\",\"result\":\"1\",\"cardNo\":\"6212263602044931384\",\"merchantInfo\":{\"order_no\":\"" + orderSn + "\",\"insurance_company\":\"平安保险\",\"insurance_type\":\"\",\"customer_id_type\":\"01\",\"customer_id\":\"a\",\"customer_sex\":\"\",\"customer_name\":\"a\",\"customer_mobile_no\":\"\",\"customer_birthdate\":\"\",\"insurance_order_no\":\"aaa\",\"car_type\":\"a\",\"car_license\":\"a\",\"car_frame_no\":\"\",\"payer_id_type\":\"\",\"payer_id\":\"\",\"payer_name\":\"\",\"payer_mobile_no\":\"\",\"payer_address\":\"\",\"ybs_mer_code\":\"000567\",\"merchant_id\":\"861440360120020\",\"merchant_name\":\"\",\"phone_no\":\"\",\"cashier_id\":\"\",\"teller_id\":\"45567\"}}";
 
             string signStr = Signature.Compute(key, secret, timespan, a1);
 
@@ -1318,7 +1341,7 @@ namespace WebAppApi.Controllers
 
 
 
-        public string GetOrderDetails(int userId, int merchantId,int posMachineId,  int orderId, Enumeration.ProductType productType)
+        public string GetOrderDetails(int userId, int merchantId, int posMachineId, int orderId, Enumeration.ProductType productType)
         {
 
             Dictionary<string, string> parames = new Dictionary<string, string>();
@@ -1334,7 +1357,7 @@ namespace WebAppApi.Controllers
             headers.Add("timestamp", timespan.ToString());
             headers.Add("sign", signStr);
             HttpUtil http = new HttpUtil();
-            string result = http.HttpGet("" + host + "/api/Order/GetDetails?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&posMachineId="+ posMachineId + "&orderId=" + orderId + "&productType=" + ((int)productType).ToString(), headers);
+            string result = http.HttpGet("" + host + "/api/Order/GetDetails?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId + "&orderId=" + orderId + "&productType=" + ((int)productType).ToString(), headers);
 
             return result;
         }

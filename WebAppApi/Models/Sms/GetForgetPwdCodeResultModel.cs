@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebAppApi.Models.Sms
 {
-    public class ResetPwdResultModel
+    public class GetForgetPwdCodeResultModel
     {
         public string UserName { get; set; }
 

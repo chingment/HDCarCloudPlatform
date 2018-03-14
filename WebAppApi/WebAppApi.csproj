@@ -202,7 +202,7 @@
     <Compile Include="Models\Sms\GetCreateAccountCodeModel.cs" />
     <Compile Include="Models\Sms\GetCreateAccountCodeResultModel.cs" />
     <Compile Include="Models\Sms\GetForgetPwdCodeModel.cs" />
-    <Compile Include="Models\Sms\ResetPwdResultModel.cs" />
+    <Compile Include="Models\Sms\GetForgetPwdCodeResultModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -32,7 +32,7 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "获取短信失败");
             }
 
-            ResetPwdResultModel resultModel = new ResetPwdResultModel();
+            GetForgetPwdCodeResultModel resultModel = new GetForgetPwdCodeResultModel();
             resultModel.UserName = model.Phone;
             resultModel.ValidCode = validCode;
             resultModel.Token = token;

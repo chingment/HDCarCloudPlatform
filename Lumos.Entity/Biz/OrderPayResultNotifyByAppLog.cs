@@ -16,9 +16,10 @@ namespace Lumos.Entity
         public int MerchantId { get; set; }
         public int PosMachineId { get; set; }
         public int UserId { get; set; }
-
         [MaxLength(128)]
         public string TransResult { get; set; }
+        [MaxLength(128)]
+        public string TransType { get; set; }
         [MaxLength(128)]
         public string Amount { get; set; }
         [MaxLength(128)]

@@ -11,42 +11,42 @@ namespace MinShunPaySdkTest
     {
         static void Main(string[] args)
         {
-            Dictionary<string, string> dics = new Dictionary<string, string>();
+            //Dictionary<string, string> dics = new Dictionary<string, string>();
 
-            dics.Add("partnerId", "160010");
-            dics.Add("tranCod", "0700");
-            dics.Add("tranType", "180000");//微信：180000 ,支付宝：280000
-            dics.Add("txnamt", "1");
-            dics.Add("orderId", "600000000A0000000002");
-            dics.Add("mercid", "894440155416002");
-            dics.Add("termid", "90117998");
-            dics.Add("spbill_ip", "127.0.0.1");
-            dics.Add("notify_url", "http://14.29.111.142/posm/wft_notify.tran");
-            dics.Add("remark", "1");
-            dics.Add("orderDate", "20170810");
-            dics.Add("orderTime", "121212");
+            //dics.Add("partnerId", "160010");
+            //dics.Add("tranCod", "0700");
+            //dics.Add("tranType", "180000");//微信：180000 ,支付宝：280000
+            //dics.Add("txnamt", "1");
+            //dics.Add("orderId", "600000000A0000000002");
+            //dics.Add("mercid", "894440155416002");
+            //dics.Add("termid", "90117998");
+            //dics.Add("spbill_ip", "127.0.0.1");
+            //dics.Add("notify_url", "http://14.29.111.142/posm/wft_notify.tran");
+            //dics.Add("remark", "1");
+            //dics.Add("orderDate", "20170810");
+            //dics.Add("orderTime", "121212");
 
-            string signdata = TdsPayUtil.GetSignData(dics);
-            Console.WriteLine("拼接的代签名数据:{0}", signdata);
+            //string signdata = TdsPayUtil.GetSignData(dics);
+            //Console.WriteLine("拼接的代签名数据:{0}", signdata);
 
-            string signkey = "36B4D6A3FBF116B5D740AFC1C39FC314";
-            string sign = TdsPayUtil.GetShaSign(signdata + signkey);
-            Console.WriteLine("拼接的代签名sign数据:{0}", sign);
-
-
-            MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
-
-            orderInfo.OrderId = "D1801251123000009465";
-            orderInfo.Price = 0.01m;
-            orderInfo.Remark = "测试";
-            orderInfo.SubmitTime = DateTime.Now;
-            orderInfo.TranType = "280000";
-            orderInfo.TermId = "90117998";
-            orderInfo.SpbillIp = "127.0.0.1";
+            //string signkey = "36B4D6A3FBF116B5D740AFC1C39FC314";
+            //string sign = TdsPayUtil.GetShaSign(signdata + signkey);
+            //Console.WriteLine("拼接的代签名sign数据:{0}", sign);
 
 
+            //MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
 
-            var result = MinShunPayUtil.CodeDownload(orderInfo);
+            //orderInfo.OrderId = "D1801251123000009465";
+            //orderInfo.Price = 0.01m;
+            //orderInfo.Remark = "测试";
+            //orderInfo.SubmitTime = DateTime.Now;
+            //orderInfo.TranType = "280000";
+            //orderInfo.TermId = "90117998";
+            //orderInfo.SpbillIp = "127.0.0.1";
+
+
+
+            //var result = MinShunPayUtil.CodeDownload(orderInfo);
 
 
             //MinShunPayApi api = new MinShunPayApi();
@@ -71,8 +71,22 @@ namespace MinShunPaySdkTest
             //var b = api.DoPost(rquest);
 
 
+            SortedDictionary<string, object> sParams = new SortedDictionary<string, object>();
 
+            sParams.Add("service", "unified.trade.query");
+            sParams.Add("mch_id", "101540281129");
+            sParams.Add("nonce_str", CommonUtil.GetNonceStr());
+            sParams.Add("out_trade_no", "90121859_D180312132300001290");
+            string sign1 = CommonUtil.MakeMd5Sign(sParams, "f9824a0350c89503c7c394f6f43b532c");
+            sParams.Add("sign", sign1);//签名
 
+            string _postData = CommonUtil.GetXml(sParams);
+
+            WebUtils webUtils = new WebUtils();
+
+            string s = webUtils.DoPost("https://pay.swiftpass.cn/pay/gateway", null, _postData, null);
+
+            string b = s;
         }
     }
 }

@@ -30,25 +30,25 @@ namespace Lumos.BLL
             return code;
         }
 
-        public CustomJsonResult SendCarInsureOfferComplete(int userId, string phone, string orderSn, string carOwner, string carPlateno)
-        {
-            string token = null;
-            CustomJsonResult result = SmsHelper.Send("SMS_4945011411f", "{\"ordersn\":\"" + orderSn + "\",\"carowner\":\"" + carOwner + "\",\"carplateno\":\"" + carPlateno + "\"}", phone, out token);
-            return result;
-        }
+        //public CustomJsonResult SendCarInsureOfferComplete(int userId, string phone, string orderSn, string carOwner, string carPlateno)
+        //{
+        //    string token = null;
+        //    CustomJsonResult result = SmsHelper.Send("SMS_4945011411f", "{\"ordersn\":\"" + orderSn + "\",\"carowner\":\"" + carOwner + "\",\"carplateno\":\"" + carPlateno + "\"}", phone, out token);
+        //    return result;
+        //}
 
-        public CustomJsonResult SendCarInsureOfferFollow(int userId, string phone, string orderSn)
-        {
-            string token = null;
-            CustomJsonResult result = SmsHelper.Send("SMS_49300130f", "{\"ordersn\":\"" + orderSn + "\"}", phone, out token);
-            return result;
-        }
+        //public CustomJsonResult SendCarInsureOfferFollow(int userId, string phone, string orderSn)
+        //{
+        //    string token = null;
+        //    CustomJsonResult result = SmsHelper.Send("SMS_49300130f", "{\"ordersn\":\"" + orderSn + "\"}", phone, out token);
+        //    return result;
+        //}
 
         public CustomJsonResult SendResetPasswordValidCode(int userId, string phone, out string validcode, out string token)
         {
             validcode = BuildValidCode();
             int seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_49460093f", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
+            CustomJsonResult result = SmsHelper.Send("SMS_88990017", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 
@@ -57,7 +57,7 @@ namespace Lumos.BLL
         {
             validcode = BuildValidCode();
             seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_49340095f", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
+            CustomJsonResult result = SmsHelper.Send("SMS_88990017", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 

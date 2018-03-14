@@ -30,11 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="aliyun-net-sdk-core">
-      <HintPath>..\packages\aliyun-net-sdk-sms\aliyun-net-sdk-core.dll</HintPath>
+    <Reference Include="aliyun-net-sdk-core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Aliyun\aliyun-net-sdk-core.dll</HintPath>
     </Reference>
-    <Reference Include="aliyun-net-sdk-sms">
-      <HintPath>..\packages\aliyun-net-sdk-sms\aliyun-net-sdk-sms.dll</HintPath>
+    <Reference Include="aliyun-net-sdk-dysmsapi">
+      <HintPath>..\packages\Aliyun\aliyun-net-sdk-dysmsapi.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>

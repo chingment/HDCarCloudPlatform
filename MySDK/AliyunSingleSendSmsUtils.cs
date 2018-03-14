@@ -1,7 +1,7 @@
 ﻿using Aliyun.Acs.Core;
 using Aliyun.Acs.Core.Exceptions;
 using Aliyun.Acs.Core.Profile;
-using Aliyun.Acs.Sms.Model.V20160927;
+using Aliyun.Acs.Dysmsapi.Model.V20170525;
 using Lumos.DAL;
 using Lumos.Entity;
 using Lumos.Mvc;
@@ -17,11 +17,14 @@ namespace MySDK
     {
         public static CustomJsonResult Send(string template, string smsparam, string mobile, out string token, string validCode = null, int? expireSecond = null)
         {
+            String product = "Dysmsapi";//短信API产品名称
+            String domain = "dysmsapi.aliyuncs.com";//短信API产品域名
             CustomJsonResult result = new CustomJsonResult();
-            IClientProfile profile = DefaultProfile.GetProfile("cn-hangzhou", "LTAInW2wvf70MRTU", "wCceTF0BOmMPgctSPPLfmMNMfyFRXS");
-            IAcsClient client = new DefaultAcsClient(profile);
+            IClientProfile profile = DefaultProfile.GetProfile("cn-hangzhou", "LTAIBXXcSKEgAxxH", "XgZJ029tZR4upF6Qrbxq6YXywPsTIP");
 
-            SingleSendSmsRequest request = new SingleSendSmsRequest();
+            DefaultProfile.AddEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+            IAcsClient acsClient = new DefaultAcsClient(profile);
+            SendSmsRequest request = new SendSmsRequest();
 
             LumosDbContext currentDb = new LumosDbContext();
 
@@ -43,16 +46,22 @@ namespace MySDK
             try
             {
 
-                request.SignName = "";//"管理控制台中配置的短信签名（状态必须是验证通过）"
+                request.SignName = "贩聚社团";//"管理控制台中配置的短信签名（状态必须是验证通过）"
+                request.PhoneNumbers = mobile;//"接收号码，多个号码可以逗号分隔"
                 request.TemplateCode = template;//管理控制台中配置的审核通过的短信模板的模板CODE（状态必须是验证通过）"
-                request.RecNum = mobile;//"接收号码，多个号码可以逗号分隔"
-                request.ParamString = smsparam;//短信模板中的变量；数字需要转换为字符串；个人用户每个变量长度必须小于15个字符。"
-                //SingleSendSmsResponse httpResponse = client.GetAcsResponse(request);
-
-
-                sendHistory.Result = Enumeration.SysSmsSendResult.Success;
-
-                result = new CustomJsonResult(ResultType.Success, "发送成功");
+                request.TemplateParam = smsparam;//短信模板中的变量；数字需要转换为字符串；个人用户每个变量长度必须小于15个字符。"
+                SendSmsResponse sendSmsResponse = acsClient.GetAcsResponse(request);
+                if (sendSmsResponse.Code == "OK")
+                {
+                    sendHistory.Result = Enumeration.SysSmsSendResult.Success;
+                    result = new CustomJsonResult(ResultType.Success, "发送成功");
+                }
+                else
+                {
+                    sendHistory.Result = Enumeration.SysSmsSendResult.Failure;
+                    sendHistory.FailureReason = sendSmsResponse.Message;
+                    result = new CustomJsonResult(ResultType.Failure, "发送失败");
+                }
 
             }
             catch (ServerException ex)

@@ -17,7 +17,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse GetForgetPwdCode(GetForgetPwdCodeModel model)
         {
-            var clientUser = CurrentDb.SysClientUser.Where(m => m.UserName == model.UserName && m.PhoneNumber == model.Phone).FirstOrDefault();
+            var clientUser = CurrentDb.SysClientUser.Where(m => m.UserName == model.Phone).FirstOrDefault();
             if (clientUser == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "用户手机不正确");
@@ -33,7 +33,7 @@ namespace WebAppApi.Controllers
             }
 
             ResetPwdResultModel resultModel = new ResetPwdResultModel();
-            resultModel.UserName = model.UserName;
+            resultModel.UserName = model.Phone;
             resultModel.ValidCode = validCode;
             resultModel.Token = token;
 

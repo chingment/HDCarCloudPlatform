@@ -175,8 +175,8 @@ namespace WebAppApi.Controllers
 
             //model.Add("登录接口", Login(userName, passWord, "869612023700703"));
 
-            model.Add("获取注册账户短信", GetCreateAccountCode("15989287032"));
-            model.Add("获取忘记密码短信", GetForgetPwdCode("15989287032"));
+             model.Add("获取注册账户短信", GetCreateAccountCode("15989287032"));
+            //model.Add("获取忘记密码短信", GetForgetPwdCode("15989287032"));
             //model.Add("修改密码", ChangePassword(15, "123456", "123456"));
             // model.Add("重置密码接口", ResetPassword(userName, newPassWord, "382001", "5e04ef95-ac41-43a9-942d-a2b41758aef2"));
             // model.Add("注册账号", GetCreateAccountCode("15989287032"));

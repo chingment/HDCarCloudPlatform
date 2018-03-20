@@ -44,20 +44,20 @@ namespace Lumos.BLL
         //    return result;
         //}
 
-        public CustomJsonResult SendGetForgetPwdCode(int userId, string phone, out string validcode, out string token)
+        public CustomJsonResult SendGetForgetPwdCode(int userId, string phone, out string validcode, out string token, out int seconds)
         {
             validcode = BuildValidCode();
-            int seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_127163043", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
+            seconds = 120;
+            CustomJsonResult result = SmsHelper.Send("SMS_127163043", "{\"code\":\"" + validcode + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 
 
-        public CustomJsonResult SendCreateAccountCode(int operater, string phone, out string validcode, out string token ,out int seconds)
+        public CustomJsonResult SendCreateAccountCode(int operater, string phone, out string validcode, out string token, out int seconds)
         {
             validcode = BuildValidCode();
             seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_127167918", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
+            CustomJsonResult result = SmsHelper.Send("SMS_127167918", "{\"code\":\"" + validcode + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 

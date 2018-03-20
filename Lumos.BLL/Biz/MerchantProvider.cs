@@ -21,13 +21,13 @@ namespace Lumos.BLL
 
             using (TransactionScope ts = new TransactionScope())
             {
-                //var code = CurrentDb.SysSmsSendHistory.Where(m => m.Token == token && m.ValidCode == validCode && m.IsUse == false && m.ExpireTime >= DateTime.Now).FirstOrDefault();
-                //if (code == null)
-                //{
-                //    return new CustomJsonResult(ResultType.Failure, "验证码错误");
-                //}
+                var code = CurrentDb.SysSmsSendHistory.Where(m => m.Token == token && m.ValidCode == validCode && m.IsUse == false && m.ExpireTime >= DateTime.Now).FirstOrDefault();
+                if (code == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, "验证码错误");
+                }
 
-                //code.IsUse = true;
+                code.IsUse = true;
 
                 var isExists = CurrentDb.SysUser.Where(m => m.UserName == userName).FirstOrDefault();
 
@@ -36,10 +36,9 @@ namespace Lumos.BLL
                     return new CustomJsonResult(ResultType.Failure, "账号已经存在");
                 }
 
-
-
                 var sysClientUser = new SysClientUser();
                 sysClientUser.UserName = userName;
+                sysClientUser.PhoneNumber = userName;
                 sysClientUser.PasswordHash = PassWordHelper.HashPassword(password);
                 sysClientUser.SecurityStamp = Guid.NewGuid().ToString();
                 sysClientUser.RegisterTime = this.DateTime;

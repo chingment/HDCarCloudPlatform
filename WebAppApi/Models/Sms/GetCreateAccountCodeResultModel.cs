@@ -7,6 +7,7 @@ namespace WebAppApi.Models.Sms
 {
     public class GetCreateAccountCodeResultModel
     {
+        public string UserName { get; set; }
         public string Phone { get; set; }
 
         public string ValidCode { get; set; }

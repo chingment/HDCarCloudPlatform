@@ -54,13 +54,13 @@ namespace MySDK
                 if (sendSmsResponse.Code == "OK")
                 {
                     sendHistory.Result = Enumeration.SysSmsSendResult.Success;
-                    result = new CustomJsonResult(ResultType.Success, "发送成功");
+                    result = new CustomJsonResult(ResultType.Success, "发送成功.");
                 }
                 else
                 {
                     sendHistory.Result = Enumeration.SysSmsSendResult.Failure;
                     sendHistory.FailureReason = sendSmsResponse.Message;
-                    result = new CustomJsonResult(ResultType.Failure, "发送失败");
+                    result = new CustomJsonResult(ResultType.Failure, "发送失败.");
                 }
 
             }
@@ -70,7 +70,7 @@ namespace MySDK
 
                 sendHistory.FailureReason = ex.ErrorCode;
 
-                result = new CustomJsonResult(ResultType.Exception, "发送失败");
+                result = new CustomJsonResult(ResultType.Exception, "发送失败..");
 
             }
             catch (ClientException ex)
@@ -79,7 +79,7 @@ namespace MySDK
 
                 sendHistory.FailureReason = ex.ErrorCode;
 
-                result = new CustomJsonResult(ResultType.Exception, "发送失败");
+                result = new CustomJsonResult(ResultType.Exception, "发送失败...");
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace MySDK
 
                 sendHistory.FailureReason = ex.Message;
 
-                result = new CustomJsonResult(ResultType.Exception, "发送失败");
+                result = new CustomJsonResult(ResultType.Exception, "发送失败....");
             }
 
             currentDb.SysSmsSendHistory.Add(sendHistory);

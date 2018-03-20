@@ -24,19 +24,20 @@ namespace WebAppApi.Controllers
             }
             string token = "";
             string validCode = "";
-
-            IResult iResult = BizFactory.Sms.SendGetForgetPwdCode(clientUser.Id, clientUser.PhoneNumber, out validCode, out token);
+            int seconds = 0;
+            IResult iResult = BizFactory.Sms.SendGetForgetPwdCode(clientUser.Id, clientUser.PhoneNumber, out validCode, out token, out seconds);
 
             if (iResult.Result != ResultType.Success)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "获取短信失败");
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, iResult.Message);
             }
 
             GetForgetPwdCodeResultModel resultModel = new GetForgetPwdCodeResultModel();
-            resultModel.UserName = model.Phone;
+            resultModel.UserName = clientUser.UserName;
+            resultModel.Phone = clientUser.PhoneNumber;
             resultModel.ValidCode = validCode;
             resultModel.Token = token;
-
+            resultModel.Seconds = seconds;
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", resultModel);
         }
 
@@ -58,7 +59,8 @@ namespace WebAppApi.Controllers
             }
 
             GetCreateAccountCodeResultModel resultModel = new GetCreateAccountCodeResultModel();
-            resultModel.Phone = model.Phone;
+            resultModel.UserName = clientUser.UserName;
+            resultModel.Phone = clientUser.PhoneNumber;
             resultModel.ValidCode = validCode;
             resultModel.Token = token;
             resultModel.Seconds = seconds;

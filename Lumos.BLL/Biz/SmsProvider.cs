@@ -44,11 +44,11 @@ namespace Lumos.BLL
         //    return result;
         //}
 
-        public CustomJsonResult SendResetPasswordValidCode(int userId, string phone, out string validcode, out string token)
+        public CustomJsonResult SendGetForgetPwdCode(int userId, string phone, out string validcode, out string token)
         {
             validcode = BuildValidCode();
             int seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_88990017", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
+            CustomJsonResult result = SmsHelper.Send("SMS_127240002", "{\"code\":\"" + validcode + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 
@@ -57,7 +57,7 @@ namespace Lumos.BLL
         {
             validcode = BuildValidCode();
             seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_88990017", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
+            CustomJsonResult result = SmsHelper.Send("SMS_127240003", "{\"code\":\"" + validcode + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 

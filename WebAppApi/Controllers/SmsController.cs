@@ -25,7 +25,7 @@ namespace WebAppApi.Controllers
             string token = "";
             string validCode = "";
 
-            IResult iResult = BizFactory.Sms.SendResetPasswordValidCode(clientUser.Id, clientUser.PhoneNumber, out validCode, out token);
+            IResult iResult = BizFactory.Sms.SendGetForgetPwdCode(clientUser.Id, clientUser.PhoneNumber, out validCode, out token);
 
             if (iResult.Result != ResultType.Success)
             {

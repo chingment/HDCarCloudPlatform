@@ -20,7 +20,7 @@ namespace MySDK
             String product = "Dysmsapi";//短信API产品名称
             String domain = "dysmsapi.aliyuncs.com";//短信API产品域名
             CustomJsonResult result = new CustomJsonResult();
-            IClientProfile profile = DefaultProfile.GetProfile("cn-hangzhou", "LTAIBXXcSKEgAxxH", "XgZJ029tZR4upF6Qrbxq6YXywPsTIP");
+            IClientProfile profile = DefaultProfile.GetProfile("cn-hangzhou", "LTAI1kaGcK7uE9Hf", "95x0VXSdph8lMvjLRvsv8sscCpTvWL");
 
             DefaultProfile.AddEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
             IAcsClient acsClient = new DefaultAcsClient(profile);
@@ -46,7 +46,7 @@ namespace MySDK
             try
             {
 
-                request.SignName = "贩聚社团";//"管理控制台中配置的短信签名（状态必须是验证通过）"
+                request.SignName = "好易联";//"管理控制台中配置的短信签名（状态必须是验证通过）"
                 request.PhoneNumbers = mobile;//"接收号码，多个号码可以逗号分隔"
                 request.TemplateCode = template;//管理控制台中配置的审核通过的短信模板的模板CODE（状态必须是验证通过）"
                 request.TemplateParam = smsparam;//短信模板中的变量；数字需要转换为字符串；个人用户每个变量长度必须小于15个字符。"

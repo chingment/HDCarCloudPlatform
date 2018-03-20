@@ -361,22 +361,22 @@ namespace Lumos.BLL
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未在就绪支付状态");
                 }
 
-                var UplinkFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.HaoYiLian).FirstOrDefault();
-                UplinkFund.Balance += orderToServiceFee.Price;
-                UplinkFund.Mender = operater;
-                UplinkFund.LastUpdateTime = this.DateTime;
+                var haoYiLianFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.HaoYiLian).FirstOrDefault();
+                haoYiLianFund.Balance += orderToServiceFee.Price;
+                haoYiLianFund.Mender = operater;
+                haoYiLianFund.LastUpdateTime = this.DateTime;
 
-                var UplinkFundTrans = new Transactions();
-                UplinkFundTrans.UserId = UplinkFund.UserId;
-                UplinkFundTrans.ChangeAmount = orderToServiceFee.Price;
-                UplinkFundTrans.Balance = UplinkFund.Balance;
-                UplinkFundTrans.Type = Enumeration.TransactionsType.Rent;
-                UplinkFundTrans.Description = string.Format("订单号:{0},押金:{1}元,流量费用:{2}元,合计:{3}元", orderSn, orderToServiceFee.Deposit, orderToServiceFee.MobileTrafficFee, orderToServiceFee.Price);
-                UplinkFundTrans.Creator = operater;
-                UplinkFundTrans.CreateTime = this.DateTime;
-                CurrentDb.Transactions.Add(UplinkFundTrans);
+                var haoYiLianFundTrans = new Transactions();
+                haoYiLianFundTrans.UserId = haoYiLianFund.UserId;
+                haoYiLianFundTrans.ChangeAmount = orderToServiceFee.Price;
+                haoYiLianFundTrans.Balance = haoYiLianFund.Balance;
+                haoYiLianFundTrans.Type = Enumeration.TransactionsType.Rent;
+                haoYiLianFundTrans.Description = string.Format("订单号:{0},押金:{1}元,流量费用:{2}元,合计:{3}元", orderSn, orderToServiceFee.Deposit, orderToServiceFee.MobileTrafficFee, orderToServiceFee.Price);
+                haoYiLianFundTrans.Creator = operater;
+                haoYiLianFundTrans.CreateTime = this.DateTime;
+                CurrentDb.Transactions.Add(haoYiLianFundTrans);
                 CurrentDb.SaveChanges();
-                UplinkFundTrans.Sn = Sn.Build(SnType.Transactions, UplinkFundTrans.Id).Sn;
+                haoYiLianFundTrans.Sn = Sn.Build(SnType.Transactions, haoYiLianFundTrans.Id).Sn;
                 CurrentDb.SaveChanges();
 
 

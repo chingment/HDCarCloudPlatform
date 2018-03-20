@@ -48,7 +48,7 @@ namespace Lumos.BLL
         {
             validcode = BuildValidCode();
             int seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_127152919", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
+            CustomJsonResult result = SmsHelper.Send("SMS_127163043", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 
@@ -57,7 +57,7 @@ namespace Lumos.BLL
         {
             validcode = BuildValidCode();
             seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_127152918", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
+            CustomJsonResult result = SmsHelper.Send("SMS_127167918", "{\"code\":\"" + validcode + "\",\"seconds\":\"" + seconds + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 

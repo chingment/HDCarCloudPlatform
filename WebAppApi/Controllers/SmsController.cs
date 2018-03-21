@@ -59,8 +59,8 @@ namespace WebAppApi.Controllers
             }
 
             GetCreateAccountCodeResultModel resultModel = new GetCreateAccountCodeResultModel();
-            resultModel.UserName = clientUser.UserName;
-            resultModel.Phone = clientUser.PhoneNumber;
+            resultModel.UserName = model.Phone;
+            resultModel.Phone = model.Phone;
             resultModel.ValidCode = validCode;
             resultModel.Token = token;
             resultModel.Seconds = seconds;

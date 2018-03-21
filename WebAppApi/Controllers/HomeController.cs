@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
-        private string host = "http://120.79.233.231";
+        private string host = "http://localhost:16665";
+        //private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -145,9 +145,14 @@ namespace WebAppApi.Controllers
             string passWord = "123456";
             string newPassWord = "888888";
             string deviceId = "861097039013879";
-            int userId = 1216;
-            int merchantId = 242;
-            int posMachineId = 149;
+
+            //int userId = 1216;
+            //int merchantId = 242;
+            //int posMachineId = 149;
+
+            int userId = 1215;
+            int merchantId = 241;
+            int posMachineId = 148;
 
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
@@ -163,7 +168,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "D180310214100001287"));
 
-            //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+            model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
@@ -175,8 +180,8 @@ namespace WebAppApi.Controllers
 
             //model.Add("登录接口", Login(userName, passWord, "869612023700703"));
 
-            model.Add("获取注册账户短信", GetCreateAccountCode("15989287032"));
-            model.Add("获取忘记密码短信", GetForgetPwdCode("15989287032"));
+            //model.Add("获取注册账户短信", GetCreateAccountCode("15989287032"));
+            //model.Add("获取忘记密码短信", GetForgetPwdCode("15989287032"));
             //model.Add("修改密码", ChangePassword(15, "123456", "123456"));
             // model.Add("重置密码接口", ResetPassword(userName, newPassWord, "382001", "5e04ef95-ac41-43a9-942d-a2b41758aef2"));
             // model.Add("注册账号", GetCreateAccountCode("15989287032"));

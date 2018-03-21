@@ -70,23 +70,6 @@ namespace MinShunPaySdkTest
 
             //var b = api.DoPost(rquest);
 
-
-            SortedDictionary<string, object> sParams = new SortedDictionary<string, object>();
-
-            sParams.Add("service", "unified.trade.query");
-            sParams.Add("mch_id", "101540281129");
-            sParams.Add("nonce_str", CommonUtil.GetNonceStr());
-            sParams.Add("out_trade_no", "90121859_D180312132300001290");
-            string sign1 = CommonUtil.MakeMd5Sign(sParams, "f9824a0350c89503c7c394f6f43b532c");
-            sParams.Add("sign", sign1);//签名
-
-            string _postData = CommonUtil.GetXml(sParams);
-
-            WebUtils webUtils = new WebUtils();
-
-            string s = webUtils.DoPost("https://pay.swiftpass.cn/pay/gateway", null, _postData, null);
-
-            string b = s;
         }
     }
 }

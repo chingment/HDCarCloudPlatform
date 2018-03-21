@@ -1139,28 +1139,13 @@
     $.fn.initUploadImage = function (options) {
         var defaults = {
             url: "/Common/UploadImage",//调用的后台方法
-            path: "",//上传到里路径，如：/Fund
-            success: function (data) { },
-            generateSize: true
+            success: function (data) { }
         };
         var opts = $.extend({}, defaults, options);
 
         var _this = $(this);
         var _url = opts.url;
-        var _path = opts.path;
         var _success = opts.success
-        var _generateSize = opts.generateSize;
-
-        if (typeof $(_this).attr('path') != 'undefined') {
-            _path = $(_this).attr('path');
-        }
-
-        if (typeof $(_this).attr('generatesize') != 'undefined') {
-            _generateSize = $(_this).attr('generatesize');
-        }
-
-
-
 
         var thisUpload = $(this);
         var inputName = $(thisUpload).attr("inputname");
@@ -1175,8 +1160,8 @@
             '<form class=\"uploadImageForm\" enctype="multipart/form-data" style="position:absolute;z-index: 0;top:-20px;" >' +
             '<input type="hidden" name="valueinputname" value="' + inputName + '" />' +
             '<input type="hidden" name="fileinputname" value="' + from_FileName + '" />' +
-            '<input type="hidden" name="path" value="' + _path + '" />' +
-            '<input type="hidden" name="generatesize" value="' + _generateSize + '" />' +
+            '<input type="hidden" name="path" value="" />' +
+            '<input type="hidden" name="generatesize" value="true" />' +
             '<input type="file"  name="' + from_FileName + '" accept="image/gif, image/jpeg, image/png, image/x-ms-bmp, image/bmp"  style="left: 0px; top: 0px; width: 45px; height: 25px; cursor: pointer; z-index: 2;filter: alpha(opacity: 0); position: relative;text-align: left;opacity: 0; moz-opacity: 0;" /></form>';
         var form = $(formTemplate);
 
@@ -1220,6 +1205,19 @@
             var form = $(this).parent();
             var comefrom = $(form).data("comefrom");
 
+            var _path = 'unknow';
+            var _generatesize = "true";
+
+            if (typeof $(comefrom).find('.uploadimg').attr('path') != 'undefined') {
+                _path = $(comefrom).find('.uploadimg').attr('path');
+            }
+
+            if (typeof $(comefrom).find('.uploadimg').attr('generatesize') != 'undefined') {
+                _path = $(comefrom).find('.uploadimg').attr('generatesize');
+            }
+
+            $(form).find('input[name=path]').val(_path);
+            $(form).find('input[name=generatesize]').val(_generatesize);
 
             var fileName = $(this).val();//文件名
 

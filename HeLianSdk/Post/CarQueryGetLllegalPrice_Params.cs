@@ -13,6 +13,6 @@ namespace HeLianSdk
         public string rackNo { get; set; }
         public string enginNo { get; set; }
         public string isCompany { get; set; }
-        public string dataLllegal { get; set; }
+        public List<DataLllegal> dataLllegal { get; set; }
     }
 }

@@ -13,13 +13,13 @@ namespace HeLianSdk
 
     public static class HeLianApi
     {
-        private static string _openid = "1066b451c67536c3e5c99d5d08a";
-        private static string _appkey = "259cfe89f9dfb3fd1d514a52i";
-
+        private static string _openid = "85237fd7e5af4fe499c92c08d58dfb44";
+        private static string _appkey = "81d31e6521c2481693399e5da4204cfa";
+        private static string _md5key = "2a8a199309774415b5098ead2a2031dd";
 
         private static long GetTimespan()
         {
-            return (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
+            return (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalMilliseconds;
         }
 
         private static string GetSign(Dictionary<string, string> dic)
@@ -35,7 +35,7 @@ namespace HeLianSdk
             foreach (var item in dic)
             {
                 string key = item.Key;
-                string value = HttpUtility.UrlEncode(item.Value, UTF8Encoding.UTF8).ToUpper();
+                string value = item.Value;
                 if (!string.IsNullOrEmpty(key))
                 {
                     queryStr.Append("&").Append(key).Append("=").Append(value);
@@ -44,7 +44,8 @@ namespace HeLianSdk
 
 
             string s = queryStr.ToString().Substring(1, queryStr.Length - 1);
-
+            s += _md5key;
+            s = s.ToLower();
             s = FormsAuthentication.HashPasswordForStoringInConfigFile(s, "MD5").ToLower();
 
             return s;
@@ -68,9 +69,11 @@ namespace HeLianSdk
             postData.Add("sign", sign);
             postData.Add("isCompany", pams.isCompany);
 
-            WebUtils webUtils = new WebUtils();
 
-            string body = DoPost("http://www.hl2016.com/mainoa/api/carquery/dataList.jhtml", postData);
+            WebUtils webUtils = new WebUtils();
+            string postDataStr = "data=" + JsonConvert.SerializeObject(postData);
+            string body = webUtils.DoPost("http://www.hl2016.com/mainoa/api/carquery/dataList.jhtml", null, postDataStr, null);
+            
 
             result = JsonConvert.DeserializeObject<HeLianApiBaseResult<List<CarQueryDataList_Request>>>(body);
 
@@ -94,9 +97,23 @@ namespace HeLianSdk
 
             postData.Add("sign", sign);
             postData.Add("isCompany", pams.isCompany);
-            postData.Add("dataLllegal", pams.dataLllegal);
+            //if (pams.dataLllegal != null)
+            //{
+                //string v = JsonConvert.SerializeObject(pams.dataLllegal);
 
-            string body = DoPost("http://www.hl2016.com/mainoa/api/carquery/getLllegalPrice.jhtml", postData);
+                string v= "[{\"bookNo\":\"4401107901494580\",\"bookType\":\"6001A\",\"lllegalCode\":\"1344\",\"cityCode\":\"440110\",\"lllegalTime\":\"2017-07-11 13:33:00\",\"point\":3,\"fine\":200}]";
+                postData.Add("dataLllegal", v);
+           // }
+
+            WebUtils webUtils = new WebUtils();
+
+            string postDataStr = JsonConvert.SerializeObject(postData);
+
+            postDataStr = "data=" + "{\"openid\":\"85237fd7e5af4fe499c92c08d58dfb44\",\"appkey\":\"81d31e6521c2481693399e5da4204cfa\",\"timestamp\":\"1521796724004\",\"carNo\":\"粤YGY662\",\"carType\":\"02\",\"rackNo\":\"004711\",\"enginNo\":\"713477\",\"sign\":\"e3c0587a5e0b1d1a23519e9d1e5f0af8\",\"isCompany\":false,\"dataLllegal\":\"[{\"bookNo\":\"4401107901494580\",\"bookType\":\"6001A\",\"lllegalCode\":\"1344\",\"cityCode\":\"440110\",\"lllegalTime\":\"2017-07-11 13:33:00\",\"point\":3,\"fine\":200}]\"}";
+
+
+            string body = webUtils.DoPost("http://www.hl2016.com/mainoa/api/carquery/getLllegalPrice.jhtml", null, postDataStr, null);
+
 
             result = JsonConvert.DeserializeObject<HeLianApiBaseResult<List<CarQueryGetLllegalPrice_Result>>>(body);
 

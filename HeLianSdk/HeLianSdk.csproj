@@ -54,6 +54,7 @@
     <Compile Include="Post\CarQueryDataList_Result.cs" />
     <Compile Include="Post\CarQueryGetLllegalPrice_Params.cs" />
     <Compile Include="Post\CarQueryGetLllegalPrice_Result.cs" />
+    <Compile Include="Post\DataLllegal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\FileItem.cs" />

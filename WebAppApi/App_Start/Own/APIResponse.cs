@@ -13,9 +13,16 @@ namespace WebAppApi
         public APIResponse(IResult apiResult)
         {
             StringContent content=new StringContent(apiResult.ToString(), Encoding.GetEncoding("UTF-8"), "application/json");
-
-
             this.Content=content;
+        }
+    }
+
+    public class APIResponse<T> : HttpResponseMessage
+    {
+        public APIResponse(IResult<T> apiResult)
+        {
+            StringContent content = new StringContent(apiResult.ToString(), Encoding.GetEncoding("UTF-8"), "application/json");
+            this.Content = content;
         }
     }
 }

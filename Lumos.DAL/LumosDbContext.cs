@@ -90,6 +90,10 @@ namespace Lumos.DAL
 
         public IDbSet<LllegalQueryScore> LllegalQueryScore { get; set; }
         public IDbSet<LllegalQueryScoreTrans> LllegalQueryScoreTrans { get; set; }
+
+        public IDbSet<LllegalQueryLog> LllegalQueryLog { get; set; }
+
+
         //public FxDbContext()
         //    : base("DefaultConnection")
         //{

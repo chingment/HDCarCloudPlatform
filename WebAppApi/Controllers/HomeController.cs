@@ -115,12 +115,16 @@ namespace WebAppApi.Controllers
         {
 
             LllegalQueryParams pms = new LllegalQueryParams();
+            pms.MerchantId = 1;
+            pms.UserId = 1001;
             pms.CarNo = "粤YGY662";
             pms.CarType = "02";
             pms.EnginNo = "713477";
             pms.RackNo = "004711";
             pms.IsCompany = false;
-            //var res = SdkFactory.HeLian.Query(0, pms);
+
+            // var res = SdkFactory.HeLian.Query(0, pms);
+
 
 
             //res.
@@ -165,6 +169,7 @@ namespace WebAppApi.Controllers
             int merchantId = 241;
             int posMachineId = 148;
 
+            model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             // model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
@@ -1487,5 +1492,40 @@ namespace WebAppApi.Controllers
 
         }
 
+
+        public string SubmittLllegalQuery(int userId, int merchantId, int posMachineId)
+        {
+
+            LllegalQueryParams pms = new LllegalQueryParams();
+            pms.MerchantId = merchantId;
+            pms.PosMachineId = posMachineId;
+            pms.UserId = userId;
+            pms.CarNo = "粤YGY662";
+            pms.CarType = "02";
+            pms.EnginNo = "713477";
+            pms.RackNo = "004711";
+            pms.IsCompany = false;
+
+            //SubmitApplyLossAssessModel model1 = new SubmitApplyLossAssessModel();
+            //model1.UserId = userId;
+            //model1.InsuranceCompanyId = 2;
+            //model1.MerchantId = merchantId;
+            //model1.PosMachineId = posMachineId;
+
+            string a1 = JsonConvert.SerializeObject(pms);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Lllegal/Query", a1, headers1);
+
+            return respon_data4;
+
+        }
     }
 }

@@ -12,13 +12,12 @@ namespace WebAppApi.Controllers
     public class LllegalController : OwnBaseApiController
     {
         // GET: Lllegal
-        public APIResponse Query(LllegalQueryParams model)
+        public APIResponse<List<LllegalRecord>> Query(LllegalQueryParams model)
         {
-            //CustomJsonResult result = SdkFactory.HeLian.Query(model.UserId, model);
-            
-            //return new APIResponse(result);
+            var result = SdkFactory.HeLian.Query(model.UserId, model);
 
-            return null;
+            return new APIResponse<List<LllegalRecord>>(result);
+
         }
     }
 }

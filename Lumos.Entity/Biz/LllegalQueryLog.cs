@@ -26,8 +26,7 @@ namespace Lumos.Entity
         public string EnginNo { get; set; }
         [MaxLength(128)]
         public string IsCompany { get; set; }
-        public string QueryResult{ get; set; }
-        public string OfferResult { get; set; }
+        public string Result{ get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }
     }

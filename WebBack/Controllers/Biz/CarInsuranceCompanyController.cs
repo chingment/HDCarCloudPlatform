@@ -35,7 +35,7 @@ namespace WebBack.Controllers.Biz
 
 
         [HttpPost]
-        public JsonResult Add(AddViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
@@ -46,7 +46,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [HttpPost]
-        public JsonResult Disable(int id)
+        public CustomJsonResult Disable(int id)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
             reuslt = BizFactory.CarInsuranceCompany.Disable(this.CurrentUserId, id);
@@ -55,7 +55,7 @@ namespace WebBack.Controllers.Biz
         }
 
 
-        public JsonResult GetList(SearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from c in CurrentDb.CarInsuranceCompany
@@ -99,7 +99,7 @@ namespace WebBack.Controllers.Biz
         /// </summary>
         /// <param name="condition"></param>
         /// <returns></returns>
-        public JsonResult GetInsuranceCompanyList(SearchCondition condition)
+        public CustomJsonResult GetInsuranceCompanyList(SearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from i in CurrentDb.InsuranceCompany

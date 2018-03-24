@@ -28,7 +28,7 @@ namespace WebAgent.Controllers.Biz
             return View();
         }
 
-        public JsonResult GetList(ApplyPosSearchCondition condition)
+        public CustomJsonResult GetList(ApplyPosSearchCondition condition)
         {
 
             string deviceId = condition.DeviceId.ToSearchString();
@@ -51,7 +51,7 @@ namespace WebAgent.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public JsonResult GetPosMachineList(Models.PosMachine.PosMachineSearchCondition condition)
+        public CustomJsonResult GetPosMachineList(Models.PosMachine.PosMachineSearchCondition condition)
         {
 
             string[] arrNoInDeviceId = condition.NoInDeviceIds == null ? new string[1] { "" } : condition.NoInDeviceIds.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
@@ -79,7 +79,7 @@ namespace WebAgent.Controllers.Biz
 
 
         [HttpPost]
-        public JsonResult Apply(ApplyModel model)
+        public CustomJsonResult Apply(ApplyModel model)
         {
             CustomJsonResult result = new CustomJsonResult();
 

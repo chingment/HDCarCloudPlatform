@@ -26,7 +26,7 @@ namespace WebAgent.Controllers.Biz
 
 
 
-        public JsonResult GetList(CarInsureOfferSearchCondition condition)
+        public CustomJsonResult GetList(CarInsureOfferSearchCondition condition)
         {
 
             string sn = condition.Sn.ToSearchString();

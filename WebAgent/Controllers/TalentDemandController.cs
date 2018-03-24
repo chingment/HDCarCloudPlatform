@@ -25,7 +25,7 @@ namespace WebAgent.Controllers.Biz
 
       
 
-        public JsonResult GetList(TalentDemandSearchCondition condition)
+        public CustomJsonResult GetList(TalentDemandSearchCondition condition)
         {
 
 

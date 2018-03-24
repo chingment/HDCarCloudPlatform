@@ -176,7 +176,7 @@ namespace Lumos.BLL
             {
                 Log.ErrorFormat("{0}订单号结果反馈发生异常,原因：{1}", notifyParty.GetCnName(), ex.StackTrace);
 
-                result = new CustomJsonResult(ex, "支付失败");
+                result = new CustomJsonResult(ResultType.Exception, "支付失败");
             }
 
             return result;

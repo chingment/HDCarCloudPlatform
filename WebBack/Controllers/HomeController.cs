@@ -48,7 +48,7 @@ namespace WebBack.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult ChangePassword(ChangePasswordModel model)
+        public CustomJsonResult ChangePassword(ChangePasswordModel model)
         {
 
             SysFactory.AuthorizeRelay.ChangePassword(this.CurrentUserId, this.CurrentUserId, model.OldPassword, model.NewPassword);

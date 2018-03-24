@@ -90,7 +90,7 @@ namespace WebBack.Controllers.Biz
 
 
 
-        public JsonResult GetPosMachineList(Models.Biz.PosMachine.PosMachineSearchCondition condition)
+        public CustomJsonResult GetPosMachineList(Models.Biz.PosMachine.PosMachineSearchCondition condition)
         {
 
 
@@ -114,7 +114,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public JsonResult GetOpenAccountList(MerchantSearchCondition condition)
+        public CustomJsonResult GetOpenAccountList(MerchantSearchCondition condition)
         {
             string clientCode = condition.ClientCode.ToSearchString();
             string yYZZ_Name = condition.YYZZ_Name.ToSearchString();
@@ -174,7 +174,7 @@ namespace WebBack.Controllers.Biz
             return deviceId;
         }
 
-        public JsonResult GetList(MerchantSearchCondition condition)
+        public CustomJsonResult GetList(MerchantSearchCondition condition)
         {
             string clientCode = condition.ClientCode.ToSearchString();
             string yYZZ_Name = condition.YYZZ_Name.ToSearchString();
@@ -219,7 +219,7 @@ namespace WebBack.Controllers.Biz
 
 
         [OwnAuthorize(PermissionCode.商户资料维护)]
-        public JsonResult GetEditList(MerchantSearchCondition condition)
+        public CustomJsonResult GetEditList(MerchantSearchCondition condition)
         {
             string clientCode = condition.ClientCode.ToSearchString();
             string yYZZ_Name = condition.YYZZ_Name.ToSearchString();
@@ -262,13 +262,13 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.商户资料维护)]
         [HttpPost]
-        public JsonResult Edit(EditViewModel model)
+        public CustomJsonResult Edit(EditViewModel model)
         {
             return BizFactory.Merchant.Edit(this.CurrentUserId, model.Merchant, model.EstimateInsuranceCompanyIds, model.MerchantPosMachine, model.BankCard);
         }
 
         [OwnAuthorize(PermissionCode.商户资料初审)]
-        public JsonResult GetPrimaryAuditList(MerchantSearchCondition condition)
+        public CustomJsonResult GetPrimaryAuditList(MerchantSearchCondition condition)
         {
             var waitAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.WaitPrimaryAudit select h.Id).Count();
             var inAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.InPrimaryAudit && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -320,13 +320,13 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.商户资料初审)]
         [HttpPost]
-        public JsonResult PrimaryAudit(PrimaryAuditViewModel model)
+        public CustomJsonResult PrimaryAudit(PrimaryAuditViewModel model)
         {
             return BizFactory.Merchant.PrimaryAudit(this.CurrentUserId, model.Operate, model.Merchant, model.EstimateInsuranceCompanyIds, model.MerchantPosMachine, model.BankCard, model.BizProcessesAudit);
         }
 
         [OwnAuthorize(PermissionCode.商户资料复审)]
-        public JsonResult GetSeniorAuditList(MerchantSearchCondition condition)
+        public CustomJsonResult GetSeniorAuditList(MerchantSearchCondition condition)
         {
             var waitAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.WaitSeniorAudit select h.Id).Count();
             var inAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.InSeniorAudit && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -378,12 +378,12 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.商户资料复审)]
         [HttpPost]
-        public JsonResult SeniorAudit(SeniorAuditViewModel model)
+        public CustomJsonResult SeniorAudit(SeniorAuditViewModel model)
         {
             return BizFactory.Merchant.SeniorAudit(this.CurrentUserId, model.Operate, model.Merchant.Id, model.BizProcessesAudit);
         }
 
-        public JsonResult GetTransactionsList(Models.Biz.Transactions.TransactionsSearchCondition condition)
+        public CustomJsonResult GetTransactionsList(Models.Biz.Transactions.TransactionsSearchCondition condition)
         {
 
             var q = (from u in CurrentDb.FundTrans

@@ -31,7 +31,7 @@ namespace WebBack.Controllers.Sys
 
         #region 方法
 
-        public JsonResult GetList(UserSearchCondition condition)
+        public CustomJsonResult GetList(UserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&

@@ -114,6 +114,17 @@ namespace WebAppApi.Controllers
         public ActionResult Index()
         {
 
+            LllegalQueryParams pms = new LllegalQueryParams();
+            pms.CarNo = "粤YGY662";
+            pms.CarType = "02";
+            pms.EnginNo = "713477";
+            pms.RackNo = "004711";
+            pms.IsCompany = false;
+            //var res = SdkFactory.HeLian.Query(0, pms);
+
+
+            //res.
+
 
             //string aa = "{\"sign\":\"7baca0f788404905f55e28bf28f54df51fb4181a\",\"result_code\":\"00\",\"mercid\":\"894440155416002\",\"result_msg\":\"成功\",\"termid\":\"90117998\",\"txnamt\":\"1\",\"orderId\":\"D180202165700000007W\"}";
 

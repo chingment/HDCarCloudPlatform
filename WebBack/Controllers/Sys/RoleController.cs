@@ -34,20 +34,20 @@ namespace WebBack.Controllers.Sys
         #endregion
 
         #region 方法
-        public JsonResult GetRoleTree()
+        public CustomJsonResult GetRoleTree()
         {
             object json = ConvertToZTreeJson2(CurrentDb.SysRole.ToArray(), "id", "pid", "name", "role");
             return Json(ResultType.Success, json);
         }
 
 
-        public JsonResult GetDetails(int id)
+        public CustomJsonResult GetDetails(int id)
         {
             DetailsViewModel model = new DetailsViewModel(id);
             return Json(ResultType.Success, model);
         }
 
-        public JsonResult GetRoleMenuTreeList(int roleId)
+        public CustomJsonResult GetRoleMenuTreeList(int roleId)
         {
             var roleMenus = SysFactory.AuthorizeRelay.GetRoleMenus(roleId);
             var isCheckedIds = from p in roleMenus select p.Id;
@@ -57,7 +57,7 @@ namespace WebBack.Controllers.Sys
 
         }
 
-        public JsonResult GetRoleUserList(RoleUserSearchCondition condition)
+        public CustomJsonResult GetRoleUserList(RoleUserSearchCondition condition)
         {
 
 
@@ -94,7 +94,7 @@ namespace WebBack.Controllers.Sys
             return Json(ResultType.Success, pageEntity);
         }
 
-        public JsonResult GetNotBindUsers(RoleUserSearchCondition condition)
+        public CustomJsonResult GetNotBindUsers(RoleUserSearchCondition condition)
         {
 
             string userName = "";
@@ -135,14 +135,14 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult AddUserToRole(int roleId, int[] userIds)
+        public CustomJsonResult AddUserToRole(int roleId, int[] userIds)
         {
             return SysFactory.AuthorizeRelay.AddUserToRole(this.CurrentUserId, roleId, userIds);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult RemoveUserFromRole(int roleId, int[] userIds)
+        public CustomJsonResult RemoveUserFromRole(int roleId, int[] userIds)
         {
             return SysFactory.AuthorizeRelay.RemoveUserFromRole(this.CurrentUserId, roleId, userIds);
         }
@@ -150,7 +150,7 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult SaveRoleMenu(int roleId, int[] menuIds)
+        public CustomJsonResult SaveRoleMenu(int roleId, int[] menuIds)
         {
             return SysFactory.AuthorizeRelay.SaveRoleMenu(this.CurrentUserId, roleId, menuIds);
         }
@@ -158,7 +158,7 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Add(AddViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
             return SysFactory.AuthorizeRelay.CreateRole(this.CurrentUserId, model.SysRole);
         }
@@ -166,7 +166,7 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Edit(EditViewModel model)
+        public CustomJsonResult Edit(EditViewModel model)
         {
             return SysFactory.AuthorizeRelay.UpdateRole(this.CurrentUserId, model.SysRole);
         }
@@ -174,7 +174,7 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Delete(int[] ids)
+        public CustomJsonResult Delete(int[] ids)
         {
             return SysFactory.AuthorizeRelay.DeleteRole(this.CurrentUserId, ids);
         }

@@ -77,7 +77,7 @@ namespace WebSSO
             if (isAjaxRequest)
             {
                 CustomJsonResult jsonResult = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, messageBox.Title, messageBox);
-                jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+                //jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
                 filterContext.Result = jsonResult;
                 filterContext.Result.ExecuteResult(filterContext);
                 filterContext.HttpContext.Response.End();

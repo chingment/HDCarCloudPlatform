@@ -25,7 +25,7 @@ namespace WebAgent.Controllers
         }
 
 
-        public JsonResult GetList(OrderSearchCondition condition)
+        public CustomJsonResult GetList(OrderSearchCondition condition)
         {
 
 

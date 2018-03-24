@@ -55,7 +55,7 @@ namespace WebBack.Controllers.Biz
 
 
 
-        public JsonResult GetList(CarClaimSearchCondition condition)
+        public CustomJsonResult GetList(CarClaimSearchCondition condition)
         {
 
 
@@ -105,7 +105,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.理赔需求核实)]
-        public JsonResult GetVerifyOrderList(CarClaimSearchCondition condition)
+        public CustomJsonResult GetVerifyOrderList(CarClaimSearchCondition condition)
         {
             var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder select h.Id).Count();
             var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyOrder && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -161,7 +161,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public JsonResult GetRepairMerchantList(Models.Biz.Merchant.RepairMerchantSearchCondition condition)
+        public CustomJsonResult GetRepairMerchantList(Models.Biz.Merchant.RepairMerchantSearchCondition condition)
         {
 
             var list = (from m in CurrentDb.Merchant
@@ -188,7 +188,7 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.理赔需求核实)]
         [HttpPost]
-        public JsonResult VerifyOrder(VerifyOrderViewModel model)
+        public CustomJsonResult VerifyOrder(VerifyOrderViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
@@ -198,7 +198,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.理赔金额核实)]
-        public JsonResult GetVerifyAmountList(CarClaimSearchCondition condition)
+        public CustomJsonResult GetVerifyAmountList(CarClaimSearchCondition condition)
         {
             var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyAmount select h.Id).Count();
             var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyAmount && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -256,7 +256,7 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.理赔金额核实)]
         [HttpPost]
-        public JsonResult VerifyAmount(VerifyAmountViewModel model)
+        public CustomJsonResult VerifyAmount(VerifyAmountViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 

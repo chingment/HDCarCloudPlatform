@@ -28,7 +28,7 @@ namespace WebAgent.Controllers.Biz
         }
 
 
-        public JsonResult GetList(MerchantSearchCondition condition)
+        public CustomJsonResult GetList(MerchantSearchCondition condition)
         {
             string clientCode = condition.ClientCode.ToSearchString();
             string yYZZ_Name = condition.YYZZ_Name.ToSearchString();

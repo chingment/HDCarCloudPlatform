@@ -41,7 +41,7 @@ namespace WebBack.Controllers.Sys
         }
         #endregion
 
-        public JsonResult GetList(StaffUserSearchCondition condition)
+        public CustomJsonResult GetList(StaffUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysStaffUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
@@ -61,7 +61,7 @@ namespace WebBack.Controllers.Sys
         }
 
 
-        public JsonResult GetSelectList(StaffUserSearchCondition condition)
+        public CustomJsonResult GetSelectList(StaffUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysStaffUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
@@ -81,7 +81,7 @@ namespace WebBack.Controllers.Sys
         }
 
 
-        public JsonResult GetUserRoleTree(int userId = 0)
+        public CustomJsonResult GetUserRoleTree(int userId = 0)
         {
             var isCheckedIds = CurrentDb.SysUserRole.Where(x => x.UserId == userId).Select(x => x.RoleId);
             object json = ConvertToZTreeJson2(CurrentDb.SysRole.ToArray(), "id", "pid", "name", "role", isCheckedIds.ToArray());
@@ -91,7 +91,7 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Add(AddViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
 
             var user = new SysStaffUser();
@@ -110,7 +110,7 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Edit(EditViewModel model)
+        public CustomJsonResult Edit(EditViewModel model)
         {
             var user = new SysStaffUser();
             user.Id = model.SysStaffUser.Id;
@@ -124,7 +124,7 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Delete(int[] userIds)
+        public CustomJsonResult Delete(int[] userIds)
         {
             return SysFactory.AuthorizeRelay.DeleteUser(this.CurrentUserId, userIds);
         }

@@ -94,7 +94,7 @@ namespace WebBack.Controllers.Biz
         }
 
 
-        public JsonResult GetList(ExtendedAppSearchCondition condition)
+        public CustomJsonResult GetList(ExtendedAppSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from e in CurrentDb.ExtendedApp
@@ -148,7 +148,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.扩展应用申请)]
-        public JsonResult GetOnList(ExtendedAppSearchCondition condition)
+        public CustomJsonResult GetOnList(ExtendedAppSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from e in CurrentDb.ExtendedApp
@@ -185,7 +185,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.扩展应用申请)]
-        public JsonResult GetOffList(ExtendedAppSearchCondition condition)
+        public CustomJsonResult GetOffList(ExtendedAppSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from e in CurrentDb.ExtendedApp
@@ -222,7 +222,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.扩展应用申请)]
-        public JsonResult GetApplyList(ExtendedAppSearchCondition condition)
+        public CustomJsonResult GetApplyList(ExtendedAppSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from b in CurrentDb.BizProcessesAudit
@@ -265,7 +265,7 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.扩展应用申请)]
         [HttpPost]
-        public JsonResult ApplyOn(ApplyOnViewModel model)
+        public CustomJsonResult ApplyOn(ApplyOnViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
@@ -276,7 +276,7 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.扩展应用申请)]
         [HttpPost]
-        public JsonResult ApplyOff(ApplyOffViewModel model)
+        public CustomJsonResult ApplyOff(ApplyOffViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
@@ -287,7 +287,7 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.扩展应用申请)]
         [HttpPost]
-        public JsonResult ApplyRecovery(ApplyOffViewModel model)
+        public CustomJsonResult ApplyRecovery(ApplyOffViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
@@ -297,7 +297,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.扩展应用初审)]
-        public JsonResult GetPrimaryAuditList(ExtendedAppSearchCondition condition)
+        public CustomJsonResult GetPrimaryAuditList(ExtendedAppSearchCondition condition)
         {
             var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppOn || h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppOff || h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppRecovery) && h.Status == (int)Enumeration.ExtendedAppAuditStatus.WaitAudit select h.Id).Count();
             var handleCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppOn || h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppOff || h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppRecovery) && h.Status == (int)Enumeration.ExtendedAppAuditStatus.InAudit && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -354,7 +354,7 @@ namespace WebBack.Controllers.Biz
 
         [HttpPost]
         [OwnAuthorize(PermissionCode.扩展应用初审)]
-        public JsonResult PrimaryAudit(PrimaryAuditViewModel model)
+        public CustomJsonResult PrimaryAudit(PrimaryAuditViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
             reuslt = BizFactory.ExtendedApp.PrimaryAudit(this.CurrentUserId, model.Operate, model.ExtendedApp, model.BizProcessesAuditDetails);
@@ -363,7 +363,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.扩展应用复审)]
-        public JsonResult GetSeniorAuditList(ExtendedAppSearchCondition condition)
+        public CustomJsonResult GetSeniorAuditList(ExtendedAppSearchCondition condition)
         {
             var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppOn || h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppOff || h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppRecovery) && h.Status == (int)Enumeration.ExtendedAppAuditStatus.WaitReview select h.Id).Count();
             var handleCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppOn || h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppOff || h.AduitType == Enumeration.BizProcessesAuditType.ExtendedAppRecovery) && h.Status == (int)Enumeration.ExtendedAppAuditStatus.InReview && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -420,7 +420,7 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.扩展应用复审)]
         [HttpPost]
-        public JsonResult SeniorAudit(SeniorAuditViewModel model)
+        public CustomJsonResult SeniorAudit(SeniorAuditViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
             reuslt = BizFactory.ExtendedApp.SeniorAudit(this.CurrentUserId, model.Operate, model.AuditCommentsCurrent);

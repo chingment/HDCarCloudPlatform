@@ -35,7 +35,7 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
-        public JsonResult GetGoodsList(ProductSearchCondition condition)
+        public CustomJsonResult GetGoodsList(ProductSearchCondition condition)
         {
             var query = (from p in CurrentDb.Product
                          where ((int)p.Type).ToString().StartsWith("1")
@@ -75,7 +75,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [HttpPost]
-        public JsonResult AddGoods(AddGoodsViewModel model)
+        public CustomJsonResult AddGoods(AddGoodsViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
             model.Product.ElseImgUrls = Newtonsoft.Json.JsonConvert.SerializeObject(model.ElseImgUrls);
@@ -85,7 +85,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [HttpPost]
-        public JsonResult EditGoods(EditGoodsViewModel model)
+        public CustomJsonResult EditGoods(EditGoodsViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
             model.Product.ElseImgUrls = Newtonsoft.Json.JsonConvert.SerializeObject(model.ElseImgUrls);
@@ -95,7 +95,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [HttpPost]
-        public JsonResult OffLine(int id)
+        public CustomJsonResult OffLine(int id)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 

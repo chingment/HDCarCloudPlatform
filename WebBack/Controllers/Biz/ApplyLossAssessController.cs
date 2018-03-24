@@ -37,7 +37,7 @@ namespace WebBack.Controllers.Biz
             return View(model);
         }
 
-        public JsonResult GetList(ApplyLossAssessSearchCondition condition)
+        public CustomJsonResult GetList(ApplyLossAssessSearchCondition condition)
         {
 
 
@@ -88,7 +88,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.定损点申请)]
-        public JsonResult GetVerifyOrderList(ApplyLossAssessSearchCondition condition)
+        public CustomJsonResult GetVerifyOrderList(ApplyLossAssessSearchCondition condition)
         {
             var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder select h.Id).Count();
             var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -148,7 +148,7 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.定损点申请)]
         [HttpPost]
-        public JsonResult VerifyOrder(VerifyOrderViewModel model)
+        public CustomJsonResult VerifyOrder(VerifyOrderViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 

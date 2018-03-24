@@ -35,7 +35,7 @@ namespace WebBack.Controllers.Biz
 
 
         [HttpPost]
-        public JsonResult Add(AddViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
@@ -50,7 +50,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [HttpPost]
-        public JsonResult Edit(AddViewModel model)
+        public CustomJsonResult Edit(AddViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
@@ -60,7 +60,7 @@ namespace WebBack.Controllers.Biz
         }
 
 
-        public JsonResult GetList(SearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from i in CurrentDb.InsuranceCompany

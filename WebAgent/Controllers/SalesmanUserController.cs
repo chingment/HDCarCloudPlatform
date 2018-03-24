@@ -42,7 +42,7 @@ namespace WebAgent.Controllers
 
         #endregion
 
-        public JsonResult GetList(SalesmanUserSearchCondition condition)
+        public CustomJsonResult GetList(SalesmanUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
@@ -63,7 +63,7 @@ namespace WebAgent.Controllers
         }
 
 
-        public JsonResult GetSelectList(SalesmanUserSearchCondition condition)
+        public CustomJsonResult GetSelectList(SalesmanUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
@@ -86,7 +86,7 @@ namespace WebAgent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Add(AddViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
 
             SysSalesmanUser user = new SysSalesmanUser();
@@ -108,7 +108,7 @@ namespace WebAgent.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Edit(EditViewModel model)
+        public CustomJsonResult Edit(EditViewModel model)
         {
 
             var user = new SysSalesmanUser();

@@ -83,11 +83,11 @@ namespace WebAgent.Controllers
         }
 
         [HttpPost]
-        public JsonResult UploadImage(string fileinputname, string path, string oldfilename, bool generateSize)
+        public CustomJsonResult UploadImage(string fileinputname, string path, string oldfilename, bool generateSize)
         {
 
             CustomJsonResult rm = new CustomJsonResult();
-            rm.ContentType = "text/html";
+            //rm.ContentType = "text/html";
             try
             {
                 Log.Info("调用上传图片接口");
@@ -129,7 +129,7 @@ namespace WebAgent.Controllers
                 entity.UploadFolder = path;
                 entity.GenerateSize = generateSize;
                 rm = HttpClientOperate.Post<CustomJsonResult>(path, strUrl, entity);//封装的POST提交方
-                rm.ContentType = "text/html";
+                //rm.ContentType = "text/html";
                 if (rm.Result == ResultType.Exception || rm.Result == ResultType.Unknown)
                 {
                     rm.Message = "上传图片发生异常.";
@@ -167,7 +167,7 @@ namespace WebAgent.Controllers
         }
 
 
-        public JsonResult GetMessageTipCount()
+        public CustomJsonResult GetMessageTipCount()
         {
 
             var waitCarInOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer select h.Id).Count();

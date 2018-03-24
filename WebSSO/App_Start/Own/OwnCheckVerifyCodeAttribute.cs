@@ -76,7 +76,7 @@ namespace WebSSO
                 if (!isFlag)
                 {
                     CustomJsonResult jsonResult = new CustomJsonResult(ResultType.Failure, ResultCode.FailureValidCode, "验证码不正确");
-                    jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+                    //jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
                     filterContext.Result = jsonResult;
                     filterContext.Result.ExecuteResult(filterContext);
                     filterContext.HttpContext.Response.End();

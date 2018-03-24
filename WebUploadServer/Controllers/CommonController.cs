@@ -15,12 +15,12 @@ namespace WebUploadImageServer.Controllers
         //
 
 
-        public JsonResult UploadImage(string fileInputName, string path, string oldFileName)
+        public CustomJsonResult UploadImage(string fileInputName, string path, string oldFileName)
         {
             ILog log = LogManager.GetLogger(this.GetType());
             log.Info("测试上传服务");
             CustomJsonResult rm = new CustomJsonResult();
-            rm.ContentType = "text/html";
+           // rm.ContentType = "text/html";
             try
             {
                 HttpPostedFileBase file_upload = Request.Files[fileInputName];
@@ -49,7 +49,7 @@ namespace WebUploadImageServer.Controllers
                 entity.FileData = bytes;
                 entity.UploadFolder = path;
                 rm = HttpClientOperate.Post<CustomJsonResult>(path, strUrl, entity);//封装的POST提交方
-                rm.ContentType = "text/html";
+                //rm.ContentType = "text/html";
                 if (rm.Result == ResultType.Exception || rm.Result == ResultType.Unknown)
                 {
                     rm.Message = "上传图片发生异常";

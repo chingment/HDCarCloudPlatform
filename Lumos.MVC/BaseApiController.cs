@@ -14,32 +14,33 @@ namespace Lumos.Mvc
     {
         #region JsonResult 扩展
 
-        protected JsonResult Json(string contenttype, ResultType type, object content, string message, params JsonConverter[] converters)
+        protected CustomJsonResult Json(string contenttype, ResultType type, object content, string message, params JsonConverter[] converters)
         {
             return new CustomJsonResult(contenttype, type, message, content);
         }
 
-        protected JsonResult Json(ResultType type, object content, string message, params JsonConverter[] converters)
+        protected CustomJsonResult Json(ResultType type, object content, string message, params JsonConverter[] converters)
         {
             return new CustomJsonResult(null, type, message, content, converters);
+
         }
 
-        protected internal JsonResult Json(ResultType type)
+        protected internal CustomJsonResult Json(ResultType type)
         {
             return Json(type, null, null);
         }
 
-        protected internal JsonResult Json(ResultType type, string message)
+        protected internal CustomJsonResult Json(ResultType type, string message)
         {
             return Json(type, null, message);
         }
 
-        protected internal JsonResult Json(string contenttype, ResultType type, string message)
+        protected internal CustomJsonResult Json(string contenttype, ResultType type, string message)
         {
             return Json(contenttype, type, null, message);
         }
 
-        protected internal JsonResult Json(ResultType type, object content)
+        protected internal CustomJsonResult Json(ResultType type, object content)
         {
             return Json(type, content, null);
         }

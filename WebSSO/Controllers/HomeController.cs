@@ -32,7 +32,7 @@ namespace WebSSO.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [CheckVerifyCode("WebSSOLoginVerifyCode")]
-        public JsonResult Login(LoginModel model)
+        public CustomJsonResult Login(LoginModel model)
         {
             GoToViewModel gotoViewModel = new GoToViewModel();
 

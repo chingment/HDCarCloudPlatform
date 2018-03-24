@@ -46,7 +46,7 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
-        public JsonResult GetList(OrderSearchCondition condition)
+        public CustomJsonResult GetList(OrderSearchCondition condition)
         {
 
 
@@ -110,7 +110,7 @@ namespace WebBack.Controllers.Biz
 
 
         [OwnAuthorize(PermissionCode.订单支付确认)]
-        public JsonResult GetConfirmPayList(Models.Biz.Order.OrderSearchCondition condition)
+        public CustomJsonResult GetConfirmPayList(Models.Biz.Order.OrderSearchCondition condition)
         {
 
 
@@ -170,7 +170,7 @@ namespace WebBack.Controllers.Biz
         }
 
 
-        public JsonResult Cancle(Order model)
+        public CustomJsonResult Cancle(Order model)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -179,7 +179,7 @@ namespace WebBack.Controllers.Biz
             return result;
         }
 
-        public JsonResult SubmitCarInsureFollow(CarInsureFollowViewModel model)
+        public CustomJsonResult SubmitCarInsureFollow(CarInsureFollowViewModel model)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -188,7 +188,7 @@ namespace WebBack.Controllers.Biz
             return result;
         }
 
-        public JsonResult SubmitEstimateList(CarClaimFollowViewModel model)
+        public CustomJsonResult SubmitEstimateList(CarClaimFollowViewModel model)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -200,7 +200,7 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.订单支付确认)]
         [HttpPost]
-        public JsonResult ConfirmPay(int orderId)
+        public CustomJsonResult ConfirmPay(int orderId)
         {
             CustomJsonResult result = new CustomJsonResult();
 

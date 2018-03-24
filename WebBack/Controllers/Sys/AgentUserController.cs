@@ -41,7 +41,7 @@ namespace WebBack.Controllers.Sys
 
         #endregion
 
-        public JsonResult GetList(AgentUserSearchCondition condition)
+        public CustomJsonResult GetList(AgentUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysAgentUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
@@ -61,7 +61,7 @@ namespace WebBack.Controllers.Sys
         }
 
 
-        public JsonResult GetSelectList(AgentUserSearchCondition condition)
+        public CustomJsonResult GetSelectList(AgentUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysAgentUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
@@ -83,7 +83,7 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Add(AddViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
             SysAgentUser user = new SysAgentUser();
             user.UserName = string.Format("AG{0}", model.SysAgentUser.UserName);
@@ -100,7 +100,7 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Edit(EditViewModel model)
+        public CustomJsonResult Edit(EditViewModel model)
         {
             SysAgentUser user = new SysAgentUser();
             user.Id = model.SysAgentUser.Id;

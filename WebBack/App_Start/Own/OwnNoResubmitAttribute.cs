@@ -43,7 +43,7 @@ namespace WebBack
                             if (isAjaxRequest)
                             {
                                 CustomJsonResult jsonResult = new CustomJsonResult(ResultType.Failure, "你已经提交了,请勿重复提交,关闭窗口或刷新后再次提交！");
-                                jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
+                                //jsonResult.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
                                 filterContext.Result = jsonResult;
                                 filterContext.Result.ExecuteResult(filterContext);
                                 filterContext.HttpContext.Response.End();

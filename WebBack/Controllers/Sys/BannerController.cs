@@ -45,7 +45,7 @@ namespace WebBack.Controllers.Sys
             return View(model);
         }
 
-        public JsonResult GetBannerList(BannerSearchCondition condition)
+        public CustomJsonResult GetBannerList(BannerSearchCondition condition)
         {
             var query = (from u in CurrentDb.SysBanner
                          where u.Type == condition.Type
@@ -81,7 +81,7 @@ namespace WebBack.Controllers.Sys
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public JsonResult GetTypeList(BannerSearchCondition condition)
+        public CustomJsonResult GetTypeList(BannerSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysBannerType
 
@@ -100,7 +100,7 @@ namespace WebBack.Controllers.Sys
 
 
         [HttpPost]
-        public JsonResult AddBanner(AddBannerViewModel model)
+        public CustomJsonResult AddBanner(AddBannerViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
@@ -111,7 +111,7 @@ namespace WebBack.Controllers.Sys
 
 
         [HttpPost]
-        public JsonResult EditBanner(EditBannerViewModel model)
+        public CustomJsonResult EditBanner(EditBannerViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 

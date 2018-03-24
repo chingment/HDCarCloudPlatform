@@ -65,7 +65,7 @@ namespace WebBack.Controllers.Biz
             return View(model);
         }
 
-        public JsonResult GetList(PosMachineSearchCondition condition)
+        public CustomJsonResult GetList(PosMachineSearchCondition condition)
         {
 
 
@@ -90,7 +90,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public JsonResult GetMerchantPosMachineList(PosMachineSearchCondition condition)
+        public CustomJsonResult GetMerchantPosMachineList(PosMachineSearchCondition condition)
         {
 
 
@@ -145,7 +145,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public JsonResult GetChangeList(PosMachineSearchCondition condition)
+        public CustomJsonResult GetChangeList(PosMachineSearchCondition condition)
         {
 
 
@@ -201,7 +201,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public JsonResult GetListByNoUse(PosMachineSearchCondition condition)
+        public CustomJsonResult GetListByNoUse(PosMachineSearchCondition condition)
         {
 
             string fuselageNumber = condition.FuselageNumber.ToSearchString();
@@ -247,7 +247,7 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.POS机登记信息)]
         [HttpPost]
-        public JsonResult Add(AddViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
             return BizFactory.PosMachine.Add(this.CurrentUserId, model.PosMachine);
         }
@@ -255,23 +255,23 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.POS机登记信息)]
         [HttpPost]
 
-        public JsonResult Edit(EditViewModel model)
+        public CustomJsonResult Edit(EditViewModel model)
         {
             return BizFactory.PosMachine.Edit(this.CurrentUserId, model.PosMachine);
         }
 
         [HttpPost]
-        public JsonResult Change(ChangeModel model)
+        public CustomJsonResult Change(ChangeModel model)
         {
             return BizFactory.PosMachine.Change(this.CurrentUserId, model.MerchantId, model.OldPosMachineId, model.NewPosMachineId);
         }
 
         [OwnAuthorize(PermissionCode.POS机登记信息)]
         [HttpPost]
-        public JsonResult ExportAdd(EditViewModel model)
+        public CustomJsonResult ExportAdd(EditViewModel model)
         {
             CustomJsonResult r = new CustomJsonResult();
-            r.ContentType = "text/html";
+            //r.ContentType = "text/html";
 
             try
             {

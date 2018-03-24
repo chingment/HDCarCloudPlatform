@@ -11,7 +11,8 @@ namespace Lumos.Mvc
         Unknown = 0,
         Success = 1,
         Failure = 2,
-        Exception = 3
+        Exception = 3,
+        NoLogin = 4
     }
 
     public enum ResultCode
@@ -29,11 +30,17 @@ namespace Lumos.Mvc
     }
 
 
-    public interface IResult
+    public interface IResult<T>
     {
         ResultType Result { get; set; }
         ResultCode Code { get; set; }
         string Message { get; set; }
-        object Data { get; set; }
+
+        T Data { get; set; }
+    }
+
+    public interface IResult : IResult<object>
+    {
+
     }
 }

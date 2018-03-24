@@ -16,13 +16,16 @@ namespace Lumos.Mvc
     /// <summary>
     /// 扩展JsonResult
     /// </summary>
-    public class CustomJsonResult : JsonResult, IResult
-    {
+    /// 
 
-        private ResultType _Result = ResultType.Unknown;
-        private ResultCode _Code = ResultCode.Unknown;
-        private string _Message = "";
-        private object _Data = null;
+
+
+    public class CustomJsonResult<T> : ActionResult, IResult<T>
+    {
+        private ResultType _result = ResultType.Unknown;
+        private ResultCode _code = ResultCode.Unknown;
+        private string _message = "";
+        private T _data;
 
         /// <summary>
         /// 结果状态默认为Unknown
@@ -31,11 +34,11 @@ namespace Lumos.Mvc
         {
             get
             {
-                return _Result;
+                return _result;
             }
             set
             {
-                _Result = value;
+                _result = value;
             }
         }
 
@@ -46,11 +49,11 @@ namespace Lumos.Mvc
         {
             get
             {
-                return _Message;
+                return _message;
             }
             set
             {
-                _Message = value;
+                _message = value;
             }
         }
 
@@ -61,26 +64,26 @@ namespace Lumos.Mvc
         {
             get
             {
-                return _Code;
+                return _code;
             }
             set
             {
-                _Code = value;
+                _code = value;
             }
         }
 
         /// <summary>
         /// 内容默认为null
         /// </summary>
-        public new object Data
+        public T Data
         {
             get
             {
-                return _Data;
+                return _data;
             }
             set
             {
-                _Data = value;
+                _data = value;
             }
         }
 
@@ -96,73 +99,43 @@ namespace Lumos.Mvc
             set;
         }
 
-
         public CustomJsonResult()
         {
             this.JsonSerializerSettings = new JsonSerializerSettings();
         }
 
-        private void SetCustomJsonResult(string contenttype, ResultType type, ResultCode code, string message, object data, JsonSerializerSettings settings, params JsonConverter[] converters)
+        private void SetCustomJsonResult(string contenttype, ResultType type, ResultCode code, string message, T data, JsonSerializerSettings settings, params JsonConverter[] converters)
         {
-            this.ContentType = contenttype;
-            this._Result = type;
-            this._Code = code;
-            this._Message = message;
-            this._Data = data;
+            //this.ContentType = contenttype;
+            this._result = type;
+            this._code = code;
+            this._message = message;
+            this._data = data;
             this.JsonSerializerSettings = settings;
             this.JsonConverter = converters;
         }
 
-        public CustomJsonResult(string contenttype, ResultType type, ResultCode code, string message, object content, JsonSerializerSettings settings, params JsonConverter[] converters)
+        public CustomJsonResult(string contenttype, ResultType type, ResultCode code, string message, T content, JsonSerializerSettings settings, params JsonConverter[] converters)
         {
             SetCustomJsonResult(contenttype, type, code, message, content, settings, converters);
         }
 
-
-        public CustomJsonResult(string contenttype, ResultType type, string message, object content, JsonSerializerSettings settings, params JsonConverter[] converters)
+        public CustomJsonResult(string contenttype, ResultType type, string message, T content, JsonSerializerSettings settings, params JsonConverter[] converters)
         {
             SetCustomJsonResult(contenttype, type, ResultCode.Unknown, message, content, settings, converters);
         }
 
-
-        public CustomJsonResult(string contenttype, ResultType type, string message, object content, params JsonConverter[] converters)
+        public CustomJsonResult(string contenttype, ResultType type, string message, T content, params JsonConverter[] converters)
         {
             SetCustomJsonResult(contenttype, type, ResultCode.Unknown, message, content, null, converters);
         }
 
-
-        public CustomJsonResult(string contenttype, ResultType type, string message, object content, JsonSerializerSettings settings)
+        public CustomJsonResult(string contenttype, ResultType type, string message, T content, JsonSerializerSettings settings)
         {
             SetCustomJsonResult(contenttype, type, ResultCode.Unknown, message, content, settings);
         }
 
-
-        public CustomJsonResult(ResultType type, string message)
-        {
-            SetCustomJsonResult(null, type, ResultCode.Unknown, message, null, null);
-        }
-
-
-        public CustomJsonResult(ResultType type, ResultCode code, string message)
-        {
-            SetCustomJsonResult(null, type, code, message, null, null);
-        }
-
-        public CustomJsonResult(Exception ex, string message)
-        {
-            MessageBoxModel messageBox = new MessageBoxModel();
-            messageBox.No = Guid.NewGuid().ToString();
-            messageBox.Type = MessageBoxTip.Exception;
-            messageBox.Title = message;
-            //messageBox.Content = "<a href=\"javascript:void(0)\" onclick=\"window.top.location.href='" + OwnWebSettingUtils.GetHomePage() + "'\">返回主页</a>";
-            messageBox.IsTop = true;
-            messageBox.ErrorStackTrace = CommonUtils.ToHtml(ex.Message + "\r\n" + ex.StackTrace);
-
-            SetCustomJsonResult(null, ResultType.Exception, ResultCode.Exception, message, messageBox, null);
-        }
-
-
-        public CustomJsonResult(ResultType type, ResultCode code, string message, object content, params JsonConverter[] converters)
+        public CustomJsonResult(ResultType type, ResultCode code, string message, T content, params JsonConverter[] converters)
         {
             SetCustomJsonResult(null, type, code, message, content, null, converters);
         }
@@ -177,19 +150,19 @@ namespace Lumos.Mvc
 
             HttpResponseBase response = context.HttpContext.Response;
 
-            if (!String.IsNullOrEmpty(ContentType))
-            {
-                response.ContentType = ContentType;
-            }
-            else
-            {
-                response.ContentType = "application/json";
-            }
+            //if (!String.IsNullOrEmpty(ContentType))
+            //{
+            //    response.ContentType = ContentType;
+            //}
+            //else
+            //{
+            //    response.ContentType = "application/json";
+            //}
 
-            if (ContentEncoding != null)
-            {
-                response.ContentEncoding = ContentEncoding;
-            }
+            //if (ContentEncoding != null)
+            //{
+            //    response.ContentEncoding = ContentEncoding;
+            //}
 
             response.Write(GetResultJson());
 
@@ -201,21 +174,20 @@ namespace Lumos.Mvc
         }
 
 
-        private string GetResultJson()
+        public string GetResultJson()
         {
             StringBuilder json = new StringBuilder();
             json.Append("{");
 
             try
             {
-                if (this._Data != null)
+                if (this._data != null)
                 {
-                    if (this._Data is string)
+                    if (this._data is string)
                     {
-                        if (!string.IsNullOrWhiteSpace(this._Data.ToString()))
+                        if (!string.IsNullOrWhiteSpace(this._data.ToString()))
                         {
-                            var obj = JsonConvert.DeserializeObject(this._Data.ToString());
-                            json.Append("\"data\":" + this._Data + ",");
+                            json.Append("\"data\":" + this._data + ",");
                         }
                     }
                     else
@@ -236,19 +208,19 @@ namespace Lumos.Mvc
                         });
                         this.JsonSerializerSettings.Converters = this.JsonConverter;
                         this.JsonSerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                        json.Append("\"data\":" + JsonConvert.SerializeObject(this._Data, Formatting.None, this.JsonSerializerSettings) + ",");
+                        json.Append("\"data\":" + JsonConvert.SerializeObject(this._data, Formatting.None, this.JsonSerializerSettings) + ",");
                     }
                 }
-                json.Append("\"result\": " + (int)this._Result + ",");
+                json.Append("\"result\": " + (int)this._result + ",");
 
 
-                if (this._Code != ResultCode.Unknown)
+                if (this._code != ResultCode.Unknown)
                 {
-                    json.Append("\"code\": \"" + ((int)this._Code).ToString() + "\",");
+                    json.Append("\"code\": \"" + ((int)this._code).ToString() + "\",");
                 }
 
 
-                json.Append("\"message\":" + JsonConvert.SerializeObject(this._Message) + "");
+                json.Append("\"message\":" + JsonConvert.SerializeObject(this._message) + "");
 
 
             }
@@ -256,7 +228,7 @@ namespace Lumos.Mvc
             {
 
                 json.Append("\"result\": " + (int)ResultType.Exception + ",");
-                json.Append("\"message\":\"Does not conform to the Json format, the conversion of Json format exception\"");
+                json.Append("\"message\":\"" + string.Format("CustomJsonResult转换发生异常:{0}", ex.Message) + "\"");
                 //转换失败记录日志
             }
             json.Append("}");
@@ -265,7 +237,58 @@ namespace Lumos.Mvc
 
             return s;
         }
+    }
+
+    public class CustomJsonResult : CustomJsonResult<object>, IResult
+    {
+
+        public CustomJsonResult()
+        {
+
+        }
+
+        public CustomJsonResult(ResultType type, string message) : base(type, ResultCode.Unknown, message, null, null)
+        {
+
+        }
+
+        public CustomJsonResult(ResultType type, ResultCode code, string message) : base(type, code, message, null, null)
+        {
+
+        }
+
+        public CustomJsonResult(ResultType type, ResultCode code, string message, object content) : base(type, code, message, content, null)
+        {
+
+        }
+
+        public CustomJsonResult(ResultType type, ResultCode code, string message, object content, params JsonConverter[] converters) : base(type, code, message, content, converters)
+        {
+
+        }
+
+        public CustomJsonResult(string contenttype, ResultType type, ResultCode code, string message, object content, JsonSerializerSettings settings, params JsonConverter[] converters) : base(contenttype, type, code, message, content, settings, converters)
+        {
+
+        }
+
+        public CustomJsonResult(string contenttype, ResultType type, string message, object content, JsonSerializerSettings settings, params JsonConverter[] converters) : base(contenttype, type, message, content, settings, converters)
+        {
+
+        }
+
+        public CustomJsonResult(string contenttype, ResultType type, string message, object content, params JsonConverter[] converters) : base(contenttype, type, message, content, converters)
+        {
+
+        }
+
+        public CustomJsonResult(string contenttype, ResultType type, string message, object content, JsonSerializerSettings settings) : base(contenttype, type, message, content, settings)
+        {
+
+        }
+
 
     }
+
     #endregion
 }

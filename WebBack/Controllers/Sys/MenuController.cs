@@ -35,13 +35,13 @@ namespace WebBack.Controllers.Sys
 
 
 
-        public JsonResult GetDetails(int id)
+        public CustomJsonResult GetDetails(int id)
         {
             DetailsViewModel model = new DetailsViewModel(id);
             return Json(ResultType.Success, model, "");
         }
 
-        public JsonResult GetTree(int pId)
+        public CustomJsonResult GetTree(int pId)
         {
             SysMenu[] arr;
             if (pId == 0)
@@ -61,14 +61,14 @@ namespace WebBack.Controllers.Sys
         [HttpPost]
         [OwnNoResubmit]
         [ValidateAntiForgeryToken]
-        public JsonResult Add(AddViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
             return SysFactory.AuthorizeRelay.CreateMenu(this.CurrentUserId, model.SysMenu, model.SysMenu.Permission);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Edit(EditViewModel model)
+        public CustomJsonResult Edit(EditViewModel model)
         {
             var menu = new SysMenu();
             menu.Id = model.SysMenu.Id;
@@ -82,14 +82,14 @@ namespace WebBack.Controllers.Sys
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Delete(int[] ids)
+        public CustomJsonResult Delete(int[] ids)
         {
             return SysFactory.AuthorizeRelay.DeleteMenu(this.CurrentUserId, ids);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult EditSort()
+        public CustomJsonResult EditSort()
         {
 
             for (int i = 0; i < Request.Form.Count; i++)

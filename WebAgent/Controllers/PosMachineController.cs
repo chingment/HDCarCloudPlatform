@@ -31,7 +31,7 @@ namespace WebAgent.Controllers
         }
 
 
-        public JsonResult GetList(PosMachineSearchCondition condition)
+        public CustomJsonResult GetList(PosMachineSearchCondition condition)
         {
 
 

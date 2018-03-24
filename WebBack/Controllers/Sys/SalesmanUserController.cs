@@ -46,7 +46,7 @@ namespace WebBack.Controllers.Sys
         #endregion
 
         [OwnAuthorize(PermissionCode.业务人员设置)]
-        public JsonResult GetList(SalesmanUserSearchCondition condition)
+        public CustomJsonResult GetList(SalesmanUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
                         join p in CurrentDb.SysAgentUser on u.AgentId equals p.Id
@@ -67,7 +67,7 @@ namespace WebBack.Controllers.Sys
         }
 
 
-        public JsonResult GetSelectList(SalesmanUserSearchCondition condition)
+        public CustomJsonResult GetSelectList(SalesmanUserSearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
                         join p in CurrentDb.SysAgentUser on u.AgentId equals p.Id
@@ -90,7 +90,7 @@ namespace WebBack.Controllers.Sys
         [OwnAuthorize(PermissionCode.业务人员设置)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Add(AddViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
             SysSalesmanUser user = new SysSalesmanUser();
 
@@ -112,7 +112,7 @@ namespace WebBack.Controllers.Sys
         [OwnAuthorize(PermissionCode.业务人员设置)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult Edit(EditViewModel model)
+        public CustomJsonResult Edit(EditViewModel model)
         {
             var user = new SysSalesmanUser();
 

@@ -24,7 +24,7 @@ namespace WebAgent.Controllers.Biz
         }
 
 
-        public JsonResult GetList(ApplyLossAssessSearchCondition condition)
+        public CustomJsonResult GetList(ApplyLossAssessSearchCondition condition)
         {
 
 

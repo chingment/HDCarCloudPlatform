@@ -54,6 +54,7 @@ namespace HeLianSdk
 
         public static HeLianApiBaseResult<List<CarQueryDataList_Request>> CarQueryDataList(CarQueryDataList_Params pams)
         {
+
             HeLianApiBaseResult<List<CarQueryDataList_Request>> result = new HeLianApiBaseResult<List<CarQueryDataList_Request>>();
 
             Dictionary<string, string> postData = new Dictionary<string, string>();
@@ -73,7 +74,7 @@ namespace HeLianSdk
             WebUtils webUtils = new WebUtils();
             string postDataStr = "data=" + JsonConvert.SerializeObject(postData);
             string body = webUtils.DoPost("http://www.hl2016.com/mainoa/api/carquery/dataList.jhtml", null, postDataStr, null);
-            
+
 
             result = JsonConvert.DeserializeObject<HeLianApiBaseResult<List<CarQueryDataList_Request>>>(body);
 
@@ -97,20 +98,20 @@ namespace HeLianSdk
 
             postData.Add("sign", sign);
             postData.Add("isCompany", pams.isCompany);
-            //if (pams.dataLllegal != null)
-            //{
-                //string v = JsonConvert.SerializeObject(pams.dataLllegal);
 
-                string v= "[{\"bookNo\":\"4401107901494580\",\"bookType\":\"6001A\",\"lllegalCode\":\"1344\",\"cityCode\":\"440110\",\"lllegalTime\":\"2017-07-11 13:33:00\",\"point\":3,\"fine\":200}]";
-                postData.Add("dataLllegal", v);
-           // }
+            string v = JsonConvert.SerializeObject(pams.dataLllegal);
+
+            postData.Add("dataLllegal", v);
 
             WebUtils webUtils = new WebUtils();
 
-            string postDataStr = JsonConvert.SerializeObject(postData);
+            string postDataStr = "";
+            foreach (var m in postData)
+            {
+                postDataStr += m.Key + "=" + m.Value + "&";
+            }
 
-            postDataStr = "data=" + "{\"openid\":\"85237fd7e5af4fe499c92c08d58dfb44\",\"appkey\":\"81d31e6521c2481693399e5da4204cfa\",\"timestamp\":\"1521796724004\",\"carNo\":\"粤YGY662\",\"carType\":\"02\",\"rackNo\":\"004711\",\"enginNo\":\"713477\",\"sign\":\"e3c0587a5e0b1d1a23519e9d1e5f0af8\",\"isCompany\":false,\"dataLllegal\":\"[{\"bookNo\":\"4401107901494580\",\"bookType\":\"6001A\",\"lllegalCode\":\"1344\",\"cityCode\":\"440110\",\"lllegalTime\":\"2017-07-11 13:33:00\",\"point\":3,\"fine\":200}]\"}";
-
+            postDataStr = postDataStr.Substring(0, postDataStr.Length - 1);
 
             string body = webUtils.DoPost("http://www.hl2016.com/mainoa/api/carquery/getLllegalPrice.jhtml", null, postDataStr, null);
 

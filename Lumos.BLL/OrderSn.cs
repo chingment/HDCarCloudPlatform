@@ -10,11 +10,12 @@ namespace Lumos.BLL
     {
         CarInsure = 1,
         Withdraw = 2,
-        Transactions = 3,
+        FundTrans = 3,
         CarClaim = 4,
         ServiceFee = 5,
         TalentDemand = 6,
-        ApplyLossAssess = 7
+        ApplyLossAssess = 7,
+        LllegalQueryScoreTrans = 8
     }
 
     public class SnModel
@@ -34,25 +35,28 @@ namespace Lumos.BLL
             switch (type)
             {
                 case SnType.CarInsure:
-                    prefix = "I";
+                    prefix = "A";
                     break;
                 case SnType.CarClaim:
-                    prefix = "C";
+                    prefix = "B";
                     break;
                 case SnType.Withdraw:
-                    prefix = "W";
+                    prefix = "C";
                     break;
-                case SnType.Transactions:
-                    prefix = "T";
-                    break;
-                case SnType.ServiceFee:
+                case SnType.FundTrans:
                     prefix = "D";
                     break;
+                case SnType.ServiceFee:
+                    prefix = "E";
+                    break;
                 case SnType.TalentDemand:
-                    prefix = "M";
+                    prefix = "F";
                     break;
                 case SnType.ApplyLossAssess:
-                    prefix = "L";
+                    prefix = "G";
+                    break;
+                case SnType.LllegalQueryScoreTrans:
+                    prefix = "H";
                     break;
             }
 

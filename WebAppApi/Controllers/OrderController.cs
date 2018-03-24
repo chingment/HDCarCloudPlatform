@@ -102,6 +102,15 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("状态", "核实需求中"));
 
                                 break;
+                            case Enumeration.ProductType.LllegalQueryRecharge:
+
+                                var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("充值", string.Format("{0}元", orderToLllegalQueryRecharge.Price.ToF2Price())));
+                                orderModel.OrderField.Add(new OrderField("积分", orderToLllegalQueryRecharge.Score.ToString()));
+
+                                break;
+
                         }
                         #endregion
 
@@ -208,6 +217,14 @@ namespace WebAppApi.Controllers
 
 
                                 break;
+                            case Enumeration.ProductType.LllegalQueryRecharge:
+
+                                var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("充值", string.Format("{0}元", orderToLllegalQueryRecharge.Price.ToF2Price())));
+                                orderModel.OrderField.Add(new OrderField("积分", orderToLllegalQueryRecharge.Score.ToString()));
+
+                                break;
                         }
                         orderModel.StatusName = "待支付";
 
@@ -270,6 +287,14 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("申请时间", orderToApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime()));
 
                                 break;
+                            case Enumeration.ProductType.LllegalQueryRecharge:
+
+                                var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("充值", string.Format("{0}元", orderToLllegalQueryRecharge.Price.ToF2Price())));
+                                orderModel.OrderField.Add(new OrderField("积分", orderToLllegalQueryRecharge.Score.ToString()));
+
+                                break;
                         }
                         #endregion
 
@@ -313,6 +338,15 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("保险公司", orderToApplyLossAssess.InsuranceCompanyName));
                                 orderModel.OrderField.Add(new OrderField("申请时间", orderToApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime()));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
+                                break;
+                            case Enumeration.ProductType.LllegalQueryRecharge:
+
+                                var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("充值", string.Format("{0}元", orderToLllegalQueryRecharge.Price.ToF2Price())));
+                                orderModel.OrderField.Add(new OrderField("积分", orderToLllegalQueryRecharge.Score.ToString()));
+                                orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
+
                                 break;
                         }
 

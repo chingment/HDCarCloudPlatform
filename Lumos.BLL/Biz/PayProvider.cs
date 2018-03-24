@@ -217,6 +217,9 @@ namespace Lumos.BLL
                         case Enumeration.ProductType.PosMachineServiceFee:
                             result = PayServiceFeeCompleted(operater, order.Sn);
                             break;
+                        case Enumeration.ProductType.LllegalQueryRecharge:
+                            result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
+                            break;
                     }
 
 
@@ -366,7 +369,7 @@ namespace Lumos.BLL
                 haoYiLianFund.Mender = operater;
                 haoYiLianFund.LastUpdateTime = this.DateTime;
 
-                var haoYiLianFundTrans = new Transactions();
+                var haoYiLianFundTrans = new FundTrans();
                 haoYiLianFundTrans.UserId = haoYiLianFund.UserId;
                 haoYiLianFundTrans.ChangeAmount = orderToServiceFee.Price;
                 haoYiLianFundTrans.Balance = haoYiLianFund.Balance;
@@ -374,9 +377,9 @@ namespace Lumos.BLL
                 haoYiLianFundTrans.Description = string.Format("订单号:{0},押金:{1}元,流量费用:{2}元,合计:{3}元", orderSn, orderToServiceFee.Deposit, orderToServiceFee.MobileTrafficFee, orderToServiceFee.Price);
                 haoYiLianFundTrans.Creator = operater;
                 haoYiLianFundTrans.CreateTime = this.DateTime;
-                CurrentDb.Transactions.Add(haoYiLianFundTrans);
+                CurrentDb.FundTrans.Add(haoYiLianFundTrans);
                 CurrentDb.SaveChanges();
-                haoYiLianFundTrans.Sn = Sn.Build(SnType.Transactions, haoYiLianFundTrans.Id).Sn;
+                haoYiLianFundTrans.Sn = Sn.Build(SnType.FundTrans, haoYiLianFundTrans.Id).Sn;
                 CurrentDb.SaveChanges();
 
 
@@ -434,5 +437,80 @@ namespace Lumos.BLL
             return result;
         }
 
+
+        private CustomJsonResult PayLllegalQueryRechargeCompleted(int operater, string orderSn)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+                if (orderToLllegalQueryRecharge == null)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "找不到订单号");
+                }
+
+                if (orderToLllegalQueryRecharge.Status == Enumeration.OrderStatus.Completed)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经支付完成");
+                }
+
+
+                if (orderToLllegalQueryRecharge.Status != Enumeration.OrderStatus.WaitPay)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未在就绪支付状态");
+                }
+
+                var haoYiLianFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.HaoYiLian).FirstOrDefault();
+                haoYiLianFund.Balance += orderToLllegalQueryRecharge.Price;
+                haoYiLianFund.Mender = operater;
+                haoYiLianFund.LastUpdateTime = this.DateTime;
+
+                var haoYiLianFundTrans = new FundTrans();
+                haoYiLianFundTrans.UserId = haoYiLianFund.UserId;
+                haoYiLianFundTrans.ChangeAmount = orderToLllegalQueryRecharge.Price;
+                haoYiLianFundTrans.Balance = haoYiLianFund.Balance;
+                haoYiLianFundTrans.Type = Enumeration.TransactionsType.Rent;
+                haoYiLianFundTrans.Description = string.Format("订单号:{0},充值违章查询积分:{1}元", orderSn, orderToLllegalQueryRecharge.Score);
+                haoYiLianFundTrans.Creator = operater;
+                haoYiLianFundTrans.CreateTime = this.DateTime;
+                CurrentDb.FundTrans.Add(haoYiLianFundTrans);
+                CurrentDb.SaveChanges();
+                haoYiLianFundTrans.Sn = Sn.Build(SnType.FundTrans, haoYiLianFundTrans.Id).Sn;
+                CurrentDb.SaveChanges();
+
+
+
+                var lllegalQueryScore = CurrentDb.LllegalQueryScore.Where(m => m.UserId == orderToLllegalQueryRecharge.UserId && m.MerchantId == orderToLllegalQueryRecharge.MerchantId).FirstOrDefault();
+                lllegalQueryScore.Score += orderToLllegalQueryRecharge.Score;
+                lllegalQueryScore.Creator = operater;
+                lllegalQueryScore.CreateTime = this.DateTime;
+                CurrentDb.LllegalQueryScore.Add(lllegalQueryScore);
+                CurrentDb.SaveChanges();
+
+
+                var lllegalQueryScoreTrans = new LllegalQueryScoreTrans();
+                lllegalQueryScoreTrans.UserId = orderToLllegalQueryRecharge.UserId;
+                lllegalQueryScoreTrans.ChangeScore = orderToLllegalQueryRecharge.Score;
+                lllegalQueryScoreTrans.Score = lllegalQueryScore.Score;
+                lllegalQueryScoreTrans.Type = Enumeration.LllegalQueryScoreTransType.IncreaseByRecharge;
+                lllegalQueryScoreTrans.Description = string.Format("充值{0}元，得到违章查询积分:{1}", orderToLllegalQueryRecharge.Price.ToF2Price(), orderToLllegalQueryRecharge.Score);
+                lllegalQueryScoreTrans.Creator = operater;
+                lllegalQueryScoreTrans.CreateTime = this.DateTime;
+                CurrentDb.LllegalQueryScoreTrans.Add(lllegalQueryScoreTrans);
+                CurrentDb.SaveChanges();
+                lllegalQueryScoreTrans.Sn = Sn.Build(SnType.LllegalQueryScoreTrans, lllegalQueryScoreTrans.Id).Sn;
+                CurrentDb.SaveChanges();
+
+                ts.Complete();
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功");
+            }
+
+            return result;
+        }
     }
 }

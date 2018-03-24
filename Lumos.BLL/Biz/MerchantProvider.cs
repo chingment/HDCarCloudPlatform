@@ -151,6 +151,43 @@ namespace Lumos.BLL
 
                 CurrentDb.SysItemCacheUpdateTime.Add(sysItemCacheUpdateTime);
                 CurrentDb.SaveChanges();
+
+
+                var fund = new Fund();
+
+                fund.UserId = sysClientUser.Id;
+                fund.MerchantId = merchant.Id;
+                fund.Balance = 0;
+                fund.Creator = operater;
+                fund.CreateTime = this.DateTime;
+                CurrentDb.Fund.Add(fund);
+                CurrentDb.SaveChanges();
+
+
+                var lllegalQueryScore = new LllegalQueryScore();
+                lllegalQueryScore.UserId = sysClientUser.Id;
+                lllegalQueryScore.MerchantId = merchant.Id;
+                lllegalQueryScore.Score = 50;
+                lllegalQueryScore.Creator = operater;
+                lllegalQueryScore.CreateTime = this.DateTime;
+                CurrentDb.LllegalQueryScore.Add(lllegalQueryScore);
+                CurrentDb.SaveChanges();
+
+
+                var lllegalQueryScoreTrans = new LllegalQueryScoreTrans();
+                lllegalQueryScoreTrans.UserId = sysClientUser.Id;
+                lllegalQueryScoreTrans.ChangeScore = lllegalQueryScore.Score;
+                lllegalQueryScoreTrans.Score = lllegalQueryScore.Score;
+                lllegalQueryScoreTrans.Type = Enumeration.LllegalQueryScoreTransType.IncreaseByInit;
+                lllegalQueryScoreTrans.Description = string.Format("初始违章查询积分:{0}", lllegalQueryScore.Score);
+                lllegalQueryScoreTrans.Creator = operater;
+                lllegalQueryScoreTrans.CreateTime = this.DateTime;
+                CurrentDb.LllegalQueryScoreTrans.Add(lllegalQueryScoreTrans);
+                CurrentDb.SaveChanges();
+                lllegalQueryScoreTrans.Sn = Sn.Build(SnType.LllegalQueryScoreTrans, lllegalQueryScoreTrans.Id).Sn;
+                CurrentDb.SaveChanges();
+
+
                 ts.Complete();
 
                 result = new CustomJsonResult(ResultType.Success, "注册成功");
@@ -504,7 +541,7 @@ namespace Lumos.BLL
             //yOrder.amount = int.Parse((orderToServiceFee.Price * 100).ToString()).ToString();
 
             yOrder.amount = "1";
-        
+
             yOrder.confirmField.Add(new OrderField("订单编号", orderToServiceFee.Sn.NullToEmpty()));
             if (orderToServiceFee.Deposit > 0)
             {

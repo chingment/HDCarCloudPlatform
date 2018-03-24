@@ -12,35 +12,36 @@ namespace HeLianSdkTest
     {
         static void Main(string[] args)
         {
-            //CarQueryDataList_Params pams = new CarQueryDataList_Params();
+            CarQueryDataList_Params pams = new CarQueryDataList_Params();
 
-            //pams.carNo = "粤YGY662";
-            //pams.carType = "02";
-            //pams.enginNo = "713477";
-            //pams.rackNo = "004711";
-            //pams.isCompany = "false";
-            //var s = HeLianApi.CarQueryDataList(pams);
+            pams.carNo = "粤YGY662";
+            pams.carType = "02";
+            pams.enginNo = "713477";
+            pams.rackNo = "004711";
+            pams.isCompany = "false";
+            var s = HeLianApi.CarQueryDataList(pams);
 
-            //List<DataLllegal> r = new List<DataLllegal>();
-            //if (s != null)
-            //{
-            //    if (s.data != null)
-            //    {
-            //        var d = s.data;
-            //        foreach(var m in d)
-            //        {
-            //            DataLllegal dl = new DataLllegal();
-            //            dl.bookNo = m.bookNo;
-            //            dl.bookType = m.bookType;
-            //            dl.cityCode = m.cityCode;
-            //            dl.lllegalCode = m.lllegalCode;
-            //            dl.lllegalTime = m.lllegalTime;
-            //            dl.point = m.point;
-            //            dl.fine = m.fine;
-            //            r.Add(dl);
-            //        }
-            //    }
-            //}
+            List<DataLllegal> r = new List<DataLllegal>();
+            if (s != null)
+            {
+                if (s.data != null)
+                {
+                    var d = s.data;
+                    foreach (var m in d)
+                    {
+                        DataLllegal dl = new DataLllegal();
+                        dl.bookNo = m.bookNo;
+                        dl.bookType = m.bookType;
+                        dl.cityCode = m.cityCode;
+                        dl.lllegalCode = m.lllegalCode;
+                        dl.lllegalTime = m.lllegalTime;
+                        dl.point = m.point;
+                        dl.fine = m.fine;
+                        dl.lllegalAddress = m.address;
+                        r.Add(dl);
+                    }
+                }
+            }
 
             CarQueryGetLllegalPrice_Params pams1 = new CarQueryGetLllegalPrice_Params();
 
@@ -49,8 +50,11 @@ namespace HeLianSdkTest
             pams1.enginNo = "713477";
             pams1.rackNo = "004711";
             pams1.isCompany = "false";
-            //pams1.dataLllegal = r;
-            HeLianApi.CarQueryGetLllegalPrice(pams1);
+            pams1.dataLllegal = r;
+            var s1 =HeLianApi.CarQueryGetLllegalPrice(pams1);
+
+            Console.ReadLine();
+
         }
     }
 }

@@ -325,7 +325,9 @@ namespace Lumos.Entity
             [Remark("人才输送")]
             TalentDemand = 401,
             [Remark("申请定损点")]
-            ApplyLossAssess = 501
+            ApplyLossAssess = 501,
+            [Remark("申请定损点")]
+            LllegalQueryRecharge = 601
 
         }
 
@@ -554,6 +556,19 @@ namespace Lumos.Entity
             [Remark("租金")]
             Rent = 12
         }
+
+        public enum LllegalQueryScoreTransType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("初始增加积分")]
+            IncreaseByInit = 1,
+            [Remark("充值增加积分")]
+            IncreaseByRecharge = 2,
+            [Remark("查询扣除积分")]
+            DecreaseByQuery = 3
+        }
+
 
         public enum CommissionRateAuditStatus
         {

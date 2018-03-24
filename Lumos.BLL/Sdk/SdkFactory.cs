@@ -23,5 +23,13 @@ namespace Lumos.BLL
                 return new MinShunPayProvider();
             }
         }
+
+        public static HeLianProvider HeLian
+        {
+            get
+            {
+                return new HeLianProvider();
+            }
+        }
     }
 }

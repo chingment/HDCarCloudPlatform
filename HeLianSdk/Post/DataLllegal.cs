@@ -16,5 +16,7 @@ namespace HeLianSdk
         public string point { get; set; }
         public string fine { get; set; }
 
+        public string lllegalAddress { get; set; }
+
     }
 }

@@ -386,7 +386,7 @@ namespace WebBack.Controllers.Biz
         public JsonResult GetTransactionsList(Models.Biz.Transactions.TransactionsSearchCondition condition)
         {
 
-            var q = (from u in CurrentDb.Transactions
+            var q = (from u in CurrentDb.FundTrans
                      where u.UserId == condition.UserId
 
                      select new

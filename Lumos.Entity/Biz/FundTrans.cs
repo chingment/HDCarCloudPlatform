@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,25 +8,30 @@ using System.Threading.Tasks;
 
 namespace Lumos.Entity
 {
-    [Table("Fund")]
-    public class Fund
+    [Table("FundTrans")]
+    public class FundTrans
     {
+
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [MaxLength(128)]
+        [Column(TypeName = "varchar")]
+        public string Sn { get; set; }
+
+        public Enumeration.TransactionsType Type { get; set; }
+
         public int UserId { get; set; }
 
-        public int MerchantId { get; set; }
+        public decimal ChangeAmount { get; set; }
 
         public decimal Balance { get; set; }
+
+        [MaxLength(1024)]
+        public string Description { get; set; }
 
         public int Creator { get; set; }
 
         public DateTime CreateTime { get; set; }
-
-        public int? Mender { get; set; }
-
-        public DateTime? LastUpdateTime { get; set; }
-
     }
 }

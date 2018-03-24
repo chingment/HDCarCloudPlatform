@@ -75,6 +75,9 @@
     <Compile Include="Biz\ExtendedApp.cs" />
     <Compile Include="Biz\ExtendedAppAccessLog.cs" />
     <Compile Include="Biz\Fund.cs" />
+    <Compile Include="Biz\LllegalQueryLog.cs" />
+    <Compile Include="Biz\LllegalQueryScore.cs" />
+    <Compile Include="Biz\LllegalQueryScoreTrans.cs" />
     <Compile Include="Biz\MerchantEstimateCompany.cs" />
     <Compile Include="Biz\MerchantPosMachineChangeHistory.cs" />
     <Compile Include="Biz\OrderPayResultNotifyByAppLog.cs" />
@@ -82,6 +85,7 @@
     <Compile Include="Biz\OrderPayResultNotifyByStaffLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
     <Compile Include="Biz\OrderToApplyLossAssess .cs" />
+    <Compile Include="Biz\OrderToLllegalQueryRecharge.cs" />
     <Compile Include="Biz\OrderToServiceFee.cs" />
     <Compile Include="Biz\InsuranceCompany.cs" />
     <Compile Include="Biz\Merchant.cs" />
@@ -97,7 +101,7 @@
     <Compile Include="Biz\OrderToTalentDemand .cs" />
     <Compile Include="Sys\SysAgentUser.cs" />
     <Compile Include="Sys\SysOpenIdInfo.cs" />
-    <Compile Include="Biz\Transactions.cs" />
+    <Compile Include="Biz\FundTrans.cs" />
     <Compile Include="EnumerationRemarkConverter.cs" />
     <Compile Include="IpInfo.cs" />
     <Compile Include="DBNullCreationConverter.cs" />

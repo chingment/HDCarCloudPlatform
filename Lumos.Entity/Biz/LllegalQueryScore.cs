@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace Lumos.Entity
 {
-    [Table("Fund")]
-    public class Fund
+    [Table("LllegalQueryScore")]
+    public class LllegalQueryScore
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -19,7 +19,7 @@ namespace Lumos.Entity
 
         public int MerchantId { get; set; }
 
-        public decimal Balance { get; set; }
+        public int Score { get; set; }
 
         public int Creator { get; set; }
 
@@ -28,6 +28,5 @@ namespace Lumos.Entity
         public int? Mender { get; set; }
 
         public DateTime? LastUpdateTime { get; set; }
-
     }
 }

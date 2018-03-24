@@ -61,13 +61,15 @@ namespace Lumos.DAL
 
         public IDbSet<OrderToServiceFee> OrderToServiceFee { get; set; }
 
+        public IDbSet<OrderToLllegalQueryRecharge> OrderToLllegalQueryRecharge { get; set; }
+
         public IDbSet<BizProcessesAudit> BizProcessesAudit { get; set; }
 
         public IDbSet<BizProcessesAuditDetails> BizProcessesAuditDetails { get; set; }
 
         public IDbSet<Fund> Fund { get; set; }
 
-        public IDbSet<Transactions> Transactions { get; set; }
+        public IDbSet<FundTrans> FundTrans { get; set; }
 
         public IDbSet<SalesmanApplyPosRecord> SalesmanApplyPosRecord { get; set; }
 
@@ -86,6 +88,8 @@ namespace Lumos.DAL
 
         public IDbSet<SysItemCacheUpdateTime>  SysItemCacheUpdateTime { get; set; }
 
+        public IDbSet<LllegalQueryScore> LllegalQueryScore { get; set; }
+        public IDbSet<LllegalQueryScoreTrans> LllegalQueryScoreTrans { get; set; }
         //public FxDbContext()
         //    : base("DefaultConnection")
         //{

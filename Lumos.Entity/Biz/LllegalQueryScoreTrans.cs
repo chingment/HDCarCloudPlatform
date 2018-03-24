@@ -8,24 +8,23 @@ using System.Threading.Tasks;
 
 namespace Lumos.Entity
 {
-    [Table("Transactions")]
-    public class Transactions
+    [Table("LllegalQueryScoreTrans")]
+   public class LllegalQueryScoreTrans
     {
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [MaxLength(128)]
-        [Column(TypeName = "varchar")]
         public string Sn { get; set; }
 
-        public Enumeration.TransactionsType Type { get; set; }
+        public Enumeration.LllegalQueryScoreTransType Type { get; set; }
 
         public int UserId { get; set; }
 
-        public decimal ChangeAmount { get; set; }
+        public decimal ChangeScore { get; set; }
 
-        public decimal Balance { get; set; }
+        public decimal Score { get; set; }
 
         [MaxLength(1024)]
         public string Description { get; set; }

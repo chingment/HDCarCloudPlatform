@@ -92,6 +92,7 @@
     <Compile Include="Factory..cs" />
     <Compile Include="OrderSn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sdk\HeLianProvider.cs" />
     <Compile Include="Sdk\MinShunPayProvider.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Sys\AuthorizeRelayProvider.cs" />
@@ -106,6 +107,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HeLianSdk\HeLianSdk.csproj">
+      <Project>{71eacf05-0fe8-4f96-b672-4d7e7361b540}</Project>
+      <Name>HeLianSdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lumos.Common\Lumos.Common.csproj">
       <Project>{241bdf50-401f-44bf-81cd-acc2ffc3a952}</Project>
       <Name>Lumos.Common</Name>

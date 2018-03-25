@@ -281,6 +281,10 @@
     <Analyzer Include="..\packages\log4net465\log4net.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HeLianSdk\HeLianSdk.csproj">
+      <Project>{71eacf05-0fe8-4f96-b672-4d7e7361b540}</Project>
+      <Name>HeLianSdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lumos.BLL\Lumos.BLL.csproj">
       <Project>{640a898e-2b63-4a12-ac93-2c61d718cc6c}</Project>
       <Name>Lumos.BLL</Name>

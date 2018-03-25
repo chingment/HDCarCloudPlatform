@@ -169,8 +169,9 @@ namespace WebAppApi.Controllers
             int merchantId = 241;
             int posMachineId = 148;
 
-            model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
-
+            //model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
+            model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
+     
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             // model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
@@ -1525,6 +1526,26 @@ namespace WebAppApi.Controllers
             string respon_data4 = http.HttpPostJson("" + host + "/api/Lllegal/Query", a1, headers1);
 
             return respon_data4;
+
+        }
+
+        public string GetLllegalQueryLog(int userId, int merchantId, int posMachineId)
+        {
+
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("userId", userId.ToString());
+            parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/Lllegal/QueryLog?userId=" + userId.ToString() + "&merchantId=" + merchantId.ToString() + "&posMachineId=" + posMachineId.ToString(), headers);
+
+            return result;
 
         }
     }

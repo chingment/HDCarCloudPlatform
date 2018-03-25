@@ -10,6 +10,16 @@ using System.Transactions;
 
 namespace Lumos.BLL
 {
+
+    public class LllegalQueryRecord
+    {
+        public string CarNo { get; set; }
+        public string CarType { get; set; }
+        public string RackNo { get; set; }
+        public string EnginNo { get; set; }
+        public string IsCompany { get; set; }
+    }
+
     public class LllegalQueryParams
     {
         public int UserId { get; set; }
@@ -210,10 +220,42 @@ namespace Lumos.BLL
             return result;
         }
 
-        public string GetOfferTypeName(string offerType )
+        public CustomJsonResult<List<LllegalQueryRecord>> QueryLog(int operater, int userId, int merchantId, int posMachineId)
+        {
+            CustomJsonResult<List<LllegalQueryRecord>> result = new CustomJsonResult<List<LllegalQueryRecord>>();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                var list = (from u in CurrentDb.LllegalQueryLog
+                            where u.UserId==userId
+                            select new { u.CarNo, u.CarType, u.EnginNo, u.RackNo, u.IsCompany }).Distinct();
+
+                List<LllegalQueryRecord> logs = new List<LllegalQueryRecord>();
+                foreach (var m in list)
+                {
+                    var log = new LllegalQueryRecord();
+
+                    log.CarNo = m.CarNo;
+                    log.CarType = m.CarType;
+                    log.EnginNo = m.EnginNo;
+                    log.RackNo = m.RackNo;
+                    log.IsCompany = m.IsCompany;
+
+                    logs.Add(log);
+                }
+
+
+                result = new CustomJsonResult<List<LllegalQueryRecord>>(ResultType.Success, ResultCode.Success, "", logs);
+            }
+
+            return result;
+        }
+
+        public string GetOfferTypeName(string offerType)
         {
             string s = "";
-            switch(offerType)
+            switch (offerType)
             {
                 case "0":
                     s = "无法处理";

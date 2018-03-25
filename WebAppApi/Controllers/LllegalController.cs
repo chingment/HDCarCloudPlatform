@@ -4,19 +4,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 
 namespace WebAppApi.Controllers
 {
     [BaseAuthorizeAttribute]
     public class LllegalController : OwnBaseApiController
     {
-        // GET: Lllegal
+        
+        [HttpPost]
         public APIResponse<List<LllegalRecord>> Query(LllegalQueryParams model)
         {
             var result = SdkFactory.HeLian.Query(model.UserId, model);
 
             return new APIResponse<List<LllegalRecord>>(result);
+
+        }
+
+        [HttpGet]
+        public APIResponse<List<LllegalQueryRecord>> QueryLog(int userId, int merchantId, int posMachineId)
+        {
+
+            var result = SdkFactory.HeLian.QueryLog(userId, userId, merchantId, posMachineId);
+
+            return new APIResponse<List<LllegalQueryRecord>>(result);
 
         }
     }

@@ -1159,75 +1159,86 @@ namespace Lumos.BLL
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            //using (TransactionScope ts = new TransactionScope())
-            //{
-            //    //用户信息
-            //    var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalQueryRecharge.UserId).FirstOrDefault();
-            //    //商户信息
-            //    var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
+            using (TransactionScope ts = new TransactionScope())
+            {
+                //用户信息
+                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalDealt.UserId).FirstOrDefault();
+                //商户信息
+                var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
 
 
-            //    //2011为车险理赔
-            //    var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.LllegalQueryRecharge).FirstOrDefault();
+                //2011为车险理赔
+                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.LllegalDealt).FirstOrDefault();
 
-            //    orderToLllegalQueryRecharge.SalesmanId = merchant.SalesmanId ?? 0;
-            //    orderToLllegalQueryRecharge.AgentId = merchant.AgentId ?? 0;
-            //    orderToLllegalQueryRecharge.ProductId = product.Id;
-            //    orderToLllegalQueryRecharge.ProductType = product.Type;
-            //    orderToLllegalQueryRecharge.ProductName = product.Name;
-            //    orderToLllegalQueryRecharge.Status = Enumeration.OrderStatus.WaitPay;
-            //    orderToLllegalQueryRecharge.SubmitTime = this.DateTime;
-            //    orderToLllegalQueryRecharge.CreateTime = this.DateTime;
-            //    orderToLllegalQueryRecharge.Creator = operater;
-            //    CurrentDb.OrderToLllegalQueryRecharge.Add(orderToLllegalQueryRecharge);
-            //    CurrentDb.SaveChanges();
-
-
-
-            //    SnModel snModel = Sn.Build(SnType.LllegalQueryRecharge, orderToLllegalQueryRecharge.Id);
-
-            //    orderToLllegalQueryRecharge.Sn = snModel.Sn;
-            //    orderToLllegalQueryRecharge.TradeSnByWechat = snModel.TradeSnByWechat;
-            //    orderToLllegalQueryRecharge.TradeSnByAlipay = snModel.TradeSnByAlipay;
-            //    CurrentDb.SaveChanges();
+                orderToLllegalDealt.SalesmanId = merchant.SalesmanId ?? 0;
+                orderToLllegalDealt.AgentId = merchant.AgentId ?? 0;
+                orderToLllegalDealt.ProductId = product.Id;
+                orderToLllegalDealt.ProductType = product.Type;
+                orderToLllegalDealt.ProductName = product.Name;
+                orderToLllegalDealt.Status = Enumeration.OrderStatus.WaitPay;
+                orderToLllegalDealt.SubmitTime = this.DateTime;
+                orderToLllegalDealt.CreateTime = this.DateTime;
+                orderToLllegalDealt.Creator = operater;
+                CurrentDb.OrderToLllegalDealt.Add(orderToLllegalDealt);
+                CurrentDb.SaveChanges();
 
 
 
-            //    OrderConfirmInfo yOrder = new OrderConfirmInfo();
+                SnModel snModel = Sn.Build(SnType.LllegalQueryRecharge, orderToLllegalDealt.Id);
+
+                orderToLllegalDealt.Sn = snModel.Sn;
+                orderToLllegalDealt.TradeSnByWechat = snModel.TradeSnByWechat;
+                orderToLllegalDealt.TradeSnByAlipay = snModel.TradeSnByAlipay;
+                CurrentDb.SaveChanges();
 
 
-            //    yOrder.OrderId = orderToLllegalQueryRecharge.Id;
-            //    yOrder.OrderSn = orderToLllegalQueryRecharge.Sn;
-            //    yOrder.remarks = orderToLllegalQueryRecharge.Remarks;
-            //    yOrder.transName = "消费";
-            //    yOrder.productType = orderToLllegalQueryRecharge.ProductType;
-            //    yOrder.productName = orderToLllegalQueryRecharge.ProductName;
+                foreach(var item in orderToLllegalDealtDetails)
+                {
 
-            //    //yOrder.amount = int.Parse((orderToServiceFee.Price * 100).ToString()).ToString();
+                    item.Status =Enumeration.OrderToLllegalDealtDetailsStatus.WaitPay;
+                    item.CreateTime = this.DateTime;
+                    item.Creator = operater;
 
-            //    yOrder.amount = "1";
-
-            //    yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalQueryRecharge.Sn.NullToEmpty()));
-            //    yOrder.confirmField.Add(new Entity.AppApi.OrderField("积分", string.Format("{0}元", orderToLllegalQueryRecharge.Score)));
-            //    yOrder.confirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalQueryRecharge.Price.NullToEmpty())));
+                    CurrentDb.OrderToLllegalDealtDetails.Add(item);
+                    CurrentDb.SaveChanges();
+                }
 
 
-            //    #region 支持的支付方式
-            //    int[] payMethods = new int[1] { 1 };
 
-            //    foreach (var payWayId in payMethods)
-            //    {
-            //        var payWay = new PayWay();
-            //        payWay.id = payWayId;
-            //        yOrder.payMethod.Add(payWay);
-            //    }
-            //    #endregion
+                OrderConfirmInfo yOrder = new OrderConfirmInfo();
 
 
-            //    ts.Complete();
+                yOrder.OrderId = orderToLllegalDealt.Id;
+                yOrder.OrderSn = orderToLllegalDealt.Sn;
+                yOrder.remarks = orderToLllegalDealt.Remarks;
+                yOrder.transName = "消费";
+                yOrder.productType = orderToLllegalDealt.ProductType;
+                yOrder.productName = orderToLllegalDealt.ProductName;
 
-            //    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功", yOrder);
-            //}
+                //yOrder.amount = int.Parse((orderToServiceFee.Price * 100).ToString()).ToString();
+
+                yOrder.amount = "1";
+
+                yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalDealt.Sn.NullToEmpty()));
+                yOrder.confirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalDealt.Price.NullToEmpty())));
+
+
+                #region 支持的支付方式
+                int[] payMethods = new int[1] { 1 };
+
+                foreach (var payWayId in payMethods)
+                {
+                    var payWay = new PayWay();
+                    payWay.id = payWayId;
+                    yOrder.payMethod.Add(payWay);
+                }
+                #endregion
+
+
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功", yOrder);
+            }
 
 
             return result;

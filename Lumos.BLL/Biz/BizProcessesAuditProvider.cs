@@ -891,5 +891,121 @@ namespace Lumos.BLL
 
             return bizProcessesAudit;
         }
+
+
+        public BizProcessesAudit ChangeLllegalDealStatus(int operater, int bizProcessesAuditId, Enumeration.LllegalDealtStatus changestatus, string description = null, DateTime? endTime = null)
+        {
+
+            var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
+            if (bizProcessesAudit != null)
+            {
+                if (bizProcessesAudit.EndTime == null)
+                {
+                    if (
+                       bizProcessesAudit.Status != (int)Enumeration.LllegalDealtStatus.Complete
+                        && bizProcessesAudit.Status != (int)Enumeration.LllegalDealtStatus.ClientCancle
+                           && bizProcessesAudit.Status != (int)Enumeration.LllegalDealtStatus.StaffCancle
+                        )
+                    {
+                        Enumeration.LllegalDealtStatus old_Status = (Enumeration.LllegalDealtStatus)bizProcessesAudit.Status;
+                        bizProcessesAudit.Mender = operater;
+                        bizProcessesAudit.LastUpdateTime = DateTime.Now;
+
+
+                        if (endTime != null)
+                        {
+                            bizProcessesAudit.EndTime = endTime.Value;
+                        }
+
+                        if (changestatus == Enumeration.LllegalDealtStatus.WaitVerifyOrder)
+                        {
+
+                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.LllegalDealtStep.VerifyOrder).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                            if (bizProcessesAuditDetails == null)
+                            {
+                                bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.WaitVerifyOrder;
+                                bizProcessesAudit.Auditor = null;
+
+                            }
+                            else
+                            {
+                                bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.InVerifyOrder;
+                                bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
+
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.LllegalDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
+                            }
+
+                        }
+                        else if (changestatus == Enumeration.LllegalDealtStatus.InVerifyOrder)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.InVerifyOrder;
+                            if (bizProcessesAudit.Auditor == null)
+                            {
+                                bizProcessesAudit.Auditor = operater;
+
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.LllegalDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
+
+                            }
+
+                        }
+
+                        else if (changestatus == Enumeration.LllegalDealtStatus.ClientCancle)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.ClientCancle;
+                            bizProcessesAudit.Auditor = operater;
+
+                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+
+                        }
+                        else if (changestatus == Enumeration.LllegalDealtStatus.StaffCancle)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.StaffCancle;
+                            bizProcessesAudit.Auditor = operater;
+                            bizProcessesAudit.EndTime = this.DateTime;
+
+                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+                        }
+                        else if (changestatus == Enumeration.LllegalDealtStatus.Complete)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.Complete;
+                            bizProcessesAudit.Auditor = operater;
+                            bizProcessesAudit.EndTime = this.DateTime;
+
+                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+
+                        }
+                    }
+
+                    CurrentDb.SaveChanges();
+                }
+
+
+                var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderByDescending(m => m.AuditTime).ToList();
+
+                bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
+
+
+                Enumeration.LllegalDealtStep merchantAuditStep = Enumeration.LllegalDealtStep.Unknow;
+                if (changestatus == Enumeration.LllegalDealtStatus.WaitVerifyOrder || changestatus == Enumeration.LllegalDealtStatus.InVerifyOrder)
+                {
+                    merchantAuditStep = Enumeration.LllegalDealtStep.VerifyOrder;
+                }
+                var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                if (currentDetails != null)
+                {
+                    bizProcessesAudit.CurrentDetails = currentDetails;
+
+                    var auditComments = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep && m.AuditComments != null).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                    if (auditComments != null)
+                    {
+                        bizProcessesAudit.CurrentDetails.AuditComments = auditComments.AuditComments;
+                    }
+                }
+
+
+            }
+
+            return bizProcessesAudit;
+        }
     }
 }

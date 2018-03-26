@@ -373,7 +373,7 @@ namespace Lumos.BLL
                 haoYiLianFundTrans.UserId = haoYiLianFund.UserId;
                 haoYiLianFundTrans.ChangeAmount = orderToServiceFee.Price;
                 haoYiLianFundTrans.Balance = haoYiLianFund.Balance;
-                haoYiLianFundTrans.Type = Enumeration.TransactionsType.Rent;
+                haoYiLianFundTrans.Type = Enumeration.TransactionsType.ServiceFee;
                 haoYiLianFundTrans.Description = string.Format("订单号:{0},押金:{1}元,流量费用:{2}元,合计:{3}元", orderSn, orderToServiceFee.Deposit, orderToServiceFee.MobileTrafficFee, orderToServiceFee.Price);
                 haoYiLianFundTrans.Creator = operater;
                 haoYiLianFundTrans.CreateTime = this.DateTime;
@@ -437,7 +437,6 @@ namespace Lumos.BLL
             return result;
         }
 
-
         private CustomJsonResult PayLllegalQueryRechargeCompleted(int operater, string orderSn)
         {
             CustomJsonResult result = new CustomJsonResult();
@@ -465,6 +464,12 @@ namespace Lumos.BLL
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未在就绪支付状态");
                 }
 
+                orderToLllegalQueryRecharge.Status = Enumeration.OrderStatus.Completed;
+                orderToLllegalQueryRecharge.PayTime = this.DateTime;
+                orderToLllegalQueryRecharge.CompleteTime = this.DateTime;
+                orderToLllegalQueryRecharge.LastUpdateTime = this.DateTime;
+                orderToLllegalQueryRecharge.Mender = operater;
+
                 var haoYiLianFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.HaoYiLian).FirstOrDefault();
                 haoYiLianFund.Balance += orderToLllegalQueryRecharge.Price;
                 haoYiLianFund.Mender = operater;
@@ -474,8 +479,8 @@ namespace Lumos.BLL
                 haoYiLianFundTrans.UserId = haoYiLianFund.UserId;
                 haoYiLianFundTrans.ChangeAmount = orderToLllegalQueryRecharge.Price;
                 haoYiLianFundTrans.Balance = haoYiLianFund.Balance;
-                haoYiLianFundTrans.Type = Enumeration.TransactionsType.Rent;
-                haoYiLianFundTrans.Description = string.Format("订单号:{0},充值违章查询积分:{1}元", orderSn, orderToLllegalQueryRecharge.Score);
+                haoYiLianFundTrans.Type = Enumeration.TransactionsType.LllegalQueryRecharg;
+                haoYiLianFundTrans.Description = string.Format("订单号:{0},充值违章查询积分:{1}元", orderSn, orderToLllegalQueryRecharge.Price);
                 haoYiLianFundTrans.Creator = operater;
                 haoYiLianFundTrans.CreateTime = this.DateTime;
                 CurrentDb.FundTrans.Add(haoYiLianFundTrans);
@@ -506,7 +511,79 @@ namespace Lumos.BLL
                 CurrentDb.SaveChanges();
 
                 ts.Complete();
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功");
+
+
+                var score = new { score= lllegalQueryScore.Score };
+
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功", score);
+            }
+
+            return result;
+        }
+
+        private CustomJsonResult PayLllegalDealtCompleted(int operater, string orderSn)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+                if (orderToLllegalDealt == null)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "找不到订单号");
+                }
+
+                if (orderToLllegalDealt.Status == Enumeration.OrderStatus.Completed)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经支付完成");
+                }
+
+
+                if (orderToLllegalDealt.Status != Enumeration.OrderStatus.WaitPay)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未在就绪支付状态");
+                }
+
+                orderToLllegalDealt.Status = Enumeration.OrderStatus.Completed;
+                orderToLllegalDealt.PayTime = this.DateTime;
+                orderToLllegalDealt.CompleteTime = this.DateTime;
+                orderToLllegalDealt.LastUpdateTime = this.DateTime;
+                orderToLllegalDealt.Mender = operater;
+
+                var haoYiLianFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.HaoYiLian).FirstOrDefault();
+                haoYiLianFund.Balance += orderToLllegalDealt.Price;
+                haoYiLianFund.Mender = operater;
+                haoYiLianFund.LastUpdateTime = this.DateTime;
+
+                var haoYiLianFundTrans = new FundTrans();
+                haoYiLianFundTrans.UserId = haoYiLianFund.UserId;
+                haoYiLianFundTrans.ChangeAmount = orderToLllegalDealt.Price;
+                haoYiLianFundTrans.Balance = haoYiLianFund.Balance;
+                haoYiLianFundTrans.Type = Enumeration.TransactionsType.LllegalDealt;
+                haoYiLianFundTrans.Description = string.Format("订单号:{0},处理违章:{1}元", orderSn, orderToLllegalDealt.Price.ToF2Price());
+                haoYiLianFundTrans.Creator = operater;
+                haoYiLianFundTrans.CreateTime = this.DateTime;
+                CurrentDb.FundTrans.Add(haoYiLianFundTrans);
+                CurrentDb.SaveChanges();
+                haoYiLianFundTrans.Sn = Sn.Build(SnType.FundTrans, haoYiLianFundTrans.Id).Sn;
+                CurrentDb.SaveChanges();
+
+
+                //状态改为待核实
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.LllegalDealt, orderToLllegalDealt.Id, Enumeration.LllegalDealtStatus.WaitVerifyOrder, "");
+                BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.LllegalDealtStep.Submit, bizProcessesAudit.Id, operater, orderToLllegalDealt.ClientRequire, "商户提交人才需求", this.DateTime);
+
+
+                ts.Complete();
+
+
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功", null);
             }
 
             return result;

@@ -143,7 +143,6 @@ namespace Lumos.Entity
             Complete = 5
         }
 
-
         public enum TalentDemandDealtStep
         {
             [Remark("未知")]
@@ -155,6 +154,35 @@ namespace Lumos.Entity
             [Remark("完成")]
             Complete = 3
 
+        }
+
+        public enum LllegalDealtStep
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("提交订单")]
+            Submit = 1,
+            [Remark("核实需求")]
+            VerifyOrder = 2,
+            [Remark("完成")]
+            Complete = 3
+
+        }
+
+        public enum LllegalDealtStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("等待核实")]
+            WaitVerifyOrder = 1,
+            [Remark("核实需求")]
+            InVerifyOrder = 2,
+            [Remark("后台取消订单")]
+            StaffCancle = 3,
+            [Remark("客户取消订单")]
+            ClientCancle = 4,
+            [Remark("完成")]
+            Complete = 5
         }
 
 
@@ -327,7 +355,9 @@ namespace Lumos.Entity
             [Remark("申请定损点")]
             ApplyLossAssess = 501,
             [Remark("违章查询积分充值")]
-            LllegalQueryRecharge = 601
+            LllegalQueryRecharge = 601,
+            [Remark("违章处理")]
+            LllegalDealt = 602
 
         }
 
@@ -453,7 +483,9 @@ namespace Lumos.Entity
             [Remark("人才输送")]
             TalentDemand = 8,
             [Remark("定损点申请")]
-            ApplyLossAssess = 9
+            ApplyLossAssess = 9,
+            [Remark("违章处理")]
+            LllegalDealt = 9
         }
 
         public enum MerchantStatus
@@ -531,30 +563,12 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("提现")]
-            Withdraw = 1,
-            [Remark("佣金")]
-            CarClaimCommission = 2,
-            [Remark("佣金")]
-            CarInsureCommission = 3,
-            [Remark("收取手续费")]
-            ChargeFee = 4,
-            [Remark("退回手续费")]
-            ReturnFee = 5,
-            [Remark("转入提现资金")]
-            TurnsInWithdrawFund = 6,
-            [Remark("转出提现资金")]
-            TurnsOutWithdrawFund = 7,
-            [Remark("退回提现资金")]
-            ReturnWithdrawFund = 8,
-            [Remark("提现失败冲回")]
-            WithdrawRefund = 9,
-            [Remark("垫付资金")]
-            Advance = 10,
-            [Remark("押金租金")]
-            DepositRent = 11,
-            [Remark("租金")]
-            Rent = 12
+            [Remark("服务费")]
+            ServiceFee = 1,
+            [Remark("违章积分充值")]
+            LllegalQueryRecharg = 2,
+            [Remark("违章处理")]
+            LllegalDealt = 3
         }
 
         public enum LllegalQueryScoreTransType

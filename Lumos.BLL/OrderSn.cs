@@ -16,7 +16,8 @@ namespace Lumos.BLL
         TalentDemand = 6,
         ApplyLossAssess = 7,
         LllegalQueryScoreTrans = 8,
-        LllegalQueryRecharge=9
+        LllegalQueryRecharge=9,
+        LllegalDealt=10
     }
 
     public class SnModel
@@ -61,6 +62,9 @@ namespace Lumos.BLL
                     break;
                 case SnType.LllegalQueryRecharge:
                     prefix = "I";
+                    break;
+                case SnType.LllegalDealt:
+                    prefix = "J";
                     break;
             }
 

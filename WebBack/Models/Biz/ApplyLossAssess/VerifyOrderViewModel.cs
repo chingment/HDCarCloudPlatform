@@ -23,7 +23,7 @@ namespace WebBack.Models.Biz.ApplyLossAssess
 
         public VerifyOrderViewModel(int id)
         {
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeApplyLossAssessDealtStatus(this.Operater, id, Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder, "后台人员正在处理中");
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeApplyLossAssessDealtStatus(this.Operater, id, Enumeration.ApplyLossAssessDealtStatus.InDealt, "后台人员正在处理中");
             if (bizProcessesAudit != null)
             {
                 _bizProcessesAudit = bizProcessesAudit;

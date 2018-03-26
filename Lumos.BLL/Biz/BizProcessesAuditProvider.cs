@@ -801,33 +801,33 @@ namespace Lumos.BLL
                             bizProcessesAudit.EndTime = endTime.Value;
                         }
 
-                        if (changestatus == Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder)
+                        if (changestatus == Enumeration.ApplyLossAssessDealtStatus.WaitDealt)
                         {
 
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.ApplyLossAssessDealtStep.VerifyOrder).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.ApplyLossAssessDealtStep.Dealt).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                             if (bizProcessesAuditDetails == null)
                             {
-                                bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder;
+                                bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.WaitDealt;
                                 bizProcessesAudit.Auditor = null;
 
                             }
                             else
                             {
-                                bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder;
+                                bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.InDealt;
                                 bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
                             }
 
                         }
-                        else if (changestatus == Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder)
+                        else if (changestatus == Enumeration.ApplyLossAssessDealtStatus.InDealt)
                         {
-                            bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder;
+                            bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.InDealt;
                             if (bizProcessesAudit.Auditor == null)
                             {
                                 bizProcessesAudit.Auditor = operater;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
 
                             }
 
@@ -870,9 +870,9 @@ namespace Lumos.BLL
 
 
                 Enumeration.ApplyLossAssessDealtStep merchantAuditStep = Enumeration.ApplyLossAssessDealtStep.Unknow;
-                if (changestatus == Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder || changestatus == Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder)
+                if (changestatus == Enumeration.ApplyLossAssessDealtStatus.WaitDealt || changestatus == Enumeration.ApplyLossAssessDealtStatus.InDealt)
                 {
-                    merchantAuditStep = Enumeration.ApplyLossAssessDealtStep.VerifyOrder;
+                    merchantAuditStep = Enumeration.ApplyLossAssessDealtStep.Dealt;
                 }
                 var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                 if (currentDetails != null)

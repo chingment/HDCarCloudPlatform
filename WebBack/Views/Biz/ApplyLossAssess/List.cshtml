@@ -80,7 +80,7 @@
         <div class="filter">
             <span class="filter-label">状态：</span>
             <span class="filter-input">
-                @(Html.initEnumeration<Lumos.Entity.Enumeration.OrderStatus>(Lumos.Entity.Enumeration.InputType.Select, "Status", new { @class = "select-control", defaulttext = "全部", hidevalue = new Lumos.Entity.Enumeration.OrderStatus[] { Lumos.Entity.Enumeration.OrderStatus.Unknow } }))
+                @(Html.initEnumeration<Lumos.Entity.Enumeration.OrderStatus>(Lumos.Entity.Enumeration.InputType.Select, "Status", new { @class = "select-control", defaulttext = "全部", hidevalue = new Lumos.Entity.Enumeration.OrderStatus[] { Lumos.Entity.Enumeration.OrderStatus.Unknow, Lumos.Entity.Enumeration.OrderStatus.Follow, Lumos.Entity.Enumeration.OrderStatus.WaitPay } }))
             </span>
         </div>
         <div class="filter"><input type="button" class="btn btn-search" id="btn_Search" value="查询" /> </div>

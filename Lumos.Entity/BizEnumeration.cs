@@ -190,10 +190,10 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("等待核实")]
-            WaitVerifyOrder = 1,
-            [Remark("核实需求")]
-            InVerifyOrder = 2,
+            [Remark("等待处理")]
+            WaitDealt = 1,
+            [Remark("处理中")]
+            InDealt = 2,
             [Remark("后台取消订单")]
             StaffCancle = 3,
             [Remark("客户取消订单")]
@@ -209,8 +209,8 @@ namespace Lumos.Entity
             Unknow = 0,
             [Remark("提交订单")]
             Submit = 1,
-            [Remark("核实需求")]
-            VerifyOrder = 2,
+            [Remark("处理中")]
+            Dealt = 2,
             [Remark("完成")]
             Complete = 3
 

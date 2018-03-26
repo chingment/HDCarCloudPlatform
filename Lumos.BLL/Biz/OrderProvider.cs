@@ -871,7 +871,7 @@ namespace Lumos.BLL
             return result;
         }
 
-        public CustomJsonResult HandleTalentDemand(int operater, Enumeration.OperateType operate, OrderToTalentDemand orderToTalentDemand, BizProcessesAudit bizProcessesAudit)
+        public CustomJsonResult DealtTalentDemand(int operater, Enumeration.OperateType operate, OrderToTalentDemand orderToTalentDemand, BizProcessesAudit bizProcessesAudit)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -986,7 +986,7 @@ namespace Lumos.BLL
                 orderToApplyLossAssess.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
                 //状态改为待核实
-                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.ApplyLossAssess, orderToApplyLossAssess.Id, Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder, "");
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.ApplyLossAssess, orderToApplyLossAssess.Id, Enumeration.ApplyLossAssessDealtStatus.WaitDealt, "");
                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.ApplyLossAssessDealtStep.Submit, bizProcessesAudit.Id, operater, orderToApplyLossAssess.ClientRequire, "商户提交定损点申请需求", this.DateTime);
 
 
@@ -1000,14 +1000,14 @@ namespace Lumos.BLL
             return result;
         }
 
-        public CustomJsonResult VerifyApplyLossAssess(int operater, Enumeration.OperateType operate, OrderToApplyLossAssess orderToApplyLossAssess, BizProcessesAudit bizProcessesAudit)
+        public CustomJsonResult DealtApplyLossAssess(int operater, Enumeration.OperateType operate, OrderToApplyLossAssess orderToApplyLossAssess, BizProcessesAudit bizProcessesAudit)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.CurrentDetails.BizProcessesAuditId && (m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder || m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder)).FirstOrDefault();
+                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.CurrentDetails.BizProcessesAuditId && (m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitDealt || m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InDealt)).FirstOrDefault();
 
                 if (bizProcessesAudit == null)
                 {
@@ -1036,7 +1036,7 @@ namespace Lumos.BLL
 
                         result = new CustomJsonResult(ResultType.Success, "保存成功");
 
-                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.ApplyLossAssessDealtStep.VerifyOrder, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, null);
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.ApplyLossAssessDealtStep.Dealt, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, null);
 
                         break;
                     case Enumeration.OperateType.Cancle:

@@ -32,7 +32,8 @@ namespace WebBack.Models
         {
             get
             {
-                return 0;
+                var userInfo = OwnRequest.GetUserInfo();
+                return userInfo.UserId;
             }
         }
 

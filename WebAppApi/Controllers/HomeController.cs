@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
-        private string host = "http://120.79.233.231";
+        private string host = "http://localhost:16665";
+        //private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -171,10 +171,10 @@ namespace WebAppApi.Controllers
 
             //model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
-            model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
+            //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
-            // model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+            model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
@@ -1388,7 +1388,8 @@ namespace WebAppApi.Controllers
             model1.WorkJob = Enumeration.WorkJob.XiChe;
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;
-
+            model1.UseStartTime = DateTime.Now;
+            model1.UseEndTime = DateTime.Now;
             string a1 = JsonConvert.SerializeObject(model1);
 
             string signStr = Signature.Compute(key, secret, timespan, a1);

@@ -24,13 +24,13 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.定损点申请)]
-        public ViewResult VerifyOrderList()
+        public ViewResult DealtList()
         {
             return View();
         }
 
         [OwnAuthorize(PermissionCode.定损点申请)]
-        public ViewResult VerifyOrder(int id)
+        public ViewResult Dealt(int id)
         {
             VerifyOrderViewModel model = new VerifyOrderViewModel(id);
 
@@ -88,10 +88,10 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.定损点申请)]
-        public CustomJsonResult GetVerifyOrderList(ApplyLossAssessSearchCondition condition)
+        public CustomJsonResult GetDealtList(ApplyLossAssessSearchCondition condition)
         {
-            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder select h.Id).Count();
-            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitDealt select h.Id).Count();
+            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToApplyLossAssess on
@@ -102,13 +102,13 @@ namespace WebBack.Controllers.Biz
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.InsuranceCompanyId, o.InsuranceCompanyName, o.ApplyTime, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
-            if (condition.DealtStatus == Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder)
+            if (condition.DealtStatus == Enumeration.ApplyLossAssessDealtStatus.WaitDealt)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder);
+                query = query.Where(m => m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitDealt);
             }
-            else if (condition.DealtStatus == Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder)
+            else if (condition.DealtStatus == Enumeration.ApplyLossAssessDealtStatus.InDealt)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder && m.Auditor == this.CurrentUserId);
+                query = query.Where(m => m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InDealt && m.Auditor == this.CurrentUserId);
             }
 
 
@@ -148,11 +148,11 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.定损点申请)]
         [HttpPost]
-        public CustomJsonResult VerifyOrder(VerifyOrderViewModel model)
+        public CustomJsonResult Dealt(VerifyOrderViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.Order.VerifyApplyLossAssess(this.CurrentUserId, model.Operate, model.OrderToApplyLossAssess, model.BizProcessesAudit);
+            reuslt = BizFactory.Order.DealtApplyLossAssess(this.CurrentUserId, model.Operate, model.OrderToApplyLossAssess, model.BizProcessesAudit);
 
             return reuslt;
         }

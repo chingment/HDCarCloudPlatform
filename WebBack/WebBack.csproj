@@ -1238,8 +1238,8 @@
     <Content Include="Views\Biz\TalentDemand\DealtList.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\Details.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\List.cshtml" />
-    <Content Include="Views\Biz\ApplyLossAssess\VerifyOrder.cshtml" />
-    <Content Include="Views\Biz\ApplyLossAssess\VerifyOrderList.cshtml" />
+    <Content Include="Views\Biz\ApplyLossAssess\Dealt.cshtml" />
+    <Content Include="Views\Biz\ApplyLossAssess\DealtList.cshtml" />
     <Content Include="Views\Biz\ServiceFee\Details.cshtml" />
     <Content Include="Views\Sys\AgentUser\Add.cshtml" />
     <Content Include="Views\Sys\AgentUser\Edit.cshtml" />

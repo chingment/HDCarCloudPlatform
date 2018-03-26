@@ -54,6 +54,10 @@ namespace Lumos.BLL
         public string address { get; set; }
 
         public bool needDealt { get; set; }
+
+        public string status { get; set; }
+
+        public bool canDealt { get; set; }
     }
 
 
@@ -117,7 +121,7 @@ namespace Lumos.BLL
 
                 List<LllegalRecord> lllegalRecords = new List<LllegalRecord>();
 
-       
+
                 var d = api_result.data;
                 if (d != null)
                 {
@@ -174,7 +178,7 @@ namespace Lumos.BLL
                 }
 
                 var queryResult = new LllegalQueryResult();
-      
+
                 queryResult.CarNo = pms.CarNo;
 
                 var d1 = api_result1.data;
@@ -189,6 +193,19 @@ namespace Lumos.BLL
                             record.serviceFee = priceresult.serviceFee;
                             record.fine = priceresult.fine;
                             record.late_fees = priceresult.fine;
+                        }
+
+                        record.status = "待处理";
+                        record.canDealt = true;
+                        var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).FirstOrDefault();
+                        if (details != null)
+                        {
+                            record.status = details.Status.GetCnName();
+
+                            if (details.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed)
+                            {
+                                record.canDealt = false;
+                            }
                         }
                     }
 
@@ -252,7 +269,7 @@ namespace Lumos.BLL
             {
 
                 var list = (from u in CurrentDb.LllegalQueryLog
-                            where u.UserId==userId
+                            where u.UserId == userId
                             select new { u.CarNo, u.CarType, u.EnginNo, u.RackNo, u.IsCompany }).Distinct();
 
                 List<LllegalQueryRecord> logs = new List<LllegalQueryRecord>();

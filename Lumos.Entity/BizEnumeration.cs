@@ -326,7 +326,7 @@ namespace Lumos.Entity
             TalentDemand = 401,
             [Remark("申请定损点")]
             ApplyLossAssess = 501,
-            [Remark("申请定损点")]
+            [Remark("违章查询积分充值")]
             LllegalQueryRecharge = 601
 
         }

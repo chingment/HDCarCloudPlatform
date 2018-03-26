@@ -29,7 +29,7 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-       // private string host = "http://localhost:16665";
+        //private string host = "http://localhost:16665";
         private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
@@ -170,8 +170,9 @@ namespace WebAppApi.Controllers
             int posMachineId = 148;
 
             //model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
-            //model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
-     
+            // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
+            model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
+
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             // model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
@@ -1546,6 +1547,33 @@ namespace WebAppApi.Controllers
             string result = http.HttpGet("" + host + "/api/Lllegal/QueryLog?userId=" + userId.ToString() + "&merchantId=" + merchantId.ToString() + "&posMachineId=" + posMachineId.ToString(), headers);
 
             return result;
+
+        }
+
+
+        public string SubmitLllegalQueryScoreRecharge(int userId, int merchantId, int posMachineId)
+        {
+
+            SubmitLllegalQueryScoreRechargeModel model1 = new SubmitLllegalQueryScoreRechargeModel();
+            model1.UserId = userId;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+            model1.Score = 50;
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/SubmitLllegalQueryScoreRecharge", a1, headers1);
+
+            return respon_data4;
 
         }
     }

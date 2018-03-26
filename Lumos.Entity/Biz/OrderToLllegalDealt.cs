@@ -11,6 +11,10 @@ namespace Lumos.Entity
     [Table("OrderToLllegalDealt")]
     public class OrderToLllegalDealt : Order
     {
-        
+        public int SumPoint { get; set; }
+
+        public decimal SumFine { get; set; }
+
+
     }
 }

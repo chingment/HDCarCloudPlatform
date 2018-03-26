@@ -93,6 +93,9 @@ namespace Lumos.DAL
 
         public IDbSet<LllegalQueryLog> LllegalQueryLog { get; set; }
 
+        public IDbSet<OrderToLllegalDealt> OrderToLllegalDealt { get; set; }
+
+        public IDbSet<OrderToLllegalDealtDetails> OrderToLllegalDealtDetails { get; set; }
 
         //public FxDbContext()
         //    : base("DefaultConnection")

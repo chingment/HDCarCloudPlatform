@@ -26,7 +26,8 @@ namespace Lumos.Mvc
         FailureNoData = 2030,
         FailureValidCode = 2040,
         FailureUserNameNotExists = 2050,
-        Exception = 3000
+        Exception = 3000,
+        LllegalQueryNotEnoughScore = 4001
     }
 
 

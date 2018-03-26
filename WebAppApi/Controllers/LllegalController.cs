@@ -13,11 +13,11 @@ namespace WebAppApi.Controllers
     {
         
         [HttpPost]
-        public APIResponse<List<LllegalRecord>> Query(LllegalQueryParams model)
+        public APIResponse<LllegalQueryResult> Query(LllegalQueryParams model)
         {
             var result = SdkFactory.HeLian.Query(model.UserId, model);
 
-            return new APIResponse<List<LllegalRecord>>(result);
+            return new APIResponse<LllegalQueryResult>(result);
 
         }
 

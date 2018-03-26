@@ -804,6 +804,75 @@ namespace WebAppApi.Controllers
 
         }
 
+        [HttpPost] 
+        public APIResponse SubmitLllegalQueryScoreRecharge(SubmitLllegalQueryScoreRechargeModel model)
+        {
+            //业务人员模拟数据
+            if (model.MerchantId == this.SalesmanMerchantId)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
+            }
+
+            OrderToLllegalQueryRecharge orderToLllegalQueryRecharge = new OrderToLllegalQueryRecharge();
+            orderToLllegalQueryRecharge.UserId = model.UserId;
+            orderToLllegalQueryRecharge.MerchantId = model.MerchantId;
+            orderToLllegalQueryRecharge.PosMachineId = model.PosMachineId;
+            orderToLllegalQueryRecharge.Price = 50;
+            orderToLllegalQueryRecharge.Score = 50;
+
+
+            IResult result = BizFactory.Order.SubmitLllegalQueryScoreRecharge(model.UserId, orderToLllegalQueryRecharge);
+            return new APIResponse(result);
+
+        }
+
+        public APIResponse SubmitLllegalDealt(SubmitLllegalDealtModel model)
+        {
+            //业务人员模拟数据
+            if (model.MerchantId == this.SalesmanMerchantId)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
+            }
+
+            OrderToLllegalDealt orderToLllegalDealt = new OrderToLllegalDealt();
+            orderToLllegalDealt.UserId = model.UserId;
+            orderToLllegalDealt.MerchantId = model.MerchantId;
+            orderToLllegalDealt.PosMachineId = model.PosMachineId;
+
+
+            List<OrderToLllegalDealtDetails> orderToLllegalDealtDetails = new List<OrderToLllegalDealtDetails>();
+
+            if(model.LllegalRecord!=null)
+            {
+                foreach(var item in model.LllegalRecord)
+                {
+                    var orderToLllegalDealtDetail = new OrderToLllegalDealtDetails();
+
+                    orderToLllegalDealtDetail.BookNo = item.bookNo;
+                    orderToLllegalDealtDetail.BookType = item.bookType;
+                    orderToLllegalDealtDetail.BookTypeName = item.bookTypeName;
+                    orderToLllegalDealtDetail.Address = item.address;
+                    orderToLllegalDealtDetail.CityCode = item.cityCode;
+                    orderToLllegalDealtDetail.Content=item.content;
+                    orderToLllegalDealtDetail.Fine = item.fine;
+                    orderToLllegalDealtDetail.Late_fees = item.late_fees;
+                    orderToLllegalDealtDetail.LllegalCity = item.lllegalCity;
+                    orderToLllegalDealtDetail.LllegalCode = item.lllegalCode;
+                    orderToLllegalDealtDetail.LllegalDesc = item.lllegalDesc;
+                    orderToLllegalDealtDetail.LllegalTime = item.lllegalTime;
+                    orderToLllegalDealtDetail.OfferType = item.offerType;
+                    orderToLllegalDealtDetail.OfserTypeName = item.ofserTypeName;
+                    orderToLllegalDealtDetail.Point = item.point;
+                    orderToLllegalDealtDetail.ServiceFee = item.serviceFee;
+                }
+            }
+
+            IResult result = BizFactory.Order.SubmitLllegalDealt(model.UserId, orderToLllegalDealt, orderToLllegalDealtDetails);
+            return new APIResponse(result);
+
+        }
+
+
         [HttpPost]
         public APIResponse QrCodeDownload(QrCodeDownloadParams pms)
         {

@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
-        //private string host = "http://120.79.233.231";
+       // private string host = "http://localhost:16665";
+        private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -121,7 +121,7 @@ namespace WebAppApi.Controllers
             pms.CarType = "02";
             pms.EnginNo = "713477";
             pms.RackNo = "004711";
-            pms.IsCompany = false;
+            pms.IsCompany = "false";
 
             // var res = SdkFactory.HeLian.Query(0, pms);
 
@@ -170,7 +170,7 @@ namespace WebAppApi.Controllers
             int posMachineId = 148;
 
             //model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
-            model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
+            //model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
      
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             // model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
@@ -1505,7 +1505,7 @@ namespace WebAppApi.Controllers
             pms.CarType = "02";
             pms.EnginNo = "713477";
             pms.RackNo = "004711";
-            pms.IsCompany = false;
+            pms.IsCompany = "false";
 
             //SubmitApplyLossAssessModel model1 = new SubmitApplyLossAssessModel();
             //model1.UserId = userId;

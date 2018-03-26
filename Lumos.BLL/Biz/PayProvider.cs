@@ -487,9 +487,8 @@ namespace Lumos.BLL
 
                 var lllegalQueryScore = CurrentDb.LllegalQueryScore.Where(m => m.UserId == orderToLllegalQueryRecharge.UserId && m.MerchantId == orderToLllegalQueryRecharge.MerchantId).FirstOrDefault();
                 lllegalQueryScore.Score += orderToLllegalQueryRecharge.Score;
-                lllegalQueryScore.Creator = operater;
-                lllegalQueryScore.CreateTime = this.DateTime;
-                CurrentDb.LllegalQueryScore.Add(lllegalQueryScore);
+                lllegalQueryScore.Mender = operater;
+                lllegalQueryScore.LastUpdateTime = this.DateTime;
                 CurrentDb.SaveChanges();
 
 

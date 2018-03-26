@@ -13,8 +13,8 @@ namespace HeLianSdk
         public string lllegalCode { get; set; }
         public string cityCode { get; set; }
         public string lllegalTime { get; set; }
-        public string point { get; set; }
-        public string fine { get; set; }
+        public int point { get; set; }
+        public decimal fine { get; set; }
         public string lllegalAddress { get; set; }
 
     }

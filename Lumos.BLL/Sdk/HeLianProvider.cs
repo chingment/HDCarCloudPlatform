@@ -29,13 +29,11 @@ namespace Lumos.BLL
         public string CarType { get; set; }
         public string RackNo { get; set; }
         public string EnginNo { get; set; }
-        public bool IsCompany { get; set; }
+        public string IsCompany { get; set; }
     }
 
     public class LllegalRecord
     {
-        public string carNo { get; set; }
-
         public string bookNo { get; set; }
         public string bookType { get; set; }
 
@@ -44,12 +42,12 @@ namespace Lumos.BLL
         public string lllegalCode { get; set; }
         public string cityCode { get; set; }
         public string lllegalTime { get; set; }
-        public string point { get; set; }
+        public decimal point { get; set; }
         public string offerType { get; set; }
         public string ofserTypeName { get; set; }
-        public string fine { get; set; }
-        public string serviceFee { get; set; }
-        public string late_fees { get; set; }
+        public decimal fine { get; set; }
+        public decimal serviceFee { get; set; }
+        public decimal late_fees { get; set; }
         public string content { get; set; }
         public string lllegalDesc { get; set; }
         public string lllegalCity { get; set; }
@@ -58,29 +56,45 @@ namespace Lumos.BLL
         public bool needDealt { get; set; }
     }
 
+
+    public class LllegalQueryResult
+    {
+        public int QueryScore { get; set; }
+
+        public string CarNo { get; set; }
+
+        public string SumCount { get; set; }
+
+        public string SumPoint { get; set; }
+
+        public string SumFine { get; set; }
+
+        public List<LllegalRecord> Record { get; set; }
+    }
+
     public class HeLianProvider : BaseProvider
     {
-        public CustomJsonResult<List<LllegalRecord>> Query(int operater, LllegalQueryParams pms)
+        public CustomJsonResult<LllegalQueryResult> Query(int operater, LllegalQueryParams pms)
         {
-            CustomJsonResult<List<LllegalRecord>> result = new CustomJsonResult<List<LllegalRecord>>();
+            CustomJsonResult<LllegalQueryResult> result = new CustomJsonResult<LllegalQueryResult>();
 
             using (TransactionScope ts = new TransactionScope())
             {
                 if (pms.EnginNo.Length < 6)
                 {
-                    return new CustomJsonResult<List<LllegalRecord>>(ResultType.Failure, ResultCode.Failure, "请输入发动机号后6位", null);
+                    return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, "请输入发动机号后6位", null);
                 }
 
                 if (pms.RackNo.Length < 6)
                 {
-                    return new CustomJsonResult<List<LllegalRecord>>(ResultType.Failure, ResultCode.Failure, "请输入车架号后6位", null);
+                    return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, "请输入车架号后6位", null);
                 }
 
                 var lllegalQueryScore = CurrentDb.LllegalQueryScore.Where(m => m.UserId == pms.UserId && m.MerchantId == pms.MerchantId).FirstOrDefault();
 
                 if (lllegalQueryScore.Score == 0)
                 {
-                    return new CustomJsonResult<List<LllegalRecord>>(ResultType.Failure, ResultCode.Failure, "当前的查询积分为0，请充值积分", null);
+                    return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.LllegalQueryNotEnoughScore, "当前的查询积分为0，请充值积分", null);
                 }
 
 
@@ -91,59 +105,56 @@ namespace Lumos.BLL
                 p.carNo = pms.CarNo;
                 p.enginNo = pms.EnginNo;
                 p.rackNo = pms.RackNo;
-                p.isCompany = pms.IsCompany == true ? "true" : "false";
+                p.isCompany = pms.IsCompany;
                 p.carType = pms.CarType;
                 var api_result = HeLianApi.CarQueryDataList(p);
 
 
                 if (api_result.resultCode != "0")
                 {
-                    return new CustomJsonResult<List<LllegalRecord>>(ResultType.Failure, ResultCode.Failure, api_result.resultMsg, null);
-                }
-
-                if (api_result.data == null || api_result.data.Count == 0)
-                {
-                    return new CustomJsonResult<List<LllegalRecord>>(ResultType.Failure, ResultCode.Failure, api_result.resultMsg, null);
+                    return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, api_result.resultMsg, null);
                 }
 
                 List<LllegalRecord> lllegalRecords = new List<LllegalRecord>();
 
+       
                 var d = api_result.data;
-                foreach (var m in d)
+                if (d != null)
                 {
-                    DataLllegal dl = new DataLllegal();
-                    dl.bookNo = m.bookNo;
-                    dl.bookType = m.bookType;
-                    dl.cityCode = m.cityCode;
-                    dl.lllegalCode = m.lllegalCode;
-                    dl.lllegalTime = m.lllegalTime;
-                    dl.point = m.point;
-                    dl.fine = m.fine;
-                    dl.lllegalAddress = m.address;
-                    dataLllegal.Add(dl);
+                    foreach (var m in d)
+                    {
+                        DataLllegal dl = new DataLllegal();
+                        dl.bookNo = m.bookNo;
+                        dl.bookType = m.bookType;
+                        dl.cityCode = m.cityCode;
+                        dl.lllegalCode = m.lllegalCode;
+                        dl.lllegalTime = m.lllegalTime;
+                        dl.point = m.point;
+                        dl.fine = m.fine;
+                        dl.lllegalAddress = m.address;
+                        dataLllegal.Add(dl);
 
-                    LllegalRecord lllegalRecord = new LllegalRecord();
-                    lllegalRecord.carNo = pms.CarNo;
-                    lllegalRecord.bookNo = m.bookNo;
-                    lllegalRecord.bookType = m.bookType;
-                    lllegalRecord.bookTypeName = GetBookTypeName(m.bookType);
-                    lllegalRecord.offerType = m.offerType;
-                    lllegalRecord.ofserTypeName = GetOfferTypeName(m.offerType);
-                    lllegalRecord.lllegalDesc = m.lllegalDesc;
-                    lllegalRecord.cityCode = m.cityCode;
-                    lllegalRecord.lllegalCode = m.lllegalCode;
-                    lllegalRecord.lllegalCity = m.lllegalCity;
-                    lllegalRecord.lllegalTime = m.lllegalTime;
-                    lllegalRecord.point = m.point;
-                    lllegalRecord.fine = m.fine;
-                    lllegalRecord.address = m.address;
-                    lllegalRecord.content = m.content;
-                    lllegalRecord.serviceFee = m.serviceFee;
-                    lllegalRecord.fine = m.fine;
-                    lllegalRecord.late_fees = m.late_fees;
+                        LllegalRecord lllegalRecord = new LllegalRecord();
+                        lllegalRecord.bookNo = m.bookNo;
+                        lllegalRecord.bookType = m.bookType;
+                        lllegalRecord.bookTypeName = GetBookTypeName(m.bookType);
+                        lllegalRecord.offerType = m.offerType;
+                        lllegalRecord.ofserTypeName = GetOfferTypeName(m.offerType);
+                        lllegalRecord.lllegalDesc = m.lllegalDesc;
+                        lllegalRecord.cityCode = m.cityCode;
+                        lllegalRecord.lllegalCode = m.lllegalCode;
+                        lllegalRecord.lllegalCity = m.lllegalCity;
+                        lllegalRecord.lllegalTime = m.lllegalTime;
+                        lllegalRecord.point = m.point;
+                        lllegalRecord.fine = m.fine;
+                        lllegalRecord.address = m.address;
+                        lllegalRecord.content = m.content;
+                        lllegalRecord.serviceFee = m.serviceFee;
+                        lllegalRecord.late_fees = m.late_fees;
 
-                    lllegalRecords.Add(lllegalRecord);
+                        lllegalRecords.Add(lllegalRecord);
 
+                    }
                 }
 
                 CarQueryGetLllegalPrice_Params p1 = new CarQueryGetLllegalPrice_Params();
@@ -151,7 +162,7 @@ namespace Lumos.BLL
                 p1.carNo = pms.CarNo;
                 p1.enginNo = pms.EnginNo;
                 p1.rackNo = pms.RackNo;
-                p1.isCompany = pms.IsCompany == true ? "true" : "false";
+                p1.isCompany = pms.IsCompany;
                 p1.carType = pms.CarType;
                 p1.dataLllegal = dataLllegal;
 
@@ -159,24 +170,32 @@ namespace Lumos.BLL
 
                 if (api_result1.resultCode != "0")
                 {
-                    return new CustomJsonResult<List<LllegalRecord>>(ResultType.Failure, ResultCode.Failure, api_result1.resultMsg, null);
+                    return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, api_result1.resultMsg, null);
                 }
 
-                if (api_result1.data == null || api_result1.data.Count == 0)
-                {
-                    return new CustomJsonResult<List<LllegalRecord>>(ResultType.Failure, ResultCode.Failure, api_result1.resultMsg, null);
-                }
+                var queryResult = new LllegalQueryResult();
+      
+                queryResult.CarNo = pms.CarNo;
 
                 var d1 = api_result1.data;
-                foreach (var record in lllegalRecords)
+
+                if (d1 != null)
                 {
-                    var priceresult = d1.Where(m => m.bookNo == record.bookNo).FirstOrDefault();
-                    if (priceresult != null)
+                    foreach (var record in lllegalRecords)
                     {
-                        record.serviceFee = priceresult.serviceFee;
-                        record.fine = priceresult.fine;
-                        record.late_fees = priceresult.fine;
+                        var priceresult = d1.Where(m => m.bookNo == record.bookNo).FirstOrDefault();
+                        if (priceresult != null)
+                        {
+                            record.serviceFee = priceresult.serviceFee;
+                            record.fine = priceresult.fine;
+                            record.late_fees = priceresult.fine;
+                        }
                     }
+
+
+                    queryResult.SumCount = lllegalRecords.Count().ToString();
+                    queryResult.SumFine = lllegalRecords.Sum(m => m.fine).ToString();
+                    queryResult.SumPoint = lllegalRecords.Sum(m => m.point).ToString();
                 }
 
 
@@ -187,7 +206,7 @@ namespace Lumos.BLL
                 lllegalQueryLog.CarNo = pms.CarNo;
                 lllegalQueryLog.EnginNo = pms.EnginNo;
                 lllegalQueryLog.RackNo = pms.RackNo;
-                lllegalQueryLog.IsCompany = (pms.IsCompany == true ? "true" : "false");
+                lllegalQueryLog.IsCompany = pms.IsCompany;
                 lllegalQueryLog.CarType = pms.CarType;
                 lllegalQueryLog.Result = Newtonsoft.Json.JsonConvert.SerializeObject(lllegalRecords);
                 lllegalQueryLog.Creator = operater;
@@ -214,7 +233,12 @@ namespace Lumos.BLL
 
                 ts.Complete();
 
-                result = new CustomJsonResult<List<LllegalRecord>>(ResultType.Success, ResultCode.Success, api_result1.resultMsg, lllegalRecords);
+                queryResult.QueryScore = lllegalQueryScore.Score;
+
+                queryResult.Record = lllegalRecords;
+
+
+                result = new CustomJsonResult<LllegalQueryResult>(ResultType.Success, ResultCode.Success, api_result1.resultMsg, queryResult);
             }
 
             return result;

@@ -371,6 +371,13 @@ namespace WebAppApi.Controllers
             model.ExtendedApp = extendedAppModel;
             #endregion 
 
+
+            var lllegalQueryScore = CurrentDb.LllegalQueryScore.Where(m => m.UserId == userId).FirstOrDefault();
+            if (lllegalQueryScore != null)
+            {
+                model.LllegalQueryScore = lllegalQueryScore.Score;
+            }
+
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
             return new APIResponse(result);
         }

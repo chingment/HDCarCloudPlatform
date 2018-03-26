@@ -709,5 +709,21 @@ namespace Lumos.Entity
         }
 
 
+        public enum OrderToLllegalDealtDetailsStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("已提交")]
+            Submitted = 1,
+            [Remark("跟进中")]
+            Follow = 2,
+            [Remark("待支付")]
+            WaitPay = 3,
+            [Remark("已完成")]
+            Completed = 4,
+            [Remark("已取消")]
+            Cancled = 5
+        }
+
     }
 }

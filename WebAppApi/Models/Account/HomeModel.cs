@@ -26,5 +26,7 @@ namespace WebAppApi.Models.Account
         public OrderConfirmInfo OrderInfo { get; set; }
 
         public List<ExtendedAppModel> ExtendedApp { get; set; }
+
+        public int LllegalQueryScore{ get;set;}
     }
 }

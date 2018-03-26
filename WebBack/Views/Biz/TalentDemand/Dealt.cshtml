@@ -1,4 +1,4 @@
-﻿@model WebBack.Models.Biz.TalentDemand.VerifyOrderViewModel
+﻿@model WebBack.Models.Biz.TalentDemand.HandleViewModel
 @{
     ViewBag.Title = "Dealt";
     Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
@@ -25,7 +25,7 @@
 
             var win = art.dialog.open.origin;
             var dealtStatus = $.lumos.getUrlParamValue("dealtStatus");
-            if (dealtStatus == "@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerifyOrder)") {
+            if (dealtStatus == "@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitHandle)") {
                 win.listTable.loadData();
             }
 

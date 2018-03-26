@@ -207,6 +207,7 @@ namespace Lumos.BLL
 
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应的订单号");
                     }
+
                     receiveNotifyLog.MerchantId = order.MerchantId;
                     receiveNotifyLog.PosMachineId = order.PosMachineId;
                     receiveNotifyLog.UserId = order.UserId;
@@ -513,7 +514,7 @@ namespace Lumos.BLL
                 ts.Complete();
 
 
-                var score = new { score= lllegalQueryScore.Score };
+                var score = new { score = lllegalQueryScore.Score };
 
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功", score);
@@ -575,7 +576,7 @@ namespace Lumos.BLL
 
 
                 //状态改为待核实
-                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.LllegalDealt, orderToLllegalDealt.Id, Enumeration.LllegalDealtStatus.WaitVerifyOrder, "");
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.LllegalDealt, orderToLllegalDealt.Id, Enumeration.LllegalDealtStatus.WaitDealt, "");
                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.LllegalDealtStep.Submit, bizProcessesAudit.Id, operater, orderToLllegalDealt.ClientRequire, "商户提交人才需求", this.DateTime);
 
 

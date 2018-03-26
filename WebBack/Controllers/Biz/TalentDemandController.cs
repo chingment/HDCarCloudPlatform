@@ -24,15 +24,15 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.人才需求核实)]
-        public ViewResult VerifyOrderList()
+        public ViewResult DealtList()
         {
             return View();
         }
 
         [OwnAuthorize(PermissionCode.人才需求核实)]
-        public ViewResult VerifyOrder(int id)
+        public ViewResult Dealt(int id)
         {
-            VerifyOrderViewModel model = new VerifyOrderViewModel(id);
+            DealtViewModel model = new DealtViewModel(id);
 
             return View(model);
         }
@@ -87,10 +87,10 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.人才需求核实)]
-        public CustomJsonResult GetVerifyOrderList(TalentDemandSearchCondition condition)
+        public CustomJsonResult GetHandleList(TalentDemandSearchCondition condition)
         {
-            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandDealtStatus.WaitVerifyOrder select h.Id).Count();
-            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandDealtStatus.InVerifyOrder && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandDealtStatus.WaitDealt select h.Id).Count();
+            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandDealtStatus.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToTalentDemand on
@@ -101,13 +101,13 @@ namespace WebBack.Controllers.Biz
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name,m.ContactName,m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
-            if (condition.DealtStatus == Enumeration.TalentDemandDealtStatus.WaitVerifyOrder)
+            if (condition.DealtStatus == Enumeration.TalentDemandDealtStatus.WaitDealt)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandDealtStatus.WaitVerifyOrder);
+                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandDealtStatus.WaitDealt);
             }
-            else if (condition.DealtStatus == Enumeration.TalentDemandDealtStatus.InVerifyOrder)
+            else if (condition.DealtStatus == Enumeration.TalentDemandDealtStatus.InDealt)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandDealtStatus.InVerifyOrder && m.Auditor == this.CurrentUserId);
+                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandDealtStatus.InDealt && m.Auditor == this.CurrentUserId);
             }
 
 
@@ -146,11 +146,11 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.人才需求核实)]
         [HttpPost]
-        public CustomJsonResult VerifyOrder(VerifyOrderViewModel model)
+        public CustomJsonResult Handle(DealtViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.Order.VerifyTalentDemand(this.CurrentUserId, model.Operate, model.OrderToTalentDemand , model.BizProcessesAudit);
+            reuslt = BizFactory.Order.HandleTalentDemand(this.CurrentUserId, model.Operate, model.OrderToTalentDemand , model.BizProcessesAudit);
 
             return reuslt;
         }

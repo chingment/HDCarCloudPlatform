@@ -10,7 +10,7 @@
 
         $(document).ready(function () {
             listTable = $("#list_table").loadDataTable({
-                url: "/Biz/TalentDemand/GetVerifyOrderList",
+                url: "/Biz/TalentDemand/GetDealtList",
                 pageIndex: 0,
                 searchParams: $("#form1").serializeArray(),
                 searchButtonId: "btn_Search",
@@ -44,7 +44,7 @@
                     "dealt": function (obj) {
 
                         function dealt(obj) {
-                            var url = '/Biz/TalentDemand/VerifyOrder?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
+                            var url = '/Biz/TalentDemand/Dealt?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
                             var title = '处理订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",
@@ -56,7 +56,7 @@
                                 cancelVal: '关闭',
                                 cancel: true,
                                 button: [{
-                                    name: '核实正确',
+                                    name: '完成',
                                     callback: function () {
 
                                         this.iframe.contentWindow.submit(operateType.submit, function (d) {
@@ -87,7 +87,7 @@
                             });
                         }
 
-                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerifyOrder)) {
+                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt)) {
                             art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
 
                                 dealt(obj)
@@ -118,13 +118,13 @@
 
 <form id="form1" name="form1">
     @Html.AntiForgeryToken()
-    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerifyOrder)" />
+    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt)" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerifyOrder))" class="status-bar-btn selected">待核实<span class="waitVerifyOrderCount">(<span id="waitVerifyOrderCount">0</span>)</span></span>
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt))" class="status-bar-btn selected">待处理<span class="waitVerifyOrderCount">(<span id="waitVerifyOrderCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.InVerifyOrder))" class="status-bar-btn">核实中<span class="inVerifyOrderCount"> (<span id="inVerifyOrderCount">0</span>)</span></span>
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.InDealt))" class="status-bar-btn">处理中<span class="inVerifyOrderCount"> (<span id="inVerifyOrderCount">0</span>)</span></span>
         </div>
         <div class="clear"></div>
     </div>

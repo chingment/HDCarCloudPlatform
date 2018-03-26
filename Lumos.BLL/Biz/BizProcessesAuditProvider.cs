@@ -686,33 +686,33 @@ namespace Lumos.BLL
                             bizProcessesAudit.EndTime = endTime.Value;
                         }
 
-                        if (changestatus == Enumeration.TalentDemandDealtStatus.WaitVerifyOrder)
+                        if (changestatus == Enumeration.TalentDemandDealtStatus.WaitDealt)
                         {
 
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.VerifyOrder).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.Dealt).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                             if (bizProcessesAuditDetails == null)
                             {
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.WaitVerifyOrder;
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.WaitDealt;
                                 bizProcessesAudit.Auditor = null;
 
                             }
                             else
                             {
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InVerifyOrder;
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InDealt;
                                 bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.TalentDemandDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.TalentDemandDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
                             }
 
                         }
-                        else if (changestatus == Enumeration.TalentDemandDealtStatus.InVerifyOrder)
+                        else if (changestatus == Enumeration.TalentDemandDealtStatus.InDealt)
                         {
-                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InVerifyOrder;
+                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InDealt;
                             if (bizProcessesAudit.Auditor == null)
                             {
                                 bizProcessesAudit.Auditor = operater;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.TalentDemandDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.TalentDemandDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
 
                             }
 
@@ -755,9 +755,9 @@ namespace Lumos.BLL
 
 
                 Enumeration.TalentDemandDealtStep merchantAuditStep = Enumeration.TalentDemandDealtStep.Unknow;
-                if (changestatus == Enumeration.TalentDemandDealtStatus.WaitVerifyOrder || changestatus == Enumeration.TalentDemandDealtStatus.InVerifyOrder)
+                if (changestatus == Enumeration.TalentDemandDealtStatus.WaitDealt || changestatus == Enumeration.TalentDemandDealtStatus.InDealt)
                 {
-                    merchantAuditStep = Enumeration.TalentDemandDealtStep.VerifyOrder;
+                    merchantAuditStep = Enumeration.TalentDemandDealtStep.Dealt;
                 }
                 var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                 if (currentDetails != null)
@@ -822,7 +822,7 @@ namespace Lumos.BLL
                         }
                         else if (changestatus == Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder)
                         {
-                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InVerifyOrder;
+                            bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder;
                             if (bizProcessesAudit.Auditor == null)
                             {
                                 bizProcessesAudit.Auditor = operater;
@@ -917,33 +917,33 @@ namespace Lumos.BLL
                             bizProcessesAudit.EndTime = endTime.Value;
                         }
 
-                        if (changestatus == Enumeration.LllegalDealtStatus.WaitVerifyOrder)
+                        if (changestatus == Enumeration.LllegalDealtStatus.WaitDealt)
                         {
 
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.LllegalDealtStep.VerifyOrder).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.LllegalDealtStep.Dealt).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                             if (bizProcessesAuditDetails == null)
                             {
-                                bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.WaitVerifyOrder;
+                                bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.WaitDealt;
                                 bizProcessesAudit.Auditor = null;
 
                             }
                             else
                             {
-                                bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.InVerifyOrder;
+                                bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.InDealt;
                                 bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.LllegalDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.LllegalDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
                             }
 
                         }
-                        else if (changestatus == Enumeration.LllegalDealtStatus.InVerifyOrder)
+                        else if (changestatus == Enumeration.LllegalDealtStatus.InDealt)
                         {
-                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.InVerifyOrder;
+                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.InDealt;
                             if (bizProcessesAudit.Auditor == null)
                             {
                                 bizProcessesAudit.Auditor = operater;
 
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.LllegalDealtStep.VerifyOrder, bizProcessesAudit.Id, operater, null, description);
+                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.LllegalDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
 
                             }
 
@@ -986,9 +986,9 @@ namespace Lumos.BLL
 
 
                 Enumeration.LllegalDealtStep merchantAuditStep = Enumeration.LllegalDealtStep.Unknow;
-                if (changestatus == Enumeration.LllegalDealtStatus.WaitVerifyOrder || changestatus == Enumeration.LllegalDealtStatus.InVerifyOrder)
+                if (changestatus == Enumeration.LllegalDealtStatus.WaitDealt || changestatus == Enumeration.LllegalDealtStatus.InDealt)
                 {
-                    merchantAuditStep = Enumeration.LllegalDealtStep.VerifyOrder;
+                    merchantAuditStep = Enumeration.LllegalDealtStep.Dealt;
                 }
                 var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                 if (currentDetails != null)

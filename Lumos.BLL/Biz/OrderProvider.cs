@@ -857,7 +857,7 @@ namespace Lumos.BLL
 
 
                 //状态改为待核实
-                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.TalentDemand, orderToTalentDemand.Id, Enumeration.TalentDemandDealtStatus.WaitVerifyOrder, "");
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.TalentDemand, orderToTalentDemand.Id, Enumeration.TalentDemandDealtStatus.WaitDealt, "");
                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.Submit, bizProcessesAudit.Id, operater, orderToTalentDemand.ClientRequire, "商户提交人才需求", this.DateTime);
 
 
@@ -871,14 +871,14 @@ namespace Lumos.BLL
             return result;
         }
 
-        public CustomJsonResult VerifyTalentDemand(int operater, Enumeration.OperateType operate, OrderToTalentDemand orderToTalentDemand, BizProcessesAudit bizProcessesAudit)
+        public CustomJsonResult HandleTalentDemand(int operater, Enumeration.OperateType operate, OrderToTalentDemand orderToTalentDemand, BizProcessesAudit bizProcessesAudit)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.CurrentDetails.BizProcessesAuditId && (m.Status == (int)Enumeration.TalentDemandDealtStatus.WaitVerifyOrder || m.Status == (int)Enumeration.TalentDemandDealtStatus.InVerifyOrder)).FirstOrDefault();
+                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.CurrentDetails.BizProcessesAuditId && (m.Status == (int)Enumeration.TalentDemandDealtStatus.WaitDealt || m.Status == (int)Enumeration.TalentDemandDealtStatus.InDealt)).FirstOrDefault();
 
                 if (bizProcessesAudit == null)
                 {
@@ -907,7 +907,7 @@ namespace Lumos.BLL
 
                         result = new CustomJsonResult(ResultType.Success, "保存成功");
 
-                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.TalentDemandDealtStep.VerifyOrder, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, null);
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.TalentDemandDealtStep.Dealt, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, null);
 
                         break;
                     case Enumeration.OperateType.Cancle:

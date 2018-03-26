@@ -251,7 +251,7 @@
     <Compile Include="Models\Biz\ServiceFee\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\TalentDemand\TalentDemandSearchCondition.cs" />
     <Compile Include="Models\Biz\TalentDemand\DetailsViewModel.cs" />
-    <Compile Include="Models\Biz\TalentDemand\VerifyOrderViewModel.cs" />
+    <Compile Include="Models\Biz\TalentDemand\DealtViewModel.cs" />
     <Compile Include="Models\Biz\Transactions\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\Transactions\TransactionsSearchCondition.cs" />
     <Compile Include="Models\Home\ChangePasswordModel.cs" />
@@ -1234,8 +1234,8 @@
     <Content Include="Views\Biz\CarInsureOffer\Add.cshtml" />
     <Content Include="Views\Biz\TalentDemand\Details.cshtml" />
     <Content Include="Views\Biz\TalentDemand\List.cshtml" />
-    <Content Include="Views\Biz\TalentDemand\VerifyOrder.cshtml" />
-    <Content Include="Views\Biz\TalentDemand\VerifyOrderList.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\Dealt.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\DealtList.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\Details.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\List.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\VerifyOrder.cshtml" />

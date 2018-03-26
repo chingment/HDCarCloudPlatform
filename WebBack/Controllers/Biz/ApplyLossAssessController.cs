@@ -104,7 +104,7 @@ namespace WebBack.Controllers.Biz
 
             if (condition.DealtStatus == Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandDealtStatus.WaitVerifyOrder);
+                query = query.Where(m => m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitVerifyOrder);
             }
             else if (condition.DealtStatus == Enumeration.ApplyLossAssessDealtStatus.InVerifyOrder)
             {

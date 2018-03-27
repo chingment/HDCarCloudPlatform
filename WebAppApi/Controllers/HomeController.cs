@@ -185,7 +185,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
             // model.Add("获取支付结果查询", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
-            model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18032710180000001279"));
+            //model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18032710180000001279"));
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));

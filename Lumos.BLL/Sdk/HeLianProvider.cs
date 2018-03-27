@@ -205,8 +205,14 @@ namespace Lumos.BLL
                         {
                             record.status = details.Status.GetCnName();
 
-                            if (details.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed)
+                            if (details.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt)
                             {
+                                record.status = "处理中";
+                                record.canDealt = false;
+                            }
+                            else if (details.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt)
+                            {
+                                record.status = "完成";
                                 record.canDealt = false;
                             }
                         }

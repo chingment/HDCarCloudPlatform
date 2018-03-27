@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebBack.Models.Sys.AgentUser
 {
-    public class AgentUserSearchCondition : SearchCondition
+    public class SearchCondition : BaseSearchCondition
     {
         public string UserName { get; set; }
         public string FullName { get; set; }

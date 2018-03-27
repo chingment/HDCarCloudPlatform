@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebBack.Models.Biz.TalentDemand
+namespace WebBack.Models.Biz.Lllegal
 {
-    public class TalentDemandSearchCondition : SearchCondition
+    public class SearchCondition : BaseSearchCondition
     {
-        public Enumeration.TalentDemandDealtStatus DealtStatus { get; set; }
+        public Enumeration.LllegalDealtStatus DealtStatus { get; set; }
 
         public Enumeration.OrderStatus Status { get; set; }
     }

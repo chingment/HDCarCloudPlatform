@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebBack.Models.Biz.CarClaim
+namespace WebBack.Models.Biz.TalentDemand
 {
-    public class CarClaimSearchCondition:SearchCondition
+    public class SearchCondition : BaseSearchCondition
     {
-        public Enumeration.CarClaimDealtStatus DealtStatus { get; set; }
+        public Enumeration.TalentDemandDealtStatus DealtStatus { get; set; }
 
         public Enumeration.OrderStatus Status { get; set; }
-
     }
 }

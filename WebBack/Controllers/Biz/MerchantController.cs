@@ -90,7 +90,7 @@ namespace WebBack.Controllers.Biz
 
 
 
-        public CustomJsonResult GetPosMachineList(Models.Biz.PosMachine.PosMachineSearchCondition condition)
+        public CustomJsonResult GetPosMachineList(Models.Biz.PosMachine.SearchCondition condition)
         {
 
 
@@ -114,7 +114,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public CustomJsonResult GetOpenAccountList(MerchantSearchCondition condition)
+        public CustomJsonResult GetOpenAccountList(SearchCondition condition)
         {
             string clientCode = condition.ClientCode.ToSearchString();
             string yYZZ_Name = condition.YYZZ_Name.ToSearchString();
@@ -174,7 +174,7 @@ namespace WebBack.Controllers.Biz
             return deviceId;
         }
 
-        public CustomJsonResult GetList(MerchantSearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
             string clientCode = condition.ClientCode.ToSearchString();
             string yYZZ_Name = condition.YYZZ_Name.ToSearchString();
@@ -219,7 +219,7 @@ namespace WebBack.Controllers.Biz
 
 
         [OwnAuthorize(PermissionCode.商户资料维护)]
-        public CustomJsonResult GetEditList(MerchantSearchCondition condition)
+        public CustomJsonResult GetEditList(SearchCondition condition)
         {
             string clientCode = condition.ClientCode.ToSearchString();
             string yYZZ_Name = condition.YYZZ_Name.ToSearchString();
@@ -268,7 +268,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.商户资料初审)]
-        public CustomJsonResult GetPrimaryAuditList(MerchantSearchCondition condition)
+        public CustomJsonResult GetPrimaryAuditList(SearchCondition condition)
         {
             var waitAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.WaitPrimaryAudit select h.Id).Count();
             var inAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.InPrimaryAudit && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -326,7 +326,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.商户资料复审)]
-        public CustomJsonResult GetSeniorAuditList(MerchantSearchCondition condition)
+        public CustomJsonResult GetSeniorAuditList(SearchCondition condition)
         {
             var waitAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.WaitSeniorAudit select h.Id).Count();
             var inAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.InSeniorAudit && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -383,7 +383,7 @@ namespace WebBack.Controllers.Biz
             return BizFactory.Merchant.SeniorAudit(this.CurrentUserId, model.Operate, model.Merchant.Id, model.BizProcessesAudit);
         }
 
-        public CustomJsonResult GetTransactionsList(Models.Biz.Transactions.TransactionsSearchCondition condition)
+        public CustomJsonResult GetTransactionsList(Models.Biz.Transactions.SearchCondition condition)
         {
 
             var q = (from u in CurrentDb.FundTrans

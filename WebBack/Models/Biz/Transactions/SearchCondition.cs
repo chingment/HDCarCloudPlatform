@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebBack.Models.Biz.Transactions
 {
-    public class TransactionsSearchCondition:SearchCondition
+    public class SearchCondition:BaseSearchCondition
     {
         public int UserId { get; set; }
     }

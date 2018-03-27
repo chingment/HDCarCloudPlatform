@@ -55,7 +55,7 @@ namespace WebBack.Controllers.Biz
         }
 
 
-        public CustomJsonResult GetList(CarInsureOfferSearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
 
             string sn = condition.Sn.ToSearchString();
@@ -107,7 +107,7 @@ namespace WebBack.Controllers.Biz
 
 
         [OwnAuthorize(PermissionCode.车险订单报价)]
-        public CustomJsonResult GetDealtList(CarInsureOfferSearchCondition condition)
+        public CustomJsonResult GetDealtList(SearchCondition condition)
         {
             var waitOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer select h.Id).Count();
             var inOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.InOffer && h.Auditor == this.CurrentUserId select h.Id).Count();

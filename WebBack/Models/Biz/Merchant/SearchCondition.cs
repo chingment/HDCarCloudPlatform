@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebBack.Models.Biz.Merchant
 {
-    public class MerchantSearchCondition:SearchCondition
+    public class SearchCondition: BaseSearchCondition
     {
         public Enumeration.MerchantAuditStatus AuditStatus { get; set; }
 

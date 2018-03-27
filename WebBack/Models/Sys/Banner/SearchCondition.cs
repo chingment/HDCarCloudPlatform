@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebBack.Models.Sys.Banner
 {
-    public class BannerSearchCondition:SearchCondition
+    public class SearchCondition:BaseSearchCondition
     {
         public string Title { get; set; }
 

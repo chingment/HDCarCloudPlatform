@@ -13,7 +13,7 @@ namespace WebAppApi.Controllers
     [BaseAuthorizeAttribute]
     public class LllegalController : OwnBaseApiController
     {
-        
+
         [HttpPost]
         public APIResponse<LllegalQueryResult> Query(LllegalQueryParams model)
         {
@@ -35,7 +35,12 @@ namespace WebAppApi.Controllers
             orderToLllegalDealt.UserId = model.UserId;
             orderToLllegalDealt.MerchantId = model.MerchantId;
             orderToLllegalDealt.PosMachineId = model.PosMachineId;
+            orderToLllegalDealt.CarNo = model.CarNo.ToUpper();
 
+            if (model.LllegalRecord == null || model.LllegalRecord.Count == 0)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "请选择要处理的违章");
+            }
 
             List<OrderToLllegalDealtDetails> orderToLllegalDealtDetails = new List<OrderToLllegalDealtDetails>();
 
@@ -61,6 +66,8 @@ namespace WebAppApi.Controllers
                     orderToLllegalDealtDetail.OfserTypeName = item.ofserTypeName;
                     orderToLllegalDealtDetail.Point = item.point;
                     orderToLllegalDealtDetail.ServiceFee = item.serviceFee;
+
+                    orderToLllegalDealtDetails.Add(orderToLllegalDealtDetail);
                 }
             }
 

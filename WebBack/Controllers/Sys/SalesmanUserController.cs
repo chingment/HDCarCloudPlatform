@@ -46,7 +46,7 @@ namespace WebBack.Controllers.Sys
         #endregion
 
         [OwnAuthorize(PermissionCode.业务人员设置)]
-        public CustomJsonResult GetList(SalesmanUserSearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
                         join p in CurrentDb.SysAgentUser on u.AgentId equals p.Id
@@ -67,7 +67,7 @@ namespace WebBack.Controllers.Sys
         }
 
 
-        public CustomJsonResult GetSelectList(SalesmanUserSearchCondition condition)
+        public CustomJsonResult GetSelectList(SearchCondition condition)
         {
             var list = (from u in CurrentDb.SysSalesmanUser
                         join p in CurrentDb.SysAgentUser on u.AgentId equals p.Id

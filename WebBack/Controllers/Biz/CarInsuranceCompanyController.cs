@@ -55,7 +55,7 @@ namespace WebBack.Controllers.Biz
         }
 
 
-        public CustomJsonResult GetList(SearchCondition condition)
+        public CustomJsonResult GetList(BaseSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from c in CurrentDb.CarInsuranceCompany
@@ -99,7 +99,7 @@ namespace WebBack.Controllers.Biz
         /// </summary>
         /// <param name="condition"></param>
         /// <returns></returns>
-        public CustomJsonResult GetInsuranceCompanyList(SearchCondition condition)
+        public CustomJsonResult GetInsuranceCompanyList(BaseSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from i in CurrentDb.InsuranceCompany

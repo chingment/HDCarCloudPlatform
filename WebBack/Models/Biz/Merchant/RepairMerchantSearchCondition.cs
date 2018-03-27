@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebBack.Models.Biz.Merchant
 {
-    public class RepairMerchantSearchCondition:SearchCondition
+    public class RepairMerchantSearchCondition: BaseSearchCondition
     {
         public int InsuranceCompanyId { get; set; }
 

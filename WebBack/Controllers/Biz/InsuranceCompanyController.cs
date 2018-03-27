@@ -60,7 +60,7 @@ namespace WebBack.Controllers.Biz
         }
 
 
-        public CustomJsonResult GetList(SearchCondition condition)
+        public CustomJsonResult GetList(BaseSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
             var query = (from i in CurrentDb.InsuranceCompany

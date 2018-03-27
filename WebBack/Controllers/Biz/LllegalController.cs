@@ -1,16 +1,15 @@
-﻿using Lumos.BLL;
-using Lumos.Entity;
+﻿using Lumos.Entity;
 using Lumos.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using WebBack.Models.Biz.TalentDemand;
+using WebBack.Models.Biz.Lllegal;
 
 namespace WebBack.Controllers.Biz
 {
-    public class TalentDemandController : OwnBaseController
+    public class LllegalController : OwnBaseController
     {
         public ViewResult List()
         {
@@ -23,13 +22,13 @@ namespace WebBack.Controllers.Biz
             return View(model);
         }
 
-        [OwnAuthorize(PermissionCode.人才需求核实)]
-        public ViewResult DealtList()
+        [OwnAuthorize(PermissionCode.违章处理)]
+        public ViewResult ListByDealt()
         {
             return View();
         }
 
-        [OwnAuthorize(PermissionCode.人才需求核实)]
+        [OwnAuthorize(PermissionCode.违章处理)]
         public ViewResult Dealt(int id)
         {
             DealtViewModel model = new DealtViewModel(id);
@@ -46,14 +45,14 @@ namespace WebBack.Controllers.Biz
             string clientName = condition.ClientName.ToSearchString();
 
 
-            var query = (from o in CurrentDb.OrderToTalentDemand
+            var query = (from o in CurrentDb.OrderToLllegalDealt
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
                          where o.PId == null &&
                          (o.Status == condition.Status || condition.Status == Enumeration.OrderStatus.Unknow) &&
                         (sn.Length == 0 || o.Sn.Contains(sn)) &&
                             (clientCode.Length == 0 || m.ClientCode.Contains(clientCode)) &&
                                 (clientCode.Length == 0 || m.YYZZ_Name.Contains(clientCode))
-                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, o.Status, o.CreateTime });
+                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.CarNo, o.SumCount, o.SumPoint, o.SumFine, o.SubmitTime, o.Status, o.CreateTime });
 
             int total = query.Count();
 
@@ -71,10 +70,12 @@ namespace WebBack.Controllers.Biz
                     item.ClientCode,
                     item.Sn,
                     item.YYZZ_Name,
-                    item.Quantity,
                     item.ContactName,
                     item.ContactPhoneNumber,
-                    WorkJob =item.WorkJob.GetCnName(),
+                    item.CarNo,
+                    item.SumFine,
+                    item.SumCount,
+                    item.SumPoint,
                     item.ProductName,
                     item.SubmitTime,
                     Status = item.Status.GetCnName()
@@ -86,28 +87,28 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        [OwnAuthorize(PermissionCode.人才需求核实)]
+        [OwnAuthorize(PermissionCode.违章处理)]
         public CustomJsonResult GetDealtList(SearchCondition condition)
         {
-            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandDealtStatus.WaitDealt select h.Id).Count();
-            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandDealtStatus.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.LllegalDealt) && h.Status == (int)Enumeration.LllegalDealtStatus.WaitDealt select h.Id).Count();
+            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.LllegalDealt) && h.Status == (int)Enumeration.LllegalDealtStatus.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
-                         join o in CurrentDb.OrderToTalentDemand on
+                         join o in CurrentDb.OrderToLllegalDealt on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.TalentDemand
+                         where b.AduitType == Enumeration.BizProcessesAuditType.LllegalDealt
 
 
-                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name,m.ContactName,m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
+                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.CarNo, o.SumCount, o.SumPoint, o.SumFine, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
-            if (condition.DealtStatus == Enumeration.TalentDemandDealtStatus.WaitDealt)
+            if (condition.DealtStatus == Enumeration.LllegalDealtStatus.WaitDealt)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandDealtStatus.WaitDealt);
+                query = query.Where(m => m.Status == (int)Enumeration.LllegalDealtStatus.WaitDealt);
             }
-            else if (condition.DealtStatus == Enumeration.TalentDemandDealtStatus.InDealt)
+            else if (condition.DealtStatus == Enumeration.LllegalDealtStatus.InDealt)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandDealtStatus.InDealt && m.Auditor == this.CurrentUserId);
+                query = query.Where(m => m.Status == (int)Enumeration.LllegalDealtStatus.InDealt && m.Auditor == this.CurrentUserId);
             }
 
 
@@ -130,8 +131,10 @@ namespace WebBack.Controllers.Biz
                     item.YYZZ_Name,
                     item.ContactName,
                     item.ContactPhoneNumber,
-                    WorkJob =item.WorkJob.GetCnName(),
-                    item.Quantity,
+                    item.CarNo,
+                    item.SumFine,
+                    item.SumCount,
+                    item.SumPoint,
                     item.ProductName,
                     item.SubmitTime,
                     DealtStatus = item.Status
@@ -144,13 +147,13 @@ namespace WebBack.Controllers.Biz
         }
 
 
-        [OwnAuthorize(PermissionCode.人才需求核实)]
+        [OwnAuthorize(PermissionCode.违章处理)]
         [HttpPost]
         public CustomJsonResult Dealt(DealtViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.Order.DealtTalentDemand(this.CurrentUserId, model.Operate, model.OrderToTalentDemand , model.BizProcessesAudit);
+            //reuslt = BizFactory.Order.DealtTalentDemand(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
 
             return reuslt;
         }

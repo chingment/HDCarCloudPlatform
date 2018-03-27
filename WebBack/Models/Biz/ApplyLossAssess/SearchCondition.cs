@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebBack.Models.Biz.ApplyLossAssess
 {
-    public class ApplyLossAssessSearchCondition : SearchCondition
+    public class SearchCondition : BaseSearchCondition
     {
         public Enumeration.ApplyLossAssessDealtStatus DealtStatus { get; set; }
 

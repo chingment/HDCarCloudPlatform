@@ -221,6 +221,9 @@ namespace Lumos.BLL
                         case Enumeration.ProductType.LllegalQueryRecharge:
                             result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
                             break;
+                        case Enumeration.ProductType.LllegalDealt:
+                            result = PayLllegalDealtCompleted (operater, order.Sn);
+                            break;
                     }
 
 
@@ -555,6 +558,15 @@ namespace Lumos.BLL
                 orderToLllegalDealt.CompleteTime = this.DateTime;
                 orderToLllegalDealt.LastUpdateTime = this.DateTime;
                 orderToLllegalDealt.Mender = operater;
+
+
+                var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.OrderId == orderToLllegalDealt.Id).ToList();
+
+                foreach(var item in orderToLllegalDealtDetails)
+                {
+                    item.Status =Enumeration.OrderToLllegalDealtDetailsStatus.Dealt;
+                    CurrentDb.SaveChanges();
+                }
 
                 var haoYiLianFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.HaoYiLian).FirstOrDefault();
                 haoYiLianFund.Balance += orderToLllegalDealt.Price;

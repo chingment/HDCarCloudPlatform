@@ -37,7 +37,7 @@ namespace WebBack.Controllers.Biz
             return View(model);
         }
 
-        public CustomJsonResult GetList(ApplyLossAssessSearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
 
 
@@ -88,7 +88,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.定损点申请)]
-        public CustomJsonResult GetDealtList(ApplyLossAssessSearchCondition condition)
+        public CustomJsonResult GetDealtList(SearchCondition condition)
         {
             var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitDealt select h.Id).Count();
             var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();

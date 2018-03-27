@@ -55,7 +55,7 @@ namespace WebBack.Controllers.Biz
 
 
 
-        public CustomJsonResult GetList(CarClaimSearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
 
 
@@ -105,7 +105,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.理赔需求核实)]
-        public CustomJsonResult GetVerifyOrderList(CarClaimSearchCondition condition)
+        public CustomJsonResult GetVerifyOrderList(SearchCondition condition)
         {
             var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder select h.Id).Count();
             var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyOrder && h.Auditor == this.CurrentUserId select h.Id).Count();
@@ -198,7 +198,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.理赔金额核实)]
-        public CustomJsonResult GetVerifyAmountList(CarClaimSearchCondition condition)
+        public CustomJsonResult GetVerifyAmountList(SearchCondition condition)
         {
             var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyAmount select h.Id).Count();
             var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyAmount && h.Auditor == this.CurrentUserId select h.Id).Count();

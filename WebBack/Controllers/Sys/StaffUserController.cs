@@ -41,7 +41,7 @@ namespace WebBack.Controllers.Sys
         }
         #endregion
 
-        public CustomJsonResult GetList(StaffUserSearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
             var list = (from u in CurrentDb.SysStaffUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&
@@ -61,7 +61,7 @@ namespace WebBack.Controllers.Sys
         }
 
 
-        public CustomJsonResult GetSelectList(StaffUserSearchCondition condition)
+        public CustomJsonResult GetSelectList(SearchCondition condition)
         {
             var list = (from u in CurrentDb.SysStaffUser
                         where (condition.UserName == null || u.UserName.Contains(condition.UserName)) &&

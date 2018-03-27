@@ -46,7 +46,7 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
-        public CustomJsonResult GetList(OrderSearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
 
 
@@ -110,7 +110,7 @@ namespace WebBack.Controllers.Biz
 
 
         [OwnAuthorize(PermissionCode.订单支付确认)]
-        public CustomJsonResult GetConfirmPayList(Models.Biz.Order.OrderSearchCondition condition)
+        public CustomJsonResult GetConfirmPayList(Models.Biz.Order.SearchCondition condition)
         {
 
 

@@ -14,6 +14,8 @@ namespace WebAppApi.Models.Order
 
         public int PosMachineId { get; set; }
 
+        public string CarNo { get; set; }
+
         public List<LllegalRecord> LllegalRecord { get; set; }
     }
 }

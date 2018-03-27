@@ -1,0 +1,91 @@
+﻿@model WebBack.Models.Biz.Lllegal.DetailsViewModel
+@{
+    ViewBag.Title = "Dealt";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+
+}
+
+
+<form id="form1" name="form1">
+    @AntiForgery.GetHtml()
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>商户信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t" style="width:80px">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t" style="width:80px">商户名：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">地区：</td>
+            <td class="c">
+                <span>@Model.Merchant.Area</span>
+            </td>
+            <td class="t">联系地址</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactAddress</span>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>需求信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>流程跟踪</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <ul>
+        @if (Model.BizProcessesAuditDetails != null)
+        {
+            foreach (var auditDetail in Model.BizProcessesAuditDetails)
+            {
+                <li style="line-height:18px;"><span>@auditDetail.CreateTime.ToUnifiedFormatDateTime()</span><span style="margin-left:10px;">@auditDetail.Description</span></li>
+            }
+        }
+    </ul>
+</form>

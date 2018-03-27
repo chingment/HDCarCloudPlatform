@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebBack.Models.Sys.Role
+namespace WebBack.Models.Sys.SalesmanUser
 {
-    public class RoleUserSearchCondition: BaseSearchCondition
+    public class SearchCondition : BaseSearchCondition
     {
-        public int RoleId { get; set; }
-
         public string UserName { get; set; }
         public string FullName { get; set; }
+
+        public int AgentId { get; set; }
     }
 }

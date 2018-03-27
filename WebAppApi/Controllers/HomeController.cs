@@ -171,8 +171,8 @@ namespace WebAppApi.Controllers
 
             //model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
-            model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
-            model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
+            //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
+            //model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
@@ -185,7 +185,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
             // model.Add("获取支付结果查询", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
-            //model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "D180310214100001287"));
+            model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18032709310000001268"));
 
             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
@@ -1587,7 +1587,7 @@ namespace WebAppApi.Controllers
             model1.UserId = userId;
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;
-
+            model1.CarNo = "粤AT88888";
 
             List<LllegalRecord> record = new List<LllegalRecord>();
 

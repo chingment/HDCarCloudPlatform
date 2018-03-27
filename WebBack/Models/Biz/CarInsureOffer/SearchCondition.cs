@@ -6,7 +6,7 @@ using Lumos.Entity;
 
 namespace WebBack.Models.Biz.CarInsureOffer
 {
-    public class CarInsureOfferSearchCondition:SearchCondition
+    public class SearchCondition: BaseSearchCondition
     {
         public Enumeration.CarInsureOfferDealtStatus DealtStatus { get; set; }
 

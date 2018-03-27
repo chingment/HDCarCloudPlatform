@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebBack.Models.Biz.Order
 {
-    public class OrderSearchCondition : SearchCondition
+    public class SearchCondition : BaseSearchCondition
     {
         public Enumeration.OrderStatus Status { get; set; }
 

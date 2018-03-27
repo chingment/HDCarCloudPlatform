@@ -25,9 +25,9 @@ namespace System
 
         public const string 订单查询 = "Biz2001";
 
-        public const string 佣金调整申请 = "Biz3001";
-        public const string 佣金调整初审 = "Biz3002";
-        public const string 佣金调整复审 = "Biz3003";
+        //public const string 佣金调整申请 = "Biz3001";
+        //public const string 佣金调整初审 = "Biz3002";
+        //public const string 佣金调整复审 = "Biz3003";
 
         public const string POS机登记信息 = "Biz4003";
         public const string POS机更换 = "Biz4004";
@@ -51,6 +51,7 @@ namespace System
 
         public const string 人才需求核实 = "Biz10001";
         public const string 定损点申请 = "Biz20001";
+        public const string 违章处理 = "Biz30001";
 
         public const string 保险公司设置 = "BizA001";
         public const string 车险保险公司设置 = "BizA002";

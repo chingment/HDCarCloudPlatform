@@ -101,6 +101,9 @@ namespace Lumos.BLL
                     return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.LllegalQueryNotEnoughScore, "当前的查询积分为0，请充值积分", null);
                 }
 
+                pms.CarNo = pms.CarNo.ToUpper();
+                pms.EnginNo = pms.EnginNo.ToUpper();
+                pms.RackNo = pms.RackNo.ToUpper();
 
                 List<DataLllegal> dataLllegal = new List<DataLllegal>();
 

@@ -15,6 +15,11 @@ namespace Lumos.Entity
 
         public decimal SumFine { get; set; }
 
+        public int SumCount { get; set; }
+
+        [MaxLength(128)]
+        public string CarNo { get; set; }
+
 
     }
 }

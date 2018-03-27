@@ -31,7 +31,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.业务人员申领POS机登记)]
-        public CustomJsonResult GetList(ApplyPosSearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
 
             string deviceId = condition.DeviceId.ToSearchString();
@@ -53,7 +53,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public CustomJsonResult GetPosMachineList(Models.Biz.PosMachine.PosMachineSearchCondition condition)
+        public CustomJsonResult GetPosMachineList(Models.Biz.PosMachine.SearchCondition condition)
         {
 
             string[] arrNoInDeviceId = condition.NoInDeviceIds == null ? new string[1] { "" } : condition.NoInDeviceIds.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);

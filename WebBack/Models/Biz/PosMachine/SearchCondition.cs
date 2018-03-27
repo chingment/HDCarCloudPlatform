@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebBack.Models.Biz.PosMachine
 {
-    public class PosMachineSearchCondition : SearchCondition
+    public class SearchCondition : BaseSearchCondition
     {
         public string UserName { get; set; }
 

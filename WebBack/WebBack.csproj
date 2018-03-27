@@ -160,6 +160,7 @@
     <Compile Include="Controllers\Biz\CarInsureOfferController.cs" />
     <Compile Include="Controllers\Biz\ExtendedAppController.cs" />
     <Compile Include="Controllers\Biz\InsuranceCompanyController.cs" />
+    <Compile Include="Controllers\Biz\LllegalController.cs" />
     <Compile Include="Controllers\Biz\MerchantController.cs" />
     <Compile Include="Controllers\Biz\OrderController.cs" />
     <Compile Include="Controllers\Biz\PosMachineController.cs" />
@@ -197,19 +198,22 @@
     <Compile Include="App_Start\Own\OwnStatisticsTrackerAttribute.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\Biz\ApplyLossAssess\DetailsViewModel.cs" />
-    <Compile Include="Models\Biz\ApplyLossAssess\ApplyLossAssessSearchCondition.cs" />
+    <Compile Include="Models\Biz\ApplyLossAssess\SearchCondition.cs" />
     <Compile Include="Models\Biz\ApplyLossAssess\VerifyOrderViewModel.cs" />
     <Compile Include="Models\Biz\ApplyPos\ApplyModel.cs" />
-    <Compile Include="Models\Biz\ApplyPos\ApplyPosSearchCondition.cs" />
-    <Compile Include="Models\Biz\CarClaim\CarClaimSearchCondition.cs" />
+    <Compile Include="Models\Biz\ApplyPos\SearchCondition.cs" />
+    <Compile Include="Models\Biz\CarClaim\SearchCondition.cs" />
     <Compile Include="Models\Biz\CarClaim\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\CarClaim\VerifyAmountViewModel.cs" />
     <Compile Include="Models\Biz\CarClaim\VerifyOrderViewModel.cs" />
     <Compile Include="Models\Biz\CarInsuranceCompany\AddViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\AddViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\SelectKindsViewModel.cs" />
+    <Compile Include="Models\Biz\Lllegal\DealtViewModel.cs" />
+    <Compile Include="Models\Biz\Lllegal\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\Lllegal\SearchCondition.cs" />
     <Compile Include="Models\Biz\Order\CarClaimFollowViewModel.cs" />
-    <Compile Include="Models\Biz\CarInsureOffer\CarInsureOfferSearchCondition.cs" />
+    <Compile Include="Models\Biz\CarInsureOffer\SearchCondition.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\DealtViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\ExtendedApp\ApplyOffViewModel..cs" />
@@ -222,7 +226,7 @@
     <Compile Include="Models\Biz\Merchant\AddViewModel.cs" />
     <Compile Include="Models\Biz\Merchant\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\Merchant\EditViewModel.cs" />
-    <Compile Include="Models\Biz\Merchant\MerchantSearchCondition.cs" />
+    <Compile Include="Models\Biz\Merchant\SearchCondition.cs" />
     <Compile Include="Models\Biz\Merchant\OpenAccountViewModel.cs" />
     <Compile Include="Models\Biz\Merchant\PrimaryAuditViewModel.cs" />
     <Compile Include="Models\Biz\Merchant\RepairMerchantSearchCondition.cs" />
@@ -230,17 +234,17 @@
     <Compile Include="Models\Biz\Order\CarInsureFollowViewModel.cs" />
     <Compile Include="Models\Biz\Order\CarInsurePayViewModel.cs" />
     <Compile Include="Models\Biz\Order\ListViewModel.cs" />
-    <Compile Include="Models\Biz\Order\OrderSearchCondition.cs" />
+    <Compile Include="Models\Biz\Order\SearchCondition.cs" />
     <Compile Include="Models\Biz\Order\PayTestModel.cs" />
     <Compile Include="Models\Biz\PosMachine\AddViewModel.cs" />
     <Compile Include="Models\Biz\PosMachine\ChangeModel.cs" />
     <Compile Include="Models\Biz\PosMachine\ChangeViewModel.cs" />
     <Compile Include="Models\Biz\PosMachine\EditViewModel.cs" />
     <Compile Include="Models\Biz\ExtendedApp\ExtendedAppSearchCondition.cs" />
-    <Compile Include="Models\Biz\PosMachine\PosMachineSearchCondition.cs" />
+    <Compile Include="Models\Biz\PosMachine\SearchCondition.cs" />
     <Compile Include="Models\Biz\Product\AddGoodsViewModel.cs" />
     <Compile Include="Models\Biz\Product\EditGoodsViewModel.cs" />
-    <Compile Include="Models\Biz\Product\ProductSearchCondition.cs" />
+    <Compile Include="Models\Biz\Product\SearchCondition.cs" />
     <Compile Include="Models\Biz\Report\CarInsureViewModel.cs" />
     <Compile Include="Models\Biz\Report\DepositRentViewModel.cs" />
     <Compile Include="Models\Biz\Report\MerchantViewModel.cs" />
@@ -249,20 +253,20 @@
     <Compile Include="Models\Biz\Report\SalesmanPosViewModel.cs" />
     <Compile Include="Models\Biz\Report\WithdrawViewModel.cs" />
     <Compile Include="Models\Biz\ServiceFee\DetailsViewModel.cs" />
-    <Compile Include="Models\Biz\TalentDemand\TalentDemandSearchCondition.cs" />
+    <Compile Include="Models\Biz\TalentDemand\SearchCondition.cs" />
     <Compile Include="Models\Biz\TalentDemand\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\TalentDemand\DealtViewModel.cs" />
     <Compile Include="Models\Biz\Transactions\DetailsViewModel.cs" />
-    <Compile Include="Models\Biz\Transactions\TransactionsSearchCondition.cs" />
+    <Compile Include="Models\Biz\Transactions\SearchCondition.cs" />
     <Compile Include="Models\Home\ChangePasswordModel.cs" />
     <Compile Include="Models\Home\LoginModel.cs" />
-    <Compile Include="Models\SearchCondition.cs" />
+    <Compile Include="Models\BaseSearchCondition.cs" />
     <Compile Include="Models\Sys\AgentUser\AddViewModel.cs" />
     <Compile Include="Models\Sys\AgentUser\EditViewModel.cs" />
-    <Compile Include="Models\Sys\AgentUser\AgentUserSearchCondition.cs" />
+    <Compile Include="Models\Sys\AgentUser\SearchCondition.cs" />
     <Compile Include="Models\Sys\Banner\AddBannerViewModel.cs" />
     <Compile Include="Models\Sys\Banner\BannerDetailsViewModel.cs" />
-    <Compile Include="Models\Sys\Banner\BannerSearchCondition.cs" />
+    <Compile Include="Models\Sys\Banner\SearchCondition.cs" />
     <Compile Include="Models\Sys\Banner\EditBannerViewModel.cs" />
     <Compile Include="Models\Sys\LogView\ListModel.cs" />
     <Compile Include="Models\Sys\Menu\AddViewModel.cs" />
@@ -275,12 +279,12 @@
     <Compile Include="Models\Sys\Role\RoleUserSearchCondition.cs" />
     <Compile Include="Models\Sys\SalesmanUser\AddViewModel.cs" />
     <Compile Include="Models\Sys\SalesmanUser\EditViewModel.cs" />
-    <Compile Include="Models\Sys\SalesmanUser\SalesmanUserSearchCondition.cs" />
+    <Compile Include="Models\Sys\SalesmanUser\SearchCondition.cs" />
     <Compile Include="Models\Sys\StaffUser\AddViewModel.cs" />
     <Compile Include="Models\Sys\StaffUser\EditViewModel.cs" />
-    <Compile Include="Models\Sys\StaffUser\StaffUserSearchCondition.cs" />
+    <Compile Include="Models\Sys\StaffUser\SearchCondition.cs" />
     <Compile Include="Models\Sys\User\DetailsViewModel.cs" />
-    <Compile Include="Models\Sys\User\UserSearchCondition.cs" />
+    <Compile Include="Models\Sys\User\SearchCondition.cs" />
     <Compile Include="Models\UpLoadFileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -1246,6 +1250,10 @@
     <Content Include="Views\Sys\AgentUser\List.cshtml" />
     <Content Include="Views\Sys\AgentUser\SelectList.cshtml" />
     <Content Include="Views\Biz\PosMachine\ListByNoUse.cshtml" />
+    <Content Include="Views\Biz\Lllegal\Dealt.cshtml" />
+    <Content Include="Views\Biz\Lllegal\ListByDealt.cshtml" />
+    <Content Include="Views\Biz\Lllegal\Details.cshtml" />
+    <Content Include="Views\Biz\Lllegal\List.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -1268,6 +1276,7 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\toolbar\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\wysiwygarea\" />
+    <Folder Include="Views\Lllegal\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

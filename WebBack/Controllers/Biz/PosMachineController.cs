@@ -65,7 +65,7 @@ namespace WebBack.Controllers.Biz
             return View(model);
         }
 
-        public CustomJsonResult GetList(PosMachineSearchCondition condition)
+        public CustomJsonResult GetList(SearchCondition condition)
         {
 
 
@@ -90,7 +90,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public CustomJsonResult GetMerchantPosMachineList(PosMachineSearchCondition condition)
+        public CustomJsonResult GetMerchantPosMachineList(SearchCondition condition)
         {
 
 
@@ -145,7 +145,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public CustomJsonResult GetChangeList(PosMachineSearchCondition condition)
+        public CustomJsonResult GetChangeList(SearchCondition condition)
         {
 
 
@@ -201,7 +201,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        public CustomJsonResult GetListByNoUse(PosMachineSearchCondition condition)
+        public CustomJsonResult GetListByNoUse(SearchCondition condition)
         {
 
             string fuselageNumber = condition.FuselageNumber.ToSearchString();

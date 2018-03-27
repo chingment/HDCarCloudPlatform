@@ -35,7 +35,7 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
-        public CustomJsonResult GetGoodsList(ProductSearchCondition condition)
+        public CustomJsonResult GetGoodsList(SearchCondition condition)
         {
             var query = (from p in CurrentDb.Product
                          where ((int)p.Type).ToString().StartsWith("1")

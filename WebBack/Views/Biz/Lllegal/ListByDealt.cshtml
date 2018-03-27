@@ -1,0 +1,190 @@
+﻿
+@{
+    ViewBag.Title = "DealtList";
+    Layout = "~/Views/Shared/_LayoutHomeIframeMainList.cshtml";
+}
+@section scripts{
+    <script type="text/javascript">
+
+        var listTable;
+
+        $(document).ready(function () {
+            listTable = $("#list_table").loadDataTable({
+                url: "/Biz/Lllegal/GetDealtList",
+                pageIndex: 0,
+                searchParams: $("#form1").serializeArray(),
+                searchButtonId: "btn_Search",
+                containerId: "form1",
+                rowDataCombie: function (p_index, p_row) {
+                    var l_Strlimt = "";
+                    l_Strlimt += "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" class=\\\"a-btn a-btn-edit\\\" operate=\\\"dealt\\\">处理</a>")";
+                    var l_StrRows = "";
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
+                    l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.sn + "\"   >" + p_row.sn + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\">" + p_row.clientCode + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactPhoneNumber + "\">" + p_row.contactPhoneNumber + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.workJob + "\">" + p_row.workJob + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.quantity + "\">" + p_row.quantity + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.submitTime + "\">" + p_row.submitTime + "</td>";
+                    l_StrRows += "<td class=\"operation\">";
+                    l_StrRows += l_Strlimt;
+                    l_StrRows += "</td>";
+                    l_StrRows += "</tr>";
+                    return l_StrRows;
+                },
+                refreshInterval: 0,
+                success: function (data) {
+                    $('#waitVerifyOrderCount').text(data.status.waitVerifyOrderCount);
+                    $('#inVerifyOrderCount').text(data.status.inVerifyOrderCount);
+                },
+                operate: {
+                    "dealt": function (obj) {
+
+                        function dealt(obj) {
+                            var url = '/Biz/Lllegal/Dealt?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
+                            var title = '处理订单-' + obj.sn;
+                            var dialog = art.dialog.open(url, {
+                                id: "openDialog2",
+                                title: title,
+                                width: '900px',
+                                height: '600px',
+                                lock: true,
+                                drag: false,
+                                cancelVal: '关闭',
+                                cancel: true,
+                                button: [{
+                                    name: '完成',
+                                    callback: function () {
+
+                                        this.iframe.contentWindow.submit(operateType.submit, function (d) {
+                                            if (d.result == resultType.success) {
+                                                dialog.close();
+                                                listTable.loadData();
+                                            }
+                                            $.lumos.tips(d.message);
+                                        });
+                                        return false;
+                                    },
+                                    focus: true
+                                },
+                                {
+                                    name: '撤销',
+                                    callback: function () {
+
+                                        this.iframe.contentWindow.submit(operateType.cancle, function (d) {
+                                            if (d.result == resultType.success) {
+                                                dialog.close();
+                                                listTable.loadData();
+                                            }
+                                            $.lumos.tips(d.message);
+                                        });
+                                        return false;
+                                    }
+                                }]
+                            });
+                        }
+
+                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.LllegalDealtStatus.WaitDealt)) {
+                            art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
+
+                                dealt(obj)
+
+                            });
+                        }
+                        else {
+                            dealt(obj);
+                        }
+                    }
+                }
+
+            });
+
+        });
+
+
+
+
+        function search(status) {
+            $("#DealtStatus").val(status);
+            listTable.loadData(0);
+        }
+
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.LllegalDealtStatus.WaitDealt)" />
+    <div class="search-bar status-bar">
+        <div class="filter">
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.LllegalDealtStatus.WaitDealt))" class="status-bar-btn selected">待处理<span class="waitVerifyOrderCount">(<span id="waitVerifyOrderCount">0</span>)</span></span>
+        </div>
+        <div class="filter">
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.LllegalDealtStatus.InDealt))" class="status-bar-btn">处理中<span class="inVerifyOrderCount"> (<span id="inVerifyOrderCount">0</span>)</span></span>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="list">
+        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:5%" class="no">
+                        序号
+                    </th>
+                    <th style="width:10%">
+                        订单号
+                    </th>
+                    <th style="width:10%">
+                        商户代码
+                    </th>
+                    <th style="width:15%">
+                        商户名称
+                    </th>
+                    <th style="width:10%">
+                        商户联系人
+                    </th>
+                    <th style="width:10%">
+                        联系电话
+                    </th>
+                    <th style="width:15%">
+                        需求工种
+                    </th>
+                    <th style="width:10%">
+                        人数
+                    </th>
+                    <th style="width:10%">
+                        提交时间
+                    </th>
+                    <th style="width:5%" class="operation">
+                        操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="10">
+                        <div class="pull-left">
+                            <span class="load-tip"></span>
+                        </div>
+                        <div class="pull-right pagination">
+                            <div class="pagination-info">
+
+                            </div>
+                            <div class="pagination-index">
+
+                            </div>
+                            <div class="pagination-goto">
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>

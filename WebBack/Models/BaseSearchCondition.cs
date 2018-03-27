@@ -5,9 +5,9 @@ using System.Web;
 
 namespace WebBack.Models
 {
-    public class SearchCondition
+    public class BaseSearchCondition
     {
-        public SearchCondition()
+        public BaseSearchCondition()
         {
             this.PageSize = 10;
         }

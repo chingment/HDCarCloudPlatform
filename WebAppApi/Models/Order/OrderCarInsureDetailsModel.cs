@@ -22,7 +22,7 @@ namespace WebAppApi.Models.Order
 
         public string Url { get; set; }
     }
-    public class OrderCarInsureDetailsModel
+    public class OrderCarInsureDetailsModel:OrderBaseDetailsViewModel
     {
         public OrderCarInsureDetailsModel()
         {
@@ -31,27 +31,10 @@ namespace WebAppApi.Models.Order
             this.RecipientAddressList = new List<string>();
             this.ZJ = new List<ZjModel>();
         }
-        public int Id { get; set; }
-
-        public string Sn { get; set; }
 
         public List<OrderCarInsureOfferCompanyModel> OfferCompany { get; set; }
 
         public List<OrderToCarInsureOfferKindModel> OfferKind { get; set; }
-
-        public Enumeration.OrderStatus Status { get; set; }
-
-        public int FollowStatus { get; set; }
-
-        public string StatusName { get; set; }
-
-        public string SubmitTime { get; set; }
-
-        public string CompleteTime { get; set; }
-
-        public string CancleTime { get; set; }
-
-        public string PayTime { get; set; }
 
         public string CarOwner { get; set; }
 
@@ -60,7 +43,6 @@ namespace WebAppApi.Models.Order
         public string CarOwnerIdNumber { get; set; }
 
         public List<ZjModel> ZJ { get; set; }
-
 
         public int InsuranceCompanyId { get; set; }
 
@@ -74,15 +56,11 @@ namespace WebAppApi.Models.Order
 
         public string CompulsoryPrice { get; set; }
 
-        public string Price { get; set; }
-
         public List<string> RecipientAddressList { get; set; }
 
         public string Recipient { get; set; }
         public string RecipientAddress { get; set; }
         public string RecipientPhoneNumber { get; set; }
-
-        public string Remarks { get; set; }
 
     }
 }

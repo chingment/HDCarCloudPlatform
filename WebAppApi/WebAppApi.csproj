@@ -185,6 +185,7 @@
     <Compile Include="Models\Lllegal\DealtParams.cs" />
     <Compile Include="Models\Order\OrderApplyLossAssessDetailsModel.cs" />
     <Compile Include="Models\Order\CancleModel.cs" />
+    <Compile Include="Models\Order\OrderBaseDetailsViewModel.cs" />
     <Compile Include="Models\Order\OrderCarClaimDetailsModel.cs" />
     <Compile Include="Models\Order\OrderCarInsureDetailsModel.cs" />
     <Compile Include="Models\CarService\CarInsCompanyModel.cs" />
@@ -196,6 +197,8 @@
     <Compile Include="Models\ExtendedAppModel.cs" />
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\Order\OrderCarInsureOfferCompanyModel.cs" />
+    <Compile Include="Models\Order\OrderLllegalDealtDetailsModel.cs" />
+    <Compile Include="Models\Order\OrderLllegalQueryRechargeDetailsModel.cs" />
     <Compile Include="Models\Order\OrderServiceFeeDetailsModel.cs" />
     <Compile Include="Models\Order\OrderTalentDemandDetailsModel.cs" />
     <Compile Include="Models\Order\SubmitApplyLossAssessModel.cs" />

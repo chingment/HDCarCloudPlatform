@@ -748,6 +748,88 @@ namespace WebAppApi.Controllers
                 return new APIResponse(result);
                 #endregion
             }
+            else if (productType == Enumeration.ProductType.LllegalQueryRecharge)
+            {
+                #region LllegalQueryRecharge
+                OrderLllegalQueryRechargeDetailsModel model = new OrderLllegalQueryRechargeDetailsModel();
+                var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(m => m.Id == orderId).FirstOrDefault();
+                if (orderToLllegalQueryRecharge != null)
+                {
+                    model.Id = orderToLllegalQueryRecharge.Id;
+                    model.Sn = orderToLllegalQueryRecharge.Sn;
+                    model.SubmitTime = orderToLllegalQueryRecharge.SubmitTime.ToUnifiedFormatDateTime();
+                    model.CompleteTime = orderToLllegalQueryRecharge.CompleteTime.ToUnifiedFormatDateTime();
+                    model.PayTime = orderToLllegalQueryRecharge.PayTime.ToUnifiedFormatDateTime();
+                    model.CancleTime = orderToLllegalQueryRecharge.CancleTime.ToUnifiedFormatDateTime();
+                    model.Status = orderToLllegalQueryRecharge.Status;
+                    model.StatusName = orderToLllegalQueryRecharge.Status.GetCnName();
+                    model.FollowStatus = orderToLllegalQueryRecharge.FollowStatus;
+                    model.Remarks = orderToLllegalQueryRecharge.Remarks.NullToEmpty();
+
+                    model.Score = orderToLllegalQueryRecharge.Score;
+                }
+
+                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
+                return new APIResponse(result);
+                #endregion
+            }
+            else if (productType == Enumeration.ProductType.LllegalDealt)
+            {
+                #region LllegalQueryRecharge
+                OrderLllegalDealtDetailsModel model = new OrderLllegalDealtDetailsModel();
+                var orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(m => m.Id == orderId).FirstOrDefault();
+                if (orderToLllegalDealt != null)
+                {
+                    model.Id = orderToLllegalDealt.Id;
+                    model.Sn = orderToLllegalDealt.Sn;
+                    model.SubmitTime = orderToLllegalDealt.SubmitTime.ToUnifiedFormatDateTime();
+                    model.CompleteTime = orderToLllegalDealt.CompleteTime.ToUnifiedFormatDateTime();
+                    model.PayTime = orderToLllegalDealt.PayTime.ToUnifiedFormatDateTime();
+                    model.CancleTime = orderToLllegalDealt.CancleTime.ToUnifiedFormatDateTime();
+                    model.Status = orderToLllegalDealt.Status;
+                    model.StatusName = orderToLllegalDealt.Status.GetCnName();
+                    model.FollowStatus = orderToLllegalDealt.FollowStatus;
+                    model.Remarks = orderToLllegalDealt.Remarks.NullToEmpty();
+
+                    model.CarNo = orderToLllegalDealt.CarNo;
+                    model.SumCount = orderToLllegalDealt.SumCount;
+                    model.SumFine = orderToLllegalDealt.SumFine;
+                    model.SumPoint = orderToLllegalDealt.SumPoint;
+
+
+                    var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.Id == orderId).ToList();
+
+                    foreach(var item in orderToLllegalDealtDetails)
+                    {
+                        var record = new LllegalRecord();
+
+                        record.bookNo = item.BookNo;
+                        record.bookType = item.BookType;
+                        record.bookTypeName = item.BookTypeName;
+                        record.lllegalCode = item.LllegalCode;
+                        record.cityCode = item.CityCode;
+                        record.lllegalTime = item.LllegalTime;
+                        record.point = item.Point;
+                        record.offerType = item.OfferType;
+                        record.ofserTypeName = item.OfserTypeName;
+                        record.fine = item.Fine;
+                        record.serviceFee = item.ServiceFee;
+                        record.late_fees = item.Late_fees;
+                        record.content = item.Content;
+                        record.lllegalDesc = item.LllegalDesc;
+                        record.lllegalCity = item.LllegalCity;
+                        record.address = item.Address;
+                        record.status = item.Status.GetCnName();
+
+                        model.LllegalRecord.Add(record);
+                    }
+
+                }
+
+                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
+                return new APIResponse(result);
+                #endregion
+            }
             else
             {
                 APIResult result = new APIResult() { Result = ResultType.Failure, Code = ResultCode.Failure, Message = "未知产品类型" };

@@ -22,16 +22,13 @@ namespace WebAppApi.Models.Order
 
     }
 
-    public class OrderCarClaimDetailsModel
+    public class OrderCarClaimDetailsModel : OrderBaseDetailsViewModel
     {
         public OrderCarClaimDetailsModel()
         {
             this.HandMerchant = new MerchantModel();
         }
 
-        public int Id { get; set; }
-
-        public string Sn { get; set; }
 
         public int InsuranceCompanyId { get; set; }
 
@@ -47,19 +44,7 @@ namespace WebAppApi.Models.Order
 
         public string HandPersonPhone { get; set; }
 
-        public Enumeration.OrderStatus Status { get; set; }
-
-        public int FollowStatus { get; set; }
-
-        public string StatusName { get; set; }
-
-        public string SubmitTime { get; set; }
-
-        public string CompleteTime { get; set; }
-
-        public string CancleTime { get; set; }
-
-        public string PayTime { get; set; }
+      
 
         public string EstimateListImgUrl { get; set; }
 
@@ -72,8 +57,5 @@ namespace WebAppApi.Models.Order
 
         public string EstimatePrice { get; set; }
 
-        public string Price { get; set; }
-
-        public string Remarks { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Lumos.Entity;
+﻿using Lumos.BLL;
+using Lumos.Entity;
 using Lumos.Mvc;
 using System;
 using System.Collections.Generic;
@@ -153,7 +154,7 @@ namespace WebBack.Controllers.Biz
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            //reuslt = BizFactory.Order.DealtTalentDemand(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
+            reuslt = BizFactory.Order.DealtLllegalDealt(this.CurrentUserId, model.Operate, model.OrderToLllegalDealt, model.BizProcessesAudit);
 
             return reuslt;
         }

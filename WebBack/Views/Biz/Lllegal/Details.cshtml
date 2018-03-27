@@ -62,12 +62,81 @@
 
     <div class="gbr-row-title clearfix">
         <div class="pull-left">
-            <h5>需求信息</h5>
+            <h5>违章信息</h5>
         </div>
         <div class="pull-right f-tb1-item-pull-right">
             <h6></h6>
         </div>
     </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t" style="width:80px">车牌号码：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.CarNo</span>
+            </td>
+            <td class="t" style="width:80px">违章：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumCount</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">扣分：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumPoint</span>
+            </td>
+            <td class="t">罚款：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumFine</span>
+            </td>
+        </tr>
+    </table>
+
+    <table id="list_table_offerkinds" class="list-tb" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:10%">
+                    违章记录号
+                </th>
+                <th style="width:10%">
+                    城市
+                </th>
+                <th style="width:10%%">
+                    地点
+                </th>
+                <th style="width:10%%">
+                    时间
+                </th>
+                <th style="width:10%%">
+                    扣分
+                </th>
+                <th style="width:10%%">
+                    扣费
+                </th>
+                <th style="width:10%">
+                    处理说明
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var m in Model.OrderToLllegalDealtDetails)
+            {
+                <tr>
+                    <td>@m.BookNo</td>
+                    <td>@m.LllegalCity</td>
+                    <td>@m.Address</td>
+                    <td>@m.LllegalTime</td>
+                    <td>@m.Point</td>
+                    <td>@m.Fine</td>
+                    <td>@m.Content</td>
+                </tr>
+            }
+
+
+
+        </tbody>
+    </table>
 
 
     <div class="gbr-row-title clearfix">

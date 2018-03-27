@@ -1227,6 +1227,90 @@ namespace Lumos.BLL
             return result;
         }
 
+        public CustomJsonResult DealtLllegalDealt(int operater, Enumeration.OperateType operate, OrderToLllegalDealt orderToLllegalDealt, BizProcessesAudit bizProcessesAudit)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.CurrentDetails.BizProcessesAuditId && (m.Status == (int)Enumeration.LllegalDealtStatus.WaitDealt || m.Status == (int)Enumeration.LllegalDealtStatus.InDealt)).FirstOrDefault();
+
+                if (bizProcessesAudit == null)
+                {
+                    return new CustomJsonResult(ResultType.Success, "该订单已经处理完成");
+                }
+
+                if (bizProcessesAudit.Auditor != null)
+                {
+                    if (bizProcessesAudit.Auditor.Value != operater)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, "该订单其他用户正在处理");
+                    }
+                }
+
+
+                var l_orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(m => m.Id == orderToLllegalDealt.Id).FirstOrDefault();
+
+
+                l_orderToLllegalDealt.Remarks = orderToLllegalDealt.Remarks;
+
+                bizProcessesAudit.CurrentDetails.AuditComments = orderToLllegalDealt.Remarks;
+
+                switch (operate)
+                {
+                    case Enumeration.OperateType.Save:
+
+                        result = new CustomJsonResult(ResultType.Success, "保存成功");
+
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.LllegalDealtStep.Dealt, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, null);
+
+                        break;
+                    case Enumeration.OperateType.Cancle:
+
+                        l_orderToLllegalDealt.Status = Enumeration.OrderStatus.Cancled;
+                        l_orderToLllegalDealt.CancleTime = this.DateTime;
+
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员撤销订单", this.DateTime);
+
+                        BizFactory.BizProcessesAudit.ChangeLllegalDealStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.LllegalDealtStatus.StaffCancle);
+
+                        result = new CustomJsonResult(ResultType.Success, "撤销成功");
+
+                        break;
+                    case Enumeration.OperateType.Submit:
+
+                        l_orderToLllegalDealt.Status = Enumeration.OrderStatus.Completed;
+                        l_orderToLllegalDealt.CompleteTime = this.DateTime;
+
+                        var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.OrderId == l_orderToLllegalDealt.Id).ToList();
+                        if (orderToLllegalDealtDetails != null)
+                        {
+                            foreach(var item in orderToLllegalDealtDetails)
+                            {
+                                item.Status =Enumeration.OrderToLllegalDealtDetailsStatus.Completed;
+                                CurrentDb.SaveChanges();
+                            }
+                        }
+
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员核实正确", this.DateTime);
+
+                        BizFactory.BizProcessesAudit.ChangeLllegalDealStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.LllegalDealtStatus.Complete, "核实正确");
+
+                        result = new CustomJsonResult(ResultType.Success, "提交成功");
+                        break;
+
+                }
+
+
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+            }
+
+            return result;
+
+        }
 
 
     }

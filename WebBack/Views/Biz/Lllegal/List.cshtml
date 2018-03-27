@@ -27,9 +27,10 @@
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactPhoneNumber + "\">" + p_row.contactPhoneNumber + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.workJob + "\">" + p_row.workJob + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.quantity + "\">" + p_row.quantity + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.status + "\">" + p_row.status + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.carNo + "\">" + p_row.carNo + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.sumCount + "\">" + p_row.sumCount + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.sumPoint + "\">" + p_row.sumPoint + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.sumFine + "\">" + p_row.sumFine + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.submitTime + "\">" + p_row.submitTime + "</td>";
                     l_StrRows += "<td class=\"operation\">";
                     l_StrRows += l_Strlimt;
@@ -98,7 +99,7 @@
                     <th style="width:10%">
                         商户代码
                     </th>
-                    <th style="width:10%">
+                    <th style="width:15%">
                         商户名称
                     </th>
                     <th style="width:10%">
@@ -108,13 +109,16 @@
                         联系电话
                     </th>
                     <th style="width:10%">
-                        需求工种
+                        车牌号码
                     </th>
-                    <th style="width:10%">
-                        人数
+                    <th style="width:5%">
+                        违章
                     </th>
-                    <th style="width:10%">
-                        状态
+                    <th style="width:5%">
+                        扣分
+                    </th>
+                    <th style="width:5%">
+                        罚款
                     </th>
                     <th style="width:10%">
                         提交时间
@@ -127,7 +131,7 @@
             <tbody></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="11">
+                    <td colspan="12">
                         <div class="pull-left">
                             <span class="load-tip"></span>
                         </div>

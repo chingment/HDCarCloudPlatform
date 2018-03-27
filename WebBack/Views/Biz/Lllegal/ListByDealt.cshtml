@@ -26,8 +26,10 @@
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactPhoneNumber + "\">" + p_row.contactPhoneNumber + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.workJob + "\">" + p_row.workJob + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.quantity + "\">" + p_row.quantity + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.carNo + "\">" + p_row.carNo + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.sumCount + "\">" + p_row.sumCount + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.sumPoint + "\">" + p_row.sumPoint + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.sumFine + "\">" + p_row.sumFine + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.submitTime + "\">" + p_row.submitTime + "</td>";
                     l_StrRows += "<td class=\"operation\">";
                     l_StrRows += l_Strlimt;
@@ -69,20 +71,6 @@
                                         return false;
                                     },
                                     focus: true
-                                },
-                                {
-                                    name: '撤销',
-                                    callback: function () {
-
-                                        this.iframe.contentWindow.submit(operateType.cancle, function (d) {
-                                            if (d.result == resultType.success) {
-                                                dialog.close();
-                                                listTable.loadData();
-                                            }
-                                            $.lumos.tips(d.message);
-                                        });
-                                        return false;
-                                    }
                                 }]
                             });
                         }
@@ -92,15 +80,15 @@
 
                                 dealt(obj)
 
-                            });
-                        }
-                        else {
-                            dealt(obj);
-                        }
+                        });
                     }
-                }
+                else {
+                            dealt(obj);
+        }
+        }
+        }
 
-            });
+        });
 
         });
 
@@ -150,11 +138,17 @@
                     <th style="width:10%">
                         联系电话
                     </th>
-                    <th style="width:15%">
-                        需求工种
-                    </th>
                     <th style="width:10%">
-                        人数
+                        车牌号码
+                    </th>
+                    <th style="width:5%">
+                        违章
+                    </th>
+                    <th style="width:5%">
+                        扣分
+                    </th>
+                    <th style="width:5%">
+                        罚款
                     </th>
                     <th style="width:10%">
                         提交时间
@@ -167,7 +161,7 @@
             <tbody></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="10">
+                    <td colspan="12">
                         <div class="pull-left">
                             <span class="load-tip"></span>
                         </div>

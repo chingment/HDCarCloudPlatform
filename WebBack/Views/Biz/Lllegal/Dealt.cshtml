@@ -36,7 +36,7 @@
 
             $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
 
-            $("#Model_OrderToTalentDemand_Remarks").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
+            $("#Model_OrderToLllegalDealt_Remarks").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
          
 
         });
@@ -140,13 +140,81 @@
     </table>
     <div class="gbr-row-title clearfix">
         <div class="pull-left">
-            <h5>需求信息</h5>
+            <h5>违章信息</h5>
         </div>
         <div class="pull-right f-tb1-item-pull-right">
             <h6></h6>
         </div>
     </div>
 
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t" style="width:80px">车牌号码：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.CarNo</span>
+            </td>
+            <td class="t" style="width:80px">违章：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumCount</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">扣分：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumPoint</span>
+            </td>
+            <td class="t">罚款：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumFine</span>
+            </td>
+        </tr>
+    </table>
+
+    <table id="list_table_offerkinds" class="list-tb" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:10%">
+                    违章记录号
+                </th>
+                <th style="width:10%">
+                    城市
+                </th>
+                <th style="width:10%%">
+                    地点
+                </th>
+                <th style="width:10%%">
+                    时间
+                </th>
+                <th style="width:10%%">
+                    扣分
+                </th>
+                <th style="width:10%%">
+                    扣费
+                </th>
+                <th style="width:10%">
+                    处理说明
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach(var m in Model.OrderToLllegalDealtDetails)
+            {
+                <tr>
+                    <td>@m.BookNo</td>
+                    <td>@m.LllegalCity</td>
+                    <td>@m.Address</td>
+                    <td>@m.LllegalTime</td>
+                    <td>@m.Point</td>
+                    <td>@m.Fine</td>
+                    <td>@m.Content</td>
+                </tr>
+            }
+
+
+
+        </tbody>
+    </table>
 
     <div class="gbr-row-title clearfix">
         <div class="pull-left">
@@ -159,7 +227,7 @@
     <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:96%">
         <tr>
             <td>
-                <textarea name="Model.OrderToTalentDemand.Remarks" class="input-control" id="Model_OrderToTalentDemand_Remarks" style="width:98%;">@Model.OrderToTalentDemand.Remarks</textarea>
+                <textarea name="Model.OrderToLllegalDealt.Remarks" class="input-control" id="Model_OrderToLllegalDealt_Remarks" style="width:98%;">@Model.OrderToLllegalDealt.Remarks</textarea>
             </td>
         </tr>
     </table>

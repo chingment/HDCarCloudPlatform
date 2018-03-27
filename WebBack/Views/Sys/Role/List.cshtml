@@ -16,36 +16,32 @@
             return selObj[0];
         }
 
-        function tabFun(index) {
-            switch (index) {
-                case 0:
-                    getDetails();
-                    break;
-                case 1:
-                    listRoleUser.loadData();
-                    break;
-                case 2:
-                    loadRoleMenuTreeList()
-                    break;
-            }
-        }
-
         var zTree;
         var listRoleUser
-        var tabIndex = 0;
+        var tab;
         $(this).ready(function () {
 
-            $("#tab1").tab({
-                beforeClick: function (index) {
+            tab = $("#tab1").tab({
+                click: function (index) {
 
                     var selObj = getSelectedNode();
                     if (selObj == null) {
                         return false;
                     }
-                    tabIndex = index;
-                    $("#Model_SysRole_Id").val(selObj.id);
 
-                    tabFun(index);
+                    $(".Model_SysRole_Id").val(selObj.id);
+          
+                    switch (index) {
+                        case 0:
+                            getDetails();
+                            break;
+                        case 1:
+                            listRoleUser.loadData();
+                            break;
+                        case 2:
+                            loadRoleMenuTreeList()
+                            break;
+                    }
 
 
                     return true;
@@ -54,24 +50,32 @@
 
             loadTreeList();
 
-            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { }, onSuccess: function () { return update(); } });
-
-            $("#Model_SysRole_Name").formValidator({ onShow: "&nbsp;", onFocus: "不超过20个字符", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 20, empty: { leftEmpty: false, emptyError: "不能为空" }, onError: "不超过20个字符" });
-            $("#Model_SysRole_Description").formValidator({ onShow: "&nbsp;", onFocus: "不超过500个字符", onCorrect: "&nbsp;", empty: true, onEmpty: "&nbsp;" }).inputValidator({ min: 0, max: 500, onError: "不超过500个字符" });
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_SysRole_Id").formValidator({ onShow: "&nbsp;", onFocus: "", onCorrect: "&nbsp;" }).inputValidator({ min: 1, onError: "请在左边树形结构选中节点信息" });
+            $("#Model_SysRole_Name").formValidator({ onShow: "&nbsp;", onFocus: "", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 20, empty: { leftEmpty: false, emptyError: "名称不能为空" }, onError: "名称不能超过20个字符" });
+            $("#Model_SysRole_Description").formValidator({ onShow: "&nbsp;", onFocus: "", onCorrect: "&nbsp;", empty: true, onEmpty: "&nbsp;" }).inputValidator({ min: 0, max: 500, onError: "备注不能超过500个字符" });
 
             $("#btn_add").click(function () {
 
-                var selObj = getSelectedNode();
-                if (selObj == null) {
-                    return;
-                }
-
-
-                var url = '../Role/Add?type=add&id=' + selObj.id + '&pName=' + escape(selObj.name);
+                //var selObj = getSelectedNode();
+                //if (selObj == null) {
+                //    return;
+                //}
+                //   var url = '../Role/Add?type=add&id=' + selObj.id + '&pName=' + escape(selObj.name);
+                var id = 1;
+                var url = '/Sys/Role/Add?type=add&id=' + id + '&pName=';
                 var title = '新建';
                 art.dialog.open(url, {
                     id: "openDialog", title: title, width: '650px', height: '350px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '确定', ok: function () {
-                        this.iframe.contentWindow.$('#form1').submit();
+                        this.iframe.contentWindow.add(function (d) {
+                            if (d.result == resultType.success) {
+                                $.lumos.parentDialog().loadTreeList(id);
+                                $.lumos.tips(d.message, true);
+                            }
+                            else {
+                                $.lumos.tips(d.message);
+                            }
+                        });
                         return false;
                     }
                 });
@@ -98,7 +102,7 @@
                              });
 
                              $.lumos.postJson({
-                                 url: "../Role/Delete",
+                                 url: "/Sys/Role/Delete",
                                  data: data,
                                  success: function (d) {
                                      art.dialog.tips(d.message);
@@ -119,7 +123,7 @@
                 if (selObj == null) {
                     return;
                 }
-                $.lumos.openDialog('../Role/AddUserToRole?type=add&id=' + selObj.id + '&pName=' + escape(selObj.name), '添加角色用户', '650px', '520px');
+                $.lumos.openDialog('/Sys/Role/AddUserToRole?type=add&id=' + selObj.id + '&pName=' + escape(selObj.name), '添加角色用户', '650px', '520px');
 
             });
 
@@ -157,7 +161,7 @@ function () {
             });
 
             listRoleUser = $("#list_table_roleuser").loadDataTable({
-                url: "../Role/GetRoleUserList",
+                url: "/Sys/Role/GetRoleUserList",
                 pageIndex: 0,
                 searchParams: $("#form2").serializeArray(),
                 searchButtonId: "btn_Search",
@@ -192,7 +196,7 @@ function () {
 
 
                         $.lumos.postJson({
-                            url: "../Role/RemoveUserFromRole",
+                            url: "/Sys/Role/RemoveUserFromRole",
                             data: array,
                             success: function (d) {
                                 listRoleUser.loadData(0);
@@ -219,13 +223,9 @@ function () {
             else {
                 $(".a-btn-del").hide();
             }
-            $("#Model_SysRole_Id").val(treeNode.id);
 
-
-            tabFun(tabIndex)
-
-
-
+            tab.click();
+  
         }
 
         function getDetails() {
@@ -234,7 +234,6 @@ function () {
                 data: { id: id },
                 url: "../Role/GetDetails",
                 success: function (d) {
-                    $("#Model_SysRole_Id").val(d.data.sysRole.pId);
                     $("#Model_SysRole_Name").val(d.data.sysRole.name);
                     $("#Model_SysRole_Description").val(d.data.sysRole.description);
                 }
@@ -244,7 +243,7 @@ function () {
         function loadTreeList(id) {
 
             $.lumos.postJson({
-                url: "../Role/GetRoleTree",
+                url: "/Sys/Role/GetRoleTree",
                 success: function (d) {
                     var obj = eval(d.data);
                     zTree = $.fn.zTree.init($("#treemenu"), {
@@ -266,28 +265,31 @@ function () {
 
         }
 
-        function update() {
+        function edit() {
 
             var selObj = getSelectedNode();
             if (selObj == null) {
                 return false;
             }
-            art.dialog.confirm(
-     '确定要保存？',
-     function () {
-         var id = selObj.id;
-         var l_Data = $("#form1").serializeArray();
-         l_Data.push({ name: "Model.SysRole.Id", value: id });
-         $.lumos.postJson({
-             url: "../Role/Edit",
-             data: l_Data,
-             success: function (d) {
-                 art.dialog.tips(d.message);
-                 loadTreeList(id);
 
-             }
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+                art.dialog.confirm(
+         '确定要保存？',
+         function () {
+
+             var l_Data = $("#form1").serializeArray();
+             $.lumos.postJson({
+                 url: "/Sys/Role/Edit",
+                 data: l_Data,
+                 success: function (d) {
+                     art.dialog.tips(d.message);
+                     loadTreeList(id);
+
+                 }
+             });
          });
-     });
+            }
             return false;
         }
 
@@ -296,7 +298,7 @@ function () {
         function loadRoleMenuTreeList() {
             var id = $("#Model_SysRole_Id").val();
             $.lumos.postJson({
-                url: "../Role/GetRoleMenuTreeList",
+                url: "/Sys/Role/GetRoleMenuTreeList",
                 data: { roleId: id },
                 success: function (d) {
                     var zNodes = d.data;
@@ -354,8 +356,8 @@ function () {
                                     名称：
                                 </td>
                                 <td class="f-tb-c">
+                                    <input name="Model.SysRole.Id" type="hidden" class="Model_SysRole_Id" id="Model_SysRole_Id"  />
                                     <input name="Model.SysRole.Name" type="text" autocomplete="off" value="" id="Model_SysRole_Name" style="width: 250px;" class="input-control" />
-                                    <span id="Model_SysRole_NameTip"></span>
                                 </td>
                             </tr>
                             <tr>
@@ -364,13 +366,12 @@ function () {
                                 </td>
                                 <td class="f-tb-c">
                                     <textarea name="Model.SysRole.Description" rows="5" cols="42" id="Model_SysRole_Description" class="input-control"></textarea>
-                                    <span id="Model_SysRole_DescriptionTip"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="f-tb-t"></td>
                                 <td class="f-tb-c">
-                                    <input type="submit" name="btn_Save" value="保存" id="btn_Save" class="btn btn-sure" />
+                                    <input type="button" onclick="return edit()" name="btn_Save" value="保存" id="btn_Save" class="btn btn-sure" />
                                 </td>
                             </tr>
                         </table>
@@ -379,7 +380,7 @@ function () {
                 <div class="subcontent">
                     <form id="form2" name="form2">
                         @Html.AntiForgeryToken()
-                        <input type="hidden" name="RoleId" id="Model_SysRole_Id" />
+                        <input type="hidden" name="RoleId" class="Model_SysRole_Id" />
                         <div class="search-bar">
                             <div class="filter">
                                 <span class="filter-label">用户名：</span>
@@ -419,7 +420,7 @@ function () {
                                 <tbody></tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="7">
+                                        <td colspan="4">
                                             <div class="pull-left">
                                                 <span class="load-tip"></span>
                                             </div>

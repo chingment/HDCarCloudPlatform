@@ -13,6 +13,8 @@ namespace WebBack.Models.Biz.Lllegal
 
         private Lumos.Entity.OrderToLllegalDealt _orderToLllegalDealt = new Lumos.Entity.OrderToLllegalDealt();
 
+        private List<Lumos.Entity.OrderToLllegalDealtDetails> _orderToLllegalDealtDetails = new List<Lumos.Entity.OrderToLllegalDealtDetails>();
+
         private Lumos.Entity.BizProcessesAudit _bizProcessesAudit = new Lumos.Entity.BizProcessesAudit();
 
 
@@ -46,8 +48,13 @@ namespace WebBack.Models.Biz.Lllegal
                         _merchant = merchant;
                     }
 
-                }
 
+                    var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.OrderId == orderToLllegalDealt.Id).ToList();
+                    if (orderToLllegalDealtDetails != null)
+                    {
+                        _orderToLllegalDealtDetails = orderToLllegalDealtDetails;
+                    }
+                }
             }
         }
 
@@ -84,6 +91,18 @@ namespace WebBack.Models.Biz.Lllegal
             set
             {
                 _bizProcessesAudit = value;
+            }
+        }
+
+        public List<Lumos.Entity.OrderToLllegalDealtDetails> OrderToLllegalDealtDetails
+        {
+            get
+            {
+                return _orderToLllegalDealtDetails;
+            }
+            set
+            {
+                _orderToLllegalDealtDetails = value;
             }
         }
     }

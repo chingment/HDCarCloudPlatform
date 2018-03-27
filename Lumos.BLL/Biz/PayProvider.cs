@@ -157,12 +157,12 @@ namespace Lumos.BLL
                         case Enumeration.PayResultNotifyParty.AppNotify:
                             result = App_ResultNotify(operater, (OrderPayResultNotifyByAppLog)model);
                             break;
-                        case Enumeration.PayResultNotifyParty.MinShunNotifyUrl:
-                            result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
-                            break;
-                        case Enumeration.PayResultNotifyParty.MinShunOrderQueryApi:
-                            result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
-                            break;
+                        //case Enumeration.PayResultNotifyParty.MinShunNotifyUrl:
+                        //    result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
+                        //    break;
+                        //case Enumeration.PayResultNotifyParty.MinShunOrderQueryApi:
+                        //    result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
+                        //    break;
                         case Enumeration.PayResultNotifyParty.Staff:
                             result = Staff_ResultNotify(operater, (OrderPayResultNotifyByStaffLog)model);
                             break;
@@ -314,6 +314,12 @@ namespace Lumos.BLL
                         {
                             case Enumeration.ProductType.PosMachineServiceFee:
                                 result = PayServiceFeeCompleted(operater, order.Sn);
+                                break;
+                            case Enumeration.ProductType.LllegalQueryRecharge:
+                                result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
+                                break;
+                            case Enumeration.ProductType.LllegalDealt:
+                                result = PayLllegalDealtCompleted(operater, order.Sn);
                                 break;
                         }
 

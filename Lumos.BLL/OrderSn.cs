@@ -16,8 +16,8 @@ namespace Lumos.BLL
         TalentDemand = 6,
         ApplyLossAssess = 7,
         LllegalQueryScoreTrans = 8,
-        LllegalQueryRecharge=9,
-        LllegalDealt=10
+        LllegalQueryRecharge = 9,
+        LllegalDealt = 10
     }
 
     public class SnModel
@@ -34,49 +34,49 @@ namespace Lumos.BLL
         {
             SnModel model = new SnModel();
             string prefix = "";
-            switch (type)
-            {
-                case SnType.CarInsure:
-                    prefix = "A";
-                    break;
-                case SnType.CarClaim:
-                    prefix = "B";
-                    break;
-                case SnType.Withdraw:
-                    prefix = "C";
-                    break;
-                case SnType.FundTrans:
-                    prefix = "D";
-                    break;
-                case SnType.ServiceFee:
-                    prefix = "E";
-                    break;
-                case SnType.TalentDemand:
-                    prefix = "F";
-                    break;
-                case SnType.ApplyLossAssess:
-                    prefix = "G";
-                    break;
-                case SnType.LllegalQueryScoreTrans:
-                    prefix = "H";
-                    break;
-                case SnType.LllegalQueryRecharge:
-                    prefix = "I";
-                    break;
-                case SnType.LllegalDealt:
-                    prefix = "J";
-                    break;
-            }
+            //switch (type)
+            //{
+            //    case SnType.CarInsure:
+            //        prefix = "A";
+            //        break;
+            //    case SnType.CarClaim:
+            //        prefix = "B";
+            //        break;
+            //    case SnType.Withdraw:
+            //        prefix = "C";
+            //        break;
+            //    case SnType.FundTrans:
+            //        prefix = "D";
+            //        break;
+            //    case SnType.ServiceFee:
+            //        prefix = "E";
+            //        break;
+            //    case SnType.TalentDemand:
+            //        prefix = "F";
+            //        break;
+            //    case SnType.ApplyLossAssess:
+            //        prefix = "G";
+            //        break;
+            //    case SnType.LllegalQueryScoreTrans:
+            //        prefix = "H";
+            //        break;
+            //    case SnType.LllegalQueryRecharge:
+            //        prefix = "I";
+            //        break;
+            //    case SnType.LllegalDealt:
+            //        prefix = "J";
+            //        break;
+            //}
 
             string dateTime = DateTime.Now.ToString("yyMMddHHmm");
 
-            string sId = id.ToString().PadLeft(9, '0');
+            string sId = id.ToString().PadLeft(10, '0');
 
             string sn = prefix + dateTime + sId;
 
             model.Sn = sn;
-            model.TradeSnByWechat = string.Format("{0}W", sn);
-            model.TradeSnByAlipay = string.Format("{0}A", sn);
+            //model.TradeSnByWechat = string.Format("{0}W", sn);
+            //model.TradeSnByAlipay = string.Format("{0}A", sn);
             return model;
         }
     }

@@ -171,10 +171,11 @@ namespace WebAppApi.Controllers
 
             //model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
-            //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
+            model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
+            model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
-            model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+            //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
@@ -1573,6 +1574,44 @@ namespace WebAppApi.Controllers
             // string a1 = "a1=das&a2=323";
             HttpUtil http = new HttpUtil();
             string respon_data4 = http.HttpPostJson("" + host + "/api/Order/SubmitLllegalQueryScoreRecharge", a1, headers1);
+
+            return respon_data4;
+
+        }
+
+
+        public string SubmitLllegalDealt(int userId, int merchantId, int posMachineId)
+        {
+
+            SubmitLllegalDealtModel model1 = new SubmitLllegalDealtModel();
+            model1.UserId = userId;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+
+
+            List<LllegalRecord> record = new List<LllegalRecord>();
+
+
+            record.Add(new LllegalRecord { bookNo="1", address="2",point=1, serviceFee=50,late_fees=2,fine=300,cityCode="4400", content="sdasdadd", lllegalTime="2012-12-12" });
+            record.Add(new LllegalRecord { bookNo = "2", address = "2", point = 1, serviceFee = 50, late_fees = 2, fine = 300, cityCode = "4400", content = "sdasdadd", lllegalTime = "2012-12-12" });
+            record.Add(new LllegalRecord { bookNo = "3", address = "2", point = 1, serviceFee = 50, late_fees = 2, fine = 300, cityCode = "4400", content = "sdasdadd", lllegalTime = "2012-12-12" });
+            record.Add(new LllegalRecord { bookNo = "4", address = "2", point = 1, serviceFee = 50, late_fees = 2, fine = 300, cityCode = "4400", content = "sdasdadd", lllegalTime = "2012-12-12" });
+
+
+            model1.LllegalRecord = record;
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Lllegal/Dealt", a1, headers1);
 
             return respon_data4;
 

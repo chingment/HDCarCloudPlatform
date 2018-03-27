@@ -39,7 +39,7 @@ namespace WebBack.Controllers.Biz
         {
             var query = (from p in CurrentDb.Product
                          where ((int)p.Type).ToString().StartsWith("1")
-                         select new { p.Id, p.Name, p.Type, p.Price, p.MainImgUrl, p.CreateTime, p.Status });
+                         select new { p.Id, p.Name, p.Type, p.MainImgUrl, p.CreateTime, p.Status });
 
             int total = query.Count();
 
@@ -58,7 +58,7 @@ namespace WebBack.Controllers.Biz
                     Id = item.Id,
                     Name = item.Name,
                     Type = item.Type.GetCnName(),
-                    Price = item.Price.ToPrice(),
+                    Price = 0,
                     ImgUrl = item.MainImgUrl,
                     LinkUrl = BizFactory.Product.GetLinkUrl(item.Type,"88888", item.Id),
                     Status = item.Status,

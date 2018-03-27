@@ -955,16 +955,11 @@ namespace Lumos.BLL
 
             using (TransactionScope ts = new TransactionScope())
             {
-                //用户信息
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToApplyLossAssess.UserId).FirstOrDefault();
-                //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-
-                var insuranceCompany = CurrentDb.InsuranceCompany.Where(m => m.Id == orderToApplyLossAssess.InsuranceCompanyId).FirstOrDefault();
-
-
                 var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.ApplyLossAssess).FirstOrDefault();
 
+                var insuranceCompany = CurrentDb.InsuranceCompany.Where(m => m.Id == orderToApplyLossAssess.InsuranceCompanyId).FirstOrDefault();
                 orderToApplyLossAssess.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToApplyLossAssess.AgentId = merchant.AgentId ?? 0;
                 orderToApplyLossAssess.ProductId = product.Id;
@@ -1083,13 +1078,8 @@ namespace Lumos.BLL
 
             using (TransactionScope ts = new TransactionScope())
             {
-                //用户信息
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalQueryRecharge.UserId).FirstOrDefault();
-                //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-
-
-                //2011为车险理赔
                 var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.LllegalQueryRecharge).FirstOrDefault();
 
                 orderToLllegalQueryRecharge.SalesmanId = merchant.SalesmanId ?? 0;
@@ -1161,13 +1151,8 @@ namespace Lumos.BLL
 
             using (TransactionScope ts = new TransactionScope())
             {
-                //用户信息
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalDealt.UserId).FirstOrDefault();
-                //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-
-
-                //2011为车险理赔
                 var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.LllegalDealt).FirstOrDefault();
 
                 orderToLllegalDealt.SalesmanId = merchant.SalesmanId ?? 0;
@@ -1182,8 +1167,6 @@ namespace Lumos.BLL
                 CurrentDb.OrderToLllegalDealt.Add(orderToLllegalDealt);
                 CurrentDb.SaveChanges();
 
-
-
                 SnModel snModel = Sn.Build(SnType.LllegalQueryRecharge, orderToLllegalDealt.Id);
 
                 orderToLllegalDealt.Sn = snModel.Sn;
@@ -1195,6 +1178,7 @@ namespace Lumos.BLL
                 foreach(var item in orderToLllegalDealtDetails)
                 {
 
+                    item.OrderId = orderToLllegalDealt.Id;
                     item.Status =Enumeration.OrderToLllegalDealtDetailsStatus.WaitPay;
                     item.CreateTime = this.DateTime;
                     item.Creator = operater;
@@ -1206,7 +1190,6 @@ namespace Lumos.BLL
 
 
                 OrderConfirmInfo yOrder = new OrderConfirmInfo();
-
 
                 yOrder.OrderId = orderToLllegalDealt.Id;
                 yOrder.OrderSn = orderToLllegalDealt.Sn;

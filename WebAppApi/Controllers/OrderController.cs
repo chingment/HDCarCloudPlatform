@@ -29,8 +29,26 @@ namespace WebAppApi.Controllers
 
             if (status != Enumeration.OrderStatus.Unknow)
             {
-                order = order.Where(m => m.Status == status);
+                if (status == Enumeration.OrderStatus.Completed)
+                {
+                    order = order.Where(m => m.Status == status);
+                }
+                else
+                {
+                    order = order.Where(m => m.Status == status && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge);
+                }
             }
+            else
+            {
+                order = order.Where(m => 
+                (m.Status == Enumeration.OrderStatus.Submitted && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge)
+                || (m.Status == Enumeration.OrderStatus.Follow && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge)
+                || (m.Status == Enumeration.OrderStatus.WaitPay && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge)
+                || (m.Status == Enumeration.OrderStatus.Completed)
+                || (m.Status == Enumeration.OrderStatus.Cancled && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge)
+                );
+            }
+
 
             int pageSize = 10;
 
@@ -804,7 +822,7 @@ namespace WebAppApi.Controllers
 
         }
 
-        [HttpPost] 
+        [HttpPost]
         public APIResponse SubmitLllegalQueryScoreRecharge(SubmitLllegalQueryScoreRechargeModel model)
         {
             //业务人员模拟数据

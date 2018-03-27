@@ -26,8 +26,6 @@ namespace Lumos.Entity
         [MaxLength(2048)]
         public string ElseImgUrls { get; set; }
 
-        public decimal Price { get; set; }
-
         public string Details { get; set; }
 
         public Enumeration.ProductStatus Status { get; set; }

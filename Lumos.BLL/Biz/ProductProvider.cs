@@ -58,7 +58,6 @@ namespace Lumos.BLL
 
                 product.Name = pProduct.Name;
                 product.Type = pProduct.Type;
-                product.Price = pProduct.Price;
                 product.MainImgUrl = pProduct.MainImgUrl;
                 product.ElseImgUrls = pProduct.ElseImgUrls;
                 product.Details = pProduct.Details;

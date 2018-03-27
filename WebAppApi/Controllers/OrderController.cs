@@ -35,17 +35,17 @@ namespace WebAppApi.Controllers
                 }
                 else
                 {
-                    order = order.Where(m => m.Status == status && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge || m.ProductType != Enumeration.ProductType.LllegalDealt));
+                    order = order.Where(m => m.Status == status && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt));
                 }
             }
             else
             {
                 order = order.Where(m => 
-                (m.Status == Enumeration.OrderStatus.Submitted && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge|| m.ProductType != Enumeration.ProductType.LllegalDealt))
-                || (m.Status == Enumeration.OrderStatus.Follow && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge || m.ProductType != Enumeration.ProductType.LllegalDealt))
-                || (m.Status == Enumeration.OrderStatus.WaitPay && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge || m.ProductType != Enumeration.ProductType.LllegalDealt))
+                (m.Status == Enumeration.OrderStatus.Submitted && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
+                || (m.Status == Enumeration.OrderStatus.Follow && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
+                || (m.Status == Enumeration.OrderStatus.WaitPay && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
                 || (m.Status == Enumeration.OrderStatus.Completed)
-                || (m.Status == Enumeration.OrderStatus.Cancled && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge || m.ProductType != Enumeration.ProductType.LllegalDealt))
+                || (m.Status == Enumeration.OrderStatus.Cancled && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
                 );
             }
 
@@ -311,6 +311,16 @@ namespace WebAppApi.Controllers
 
                                 orderModel.OrderField.Add(new OrderField("充值", string.Format("{0}元", orderToLllegalQueryRecharge.Price.ToF2Price())));
                                 orderModel.OrderField.Add(new OrderField("积分", orderToLllegalQueryRecharge.Score.ToString()));
+
+                                break;
+                            case Enumeration.ProductType.LllegalDealt:
+
+                                var orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToLllegalDealt.CarNo));
+                                orderModel.OrderField.Add(new OrderField("违章", string.Format("{0}次", orderToLllegalDealt.SumCount)));
+                                orderModel.OrderField.Add(new OrderField("扣分", orderToLllegalDealt.SumPoint.ToString()));
+                                orderModel.OrderField.Add(new OrderField("罚款", orderToLllegalDealt.SumFine.ToString()));
 
                                 break;
                         }

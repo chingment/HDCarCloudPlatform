@@ -1164,6 +1164,10 @@ namespace Lumos.BLL
                 orderToLllegalDealt.SubmitTime = this.DateTime;
                 orderToLllegalDealt.CreateTime = this.DateTime;
                 orderToLllegalDealt.Creator = operater;
+                orderToLllegalDealt.SumCount = orderToLllegalDealtDetails.Count();
+                orderToLllegalDealt.SumFine = orderToLllegalDealtDetails.Sum(m => m.Fine);
+                orderToLllegalDealt.SumPoint = orderToLllegalDealtDetails.Sum(m => m.Point);
+
                 CurrentDb.OrderToLllegalDealt.Add(orderToLllegalDealt);
                 CurrentDb.SaveChanges();
 
@@ -1203,6 +1207,10 @@ namespace Lumos.BLL
                 yOrder.amount = "1";
 
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalDealt.Sn.NullToEmpty()));
+                yOrder.confirmField.Add(new Entity.AppApi.OrderField("车牌号码", orderToLllegalDealt.CarNo.NullToEmpty()));
+                yOrder.confirmField.Add(new Entity.AppApi.OrderField("违章", string.Format("{0}次", orderToLllegalDealt.SumCount)));
+                yOrder.confirmField.Add(new Entity.AppApi.OrderField("扣分", orderToLllegalDealt.SumPoint.NullToEmpty()));
+                yOrder.confirmField.Add(new Entity.AppApi.OrderField("罚款", orderToLllegalDealt.SumFine.NullToEmpty()));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalDealt.Price.NullToEmpty())));
 
 

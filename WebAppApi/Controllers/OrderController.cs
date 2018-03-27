@@ -35,17 +35,17 @@ namespace WebAppApi.Controllers
                 }
                 else
                 {
-                    order = order.Where(m => m.Status == status && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge);
+                    order = order.Where(m => m.Status == status && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge || m.ProductType != Enumeration.ProductType.LllegalDealt));
                 }
             }
             else
             {
                 order = order.Where(m => 
-                (m.Status == Enumeration.OrderStatus.Submitted && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge)
-                || (m.Status == Enumeration.OrderStatus.Follow && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge)
-                || (m.Status == Enumeration.OrderStatus.WaitPay && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge)
+                (m.Status == Enumeration.OrderStatus.Submitted && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge|| m.ProductType != Enumeration.ProductType.LllegalDealt))
+                || (m.Status == Enumeration.OrderStatus.Follow && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge || m.ProductType != Enumeration.ProductType.LllegalDealt))
+                || (m.Status == Enumeration.OrderStatus.WaitPay && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge || m.ProductType != Enumeration.ProductType.LllegalDealt))
                 || (m.Status == Enumeration.OrderStatus.Completed)
-                || (m.Status == Enumeration.OrderStatus.Cancled && m.ProductType != Enumeration.ProductType.LllegalQueryRecharge)
+                || (m.Status == Enumeration.OrderStatus.Cancled && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge || m.ProductType != Enumeration.ProductType.LllegalDealt))
                 );
             }
 

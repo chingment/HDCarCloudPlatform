@@ -16,6 +16,8 @@ namespace WebAppApi.Models.Order
 
         public string CarNo { get; set; }
 
+        public string IsOfferPrice { get; set; }
+
         public List<LllegalRecord> LllegalRecord { get; set; }
     }
 }

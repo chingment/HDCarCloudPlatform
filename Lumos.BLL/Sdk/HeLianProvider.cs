@@ -31,7 +31,7 @@ namespace Lumos.BLL
         public string EnginNo { get; set; }
         public string IsCompany { get; set; }
 
-        public bool IsOfferPrice { get; set; }
+        public string IsOfferPrice { get; set; }
     }
 
     public class LllegalRecord
@@ -76,6 +76,8 @@ namespace Lumos.BLL
         public string SumFine { get; set; }
 
         public List<LllegalRecord> Record { get; set; }
+
+        public bool IsOfferPrice { get; set; }
     }
 
     public class HeLianProvider : BaseProvider
@@ -177,10 +179,11 @@ namespace Lumos.BLL
 
                 var queryResult = new LllegalQueryResult();
 
+                queryResult.IsOfferPrice = pms.IsOfferPrice == "true" ? true : false;
                 queryResult.CarNo = pms.CarNo;
 
                 string msg = "";
-                if (pms.IsOfferPrice)
+                if (queryResult.IsOfferPrice)
                 {
                     var api_result1 = HeLianApi.CarQueryGetLllegalPrice(p1);
 

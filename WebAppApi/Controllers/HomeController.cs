@@ -169,7 +169,7 @@ namespace WebAppApi.Controllers
             int merchantId = 241;
             int posMachineId = 148;
 
-            //model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
+           // model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
            // model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
@@ -199,7 +199,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("登录接口", Login(userName, passWord, "869612023700703"));
 
-            model.Add("获取注册账户短信", GetCreateAccountCode("181489224118"));
+            //model.Add("获取注册账户短信", GetCreateAccountCode("181489224118"));
             //model.Add("获取忘记密码短信", GetForgetPwdCode("15989287032"));
             //model.Add("修改密码", ChangePassword(15, "123456", "123456"));
             // model.Add("重置密码接口", ResetPassword(userName, newPassWord, "382001", "5e04ef95-ac41-43a9-942d-a2b41758aef2"));
@@ -1509,7 +1509,7 @@ namespace WebAppApi.Controllers
             pms.EnginNo = "713477";
             pms.RackNo = "004711";
             pms.IsCompany = "false";
-
+            pms.IsOfferPrice = "false";
             //SubmitApplyLossAssessModel model1 = new SubmitApplyLossAssessModel();
             //model1.UserId = userId;
             //model1.InsuranceCompanyId = 2;
@@ -1588,7 +1588,7 @@ namespace WebAppApi.Controllers
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;
             model1.CarNo = "粤AT88888";
-
+            model1.IsOfferPrice = "true";
             List<LllegalRecord> record = new List<LllegalRecord>();
 
 

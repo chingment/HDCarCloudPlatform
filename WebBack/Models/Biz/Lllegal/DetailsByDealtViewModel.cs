@@ -7,7 +7,7 @@ using System.Web;
 
 namespace WebBack.Models.Biz.Lllegal
 {
-    public class DetailsViewModel : BaseViewModel
+    public class DetailsByDealtViewModel : BaseViewModel
     {
         private Lumos.Entity.Merchant _merchant = new Lumos.Entity.Merchant();
 
@@ -17,12 +17,12 @@ namespace WebBack.Models.Biz.Lllegal
 
         private List<BizProcessesAuditDetails> _bizProcessesAuditDetails = new List<BizProcessesAuditDetails>();
 
-        public DetailsViewModel()
+        public DetailsByDealtViewModel()
         {
 
         }
 
-        public DetailsViewModel(int id)
+        public DetailsByDealtViewModel(int id)
         {
             var orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(m => m.Id == id).FirstOrDefault();
             if (orderToLllegalDealt != null)

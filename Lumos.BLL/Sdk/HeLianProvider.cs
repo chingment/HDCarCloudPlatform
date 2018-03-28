@@ -200,21 +200,29 @@ namespace Lumos.BLL
 
                         record.status = "待处理";
                         record.canDealt = true;
-                        var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).FirstOrDefault();
+                        record.needDealt = true;
+
+                        var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
                         if (details != null)
                         {
-                            record.status = details.Status.GetCnName();
+                            var hasDealt = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
+                            var hasCompleted = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed).Count();
 
-                            if (details.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt)
+
+                            if(hasDealt>0)
                             {
                                 record.status = "处理中";
                                 record.canDealt = false;
+                                record.needDealt = false;
                             }
-                            else if (details.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt)
+
+                            if (hasCompleted > 0)
                             {
                                 record.status = "完成";
                                 record.canDealt = false;
+                                record.needDealt = false;
                             }
+
                         }
                     }
 

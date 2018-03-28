@@ -19,7 +19,13 @@ namespace WebBack.Controllers.Biz
 
         public ViewResult Details(int id)
         {
-            DetailsViewModel model = new DetailsViewModel(id);
+            DetailsByDealtViewModel model = new DetailsByDealtViewModel(id);
+            return View(model);
+        }
+
+        public ViewResult DetailsByQueryRecharge(int id)
+        {
+            DetailsByQueryRechargeViewModel model = new DetailsByQueryRechargeViewModel(id);
             return View(model);
         }
 

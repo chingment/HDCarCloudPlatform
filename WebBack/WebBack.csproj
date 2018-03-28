@@ -210,7 +210,8 @@
     <Compile Include="Models\Biz\CarInsureOffer\AddViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\SelectKindsViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\DealtViewModel.cs" />
-    <Compile Include="Models\Biz\Lllegal\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\Lllegal\DetailsByQueryRechargeViewModel.cs" />
+    <Compile Include="Models\Biz\Lllegal\DetailsByDealtViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\SearchCondition.cs" />
     <Compile Include="Models\Biz\Order\CarClaimFollowViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\SearchCondition.cs" />
@@ -1252,8 +1253,9 @@
     <Content Include="Views\Biz\PosMachine\ListByNoUse.cshtml" />
     <Content Include="Views\Biz\Lllegal\Dealt.cshtml" />
     <Content Include="Views\Biz\Lllegal\ListByDealt.cshtml" />
-    <Content Include="Views\Biz\Lllegal\Details.cshtml" />
+    <Content Include="Views\Biz\Lllegal\DetailsByDealt.cshtml" />
     <Content Include="Views\Biz\Lllegal\List.cshtml" />
+    <Content Include="Views\Biz\Lllegal\DetailsByQueryRecharge.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -1276,7 +1278,6 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\toolbar\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\wysiwygarea\" />
-    <Folder Include="Views\Lllegal\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

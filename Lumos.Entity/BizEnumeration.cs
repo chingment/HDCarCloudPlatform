@@ -691,10 +691,30 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("洗车")]
-            XiChe = 1,
-            [Remark("修车")]
-            XiuChe = 2
+            [Remark("储备店长")]
+            储备店长 = 1,
+            [Remark("机修")]
+            机修 = 2,
+            [Remark("钣喷")]
+            钣喷 = 3,
+            [Remark("美容")]
+            美容 = 4,
+            [Remark("销售顾问")]
+            销售顾问 = 5,
+            [Remark("电销专员")]
+            电销专员 = 6,
+            [Remark("前台接待")]
+            前台接待 = 7,
+            [Remark("理赔专员")]
+            理赔专员 = 8,
+            [Remark("配件销售")]
+            配件销售 = 9,
+            [Remark("仓管员")]
+            仓管员 = 10,
+            [Remark("财务出纳")]
+            财务出纳 = 11,
+            [Remark("行政人事专员")]
+            行政人事专员 = 12
         }
 
         public enum PayResultNotifyParty

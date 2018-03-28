@@ -199,7 +199,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("登录接口", Login(userName, passWord, "869612023700703"));
 
-            //model.Add("获取注册账户短信", GetCreateAccountCode("15989287032"));
+            model.Add("获取注册账户短信", GetCreateAccountCode("181489224118"));
             //model.Add("获取忘记密码短信", GetForgetPwdCode("15989287032"));
             //model.Add("修改密码", ChangePassword(15, "123456", "123456"));
             // model.Add("重置密码接口", ResetPassword(userName, newPassWord, "382001", "5e04ef95-ac41-43a9-942d-a2b41758aef2"));
@@ -1386,7 +1386,7 @@ namespace WebAppApi.Controllers
             SubmitTalentDemandModel model1 = new SubmitTalentDemandModel();
             model1.UserId = userId;
             model1.Quantity = 2;
-            model1.WorkJob = Enumeration.WorkJob.XiChe;
+            model1.WorkJob = Enumeration.WorkJob.机修;
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;
             model1.UseStartTime = DateTime.Now;

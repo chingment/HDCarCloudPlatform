@@ -18,7 +18,7 @@ namespace WebAppApi.Controllers
     public class OrderController : OwnBaseApiController
     {
         [HttpGet]
-        public APIResponse GetList(int userId, int merchantId, int posMachineId, int pageIndex, Enumeration.OrderStatus status)
+        public APIResponse GetList(int userId, int merchantId, int posMachineId, int pageIndex, Enumeration.OrderStatus status, Enumeration.ProductType productType)
         {
             var order = (from o in CurrentDb.Order
                          where o.MerchantId == merchantId
@@ -40,13 +40,18 @@ namespace WebAppApi.Controllers
             }
             else
             {
-                order = order.Where(m => 
+                order = order.Where(m =>
                 (m.Status == Enumeration.OrderStatus.Submitted && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
                 || (m.Status == Enumeration.OrderStatus.Follow && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
                 || (m.Status == Enumeration.OrderStatus.WaitPay && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
                 || (m.Status == Enumeration.OrderStatus.Completed)
                 || (m.Status == Enumeration.OrderStatus.Cancled && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
                 );
+            }
+
+            if (productType != Enumeration.ProductType.Unknow)
+            {
+                order = order.Where(m => m.ProductType == productType);
             }
 
 
@@ -379,8 +384,6 @@ namespace WebAppApi.Controllers
                         }
 
                         #endregion
-
-
 
                         break;
                 }
@@ -799,7 +802,7 @@ namespace WebAppApi.Controllers
 
                     var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.Id == orderId).ToList();
 
-                    foreach(var item in orderToLllegalDealtDetails)
+                    foreach (var item in orderToLllegalDealtDetails)
                     {
                         var record = new LllegalRecord();
 

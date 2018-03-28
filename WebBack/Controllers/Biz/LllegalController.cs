@@ -17,7 +17,7 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
-        public ViewResult Details(int id)
+        public ViewResult DetailsByDealt(int id)
         {
             DetailsByDealtViewModel model = new DetailsByDealtViewModel(id);
             return View(model);

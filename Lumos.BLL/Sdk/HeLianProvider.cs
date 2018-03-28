@@ -30,6 +30,8 @@ namespace Lumos.BLL
         public string RackNo { get; set; }
         public string EnginNo { get; set; }
         public string IsCompany { get; set; }
+
+        public bool IsOfferPrice { get; set; }
     }
 
     public class LllegalRecord
@@ -173,64 +175,70 @@ namespace Lumos.BLL
                 p1.carType = pms.CarType;
                 p1.dataLllegal = dataLllegal;
 
-                var api_result1 = HeLianApi.CarQueryGetLllegalPrice(p1);
-
-                if (api_result1.resultCode != "0")
-                {
-                    return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, api_result1.resultMsg, null);
-                }
-
                 var queryResult = new LllegalQueryResult();
 
                 queryResult.CarNo = pms.CarNo;
 
-                var d1 = api_result1.data;
-
-                if (d1 != null)
+                string msg = "";
+                if (pms.IsOfferPrice)
                 {
-                    foreach (var record in lllegalRecords)
+                    var api_result1 = HeLianApi.CarQueryGetLllegalPrice(p1);
+
+                    if (api_result1.resultCode != "0")
                     {
-                        var priceresult = d1.Where(m => m.bookNo == record.bookNo).FirstOrDefault();
-                        if (priceresult != null)
-                        {
-                            record.serviceFee = priceresult.serviceFee;
-                            record.fine = priceresult.fine;
-                            record.late_fees = priceresult.fine;
-                        }
-
-                        record.status = "待处理";
-                        record.canDealt = true;
-                        record.needDealt = true;
-
-                        var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
-                        if (details != null)
-                        {
-                            var hasDealt = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
-                            var hasCompleted = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed).Count();
-
-
-                            if(hasDealt>0)
-                            {
-                                record.status = "处理中";
-                                record.canDealt = false;
-                                record.needDealt = false;
-                            }
-
-                            if (hasCompleted > 0)
-                            {
-                                record.status = "完成";
-                                record.canDealt = false;
-                                record.needDealt = false;
-                            }
-
-                        }
+                        return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, api_result1.resultMsg, null);
                     }
 
+                    msg = api_result1.resultMsg;
 
-                    queryResult.SumCount = lllegalRecords.Count().ToString();
-                    queryResult.SumFine = lllegalRecords.Sum(m => m.fine).ToString();
-                    queryResult.SumPoint = lllegalRecords.Sum(m => m.point).ToString();
+                    var d1 = api_result1.data;
+
+                    if (d1 != null)
+                    {
+                        foreach (var record in lllegalRecords)
+                        {
+                            var priceresult = d1.Where(m => m.bookNo == record.bookNo).FirstOrDefault();
+                            if (priceresult != null)
+                            {
+                                record.serviceFee = priceresult.serviceFee;
+                                record.fine = priceresult.fine;
+                                record.late_fees = priceresult.fine;
+                            }
+
+                            record.status = "待处理";
+                            record.canDealt = true;
+                            record.needDealt = true;
+
+                            var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
+                            if (details != null)
+                            {
+                                var hasDealt = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
+                                var hasCompleted = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed).Count();
+
+
+                                if (hasDealt > 0)
+                                {
+                                    record.status = "处理中";
+                                    record.canDealt = false;
+                                    record.needDealt = false;
+                                }
+
+                                if (hasCompleted > 0)
+                                {
+                                    record.status = "完成";
+                                    record.canDealt = false;
+                                    record.needDealt = false;
+                                }
+
+                            }
+                        }
+                    }
                 }
+
+
+                queryResult.SumCount = lllegalRecords.Count().ToString();
+                queryResult.SumFine = lllegalRecords.Sum(m => m.fine).ToString();
+                queryResult.SumPoint = lllegalRecords.Sum(m => m.point).ToString();
 
 
                 var lllegalQueryLog = new LllegalQueryLog();
@@ -272,7 +280,7 @@ namespace Lumos.BLL
                 queryResult.Record = lllegalRecords;
 
 
-                result = new CustomJsonResult<LllegalQueryResult>(ResultType.Success, ResultCode.Success, api_result1.resultMsg, queryResult);
+                result = new CustomJsonResult<LllegalQueryResult>(ResultType.Success, ResultCode.Success, msg, queryResult);
             }
 
             return result;

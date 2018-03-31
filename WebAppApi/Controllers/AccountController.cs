@@ -87,14 +87,23 @@ namespace WebAppApi.Controllers
 
             if (posMachine == null)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备与用户不匹配");
+                return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备没有注册");
             }
 
-            var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.UserId == clientUser.Id && m.MerchantId == clientUser.MerchantId && m.PosMachineId == posMachine.Id).FirstOrDefault();
+            var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.UserId == clientUser.Id && m.MerchantId == clientUser.MerchantId).FirstOrDefault();
 
             if (merchantPosMachine == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备与用户不匹配");
+            }
+
+            if (merchantPosMachine.PosMachineId != posMachine.Id)
+            {
+                //内测账号，不验证设备ID
+                if (model.UserName != "15989287032")
+                {
+                    return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备与用户不匹配");
+                }
             }
 
             if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Unknow)

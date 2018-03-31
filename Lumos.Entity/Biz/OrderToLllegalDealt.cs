@@ -17,6 +17,9 @@ namespace Lumos.Entity
 
         public int SumCount { get; set; }
 
+        public decimal SumLateFees { get; set; }
+        public decimal SumServiceFees { get; set; }
+
         [MaxLength(128)]
         public string CarNo { get; set; }
 

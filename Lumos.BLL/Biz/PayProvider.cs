@@ -121,7 +121,7 @@ namespace Lumos.BLL
                     case Enumeration.ProductType.PosMachineServiceFee:
                         #region 服务费
                         var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Sn == model.OrderSn).FirstOrDefault();
-                        yOrder = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee);
+                        //yOrder = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee);
 
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "确认成功", yOrder);
                         #endregion

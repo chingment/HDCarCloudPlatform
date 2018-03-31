@@ -172,7 +172,7 @@ namespace WebAppApi.Controllers
            // model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
-           // model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
+            model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
@@ -1600,8 +1600,9 @@ namespace WebAppApi.Controllers
 
             model1.LllegalRecord = record;
 
-            string a1 = JsonConvert.SerializeObject(model1);
+           // string a1 = JsonConvert.SerializeObject(model1);
 
+            string a1= "{\"lllegalRecord\":[{\"bookNo\":\"4401107901494580\",\"bookType\":\"6001A\",\"bookTypeName\":\"非现场未处理违章数据\",\"lllegalCode\":\"1344\",\"cityCode\":\"440110\",\"lllegalTime\":\"2017-07-11 13:33:00\",\"point\":\"3.0\",\"offerType\":\"3\",\"ofserTypeName\":\"扣分单\",\"fine\":\"200.0\",\"serviceFee\":\"435.0\",\"late_fees\":\"200.0\",\"content\":\"免资料；2-3个工作日.超证另通知\",\"lllegalDesc\":\"机动车违反禁令标志指示的\",\"lllegalCity\":\"广东省广州市\",\"address\":\"元岗横路_元岗横路路段\"}],\"merchantId\":241,\"carNo\":\"粤YGY662\",\"userId\":1215,\"posMachineId\":149}";
             string signStr = Signature.Compute(key, secret, timespan, a1);
 
             Dictionary<string, string> headers1 = new Dictionary<string, string>();

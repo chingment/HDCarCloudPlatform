@@ -252,7 +252,7 @@ namespace Lumos.BLL
 
                 }
 
-                var creator = CurrentDb.SysUser.Where(m => m.Id == l_orderToCarInsure.Creator).FirstOrDefault();
+                var client = CurrentDb.SysUser.Where(m => m.Id == l_orderToCarInsure.UserId).FirstOrDefault();
 
                 switch (operate)
                 {
@@ -271,6 +271,8 @@ namespace Lumos.BLL
                         BizFactory.BizProcessesAudit.ChangeAuditDetailsAuditComments(operater, bizProcessesAudit.CurrentDetails.Id, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员转给商户跟进", this.DateTime);
 
                         BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.CarInsureOfferDealtStatus.ClientFllow, "商户正在跟进");
+
+                        BizFactory.Sms.SendCarInsureOfferFollow(client.Id, client.PhoneNumber, l_orderToCarInsure.Sn, l_orderToCarInsure.CarOwner, l_orderToCarInsure.CarPlateNo);
 
                         result = new CustomJsonResult(ResultType.Success, "转给客户跟进成功");
 
@@ -299,7 +301,7 @@ namespace Lumos.BLL
                         BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.CarInsureOfferDealtStep.Offer, l_bizProcessesAudit.Id, operater, bizProcessesAudit.CurrentDetails.AuditComments, "报价完成", this.DateTime);
                         BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, l_bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.OfferComplete);
 
-                        //BizFactory.Sms.SendCarInsureOfferComplete(creator.Id, creator.PhoneNumber, l_orderToCarInsure.Sn, l_orderToCarInsure.CarOwner, l_orderToCarInsure.CarPlateNo);
+                        BizFactory.Sms.SendCarInsureOfferComplete(client.Id, client.PhoneNumber, l_orderToCarInsure.Sn, l_orderToCarInsure.CarOwner, l_orderToCarInsure.CarPlateNo);
 
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;
@@ -1115,7 +1117,9 @@ namespace Lumos.BLL
                 yOrder.productType = orderToLllegalQueryRecharge.ProductType;
                 yOrder.productName = orderToLllegalQueryRecharge.ProductName;
 
-                //yOrder.amount = int.Parse((orderToServiceFee.Price * 100).ToString()).ToString();
+                //todo amount
+                yOrder.amount = Convert.ToInt32((orderToLllegalQueryRecharge.Price * 100)).ToString();
+    
 
                 yOrder.amount = "1";
 
@@ -1167,7 +1171,9 @@ namespace Lumos.BLL
                 orderToLllegalDealt.SumCount = orderToLllegalDealtDetails.Count();
                 orderToLllegalDealt.SumFine = orderToLllegalDealtDetails.Sum(m => m.Fine);
                 orderToLllegalDealt.SumPoint = orderToLllegalDealtDetails.Sum(m => m.Point);
-
+                orderToLllegalDealt.SumServiceFees = orderToLllegalDealtDetails.Sum(m => m.ServiceFee);
+                orderToLllegalDealt.SumLateFees = orderToLllegalDealtDetails.Sum(m => m.Late_fees);
+                orderToLllegalDealt.Price = orderToLllegalDealt.SumFine + orderToLllegalDealt.SumServiceFees + orderToLllegalDealt.SumLateFees;
                 CurrentDb.OrderToLllegalDealt.Add(orderToLllegalDealt);
                 CurrentDb.SaveChanges();
 
@@ -1202,7 +1208,9 @@ namespace Lumos.BLL
                 yOrder.productType = orderToLllegalDealt.ProductType;
                 yOrder.productName = orderToLllegalDealt.ProductName;
 
-                //yOrder.amount = int.Parse((orderToServiceFee.Price * 100).ToString()).ToString();
+                //todo amount
+
+                yOrder.amount = Convert.ToInt32((orderToLllegalDealt.Price * 100)).ToString();
 
                 yOrder.amount = "1";
 

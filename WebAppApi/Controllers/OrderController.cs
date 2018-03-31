@@ -325,7 +325,16 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("车牌号码", orderToLllegalDealt.CarNo));
                                 orderModel.OrderField.Add(new OrderField("违章", string.Format("{0}次", orderToLllegalDealt.SumCount)));
                                 orderModel.OrderField.Add(new OrderField("扣分", orderToLllegalDealt.SumPoint.ToString()));
-                                orderModel.OrderField.Add(new OrderField("罚款", orderToLllegalDealt.SumFine.ToString()));
+                                orderModel.OrderField.Add(new OrderField("罚款", orderToLllegalDealt.SumFine.ToF2Price()));
+
+                                var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(c => c.OrderId == m.Id).ToList();
+                                var dealtcount = orderToLllegalDealtDetails.Where(c => c.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
+                                if (dealtcount > 0) {
+                                    orderModel.StatusName = "已付，处理中";
+                                }
+                                else {
+                                    orderModel.StatusName = "完成";
+                                }
 
                                 break;
                         }
@@ -789,18 +798,19 @@ namespace WebAppApi.Controllers
                     model.CompleteTime = orderToLllegalDealt.CompleteTime.ToUnifiedFormatDateTime();
                     model.PayTime = orderToLllegalDealt.PayTime.ToUnifiedFormatDateTime();
                     model.CancleTime = orderToLllegalDealt.CancleTime.ToUnifiedFormatDateTime();
-                    model.Status = orderToLllegalDealt.Status;
+       
                     model.StatusName = orderToLllegalDealt.Status.GetCnName();
                     model.FollowStatus = orderToLllegalDealt.FollowStatus;
                     model.Remarks = orderToLllegalDealt.Remarks.NullToEmpty();
 
                     model.CarNo = orderToLllegalDealt.CarNo;
                     model.SumCount = orderToLllegalDealt.SumCount;
-                    model.SumFine = orderToLllegalDealt.SumFine;
-                    model.SumPoint = orderToLllegalDealt.SumPoint;
-
-
-                    var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.Id == orderId).ToList();
+                    model.SumFine = orderToLllegalDealt.SumFine.ToF2Price();
+                    model.SumPoint = orderToLllegalDealt.SumPoint.ToString();
+                    model.SumLateFees = orderToLllegalDealt.SumLateFees.ToF2Price();
+                    model.SumServiceFees = orderToLllegalDealt.SumServiceFees.ToF2Price();
+                    model.Price = orderToLllegalDealt.Price.ToF2Price();
+                    var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.OrderId == orderId).ToList();
 
                     foreach (var item in orderToLllegalDealtDetails)
                     {
@@ -823,8 +833,15 @@ namespace WebAppApi.Controllers
                         record.lllegalCity = item.LllegalCity;
                         record.address = item.Address;
                         record.status = item.Status.GetCnName();
-
                         model.LllegalRecord.Add(record);
+                    }
+
+                    var dealtcount = orderToLllegalDealtDetails.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
+                    if (dealtcount > 0) {
+                        model.StatusName = "已付，处理中";
+                    }
+                    else {
+                        model.StatusName = "完成";
                     }
 
                 }

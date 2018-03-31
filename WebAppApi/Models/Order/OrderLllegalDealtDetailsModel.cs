@@ -15,9 +15,12 @@ namespace WebAppApi.Models.Order
 
         public List<LllegalRecord> LllegalRecord { get; set; }
 
-        public decimal SumPoint { get; set; }
-        public decimal SumFine { get; set; }
+        public string SumPoint { get; set; }
+        public string SumFine { get; set; }
         public string CarNo { get; set; }
         public int SumCount { get; set; }
+
+        public string SumLateFees { get; set; }
+        public string SumServiceFees { get; set; }
     }
 }

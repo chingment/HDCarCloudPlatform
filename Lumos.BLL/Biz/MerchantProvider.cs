@@ -538,7 +538,9 @@ namespace Lumos.BLL
             yOrder.productType = orderToServiceFee.ProductType;
             yOrder.productName = orderToServiceFee.ProductName;
 
-            //yOrder.amount = int.Parse((orderToServiceFee.Price * 100).ToString()).ToString();
+            //todo amount
+            yOrder.amount = Convert.ToInt32((orderToServiceFee.Price * 100)).ToString();
+
 
             yOrder.amount = "1";
 

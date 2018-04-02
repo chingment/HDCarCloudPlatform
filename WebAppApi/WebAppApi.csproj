@@ -183,6 +183,7 @@
     <Compile Include="Models\CarService\ReInsureOfferModel.cs" />
     <Compile Include="Models\Lllegal\QueryParams.cs" />
     <Compile Include="Models\Lllegal\DealtParams.cs" />
+    <Compile Include="Models\Order\GetPayTranSnParams.cs" />
     <Compile Include="Models\Order\OrderApplyLossAssessDetailsModel.cs" />
     <Compile Include="Models\Order\CancleModel.cs" />
     <Compile Include="Models\Order\OrderBaseDetailsViewModel.cs" />

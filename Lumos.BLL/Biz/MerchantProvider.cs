@@ -536,24 +536,11 @@ namespace Lumos.BLL
             yOrder.OrderId = orderToServiceFee.Id;
             yOrder.OrderSn = orderToServiceFee.Sn;
             yOrder.remarks = orderToServiceFee.Remarks;
-            yOrder.transName = "消费";
             yOrder.productType = orderToServiceFee.ProductType;
             yOrder.productName = orderToServiceFee.ProductName;
 
+            //yOrder.confirmField.Add(new OrderField("订单编号", orderToServiceFee.Sn.NullToEmpty()));
 
-            if (BizFactory.AppSettings.IsTest)
-            {
-                yOrder.amount = "1";
-            }
-            else
-            {
-                yOrder.amount = Convert.ToInt32((orderToServiceFee.Price * 100)).ToString();
-            }
-
-
-
-
-            yOrder.confirmField.Add(new OrderField("订单编号", orderToServiceFee.Sn.NullToEmpty()));
             if (orderToServiceFee.Deposit > 0)
             {
                 yOrder.confirmField.Add(new OrderField("押金", string.Format("{0}元", orderToServiceFee.Deposit.ToF2Price())));

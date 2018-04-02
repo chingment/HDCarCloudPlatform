@@ -1113,20 +1113,10 @@ namespace Lumos.BLL
                 yOrder.OrderId = orderToLllegalQueryRecharge.Id;
                 yOrder.OrderSn = orderToLllegalQueryRecharge.Sn;
                 yOrder.remarks = orderToLllegalQueryRecharge.Remarks;
-                yOrder.transName = "消费";
                 yOrder.productType = orderToLllegalQueryRecharge.ProductType;
                 yOrder.productName = orderToLllegalQueryRecharge.ProductName;
 
-                if (BizFactory.AppSettings.IsTest)
-                {
-                    yOrder.amount = "1";
-                }
-                else
-                {
-                    yOrder.amount = Convert.ToInt32((orderToLllegalQueryRecharge.Price * 100)).ToString();
-                }
-
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalQueryRecharge.Sn.NullToEmpty()));
+                // yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalQueryRecharge.Sn.NullToEmpty()));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("积分", string.Format("{0}", orderToLllegalQueryRecharge.Score)));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalQueryRecharge.Price.NullToEmpty())));
 
@@ -1207,20 +1197,12 @@ namespace Lumos.BLL
                 yOrder.OrderId = orderToLllegalDealt.Id;
                 yOrder.OrderSn = orderToLllegalDealt.Sn;
                 yOrder.remarks = orderToLllegalDealt.Remarks;
-                yOrder.transName = "消费";
                 yOrder.productType = orderToLllegalDealt.ProductType;
                 yOrder.productName = orderToLllegalDealt.ProductName;
 
-                if (BizFactory.AppSettings.IsTest)
-                {
-                    yOrder.amount = "1";
-                }
-                else
-                {
-                    yOrder.amount = Convert.ToInt32((orderToLllegalDealt.Price * 100)).ToString();
-                }
 
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalDealt.Sn.NullToEmpty()));
+
+                //yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalDealt.Sn.NullToEmpty()));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("车牌号码", orderToLllegalDealt.CarNo.NullToEmpty()));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("违章", string.Format("{0}次", orderToLllegalDealt.SumCount)));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("扣分", orderToLllegalDealt.SumPoint.NullToEmpty()));
@@ -1334,6 +1316,60 @@ namespace Lumos.BLL
 
         }
 
+
+        public CustomJsonResult GetPayTranSn(int operater, OrderPayTrans orderPayTrans)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                var order = CurrentDb.Order.Where(m => m.UserId == orderPayTrans.UserId && m.Id == orderPayTrans.Id && m.Sn == orderPayTrans.OrderSn).FirstOrDefault();
+                if (order == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "跳转支付错误");
+                }
+
+                var l_orderPayTrans = new OrderPayTrans();
+
+                l_orderPayTrans.UserId = orderPayTrans.UserId;
+                l_orderPayTrans.MerchantId = orderPayTrans.MerchantId;
+                l_orderPayTrans.PosMachineId = orderPayTrans.PosMachineId;
+                l_orderPayTrans.OrderId = orderPayTrans.OrderId;
+                l_orderPayTrans.OrderSn = orderPayTrans.OrderSn;
+                l_orderPayTrans.TransType = orderPayTrans.TransType;
+
+
+                if (BizFactory.AppSettings.IsTest)
+                {
+                    l_orderPayTrans.Amount = "1";
+                }
+                else
+                {
+                    l_orderPayTrans.Amount = Convert.ToInt32((order.Price * 100)).ToString();
+                }
+
+                l_orderPayTrans.CreateTime = DateTime.Now;
+                l_orderPayTrans.Creator = operater;
+                CurrentDb.OrderPayTrans.Add(l_orderPayTrans);
+                CurrentDb.SaveChanges();
+
+                SnModel snModel = Sn.Build(SnType.OrderPayTrans, l_orderPayTrans.Id);
+
+                l_orderPayTrans.Sn = snModel.Sn;
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+
+                var model = new { orderId = orderPayTrans.OrderId, orderSn = orderPayTrans.OrderSn, payTransSn = l_orderPayTrans.Sn };
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", model);
+
+            }
+
+            return result;
+        }
 
     }
 }

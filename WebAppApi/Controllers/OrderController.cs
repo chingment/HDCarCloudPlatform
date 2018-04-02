@@ -329,7 +329,8 @@ namespace WebAppApi.Controllers
 
                                 var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(c => c.OrderId == m.Id).ToList();
                                 var dealtcount = orderToLllegalDealtDetails.Where(c => c.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
-                                if (dealtcount > 0) {
+                                if (dealtcount > 0)
+                                {
                                     orderModel.StatusName = "已付，处理中";
                                 }
                                 else {
@@ -798,7 +799,7 @@ namespace WebAppApi.Controllers
                     model.CompleteTime = orderToLllegalDealt.CompleteTime.ToUnifiedFormatDateTime();
                     model.PayTime = orderToLllegalDealt.PayTime.ToUnifiedFormatDateTime();
                     model.CancleTime = orderToLllegalDealt.CancleTime.ToUnifiedFormatDateTime();
-       
+
                     model.StatusName = orderToLllegalDealt.Status.GetCnName();
                     model.FollowStatus = orderToLllegalDealt.FollowStatus;
                     model.Remarks = orderToLllegalDealt.Remarks.NullToEmpty();
@@ -837,7 +838,8 @@ namespace WebAppApi.Controllers
                     }
 
                     var dealtcount = orderToLllegalDealtDetails.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
-                    if (dealtcount > 0) {
+                    if (dealtcount > 0)
+                    {
                         model.StatusName = "已付，处理中";
                     }
                     else {
@@ -969,6 +971,27 @@ namespace WebAppApi.Controllers
             IResult result = BizFactory.Pay.ResultNotify(model.UserId, Enumeration.PayResultNotifyParty.AppNotify, model);
 
             return new APIResponse(result);
+        }
+
+
+        [HttpPost]
+        public APIResponse GetPayTranSn(GetPayTranSnParams pms)
+        {
+            var orderPayTrans = new OrderPayTrans();
+
+            orderPayTrans.UserId = pms.UserId;
+            orderPayTrans.MerchantId = pms.MerchantId;
+            orderPayTrans.PosMachineId = pms.PosMachineId;
+            orderPayTrans.OrderId = pms.OrderId;
+            orderPayTrans.OrderSn = pms.OrderSn;
+            orderPayTrans.TransType = pms.TransType;
+            orderPayTrans.CreateTime = DateTime.Now;
+            orderPayTrans.Creator = pms.UserId;
+
+            IResult result = BizFactory.Order.GetPayTranSn(pms.UserId, orderPayTrans);
+
+            return new APIResponse(result);
+
         }
     }
 }

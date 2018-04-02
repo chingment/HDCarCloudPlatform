@@ -17,7 +17,8 @@ namespace Lumos.BLL
         ApplyLossAssess = 7,
         LllegalQueryScoreTrans = 8,
         LllegalQueryRecharge = 9,
-        LllegalDealt = 10
+        LllegalDealt = 10,
+        OrderPayTrans=11
     }
 
     public class SnModel

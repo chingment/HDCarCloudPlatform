@@ -97,6 +97,8 @@ namespace Lumos.DAL
 
         public IDbSet<OrderToLllegalDealtDetails> OrderToLllegalDealtDetails { get; set; }
 
+        public IDbSet<OrderPayTrans> OrderPayTrans { get; set; }
+
         //public FxDbContext()
         //    : base("DefaultConnection")
         //{

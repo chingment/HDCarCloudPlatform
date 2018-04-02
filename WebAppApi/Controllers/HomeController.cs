@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
-        //private string host = "http://120.79.233.231";
+        //private string host = "http://localhost:16665";
+        private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -169,10 +169,13 @@ namespace WebAppApi.Controllers
             int merchantId = 241;
             int posMachineId = 148;
 
-           // model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
+            model.Add("获取支付流水号", GetGetPayTranSn(1001, 1, 2, 3, "D180205111300000007"));
+
+
+            // model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
-            model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
+            // model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
 
             //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
@@ -1592,7 +1595,7 @@ namespace WebAppApi.Controllers
             List<LllegalRecord> record = new List<LllegalRecord>();
 
 
-            record.Add(new LllegalRecord { bookNo="1", address="2",point=1, serviceFee=50,late_fees=2,fine=300,cityCode="4400", content="sdasdadd", lllegalTime="2012-12-12" });
+            record.Add(new LllegalRecord { bookNo = "1", address = "2", point = 1, serviceFee = 50, late_fees = 2, fine = 300, cityCode = "4400", content = "sdasdadd", lllegalTime = "2012-12-12" });
             record.Add(new LllegalRecord { bookNo = "2", address = "2", point = 1, serviceFee = 50, late_fees = 2, fine = 300, cityCode = "4400", content = "sdasdadd", lllegalTime = "2012-12-12" });
             record.Add(new LllegalRecord { bookNo = "3", address = "2", point = 1, serviceFee = 50, late_fees = 2, fine = 300, cityCode = "4400", content = "sdasdadd", lllegalTime = "2012-12-12" });
             record.Add(new LllegalRecord { bookNo = "4", address = "2", point = 1, serviceFee = 50, late_fees = 2, fine = 300, cityCode = "4400", content = "sdasdadd", lllegalTime = "2012-12-12" });
@@ -1600,9 +1603,9 @@ namespace WebAppApi.Controllers
 
             model1.LllegalRecord = record;
 
-           // string a1 = JsonConvert.SerializeObject(model1);
+            // string a1 = JsonConvert.SerializeObject(model1);
 
-            string a1= "{\"lllegalRecord\":[{\"bookNo\":\"4401107901494580\",\"bookType\":\"6001A\",\"bookTypeName\":\"非现场未处理违章数据\",\"lllegalCode\":\"1344\",\"cityCode\":\"440110\",\"lllegalTime\":\"2017-07-11 13:33:00\",\"point\":\"3.0\",\"offerType\":\"3\",\"ofserTypeName\":\"扣分单\",\"fine\":\"200.0\",\"serviceFee\":\"435.0\",\"late_fees\":\"200.0\",\"content\":\"免资料；2-3个工作日.超证另通知\",\"lllegalDesc\":\"机动车违反禁令标志指示的\",\"lllegalCity\":\"广东省广州市\",\"address\":\"元岗横路_元岗横路路段\"}],\"merchantId\":241,\"carNo\":\"粤YGY662\",\"userId\":1215,\"posMachineId\":149}";
+            string a1 = "{\"lllegalRecord\":[{\"bookNo\":\"4401107901494580\",\"bookType\":\"6001A\",\"bookTypeName\":\"非现场未处理违章数据\",\"lllegalCode\":\"1344\",\"cityCode\":\"440110\",\"lllegalTime\":\"2017-07-11 13:33:00\",\"point\":\"3.0\",\"offerType\":\"3\",\"ofserTypeName\":\"扣分单\",\"fine\":\"200.0\",\"serviceFee\":\"435.0\",\"late_fees\":\"200.0\",\"content\":\"免资料；2-3个工作日.超证另通知\",\"lllegalDesc\":\"机动车违反禁令标志指示的\",\"lllegalCity\":\"广东省广州市\",\"address\":\"元岗横路_元岗横路路段\"}],\"merchantId\":241,\"carNo\":\"粤YGY662\",\"userId\":1215,\"posMachineId\":149}";
             string signStr = Signature.Compute(key, secret, timespan, a1);
 
             Dictionary<string, string> headers1 = new Dictionary<string, string>();
@@ -1615,6 +1618,35 @@ namespace WebAppApi.Controllers
             string respon_data4 = http.HttpPostJson("" + host + "/api/Lllegal/Dealt", a1, headers1);
 
             return respon_data4;
+
+        }
+
+
+        public string GetGetPayTranSn(int userId, int merchantId, int posMachineId, int orderId, string orderSn)
+        {
+
+
+            GetPayTranSnParams pms = new GetPayTranSnParams();
+            pms.MerchantId = merchantId;
+            pms.PosMachineId = posMachineId;
+            pms.UserId = userId;
+            pms.OrderId = orderId;
+            pms.OrderSn = orderSn;
+
+            string a1 = JsonConvert.SerializeObject(pms);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/GetPayTranSn", a1, headers1);
+
+            return respon_data4;
+
 
         }
     }

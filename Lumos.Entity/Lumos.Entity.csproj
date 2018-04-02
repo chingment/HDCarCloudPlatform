@@ -84,6 +84,7 @@
     <Compile Include="Biz\OrderPayResultNotifyByMinShunLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyByStaffLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
+    <Compile Include="Biz\OrderPayTrans.cs" />
     <Compile Include="Biz\OrderToApplyLossAssess .cs" />
     <Compile Include="Biz\OrderToLllegalDealt.cs" />
     <Compile Include="Biz\OrderToLllegalDealtDetails.cs" />

@@ -26,13 +26,8 @@ namespace Lumos.BLL
 
         public string productName { get; set; }
 
-        public string transName { get; set; }
-
-        public string amount { get; set; }
-
         public string remarks { get; set; }
 
-        //public YiBanShiOrderInfo orderInfo { get; set; }
 
         public List<OrderField> confirmField
         {

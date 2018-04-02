@@ -18,6 +18,7 @@
             $("#Model_Merchant_Type").formValidator().inputValidator({ min: 1, max: 500, onError: "请选择商户类型" });
             $("#Model_Merchant_ContactName").formValidator().inputValidator({ min: 1, max: 100, onError: "[商户信息]联系人不能为空,且不超过100个字符" });
             $("#Model_Merchant_ContactPhoneNumber").formValidator().inputValidator({ min: 11, max: 11, onError: "[商户信息]联系电话只能输入11位的手机号码" });
+            $("#Model_Merchant_WechatNumber").formValidator({ onShow: "", onFocus: "", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 100, onError: "[商户信息]微信号不能为空,且不超过100个字符" });
             $("#Model_Merchant_AreaCode").formValidator().inputValidator({ min: 1, onError: "请选择地区" });
             $("#Model_Merchant_ContactAddress").formValidator().inputValidator({ min: 1, max: 100, onError: "[商户信息]联系地址不能为空,且不超过100个字符" });
             $("#Model_Merchant_AgentId").formValidator().inputValidator({ min: 1, max: 500, empty: { leftEmpty: false, emptyError: "请选择代理商" }, onError: "请选择代理商" });
@@ -47,9 +48,9 @@
             //$("#Model_MerchantPosMachine_Deposit_0").decimalInput(2);
             //$("#Model_MerchantPosMachine_Rent_0").decimalInput(2);
 
-            $("#Model_BankCard_BankName_0").formValidator().inputValidator({ min: 1, max: 100, onError: "开户行不能为空,且不超过100个字符" });
-            $("#Model_BankCard_BankAccountName_0").formValidator().inputValidator({ min: 1, max: 100, onError: "持卡人不能为空,且不超过100个字符" });
-            $("#Model_BankCard_BankAccountNo_0").formValidator().inputValidator({ min: 1, max: 100, onError: "开户账号不能为空,且不超过100个字符" });
+            //$("#Model_BankCard_BankName_0").formValidator().inputValidator({ min: 1, max: 100, onError: "开户行不能为空,且不超过100个字符" });
+            //$("#Model_BankCard_BankAccountName_0").formValidator().inputValidator({ min: 1, max: 100, onError: "持卡人不能为空,且不超过100个字符" });
+            //$("#Model_BankCard_BankAccountNo_0").formValidator().inputValidator({ min: 1, max: 100, onError: "开户账号不能为空,且不超过100个字符" });
 
 
             $('#Model_Merchant_Type').change(function () {
@@ -122,7 +123,7 @@
         }
 
         function getAgentUserDetails(obj) {
-
+      
             $('#lbl_Merchant_Agent').text(obj.fullName + "(" + obj.userName + ")");
             $('#Model_Merchant_AgentId').val(obj.id);
         }
@@ -261,7 +262,7 @@
             <td class="t"><span class="required-symbol">*</span>代理商：</td>
             <td class="c">
 
-                <span id="lbl_Agent_Salesman">@(Model.Agent == null ? "" : Model.Agent.FullName + "(" + Model.Agent.UserName + ")")</span>
+                <span id="lbl_Merchant_Agent">@(Model.Agent == null ? "" : Model.Agent.FullName + "(" + Model.Agent.UserName + ")")</span>
                 <input type="hidden" class="input-control" name="Model.Merchant.AgentId" id="Model_Merchant_AgentId" value="@(Model.Agent==null?"":Model.Agent.Id.ToString())" />
 
                 <span> <input type="button" class="btn" id="btn_select_agentUser" value="选择" dialog-title="选择代理商" /></span>
@@ -422,17 +423,17 @@
         <input type="hidden" name="Model.BankCard[@i].Id" value="@Model.BankCard[i].Id" />
         <table class="f-tb1-detail">
             <tr>
-                <td class="t"><span class="required-symbol">*</span>开户行：</td>
+                <td class="t">开户行：</td>
                 <td class="c">
                     <span><input type="text" class="input-control" name="Model.BankCard[@i].BankName" id="Model_BankCard_BankName_@i" value="@Model.BankCard[i].BankName" /></span>
                 </td>
-                <td class="t"><span class="required-symbol">*</span>持卡人：</td>
+                <td class="t">持卡人：</td>
                 <td class="c">
                     <span><input type="text" class="input-control" name="Model.BankCard[@i].BankAccountName" id="Model_BankCard_BankAccountName_@i" value="@Model.BankCard[i].BankAccountName" /></span>
                 </td>
             </tr>
             <tr>
-                <td class="t"><span class="required-symbol">*</span>开户账号：</td>
+                <td class="t">开户账号：</td>
                 <td class="c" colspan="3">
                     <span><input type="text" class="input-control" name="Model.BankCard[@i].BankAccountNo" id="Model_BankCard_BankAccountNo_@i" value="@Model.BankCard[i].BankAccountNo" /></span>
                 </td>

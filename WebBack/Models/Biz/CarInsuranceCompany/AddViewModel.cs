@@ -7,15 +7,9 @@ namespace WebBack.Models.Biz.CarInsuranceCompany
 {
     public class AddViewModel
     {
-        public int InsuranceCompanyId { get; set; }
 
-        public string InsuranceCompanyName { get; set; }
+        public Lumos.Entity.CarInsuranceCompany CarInsuranceCompany { get; set; }
 
-        public string InsuranceCompanyImgUrl { get; set; }
-
-        public decimal CommercialRate { get; set; }
-
-        public decimal CompulsoryRate { get; set; }
 
     }
 }

@@ -90,6 +90,22 @@
                 <span>@Model.OrderToLllegalDealt.SumFine</span>
             </td>
         </tr>
+        <tr>
+            <td class="t">滞纳金：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumLateFees</span>
+            </td>
+            <td class="t">服务费：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumServiceFees</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">总额：</td>
+            <td class="c" colspan="3">
+                <span>@Model.OrderToLllegalDealt.Price</span>
+            </td>
+        </tr>
     </table>
 
     <table id="list_table_offerkinds" class="list-tb" cellpadding="0" cellspacing="0">
@@ -101,17 +117,23 @@
                 <th style="width:10%">
                     城市
                 </th>
-                <th style="width:10%%">
+                <th style="width:10%">
                     地点
                 </th>
-                <th style="width:10%%">
+                <th style="width:10%">
                     时间
                 </th>
-                <th style="width:10%%">
+                <th style="width:10%">
                     扣分
                 </th>
-                <th style="width:10%%">
+                <th style="width:10%">
                     扣费
+                </th>
+                <th style="width:10%">
+                    滞纳金
+                </th>
+                <th style="width:10%">
+                    服务费
                 </th>
                 <th style="width:10%">
                     处理说明
@@ -129,6 +151,8 @@
                     <td>@m.LllegalTime</td>
                     <td>@m.Point</td>
                     <td>@m.Fine</td>
+                    <td>@m.Late_fees</td>
+                    <td>@m.ServiceFee</td>
                     <td>@m.Content</td>
                 </tr>
             }

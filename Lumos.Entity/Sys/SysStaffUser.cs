@@ -16,5 +16,6 @@ namespace Lumos.Entity
         [MaxLength(50)]
         public string CtiNo { get; set; }
 
+
     }
 }

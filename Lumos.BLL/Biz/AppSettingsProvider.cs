@@ -9,6 +9,27 @@ namespace Lumos.BLL
 {
     public class AppSettingsProvider
     {
+
+        public bool IsTest
+        {
+            get
+            {
+                string istest = ConfigurationManager.AppSettings["custom:IsTest"];
+                if (istest == null){
+                    return false;
+                }
+
+                if(istest.ToLower()=="true")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         public int CutOffIntervalByMinutes
         {
             get

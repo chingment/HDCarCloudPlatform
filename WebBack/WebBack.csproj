@@ -181,6 +181,7 @@
     <Compile Include="Controllers\Sys\PermissionController.cs" />
     <Compile Include="Controllers\Sys\RoleController.cs" />
     <Compile Include="Controllers\Sys\SalesmanUserController.cs" />
+    <Compile Include="Controllers\Sys\SmsSendController.cs" />
     <Compile Include="Controllers\Sys\StaffUserController.cs" />
     <Compile Include="Controllers\Sys\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -207,6 +208,7 @@
     <Compile Include="Models\Biz\CarClaim\VerifyAmountViewModel.cs" />
     <Compile Include="Models\Biz\CarClaim\VerifyOrderViewModel.cs" />
     <Compile Include="Models\Biz\CarInsuranceCompany\AddViewModel.cs" />
+    <Compile Include="Models\Biz\CarInsuranceCompany\EditViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\AddViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\SelectKindsViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\DealtViewModel.cs" />
@@ -281,6 +283,7 @@
     <Compile Include="Models\Sys\SalesmanUser\AddViewModel.cs" />
     <Compile Include="Models\Sys\SalesmanUser\EditViewModel.cs" />
     <Compile Include="Models\Sys\SalesmanUser\SearchCondition.cs" />
+    <Compile Include="Models\Sys\SmsSend\SearchCondition.cs" />
     <Compile Include="Models\Sys\StaffUser\AddViewModel.cs" />
     <Compile Include="Models\Sys\StaffUser\EditViewModel.cs" />
     <Compile Include="Models\Sys\StaffUser\SearchCondition.cs" />
@@ -1256,6 +1259,8 @@
     <Content Include="Views\Biz\Lllegal\DetailsByDealt.cshtml" />
     <Content Include="Views\Biz\Lllegal\List.cshtml" />
     <Content Include="Views\Biz\Lllegal\DetailsByQueryRecharge.cshtml" />
+    <Content Include="Views\Sys\SmsSend\Log.cshtml" />
+    <Content Include="Views\Biz\CarInsuranceCompany\Edit.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -1278,6 +1283,7 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\toolbar\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\wysiwygarea\" />
+    <Folder Include="Views\SmsSend\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -95,7 +95,7 @@ namespace WebBack.Controllers.Sys
         {
 
             var user = new SysStaffUser();
-            user.UserName = string.Format("UP{0}", model.SysStaffUser.UserName);
+            user.UserName = string.Format("HYL{0}", model.SysStaffUser.UserName);
             user.FullName = model.SysStaffUser.FullName;
             user.PasswordHash = PassWordHelper.HashPassword(model.SysStaffUser.Password);
             user.Email = model.SysStaffUser.Email;

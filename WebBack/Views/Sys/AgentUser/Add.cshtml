@@ -10,6 +10,7 @@
             $.formValidator.initConfig({ formID: "form1", onSuccess: function () { return add(); } });
             $("#Model_SysAgentUser_UserName").formValidator({ onShow: "&nbsp;", onFocus: "由3到20个数字、英文字母或下划线组成", onCorrect: "&nbsp;" }).regexValidator({ min: 3, max: 20, regExp: "^[0-9a-zA-Z_]{3,20}$", onError: "由3到20个数字、英文字母或下划线组成" });
             $("#Model_SysAgentUser_FullName").formValidator({ onShow: "&nbsp;", onFocus: "不超过50个字符", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 50, empty: { leftEmpty: false, emptyError: "不能有空格" }, onError: "不超过50个字符" });
+            $("#Model_SysAgentUser_WechatNumber").formValidator({ onShow: "&nbsp;", onFocus: "不超过50个字符", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 50, empty: { leftEmpty: false, emptyError: "不能有空格" }, onError: "不超过50个字符" });
             $("#Model_SysAgentUser_Email").formValidator({ onShow: "&nbsp;", onFocus: "邮箱格式且不超过100个字符", onCorrect: "&nbsp;", empty: true, onEmpty: "&nbsp;" }).inputValidator({ min: 0, max: 100, onError: "邮箱格式且不超过100个字符" }).regexValidator({ regExp: regexEnum.email, onError: "邮箱格式且不超过100个字符" });
             $("#Model_SysAgentUser_PhoneNumber").formValidator({ onShow: "&nbsp;", onFocus: "手机号码格式", onCorrect: "&nbsp;", empty: true, onEmpty: "&nbsp;" }).inputValidator({ min: 0, max: 11, onError: "手机号码格式且不超过11个字符" }).regexValidator({ regExp: regexEnum.mobile, onError: "手机号码格式且不超过11个字符" });
 
@@ -70,6 +71,15 @@ function () {
                 <td class="f-tb-c">
                     <input name="Model.SysAgentUser.FullName" class="input-control" type="text" id="Model_SysAgentUser_FullName" style="width: 150px;" />
                     <span id="Model_SysAgentUser_FullNameTip"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    微信号：
+                </td>
+                <td class="f-tb-c">
+                    <input name="Model.SysAgentUser.WechatNumber" class="input-control" type="text" id="Model_SysAgentUser_WechatNumber" style="width: 150px;" />
+                    <span id="Model_SysAgentUser_WechatNumberTip"></span>
                 </td>
             </tr>
             <tr>

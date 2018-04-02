@@ -222,6 +222,7 @@ namespace Lumos.BLL
                 l_Merchant.ContactName = merchant.ContactName;
                 l_Merchant.ContactPhoneNumber = merchant.ContactPhoneNumber;
                 l_Merchant.ContactAddress = merchant.ContactAddress;
+                l_Merchant.WechatNumber = merchant.WechatNumber;
                 l_Merchant.YYZZ_Name = merchant.YYZZ_Name;
                 l_Merchant.YYZZ_RegisterNo = merchant.YYZZ_RegisterNo;
                 l_Merchant.YYZZ_Type = merchant.YYZZ_Type;
@@ -342,6 +343,7 @@ namespace Lumos.BLL
                 l_Merchant.ContactName = merchant.ContactName;
                 l_Merchant.ContactPhoneNumber = merchant.ContactPhoneNumber;
                 l_Merchant.ContactAddress = merchant.ContactAddress;
+                l_Merchant.WechatNumber = merchant.WechatNumber;
                 l_Merchant.YYZZ_Name = merchant.YYZZ_Name;
                 l_Merchant.YYZZ_RegisterNo = merchant.YYZZ_RegisterNo;
                 l_Merchant.YYZZ_Type = merchant.YYZZ_Type;
@@ -538,11 +540,18 @@ namespace Lumos.BLL
             yOrder.productType = orderToServiceFee.ProductType;
             yOrder.productName = orderToServiceFee.ProductName;
 
-            //todo amount
-            yOrder.amount = Convert.ToInt32((orderToServiceFee.Price * 100)).ToString();
+
+            if (BizFactory.AppSettings.IsTest)
+            {
+                yOrder.amount = "1";
+            }
+            else
+            {
+                yOrder.amount = Convert.ToInt32((orderToServiceFee.Price * 100)).ToString();
+            }
 
 
-            yOrder.amount = "1";
+
 
             yOrder.confirmField.Add(new OrderField("订单编号", orderToServiceFee.Sn.NullToEmpty()));
             if (orderToServiceFee.Deposit > 0)

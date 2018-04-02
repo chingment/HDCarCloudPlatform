@@ -15,5 +15,6 @@ namespace Lumos.Entity
     {
         [MaxLength(50)]
         public string AgentCode { get; set; }
+
     }
 }

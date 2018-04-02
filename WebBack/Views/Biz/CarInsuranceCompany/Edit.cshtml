@@ -1,0 +1,110 @@
+﻿@model WebBack.Models.Biz.CarInsuranceCompany.EditViewModel
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        var listTable;
+
+        $(document).ready(function () {
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+        });
+
+
+        function submit(fun) {
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+                art.dialog.confirm(
+                '确定要修改？',
+                function () {
+                    var l_Data = $("#form1").serializeArray();
+                    $.lumos.postJson({
+                        url: "/Biz/CarInsuranceCompany/Edit",
+                        data: l_Data,
+                        success: function (d) {
+                            fun(d);
+                        }
+                    });
+                });
+            }
+
+            return false;
+        }
+
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @Html.AntiForgeryToken()
+    <input id="Model_CarInsuranceCompany_Id" value="@Model.CarInsuranceCompany.Id" name="Model.CarInsuranceCompany.Id" type="hidden" />
+    <input id="Model_CarInsuranceCompany_InsuranceCompanyId" value="@Model.CarInsuranceCompany.InsuranceCompanyId" name="Model.CarInsuranceCompany.InsuranceCompanyId" type="hidden" />
+    <input id="Model_CarInsuranceCompany_InsuranceCompanyName" value="@Model.CarInsuranceCompany.InsuranceCompanyName" name="Model.CarInsuranceCompany.InsuranceCompanyName" type="hidden" />
+    <table class="f-tb" cellpadding="0" cellspacing="1">
+        <tr>
+            <td class="f-tb-t" style="width:50px;">
+                保险公司：
+            </td>
+            <td class="f-tb-c">
+                @Model.CarInsuranceCompany.InsuranceCompanyName
+            </td>
+        </tr>
+        <tr>
+            <td class="f-tb-t" style="width:50px;">
+                图标：
+            </td>
+            <td class="f-tb-c">
+                <span class="uploadimgbox" upload="true">
+                    <span class="uploadimg" inputname="Model.CarInsuranceCompany.InsuranceCompanyImgUrl" path="CarInsuranceCompany">
+                        <img src="" id="Model_CarInsuranceCompany_InsuranceCompanyImgUrl_src" />
+                        <span class="uploadimg-click" style="">上传</span>
+                        <input id="Model_CarInsuranceCompany_InsuranceCompanyImgUrl" value="" @Model.CarInsuranceCompany.InsuranceCompanyImgUrl " name="Model.CarInsuranceCompany.InsuranceCompanyImgUrl" type="hidden" />
+                    </span>
+                    <span class="uploadimg-view" style="">预览</span>
+                </span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="f-tb-t" style="width:50px;">
+                可投保：
+            </td>
+            <td class="f-tb-c">
+                @Html.initBool("Model.CarInsuranceCompany.CanInsure", new { @class = "select-control", defaulttext = "请选择", selectedvalue = Model.CarInsuranceCompany.CanInsure })
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="f-tb-t" style="width:50px;">
+                可理赔：
+            </td>
+            <td class="f-tb-c">
+                @Html.initBool("Model.CarInsuranceCompany.CanClaims", new { @class = "select-control", defaulttext = "请选择", selectedvalue = Model.CarInsuranceCompany.CanClaims })
+
+            </td>
+        </tr>
+        <tr>
+            <td class="f-tb-t" style="width:50px;">
+                可作为申请定损点：
+            </td>
+            <td class="f-tb-c">
+                @Html.initBool("Model.CarInsuranceCompany.CanApplyLossAssess", new { @class = "select-control", defaulttext = "请选择", selectedvalue = Model.CarInsuranceCompany.CanApplyLossAssess })
+            </td>
+        </tr>
+        <tr style="display:none">
+            <td class="f-tb-t"></td>
+            <td class="f-tb-c">
+                <input type="submit" name="btn_Submit" id="btn_Submit" value="确定" class="btn btn-sure" />
+                <input type="button" name="btn_Cancle" id="btn_Cancle" value="关闭" class="btn btn-close dialog-close" />
+            </td>
+        </tr>
+    </table>
+
+</form>
+

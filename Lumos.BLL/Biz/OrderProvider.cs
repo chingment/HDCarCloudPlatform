@@ -1117,11 +1117,14 @@ namespace Lumos.BLL
                 yOrder.productType = orderToLllegalQueryRecharge.ProductType;
                 yOrder.productName = orderToLllegalQueryRecharge.ProductName;
 
-                //todo amount
-                yOrder.amount = Convert.ToInt32((orderToLllegalQueryRecharge.Price * 100)).ToString();
-    
-
-                yOrder.amount = "1";
+                if (BizFactory.AppSettings.IsTest)
+                {
+                    yOrder.amount = "1";
+                }
+                else
+                {
+                    yOrder.amount = Convert.ToInt32((orderToLllegalQueryRecharge.Price * 100)).ToString();
+                }
 
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalQueryRecharge.Sn.NullToEmpty()));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("积分", string.Format("{0}", orderToLllegalQueryRecharge.Score)));
@@ -1185,11 +1188,11 @@ namespace Lumos.BLL
                 CurrentDb.SaveChanges();
 
 
-                foreach(var item in orderToLllegalDealtDetails)
+                foreach (var item in orderToLllegalDealtDetails)
                 {
 
                     item.OrderId = orderToLllegalDealt.Id;
-                    item.Status =Enumeration.OrderToLllegalDealtDetailsStatus.WaitPay;
+                    item.Status = Enumeration.OrderToLllegalDealtDetailsStatus.WaitPay;
                     item.CreateTime = this.DateTime;
                     item.Creator = operater;
 
@@ -1208,11 +1211,14 @@ namespace Lumos.BLL
                 yOrder.productType = orderToLllegalDealt.ProductType;
                 yOrder.productName = orderToLllegalDealt.ProductName;
 
-                //todo amount
-
-                yOrder.amount = Convert.ToInt32((orderToLllegalDealt.Price * 100)).ToString();
-
-                yOrder.amount = "1";
+                if (BizFactory.AppSettings.IsTest)
+                {
+                    yOrder.amount = "1";
+                }
+                else
+                {
+                    yOrder.amount = Convert.ToInt32((orderToLllegalDealt.Price * 100)).ToString();
+                }
 
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalDealt.Sn.NullToEmpty()));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("车牌号码", orderToLllegalDealt.CarNo.NullToEmpty()));
@@ -1302,9 +1308,9 @@ namespace Lumos.BLL
                         var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.OrderId == l_orderToLllegalDealt.Id).ToList();
                         if (orderToLllegalDealtDetails != null)
                         {
-                            foreach(var item in orderToLllegalDealtDetails)
+                            foreach (var item in orderToLllegalDealtDetails)
                             {
-                                item.Status =Enumeration.OrderToLllegalDealtDetailsStatus.Completed;
+                                item.Status = Enumeration.OrderToLllegalDealtDetailsStatus.Completed;
                                 CurrentDb.SaveChanges();
                             }
                         }

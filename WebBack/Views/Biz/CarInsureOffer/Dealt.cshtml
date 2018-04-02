@@ -861,18 +861,18 @@
     <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th style="width:5%" class="no">
+                <th style="width:10%" class="no">
                     序号
                 </th>
                 <th style="width:15%">
                     保险公司
                 </th>
-                <th style="width:10%">
+                <th style="width:15%">
                     <span class="required-symbol">*</span>投保单图片
                 </th>
-                <th style="width:10%">
+                @*<th style="width:10%">
                     支付二维码
-                </th>
+                </th>*@
                 <th style="width:15%">
                     <span class="required-symbol">*</span>交强险
                 </th>
@@ -912,7 +912,7 @@
                         </span>
 
                     </td>
-                    <td class="overflow">
+                    @*<td class="overflow">
 
                         <span class="uploadimgbox" upload="true">
                             <span class="uploadimg" inputname="Model.OrderToCarInsureOfferCompany[@i].PayUrl" path="carInsure">
@@ -924,7 +924,7 @@
                         </span>
 
 
-                    </td>
+                    </td>*@
                     <td class="overflow">
                         <input name="Model.OrderToCarInsureOfferCompany[@i].CompulsoryPrice" type="text" autocomplete="off" id="Model_OrderToCarInsureOfferCompany_CompulsoryPrice_@i" style="width:70px;" class="input-control calprice compulsoryprice" value="@Model.OrderToCarInsureOfferCompany[i].CompulsoryPrice" />
                     </td>
@@ -939,7 +939,7 @@
                         <span class="insuretotalprice">@Model.OrderToCarInsureOfferCompany[i].InsureTotalPrice</span>
                     </td>
                 </tr>
-                <tr><td colspan="8" id="offer_extmsg_@Model.OrderToCarInsureOfferCompany[i].InsuranceCompanyId" style="text-align:center;color:red;"></td></tr>
+                <tr><td colspan="7" id="offer_extmsg_@Model.OrderToCarInsureOfferCompany[i].InsuranceCompanyId" style="text-align:center;color:red;"></td></tr>
             }
         </tbody>
     </table>

@@ -47,8 +47,8 @@ namespace Lumos.BLL
         public CustomJsonResult SendGetForgetPwdCode(int userId, string phone, out string validcode, out string token, out int seconds)
         {
             validcode = BuildValidCode();
-            seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_127163043", "{\"code\":\"" + validcode + "\"}", phone, out token, validcode, seconds);
+            seconds = 600;
+            CustomJsonResult result = SmsHelper.Send("SMS_129757696", "{\"code\":\"" + validcode + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 
@@ -56,8 +56,8 @@ namespace Lumos.BLL
         public CustomJsonResult SendCreateAccountCode(int operater, string phone, out string validcode, out string token, out int seconds)
         {
             validcode = BuildValidCode();
-            seconds = 120;
-            CustomJsonResult result = SmsHelper.Send("SMS_127167918", "{\"code\":\"" + validcode + "\"}", phone, out token, validcode, seconds);
+            seconds = 600;
+            CustomJsonResult result = SmsHelper.Send("SMS_129747717", "{\"code\":\"" + validcode + "\"}", phone, out token, validcode, seconds);
             return result;
         }
 

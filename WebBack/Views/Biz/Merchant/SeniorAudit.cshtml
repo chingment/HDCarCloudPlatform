@@ -6,7 +6,7 @@
 
 @section styles{
 
-    <style type="text/css">
+    @*<style type="text/css">
         .f-tb1-detail .t {
             width: 120px;
         }
@@ -14,7 +14,7 @@
         .f-tb1-detail .c {
             width: 280px;
         }
-    </style>
+    </style>*@
 }
 
 @section scriptsbyend{
@@ -118,6 +118,12 @@
             <td class="t">联系电话：</td>
             <td class="c">
                 <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">微信号：</td>
+            <td class="c" colspan="3">
+                @Model.Merchant.WechatNumber
             </td>
         </tr>
         <tr>

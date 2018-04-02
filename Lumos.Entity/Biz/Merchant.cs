@@ -75,6 +75,9 @@ namespace Lumos.Entity
         public string ContactAddress { get; set; }
 
         [MaxLength(128)]
+        public string WechatNumber { get; set; }
+
+        [MaxLength(128)]
         public string AreaCode { get; set; }
 
         [MaxLength(256)]

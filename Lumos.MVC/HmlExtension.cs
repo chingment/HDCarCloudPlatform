@@ -47,5 +47,50 @@ namespace System.Web
             return new HtmlString(sb.ToString());
         }
 
+
+        public static IHtmlString initBool(this HtmlHelper helper, string name, object htmlAttributes = null)
+        {
+            IDictionary<string, object> HtmlAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+            StringBuilder sb = new StringBuilder();
+
+
+            var classname = "";
+            if (HtmlAttributes["class"] != null)
+            {
+                classname = "class=\"" + HtmlAttributes["class"].ToString() + "\"";
+            }
+
+            bool selectValue = false;
+            if (HtmlAttributes["selectedvalue"] != null)
+            {
+                selectValue = bool.Parse(HtmlAttributes["selectedvalue"].ToString());
+            }
+
+            int i = 0;
+            string id = name.Replace(".", "_");
+            sb.Append("<select name=\"" + name + "\" id=\"" + id + "\"  " + classname + ">");
+
+            string checkeds = "";
+            string checkeds2 = "";
+            if (selectValue)
+            {
+                checkeds = "selected";
+            }
+            else
+            {
+                checkeds2 = "selected";
+            }
+
+
+
+            sb.Append(" <option value=\"True\"" + checkeds + ">是</option>");
+            sb.Append(" <option value=\"False\"" + checkeds2 + ">否</option>");
+
+            sb.Append("/<select>");
+
+
+
+            return new MvcHtmlString(sb.ToString());
+        }
     }
 }

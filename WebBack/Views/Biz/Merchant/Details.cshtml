@@ -4,15 +4,11 @@
     Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
 }
 @section styles{
-    @*<style type="text/css">
-        .f-tb1-detail .t {
-            width: 120px;
+    <style type="text/css">
+        .f-tb1-detail {
+            table-layout: auto;
         }
-
-        .f-tb1-detail .c {
-            width: 280px;
-        }
-    </style>*@
+    </style>
 
 }
 
@@ -36,7 +32,7 @@
                 <li class="item"><a class="a-btn-info" href="javascript:void(0)">POS机信息</a></li>
                 <li class="item"><a class="a-btn-info" href="javascript:void(0)">银行卡</a></li>
                 @*<li class="item"><a class="a-btn-info" href="javascript:void(0)">提现记录</a></li>
-                <li class="item"><a class="a-btn-info" href="javascript:void(0)">资金流水</a></li>*@
+                    <li class="item"><a class="a-btn-info" href="javascript:void(0)">资金流水</a></li>*@
             </ul>
         </div>
         <div class="tab-content">
@@ -68,6 +64,12 @@
                         <td class="t">联系电话：</td>
                         <td class="c">
                             <span>@Model.Merchant.ContactPhoneNumber</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="t">微信号：</td>
+                        <td class="c" colspan="3">
+                            @Model.Merchant.WechatNumber
                         </td>
                     </tr>
                     <tr>
@@ -127,7 +129,7 @@
                                 <span>@Html.Raw(checkeds)</span>
                             </td>
                         </tr>
-                    }
+                                    }
 
                     <tr>
                         <td class="t">代理商：</td>

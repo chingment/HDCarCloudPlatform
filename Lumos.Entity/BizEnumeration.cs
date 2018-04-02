@@ -504,12 +504,14 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("车行")]
-            CarSales = 1,
-            [Remark("维修店")]
+            [Remark("汽车用品")]
+            CarGoods = 1,
+            [Remark("维修厂")]
             CarRepair = 2,
-            [Remark("美容店")]
-            CarBeauty = 3
+            [Remark("美容快保")]
+            CarBeauty = 3,
+            [Remark("其他")]
+            Else = 4
         }
 
         public enum HandMerchantType
@@ -671,8 +673,6 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("佣金比例审核中")]
-            Audit = 1,
             [Remark("正常")]
             Normal = 2,
             [Remark("停用")]

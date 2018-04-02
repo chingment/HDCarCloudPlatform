@@ -222,7 +222,7 @@ namespace Lumos.BLL
                             result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
                             break;
                         case Enumeration.ProductType.LllegalDealt:
-                            result = PayLllegalDealtCompleted (operater, order.Sn);
+                            result = PayLllegalDealtCompleted(operater, order.Sn);
                             break;
                     }
 
@@ -314,6 +314,9 @@ namespace Lumos.BLL
                         {
                             case Enumeration.ProductType.PosMachineServiceFee:
                                 result = PayServiceFeeCompleted(operater, order.Sn);
+                                break;
+                            case Enumeration.ProductType.InsureForCarForInsure:
+                                result = PayCarInsureCompleted(operater, order.Sn);
                                 break;
                             case Enumeration.ProductType.LllegalQueryRecharge:
                                 result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
@@ -568,9 +571,9 @@ namespace Lumos.BLL
 
                 var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.OrderId == orderToLllegalDealt.Id).ToList();
 
-                foreach(var item in orderToLllegalDealtDetails)
+                foreach (var item in orderToLllegalDealtDetails)
                 {
-                    item.Status =Enumeration.OrderToLllegalDealtDetailsStatus.Dealt;
+                    item.Status = Enumeration.OrderToLllegalDealtDetailsStatus.Dealt;
                     CurrentDb.SaveChanges();
                 }
 
@@ -603,6 +606,116 @@ namespace Lumos.BLL
 
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功", null);
+            }
+
+            return result;
+        }
+
+        private CustomJsonResult PayCarInsureCompleted(int operater, string orderSn)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+
+                if (orderToCarInsure.Status == Enumeration.OrderStatus.Completed)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经支付完成");
+                }
+
+                if (orderToCarInsure.Status != Enumeration.OrderStatus.WaitPay)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未在就绪支付状态");
+                }
+
+
+                orderToCarInsure.Status = Enumeration.OrderStatus.Completed;
+                orderToCarInsure.PayTime = this.DateTime;
+                orderToCarInsure.CompleteTime = this.DateTime;
+                orderToCarInsure.LastUpdateTime = this.DateTime;
+                orderToCarInsure.Mender = operater;
+
+
+                var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.CarInsure && m.AduitReferenceId == orderToCarInsure.Id).FirstOrDefault();
+                if (bizProcessesAudit != null)
+                {
+                    BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, bizProcessesAudit.Id, orderToCarInsure.Creator, null, "支付完成", this.DateTime);
+                    BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(orderToCarInsure.Creator, bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.Complete);
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功");
+
+            }
+
+            return result;
+        }
+
+        private CustomJsonResult PayCarClaimCompleted(int operater, string orderSn)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var orderToCarClaim = CurrentDb.OrderToCarClaim.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+
+                if (orderToCarClaim.Status == Enumeration.OrderStatus.Completed)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经支付完成");
+                }
+
+
+                if (orderToCarClaim.Status != Enumeration.OrderStatus.WaitPay)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未在就绪支付状态");
+                }
+
+
+
+
+                orderToCarClaim.Status = Enumeration.OrderStatus.Completed;
+                orderToCarClaim.PayTime = this.DateTime;
+                orderToCarClaim.CompleteTime = this.DateTime;
+                orderToCarClaim.LastUpdateTime = this.DateTime;
+                orderToCarClaim.Mender = operater;
+
+
+
+
+                if (orderToCarClaim.HandOrderId != null)
+                {
+                    var handOrder = CurrentDb.OrderToCarClaim.Where(m => m.Id == orderToCarClaim.HandOrderId.Value).FirstOrDefault();
+
+                    handOrder.Status = Enumeration.OrderStatus.Completed;
+                    handOrder.PayTime = this.DateTime;
+                    handOrder.CompleteTime = this.DateTime;
+                    handOrder.LastUpdateTime = this.DateTime;
+                    handOrder.Mender = operater;
+                    CurrentDb.SaveChanges();
+
+
+                    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.CarClaim && m.AduitReferenceId == orderToCarClaim.HandOrderId.Value).FirstOrDefault();
+                    if (bizProcessesAudit != null)
+                    {
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarClaimDealtStep.Complete, bizProcessesAudit.Id, operater, null, "支付完成", this.DateTime);
+                        BizFactory.BizProcessesAudit.ChangeCarClaimDealtStatus(operater, bizProcessesAudit.Id, Enumeration.CarClaimDealtStatus.Complete);
+                    }
+
+                }
+
+                CurrentDb.SaveChanges();
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功");
             }
 
             return result;

@@ -33,6 +33,12 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
+        public ViewResult Edit(int id)
+        {
+            var model = new EditViewModel();
+            model.LoadData(id);
+            return View(model);
+        }
 
         [HttpPost]
         public CustomJsonResult Add(AddViewModel model)
@@ -40,19 +46,30 @@ namespace WebBack.Controllers.Biz
             CustomJsonResult reuslt = new CustomJsonResult();
 
 
-            reuslt = BizFactory.CarInsuranceCompany.Add(this.CurrentUserId, model.InsuranceCompanyId, model.InsuranceCompanyName, model.InsuranceCompanyImgUrl, model.CommercialRate, model.CompulsoryRate);
+            reuslt = BizFactory.CarInsuranceCompany.Add(this.CurrentUserId, model.CarInsuranceCompany);
 
             return reuslt;
         }
 
         [HttpPost]
-        public CustomJsonResult Disable(int id)
+        public CustomJsonResult Edit(EditViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
-            reuslt = BizFactory.CarInsuranceCompany.Disable(this.CurrentUserId, id);
+
+
+            reuslt = BizFactory.CarInsuranceCompany.Edit(this.CurrentUserId, model.CarInsuranceCompany);
 
             return reuslt;
         }
+
+        //[HttpPost]
+        //public CustomJsonResult Disable(int id)
+        //{
+        //    CustomJsonResult reuslt = new CustomJsonResult();
+        //    reuslt = BizFactory.CarInsuranceCompany.Disable(this.CurrentUserId, id);
+
+        //    return reuslt;
+        //}
 
 
         public CustomJsonResult GetList(BaseSearchCondition condition)
@@ -64,7 +81,7 @@ namespace WebBack.Controllers.Biz
                          where
                                  (name.Length == 0 || tt0.Name.Contains(name))
 
-                         select new { c.Id, c.InsuranceCompanyId, c.Status, c.InsuranceCompanyImgUrl, tt0.Name, c.CreateTime });
+                         select new { c.Id, c.InsuranceCompanyId, c.Status, c.InsuranceCompanyImgUrl, tt0.Name, c.CreateTime,c.CanInsure,c.CanClaims,c.CanApplyLossAssess });
 
             int total = query.Count();
 
@@ -84,7 +101,10 @@ namespace WebBack.Controllers.Biz
                     item.InsuranceCompanyImgUrl,
                     item.CreateTime,
                     Status= item.Status,
-                    StatusName = item.Status.GetCnName()
+                    StatusName = item.Status.GetCnName(),
+                    CanInsure = (item.CanInsure == true?"是":"否"),
+                    CanClaims = (item.CanClaims == true ? "是" : "否"),
+                    CanApplyLossAssess = (item.CanApplyLossAssess == true ? "是" : "否"),
                 });
             }
 

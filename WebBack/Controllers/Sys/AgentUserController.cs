@@ -94,7 +94,7 @@ namespace WebBack.Controllers.Sys
             user.IsDelete = false;
             user.Status = Enumeration.UserStatus.Normal;
             user.Type = Enumeration.UserType.Agent;
-
+            user.WechatNumber = model.SysAgentUser.WechatNumber;
             return SysFactory.AuthorizeRelay.CreateUser<SysAgentUser>(this.CurrentUserId, user);
         }
 
@@ -108,7 +108,7 @@ namespace WebBack.Controllers.Sys
             user.FullName = model.SysAgentUser.FullName;
             user.Email = model.SysAgentUser.Email;
             user.PhoneNumber = model.SysAgentUser.PhoneNumber;
-
+            user.WechatNumber = model.SysAgentUser.WechatNumber;
             return SysFactory.AuthorizeRelay.UpdateUser<SysAgentUser>(this.CurrentUserId, user);
 
         }

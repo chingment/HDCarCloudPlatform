@@ -11,32 +11,70 @@ namespace Lumos.BLL
 {
     public class CarInsuranceCompanyProvider : BaseProvider
     {
-        public CustomJsonResult Add(int operater, int insuranceCompanyId, string insuranceCompanyName, string insuranceCompanyImgUrl, decimal commercialRate, decimal compulsoryRate)
+        public CustomJsonResult Add(int operater, CarInsuranceCompany carInsuranceCompany)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var isExsits = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == insuranceCompanyId).Count();
+                var isExsits = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).Count();
                 if (isExsits > 0)
                 {
                     ts.Dispose();
                     return new CustomJsonResult(ResultType.Failure, "已存在相同保险公司的名称");
                 }
-                CarInsuranceCompany carInsuranceCompany = new CarInsuranceCompany();
-                carInsuranceCompany.InsuranceCompanyId = insuranceCompanyId;
-                carInsuranceCompany.InsuranceCompanyImgUrl = insuranceCompanyImgUrl;
-                carInsuranceCompany.Creator = operater;
-                carInsuranceCompany.CreateTime = DateTime.Now;
-                carInsuranceCompany.Status = Enumeration.CarInsuranceCompanyStatus.Audit;
-                CurrentDb.CarInsuranceCompany.Add(carInsuranceCompany);
+
+                CarInsuranceCompany l_carInsuranceCompany = new CarInsuranceCompany();
+                l_carInsuranceCompany.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                l_carInsuranceCompany.InsuranceCompanyName = carInsuranceCompany.InsuranceCompanyName;
+                l_carInsuranceCompany.InsuranceCompanyImgUrl = carInsuranceCompany.InsuranceCompanyImgUrl;
+                l_carInsuranceCompany.CanInsure = carInsuranceCompany.CanInsure;
+                l_carInsuranceCompany.CanClaims = carInsuranceCompany.CanClaims;
+                l_carInsuranceCompany.CanApplyLossAssess = carInsuranceCompany.CanApplyLossAssess;
+                l_carInsuranceCompany.Creator = operater;
+                l_carInsuranceCompany.CreateTime = DateTime.Now;
+                l_carInsuranceCompany.Status = Enumeration.CarInsuranceCompanyStatus.Normal;
+                CurrentDb.CarInsuranceCompany.Add(l_carInsuranceCompany);
                 CurrentDb.SaveChanges();
 
-                CurrentDb.SaveChanges();
+
+                SysFactory.SysItemCacheUpdateTime.Update(Enumeration.SysItemCacheType.CarInsCompanys);
+
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, "提交成功");
+
+
+                result = new CustomJsonResult(ResultType.Success, "添加成功");
+            }
+
+            return result;
+        }
+
+        public CustomJsonResult Edit(int operater, CarInsuranceCompany carInsuranceCompany)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                var l_carInsuranceCompany = CurrentDb.CarInsuranceCompany.Where(m => m.Id == carInsuranceCompany.Id).FirstOrDefault();
+                l_carInsuranceCompany.InsuranceCompanyImgUrl = carInsuranceCompany.InsuranceCompanyImgUrl;
+                l_carInsuranceCompany.CanInsure = carInsuranceCompany.CanInsure;
+                l_carInsuranceCompany.CanClaims = carInsuranceCompany.CanClaims;
+                l_carInsuranceCompany.CanApplyLossAssess = carInsuranceCompany.CanApplyLossAssess;
+                l_carInsuranceCompany.Mender = operater;
+                l_carInsuranceCompany.LastUpdateTime = DateTime.Now;
+                l_carInsuranceCompany.Status = carInsuranceCompany.Status;
+                CurrentDb.SaveChanges();
+
+                SysFactory.SysItemCacheUpdateTime.Update(Enumeration.SysItemCacheType.CarInsCompanys);
+
+                ts.Complete();
+
+
+
+                result = new CustomJsonResult(ResultType.Success, "修改成功");
             }
 
             return result;
@@ -57,10 +95,6 @@ namespace Lumos.BLL
                     return new CustomJsonResult(ResultType.Failure, "找不到该数据");
                 }
 
-                if (carInsuranceCompany.Status == Enumeration.CarInsuranceCompanyStatus.Audit)
-                {
-                    return new CustomJsonResult(ResultType.Failure, "正在审核中");
-                }
 
                 if (carInsuranceCompany.Status == Enumeration.CarInsuranceCompanyStatus.Normal)
                 {
@@ -75,9 +109,14 @@ namespace Lumos.BLL
                 carInsuranceCompany.LastUpdateTime = this.DateTime;
                 carInsuranceCompany.Mender = operater;
                 CurrentDb.SaveChanges();
+
+
+                SysFactory.SysItemCacheUpdateTime.Update(Enumeration.SysItemCacheType.CarInsCompanys);
+
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, "停用成功");
+
+                result = new CustomJsonResult(ResultType.Success, "操作成功");
             }
 
             return result;

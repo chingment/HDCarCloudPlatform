@@ -320,6 +320,7 @@ namespace Lumos.DAL.AuthorizeRelay
                         sysAgentUser.PhoneNumber = user.PhoneNumber;
                         sysAgentUser.LastUpdateTime = DateTime.Now;
                         sysAgentUser.Mender = operater;
+                        sysAgentUser.WechatNumber = user.WechatNumber;
                         _db.SaveChanges();
                     }
 

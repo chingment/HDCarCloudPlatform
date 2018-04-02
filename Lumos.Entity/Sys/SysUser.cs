@@ -112,5 +112,8 @@ namespace Lumos.Entity
         [NotMapped]
         public string Password { get; set; }
 
-    }
+        [MaxLength(128)]
+        public string WechatNumber { get; set; }
+
+}
 }

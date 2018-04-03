@@ -8,6 +8,7 @@ namespace WebBack.Models.Biz.Order
 {
     public class SearchCondition : BaseSearchCondition
     {
+        public int OrderId { get; set; }
         public Enumeration.OrderStatus Status { get; set; }
 
         public string YYZZ_Name { get; set; }

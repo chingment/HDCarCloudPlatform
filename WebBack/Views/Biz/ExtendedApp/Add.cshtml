@@ -21,12 +21,12 @@
 
         function applyOn() {
             art.dialog.confirm(
-'确定要申请上架？',
+'确定要添加？',
 function () {
     var l_Data = $("#form1").serializeArray();
 
     $.lumos.postJson({
-        url: "../ExtendedApp/ApplyOn",
+        url: "/Biz/ExtendedApp/Add",
         data: l_Data,
         success: function (d) {
             if (d.result == resultType.success) {

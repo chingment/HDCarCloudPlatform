@@ -48,8 +48,5 @@ namespace Lumos.Entity
         public int? Mender { get; set; }
 
         public DateTime? LastUpdateTime { get; set; }
-
-        [NotMapped]
-        public Enumeration.ExtendedAppApplyType ApplyType { get; set; }
     }
 }

@@ -32,24 +32,14 @@ namespace Lumos.Entity
             CarInsService = 3
         }
 
-        public enum ExtendedAppAuditStatus
+        public enum ExtendedAppStatus
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("等待初审")]
-            WaitAudit = 1,
-            [Remark("初审中")]
-            InAudit = 2,
-            [Remark("等待复审")]
-            WaitReview = 3,
-            [Remark("复审中")]
-            InReview = 4,
-            [Remark("复审通过")]
-            ReviewPass = 5,
-            [Remark("复审驳回")]
-            ReviewReject = 6,
-            [Remark("复审拒绝")]
-            ReviewRefuse = 7
+            [Remark("正常")]
+            Normal = 1,
+            [Remark("停用")]
+            Disable = 2
         }
 
         public enum CarInsureOfferDealtStatus
@@ -245,52 +235,6 @@ namespace Lumos.Entity
             SeniorAudit = 2
         }
 
-
-        public enum ExtendedAppAuditStep
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("初审")]
-            PrimaryAudit = 1,
-            [Remark("复审")]
-            SeniorAudit = 2,
-        }
-
-        public enum ExtendedAppApplyType
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("上架")]
-            On = 1,
-            [Remark("下架")]
-            Off = 2,
-            [Remark("恢复")]
-            Recovery = 3
-        }
-
-        public enum ExtendedAppStatus
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("上架审核中")]
-            AuditOn = 1,
-            [Remark("上架审核通过")]
-            AuditOnPass = 2,
-            [Remark("上架审核拒绝")]
-            AuditOnRefuse = 3,
-            [Remark("下架审核中")]
-            AuditOff = 4,
-            [Remark("下架审核通过")]
-            AuditOffPass = 5,
-            [Remark("下架审核拒绝")]
-            AuditOffRefuse = 6,
-            [Remark("恢复审核中")]
-            AuditRecovery = 7,
-            [Remark("恢复审核通过")]
-            AuditRecoveryPass = 8,
-            [Remark("恢复审核拒绝")]
-            AuditRecoveryRefuse = 9
-        }
 
         public enum CarInsurePlanStatus
         {

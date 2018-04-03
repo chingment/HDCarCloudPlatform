@@ -27,7 +27,7 @@
 
                     l_StrRows += "<td class=\"overflow\" >" + app + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.name + "\">" + p_row.name + "</td>";
-                    l_StrRows += "<td class=\"no\"><a href=\"javascript:void(0)\" operate=\"selectin\"   class=\"a-btn\"  >选择</a></td>"
+                    l_StrRows += "<td class=\"operation\"><a href=\"javascript:void(0)\" operate=\"selectin\"   class=\"a-btn\"  >选择</a></td>"
                     l_StrRows += "</tr>";
                     return l_StrRows;
                 },
@@ -96,16 +96,16 @@
         <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
             <thead>
                 <tr>
-                    <th style="width:5%" class="no">
+                    <th style="width:10%" class="no">
                         序号
                     </th>
-                    <th style="width:45%">
+                    <th style="width:40%">
                         图标
                     </th>
-                    <th style="width:45%">
+                    <th style="width:40%">
                         名称
                     </th>
-                    <th style="width:5%">
+                    <th style="width:10%" class="operation">
                         选择
                     </th>
                 </tr>

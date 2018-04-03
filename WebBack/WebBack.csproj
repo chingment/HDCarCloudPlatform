@@ -219,11 +219,7 @@
     <Compile Include="Models\Biz\CarInsureOffer\SearchCondition.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\DealtViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\DetailsViewModel.cs" />
-    <Compile Include="Models\Biz\ExtendedApp\ApplyOffViewModel..cs" />
-    <Compile Include="Models\Biz\ExtendedApp\ApplyOnViewModel.cs" />
-    <Compile Include="Models\Biz\ExtendedApp\ApplyRecoveryViewModel.cs" />
-    <Compile Include="Models\Biz\ExtendedApp\SeniorAuditViewModel.cs" />
-    <Compile Include="Models\Biz\ExtendedApp\PrimaryAuditViewModel.cs" />
+    <Compile Include="Models\Biz\ExtendedApp\AddViewModel.cs" />
     <Compile Include="Models\Biz\InsuranceCompany\AddViewModel.cs" />
     <Compile Include="Models\Biz\InsuranceCompany\EditViewModel.cs" />
     <Compile Include="Models\Biz\Merchant\AddViewModel.cs" />
@@ -243,7 +239,7 @@
     <Compile Include="Models\Biz\PosMachine\ChangeModel.cs" />
     <Compile Include="Models\Biz\PosMachine\ChangeViewModel.cs" />
     <Compile Include="Models\Biz\PosMachine\EditViewModel.cs" />
-    <Compile Include="Models\Biz\ExtendedApp\ExtendedAppSearchCondition.cs" />
+    <Compile Include="Models\Biz\ExtendedApp\SearchCondition.cs" />
     <Compile Include="Models\Biz\PosMachine\SearchCondition.cs" />
     <Compile Include="Models\Biz\Product\AddGoodsViewModel.cs" />
     <Compile Include="Models\Biz\Product\EditGoodsViewModel.cs" />
@@ -1261,6 +1257,7 @@
     <Content Include="Views\Biz\Lllegal\DetailsByQueryRecharge.cshtml" />
     <Content Include="Views\Sys\SmsSend\Log.cshtml" />
     <Content Include="Views\Biz\CarInsuranceCompany\Edit.cshtml" />
+    <Content Include="Views\Biz\Order\PayTransList.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -1283,7 +1280,6 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\toolbar\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\wysiwygarea\" />
-    <Folder Include="Views\SmsSend\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -1365,17 +1361,8 @@
     <Content Include="Views\Biz\CarInsureOffer\DealtList.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\Dealt.cshtml" />
     <Content Include="Views\Biz\ExtendedApp\List.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\ApplyOn.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\PrimaryAuditList.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\SeniorAuditList.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\SeniorAudit.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\PrimaryAudit.cshtml" />
+    <Content Include="Views\Biz\ExtendedApp\Add.cshtml" />
     <Content Include="Views\Biz\ExtendedApp\Details.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\ApplyList.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\ApplyOff.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\OnList.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\ApplyRecovery.cshtml" />
-    <Content Include="Views\Biz\ExtendedApp\OffList.cshtml" />
     <Content Include="Views\Biz\Merchant\EditList.cshtml" />
     <Content Include="Views\Biz\Merchant\Details.cshtml" />
     <Content Include="Views\Biz\CarClaim\VerifyOrderList.cshtml" />

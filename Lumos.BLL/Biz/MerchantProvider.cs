@@ -66,30 +66,36 @@ namespace Lumos.BLL
                 sysClientUser.MerchantId = merchant.Id;
 
                 var posMachine = CurrentDb.PosMachine.Where(m => m.DeviceId == deviceId).FirstOrDefault();
-                if (posMachine != null)
-                {
 
+                if (posMachine == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, "POS机未登记，请联系客服");
+
+                    //posMachine = new PosMachine();
+                    //posMachine.DeviceId = deviceId;
+                    //posMachine.Creator = operater;
+                    //posMachine.CreateTime = this.DateTime;
+                    //CurrentDb.PosMachine.Add(posMachine);
+                    //CurrentDb.SaveChanges();
+                }
+                else
+                {
                     if (posMachine.IsUse)
                     {
-                        return new CustomJsonResult(ResultType.Failure, "当前POS已被注册");
+                        return new CustomJsonResult(ResultType.Failure, "POS机已被注册");
+                    }
+
+                    if (posMachine.SalesmanId == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, "POS机未出库，请联系客服");
                     }
 
                     posMachine.IsUse = false;
                     posMachine.Mender = operater;
                     posMachine.LastUpdateTime = this.DateTime;
                     CurrentDb.SaveChanges();
-                }
-                else
-                {
 
-                    posMachine = new PosMachine();
-                    posMachine.DeviceId = deviceId;
-                    posMachine.Creator = operater;
-                    posMachine.CreateTime = this.DateTime;
-                    CurrentDb.PosMachine.Add(posMachine);
-                    CurrentDb.SaveChanges();
                 }
-
 
                 var bankCard = new BankCard();
                 bankCard.MerchantId = merchant.Id;

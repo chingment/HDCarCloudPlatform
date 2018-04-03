@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
-        private string host = "http://120.79.233.231";
+        private string host = "http://localhost:16665";
+        //private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -169,7 +169,7 @@ namespace WebAppApi.Controllers
             int merchantId = 241;
             int posMachineId = 148;
 
-            model.Add("获取支付流水号", GetGetPayTranSn(1001, 1, 2, 3, "D180205111300000007"));
+           // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
             // model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
@@ -177,8 +177,8 @@ namespace WebAppApi.Controllers
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             // model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
 
-            //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
-            //model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+            model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
+            model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));

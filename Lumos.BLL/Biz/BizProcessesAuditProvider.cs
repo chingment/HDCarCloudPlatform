@@ -160,103 +160,6 @@ namespace Lumos.BLL
 
         }
 
-
-        public BizProcessesAudit ChangeExtendedAppAuditStatus(int operater, int bizProcessesAuditId, Enumeration.ExtendedAppAuditStatus changestatus, DateTime? endTime = null)
-        {
-
-            var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
-            if (bizProcessesAudit != null)
-            {
-                if (bizProcessesAudit.EndTime == null)
-                {
-                    if (
-                       bizProcessesAudit.Status != (int)Enumeration.ExtendedAppAuditStatus.ReviewPass
-                        && bizProcessesAudit.Status != (int)Enumeration.ExtendedAppAuditStatus.ReviewRefuse
-                        )
-                    {
-                        Enumeration.ExtendedAppAuditStatus old_Status = (Enumeration.ExtendedAppAuditStatus)bizProcessesAudit.Status;
-                        bizProcessesAudit.Mender = operater;
-                        bizProcessesAudit.LastUpdateTime = DateTime.Now;
-
-
-                        if (endTime != null)
-                        {
-                            bizProcessesAudit.EndTime = endTime.Value;
-                        }
-
-                        if (changestatus == Enumeration.ExtendedAppAuditStatus.InAudit)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.ExtendedAppAuditStatus.InAudit;
-                            if (bizProcessesAudit.Auditor == null)
-                            {
-                                bizProcessesAudit.Auditor = operater;
-
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ExtendedAppAuditStep.PrimaryAudit, bizProcessesAudit.Id, operater, null, null, null);
-
-                            }
-
-
-                        }
-                        else if (changestatus == Enumeration.ExtendedAppAuditStatus.WaitReview)
-                        {
-
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.ExtendedAppAuditStep.SeniorAudit).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                            if (bizProcessesAuditDetails == null)
-                            {
-                                bizProcessesAudit.Status = (int)Enumeration.ExtendedAppAuditStatus.WaitReview;
-                                bizProcessesAudit.Auditor = null;
-
-                            }
-                            else
-                            {
-                                bizProcessesAudit.Status = (int)Enumeration.ExtendedAppAuditStatus.InReview;
-                                bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
-                            }
-
-                        }
-                        else if (changestatus == Enumeration.ExtendedAppAuditStatus.InReview)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.ExtendedAppAuditStatus.InReview;
-                            if (bizProcessesAudit.Auditor == null)
-                            {
-                                bizProcessesAudit.Auditor = operater;
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ExtendedAppAuditStep.SeniorAudit, bizProcessesAudit.Id, operater, null, null);
-                            }
-                        }
-                        else if (changestatus == Enumeration.ExtendedAppAuditStatus.ReviewReject)
-                        {
-                            //var enterpriseAuditDetailsHistory = CurrentDb.EnterpriseAuditDetailsHistory.Where(m => m.EnterpriseAuditHistoryId == enterpriseAuditHistoryId && m.AuditStep == Enumeration.EnterpriseAuditDetailsHistoryStep.PrimaryAudit).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                            //if (enterpriseAuditDetailsHistory == null)
-                            //{
-                            //    enterpriseAuditHistory.Status = Enumeration.EnterpriseAuditHistoryAuditStatus.WaitAudit;
-                            //    enterpriseAuditHistory.Auditor = null;
-                            //}
-                            //else
-                            //{
-                            //    enterpriseAuditHistory.Status = Enumeration.EnterpriseAuditHistoryAuditStatus.InAudit;
-                            //    enterpriseAuditHistory.Auditor = enterpriseAuditDetailsHistory.AuditPerson;
-                            //}
-                        }
-                        else if (changestatus == Enumeration.ExtendedAppAuditStatus.ReviewPass)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.ExtendedAppAuditStatus.ReviewPass;
-                            bizProcessesAudit.Auditor = operater;
-                        }
-                        else if (changestatus == Enumeration.ExtendedAppAuditStatus.ReviewRefuse)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.ExtendedAppAuditStatus.ReviewRefuse;
-                            bizProcessesAudit.Auditor = operater;
-
-                        }
-                    }
-
-                    CurrentDb.SaveChanges();
-                }
-            }
-
-            return bizProcessesAudit;
-        }
-
         public BizProcessesAudit ChangeMerchantAuditStatus(int operater, int bizProcessesAuditId, Enumeration.MerchantAuditStatus changestatus, DateTime? endTime = null)
         {
 
@@ -297,7 +200,7 @@ namespace Lumos.BLL
                     else if (changestatus == Enumeration.MerchantAuditStatus.WaitSeniorAudit)
                     {
 
-                        var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.ExtendedAppAuditStep.SeniorAudit).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                        var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.MerchantAuditStep.SeniorAudit).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                         if (bizProcessesAuditDetails == null)
                         {
                             bizProcessesAudit.Status = (int)Enumeration.MerchantAuditStatus.WaitSeniorAudit;
@@ -309,7 +212,7 @@ namespace Lumos.BLL
                             bizProcessesAudit.Status = (int)Enumeration.MerchantAuditStatus.InSeniorAudit;
                             bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ExtendedAppAuditStep.SeniorAudit, bizProcessesAudit.Id, operater, null, null);
+                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.MerchantAuditStep.SeniorAudit, bizProcessesAudit.Id, operater, null, null);
                         }
                     }
                     else if (changestatus == Enumeration.MerchantAuditStatus.InSeniorAudit)
@@ -318,7 +221,7 @@ namespace Lumos.BLL
                         if (bizProcessesAudit.Auditor == null)
                         {
                             bizProcessesAudit.Auditor = operater;
-                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ExtendedAppAuditStep.SeniorAudit, bizProcessesAudit.Id, operater, null, null);
+                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.MerchantAuditStep.SeniorAudit, bizProcessesAudit.Id, operater, null, null);
                         }
                     }
                     else if (changestatus == Enumeration.MerchantAuditStatus.SeniorAuditReject)
@@ -329,7 +232,7 @@ namespace Lumos.BLL
                             bizProcessesAudit.Status = (int)Enumeration.MerchantAuditStatus.InPrimaryAudit;
                             bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ExtendedAppAuditStep.PrimaryAudit, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, null);
+                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.MerchantAuditStep.PrimaryAudit, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, null);
                         }
                     }
                     else if (changestatus == Enumeration.MerchantAuditStatus.SeniorAuditPass)

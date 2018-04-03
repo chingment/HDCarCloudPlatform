@@ -43,6 +43,8 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string PosId { get; set; }
         [MaxLength(128)]
+        public string Order { get; set; }
+        [MaxLength(128)]
         public string OrderSn { get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }

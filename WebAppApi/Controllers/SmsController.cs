@@ -38,7 +38,7 @@ namespace WebAppApi.Controllers
             resultModel.ValidCode = validCode;
             resultModel.Token = token;
             resultModel.Seconds = seconds;
-            return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", resultModel);
+            return ResponseResult(ResultType.Success, ResultCode.Success, "发送成功，请查阅手机", resultModel);
         }
 
         [HttpPost]
@@ -65,7 +65,7 @@ namespace WebAppApi.Controllers
             resultModel.Token = token;
             resultModel.Seconds = seconds;
 
-            return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", resultModel);
+            return ResponseResult(ResultType.Success, ResultCode.Success, "发送成功，请查阅手机", resultModel);
         }
     }
 }

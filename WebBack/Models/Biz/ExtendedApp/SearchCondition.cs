@@ -6,8 +6,8 @@ using System.Web;
 
 namespace WebBack.Models.Biz.ExtendedApp
 {
-    public class ExtendedAppSearchCondition:BaseSearchCondition
+    public class SearchCondition:BaseSearchCondition
     {
-        public Enumeration.ExtendedAppAuditStatus AuditStatus { get; set; }
+        public Enumeration.ExtendedAppStatus Status { get; set; }
     }
 }

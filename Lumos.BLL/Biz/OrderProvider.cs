@@ -1324,7 +1324,7 @@ namespace Lumos.BLL
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var order = CurrentDb.Order.Where(m => m.UserId == orderPayTrans.UserId && m.Id == orderPayTrans.Id && m.Sn == orderPayTrans.OrderSn).FirstOrDefault();
+                var order = CurrentDb.Order.Where(m => m.UserId == orderPayTrans.UserId && m.Id == orderPayTrans.OrderId && m.Sn == orderPayTrans.OrderSn).FirstOrDefault();
                 if (order == null)
                 {
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "跳转支付错误");
@@ -1362,7 +1362,7 @@ namespace Lumos.BLL
                 ts.Complete();
 
 
-                var model = new { orderId = orderPayTrans.OrderId, orderSn = orderPayTrans.OrderSn, payTransSn = l_orderPayTrans.Sn };
+                var model = new { orderId = orderPayTrans.OrderId, orderSn = orderPayTrans.OrderSn, payTransSn = l_orderPayTrans.Sn, transType=l_orderPayTrans.TransType, amount = l_orderPayTrans.Amount };
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", model);
 

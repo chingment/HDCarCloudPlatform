@@ -191,7 +191,7 @@ namespace Lumos.BLL
 
                     if (order == null)
                     {
-                        if (!string.IsNullOrEmpty(receiveNotifyLog.OrderSn))
+                        if (!string.IsNullOrEmpty(receiveNotifyLog.Order))
                         {
                             receiveNotifyLog.Creator = 0;
                             receiveNotifyLog.CreateTime = DateTime.Now;

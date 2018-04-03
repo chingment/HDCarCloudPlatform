@@ -46,6 +46,11 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
+        public ViewResult PayTransList()
+        {
+            return View();
+        }
+
         public CustomJsonResult GetList(SearchCondition condition)
         {
 
@@ -73,7 +78,7 @@ namespace WebBack.Controllers.Biz
             if (status != Enumeration.OrderStatus.Unknow)
             {
                 //&& (((int)m.ProductType).ToString().StartsWith("201"))
-                query = query.Where(m => m.Status == status );
+                query = query.Where(m => m.Status == status);
             }
 
             int total = query.Count();
@@ -124,7 +129,7 @@ namespace WebBack.Controllers.Biz
             var query = (from o in CurrentDb.Order
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
                          where
-                       
+
                          o.Status == Enumeration.OrderStatus.WaitPay
                          &&
                          (clientCode.Length == 0 || m.ClientCode.Contains(clientCode)) &&
@@ -132,7 +137,7 @@ namespace WebBack.Controllers.Biz
                                  (sn.Length == 0 || o.Sn.Contains(sn))
 
 
-                         select new { o.Id, m.ClientCode, m.YYZZ_Name, o.Sn, o.ProductType, o.ProductName, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, o.ContactPhoneNumber, o.Contact}
+                         select new { o.Id, m.ClientCode, m.YYZZ_Name, o.Sn, o.ProductType, o.ProductName, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, o.ContactPhoneNumber, o.Contact }
                         );
 
 
@@ -209,5 +214,53 @@ namespace WebBack.Controllers.Biz
             return result;
         }
 
+
+        public CustomJsonResult GetPayTransList(SearchCondition condition)
+        {
+
+
+            string clientCode = condition.ClientCode.ToSearchString();
+            string yYZZ_Name = condition.YYZZ_Name.ToSearchString();
+            string sn = condition.Sn.ToSearchString();
+
+
+            Enumeration.OrderStatus status = condition.Status;
+
+            var query = (from o in CurrentDb.OrderPayTrans
+
+                         where o.OrderId == condition.OrderId
+                         &&
+                        (condition.Sn == null || o.Sn.Contains(condition.Sn))
+                         select new { o.Id, o.Sn, o.OrderSn, o.Amount, o.TransType, o.CreateTime }
+                        );
+
+            int total = query.Count();
+
+            int pageIndex = condition.PageIndex;
+            int pageSize = 10;
+
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            List<object> list = new List<object>();
+
+            foreach (var item in query)
+            {
+                list.Add(new
+                {
+                    item.Id,
+                    item.Sn,
+                    item.OrderSn,
+                    item.Amount,
+                    item.TransType,
+                    item.CreateTime
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list };
+
+            return Json(ResultType.Success, pageEntity, "");
+
+        }
     }
 }

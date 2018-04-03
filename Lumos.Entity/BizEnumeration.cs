@@ -429,7 +429,7 @@ namespace Lumos.Entity
             [Remark("定损点申请")]
             ApplyLossAssess = 9,
             [Remark("违章处理")]
-            LllegalDealt = 9
+            LllegalDealt = 10
         }
 
         public enum MerchantStatus

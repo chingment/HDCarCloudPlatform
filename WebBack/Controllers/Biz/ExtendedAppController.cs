@@ -59,7 +59,7 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-        [OwnAuthorize(PermissionCode.扩展应用申请)]
+        [OwnAuthorize(PermissionCode.扩展应用添加)]
         [HttpPost]
         public CustomJsonResult Add(ApplyOnViewModel model)
         {

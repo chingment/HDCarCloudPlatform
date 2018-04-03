@@ -9,9 +9,8 @@
         var listTable;
 
         $(document).ready(function () {
-
             listTable = $("#list_table").loadDataTable({
-                url: "../CarInsureOffer/GetDealtList",
+                url: "/Biz/TalentDemand/GetListByDealt",
                 pageIndex: 0,
                 searchParams: $("#form1").serializeArray(),
                 searchButtonId: "btn_Search",
@@ -23,10 +22,12 @@
                     l_StrRows += "<tr>";
                     l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
                     l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.sn + "\"   >" + p_row.sn + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.productName + "\">" + p_row.productName + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\">" + p_row.clientCode + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactPhoneNumber + "\">" + p_row.contactPhoneNumber + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.workJob + "\">" + p_row.workJob + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.quantity + "\">" + p_row.quantity + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.submitTime + "\">" + p_row.submitTime + "</td>";
                     l_StrRows += "<td class=\"operation\">";
                     l_StrRows += l_Strlimt;
@@ -34,16 +35,16 @@
                     l_StrRows += "</tr>";
                     return l_StrRows;
                 },
-                refreshInterval: 60000,
+                refreshInterval: 0,
                 success: function (data) {
-                    $('#waitOfferCount').text(data.status.waitOfferCount);
-                    $('#inOfferCount').text(data.status.inOfferCount);
+                    $('#waitCount').text(data.status.waitCount);
+                    $('#inCount').text(data.status.inCount);
                 },
                 operate: {
                     "dealt": function (obj) {
 
                         function dealt(obj) {
-                            var url = '/Biz/CarInsureOffer/Dealt2?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
+                            var url = '/Biz/TalentDemand/Dealt?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
                             var title = '处理订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",
@@ -55,7 +56,7 @@
                                 cancelVal: '关闭',
                                 cancel: true,
                                 button: [{
-                                    name: '完成报价',
+                                    name: '处理完成',
                                     callback: function () {
 
                                         this.iframe.contentWindow.submit(operateType.submit, function (d) {
@@ -70,21 +71,7 @@
                                     focus: true
                                 },
                                 {
-                                    name: '转给商户跟进',
-                                    callback: function () {
-
-                                        this.iframe.contentWindow.submit(operateType.reject, function (d) {
-                                            if (d.result == resultType.success) {
-                                                dialog.close();
-                                                listTable.loadData();
-                                            }
-                                            $.lumos.tips(d.message);
-                                        });
-                                        return false;
-                                    }
-                                },
-                                {
-                                    name: '撤销',
+                                    name: '处理失败',
                                     callback: function () {
 
                                         this.iframe.contentWindow.submit(operateType.cancle, function (d) {
@@ -96,12 +83,15 @@
                                         });
                                         return false;
                                     }
-                                },
-                                {
-                                    name: '暂存',
+                                },{
+                                    name: '驳回',
                                     callback: function () {
 
-                                        this.iframe.contentWindow.submit(operateType.save, function (d) {
+                                        this.iframe.contentWindow.submit(operateType.reject, function (d) {
+                                            if (d.result == resultType.success) {
+                                                dialog.close();
+                                                listTable.loadData();
+                                            }
                                             $.lumos.tips(d.message);
                                         });
                                         return false;
@@ -110,42 +100,20 @@
                             });
                         }
 
-                        if (obj.dealtStatus == 1) {
+                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt)) {
                             art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
+
                                 dealt(obj)
-                            });
-                        }
-                        else {
-                            dealt(obj);
-                        }
+
+                        });
                     }
-                }
-            });
+                else {
+                            dealt(obj);
+        }
+        }
+        }
 
-
-
-            $("#btn_Add").click(function () {
-                var url = '/Biz/CarInsureOffer/Add';
-                var title = '新建';
-                var dialog = art.dialog.open(url, {
-                    id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true,
-                    button: [{
-                        name: '确定',
-                        callback: function () {
-                            this.iframe.contentWindow.submit(function (d) {
-                                if (d.result == resultType.success) {
-                                    dialog.close();
-                                    listTable.loadData();
-                                }
-                                $.lumos.tips(d.message);
-                            });
-                            return false;
-                        },
-                        focus: true
-                    }]
-                });
-            });
-
+        });
 
         });
 
@@ -163,17 +131,14 @@
 
 <form id="form1" name="form1">
     @Html.AntiForgeryToken()
-    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.CarInsureOfferDealtStatus.WaitOffer)" />
+    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt)" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.CarInsureOfferDealtStatus.WaitOffer))" class="status-bar-btn selected">待报价<span class="waitOfferCount">(<span id="waitOfferCount">0</span>)</span></span>
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt))" class="status-bar-btn selected">待处理<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.CarInsureOfferDealtStatus.InOffer))" class="status-bar-btn">报价中<span class="inOfferCount"> (<span id="inOfferCount">0</span>)</span></span>
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.InDealt))" class="status-bar-btn">处理中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
         </div>
-        @*<div class="filter" style="float:right">
-            <input type="button" class="btn btn-add" id="btn_Add" value="新建报价单" />
-        </div>*@
         <div class="clear"></div>
     </div>
     <div class="list">
@@ -183,22 +148,28 @@
                     <th style="width:5%" class="no">
                         序号
                     </th>
-                    <th style="width:15%">
-                        订单号
-                    </th>
                     <th style="width:10%">
-                        类型
+                        订单号
                     </th>
                     <th style="width:10%">
                         商户代码
                     </th>
-                    <th style="width:25%">
+                    <th style="width:15%">
                         商户名称
                     </th>
-                    <th style="width:15%">
+                    <th style="width:10%">
+                        商户联系人
+                    </th>
+                    <th style="width:10%">
                         联系电话
                     </th>
                     <th style="width:15%">
+                        需求工种
+                    </th>
+                    <th style="width:10%">
+                        人数
+                    </th>
+                    <th style="width:10%">
                         提交时间
                     </th>
                     <th style="width:5%" class="operation">
@@ -209,7 +180,7 @@
             <tbody></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="8">
+                    <td colspan="10">
                         <div class="pull-left">
                             <span class="load-tip"></span>
                         </div>
@@ -230,4 +201,3 @@
         </table>
     </div>
 </form>
-

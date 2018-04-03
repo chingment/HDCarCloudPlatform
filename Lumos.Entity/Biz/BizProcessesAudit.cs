@@ -30,16 +30,6 @@ namespace Lumos.Entity
 
         public int Status { get; set; }
 
-        public int? Result { get; set; }
-
-        [MaxLength(1024)]
-        public string Remark { get; set; }
-
-        [MaxLength(1024)]
-        public string Reason { get; set; }
-
-        public string JsonData { get; set; }
-
         public int Creator { get; set; }
 
         public DateTime CreateTime { get; set; }

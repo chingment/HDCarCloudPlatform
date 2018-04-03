@@ -32,10 +32,6 @@ namespace Lumos.Entity
 
         public DateTime? AuditTime { get; set; }
 
-        public DateTime StartTime { get; set; }
-
-        public DateTime? EndTime { get; set; }
-
         public int Creator { get; set; }
 
         public DateTime CreateTime { get; set; }

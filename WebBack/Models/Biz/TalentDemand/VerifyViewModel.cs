@@ -7,7 +7,7 @@ using System.Web;
 
 namespace WebBack.Models.Biz.TalentDemand
 {
-    public class DealtViewModel : BaseViewModel
+    public class VerifyViewModel : BaseViewModel
     {
         private Lumos.Entity.Merchant _merchant = new Lumos.Entity.Merchant();
 
@@ -16,15 +16,15 @@ namespace WebBack.Models.Biz.TalentDemand
         private Lumos.Entity.BizProcessesAudit _bizProcessesAudit = new Lumos.Entity.BizProcessesAudit();
 
 
-        public DealtViewModel()
+        public VerifyViewModel()
         {
 
         }
 
-        public DealtViewModel(int id)
+        public VerifyViewModel(int id)
         {
 
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Save, id, Enumeration.TalentDemandDealtStatus.InDealt, this.Operater, null, "已取单，正在处理");
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Save, id, Enumeration.TalentDemandDealtStatus.InVerify, this.Operater, null, "已取单，正在核实");
 
             if (bizProcessesAudit != null)
             {

@@ -1,0 +1,924 @@
+﻿@model WebBack.Models.Biz.CarInsureOffer.DealtViewModel
+@{
+    ViewBag.Title = "Dealt";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script type="text/javascript">
+
+        var offerKinds= @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OrderToCarInsureOfferKind));
+        var productType=@((int)Model.OrderToCarInsure.ProductType)
+        function loadOfferKindsTable(offerKinds){
+            var obj_tbody=$('#list_table_offerkinds tbody');
+            $(obj_tbody).html('');
+
+            var html="";
+
+
+            for(var i=0;i<offerKinds.length;i++)
+            {
+                html+="<tr>"
+                html+="<td>"+offerKinds[i].kindName+"</td>";
+
+                var kindv="";
+
+                if(offerKinds[i].kindValue!=null)
+                {
+                    var kindu=offerKinds[i].kindUnit==null?"":offerKinds[i].kindUnit;
+                    kindv=offerKinds[i].kindValue+kindu;
+                }
+
+                html+="<td>"+kindv+"</td>";
+
+                var isWaiverDeductible=offerKinds[i].isWaiverDeductible==true?"不计免赔":"";
+
+                html+="<td>"+isWaiverDeductible+"</td>";
+                html+="<td>";
+
+                html+=offerKinds[i].kindDetails==null?"":offerKinds[i].kindDetails;
+
+                html+=" </td>";
+
+
+                html+="<td>";
+
+                if(productType==2012)
+                {
+                    if(offerKinds[i].kindId!=1&&offerKinds[i].kindId!=2)   {
+                        html+="<a href=\"javascript:void(0)\" class=\"a-btn a-btn-del-kind\" kindid=\""+offerKinds[i].kindId+"\"  >移除</a>";
+                    }
+                }
+
+                html+="</td>";
+
+                html+="</tr>"
+            }
+
+            $(obj_tbody).html(html);
+
+        }
+
+        var carmodels=[];
+        $(document).ready(function () {
+
+
+            var win = art.dialog.open.origin;
+            var dealtStatus = $.lumos.getUrlParamValue("dealtStatus");
+            if (dealtStatus == "@((int)Lumos.Entity.Enumeration.CarInsureOfferDealtStatus.WaitOffer)") {
+                win.listTable.loadData();
+            }
+
+
+
+            @if (Model.IsHasOperater)
+            {
+                @Html.Raw("setTimeout(function () {art.dialog({ title: '提示', content: '用户【" + Model.OperaterName + "】正在审核', cancelVal:'退出',cancel: function () {art.dialog.close();}, lock: true, drag: false, dblclickClose: false }); }, 100);");
+            }
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_OrderToCarInsure_CarOwner").formValidator().inputValidator({ min: 1, max: 20, onError: "车主姓名不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarOwnerIdNumber").formValidator().inputValidator({ min: 1, max: 20, onError: "车主身份证号码不能为空,且不超过20个字符" });
+            $("#Model_OrderToCarInsure_CarPlateNo").formValidator().inputValidator({ min: 1, max: 20, onError: "车牌号码不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarUserCharacter").formValidator().inputValidator({ min: 1, max: 20, onError: "请选择车辆使用性质" });
+            //$("#Model_OrderToCarInsure_CarModel").formValidator().inputValidator({ min: 1, max: 20, onError: "品牌型号不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarVin").formValidator().inputValidator({ min: 1, max: 20, onError: "车辆识别代号不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarEngineNo").formValidator().inputValidator({ min: 1, max: 20, onError: "发动机号不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarSeat").formValidator().inputValidator({ min: 1, max: 20, onError: "请选择核定载人数" });
+            //$("#Model_OrderToCarInsure_CarVechicheType").formValidator().inputValidator({ min: 1, max: 20, onError: "请选择车辆型号" });
+            //$("#Model_OrderToCarInsure_CarIssueDate").formValidator().regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "车辆发证日期格式不正确,格式例子:2016-08-08" });
+            //$("#Model_OrderToCarInsure_CarRegisterDate").formValidator().regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "车辆注册日期格式不正确,格式例子:2016-08-08" });
+            //$("#Model_OrderToCarInsure_PeriodStart").formValidator().regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "承保期间（开始）格式不正确,格式例子:2016-08-08" });
+            //  $("#Model_OrderToCarInsure_PeriodEnd").formValidator().regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "承保期间（结束）格式不正确,格式例子:2016-08-08" });
+
+
+            $("#Model_OrderToCarInsure_Remarks").formValidator({ onShow: "", onFocus: "", onCorrect: "", empty: true, onEmpty: "" }).inputValidator({ min: 0, max: 500, onError: "告知备注不超过500个字" });
+
+
+
+            $(".insureimgurl").each(function (i, e) {
+                var insurancecompanyname = $(e).parent().parent().find('.insurancecompanyname').text();
+                $(e).formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传" + insurancecompanyname + "投保单" });
+            });
+
+
+
+            $(".insuranceOrderid").each(function (i, e) {
+                //var insurancecompanyname = $(e).parent().parent().find('.insurancecompanyname').text();
+                //$(e).formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 0, max: 50, empty: { leftEmpty: false }, onError: insurancecompanyname + "的投保单号不能为空,且不超过50个字符" });
+            });
+
+
+            $(".compulsoryprice").each(function (i, e) {
+                //var insurancecompanyname = $(e).parent().parent().find('.insurancecompanyname').text();
+                //$(e).formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.00, max: 100000000, onError: insurancecompanyname + "的交强险金额范围在0.00~100000000.00之间" });
+                //$(e).decimalInput(2);
+            });
+
+            $(".traveltaxprice").each(function (i, e) {
+                //var insurancecompanyname = $(e).parent().parent().find('.insurancecompanyname').text();
+                //$(e).formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.00, max: 100000000, onError: insurancecompanyname + "车船税金额范围在0.00~100000000.00之间" });
+               // $(e).decimalInput(2);
+            });
+
+            $(".commercialprice").each(function (i, e) {
+                //var insurancecompanyname = $(e).parent().parent().find('.insurancecompanyname').text();
+                //$(e).formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.00, max: 100000000, onError: insurancecompanyname + "商业险金额范围在0.00~100000000.00之间" });
+                //$(e).decimalInput(2);
+            });
+
+
+            $('.calprice').live('change',function(){
+
+                var p=$(this).parent().parent();
+                var compulsoryprice=$(p).find('.compulsoryprice').val();
+                var traveltaxprice=$(p).find('.traveltaxprice').val();
+                var commercialprice=$(p).find('.commercialprice').val();
+
+                compulsoryprice=compulsoryprice==''?0:compulsoryprice;
+                traveltaxprice=traveltaxprice==''?0:traveltaxprice;
+                commercialprice=commercialprice==''?0:commercialprice;
+
+                var sum=parseFloat(compulsoryprice)+parseFloat(traveltaxprice)+parseFloat(commercialprice);
+
+
+                $(p).find('.insuretotalprice').text(sum.toFixed(2));
+
+
+
+            });
+
+
+            $('#btn_select_kinds').live('click', function () {
+
+                var selectedIds='';
+
+                for(var i=0;i<offerKinds.length;i++){
+                    selectedIds+=offerKinds[i].kindId+',';
+                }
+
+
+                var dialog = art.dialog.open('/Biz/CarInsureOffer/SelectKinds?selectedIds='+selectedIds, {
+                    id: "openDialog565", title: '选择险种', width: '800px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '确定', ok: function () {
+                        this.iframe.contentWindow.submit(function (d) {
+
+                            if(d.length==0) {
+                                $.lumos.tips('至少勾选一种险种');
+                            }
+                            else{
+
+                                for(var i=0;i<d.length;i++){
+
+                                    var kind=$.lumos.jsonHelper.getDetail(offerKinds,"kindId",d[i].kindId);
+                                    if(typeof kind == 'undefined')  {
+                                        offerKinds.push(d[i]);
+                                    }
+                                }
+
+                                loadOfferKindsTable(offerKinds);
+
+                                dialog.close();
+
+                            }
+
+                        });
+                        return false;
+                    }
+                });
+
+            });
+
+
+            $('.a-btn-del-kind').live('click',function(){
+                var _this=$(this);
+                var kindId=$(_this).attr("kindid");
+
+                art.dialog.confirm('确定要删除？', function () {
+
+                    $(_this).parent().parent().remove();
+
+                    $.lumos.jsonHelper.del(offerKinds,"kindId",kindId);
+                });
+
+            });
+
+            loadOfferKindsTable(offerKinds);
+
+
+
+            $('#btn_VehicleInformationQuery').click(function(){
+
+                var carNo=$('#Model_OrderToCarInsure_CarPlateNo').val();
+                var ownerName=$('#Model_OrderToCarInsure_CarOwner').val();
+
+                if(ownerName=='') {
+                    art.dialog.tips('请输入车主姓名和车牌号码');
+                    return;
+                }
+
+                if(carNo=='') {
+                    art.dialog.tips('请输入车主姓名和车牌号码');
+                    return;
+                }
+
+                $.lumos.postJson({
+                    isUseHandling: true,
+                    url: "/Biz/CarInsureOffer/VehicleInformationQuery",
+                    data: {carNo:carNo,ownerName:ownerName},
+                    success: function (data) {
+
+
+                        alert(JSON.stringify(data));
+
+                    }
+                });
+
+
+
+            });
+
+            $('#btn_CarModelQuery').click(function(){
+
+                var keyword=$('#txt_Keyword').val();
+                var vin=$('#txt_Vin').val();
+                var firstRegisterDate=$('#txt_FirstRegisterDate').val();
+
+                $.lumos.postJson({
+                    isUseHandling: true,
+                    url: "/Biz/CarInsureOffer/CarModelQuery",
+                    data: {keyword:keyword,vin:vin,firstRegisterDate:firstRegisterDate},
+                    success: function (d) {
+
+                        $('#list_carmodel_table tbody').html('');
+
+                        if(d.code==0){
+
+                            carmodels=d.data;
+                            if(carmodels.length==0) {
+
+                                $.lumos.tips('找不到车辆信息')
+                            }
+                            else{
+                                $.each(carmodels,function(index, item){
+
+                                    var l_StrRows = "";
+                                    l_StrRows += "<tr>";
+                                    l_StrRows += "<td class=\"no\" >"+(index+1)+"</td>";
+                                    l_StrRows += "<td class=\"overflow\" title=\"" + item.modelCode + "\">" + item.modelCode + "</td>";
+                                    l_StrRows += "<td class=\"overflow\" title=\"" + item.modelName + "\">" + item.modelName + "</td>";
+                                    l_StrRows += "<td class=\"overflow\" title=\"" + item.displacement + "\">" + item.displacement + "</td>";
+                                    l_StrRows += "<td class=\"overflow\" title=\"" + item.marketYear + "\">" + item.marketYear + "</td>";
+                                    l_StrRows += "<td class=\"overflow\" title=\"" + item.ratedPassengerCapacity + "\">" + item.ratedPassengerCapacity + "</td>";
+                                    l_StrRows += "<td class=\"overflow\" title=\"" + item.replacementValue + "\">" + item.replacementValue + "</td>";
+
+                                    l_StrRows += "<td class=\"operation\">";
+                                    l_StrRows += "<a href=\"javascript:void(0)\" class=\"a-btn a-btn-edit selectcarmodel\" modelid=\""+item.id+"\" >选择</a>";
+                                    l_StrRows += "</td>";
+
+
+                                    l_StrRows += "</tr>";
+
+                                    $('#list_carmodel_table tbody').append(l_StrRows)
+
+                                });
+                            }
+
+                        }
+
+                    }
+                });
+
+
+
+            });
+
+
+            $('.selectcarmodel').live('click',function(){
+
+                var modelid=$(this).attr('modelid');
+
+
+                var model=$.lumos.jsonHelper.getDetail(carmodels,"id",modelid);
+
+
+                var carVin=$('#txt_Vin').val();
+                var carFirstRegisterDate=$('#txt_FirstRegisterDate').val();
+
+                $('#Model_OrderToCarInsure_CarModel').val(model.modelCode);
+                $('#Model_OrderToCarInsure_CarModelName').val(model.modelName);
+                $('#Model_OrderToCarInsure_CarVin').val(carVin);
+                $('#Model_OrderToCarInsure_CarPurchasePrice').val(model.replacementValue);
+                $('#Model_OrderToCarInsure_CarSeat').val(model.ratedPassengerCapacity);
+                $('#Model_OrderToCarInsure_CarRegisterDate').val(carFirstRegisterDate)
+
+
+
+            });
+
+            $('#btn_GetCarInsOffer').click(function(){
+                var carModelName=$('#Model_OrderToCarInsure_CarModelName').val();
+                var carPlateNo=$('#Model_OrderToCarInsure_CarPlateNo').val();
+                var carEngineNo=$('#Model_OrderToCarInsure_CarEngineNo').val();
+
+                if(carModelName=='') {
+                    art.dialog.tips('请先查询车辆信息后，选择车辆');
+                    return;
+                }
+
+                if(carPlateNo=='') {
+                    art.dialog.tips('请输入车牌号码');
+                    return;
+                }
+
+                if(carEngineNo=='') {
+                    art.dialog.tips('请输入发动机号');
+                    return;
+                }
+
+                var l_Data = $("#form1").serializeArray();
+
+                for (var i = 0; i < offerKinds.length; i++) {
+                    l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].KindId", value: offerKinds[i].kindId });
+                    l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].KindValue", value: offerKinds[i].kindValue });
+                    l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].KindDetails", value: offerKinds[i].kindDetails });
+                    l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].IsWaiverDeductible", value: offerKinds[i].isWaiverDeductible });
+                }
+
+                $.lumos.postJson({
+                    isUseHandling: true,
+                    url: "/Biz/CarInsureOffer/GetCarInsOffer",
+                    data: l_Data,
+                    success: function (d) {
+                        console.log(JSON.stringify(d));
+                        //alert(JSON.stringify(d))
+                        if(d.result== resultType.success){
+
+                            var offData=d.data;
+
+                            for(var i=0;i<offData.length;i++){
+
+                                var compulsoryPrice=0;
+                                var commercialPrice=0;
+                                var travelTaxPrice=0;
+                                var sumPrice=0;
+                                var offerImgUrl='';
+                                var uplinkInsCompanyId=offData[i].uplinkInsCompanyId;
+                                var extmsg='';
+                                if(offData[i].inquiry.code==0){
+
+                                    compulsoryPrice=offData[i].compulsoryPrice;
+                                    commercialPrice=offData[i].commercialPrice;
+                                    travelTaxPrice=offData[i].travelTaxPrice;
+                                    sumPrice=offData[i].sumPrice;
+                                    offerImgUrl=offData[i].offerImgUrl;
+                                }
+                                else  {
+                                    extmsg=offData[i].inquiry.extmsg;
+                                }
+
+
+                                $('#offer_'+uplinkInsCompanyId).find('.compulsoryprice').val(compulsoryPrice);
+                                $('#offer_'+uplinkInsCompanyId).find('.commercialprice').val(commercialPrice);
+                                $('#offer_'+uplinkInsCompanyId).find('.traveltaxprice').val(travelTaxPrice);
+                                $('#offer_'+uplinkInsCompanyId).find('.insuretotalprice').text(sumPrice);
+                                $('#offer_'+uplinkInsCompanyId).find('.insureimgurl').val(offerImgUrl);
+                                $('#offer_'+uplinkInsCompanyId).find('.insureimgurlsrc').attr('src',offerImgUrl);
+
+                                $('#offer_extmsg_'+uplinkInsCompanyId).text(extmsg);
+                            }
+                        }
+                    }
+                });
+
+
+            });
+
+        });
+
+
+
+        function submit(operate, fun) {
+            var form = $("#form1");
+            var msg = "";
+            var model_OrderToCarInsure_Remarks = $("#Model_OrderToCarInsure_Remarks").val();
+            if (operate == operateType.save) {
+                msg = "确定要保存？";
+                $(form).find('*').setInputRequired(false);
+            }
+            else if (operate == operateType.submit) {
+                msg = "确定要提交报价？";
+                $(form).find('*').setInputRequired(true);
+            }
+            else if (operate == operateType.reject) {
+                msg = "确定要转给客户跟进？";
+                $(form).find('*').setInputRequired(false);
+
+                if (model_OrderToCarInsure_Remarks == "") {
+                    $.lumos.tips('请输入告知备注');
+                    return;
+                }
+            }
+            else if (operate == operateType.cancle) {
+                msg = "确定要取消该订单？";
+                $(form).find('*').setInputRequired(false);
+
+                if (model_OrderToCarInsure_Remarks == "") {
+                    $.lumos.tips('请输入告知备注');
+                    return;
+                }
+            }
+
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+
+
+
+
+                art.dialog.confirm(msg, function () {
+                    var l_Data = $("#form1").serializeArray();
+                    l_Data.push({ name: "Model.Operate", value: operate });
+
+                    for (var i = 0; i < offerKinds.length; i++) {
+                        l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].KindId", value: offerKinds[i].kindId });
+                        l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].KindValue", value: offerKinds[i].kindValue });
+                        l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].KindDetails", value: offerKinds[i].kindDetails });
+                        l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].IsWaiverDeductible", value: offerKinds[i].isWaiverDeductible });
+                    }
+
+                    $.lumos.postJson({
+                        isUseHandling: true,
+                        url: "/Biz/CarInsureOffer/Dealt",
+                        data: l_Data,
+                        success: function (data) {
+                            fun(data);
+
+                        }
+                    });
+                });
+            }
+            return false;
+
+        }
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @AntiForgery.GetHtml()
+    <input name="Model.OrderToCarInsure.Id" type="hidden" value="@Model.OrderToCarInsure.Id" />
+    <input name="Model.BizProcessesAudit.CurrentDetails.Id" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.Id" />
+    <input name="Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" />
+
+    <input name="Model.OrderToCarInsure.CarModelName" type="hidden" id="Model_OrderToCarInsure_CarModelName" value="@Model.OrderToCarInsure.CarModelName" />
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>商户信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t">商户名：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+    </table>
+
+
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>险种信息</h5>
+
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6>@Lumos.BLL.BizFactory.CarInsurePlan.GetPlanName(Model.OrderToCarInsure.InsurePlanId)</h6>
+        </div>
+    </div>
+    <table id="list_table_offerkinds" class="list-tb" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:25%">
+                    名称
+                </th>
+                <th style="width:25%">
+
+                </th>
+                <th style="width:20%">
+
+                </th>
+                <th style="width:25%">
+                    投保明细
+                </th>
+                <th style="width:5%">
+
+                </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>客户要求</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:96%">
+        <tr>
+            <td>
+                @Model.OrderToCarInsure.ClientRequire
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>证件图片</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+
+    <table class="f-tb1-detail" style="text-align:center">
+        <tr style="vertical-align:top">
+            <td>
+                <div>
+                    <span class="uploadimgbox" upload="false">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.CZ_CL_XSZ_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>车辆行驶证</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.CZ_SFZ_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>身份证</span>
+                    <input type="hidden" name="Model.OrderToCarInsure.CZ_SFZ_ImgUrl" value="@Model.OrderToCarInsure.CZ_SFZ_ImgUrl" />
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.CCSJM_WSZM_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>车船税减免<br />或完税证明</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.YCZ_CLDJZ_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.YCZ_CLDJZ_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>验证照<br />或辆登记证</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.ZJ1_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.ZJ1_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>其他证件1</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.ZJ2_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.ZJ2_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>其他证件2</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.ZJ3_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.ZJ3_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>其他证件3</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span class="uploadimgbox">
+                        <span class="uploadimg">
+                            <img src="@Model.OrderToCarInsure.ZJ4_ImgUrl" />
+                        </span>
+                        <span class="uploadimg-view" style="@Model.OrderToCarInsure.ZJ4_ImgUrl">预览</span>
+                    </span>
+                </div>
+                <div>
+                    <span>其他证件4</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="gbr-row-title clearfix" style="display:none;">
+        <div class="pull-left">
+            <h5>车辆查询</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail" style="display:none;">
+        <tr>
+            <td class="t">品牌型号：</td>
+            <td class="c">
+                <span><input type="text" autocomplete="off" id="txt_Keyword" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarModel" /></span>
+            </td>
+            <td class="t">车辆识别代号：</td>
+            <td class="c">
+                <span><input type="text" autocomplete="off" id="txt_Vin" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarVin" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">初登日期：</td>
+            <td class="c">
+                <span><input type="text" autocomplete="off" id="txt_FirstRegisterDate" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarRegisterDate" onclick="WdatePicker()" /></span>
+                <span> <input type="button" class="btn" id="btn_CarModelQuery" value="查询" /></span>
+            </td>
+            <td class="t"></td>
+            <td class="c"></td>
+        </tr>
+    </table>
+
+
+    <table id="list_carmodel_table" class="list-tb" cellpadding="0" cellspacing="0" style="display:none;">
+        <thead>
+            <tr>
+                <th style="width:5%" class="no">
+                    序号
+                </th>
+                <th style="width:10%">
+                    车型代码
+                </th>
+                <th style="width:10%">
+                    车型名称
+                </th>
+                <th style="width:10%">
+                    排量（毫升）
+                </th>
+                <th style="width:10%">
+                    上市年份
+                </th>
+                <th style="width:10%">
+                    额定载客人数
+                </th>
+                <th style="width:10%">
+                    新车购置价(元)
+                </th>
+                <th style="width:5%" class="operation">
+                    操作
+                </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>投保信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t"><span class="required-symbol">*</span>车主姓名：</td>
+            <td class="c">
+                <span><input name="Model.OrderToCarInsure.CarOwner" type="text" autocomplete="off" id="Model_OrderToCarInsure_CarOwner" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarOwner" /></span>
+            </td>
+            <td class="t">车主身份证号码：</td>
+            <td class="c">
+                <span> <input name="Model.OrderToCarInsure.CarOwnerIdNumber" type="text" autocomplete="off" id="Model_OrderToCarInsure_CarOwnerIdNumber" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarOwnerIdNumber" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t"><span class="required-symbol">*</span>车牌号码：</td>
+            <td class="c">
+                <span><input name="Model.OrderToCarInsure.CarPlateNo" type="text" autocomplete="off" id="Model_OrderToCarInsure_CarPlateNo" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarPlateNo" /></span>
+            </td>
+            <td class="t">车辆使用性质：</td>
+            <td class="c">
+                <span>@(Html.initEnumeration<Lumos.Entity.Enumeration.CarUserCharacter>(Lumos.Entity.Enumeration.InputType.Select, "Model.OrderToCarInsure.CarUserCharacter", new { @class = "select-control", defaulttext = "请选择", selectedvalue = new Lumos.Entity.Enumeration.CarUserCharacter[] { Model.OrderToCarInsure.CarUserCharacter }, hidevalue = new Lumos.Entity.Enumeration.CarUserCharacter[] { Lumos.Entity.Enumeration.CarUserCharacter.Unknow } }))</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">品牌型号：</td>
+            <td class="c">
+                <span><input name="Model.OrderToCarInsure.CarModel" type="text" autocomplete="off" id="Model_OrderToCarInsure_CarModel" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarModel" /></span>
+            </td>
+            <td class="t">车辆识别代号：</td>
+            <td class="c">
+                <span><input name="Model.OrderToCarInsure.CarVin" type="text" autocomplete="off" id="Model_OrderToCarInsure_CarVin" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarVin" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">发动机号：</td>
+            <td class="c">
+                <span><input name="Model.OrderToCarInsure.CarEngineNo" type="text" autocomplete="off" id="Model_OrderToCarInsure_CarEngineNo" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarEngineNo" /></span>
+            </td>
+            <td class="t">核定载人数：</td>
+            <td class="c">
+                <span><input name="Model.OrderToCarInsure.CarSeat" type="text" autocomplete="off" id="Model_OrderToCarInsure_CarSeat" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarSeat" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">车辆型号：</td>
+            <td class="c">
+                <span>@(Html.initEnumeration<Lumos.Entity.Enumeration.CarVechicheType>(Lumos.Entity.Enumeration.InputType.Select, "Model.OrderToCarInsure.CarVechicheType", new { @class = "select-control", defaulttext = "请选择", selectedvalue = new Lumos.Entity.Enumeration.CarVechicheType[] { Model.OrderToCarInsure.CarVechicheType }, hidevalue = new Lumos.Entity.Enumeration.CarVechicheType[] { Lumos.Entity.Enumeration.CarVechicheType.Unknow } }))</span>
+            </td>
+            <td class="t">初登日期：</td>
+            <td class="c">
+                <span><input name="Model.OrderToCarInsure.CarRegisterDate" type="text" autocomplete="off" id="Model_OrderToCarInsure_CarRegisterDate" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarRegisterDate" onclick="WdatePicker()" /></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">新车购置价：</td>
+            <td class="c">
+                <span><input name="Model.OrderToCarInsure.CarPurchasePrice" type="text" autocomplete="off" id="Model_OrderToCarInsure_CarPurchasePrice" class="input-control" style="width:175px;" value="@Model.OrderToCarInsure.CarPurchasePrice" /></span>
+            </td>
+            <td class="t"></td>
+            <td class="c"></td>
+        </tr>
+        <tr>
+            <td class="t">承保期间（开始）：</td>
+            <td class="c">
+                <span><input type="text" class="input-control" name="Model.OrderToCarInsure.PeriodStart" id="Model_OrderToCarInsure_PeriodStart" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_OrderToCarInsure_PeriodStart\')}' })" style="width:175px;" value="@(Model.OrderToCarInsure.PeriodStart==null?DateTime.Now.ToUnifiedFormatDate():Model.OrderToCarInsure.PeriodStart.ToUnifiedFormatDate())" /></span>
+            </td>
+            <td class="t">是否含车损：</td>
+            <td class="c">
+                <span>
+
+                    <input type="checkbox" value="true" id="Model_OrderToCarInsure_IsCarDamage" name="Model.OrderToCarInsure.IsCarDamage" @(Model.OrderToCarInsure.IsCarDamage == false ? "" : "checked=checked") />
+
+                </span>
+            </td>
+
+            @*
+                <td class="t"><span class="required-symbol">*</span>承保期间（结束）：</td>
+                <td class="c">
+                    <span><input type="text" class="input-control" name="Model.OrderToCarInsure.PeriodEnd" id="Model_OrderToCarInsure_PeriodEnd" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_OrderToCarInsure_PeriodEnd\')}' })" style="width:175px;" value="@Model.OrderToCarInsure.PeriodEnd.ToUnifiedFormatDate()" /></span>
+                </td>*@
+        </tr>
+        <tr style="display:none;">
+            <td class="c" colspan="4" style="text-align:center;">
+                <span>
+
+                    <span> <input type="button" class="btn" id="btn_GetCarInsOffer" value="获取报价" /></span>
+
+                </span>
+            </td>
+        </tr>
+    </table>
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>填写保险报价</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+
+    <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:10%" class="no">
+                    序号
+                </th>
+                <th style="width:20%">
+                    保险公司
+                </th>
+                <th style="width:70%">
+                    <span class="required-symbol">*</span>投保单图片
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for (var i = 0; i < Model.OrderToCarInsureOfferCompany.Count; i++)
+            {
+                <tr id="offer_@Model.OrderToCarInsureOfferCompany[i].InsuranceCompanyId">
+                    <td class="no">@(i + 1)</td>
+                    <td class="overflow tipitem">
+                        <span class="insurancecompanyname">@Model.OrderToCarInsureOfferCompany[i].InsuranceCompanyName</span>
+                        <input name="Model.OrderToCarInsureOfferCompany[@i].Id" type="hidden" value="@Model.OrderToCarInsureOfferCompany[i].Id" />
+                        <input name="Model.OrderToCarInsureOfferCompany[@i].InsuranceCompanyId" type="hidden" value="@Model.OrderToCarInsureOfferCompany[i].InsuranceCompanyId" />
+                    </td>
+                    <td>
+
+
+                        <span class="uploadimgbox" upload="true">
+                            <span class="uploadimg" inputname="Model.OrderToCarInsureOfferCompany[@i].InsureImgUrl" path="carInsure">
+                                <img src="@Model.OrderToCarInsureOfferCompany[i].InsureImgUrl" class="insureimgurlsrc" />
+                                <span class="uploadimg-click" style="">上传</span>
+                                <input id="Model_OrderToCarInsureOfferCompany_InsureImgUrl_@i" value="@Model.OrderToCarInsureOfferCompany[i].InsureImgUrl" class="insureimgurl" name="Model.OrderToCarInsureOfferCompany[@i].InsureImgUrl" type="hidden" />
+                            </span>
+                            <span class="uploadimg-view" style="">预览</span>
+                            <span class="insurancecompanyname" style="display:none">@Model.OrderToCarInsureOfferCompany[i].InsuranceCompanyName</span>
+                        </span>
+
+                    </td>
+                </tr>
+                <tr><td colspan="3" id="offer_extmsg_@Model.OrderToCarInsureOfferCompany[i].InsuranceCompanyId" style="text-align:center;color:red;"></td></tr>
+            }
+        </tbody>
+    </table>
+
+
+    @Html.Partial("AuditFlowTrace", Model.BizProcessesAudit.HistoricalDetails)
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>告知备注</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:96%">
+        <tr>
+            <td>
+                <textarea name="Model.OrderToCarInsure.Remarks" class="input-control" id="Model_OrderToCarInsure_Remarks" style="width:98%;">@Model.OrderToCarInsure.Remarks</textarea>
+            </td>
+        </tr>
+    </table>
+</form>

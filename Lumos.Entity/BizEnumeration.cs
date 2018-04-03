@@ -84,13 +84,13 @@ namespace Lumos.Entity
             Unknow = 0,
             [Remark("等待核实")]
             WaitVerifyOrder = 1,
-            [Remark("核实需求")]
+            [Remark("核实需求中")]
             InVerifyOrder = 2,
             [Remark("跟进待上传定损单")]
             FllowUploadEstimateListImg = 3,
-            [Remark("核实金额")]
+            [Remark("等待核实金额")]
             WaitVerifyAmount = 4,
-            [Remark("核实金额")]
+            [Remark("核实金额中")]
             InVerifyAmount = 5,
             [Remark("后台取消订单")]
             StaffCancle = 6,
@@ -121,16 +121,26 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
+            [Remark("提交订单")]
+            Submit = 1,
+            [Remark("等待核实")]
+            WaitVerify = 2,
+            [Remark("核实中")]
+            InVerify = 3,
+            [Remark("核实正确")]
+            VerifyCorrect = 5,
+            [Remark("核实不正确")]
+            VerifyIncorrect = 6,
             [Remark("等待处理")]
-            WaitDealt = 1,
+            WaitDealt = 7,
             [Remark("处理中")]
-            InDealt = 2,
-            [Remark("后台取消订单")]
-            StaffCancle = 3,
-            [Remark("客户取消订单")]
-            ClientCancle = 4,
-            [Remark("完成")]
-            Complete = 5
+            InDealt = 8,
+            [Remark("处理驳回")]
+            DealtReject = 9,
+            [Remark("处理成功")]
+            DealtSuccess = 10,
+            [Remark("处理失败")]
+            DealtFailure = 11
         }
 
         public enum TalentDemandDealtStep
@@ -139,11 +149,18 @@ namespace Lumos.Entity
             Unknow = 0,
             [Remark("提交订单")]
             Submit = 1,
-            [Remark("处理订单")]
-            Dealt = 2,
-            [Remark("完成")]
-            Complete = 3
-
+            [Remark("核实中")]
+            InVerify = 2,
+            [Remark("核实完成")]
+            VerifyedComplete = 3,
+            [Remark("处理驳回")]
+            VerifyedReject = 4,
+            [Remark("处理订单中")]
+            InDealt = 5,
+            [Remark("处理完成")]
+            DealtedComplete = 6,
+            [Remark("处理驳回")]
+            DealtedReject = 7
         }
 
         public enum LllegalDealtStep
@@ -211,28 +228,33 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
+            [Remark("提交订单")]
+            Submit = 1,
             [Remark("等待初审")]
-            WaitPrimaryAudit = 1,
+            WaitPrimaryAudit = 2,
             [Remark("初审中")]
-            InPrimaryAudit = 2,
+            InPrimaryAudit = 3,
             [Remark("等待复审")]
-            WaitSeniorAudit = 3,
+            WaitSeniorAudit = 4,
             [Remark("复审中")]
-            InSeniorAudit = 4,
+            InSeniorAudit = 5,
             [Remark("复审通过")]
-            SeniorAuditPass = 5,
+            SeniorAuditPass = 6,
             [Remark("复审驳回")]
-            SeniorAuditReject = 6
+            SeniorAuditReject = 7
         }
+
 
         public enum MerchantAuditStep
         {
             [Remark("未知")]
             Unknow = 0,
+            [Remark("提交")]
+            Submit = 1,
             [Remark("初审")]
-            PrimaryAudit = 1,
+            PrimaryAudit = 2,
             [Remark("复审")]
-            SeniorAudit = 2
+            SeniorAudit = 3
         }
 
 
@@ -410,26 +432,18 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("扩展应用上架申请")]
-            ExtendedAppOn = 1,
-            [Remark("扩展应用下架申请")]
-            ExtendedAppOff = 2,
-            [Remark("扩展应用恢复申请")]
-            ExtendedAppRecovery = 3,
             [Remark("车险订单")]
-            CarInsure = 4,
+            CarInsure = 1,
             [Remark("车险理赔")]
-            CarClaim = 5,
+            CarClaim = 2,
             [Remark("商户资料审核")]
-            MerchantAudit = 6,
-            [Remark("佣金审核")]
-            CommissionRateAudit = 7,
+            MerchantAudit = 3,
             [Remark("人才输送")]
-            TalentDemand = 8,
+            TalentDemand = 4,
             [Remark("定损点申请")]
-            ApplyLossAssess = 9,
+            ApplyLossAssess = 5,
             [Remark("违章处理")]
-            LllegalDealt = 10
+            LllegalDealt = 6
         }
 
         public enum MerchantStatus
@@ -491,20 +505,6 @@ namespace Lumos.Entity
             Estimate = 2
         }
 
-        public enum WithdrawStatus
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("发起请求")]
-            SendRequest = 1,
-            [Remark("处理中")]
-            Handing = 2,
-            [Remark("成功")]
-            Success = 3,
-            [Remark("失败")]
-            Failure = 4
-        }
-
         public enum TransactionsType
         {
             [Remark("未知")]
@@ -528,40 +528,6 @@ namespace Lumos.Entity
             [Remark("查询扣除积分")]
             DecreaseByQuery = 3
         }
-
-
-        public enum CommissionRateAuditStatus
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("等待初审")]
-            WaitPrimaryAudit = 1,
-            [Remark("初审中")]
-            InPrimaryAudit = 2,
-            [Remark("等待复审")]
-            WaitSeniorAudit = 3,
-            [Remark("复审中")]
-            InSeniorAudit = 4,
-            [Remark("复审通过")]
-            SeniorAuditPass = 5,
-            [Remark("复审驳回")]
-            SeniorAuditReject = 6,
-            [Remark("复审拒绝")]
-            SeniorAuditRefuse = 7
-        }
-
-        public enum CommissionRateAuditStep
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("申请")]
-            Apply = 1,
-            [Remark("初审")]
-            PrimaryAudit = 2,
-            [Remark("复审")]
-            SeniorAudit = 3
-        }
-
 
         public enum CarUserCharacter
         {

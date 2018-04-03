@@ -250,11 +250,11 @@
     <Compile Include="Models\Biz\Report\PosListViewModel.cs" />
     <Compile Include="Models\Biz\Report\ReportModel.cs" />
     <Compile Include="Models\Biz\Report\SalesmanPosViewModel.cs" />
-    <Compile Include="Models\Biz\Report\WithdrawViewModel.cs" />
     <Compile Include="Models\Biz\ServiceFee\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\TalentDemand\DealtViewModel.cs" />
     <Compile Include="Models\Biz\TalentDemand\SearchCondition.cs" />
     <Compile Include="Models\Biz\TalentDemand\DetailsViewModel.cs" />
-    <Compile Include="Models\Biz\TalentDemand\DealtViewModel.cs" />
+    <Compile Include="Models\Biz\TalentDemand\VerifyViewModel.cs" />
     <Compile Include="Models\Biz\Transactions\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\Transactions\SearchCondition.cs" />
     <Compile Include="Models\Home\ChangePasswordModel.cs" />
@@ -1238,8 +1238,8 @@
     <Content Include="Views\Biz\CarInsureOffer\Add.cshtml" />
     <Content Include="Views\Biz\TalentDemand\Details.cshtml" />
     <Content Include="Views\Biz\TalentDemand\List.cshtml" />
-    <Content Include="Views\Biz\TalentDemand\Dealt.cshtml" />
-    <Content Include="Views\Biz\TalentDemand\DealtList.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\Verify.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\ListByVerify.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\Details.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\List.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\Dealt.cshtml" />
@@ -1258,6 +1258,10 @@
     <Content Include="Views\Sys\SmsSend\Log.cshtml" />
     <Content Include="Views\Biz\CarInsuranceCompany\Edit.cshtml" />
     <Content Include="Views\Biz\Order\PayTransList.cshtml" />
+    <Content Include="Views\Biz\CarInsureOffer\Dealt2.cshtml" />
+    <Content Include="Views\Biz\CarInsureOffer\Edit.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\Dealt.cshtml" />
+    <Content Include="Views\Biz\TalentDemand\ListByDealt.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

@@ -10,7 +10,7 @@
 
         $(document).ready(function () {
             listTable = $("#list_table").loadDataTable({
-                url: "/Biz/TalentDemand/GetDealtList",
+                url: "/Biz/TalentDemand/GetListByVerify",
                 pageIndex: 0,
                 searchParams: $("#form1").serializeArray(),
                 searchButtonId: "btn_Search",
@@ -37,14 +37,14 @@
                 },
                 refreshInterval: 0,
                 success: function (data) {
-                    $('#waitVerifyOrderCount').text(data.status.waitVerifyOrderCount);
-                    $('#inVerifyOrderCount').text(data.status.inVerifyOrderCount);
+                    $('#waitCount').text(data.status.waitCount);
+                    $('#inCount').text(data.status.inCount);
                 },
                 operate: {
                     "dealt": function (obj) {
 
                         function dealt(obj) {
-                            var url = '/Biz/TalentDemand/Dealt?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
+                            var url = '/Biz/TalentDemand/Verify?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
                             var title = '处理订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",
@@ -56,7 +56,7 @@
                                 cancelVal: '关闭',
                                 cancel: true,
                                 button: [{
-                                    name: '完成',
+                                    name: '核实正确,转入处理',
                                     callback: function () {
 
                                         this.iframe.contentWindow.submit(operateType.submit, function (d) {
@@ -71,7 +71,7 @@
                                     focus: true
                                 },
                                 {
-                                    name: '撤销',
+                                    name: '核实无效，作废',
                                     callback: function () {
 
                                         this.iframe.contentWindow.submit(operateType.cancle, function (d) {
@@ -83,24 +83,33 @@
                                         });
                                         return false;
                                     }
+                                }, {
+                                    name: '暂存',
+                                    callback: function () {
+
+                                        this.iframe.contentWindow.submit(operateType.save, function (d) {
+                                            $.lumos.tips(d.message);
+                                        });
+                                        return false;
+                                    }
                                 }]
                             });
                         }
 
-                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt)) {
+                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerify)) {
                             art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
 
                                 dealt(obj)
 
-                            });
-                        }
-                        else {
-                            dealt(obj);
-                        }
+                        });
                     }
-                }
+                else {
+                            dealt(obj);
+        }
+        }
+        }
 
-            });
+        });
 
         });
 
@@ -118,13 +127,13 @@
 
 <form id="form1" name="form1">
     @Html.AntiForgeryToken()
-    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt)" />
+    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerify)" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt))" class="status-bar-btn selected">待处理<span class="waitVerifyOrderCount">(<span id="waitVerifyOrderCount">0</span>)</span></span>
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerify))" class="status-bar-btn selected">待核实<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.InDealt))" class="status-bar-btn">处理中<span class="inVerifyOrderCount"> (<span id="inVerifyOrderCount">0</span>)</span></span>
+            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.InVerify))" class="status-bar-btn">核实中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
         </div>
         <div class="clear"></div>
     </div>

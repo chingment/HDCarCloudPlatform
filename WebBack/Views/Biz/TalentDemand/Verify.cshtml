@@ -1,4 +1,4 @@
-﻿@model WebBack.Models.Biz.TalentDemand.DealtViewModel
+﻿@model WebBack.Models.Biz.TalentDemand.VerifyViewModel
 @{
     ViewBag.Title = "Dealt";
     Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
@@ -25,7 +25,7 @@
 
             var win = art.dialog.open.origin;
             var dealtStatus = $.lumos.getUrlParamValue("dealtStatus");
-            if (dealtStatus == "@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt)") {
+            if (dealtStatus == "@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerify)") {
                 win.listTable.loadData();
             }
 
@@ -36,7 +36,7 @@
 
             $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
 
-            $("#Model_OrderToTalentDemand_Remarks").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
+            $("#Model_BizProcessesAudit_CurrentDetails_AuditComments").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
 
 
         });
@@ -75,7 +75,7 @@
 
                     $.lumos.postJson({
                         isUseHandling: true,
-                        url: "/Biz/TalentDemand/Dealt",
+                        url: "/Biz/TalentDemand/Verify",
                         data: l_Data,
                         success: function (data) {
                             fun(data);
@@ -179,7 +179,7 @@
     <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:96%">
         <tr>
             <td>
-                <textarea name="Model.OrderToTalentDemand.Remarks" class="input-control" id="Model_OrderToTalentDemand_Remarks" style="width:98%;">@Model.OrderToTalentDemand.Remarks</textarea>
+                <textarea class="input-control" name="Model.BizProcessesAudit.CurrentDetails.AuditComments" id="Model_BizProcessesAudit_CurrentDetails_AuditComments" style="height:120px;width:96%;">@Model.BizProcessesAudit.CurrentDetails.AuditComments</textarea>
             </td>
         </tr>
     </table>

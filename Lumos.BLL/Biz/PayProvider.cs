@@ -430,7 +430,7 @@ namespace Lumos.BLL
 
                     posMachine.IsUse = true;
 
-                    BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, orderToServiceFee.MerchantId, Enumeration.MerchantAuditStatus.WaitPrimaryAudit, "");
+                    //BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, orderToServiceFee.MerchantId, Enumeration.MerchantAuditStatus.WaitPrimaryAudit);
 
                     CurrentDb.SaveChanges();
                 }
@@ -592,8 +592,8 @@ namespace Lumos.BLL
 
 
                 //状态改为待核实
-                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.LllegalDealt, orderToLllegalDealt.Id, Enumeration.LllegalDealtStatus.WaitDealt, "");
-                BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.LllegalDealtStep.Submit, bizProcessesAudit.Id, operater, orderToLllegalDealt.ClientRequire, "商户提交人才需求", this.DateTime);
+               // BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.LllegalDealt, orderToLllegalDealt.Id, Enumeration.LllegalDealtStatus.WaitDealt);
+               // BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.LllegalDealtStep.Submit, bizProcessesAudit.Id, operater, orderToLllegalDealt.ClientRequire, "商户提交人才需求", this.DateTime);
 
 
                 ts.Complete();

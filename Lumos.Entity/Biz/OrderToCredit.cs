@@ -11,9 +11,9 @@ namespace Lumos.Entity
     [Table("OrderToCredit")]
     public class OrderToCredit : Order
     {
-        [MaxLength(128)]
         public decimal Creditline { get; set; }
 
+        [MaxLength(128)]
         public string CreditClass { get; set; }
     }
 }

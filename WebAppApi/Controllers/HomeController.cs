@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        // private string host = "http://localhost:16665";
-        private string host = "http://120.79.233.231";
+        private string host = "http://localhost:16665";
+       // private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -179,6 +179,8 @@ namespace WebAppApi.Controllers
 
             model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+            model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
+
             // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
@@ -190,7 +192,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18032710180000001279"));
 
-            model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+           // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
@@ -1647,6 +1649,33 @@ namespace WebAppApi.Controllers
 
             return respon_data4;
 
+
+        }
+
+        public string SubmitCredit(int userId, int merchantId, int posMachineId)
+        {
+
+            SubmitCreditModel model1 = new SubmitCreditModel();
+            model1.UserId = userId;
+            model1.Creditline = 20000;
+            model1.CreditClass = "POS机流水款";
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/SubmitCredit", a1, headers1);
+
+            return respon_data4;
 
         }
     }

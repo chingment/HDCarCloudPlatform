@@ -158,6 +158,7 @@
     <Compile Include="Controllers\Biz\CarClaimController.cs" />
     <Compile Include="Controllers\Biz\CarInsuranceCompanyController.cs" />
     <Compile Include="Controllers\Biz\CarInsureOfferController.cs" />
+    <Compile Include="Controllers\Biz\CreditController.cs" />
     <Compile Include="Controllers\Biz\ExtendedAppController.cs" />
     <Compile Include="Controllers\Biz\InsuranceCompanyController.cs" />
     <Compile Include="Controllers\Biz\LllegalController.cs" />
@@ -212,6 +213,10 @@
     <Compile Include="Models\Biz\CarInsuranceCompany\EditViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\AddViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\SelectKindsViewModel.cs" />
+    <Compile Include="Models\Biz\Credit\DealtViewModel.cs" />
+    <Compile Include="Models\Biz\Credit\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\Credit\SearchCondition.cs" />
+    <Compile Include="Models\Biz\Credit\VerifyViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\DealtViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\DetailsByQueryRechargeViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\DetailsByDealtViewModel.cs" />
@@ -1265,6 +1270,12 @@
     <Content Include="Views\Biz\TalentDemand\ListByDealt.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\ListByVerify.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\Verify.cshtml" />
+    <Content Include="Views\Biz\Credit\Dealt.cshtml" />
+    <Content Include="Views\Biz\Credit\Details.cshtml" />
+    <Content Include="Views\Biz\Credit\List.cshtml" />
+    <Content Include="Views\Biz\Credit\ListByDealt.cshtml" />
+    <Content Include="Views\Biz\Credit\ListByVerify.cshtml" />
+    <Content Include="Views\Biz\Credit\Verify.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

@@ -1,4 +1,4 @@
-﻿@model WebBack.Models.Biz.TalentDemand.DetailsViewModel
+﻿@model WebBack.Models.Biz.Credit.DetailsViewModel
 @{
     ViewBag.Title = "Dealt";
     Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
@@ -68,30 +68,17 @@
             <h6></h6>
         </div>
     </div>
-
     <table class="f-tb1-detail">
         <tr>
-            <td class="t" style="width:80px">工种：</td>
+            <td class="t" style="width:80px">贷款类别：</td>
             <td class="c">
-                <span>@Model.OrderToTalentDemand.WorkJob.GetCnName()</span>
+                <span>@Model.OrderToCredit.CreditClass</span>
             </td>
-            <td class="t" style="width:80px">人数：</td>
+            <td class="t" style="width:80px">贷款金额：</td>
             <td class="c">
-                <span>@Model.OrderToTalentDemand.Quantity</span>
-            </td>
-        </tr>
-        <tr>
-            <td class="t">开始时间：</td>
-            <td class="c">
-                <span>@Model.OrderToTalentDemand.UseStartTime.ToUnifiedFormatDate()</span>
-            </td>
-            <td class="t" >结束时间：</td>
-            <td class="c">
-                <span>@Model.OrderToTalentDemand.UseEndTime.ToUnifiedFormatDate()</span>
+                <span>@Model.OrderToCredit.Creditline</span>
             </td>
         </tr>
     </table>
-
     @Html.Partial("AuditFlowTrace", Model.BizProcessesAuditDetails)
-
 </form>

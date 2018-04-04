@@ -1,0 +1,173 @@
+﻿@model WebBack.Models.Biz.Credit.DealtViewModel
+@{
+    ViewBag.Title = "Dealt";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section styles{
+    <style type="text/css">
+        .f-tb1-detail .t {
+            width: 120px;
+        }
+
+        .f-tb1-detail .c {
+            width: 280px;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script type="text/javascript">
+
+        var listTable;
+
+        $(document).ready(function () {
+
+            var win = art.dialog.open.origin;
+            var auditStatus = $.lumos.getUrlParamValue("auditStatus");
+            if (auditStatus == "@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitDealt)") {
+                win.listTable.loadData();
+            }
+
+            @if (Model.IsHasOperater)    {
+                @Html.Raw("setTimeout(function () {art.dialog({ title: '提示', content: '用户【" + Model.OperaterName + "】正在审核', cancelVal:'退出',cancel: function () {art.dialog.close();}, lock: true, drag: false, dblclickClose: false }); }, 100);");
+            }
+
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+
+            $("#Model_BizProcessesAudit_TempAuditComments").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
+
+
+        });
+
+
+
+        function submit(operate, fun) {
+            var form = $("#form1");
+            var msg = "";
+            var txt_AuditComments = $("#Model_BizProcessesAudit_TempAuditComments").val();
+
+            if (operate == operateType.save) {
+                msg = "确定要保存？";
+                $(form).find('*').setInputRequired(false);
+            }
+            if (operate == operateType.submit) {
+                msg = "确定处理完成？";
+                $(form).find('*').setInputRequired(true);
+            }
+            else if (operate == operateType.cancle) {
+                msg = "确定处理失败？";
+                $(form).find('*').setInputRequired(false);
+
+                if (txt_AuditComments == "") {
+                    $.lumos.tips('请输入告知商户备注');
+                    return;
+                }
+            }
+
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+                art.dialog.confirm(msg, function () {
+                    var l_Data = $("#form1").serializeArray();
+                    l_Data.push({ name: "Model.Operate", value: operate });
+                    $.lumos.postJson({
+                        isUseHandling: true,
+                        url: "/Biz/Credit/Dealt",
+                        data: l_Data,
+                        success: function (data) {
+                            fun(data);
+                        }
+                    });
+                });
+            }
+            return false;
+
+        }
+
+    </script>
+}
+
+<form id="form1" name="form1">
+    @AntiForgery.GetHtml()
+    <input name="Model.OrderToCredit.Id" type="hidden" value="@Model.OrderToCredit.Id" />
+    <input name="MerchantId" type="hidden" value="@Model.OrderToCredit.MerchantId" />
+    <input name="Model.BizProcessesAudit.Id" type="hidden" value="@Model.BizProcessesAudit.Id" />
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>商户信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t" style="width:80px">商户代码：</td>
+            <td class="c">
+                <span>@Model.Merchant.ClientCode</span>
+            </td>
+            <td class="t" style="width:80px">商户名：</td>
+            <td class="c">
+                <span>@Model.Merchant.YYZZ_Name</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">联系人：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactName</span>
+            </td>
+            <td class="t">联系电话：</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactPhoneNumber</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="t">地区：</td>
+            <td class="c">
+                <span>@Model.Merchant.Area</span>
+            </td>
+            <td class="t">联系地址</td>
+            <td class="c">
+                <span>@Model.Merchant.ContactAddress</span>
+            </td>
+        </tr>
+    </table>
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>需求信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t" style="width:80px">贷款类别：</td>
+            <td class="c">
+                <span>@Model.OrderToCredit.CreditClass</span>
+            </td>
+            <td class="t" style="width:80px">贷款金额：</td>
+            <td class="c">
+                <span>@Model.OrderToCredit.Creditline</span>
+            </td>
+        </tr>
+    </table>
+    @Html.Partial("AuditFlowTrace", Model.BizProcessesAudit.HistoricalDetails)
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>告知商户备注</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:96%">
+        <tr>
+            <td>
+                <textarea class="input-control" name="Model.BizProcessesAudit.TempAuditComments" id="Model_BizProcessesAudit_TempAuditComments" style="height:120px;width:96%;">@Model.BizProcessesAudit.TempAuditComments</textarea>
+            </td>
+        </tr>
+    </table>
+</form>

@@ -117,7 +117,7 @@ namespace Lumos.Entity
 
         }
 
-        public enum TalentDemandDealtStatus
+        public enum TalentDemandAuditStatus
         {
             [Remark("未知")]
             Unknow = 0,

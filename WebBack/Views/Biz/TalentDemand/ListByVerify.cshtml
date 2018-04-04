@@ -7,8 +7,19 @@
     <script type="text/javascript">
 
         var listTable;
-
+        var auditStatus={"waitVerify": @((int)Lumos.Entity.Enumeration.TalentDemandAuditStatus.WaitVerify),"inVerify":@((int)Lumos.Entity.Enumeration.TalentDemandAuditStatus.InVerify) };
         $(document).ready(function () {
+
+            $("#AuditStatus").val(auditStatus.waitVerify);
+            $('#btn_Wait').attr("auditStatus",auditStatus.waitVerify);
+            $('#btn_In').attr("auditStatus",auditStatus.inVerify);
+            $('#btn_In,#btn_Wait').live('click',function(){
+                var status=$(this).attr("auditStatus");
+                $("#AuditStatus").val(status);
+                listTable.loadData(0);
+            });
+
+
             listTable = $("#list_table").loadDataTable({
                 url: "/Biz/TalentDemand/GetListByVerify",
                 pageIndex: 0,
@@ -44,7 +55,7 @@
                     "dealt": function (obj) {
 
                         function dealt(obj) {
-                            var url = '/Biz/TalentDemand/Verify?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
+                            var url = '/Biz/TalentDemand/Verify?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
                             var title = '处理订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",
@@ -96,44 +107,31 @@
                             });
                         }
 
-                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerify)) {
+                        if (obj.auditStatus ==auditStatus.waitVerify) {
                             art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
-
                                 dealt(obj)
-
-                        });
-                    }
-                else {
+                            });
+                        }
+                        else {
                             dealt(obj);
-        }
-        }
-        }
-
+                        }
+                    }
+                }
+            });
         });
-
-        });
-
-
-
-
-        function search(status) {
-            $("#DealtStatus").val(status);
-            listTable.loadData(0);
-        }
-
 
     </script>
 }
 
 <form id="form1" name="form1">
     @Html.AntiForgeryToken()
-    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerify)" />
+    <input type="hidden" name="AuditStatus" id="AuditStatus" value="" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitVerify))" class="status-bar-btn selected">待核实<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
+            <span id="btn_Wait" class="status-bar-btn selected">待核实<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.InVerify))" class="status-bar-btn">核实中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
+            <span id="btn_In" class="status-bar-btn">核实中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
         </div>
         <div class="clear"></div>
     </div>

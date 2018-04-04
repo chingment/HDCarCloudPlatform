@@ -24,8 +24,8 @@
         $(document).ready(function () {
 
             var win = art.dialog.open.origin;
-            var dealtStatus = $.lumos.getUrlParamValue("dealtStatus");
-            if (dealtStatus == "@((int)Lumos.Entity.Enumeration.TalentDemandDealtStatus.WaitDealt)") {
+            var auditStatus = $.lumos.getUrlParamValue("auditStatus");
+            if (auditStatus == "@((int)Lumos.Entity.Enumeration.TalentDemandAuditStatus.WaitDealt)") {
                 win.listTable.loadData();
             }
 

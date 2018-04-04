@@ -855,7 +855,7 @@ namespace Lumos.BLL
                 orderToTalentDemand.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
                 var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.TalentDemand, orderToTalentDemand.Id);
-                BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandDealtStatus.Submit, operater, null, "提交订单，等待取单");
+                BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandAuditStatus.Submit, operater, null, "提交订单，等待取单");
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -874,7 +874,7 @@ namespace Lumos.BLL
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.Id && (m.Status == (int)Enumeration.TalentDemandDealtStatus.WaitVerify || m.Status == (int)Enumeration.TalentDemandDealtStatus.InVerify)).FirstOrDefault();
+                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.Id && (m.Status == (int)Enumeration.TalentDemandAuditStatus.WaitVerify || m.Status == (int)Enumeration.TalentDemandAuditStatus.InVerify)).FirstOrDefault();
 
                 if (bizProcessesAudit == null)
                 {
@@ -906,7 +906,7 @@ namespace Lumos.BLL
                         l_orderToTalentDemand.CancleTime = this.DateTime;
 
 
-                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandDealtStatus.VerifyIncorrect, operater, orderToTalentDemand.Remarks, "核实订单无效");
+                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandAuditStatus.VerifyIncorrect, operater, orderToTalentDemand.Remarks, "核实订单无效");
 
                         result = new CustomJsonResult(ResultType.Success, "撤销成功");
 
@@ -917,7 +917,7 @@ namespace Lumos.BLL
                         l_orderToTalentDemand.CompleteTime = this.DateTime;
                         l_orderToTalentDemand.FollowStatus = 1;
 
-                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandDealtStatus.VerifyCorrect, operater, orderToTalentDemand.Remarks, "核实订单正确，等待处理");
+                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandAuditStatus.VerifyCorrect, operater, orderToTalentDemand.Remarks, "核实订单正确，等待处理");
 
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;
@@ -941,7 +941,7 @@ namespace Lumos.BLL
             using (TransactionScope ts = new TransactionScope())
             {
 
-                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.Id && (m.Status == (int)Enumeration.TalentDemandDealtStatus.WaitDealt || m.Status == (int)Enumeration.TalentDemandDealtStatus.InDealt)).FirstOrDefault();
+                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.Id && (m.Status == (int)Enumeration.TalentDemandAuditStatus.WaitDealt || m.Status == (int)Enumeration.TalentDemandAuditStatus.InDealt)).FirstOrDefault();
 
                 if (bizProcessesAudit == null)
                 {
@@ -974,7 +974,7 @@ namespace Lumos.BLL
                         l_orderToTalentDemand.CancleTime = this.DateTime;
 
 
-                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandDealtStatus.DealtFailure, operater, orderToTalentDemand.Remarks, "订单处理失败");
+                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandAuditStatus.DealtFailure, operater, orderToTalentDemand.Remarks, "订单处理失败");
 
                         result = new CustomJsonResult(ResultType.Success, "撤销成功");
 
@@ -982,7 +982,7 @@ namespace Lumos.BLL
                     case Enumeration.OperateType.Reject:
 
 
-                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandDealtStatus.DealtReject, operater, orderToTalentDemand.Remarks, "订单处理驳回");
+                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandAuditStatus.DealtReject, operater, orderToTalentDemand.Remarks, "订单处理驳回");
 
                         result = new CustomJsonResult(ResultType.Success, "撤销成功");
 
@@ -993,7 +993,7 @@ namespace Lumos.BLL
                         l_orderToTalentDemand.CompleteTime = this.DateTime;
                         l_orderToTalentDemand.FollowStatus = 1;
 
-                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandDealtStatus.DealtSuccess, operater, orderToTalentDemand.Remarks, "订单处理成功");
+                        BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Submit, bizProcessesAudit.Id, Enumeration.TalentDemandAuditStatus.DealtSuccess, operater, orderToTalentDemand.Remarks, "订单处理成功");
 
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;

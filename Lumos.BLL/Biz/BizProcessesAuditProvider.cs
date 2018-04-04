@@ -793,18 +793,18 @@ namespace Lumos.BLL
                 {
                     case Enumeration.BizProcessesAuditType.TalentDemand:
                         #region TalentDemand
-                        Enumeration.TalentDemandDealtStatus talentDemandDealtStatus = (Enumeration.TalentDemandDealtStatus)auditStatus;
+                        Enumeration.TalentDemandAuditStatus talentDemandDealtStatus = (Enumeration.TalentDemandAuditStatus)auditStatus;
                         switch (talentDemandDealtStatus)
                         {
-                            case Enumeration.TalentDemandDealtStatus.Submit:
+                            case Enumeration.TalentDemandAuditStatus.Submit:
                                 //提交订单将订单转为待核实状态，审核人空
                                 ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.Submit, bizProcessesAudit.Id, auditor, auditComments, description);
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.WaitVerify;
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.WaitVerify;
                                 bizProcessesAudit.Auditor = null;
                                 break;
-                            case Enumeration.TalentDemandDealtStatus.InVerify:
+                            case Enumeration.TalentDemandAuditStatus.InVerify:
                                 //提交订单将订单转为待核实中，判断当前审核人是否为空，若空设置
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InVerify;
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InVerify;
 
                                 if (bizProcessesAudit.Auditor == null)
                                 {
@@ -812,55 +812,55 @@ namespace Lumos.BLL
                                     bizProcessesAudit.Auditor = auditor;
                                 }
                                 break;
-                            case Enumeration.TalentDemandDealtStatus.VerifyCorrect:
+                            case Enumeration.TalentDemandAuditStatus.VerifyCorrect:
                                 //订单核实正确将订单转为待处理，审核人空
 
                                 ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.VerifyedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
                                 var bizProcessesAuditDetailsDealted = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.DealtedReject).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                                 if (bizProcessesAuditDetailsDealted == null)
                                 {
-                                    bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.WaitDealt;
+                                    bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.WaitDealt;
                                     bizProcessesAudit.Auditor = null;
                                 }
                                 else
                                 {
-                                    bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InDealt;
+                                    bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InDealt;
                                     bizProcessesAudit.Auditor = bizProcessesAuditDetailsDealted.Auditor;
                                 }
                                 break;
-                            case Enumeration.TalentDemandDealtStatus.VerifyIncorrect:
+                            case Enumeration.TalentDemandAuditStatus.VerifyIncorrect:
                                 ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.VerifyedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.VerifyIncorrect;
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.VerifyIncorrect;
                                 bizProcessesAudit.Auditor = auditor;
                                 bizProcessesAudit.EndTime = this.DateTime;
                                 break;
-                            case Enumeration.TalentDemandDealtStatus.InDealt:
+                            case Enumeration.TalentDemandAuditStatus.InDealt:
                                 //提交订单将订单转为待处理中，判断当前审核人是否为空，若空设置
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InDealt;
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InDealt;
                                 if (bizProcessesAudit.Auditor == null)
                                 {
                                     ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.InDealt, bizProcessesAudit.Id, auditor, auditComments, description);
                                     bizProcessesAudit.Auditor = auditor;
                                 }
                                 break;
-                            case Enumeration.TalentDemandDealtStatus.DealtSuccess:
+                            case Enumeration.TalentDemandAuditStatus.DealtSuccess:
                                 //订单核实正确将订单转为待处理，审核人空
                                 ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.DealtSuccess;
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.DealtSuccess;
                                 bizProcessesAudit.Auditor = auditor;
                                 bizProcessesAudit.EndTime = this.DateTime;
                                 break;
-                            case Enumeration.TalentDemandDealtStatus.DealtFailure:
+                            case Enumeration.TalentDemandAuditStatus.DealtFailure:
                                 ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.DealtFailure;
+                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.DealtFailure;
                                 bizProcessesAudit.Auditor = auditor;
                                 bizProcessesAudit.EndTime = this.DateTime;
                                 break;
-                            case Enumeration.TalentDemandDealtStatus.DealtReject:
+                            case Enumeration.TalentDemandAuditStatus.DealtReject:
                                 var bizProcessesAuditDetailsVerifyed = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.VerifyedComplete).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                                 if (bizProcessesAuditDetailsVerifyed != null)
                                 {
-                                    bizProcessesAudit.Status = (int)Enumeration.TalentDemandDealtStatus.InVerify;
+                                    bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InVerify;
                                     bizProcessesAudit.Auditor = bizProcessesAuditDetailsVerifyed.Auditor;
 
                                     ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedReject, bizProcessesAudit.Id, auditor, auditComments, description);
@@ -873,15 +873,15 @@ namespace Lumos.BLL
 
                 CurrentDb.SaveChanges();
 
-                var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderBy(m => m.CreateTime).ToList();
+                //var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderBy(m => m.CreateTime).ToList();
 
-                bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
+                //bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
 
-                var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep ==).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                if (currentDetails != null)
-                {
-                    bizProcessesAudit.CurrentDetails = currentDetails;
-                }
+                //var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep ==).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                //if (currentDetails != null)
+                //{
+                //    bizProcessesAudit.CurrentDetails = currentDetails;
+                //}
 
             }
 

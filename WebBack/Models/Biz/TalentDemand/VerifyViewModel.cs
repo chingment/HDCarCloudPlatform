@@ -24,7 +24,7 @@ namespace WebBack.Models.Biz.TalentDemand
         public VerifyViewModel(int id)
         {
 
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Save, id, Enumeration.TalentDemandDealtStatus.InVerify, this.Operater, null, "已取单，正在核实");
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Save, id, Enumeration.TalentDemandAuditStatus.InVerify, this.Operater, null, "已取单，正在核实");
 
             if (bizProcessesAudit != null)
             {

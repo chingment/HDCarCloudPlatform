@@ -43,5 +43,11 @@ namespace Lumos.Entity
 
         [NotMapped]
         public BizProcessesAuditDetails CurrentDetails { get; set; }
+
+        public BizProcessesAudit()
+        {
+            this.HistoricalDetails = new List<BizProcessesAuditDetails>();
+            this.CurrentDetails = new BizProcessesAuditDetails();
+        }
     }
 }

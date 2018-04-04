@@ -24,7 +24,7 @@ namespace WebBack.Models.Biz.TalentDemand
         public DealtViewModel(int id)
         {
 
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatus(Enumeration.OperateType.Save, id, Enumeration.TalentDemandAuditStatus.InDealt, this.Operater, null, "已取单，正在处理");
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatus(id, Enumeration.TalentDemandAuditStatus.InDealt, this.Operater, null, "已取单，正在处理");
 
             if (bizProcessesAudit != null)
             {

@@ -41,6 +41,14 @@ namespace Lumos.BLL
             }
         }
 
+        public static TalentDemandProvider TalentDemand
+        {
+            get
+            {
+                return new TalentDemandProvider();
+            }
+        }
+
         public static ExtendedAppProvder ExtendedApp
         {
             get

@@ -220,7 +220,7 @@ namespace WebBack.Controllers.Biz
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.Order.VerifyTalentDemand(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
+            reuslt = BizFactory.TalentDemand.Verify(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
 
             return reuslt;
         }
@@ -231,7 +231,7 @@ namespace WebBack.Controllers.Biz
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.Order.DealtTalentDemand(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
+            reuslt = BizFactory.TalentDemand.Dealt(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
 
             return reuslt;
         }

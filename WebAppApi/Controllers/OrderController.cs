@@ -911,7 +911,7 @@ namespace WebAppApi.Controllers
             orderToTalentDemand.Quantity = model.Quantity;
             orderToTalentDemand.UseEndTime = model.UseEndTime;
             orderToTalentDemand.UseStartTime = model.UseStartTime;
-            IResult result = BizFactory.Order.SubmitTalentDemand(model.UserId, orderToTalentDemand);
+            IResult result = BizFactory.TalentDemand.Submit(model.UserId, orderToTalentDemand);
             return new APIResponse(result);
 
         }

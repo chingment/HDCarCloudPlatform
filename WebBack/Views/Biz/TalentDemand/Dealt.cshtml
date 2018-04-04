@@ -30,13 +30,13 @@
             }
 
             @if (Model.IsHasOperater)    {
-                @Html.Raw("setTimeout(function () {art.dialog({ title: '提示', content: '用户【" + Model.OperaterName + "】正在审核', cancelVal:'退出',cancel: function () {art.dialog.close();}, lock: true, drag: false, dblclickClose: false }); }, 100);");
+                @Html.Raw("setTimeout(function () {art.dialog({ title: '提示', content: '用户【" + Model.OperaterName + "】正在处理', cancelVal:'退出',cancel: function () {art.dialog.close();}, lock: true, drag: false, dblclickClose: false }); }, 100);");
             }
 
 
             $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
 
-            $("#Model_OrderToTalentDemand_Remarks").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
+            $("#Model_BizProcessesAudit_TempAuditComments").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
 
 
         });
@@ -46,21 +46,21 @@
         function submit(operate, fun) {
             var form = $("#form1");
             var msg = "";
-            var model_OrderToCarClaim_Remarks = $("#Model_OrderToTalentDemand_Remarks").val();
+            var txt_AuditComments = $("#Model_BizProcessesAudit_TempAuditComments").val();
 
             if (operate == operateType.save) {
                 msg = "确定要保存？";
                 $(form).find('*').setInputRequired(false);
             }
             if (operate == operateType.submit) {
-                msg = "确定完成？";
+                msg = "确定处理完成？";
                 $(form).find('*').setInputRequired(true);
             }
             else if (operate == operateType.cancle) {
-                msg = "确定要取消该订单？";
+                msg = "确定处理失败？";
                 $(form).find('*').setInputRequired(false);
 
-                if (model_OrderToCarClaim_Remarks == "") {
+                if (txt_AuditComments == "") {
                     $.lumos.tips('请输入告知商户备注');
                     return;
                 }
@@ -68,18 +68,15 @@
 
             var isValid = $.formValidator.pageIsValid();
             if (isValid) {
-
                 art.dialog.confirm(msg, function () {
                     var l_Data = $("#form1").serializeArray();
                     l_Data.push({ name: "Model.Operate", value: operate });
-
                     $.lumos.postJson({
                         isUseHandling: true,
                         url: "/Biz/TalentDemand/Dealt",
                         data: l_Data,
                         success: function (data) {
                             fun(data);
-
                         }
                     });
                 });
@@ -179,7 +176,7 @@
     <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:96%">
         <tr>
             <td>
-                <textarea name="Model.OrderToTalentDemand.Remarks" class="input-control" id="Model_OrderToTalentDemand_Remarks" style="width:98%;">@Model.OrderToTalentDemand.Remarks</textarea>
+                <textarea class="input-control" name="Model.BizProcessesAudit.TempAuditComments" id="Model_BizProcessesAudit_TempAuditComments" style="height:120px;width:96%;">@Model.BizProcessesAudit.TempAuditComments</textarea>
             </td>
         </tr>
     </table>

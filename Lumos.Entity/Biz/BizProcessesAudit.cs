@@ -38,6 +38,9 @@ namespace Lumos.Entity
 
         public DateTime? LastUpdateTime { get; set; }
 
+        [MaxLength(2058)]
+        public string TempAuditComments { get; set; }
+
         [NotMapped]
         public List<BizProcessesAuditDetails> HistoricalDetails { get; set; }
 

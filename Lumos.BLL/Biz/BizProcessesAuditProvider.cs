@@ -64,8 +64,7 @@ namespace Lumos.BLL
                             {
                                 detailsHistory.AuditTime = nowDate;
                             }
-                            detailsHistory.LastUpdateTime = nowDate;
-                            detailsHistory.Mender = operater;
+
                         }
                         else
                         {
@@ -103,18 +102,15 @@ namespace Lumos.BLL
                 if (detailsHistory.Auditor == null)
                 {
                     detailsHistory.Auditor = operater;
-                    detailsHistory.LastUpdateTime = nowDate;
                 }
 
                 if (auditTime != null)
                 {
                     detailsHistory.AuditTime = auditTime;
-                    detailsHistory.LastUpdateTime = auditTime;
                 }
 
                 detailsHistory.AuditComments = auditComments;
                 detailsHistory.Description = description;
-                detailsHistory.Mender = operater;
 
             }
 
@@ -779,7 +775,7 @@ namespace Lumos.BLL
             return bizProcessesAudit;
         }
 
-        public BizProcessesAudit ChangeStatus(Enumeration.OperateType operate, int bizProcessesAuditId, object auditStatus, int auditor, string auditComments, string description = null)
+        public BizProcessesAudit ChangeStatus(int bizProcessesAuditId, object auditStatus, int auditor, string auditComments, string description = null)
         {
             DateTime nowDate = DateTime.Now;
             var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
@@ -805,7 +801,7 @@ namespace Lumos.BLL
                             case Enumeration.TalentDemandAuditStatus.InVerify:
                                 //提交订单将订单转为待核实中，判断当前审核人是否为空，若空设置
                                 bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InVerify;
-
+                               
                                 if (bizProcessesAudit.Auditor == null)
                                 {
                                     ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.InVerify, bizProcessesAudit.Id, auditor, auditComments, description);
@@ -821,6 +817,7 @@ namespace Lumos.BLL
                                 {
                                     bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.WaitDealt;
                                     bizProcessesAudit.Auditor = null;
+                                    bizProcessesAudit.TempAuditComments = null;
                                 }
                                 else
                                 {
@@ -833,6 +830,7 @@ namespace Lumos.BLL
                                 bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.VerifyIncorrect;
                                 bizProcessesAudit.Auditor = auditor;
                                 bizProcessesAudit.EndTime = this.DateTime;
+                                bizProcessesAudit.TempAuditComments = null;
                                 break;
                             case Enumeration.TalentDemandAuditStatus.InDealt:
                                 //提交订单将订单转为待处理中，判断当前审核人是否为空，若空设置
@@ -849,12 +847,14 @@ namespace Lumos.BLL
                                 bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.DealtSuccess;
                                 bizProcessesAudit.Auditor = auditor;
                                 bizProcessesAudit.EndTime = this.DateTime;
+                                bizProcessesAudit.TempAuditComments = null;
                                 break;
                             case Enumeration.TalentDemandAuditStatus.DealtFailure:
                                 ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
                                 bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.DealtFailure;
                                 bizProcessesAudit.Auditor = auditor;
                                 bizProcessesAudit.EndTime = this.DateTime;
+                                bizProcessesAudit.TempAuditComments = null;
                                 break;
                             case Enumeration.TalentDemandAuditStatus.DealtReject:
                                 var bizProcessesAuditDetailsVerifyed = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.VerifyedComplete).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
@@ -862,7 +862,7 @@ namespace Lumos.BLL
                                 {
                                     bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InVerify;
                                     bizProcessesAudit.Auditor = bizProcessesAuditDetailsVerifyed.Auditor;
-
+                                    bizProcessesAudit.TempAuditComments = null;
                                     ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedReject, bizProcessesAudit.Id, auditor, auditComments, description);
                                 }
                                 break;
@@ -873,21 +873,28 @@ namespace Lumos.BLL
 
                 CurrentDb.SaveChanges();
 
-                //var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderBy(m => m.CreateTime).ToList();
+                var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderBy(m => m.CreateTime).ToList();
 
-                //bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
-
-                //var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep ==).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                //if (currentDetails != null)
-                //{
-                //    bizProcessesAudit.CurrentDetails = currentDetails;
-                //}
-
+                bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
             }
 
             return bizProcessesAudit;
         }
 
+        public BizProcessesAudit SaveTempAuditComments(int bizProcessesAuditId, int auditor, string auditComments)
+        {
+            DateTime nowDate = DateTime.Now;
+            var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
+            if (bizProcessesAudit != null)
+            {
+                bizProcessesAudit.TempAuditComments = auditComments;
+                bizProcessesAudit.Mender = auditor;
+                bizProcessesAudit.LastUpdateTime = nowDate;
+                CurrentDb.SaveChanges();
+            }
+
+            return bizProcessesAudit;
+        }
 
     }
 

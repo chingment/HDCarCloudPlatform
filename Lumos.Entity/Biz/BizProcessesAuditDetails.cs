@@ -36,10 +36,6 @@ namespace Lumos.Entity
 
         public DateTime CreateTime { get; set; }
 
-        public int? Mender { get; set; }
-
-        public DateTime? LastUpdateTime { get; set; }
-
     }
 
 

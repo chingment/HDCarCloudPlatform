@@ -321,6 +321,8 @@ namespace Lumos.Entity
             InsureForCar = 201,
             [Remark("车险投保")]
             InsureForCarForInsure = 2011,
+            [Remark("意外险")]
+            InsureForYiWaiXian = 2021,
             //[Remark("车险续保")]
             //InsureForCarForRenewal = 2012,
             [Remark("车险理赔")]
@@ -336,7 +338,9 @@ namespace Lumos.Entity
             [Remark("违章查询积分充值")]
             LllegalQueryRecharge = 601,
             [Remark("违章处理")]
-            LllegalDealt = 602
+            LllegalDealt = 602,
+            [Remark("贷款申请")]
+            Credit = 701
 
         }
 

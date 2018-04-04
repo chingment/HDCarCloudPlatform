@@ -103,7 +103,7 @@ namespace WebAppApi.Controllers
                                 var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
-                                orderModel.OrderField.Add(new OrderField("状态", "核实需求中"));
+                                orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
                                 break;
                             case Enumeration.ProductType.PosMachineServiceFee:
 
@@ -122,7 +122,7 @@ namespace WebAppApi.Controllers
 
                                 orderModel.OrderField.Add(new OrderField("保险公司", orderToApplyLossAssess.InsuranceCompanyName));
                                 orderModel.OrderField.Add(new OrderField("申请时间", orderToApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime()));
-                                orderModel.OrderField.Add(new OrderField("状态", "核实需求中"));
+                                orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
 
                                 break;
                             case Enumeration.ProductType.LllegalQueryRecharge:
@@ -131,6 +131,15 @@ namespace WebAppApi.Controllers
 
                                 orderModel.OrderField.Add(new OrderField("充值", string.Format("{0}元", orderToLllegalQueryRecharge.Price.ToF2Price())));
                                 orderModel.OrderField.Add(new OrderField("积分", orderToLllegalQueryRecharge.Score.ToString()));
+
+                                break;
+                            case Enumeration.ProductType.Credit:
+
+                                var orderToCredit = CurrentDb.OrderToCredit.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("贷款类别", orderToCredit.CreditClass));
+                                orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
+                                orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
 
                                 break;
 
@@ -338,6 +347,15 @@ namespace WebAppApi.Controllers
                                 }
 
                                 break;
+                            case Enumeration.ProductType.Credit:
+
+                                var orderToCredit = CurrentDb.OrderToCredit.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("贷款类别", orderToCredit.CreditClass));
+                                orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
+
+
+                                break;
                         }
                         #endregion
 
@@ -391,6 +409,15 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
 
                                 break;
+                            case Enumeration.ProductType.Credit:
+
+                                var orderToCredit = CurrentDb.OrderToCredit.Where(c => c.Id == m.Id).FirstOrDefault();
+
+                                orderModel.OrderField.Add(new OrderField("贷款类别", orderToCredit.CreditClass));
+                                orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
+                                orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
+
+                                break;
                         }
 
                         #endregion
@@ -412,450 +439,461 @@ namespace WebAppApi.Controllers
         [HttpGet]
         public APIResponse GetDetails(int userId, int merchantId, int posMachineId, int orderId, Enumeration.ProductType productType)
         {
-            if (productType == Enumeration.ProductType.InsureForCarForInsure)
+            APIResult result = null;
+            switch (productType)
             {
-                #region 投保
-                OrderCarInsureDetailsModel model = new OrderCarInsureDetailsModel();
-                var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
-                if (orderToCarInsure != null)
-                {
-
-                    model.Id = orderToCarInsure.Id;
-                    model.Sn = orderToCarInsure.Sn;
-
-                    #region 报价公司
-                    var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
-                    foreach (var m in orderToCarInsureOfferCompany)
+                case Enumeration.ProductType.InsureForCarForInsure:
+                    #region 投保
+                    OrderCarInsureDetailsModel orderCarInsureDetailsModel = new OrderCarInsureDetailsModel();
+                    var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToCarInsure != null)
                     {
-                        OrderCarInsureOfferCompanyModel orderCarInsureOfferCompanyModel = new OrderCarInsureOfferCompanyModel();
-                        orderCarInsureOfferCompanyModel.InsuranceOfferId = m.Id;
-                        orderCarInsureOfferCompanyModel.InsuranceCompanyId = m.InsuranceCompanyId;
-                        orderCarInsureOfferCompanyModel.InsuranceCompanyName = m.InsuranceCompanyName;
 
+                        orderCarInsureDetailsModel.Id = orderToCarInsure.Id;
+                        orderCarInsureDetailsModel.Sn = orderToCarInsure.Sn;
 
-                        if (m.InsuranceCompanyId == orderToCarInsure.InsuranceCompanyId)
+                        #region 报价公司
+                        var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
+                        foreach (var m in orderToCarInsureOfferCompany)
                         {
-                            orderCarInsureOfferCompanyModel.IsCheck = true;
-                        }
+                            OrderCarInsureOfferCompanyModel orderCarInsureOfferCompanyModel = new OrderCarInsureOfferCompanyModel();
+                            orderCarInsureOfferCompanyModel.InsuranceOfferId = m.Id;
+                            orderCarInsureOfferCompanyModel.InsuranceCompanyId = m.InsuranceCompanyId;
+                            orderCarInsureOfferCompanyModel.InsuranceCompanyName = m.InsuranceCompanyName;
 
-                        if (m.CompulsoryPrice != null)
-                        {
-                            orderCarInsureOfferCompanyModel.CompulsoryPrice = m.CompulsoryPrice.Value;
-                        }
 
-                        if (m.TravelTaxPrice != null)
-                        {
-                            orderCarInsureOfferCompanyModel.TravelTaxPrice = m.TravelTaxPrice.Value;
-                        }
-
-                        if (m.CommercialPrice != null)
-                        {
-                            orderCarInsureOfferCompanyModel.CompulsoryPrice = m.CommercialPrice.Value;
-                        }
-
-                        if (m.InsureTotalPrice != null)
-                        {
-                            orderCarInsureOfferCompanyModel.InsureTotalPrice = m.InsureTotalPrice.Value;
-                        }
-
-                        switch (orderToCarInsure.Status)
-                        {
-                            case Enumeration.OrderStatus.Submitted:
-                                orderCarInsureOfferCompanyModel.description = "正在报价中";
-                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsuranceCompanyImgUrl;
-                                break;
-                            case Enumeration.OrderStatus.Follow:
-                                orderCarInsureOfferCompanyModel.description = "正在报价中";
-                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsuranceCompanyImgUrl;
-                                break;
-                            case Enumeration.OrderStatus.WaitPay:
-                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl;
-                                orderCarInsureOfferCompanyModel.description = string.Format(
-                                    "交强险：{0}，车船税：{1}，商业险：{2}，合计：{3}",
-                                    orderCarInsureOfferCompanyModel.CompulsoryPrice,
-                                    orderCarInsureOfferCompanyModel.TravelTaxPrice,
-                                      orderCarInsureOfferCompanyModel.CompulsoryPrice,
-                                       orderCarInsureOfferCompanyModel.InsureTotalPrice
-                                    );
-                                break;
-                            case Enumeration.OrderStatus.Completed:
-                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl;
-                                orderCarInsureOfferCompanyModel.description = string.Format(
-                         "交强险：{0}，车船税：{1}，商业险：{2}，合计：{3}",
-                         orderCarInsureOfferCompanyModel.CompulsoryPrice,
-                         orderCarInsureOfferCompanyModel.TravelTaxPrice,
-                           orderCarInsureOfferCompanyModel.CompulsoryPrice,
-                            orderCarInsureOfferCompanyModel.InsureTotalPrice
-                         );
-                                break;
-                            case Enumeration.OrderStatus.Cancled:
-                                orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl == null ? m.InsuranceCompanyImgUrl : m.InsureImgUrl;
-                                orderCarInsureOfferCompanyModel.description = "";
-                                break;
-                        }
-
-                        model.OfferCompany.Add(orderCarInsureOfferCompanyModel);
-                    }
-                    #endregion
-
-                    #region 险种
-                    var orderToCarInsureOfferKind = CurrentDb.OrderToCarInsureOfferKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
-                    var carKinds = CurrentDb.CarKind.ToList();
-                    if (orderToCarInsureOfferKind != null)
-                    {
-                        foreach (var m in orderToCarInsureOfferKind)
-                        {
-                            var carKind = carKinds.Where(q => q.Id == m.KindId).FirstOrDefault();
-                            if (carKind != null)
+                            if (m.InsuranceCompanyId == orderToCarInsure.InsuranceCompanyId)
                             {
-                                OrderToCarInsureOfferKindModel orderToCarInsureOfferKindModel = new OrderToCarInsureOfferKindModel();
-                                orderToCarInsureOfferKindModel.Field = carKind.Name;
-                                orderToCarInsureOfferKindModel.Value = m.KindValue + carKind.InputUnit;
-                                model.OfferKind.Add(orderToCarInsureOfferKindModel);
-                            }
-                        }
-                    }
-                    #endregion
-
-                    #region 车主
-                    model.CarOwner = orderToCarInsure.CarOwner.NullToEmpty();
-                    model.CarPlateNo = orderToCarInsure.CarPlateNo.NullToEmpty();
-                    model.CarOwnerIdNumber = orderToCarInsure.CarOwnerIdNumber.NullToEmpty();
-                    #endregion
-
-                    model.InsuranceCompanyId = orderToCarInsure.InsuranceCompanyId;
-                    model.InsuranceCompanyName = orderToCarInsure.InsuranceCompanyName;
-                    model.InsureImgUrl = orderToCarInsure.InsureImgUrl;
-
-                    model.Recipient = orderToCarInsure.Recipient.NullToEmpty();
-                    model.RecipientAddress = orderToCarInsure.RecipientAddress.NullToEmpty();
-                    model.RecipientPhoneNumber = orderToCarInsure.RecipientPhoneNumber.NullToEmpty();
-
-                    model.CommercialPrice = orderToCarInsure.CommercialPrice.ToF2Price();
-                    model.TravelTaxPrice = orderToCarInsure.TravelTaxPrice.ToF2Price();
-                    model.CompulsoryPrice = orderToCarInsure.CompulsoryPrice.ToF2Price();
-                    model.Price = orderToCarInsure.Price.ToF2Price();
-
-                    #region 证件
-
-                    if (orderToCarInsure.CZ_CL_XSZ_ImgUrl != null)
-                    {
-                        model.ZJ.Add(new ZjModel("行驶证", orderToCarInsure.CZ_CL_XSZ_ImgUrl));
-                    }
-
-                    if (orderToCarInsure.CZ_SFZ_ImgUrl != null)
-                    {
-                        model.ZJ.Add(new ZjModel("身份证", orderToCarInsure.CZ_SFZ_ImgUrl));
-                    }
-
-                    if (orderToCarInsure.CCSJM_WSZM_ImgUrl != null)
-                    {
-                        model.ZJ.Add(new ZjModel("车船税减免/完税证明", orderToCarInsure.CCSJM_WSZM_ImgUrl));
-                    }
-
-                    if (orderToCarInsure.YCZ_CLDJZ_ImgUrl != null)
-                    {
-                        model.ZJ.Add(new ZjModel("验车照/车辆登记证", orderToCarInsure.YCZ_CLDJZ_ImgUrl));
-                    }
-
-                    if (orderToCarInsure.ZJ1_ImgUrl != null)
-                    {
-                        model.ZJ.Add(new ZjModel("其它", orderToCarInsure.ZJ1_ImgUrl));
-                    }
-
-                    if (orderToCarInsure.ZJ2_ImgUrl != null)
-                    {
-                        model.ZJ.Add(new ZjModel("其它", orderToCarInsure.ZJ2_ImgUrl));
-                    }
-
-                    if (orderToCarInsure.ZJ3_ImgUrl != null)
-                    {
-                        model.ZJ.Add(new ZjModel("其它", orderToCarInsure.ZJ3_ImgUrl));
-                    }
-
-                    if (orderToCarInsure.ZJ4_ImgUrl != null)
-                    {
-                        model.ZJ.Add(new ZjModel("其它", orderToCarInsure.ZJ4_ImgUrl));
-                    }
-                    #endregion
-
-                    model.SubmitTime = orderToCarInsure.SubmitTime.ToUnifiedFormatDateTime();
-                    model.CompleteTime = orderToCarInsure.CompleteTime.ToUnifiedFormatDateTime();
-                    model.PayTime = orderToCarInsure.PayTime.ToUnifiedFormatDateTime();
-                    model.CancleTime = orderToCarInsure.CancleTime.ToUnifiedFormatDateTime();
-                    model.Status = orderToCarInsure.Status;
-                    model.StatusName = orderToCarInsure.Status.GetCnName();
-                    model.FollowStatus = orderToCarInsure.FollowStatus;
-                    model.Remarks = orderToCarInsure.Remarks.NullToEmpty();
-
-                    model.RecipientAddressList.Add("地址1");
-                    model.RecipientAddressList.Add("地址2");
-
-                }
-
-                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
-                return new APIResponse(result);
-                #endregion
-            }
-            else if (productType == Enumeration.ProductType.InsureForCarForClaim)
-            {
-                #region 理赔
-                OrderCarClaimDetailsModel model = new OrderCarClaimDetailsModel();
-                var orderToCarEstimate = CurrentDb.OrderToCarClaim.Where(m => m.Id == orderId).FirstOrDefault();
-                if (orderToCarEstimate != null)
-                {
-                    model.Id = orderToCarEstimate.Id;
-                    model.Sn = orderToCarEstimate.Sn;
-                    model.CarOwner = orderToCarEstimate.CarOwner;
-                    model.CarPlateNo = orderToCarEstimate.CarPlateNo;
-                    model.RepairsType = orderToCarEstimate.RepairsType.GetCnName();
-                    model.HandPerson = orderToCarEstimate.HandPerson;
-                    model.HandPersonPhone = orderToCarEstimate.HandPersonPhone;
-                    model.InsuranceCompanyName = orderToCarEstimate.InsuranceCompanyName;
-                    model.InsuranceCompanyId = orderToCarEstimate.InsuranceCompanyId;
-                    model.EstimateListImgUrl = orderToCarEstimate.EstimateListImgUrl;
-                    model.SubmitTime = orderToCarEstimate.SubmitTime.ToUnifiedFormatDateTime();
-                    model.CompleteTime = orderToCarEstimate.CompleteTime.ToUnifiedFormatDateTime();
-                    model.PayTime = orderToCarEstimate.PayTime.ToUnifiedFormatDateTime();
-                    model.CancleTime = orderToCarEstimate.CancleTime.ToUnifiedFormatDateTime();
-                    model.AccessoriesPrice = orderToCarEstimate.AccessoriesPrice.ToF2Price();
-                    model.WorkingHoursPrice = orderToCarEstimate.WorkingHoursPrice.ToF2Price();
-                    model.EstimatePrice = orderToCarEstimate.EstimatePrice.ToF2Price();
-                    model.Price = orderToCarEstimate.Price.ToF2Price();
-                    model.Status = orderToCarEstimate.Status;
-                    model.FollowStatus = orderToCarEstimate.FollowStatus;
-                    model.StatusName = orderToCarEstimate.Status.GetCnName();
-                    model.Remarks = orderToCarEstimate.Remarks;
-
-                    if (orderToCarEstimate.HandMerchantId != null)
-                    {
-                        var handMerchant = CurrentDb.Merchant.Where(m => m.Id == orderToCarEstimate.HandMerchantId.Value).FirstOrDefault();
-                        if (handMerchant != null)
-                        {
-                            MerchantModel merchantModel = new MerchantModel();
-                            merchantModel.Id = handMerchant.Id;
-                            merchantModel.Name = handMerchant.YYZZ_Name;
-                            merchantModel.Contact = handMerchant.ContactName;
-                            merchantModel.ContactAddress = handMerchant.YYZZ_Address;
-                            merchantModel.ContactPhone = handMerchant.ContactPhoneNumber;
-
-                            string headTitle = "";
-                            if (orderToCarEstimate.HandMerchantType == Enumeration.HandMerchantType.Demand)
-                            {
-                                headTitle = "对接商家";
-                            }
-                            else if (orderToCarEstimate.HandMerchantType == Enumeration.HandMerchantType.Supply)
-                            {
-                                headTitle = "维修厂";
+                                orderCarInsureOfferCompanyModel.IsCheck = true;
                             }
 
-                            merchantModel.HeadTitle = headTitle;
-                            model.HandMerchant = merchantModel;
+                            if (m.CompulsoryPrice != null)
+                            {
+                                orderCarInsureOfferCompanyModel.CompulsoryPrice = m.CompulsoryPrice.Value;
+                            }
 
+                            if (m.TravelTaxPrice != null)
+                            {
+                                orderCarInsureOfferCompanyModel.TravelTaxPrice = m.TravelTaxPrice.Value;
+                            }
+
+                            if (m.CommercialPrice != null)
+                            {
+                                orderCarInsureOfferCompanyModel.CompulsoryPrice = m.CommercialPrice.Value;
+                            }
+
+                            if (m.InsureTotalPrice != null)
+                            {
+                                orderCarInsureOfferCompanyModel.InsureTotalPrice = m.InsureTotalPrice.Value;
+                            }
+
+                            switch (orderToCarInsure.Status)
+                            {
+                                case Enumeration.OrderStatus.Submitted:
+                                    orderCarInsureOfferCompanyModel.description = "正在报价中";
+                                    orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsuranceCompanyImgUrl;
+                                    break;
+                                case Enumeration.OrderStatus.Follow:
+                                    orderCarInsureOfferCompanyModel.description = "正在报价中";
+                                    orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsuranceCompanyImgUrl;
+                                    break;
+                                case Enumeration.OrderStatus.WaitPay:
+                                    orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl;
+                                    orderCarInsureOfferCompanyModel.description = string.Format(
+                                        "交强险：{0}，车船税：{1}，商业险：{2}，合计：{3}",
+                                        orderCarInsureOfferCompanyModel.CompulsoryPrice,
+                                        orderCarInsureOfferCompanyModel.TravelTaxPrice,
+                                          orderCarInsureOfferCompanyModel.CompulsoryPrice,
+                                           orderCarInsureOfferCompanyModel.InsureTotalPrice
+                                        );
+                                    break;
+                                case Enumeration.OrderStatus.Completed:
+                                    orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl;
+                                    orderCarInsureOfferCompanyModel.description = string.Format(
+                             "交强险：{0}，车船税：{1}，商业险：{2}，合计：{3}",
+                             orderCarInsureOfferCompanyModel.CompulsoryPrice,
+                             orderCarInsureOfferCompanyModel.TravelTaxPrice,
+                               orderCarInsureOfferCompanyModel.CompulsoryPrice,
+                                orderCarInsureOfferCompanyModel.InsureTotalPrice
+                             );
+                                    break;
+                                case Enumeration.OrderStatus.Cancled:
+                                    orderCarInsureOfferCompanyModel.InsureImgUrl = m.InsureImgUrl == null ? m.InsuranceCompanyImgUrl : m.InsureImgUrl;
+                                    orderCarInsureOfferCompanyModel.description = "";
+                                    break;
+                            }
+
+                            orderCarInsureDetailsModel.OfferCompany.Add(orderCarInsureOfferCompanyModel);
+                        }
+                        #endregion
+
+                        #region 险种
+                        var orderToCarInsureOfferKind = CurrentDb.OrderToCarInsureOfferKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
+                        var carKinds = CurrentDb.CarKind.ToList();
+                        if (orderToCarInsureOfferKind != null)
+                        {
+                            foreach (var m in orderToCarInsureOfferKind)
+                            {
+                                var carKind = carKinds.Where(q => q.Id == m.KindId).FirstOrDefault();
+                                if (carKind != null)
+                                {
+                                    OrderToCarInsureOfferKindModel orderToCarInsureOfferKindModel = new OrderToCarInsureOfferKindModel();
+                                    orderToCarInsureOfferKindModel.Field = carKind.Name;
+                                    orderToCarInsureOfferKindModel.Value = m.KindValue + carKind.InputUnit;
+                                    orderCarInsureDetailsModel.OfferKind.Add(orderToCarInsureOfferKindModel);
+                                }
+                            }
+                        }
+                        #endregion
+
+                        #region 车主
+                        orderCarInsureDetailsModel.CarOwner = orderToCarInsure.CarOwner.NullToEmpty();
+                        orderCarInsureDetailsModel.CarPlateNo = orderToCarInsure.CarPlateNo.NullToEmpty();
+                        orderCarInsureDetailsModel.CarOwnerIdNumber = orderToCarInsure.CarOwnerIdNumber.NullToEmpty();
+                        #endregion
+
+                        orderCarInsureDetailsModel.InsuranceCompanyId = orderToCarInsure.InsuranceCompanyId;
+                        orderCarInsureDetailsModel.InsuranceCompanyName = orderToCarInsure.InsuranceCompanyName;
+                        orderCarInsureDetailsModel.InsureImgUrl = orderToCarInsure.InsureImgUrl;
+
+                        orderCarInsureDetailsModel.Recipient = orderToCarInsure.Recipient.NullToEmpty();
+                        orderCarInsureDetailsModel.RecipientAddress = orderToCarInsure.RecipientAddress.NullToEmpty();
+                        orderCarInsureDetailsModel.RecipientPhoneNumber = orderToCarInsure.RecipientPhoneNumber.NullToEmpty();
+
+                        orderCarInsureDetailsModel.CommercialPrice = orderToCarInsure.CommercialPrice.ToF2Price();
+                        orderCarInsureDetailsModel.TravelTaxPrice = orderToCarInsure.TravelTaxPrice.ToF2Price();
+                        orderCarInsureDetailsModel.CompulsoryPrice = orderToCarInsure.CompulsoryPrice.ToF2Price();
+                        orderCarInsureDetailsModel.Price = orderToCarInsure.Price.ToF2Price();
+
+                        #region 证件
+
+                        if (orderToCarInsure.CZ_CL_XSZ_ImgUrl != null)
+                        {
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("行驶证", orderToCarInsure.CZ_CL_XSZ_ImgUrl));
+                        }
+
+                        if (orderToCarInsure.CZ_SFZ_ImgUrl != null)
+                        {
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("身份证", orderToCarInsure.CZ_SFZ_ImgUrl));
+                        }
+
+                        if (orderToCarInsure.CCSJM_WSZM_ImgUrl != null)
+                        {
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("车船税减免/完税证明", orderToCarInsure.CCSJM_WSZM_ImgUrl));
+                        }
+
+                        if (orderToCarInsure.YCZ_CLDJZ_ImgUrl != null)
+                        {
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("验车照/车辆登记证", orderToCarInsure.YCZ_CLDJZ_ImgUrl));
+                        }
+
+                        if (orderToCarInsure.ZJ1_ImgUrl != null)
+                        {
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("其它", orderToCarInsure.ZJ1_ImgUrl));
+                        }
+
+                        if (orderToCarInsure.ZJ2_ImgUrl != null)
+                        {
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("其它", orderToCarInsure.ZJ2_ImgUrl));
+                        }
+
+                        if (orderToCarInsure.ZJ3_ImgUrl != null)
+                        {
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("其它", orderToCarInsure.ZJ3_ImgUrl));
+                        }
+
+                        if (orderToCarInsure.ZJ4_ImgUrl != null)
+                        {
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("其它", orderToCarInsure.ZJ4_ImgUrl));
+                        }
+                        #endregion
+
+                        orderCarInsureDetailsModel.SubmitTime = orderToCarInsure.SubmitTime.ToUnifiedFormatDateTime();
+                        orderCarInsureDetailsModel.CompleteTime = orderToCarInsure.CompleteTime.ToUnifiedFormatDateTime();
+                        orderCarInsureDetailsModel.PayTime = orderToCarInsure.PayTime.ToUnifiedFormatDateTime();
+                        orderCarInsureDetailsModel.CancleTime = orderToCarInsure.CancleTime.ToUnifiedFormatDateTime();
+                        orderCarInsureDetailsModel.Status = orderToCarInsure.Status;
+                        orderCarInsureDetailsModel.StatusName = orderToCarInsure.Status.GetCnName();
+                        orderCarInsureDetailsModel.FollowStatus = orderToCarInsure.FollowStatus;
+                        orderCarInsureDetailsModel.Remarks = orderToCarInsure.Remarks.NullToEmpty();
+
+                        orderCarInsureDetailsModel.RecipientAddressList.Add("地址1");
+                        orderCarInsureDetailsModel.RecipientAddressList.Add("地址2");
+
+                    }
+
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderCarInsureDetailsModel };
+                    return new APIResponse(result);
+                #endregion
+                case Enumeration.ProductType.InsureForCarForClaim:
+                    #region 理赔
+                    OrderCarClaimDetailsModel orderCarClaimDetailsModel = new OrderCarClaimDetailsModel();
+                    var orderToCarEstimate = CurrentDb.OrderToCarClaim.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToCarEstimate != null)
+                    {
+                        orderCarClaimDetailsModel.Id = orderToCarEstimate.Id;
+                        orderCarClaimDetailsModel.Sn = orderToCarEstimate.Sn;
+                        orderCarClaimDetailsModel.CarOwner = orderToCarEstimate.CarOwner;
+                        orderCarClaimDetailsModel.CarPlateNo = orderToCarEstimate.CarPlateNo;
+                        orderCarClaimDetailsModel.RepairsType = orderToCarEstimate.RepairsType.GetCnName();
+                        orderCarClaimDetailsModel.HandPerson = orderToCarEstimate.HandPerson;
+                        orderCarClaimDetailsModel.HandPersonPhone = orderToCarEstimate.HandPersonPhone;
+                        orderCarClaimDetailsModel.InsuranceCompanyName = orderToCarEstimate.InsuranceCompanyName;
+                        orderCarClaimDetailsModel.InsuranceCompanyId = orderToCarEstimate.InsuranceCompanyId;
+                        orderCarClaimDetailsModel.EstimateListImgUrl = orderToCarEstimate.EstimateListImgUrl;
+                        orderCarClaimDetailsModel.SubmitTime = orderToCarEstimate.SubmitTime.ToUnifiedFormatDateTime();
+                        orderCarClaimDetailsModel.CompleteTime = orderToCarEstimate.CompleteTime.ToUnifiedFormatDateTime();
+                        orderCarClaimDetailsModel.PayTime = orderToCarEstimate.PayTime.ToUnifiedFormatDateTime();
+                        orderCarClaimDetailsModel.CancleTime = orderToCarEstimate.CancleTime.ToUnifiedFormatDateTime();
+                        orderCarClaimDetailsModel.AccessoriesPrice = orderToCarEstimate.AccessoriesPrice.ToF2Price();
+                        orderCarClaimDetailsModel.WorkingHoursPrice = orderToCarEstimate.WorkingHoursPrice.ToF2Price();
+                        orderCarClaimDetailsModel.EstimatePrice = orderToCarEstimate.EstimatePrice.ToF2Price();
+                        orderCarClaimDetailsModel.Price = orderToCarEstimate.Price.ToF2Price();
+                        orderCarClaimDetailsModel.Status = orderToCarEstimate.Status;
+                        orderCarClaimDetailsModel.FollowStatus = orderToCarEstimate.FollowStatus;
+                        orderCarClaimDetailsModel.StatusName = orderToCarEstimate.Status.GetCnName();
+                        orderCarClaimDetailsModel.Remarks = orderToCarEstimate.Remarks;
+
+                        if (orderToCarEstimate.HandMerchantId != null)
+                        {
+                            var handMerchant = CurrentDb.Merchant.Where(m => m.Id == orderToCarEstimate.HandMerchantId.Value).FirstOrDefault();
+                            if (handMerchant != null)
+                            {
+                                MerchantModel merchantModel = new MerchantModel();
+                                merchantModel.Id = handMerchant.Id;
+                                merchantModel.Name = handMerchant.YYZZ_Name;
+                                merchantModel.Contact = handMerchant.ContactName;
+                                merchantModel.ContactAddress = handMerchant.YYZZ_Address;
+                                merchantModel.ContactPhone = handMerchant.ContactPhoneNumber;
+
+                                string headTitle = "";
+                                if (orderToCarEstimate.HandMerchantType == Enumeration.HandMerchantType.Demand)
+                                {
+                                    headTitle = "对接商家";
+                                }
+                                else if (orderToCarEstimate.HandMerchantType == Enumeration.HandMerchantType.Supply)
+                                {
+                                    headTitle = "维修厂";
+                                }
+
+                                merchantModel.HeadTitle = headTitle;
+                                orderCarClaimDetailsModel.HandMerchant = merchantModel;
+
+                            }
+
+                        }
+                    }
+
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderCarClaimDetailsModel };
+                    return new APIResponse(result);
+                #endregion
+                case Enumeration.ProductType.PosMachineServiceFee:
+                    #region  PosMachineDepositRent
+                    OrderServiceFeeDetailsModel orderServiceFeeDetailsModel = new OrderServiceFeeDetailsModel();
+                    var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToServiceFee != null)
+                    {
+                        orderServiceFeeDetailsModel.Id = orderToServiceFee.Id;
+                        orderServiceFeeDetailsModel.Sn = orderToServiceFee.Sn;
+                        orderServiceFeeDetailsModel.Status = orderToServiceFee.Status;
+                        orderServiceFeeDetailsModel.StatusName = orderToServiceFee.Status.GetCnName();
+                        orderServiceFeeDetailsModel.Remarks = orderToServiceFee.Remarks;
+                        orderServiceFeeDetailsModel.SubmitTime = orderToServiceFee.SubmitTime.ToUnifiedFormatDateTime();
+                        orderServiceFeeDetailsModel.CompleteTime = orderToServiceFee.CompleteTime.ToUnifiedFormatDateTime();
+                        orderServiceFeeDetailsModel.PayTime = orderToServiceFee.PayTime.ToUnifiedFormatDateTime();
+                        orderServiceFeeDetailsModel.CancleTime = orderToServiceFee.CancleTime.ToUnifiedFormatDateTime();
+                        orderServiceFeeDetailsModel.Price = orderToServiceFee.Price.ToF2Price();
+
+                        if (orderToServiceFee.Deposit > 0)
+                        {
+                            orderServiceFeeDetailsModel.Deposit = orderToServiceFee.Deposit.ToF2Price();
+                        }
+
+                        orderServiceFeeDetailsModel.MobileTrafficFee = orderToServiceFee.MobileTrafficFee.ToF2Price();
+                        orderServiceFeeDetailsModel.ExpiryTime = orderToServiceFee.ExpiryTime.ToUnifiedFormatDate();
+
+                        PrintDataModel printData = new PrintDataModel();
+
+                        printData.MerchantName = "好易联";
+                        printData.MerchantCode = "354422";
+                        printData.ProductName = orderToServiceFee.ProductName;
+                        printData.TradeType = "消费";
+                        printData.TradeNo = orderToServiceFee.Sn;
+                        printData.TradePayMethod = orderToServiceFee.PayWay.GetCnName();
+                        printData.TradeAmount = orderToServiceFee.Price.ToF2Price();
+                        printData.TradeDateTime = orderToServiceFee.PayTime.ToUnifiedFormatDateTime();
+                        printData.ServiceHotline = "4400000000";
+
+                        orderServiceFeeDetailsModel.PrintData = printData;
+                    }
+
+
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderServiceFeeDetailsModel };
+                    return new APIResponse(result);
+                #endregion
+                case Enumeration.ProductType.TalentDemand:
+                    #region TalentDemand
+                    OrderTalentDemandDetailsModel orderTalentDemandDetailsModel = new OrderTalentDemandDetailsModel();
+                    var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToTalentDemand != null)
+                    {
+                        orderTalentDemandDetailsModel.Id = orderToTalentDemand.Id;
+                        orderTalentDemandDetailsModel.Sn = orderToTalentDemand.Sn;
+                        orderTalentDemandDetailsModel.SubmitTime = orderToTalentDemand.SubmitTime.ToUnifiedFormatDateTime();
+                        orderTalentDemandDetailsModel.CompleteTime = orderToTalentDemand.CompleteTime.ToUnifiedFormatDateTime();
+                        orderTalentDemandDetailsModel.PayTime = orderToTalentDemand.PayTime.ToUnifiedFormatDateTime();
+                        orderTalentDemandDetailsModel.CancleTime = orderToTalentDemand.CancleTime.ToUnifiedFormatDateTime();
+                        orderTalentDemandDetailsModel.Status = orderToTalentDemand.Status;
+                        orderTalentDemandDetailsModel.StatusName = orderToTalentDemand.Status.GetCnName();
+                        orderTalentDemandDetailsModel.FollowStatus = orderToTalentDemand.FollowStatus;
+                        orderTalentDemandDetailsModel.Remarks = orderToTalentDemand.Remarks.NullToEmpty();
+
+                        orderTalentDemandDetailsModel.Quantity = orderToTalentDemand.Quantity;
+                        orderTalentDemandDetailsModel.WorkJob = orderToTalentDemand.WorkJob.GetCnName();
+                        orderTalentDemandDetailsModel.UseStartTime = orderToTalentDemand.UseStartTime.ToUnifiedFormatDateTime();
+                        orderTalentDemandDetailsModel.UseEndTime = orderToTalentDemand.UseEndTime.ToUnifiedFormatDateTime();
+                    }
+
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderTalentDemandDetailsModel };
+                    return new APIResponse(result);
+                #endregion
+                case Enumeration.ProductType.ApplyLossAssess:
+                    #region ApplyLossAssess
+                    OrderApplyLossAssessDetailsModel orderApplyLossAssessDetailsModel = new OrderApplyLossAssessDetailsModel();
+                    var orderApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderApplyLossAssess != null)
+                    {
+                        orderApplyLossAssessDetailsModel.Id = orderApplyLossAssess.Id;
+                        orderApplyLossAssessDetailsModel.Sn = orderApplyLossAssess.Sn;
+                        orderApplyLossAssessDetailsModel.SubmitTime = orderApplyLossAssess.SubmitTime.ToUnifiedFormatDateTime();
+                        orderApplyLossAssessDetailsModel.CompleteTime = orderApplyLossAssess.CompleteTime.ToUnifiedFormatDateTime();
+                        orderApplyLossAssessDetailsModel.PayTime = orderApplyLossAssess.PayTime.ToUnifiedFormatDateTime();
+                        orderApplyLossAssessDetailsModel.CancleTime = orderApplyLossAssess.CancleTime.ToUnifiedFormatDateTime();
+                        orderApplyLossAssessDetailsModel.Status = orderApplyLossAssess.Status;
+                        orderApplyLossAssessDetailsModel.StatusName = orderApplyLossAssess.Status.GetCnName();
+                        orderApplyLossAssessDetailsModel.FollowStatus = orderApplyLossAssess.FollowStatus;
+                        orderApplyLossAssessDetailsModel.Remarks = orderApplyLossAssess.Remarks.NullToEmpty();
+
+                        orderApplyLossAssessDetailsModel.InsuranceCompanyName = orderApplyLossAssess.InsuranceCompanyName;
+                        orderApplyLossAssessDetailsModel.ApplyTime = orderApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime();
+                    }
+
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderApplyLossAssessDetailsModel };
+                    return new APIResponse(result);
+                #endregion
+                case Enumeration.ProductType.LllegalQueryRecharge:
+                    #region LllegalQueryRecharge
+                    OrderLllegalQueryRechargeDetailsModel orderLllegalQueryRechargeDetailsModel = new OrderLllegalQueryRechargeDetailsModel();
+                    var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToLllegalQueryRecharge != null)
+                    {
+                        orderLllegalQueryRechargeDetailsModel.Id = orderToLllegalQueryRecharge.Id;
+                        orderLllegalQueryRechargeDetailsModel.Sn = orderToLllegalQueryRecharge.Sn;
+                        orderLllegalQueryRechargeDetailsModel.SubmitTime = orderToLllegalQueryRecharge.SubmitTime.ToUnifiedFormatDateTime();
+                        orderLllegalQueryRechargeDetailsModel.CompleteTime = orderToLllegalQueryRecharge.CompleteTime.ToUnifiedFormatDateTime();
+                        orderLllegalQueryRechargeDetailsModel.PayTime = orderToLllegalQueryRecharge.PayTime.ToUnifiedFormatDateTime();
+                        orderLllegalQueryRechargeDetailsModel.CancleTime = orderToLllegalQueryRecharge.CancleTime.ToUnifiedFormatDateTime();
+                        orderLllegalQueryRechargeDetailsModel.Status = orderToLllegalQueryRecharge.Status;
+                        orderLllegalQueryRechargeDetailsModel.StatusName = orderToLllegalQueryRecharge.Status.GetCnName();
+                        orderLllegalQueryRechargeDetailsModel.FollowStatus = orderToLllegalQueryRecharge.FollowStatus;
+                        orderLllegalQueryRechargeDetailsModel.Remarks = orderToLllegalQueryRecharge.Remarks.NullToEmpty();
+
+                        orderLllegalQueryRechargeDetailsModel.Score = orderToLllegalQueryRecharge.Score;
+                    }
+
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderLllegalQueryRechargeDetailsModel };
+                    return new APIResponse(result);
+                #endregion
+                case Enumeration.ProductType.LllegalDealt:
+                    #region LllegalDealt
+                    OrderLllegalDealtDetailsModel orderLllegalDealtDetailsModel = new OrderLllegalDealtDetailsModel();
+                    var orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToLllegalDealt != null)
+                    {
+                        orderLllegalDealtDetailsModel.Id = orderToLllegalDealt.Id;
+                        orderLllegalDealtDetailsModel.Sn = orderToLllegalDealt.Sn;
+                        orderLllegalDealtDetailsModel.SubmitTime = orderToLllegalDealt.SubmitTime.ToUnifiedFormatDateTime();
+                        orderLllegalDealtDetailsModel.CompleteTime = orderToLllegalDealt.CompleteTime.ToUnifiedFormatDateTime();
+                        orderLllegalDealtDetailsModel.PayTime = orderToLllegalDealt.PayTime.ToUnifiedFormatDateTime();
+                        orderLllegalDealtDetailsModel.CancleTime = orderToLllegalDealt.CancleTime.ToUnifiedFormatDateTime();
+
+                        orderLllegalDealtDetailsModel.StatusName = orderToLllegalDealt.Status.GetCnName();
+                        orderLllegalDealtDetailsModel.FollowStatus = orderToLllegalDealt.FollowStatus;
+                        orderLllegalDealtDetailsModel.Remarks = orderToLllegalDealt.Remarks.NullToEmpty();
+
+                        orderLllegalDealtDetailsModel.CarNo = orderToLllegalDealt.CarNo;
+                        orderLllegalDealtDetailsModel.SumCount = orderToLllegalDealt.SumCount;
+                        orderLllegalDealtDetailsModel.SumFine = orderToLllegalDealt.SumFine.ToF2Price();
+                        orderLllegalDealtDetailsModel.SumPoint = orderToLllegalDealt.SumPoint.ToString();
+                        orderLllegalDealtDetailsModel.SumLateFees = orderToLllegalDealt.SumLateFees.ToF2Price();
+                        orderLllegalDealtDetailsModel.SumServiceFees = orderToLllegalDealt.SumServiceFees.ToF2Price();
+                        orderLllegalDealtDetailsModel.Price = orderToLllegalDealt.Price.ToF2Price();
+                        var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.OrderId == orderId).ToList();
+
+                        foreach (var item in orderToLllegalDealtDetails)
+                        {
+                            var record = new LllegalRecord();
+
+                            record.bookNo = item.BookNo;
+                            record.bookType = item.BookType;
+                            record.bookTypeName = item.BookTypeName;
+                            record.lllegalCode = item.LllegalCode;
+                            record.cityCode = item.CityCode;
+                            record.lllegalTime = item.LllegalTime;
+                            record.point = item.Point;
+                            record.offerType = item.OfferType;
+                            record.ofserTypeName = item.OfserTypeName;
+                            record.fine = item.Fine;
+                            record.serviceFee = item.ServiceFee;
+                            record.late_fees = item.Late_fees;
+                            record.content = item.Content;
+                            record.lllegalDesc = item.LllegalDesc;
+                            record.lllegalCity = item.LllegalCity;
+                            record.address = item.Address;
+                            record.status = item.Status.GetCnName();
+                            orderLllegalDealtDetailsModel.LllegalRecord.Add(record);
+                        }
+
+                        var dealtcount = orderToLllegalDealtDetails.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
+                        if (dealtcount > 0)
+                        {
+                            orderLllegalDealtDetailsModel.StatusName = "已付，处理中";
+                        }
+                        else {
+                            orderLllegalDealtDetailsModel.StatusName = "完成";
                         }
 
                     }
-                }
 
-                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
-                return new APIResponse(result);
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderLllegalDealtDetailsModel };
+                    return new APIResponse(result);
                 #endregion
-            }
-            else if (productType == Enumeration.ProductType.PosMachineServiceFee)
-            {
-                #region  PosMachineDepositRent
-                OrderServiceFeeDetailsModel model = new OrderServiceFeeDetailsModel();
-                var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Id == orderId).FirstOrDefault();
-                if (orderToServiceFee != null)
-                {
-                    model.Id = orderToServiceFee.Id;
-                    model.Sn = orderToServiceFee.Sn;
-                    model.Status = orderToServiceFee.Status;
-                    model.StatusName = orderToServiceFee.Status.GetCnName();
-                    model.Remarks = orderToServiceFee.Remarks;
-                    model.SubmitTime = orderToServiceFee.SubmitTime.ToUnifiedFormatDateTime();
-                    model.CompleteTime = orderToServiceFee.CompleteTime.ToUnifiedFormatDateTime();
-                    model.PayTime = orderToServiceFee.PayTime.ToUnifiedFormatDateTime();
-                    model.CancleTime = orderToServiceFee.CancleTime.ToUnifiedFormatDateTime();
-                    model.Price = orderToServiceFee.Price.ToF2Price();
-
-                    if (orderToServiceFee.Deposit > 0)
+                case Enumeration.ProductType.Credit:
+                    #region Credit
+                    OrderCreditDetailsModel orderCreditDetailsModel = new OrderCreditDetailsModel();
+                    var orderToCredit = CurrentDb.OrderToCredit.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToCredit != null)
                     {
-                        model.Deposit = orderToServiceFee.Deposit.ToF2Price();
+                        orderCreditDetailsModel.Id = orderToCredit.Id;
+                        orderCreditDetailsModel.Sn = orderToCredit.Sn;
+                        orderCreditDetailsModel.SubmitTime = orderToCredit.SubmitTime.ToUnifiedFormatDateTime();
+                        orderCreditDetailsModel.CompleteTime = orderToCredit.CompleteTime.ToUnifiedFormatDateTime();
+                        orderCreditDetailsModel.PayTime = orderToCredit.PayTime.ToUnifiedFormatDateTime();
+                        orderCreditDetailsModel.CancleTime = orderToCredit.CancleTime.ToUnifiedFormatDateTime();
+                        orderCreditDetailsModel.Status = orderToCredit.Status;
+                        orderCreditDetailsModel.StatusName = orderToCredit.Status.GetCnName();
+                        orderCreditDetailsModel.FollowStatus = orderToCredit.FollowStatus;
+                        orderCreditDetailsModel.Remarks = orderToCredit.Remarks.NullToEmpty();
+                        orderCreditDetailsModel.CreditClass = orderToCredit.CreditClass;
+                        orderCreditDetailsModel.Creditline = orderToCredit.Creditline;
                     }
 
-                    model.MobileTrafficFee = orderToServiceFee.MobileTrafficFee.ToF2Price();
-                    model.ExpiryTime = orderToServiceFee.ExpiryTime.ToUnifiedFormatDate();
-
-                    PrintDataModel printData = new PrintDataModel();
-
-                    printData.MerchantName = "好易联";
-                    printData.MerchantCode = "354422";
-                    printData.ProductName = orderToServiceFee.ProductName;
-                    printData.TradeType = "消费";
-                    printData.TradeNo = orderToServiceFee.Sn;
-                    printData.TradePayMethod = orderToServiceFee.PayWay.GetCnName();
-                    printData.TradeAmount = orderToServiceFee.Price.ToF2Price();
-                    printData.TradeDateTime = orderToServiceFee.PayTime.ToUnifiedFormatDateTime();
-                    printData.ServiceHotline = "4400000000";
-
-                    model.PrintData = printData;
-                }
-
-
-                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
-                return new APIResponse(result);
-                #endregion 
-            }
-            else if (productType == Enumeration.ProductType.TalentDemand)
-            {
-                #region TalentDemand
-                OrderTalentDemandDetailsModel model = new OrderTalentDemandDetailsModel();
-                var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(m => m.Id == orderId).FirstOrDefault();
-                if (orderToTalentDemand != null)
-                {
-                    model.Id = orderToTalentDemand.Id;
-                    model.Sn = orderToTalentDemand.Sn;
-                    model.SubmitTime = orderToTalentDemand.SubmitTime.ToUnifiedFormatDateTime();
-                    model.CompleteTime = orderToTalentDemand.CompleteTime.ToUnifiedFormatDateTime();
-                    model.PayTime = orderToTalentDemand.PayTime.ToUnifiedFormatDateTime();
-                    model.CancleTime = orderToTalentDemand.CancleTime.ToUnifiedFormatDateTime();
-                    model.Status = orderToTalentDemand.Status;
-                    model.StatusName = orderToTalentDemand.Status.GetCnName();
-                    model.FollowStatus = orderToTalentDemand.FollowStatus;
-                    model.Remarks = orderToTalentDemand.Remarks.NullToEmpty();
-
-                    model.Quantity = orderToTalentDemand.Quantity;
-                    model.WorkJob = orderToTalentDemand.WorkJob.GetCnName();
-                    model.UseStartTime = orderToTalentDemand.UseStartTime.ToUnifiedFormatDateTime();
-                    model.UseEndTime = orderToTalentDemand.UseEndTime.ToUnifiedFormatDateTime();
-                }
-
-                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
-                return new APIResponse(result);
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderCreditDetailsModel };
+                    return new APIResponse(result);
                 #endregion
-            }
-            else if (productType == Enumeration.ProductType.ApplyLossAssess)
-            {
-                #region ApplyLossAssess
-                OrderApplyLossAssessDetailsModel model = new OrderApplyLossAssessDetailsModel();
-                var orderApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(m => m.Id == orderId).FirstOrDefault();
-                if (orderApplyLossAssess != null)
-                {
-                    model.Id = orderApplyLossAssess.Id;
-                    model.Sn = orderApplyLossAssess.Sn;
-                    model.SubmitTime = orderApplyLossAssess.SubmitTime.ToUnifiedFormatDateTime();
-                    model.CompleteTime = orderApplyLossAssess.CompleteTime.ToUnifiedFormatDateTime();
-                    model.PayTime = orderApplyLossAssess.PayTime.ToUnifiedFormatDateTime();
-                    model.CancleTime = orderApplyLossAssess.CancleTime.ToUnifiedFormatDateTime();
-                    model.Status = orderApplyLossAssess.Status;
-                    model.StatusName = orderApplyLossAssess.Status.GetCnName();
-                    model.FollowStatus = orderApplyLossAssess.FollowStatus;
-                    model.Remarks = orderApplyLossAssess.Remarks.NullToEmpty();
-
-                    model.InsuranceCompanyName = orderApplyLossAssess.InsuranceCompanyName;
-                    model.ApplyTime = orderApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime();
-                }
-
-                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
-                return new APIResponse(result);
-                #endregion
-            }
-            else if (productType == Enumeration.ProductType.LllegalQueryRecharge)
-            {
-                #region LllegalQueryRecharge
-                OrderLllegalQueryRechargeDetailsModel model = new OrderLllegalQueryRechargeDetailsModel();
-                var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(m => m.Id == orderId).FirstOrDefault();
-                if (orderToLllegalQueryRecharge != null)
-                {
-                    model.Id = orderToLllegalQueryRecharge.Id;
-                    model.Sn = orderToLllegalQueryRecharge.Sn;
-                    model.SubmitTime = orderToLllegalQueryRecharge.SubmitTime.ToUnifiedFormatDateTime();
-                    model.CompleteTime = orderToLllegalQueryRecharge.CompleteTime.ToUnifiedFormatDateTime();
-                    model.PayTime = orderToLllegalQueryRecharge.PayTime.ToUnifiedFormatDateTime();
-                    model.CancleTime = orderToLllegalQueryRecharge.CancleTime.ToUnifiedFormatDateTime();
-                    model.Status = orderToLllegalQueryRecharge.Status;
-                    model.StatusName = orderToLllegalQueryRecharge.Status.GetCnName();
-                    model.FollowStatus = orderToLllegalQueryRecharge.FollowStatus;
-                    model.Remarks = orderToLllegalQueryRecharge.Remarks.NullToEmpty();
-
-                    model.Score = orderToLllegalQueryRecharge.Score;
-                }
-
-                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
-                return new APIResponse(result);
-                #endregion
-            }
-            else if (productType == Enumeration.ProductType.LllegalDealt)
-            {
-                #region LllegalQueryRecharge
-                OrderLllegalDealtDetailsModel model = new OrderLllegalDealtDetailsModel();
-                var orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(m => m.Id == orderId).FirstOrDefault();
-                if (orderToLllegalDealt != null)
-                {
-                    model.Id = orderToLllegalDealt.Id;
-                    model.Sn = orderToLllegalDealt.Sn;
-                    model.SubmitTime = orderToLllegalDealt.SubmitTime.ToUnifiedFormatDateTime();
-                    model.CompleteTime = orderToLllegalDealt.CompleteTime.ToUnifiedFormatDateTime();
-                    model.PayTime = orderToLllegalDealt.PayTime.ToUnifiedFormatDateTime();
-                    model.CancleTime = orderToLllegalDealt.CancleTime.ToUnifiedFormatDateTime();
-
-                    model.StatusName = orderToLllegalDealt.Status.GetCnName();
-                    model.FollowStatus = orderToLllegalDealt.FollowStatus;
-                    model.Remarks = orderToLllegalDealt.Remarks.NullToEmpty();
-
-                    model.CarNo = orderToLllegalDealt.CarNo;
-                    model.SumCount = orderToLllegalDealt.SumCount;
-                    model.SumFine = orderToLllegalDealt.SumFine.ToF2Price();
-                    model.SumPoint = orderToLllegalDealt.SumPoint.ToString();
-                    model.SumLateFees = orderToLllegalDealt.SumLateFees.ToF2Price();
-                    model.SumServiceFees = orderToLllegalDealt.SumServiceFees.ToF2Price();
-                    model.Price = orderToLllegalDealt.Price.ToF2Price();
-                    var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.OrderId == orderId).ToList();
-
-                    foreach (var item in orderToLllegalDealtDetails)
-                    {
-                        var record = new LllegalRecord();
-
-                        record.bookNo = item.BookNo;
-                        record.bookType = item.BookType;
-                        record.bookTypeName = item.BookTypeName;
-                        record.lllegalCode = item.LllegalCode;
-                        record.cityCode = item.CityCode;
-                        record.lllegalTime = item.LllegalTime;
-                        record.point = item.Point;
-                        record.offerType = item.OfferType;
-                        record.ofserTypeName = item.OfserTypeName;
-                        record.fine = item.Fine;
-                        record.serviceFee = item.ServiceFee;
-                        record.late_fees = item.Late_fees;
-                        record.content = item.Content;
-                        record.lllegalDesc = item.LllegalDesc;
-                        record.lllegalCity = item.LllegalCity;
-                        record.address = item.Address;
-                        record.status = item.Status.GetCnName();
-                        model.LllegalRecord.Add(record);
-                    }
-
-                    var dealtcount = orderToLllegalDealtDetails.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
-                    if (dealtcount > 0)
-                    {
-                        model.StatusName = "已付，处理中";
-                    }
-                    else {
-                        model.StatusName = "完成";
-                    }
-
-                }
-
-                APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
-                return new APIResponse(result);
-                #endregion
-            }
-            else
-            {
-                APIResult result = new APIResult() { Result = ResultType.Failure, Code = ResultCode.Failure, Message = "未知产品类型" };
-                return new APIResponse(result);
+                default:
+                    result = new APIResult() { Result = ResultType.Failure, Code = ResultCode.Failure, Message = "未知产品类型" };
+                    return new APIResponse(result);
             }
         }
 

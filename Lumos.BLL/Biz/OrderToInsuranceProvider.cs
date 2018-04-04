@@ -7,43 +7,44 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
+
 namespace Lumos.BLL
 {
-    public class OrderToCreditProvider : BaseProvider
+   public class OrderToInsuranceProvider : BaseProvider
     {
-        public CustomJsonResult Submit(int operater, OrderToCredit orderToCredit)
+        public CustomJsonResult Submit(int operater, OrderToInsurance orderToInsurance)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
                 //用户信息
-                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToCredit.UserId).FirstOrDefault();
+                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToInsurance.UserId).FirstOrDefault();
                 //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
 
-                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.Credit).FirstOrDefault();
+                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.InsureForYiWaiXian).FirstOrDefault();
 
-                orderToCredit.SalesmanId = merchant.SalesmanId ?? 0;
-                orderToCredit.AgentId = merchant.AgentId ?? 0;
-                orderToCredit.ProductId = product.Id;
-                orderToCredit.ProductType = product.Type;
-                orderToCredit.ProductName = product.Name;
-                orderToCredit.Status = Enumeration.OrderStatus.Submitted;
-                orderToCredit.SubmitTime = this.DateTime;
-                orderToCredit.CreateTime = this.DateTime;
-                orderToCredit.Creator = operater;
-                CurrentDb.OrderToCredit.Add(orderToCredit);
+                orderToInsurance.SalesmanId = merchant.SalesmanId ?? 0;
+                orderToInsurance.AgentId = merchant.AgentId ?? 0;
+                orderToInsurance.ProductId = product.Id;
+                orderToInsurance.ProductType = product.Type;
+                orderToInsurance.ProductName = product.Name;
+                orderToInsurance.Status = Enumeration.OrderStatus.Submitted;
+                orderToInsurance.SubmitTime = this.DateTime;
+                orderToInsurance.CreateTime = this.DateTime;
+                orderToInsurance.Creator = operater;
+                CurrentDb.OrderToInsurance.Add(orderToInsurance);
                 CurrentDb.SaveChanges();
 
 
-                SnModel snModel = Sn.Build(SnType.OrderToCredit, orderToCredit.Id);
+                SnModel snModel = Sn.Build(SnType.OrderToCredit, orderToInsurance.Id);
 
-                orderToCredit.Sn = snModel.Sn;
-                orderToCredit.TradeSnByWechat = snModel.TradeSnByWechat;
-                orderToCredit.TradeSnByAlipay = snModel.TradeSnByAlipay;
+                orderToInsurance.Sn = snModel.Sn;
+                orderToInsurance.TradeSnByWechat = snModel.TradeSnByWechat;
+                orderToInsurance.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
-                var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCredit, orderToCredit.Id, Enumeration.AuditFlowV1Status.Submit);
+                var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToInsurance, orderToInsurance.Id, Enumeration.AuditFlowV1Status.Submit);
                 BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.Submit, operater, null, "提交订单，等待取单");
 
                 CurrentDb.SaveChanges();
@@ -56,7 +57,7 @@ namespace Lumos.BLL
             return result;
         }
 
-        public CustomJsonResult Verify(int operater, Enumeration.OperateType operate, OrderToCredit orderToCredit, BizProcessesAudit bizProcessesAudit)
+        public CustomJsonResult Verify(int operater, Enumeration.OperateType operate, OrderToInsurance orderToInsurance, BizProcessesAudit bizProcessesAudit)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -78,9 +79,9 @@ namespace Lumos.BLL
                     }
                 }
 
-                var l_orderToCredit = CurrentDb.OrderToCredit.Where(m => m.Id == orderToCredit.Id).FirstOrDefault();
+                var l_orderToInsurance = CurrentDb.OrderToCredit.Where(m => m.Id == orderToInsurance.Id).FirstOrDefault();
 
-                l_orderToCredit.Remarks = bizProcessesAudit.TempAuditComments;
+                l_orderToInsurance.Remarks = bizProcessesAudit.TempAuditComments;
 
                 switch (operate)
                 {
@@ -89,13 +90,13 @@ namespace Lumos.BLL
                         result = new CustomJsonResult(ResultType.Success, "保存成功");
                         break;
                     case Enumeration.OperateType.Cancle:
-                        l_orderToCredit.Status = Enumeration.OrderStatus.Cancled;
-                        l_orderToCredit.CancleTime = this.DateTime;
+                        l_orderToInsurance.Status = Enumeration.OrderStatus.Cancled;
+                        l_orderToInsurance.CancleTime = this.DateTime;
                         BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.VerifyIncorrect, operater, bizProcessesAudit.TempAuditComments, "核实订单无效");
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;
                     case Enumeration.OperateType.Submit:
-                        l_orderToCredit.FollowStatus = 1;
+                        l_orderToInsurance.FollowStatus = 1;
                         BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.VerifyCorrect, operater, bizProcessesAudit.TempAuditComments, "核实订单正确，等待处理");
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;
@@ -109,7 +110,7 @@ namespace Lumos.BLL
 
         }
 
-        public CustomJsonResult Dealt(int operater, Enumeration.OperateType operate, OrderToCredit orderToCredit, BizProcessesAudit bizProcessesAudit)
+        public CustomJsonResult Dealt(int operater, Enumeration.OperateType operate, OrderToInsurance orderToInsurance, BizProcessesAudit bizProcessesAudit)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -131,9 +132,9 @@ namespace Lumos.BLL
                     }
                 }
 
-                var l_orderToCredit = CurrentDb.OrderToCredit.Where(m => m.Id == orderToCredit.Id).FirstOrDefault();
+                var l_orderToInsurance = CurrentDb.OrderToCredit.Where(m => m.Id == orderToInsurance.Id).FirstOrDefault();
 
-                l_orderToCredit.Remarks = bizProcessesAudit.TempAuditComments;
+                l_orderToInsurance.Remarks = bizProcessesAudit.TempAuditComments;
 
                 switch (operate)
                 {
@@ -142,8 +143,8 @@ namespace Lumos.BLL
                         result = new CustomJsonResult(ResultType.Success, "保存成功");
                         break;
                     case Enumeration.OperateType.Cancle:
-                        l_orderToCredit.Status = Enumeration.OrderStatus.Cancled;
-                        l_orderToCredit.CancleTime = this.DateTime;
+                        l_orderToInsurance.Status = Enumeration.OrderStatus.Cancled;
+                        l_orderToInsurance.CancleTime = this.DateTime;
                         BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.DealtFailure, operater, bizProcessesAudit.TempAuditComments, "订单处理失败");
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;
@@ -153,9 +154,9 @@ namespace Lumos.BLL
 
                         break;
                     case Enumeration.OperateType.Submit:
-                        l_orderToCredit.Status = Enumeration.OrderStatus.Completed;
-                        l_orderToCredit.CompleteTime = this.DateTime;
-                        l_orderToCredit.FollowStatus = 1;
+                        l_orderToInsurance.Status = Enumeration.OrderStatus.Completed;
+                        l_orderToInsurance.CompleteTime = this.DateTime;
+                        l_orderToInsurance.FollowStatus = 1;
                         BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.DealtSuccess, operater, bizProcessesAudit.TempAuditComments, "订单处理成功");
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;

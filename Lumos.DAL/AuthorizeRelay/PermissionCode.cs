@@ -33,6 +33,7 @@ namespace System
         public const string 定损点申请 = "Biz20001";
         public const string 违章处理 = "Biz30001";
         public const string 贷款申请 = "Biz40001";
+        public const string 保险购买 = "Biz50001";
         public const string 保险公司设置 = "BizA001";
         public const string 车险保险公司设置 = "BizA002";
         public const string 业务人员设置 = "BizB001";

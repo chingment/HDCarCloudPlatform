@@ -81,6 +81,7 @@
     <Compile Include="Biz\InsuranceCompanyProvider.cs" />
     <Compile Include="Biz\OrderProvider.cs" />
     <Compile Include="Biz\MerchantProvider.cs" />
+    <Compile Include="Biz\OrderToInsuranceProvider.cs" />
     <Compile Include="Biz\PayProvider.cs" />
     <Compile Include="Biz\PosMachineProvider.cs" />
     <Compile Include="Biz\ProductProvider.cs" />

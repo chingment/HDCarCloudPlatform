@@ -130,5 +130,13 @@ namespace Lumos.BLL
             }
         }
 
+        public static OrderToInsuranceProvider OrderToInsurance
+        {
+            get
+            {
+                return new OrderToInsuranceProvider();
+            }
+        }
+
     }
 }

@@ -161,6 +161,7 @@
     <Compile Include="Controllers\Biz\CreditController.cs" />
     <Compile Include="Controllers\Biz\ExtendedAppController.cs" />
     <Compile Include="Controllers\Biz\InsuranceCompanyController.cs" />
+    <Compile Include="Controllers\Biz\InsuranceController.cs" />
     <Compile Include="Controllers\Biz\LllegalController.cs" />
     <Compile Include="Controllers\Biz\MerchantController.cs" />
     <Compile Include="Controllers\Biz\OrderController.cs" />
@@ -217,6 +218,10 @@
     <Compile Include="Models\Biz\Credit\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\Credit\SearchCondition.cs" />
     <Compile Include="Models\Biz\Credit\VerifyViewModel.cs" />
+    <Compile Include="Models\Biz\Insurance\DealtViewModel.cs" />
+    <Compile Include="Models\Biz\Insurance\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\Insurance\SearchCondition.cs" />
+    <Compile Include="Models\Biz\Insurance\VerifyViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\DealtViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\DetailsByQueryRechargeViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\DetailsByDealtViewModel.cs" />
@@ -1276,6 +1281,12 @@
     <Content Include="Views\Biz\Credit\ListByDealt.cshtml" />
     <Content Include="Views\Biz\Credit\ListByVerify.cshtml" />
     <Content Include="Views\Biz\Credit\Verify.cshtml" />
+    <Content Include="Views\Biz\Insurance\Dealt.cshtml" />
+    <Content Include="Views\Biz\Insurance\Details.cshtml" />
+    <Content Include="Views\Biz\Insurance\List.cshtml" />
+    <Content Include="Views\Biz\Insurance\ListByDealt.cshtml" />
+    <Content Include="Views\Biz\Insurance\ListByVerify.cshtml" />
+    <Content Include="Views\Biz\Insurance\Verify.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

@@ -931,7 +931,7 @@ namespace WebAppApi.Controllers
             orderToApplyLossAssess.PosMachineId = model.PosMachineId;
             orderToApplyLossAssess.InsuranceCompanyId = model.InsuranceCompanyId;
             orderToApplyLossAssess.IsAgreeService = model.IsAgreeService;
-            IResult result = BizFactory.Order.SubmitApplyLossAssess(model.UserId, orderToApplyLossAssess);
+            IResult result = BizFactory.ApplyLossAssess.Submit(model.UserId, orderToApplyLossAssess);
             return new APIResponse(result);
 
         }

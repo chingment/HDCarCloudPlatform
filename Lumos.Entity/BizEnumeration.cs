@@ -117,7 +117,34 @@ namespace Lumos.Entity
 
         }
 
-        public enum TalentDemandAuditStatus
+        //public enum TalentDemandAuditStatus
+        //{
+        //    [Remark("未知")]
+        //    Unknow = 0,
+        //    [Remark("提交订单")]
+        //    Submit = 1,
+        //    [Remark("等待核实")]
+        //    WaitVerify = 2,
+        //    [Remark("核实中")]
+        //    InVerify = 3,
+        //    [Remark("核实正确")]
+        //    VerifyCorrect = 5,
+        //    [Remark("核实不正确")]
+        //    VerifyIncorrect = 6,
+        //    [Remark("等待处理")]
+        //    WaitDealt = 7,
+        //    [Remark("处理中")]
+        //    InDealt = 8,
+        //    [Remark("处理驳回")]
+        //    DealtReject = 9,
+        //    [Remark("处理成功")]
+        //    DealtSuccess = 10,
+        //    [Remark("处理失败")]
+        //    DealtFailure = 11
+        //}
+
+
+        public enum AuditFlowV1Status
         {
             [Remark("未知")]
             Unknow = 0,
@@ -143,7 +170,8 @@ namespace Lumos.Entity
             DealtFailure = 11
         }
 
-        public enum TalentDemandDealtStep
+
+        public enum AuditFlowV1Step
         {
             [Remark("未知")]
             Unknow = 0,
@@ -162,6 +190,8 @@ namespace Lumos.Entity
             [Remark("处理驳回")]
             DealtedReject = 7
         }
+
+
 
         public enum LllegalDealtStep
         {
@@ -183,23 +213,6 @@ namespace Lumos.Entity
             [Remark("等待核实")]
             WaitDealt = 1,
             [Remark("核实需求")]
-            InDealt = 2,
-            [Remark("后台取消订单")]
-            StaffCancle = 3,
-            [Remark("客户取消订单")]
-            ClientCancle = 4,
-            [Remark("完成")]
-            Complete = 5
-        }
-
-
-        public enum ApplyLossAssessDealtStatus
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("等待处理")]
-            WaitDealt = 1,
-            [Remark("处理中")]
             InDealt = 2,
             [Remark("后台取消订单")]
             StaffCancle = 3,

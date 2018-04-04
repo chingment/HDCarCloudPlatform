@@ -49,6 +49,14 @@ namespace Lumos.BLL
             }
         }
 
+        public static ApplyLossAssessProvider ApplyLossAssess
+        {
+            get
+            {
+                return new ApplyLossAssessProvider();
+            }
+        }
+
         public static ExtendedAppProvder ExtendedApp
         {
             get

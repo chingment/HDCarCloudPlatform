@@ -7,20 +7,20 @@
     <script type="text/javascript">
 
         var listTable;
-        var auditStatus={"waitDealt": @((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitDealt),"inDealt":@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.InDealt) };
+        var auditStatus={"waitVerify": @((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitVerify),"inVerify":@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.InVerify) };
         $(document).ready(function () {
 
-            $("#AuditStatus").val(auditStatus.waitDealt);
-            $('#btn_Wait').attr("auditStatus",auditStatus.waitDealt);
-            $('#btn_In').attr("auditStatus",auditStatus.inDealt);
-            $('#btn_In,#btn_Wait').live('click',function(){
-                var status=$(this).attr("auditStatus");
+            $("#AuditStatus").val(auditStatus.waitVerify);
+            $('#btn_Wait').attr("auditStatus", auditStatus.waitVerify);
+            $('#btn_In').attr("auditStatus", auditStatus.inVerify);
+            $('#btn_In,#btn_Wait').live('click', function () {
+                var status = $(this).attr("auditStatus");
                 $("#AuditStatus").val(status);
                 listTable.loadData(0);
             });
 
             listTable = $("#list_table").loadDataTable({
-                url: "/Biz/TalentDemand/GetListByDealt",
+                url: "/Biz/ApplyLossAssess/GetListByVerify",
                 pageIndex: 0,
                 searchParams: $("#form1").serializeArray(),
                 searchButtonId: "btn_Search",
@@ -36,8 +36,8 @@
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactPhoneNumber + "\">" + p_row.contactPhoneNumber + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.workJob + "\">" + p_row.workJob + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.quantity + "\">" + p_row.quantity + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.insuranceCompanyName + "\">" + p_row.insuranceCompanyName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.applyTime + "\">" + p_row.applyTime + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.submitTime + "\">" + p_row.submitTime + "</td>";
                     l_StrRows += "<td class=\"operation\">";
                     l_StrRows += l_Strlimt;
@@ -54,8 +54,8 @@
                     "dealt": function (obj) {
 
                         function dealt(obj) {
-                            var url = '/Biz/TalentDemand/Dealt?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
-                            var title = '处理订单-' + obj.sn;
+                            var url = '/Biz/ApplyLossAssess/Verify?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
+                            var title = '核实订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",
                                 title: title,
@@ -66,7 +66,7 @@
                                 cancelVal: '关闭',
                                 cancel: true,
                                 button: [{
-                                    name: '处理完成',
+                                    name: '核实正确,转入处理',
                                     callback: function () {
 
                                         this.iframe.contentWindow.submit(operateType.submit, function (d) {
@@ -81,7 +81,7 @@
                                     focus: true
                                 },
                                 {
-                                    name: '处理失败',
+                                    name: '核实无效，作废',
                                     callback: function () {
 
                                         this.iframe.contentWindow.submit(operateType.cancle, function (d) {
@@ -106,8 +106,8 @@
                             });
                         }
 
-                        if (obj.auditStatus == auditStatus.waitDealt) {
-                            art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
+                        if (obj.dealtStatus == auditStatus.waitVerify) {
+                            art.dialog.confirm('您确定要处理订单号' + obj.sn + '，确定后该订单由您来处理？', function () {
                                 dealt(obj)
                             });
                         }
@@ -121,18 +121,19 @@
 
         });
 
+
     </script>
 }
 
 <form id="form1" name="form1">
     @Html.AntiForgeryToken()
-    <input type="hidden" name="AuditStatus" id="AuditStatus" />
+    <input type="hidden" name="AuditStatus" id="AuditStatus" value="" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span id="btn_Wait" class="status-bar-btn selected">待处理<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
+            <span id="btn_Wait" class="status-bar-btn selected">待核实<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span id="btn_In" class="status-bar-btn">处理中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
+            <span id="btn_In" class="status-bar-btn">核实中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
         </div>
         <div class="clear"></div>
     </div>
@@ -158,11 +159,11 @@
                     <th style="width:10%">
                         联系电话
                     </th>
-                    <th style="width:15%">
-                        需求工种
+                    <th style="width:10%">
+                        保险公司
                     </th>
                     <th style="width:10%">
-                        人数
+                        申请时间
                     </th>
                     <th style="width:10%">
                         提交时间

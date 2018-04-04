@@ -7,7 +7,7 @@
     <script type="text/javascript">
 
         var listTable;
-        var auditStatus={"waitVerify": @((int)Lumos.Entity.Enumeration.TalentDemandAuditStatus.WaitVerify),"inVerify":@((int)Lumos.Entity.Enumeration.TalentDemandAuditStatus.InVerify) };
+        var auditStatus={"waitVerify": @((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitVerify),"inVerify":@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.InVerify) };
         $(document).ready(function () {
 
             $("#AuditStatus").val(auditStatus.waitVerify);
@@ -56,7 +56,7 @@
 
                         function dealt(obj) {
                             var url = '/Biz/TalentDemand/Verify?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
-                            var title = '处理订单-' + obj.sn;
+                            var title = '核实订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",
                                 title: title,

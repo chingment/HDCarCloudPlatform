@@ -8,7 +8,7 @@ namespace WebAgent.Models.ApplyLossAssess
 {
     public class ApplyLossAssessSearchCondition : SearchCondition
     {
-        public Enumeration.ApplyLossAssessDealtStatus DealtStatus { get; set; }
+        public Enumeration.AuditFlowV1Status AuditStatus { get; set; }
 
         public Enumeration.OrderStatus Status { get; set; }
     }

@@ -198,9 +198,10 @@
     <Compile Include="App_Start\Own\OwnStaticResource.cs" />
     <Compile Include="App_Start\Own\OwnStatisticsTrackerAttribute.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
+    <Compile Include="Models\Biz\ApplyLossAssess\DealtViewModel.cs" />
     <Compile Include="Models\Biz\ApplyLossAssess\DetailsViewModel.cs" />
     <Compile Include="Models\Biz\ApplyLossAssess\SearchCondition.cs" />
-    <Compile Include="Models\Biz\ApplyLossAssess\VerifyOrderViewModel.cs" />
+    <Compile Include="Models\Biz\ApplyLossAssess\VerifyViewModel.cs" />
     <Compile Include="Models\Biz\ApplyPos\ApplyModel.cs" />
     <Compile Include="Models\Biz\ApplyPos\SearchCondition.cs" />
     <Compile Include="Models\Biz\CarClaim\SearchCondition.cs" />
@@ -1243,7 +1244,7 @@
     <Content Include="Views\Biz\ApplyLossAssess\Details.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\List.cshtml" />
     <Content Include="Views\Biz\ApplyLossAssess\Dealt.cshtml" />
-    <Content Include="Views\Biz\ApplyLossAssess\DealtList.cshtml" />
+    <Content Include="Views\Biz\ApplyLossAssess\ListByDealt.cshtml" />
     <Content Include="Views\Biz\ServiceFee\Details.cshtml" />
     <Content Include="Views\Sys\AgentUser\Add.cshtml" />
     <Content Include="Views\Sys\AgentUser\Edit.cshtml" />
@@ -1262,6 +1263,8 @@
     <Content Include="Views\Biz\CarInsureOffer\Edit.cshtml" />
     <Content Include="Views\Biz\TalentDemand\Dealt.cshtml" />
     <Content Include="Views\Biz\TalentDemand\ListByDealt.cshtml" />
+    <Content Include="Views\Biz\ApplyLossAssess\ListByVerify.cshtml" />
+    <Content Include="Views\Biz\ApplyLossAssess\Verify.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

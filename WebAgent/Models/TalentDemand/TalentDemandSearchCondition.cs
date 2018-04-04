@@ -8,7 +8,7 @@ namespace WebAgent.Models.TalentDemand
 {
     public class TalentDemandSearchCondition : SearchCondition
     {
-        public Enumeration.TalentDemandAuditStatus AuditStatu { get; set; }
+        public Enumeration.AuditFlowV1Status AuditStatu { get; set; }
 
         public Enumeration.OrderStatus Status { get; set; }
     }

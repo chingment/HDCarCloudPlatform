@@ -25,7 +25,7 @@
 
             var win = art.dialog.open.origin;
             var auditStatus = $.lumos.getUrlParamValue("auditStatus");
-            if (auditStatus == "@((int)Lumos.Entity.Enumeration.TalentDemandAuditStatus.WaitDealt)") {
+            if (auditStatus == "@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitDealt)") {
                 win.listTable.loadData();
             }
 

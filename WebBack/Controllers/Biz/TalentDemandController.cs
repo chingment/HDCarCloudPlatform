@@ -102,8 +102,8 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.人才需求核实)]
         public CustomJsonResult GetListByVerify(SearchCondition condition)
         {
-            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandAuditStatus.WaitVerify select h.Id).Count();
-            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandAuditStatus.InVerify && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitVerify select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.InVerify && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToTalentDemand on
@@ -114,13 +114,13 @@ namespace WebBack.Controllers.Biz
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
-            if (condition.AuditStatus == Enumeration.TalentDemandAuditStatus.WaitVerify)
+            if (condition.AuditStatus == Enumeration.AuditFlowV1Status.WaitVerify)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandAuditStatus.WaitVerify);
+                query = query.Where(m => m.Status == (int)Enumeration.AuditFlowV1Status.WaitVerify);
             }
-            else if (condition.AuditStatus == Enumeration.TalentDemandAuditStatus.InVerify)
+            else if (condition.AuditStatus == Enumeration.AuditFlowV1Status.InVerify)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandAuditStatus.InVerify && m.Auditor == this.CurrentUserId);
+                query = query.Where(m => m.Status == (int)Enumeration.AuditFlowV1Status.InVerify && m.Auditor == this.CurrentUserId);
             }
 
 
@@ -160,8 +160,8 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.人才需求核实)]
         public CustomJsonResult GetListByDealt(SearchCondition condition)
         {
-            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandAuditStatus.WaitDealt select h.Id).Count();
-            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.TalentDemandAuditStatus.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitDealt select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToTalentDemand on
@@ -172,13 +172,13 @@ namespace WebBack.Controllers.Biz
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
-            if (condition.AuditStatus == Enumeration.TalentDemandAuditStatus.WaitDealt)
+            if (condition.AuditStatus == Enumeration.AuditFlowV1Status.WaitDealt)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandAuditStatus.WaitDealt);
+                query = query.Where(m => m.Status == (int)Enumeration.AuditFlowV1Status.WaitDealt);
             }
-            else if (condition.AuditStatus == Enumeration.TalentDemandAuditStatus.InDealt)
+            else if (condition.AuditStatus == Enumeration.AuditFlowV1Status.InDealt)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.TalentDemandAuditStatus.InDealt && m.Auditor == this.CurrentUserId);
+                query = query.Where(m => m.Status == (int)Enumeration.AuditFlowV1Status.InDealt && m.Auditor == this.CurrentUserId);
             }
 
 

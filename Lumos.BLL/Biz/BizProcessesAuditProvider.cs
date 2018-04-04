@@ -544,122 +544,6 @@ namespace Lumos.BLL
         }
 
 
-        public BizProcessesAudit ChangeApplyLossAssessDealtStatus(int operater, int bizProcessesAuditId, Enumeration.ApplyLossAssessDealtStatus changestatus, string description = null, DateTime? endTime = null)
-        {
-
-            var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
-            if (bizProcessesAudit != null)
-            {
-                if (bizProcessesAudit.EndTime == null)
-                {
-                    if (
-                       bizProcessesAudit.Status != (int)Enumeration.ApplyLossAssessDealtStatus.Complete
-                        && bizProcessesAudit.Status != (int)Enumeration.ApplyLossAssessDealtStatus.ClientCancle
-                           && bizProcessesAudit.Status != (int)Enumeration.ApplyLossAssessDealtStatus.StaffCancle
-                        )
-                    {
-                        Enumeration.ApplyLossAssessDealtStatus old_Status = (Enumeration.ApplyLossAssessDealtStatus)bizProcessesAudit.Status;
-                        bizProcessesAudit.Mender = operater;
-                        bizProcessesAudit.LastUpdateTime = DateTime.Now;
-
-
-                        if (endTime != null)
-                        {
-                            bizProcessesAudit.EndTime = endTime.Value;
-                        }
-
-                        if (changestatus == Enumeration.ApplyLossAssessDealtStatus.WaitDealt)
-                        {
-
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.ApplyLossAssessDealtStep.Dealt).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                            if (bizProcessesAuditDetails == null)
-                            {
-                                bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.WaitDealt;
-                                bizProcessesAudit.Auditor = null;
-
-                            }
-                            else
-                            {
-                                bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.InDealt;
-                                bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
-
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
-                            }
-
-                        }
-                        else if (changestatus == Enumeration.ApplyLossAssessDealtStatus.InDealt)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.InDealt;
-                            if (bizProcessesAudit.Auditor == null)
-                            {
-                                bizProcessesAudit.Auditor = operater;
-
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.ApplyLossAssessDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
-
-                            }
-
-                        }
-
-                        else if (changestatus == Enumeration.ApplyLossAssessDealtStatus.ClientCancle)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.ClientCancle;
-                            bizProcessesAudit.Auditor = operater;
-
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
-
-                        }
-                        else if (changestatus == Enumeration.ApplyLossAssessDealtStatus.StaffCancle)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.StaffCancle;
-                            bizProcessesAudit.Auditor = operater;
-                            bizProcessesAudit.EndTime = this.DateTime;
-
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
-                        }
-                        else if (changestatus == Enumeration.ApplyLossAssessDealtStatus.Complete)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.Complete;
-                            bizProcessesAudit.Auditor = operater;
-                            bizProcessesAudit.EndTime = this.DateTime;
-
-                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.ApplyLossAssessDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
-
-                        }
-                    }
-
-                    CurrentDb.SaveChanges();
-                }
-
-
-                var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderByDescending(m => m.AuditTime).ToList();
-
-                bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
-
-
-                Enumeration.ApplyLossAssessDealtStep merchantAuditStep = Enumeration.ApplyLossAssessDealtStep.Unknow;
-                if (changestatus == Enumeration.ApplyLossAssessDealtStatus.WaitDealt || changestatus == Enumeration.ApplyLossAssessDealtStatus.InDealt)
-                {
-                    merchantAuditStep = Enumeration.ApplyLossAssessDealtStep.Dealt;
-                }
-                var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                if (currentDetails != null)
-                {
-                    bizProcessesAudit.CurrentDetails = currentDetails;
-
-                    var auditComments = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep && m.AuditComments != null).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                    if (auditComments != null)
-                    {
-                        bizProcessesAudit.CurrentDetails.AuditComments = auditComments.AuditComments;
-                    }
-                }
-
-
-            }
-
-            return bizProcessesAudit;
-        }
-
-
         public BizProcessesAudit ChangeLllegalDealStatus(int operater, int bizProcessesAuditId, Enumeration.LllegalDealtStatus changestatus, string description = null, DateTime? endTime = null)
         {
 
@@ -726,7 +610,7 @@ namespace Lumos.BLL
                         }
                         else if (changestatus == Enumeration.LllegalDealtStatus.StaffCancle)
                         {
-                            bizProcessesAudit.Status = (int)Enumeration.ApplyLossAssessDealtStatus.StaffCancle;
+                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.StaffCancle;
                             bizProcessesAudit.Auditor = operater;
                             bizProcessesAudit.EndTime = this.DateTime;
 
@@ -775,7 +659,113 @@ namespace Lumos.BLL
             return bizProcessesAudit;
         }
 
-        public BizProcessesAudit ChangeStatus(int bizProcessesAuditId, object auditStatus, int auditor, string auditComments, string description = null)
+
+
+        //public BizProcessesAudit ChangeStatus(int bizProcessesAuditId, object auditStatus, int auditor, string auditComments, string description = null)
+        //{
+        //    DateTime nowDate = DateTime.Now;
+        //    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
+        //    if (bizProcessesAudit != null)
+        //    {
+        //        bizProcessesAudit.Mender = auditor;
+        //        bizProcessesAudit.LastUpdateTime = nowDate;
+
+        //        switch (bizProcessesAudit.AduitType)
+        //        {
+        //            case Enumeration.BizProcessesAuditType.TalentDemand:
+        //                #region TalentDemand
+        //                Enumeration.TalentDemandAuditStatus talentDemandDealtStatus = (Enumeration.TalentDemandAuditStatus)auditStatus;
+        //                switch (talentDemandDealtStatus)
+        //                {
+        //                    case Enumeration.TalentDemandAuditStatus.Submit:
+        //                        //提交订单将订单转为待核实状态，审核人空
+        //                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.Submit, bizProcessesAudit.Id, auditor, auditComments, description);
+        //                        bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.WaitVerify;
+        //                        bizProcessesAudit.Auditor = null;
+        //                        break;
+        //                    case Enumeration.TalentDemandAuditStatus.InVerify:
+        //                        //提交订单将订单转为待核实中，判断当前审核人是否为空，若空设置
+        //                        bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InVerify;
+
+        //                        if (bizProcessesAudit.Auditor == null)
+        //                        {
+        //                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.InVerify, bizProcessesAudit.Id, auditor, auditComments, description);
+        //                            bizProcessesAudit.Auditor = auditor;
+        //                        }
+        //                        break;
+        //                    case Enumeration.TalentDemandAuditStatus.VerifyCorrect:
+        //                        //订单核实正确将订单转为待处理，审核人空
+
+        //                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.VerifyedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
+        //                        var bizProcessesAuditDetailsDealted = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.DealtedReject).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+        //                        if (bizProcessesAuditDetailsDealted == null)
+        //                        {
+        //                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.WaitDealt;
+        //                            bizProcessesAudit.Auditor = null;
+        //                            bizProcessesAudit.TempAuditComments = null;
+        //                        }
+        //                        else
+        //                        {
+        //                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InDealt;
+        //                            bizProcessesAudit.Auditor = bizProcessesAuditDetailsDealted.Auditor;
+        //                        }
+        //                        break;
+        //                    case Enumeration.TalentDemandAuditStatus.VerifyIncorrect:
+        //                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.VerifyedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
+        //                        bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.VerifyIncorrect;
+        //                        bizProcessesAudit.Auditor = auditor;
+        //                        bizProcessesAudit.EndTime = this.DateTime;
+        //                        bizProcessesAudit.TempAuditComments = null;
+        //                        break;
+        //                    case Enumeration.TalentDemandAuditStatus.InDealt:
+        //                        //提交订单将订单转为待处理中，判断当前审核人是否为空，若空设置
+        //                        bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InDealt;
+        //                        if (bizProcessesAudit.Auditor == null)
+        //                        {
+        //                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.InDealt, bizProcessesAudit.Id, auditor, auditComments, description);
+        //                            bizProcessesAudit.Auditor = auditor;
+        //                        }
+        //                        break;
+        //                    case Enumeration.TalentDemandAuditStatus.DealtSuccess:
+        //                        //订单核实正确将订单转为待处理，审核人空
+        //                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
+        //                        bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.DealtSuccess;
+        //                        bizProcessesAudit.Auditor = auditor;
+        //                        bizProcessesAudit.EndTime = this.DateTime;
+        //                        bizProcessesAudit.TempAuditComments = null;
+        //                        break;
+        //                    case Enumeration.TalentDemandAuditStatus.DealtFailure:
+        //                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
+        //                        bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.DealtFailure;
+        //                        bizProcessesAudit.Auditor = auditor;
+        //                        bizProcessesAudit.EndTime = this.DateTime;
+        //                        bizProcessesAudit.TempAuditComments = null;
+        //                        break;
+        //                    case Enumeration.TalentDemandAuditStatus.DealtReject:
+        //                        var bizProcessesAuditDetailsVerifyed = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.VerifyedComplete).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+        //                        if (bizProcessesAuditDetailsVerifyed != null)
+        //                        {
+        //                            bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InVerify;
+        //                            bizProcessesAudit.Auditor = bizProcessesAuditDetailsVerifyed.Auditor;
+        //                            bizProcessesAudit.TempAuditComments = null;
+        //                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedReject, bizProcessesAudit.Id, auditor, auditComments, description);
+        //                        }
+        //                        break;
+        //                }
+        //                #endregion
+        //                break;
+        //        }
+
+        //        CurrentDb.SaveChanges();
+        //        var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderBy(m => m.CreateTime).ToList();
+        //        bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
+        //    }
+
+        //    return bizProcessesAudit;
+        //}
+
+
+        public BizProcessesAudit ChangeStatusByAuditFlowV1(int bizProcessesAuditId, Enumeration.AuditFlowV1Status auditStatus, int auditor, string auditComments, string description = null)
         {
             DateTime nowDate = DateTime.Now;
             var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
@@ -784,102 +774,97 @@ namespace Lumos.BLL
                 bizProcessesAudit.Mender = auditor;
                 bizProcessesAudit.LastUpdateTime = nowDate;
 
-                int aduitStep = 0;
-                switch (bizProcessesAudit.AduitType)
-                {
-                    case Enumeration.BizProcessesAuditType.TalentDemand:
-                        #region TalentDemand
-                        Enumeration.TalentDemandAuditStatus talentDemandDealtStatus = (Enumeration.TalentDemandAuditStatus)auditStatus;
-                        switch (talentDemandDealtStatus)
-                        {
-                            case Enumeration.TalentDemandAuditStatus.Submit:
-                                //提交订单将订单转为待核实状态，审核人空
-                                ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.Submit, bizProcessesAudit.Id, auditor, auditComments, description);
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.WaitVerify;
-                                bizProcessesAudit.Auditor = null;
-                                break;
-                            case Enumeration.TalentDemandAuditStatus.InVerify:
-                                //提交订单将订单转为待核实中，判断当前审核人是否为空，若空设置
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InVerify;
-                               
-                                if (bizProcessesAudit.Auditor == null)
-                                {
-                                    ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.InVerify, bizProcessesAudit.Id, auditor, auditComments, description);
-                                    bizProcessesAudit.Auditor = auditor;
-                                }
-                                break;
-                            case Enumeration.TalentDemandAuditStatus.VerifyCorrect:
-                                //订单核实正确将订单转为待处理，审核人空
 
-                                ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.VerifyedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
-                                var bizProcessesAuditDetailsDealted = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.DealtedReject).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                                if (bizProcessesAuditDetailsDealted == null)
-                                {
-                                    bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.WaitDealt;
-                                    bizProcessesAudit.Auditor = null;
-                                    bizProcessesAudit.TempAuditComments = null;
-                                }
-                                else
-                                {
-                                    bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InDealt;
-                                    bizProcessesAudit.Auditor = bizProcessesAuditDetailsDealted.Auditor;
-                                }
-                                break;
-                            case Enumeration.TalentDemandAuditStatus.VerifyIncorrect:
-                                ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.VerifyedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.VerifyIncorrect;
-                                bizProcessesAudit.Auditor = auditor;
-                                bizProcessesAudit.EndTime = this.DateTime;
-                                bizProcessesAudit.TempAuditComments = null;
-                                break;
-                            case Enumeration.TalentDemandAuditStatus.InDealt:
-                                //提交订单将订单转为待处理中，判断当前审核人是否为空，若空设置
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InDealt;
-                                if (bizProcessesAudit.Auditor == null)
-                                {
-                                    ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.InDealt, bizProcessesAudit.Id, auditor, auditComments, description);
-                                    bizProcessesAudit.Auditor = auditor;
-                                }
-                                break;
-                            case Enumeration.TalentDemandAuditStatus.DealtSuccess:
-                                //订单核实正确将订单转为待处理，审核人空
-                                ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.DealtSuccess;
-                                bizProcessesAudit.Auditor = auditor;
-                                bizProcessesAudit.EndTime = this.DateTime;
-                                bizProcessesAudit.TempAuditComments = null;
-                                break;
-                            case Enumeration.TalentDemandAuditStatus.DealtFailure:
-                                ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
-                                bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.DealtFailure;
-                                bizProcessesAudit.Auditor = auditor;
-                                bizProcessesAudit.EndTime = this.DateTime;
-                                bizProcessesAudit.TempAuditComments = null;
-                                break;
-                            case Enumeration.TalentDemandAuditStatus.DealtReject:
-                                var bizProcessesAuditDetailsVerifyed = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.TalentDemandDealtStep.VerifyedComplete).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                                if (bizProcessesAuditDetailsVerifyed != null)
-                                {
-                                    bizProcessesAudit.Status = (int)Enumeration.TalentDemandAuditStatus.InVerify;
-                                    bizProcessesAudit.Auditor = bizProcessesAuditDetailsVerifyed.Auditor;
-                                    bizProcessesAudit.TempAuditComments = null;
-                                    ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.TalentDemandDealtStep.DealtedReject, bizProcessesAudit.Id, auditor, auditComments, description);
-                                }
-                                break;
+                #region TalentDemand
+                switch (auditStatus)
+                {
+                    case Enumeration.AuditFlowV1Status.Submit:
+                        //提交订单将订单转为待核实状态，审核人空
+                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.Submit, bizProcessesAudit.Id, auditor, auditComments, description);
+                        bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.WaitVerify;
+                        bizProcessesAudit.Auditor = null;
+                        break;
+                    case Enumeration.AuditFlowV1Status.InVerify:
+                        //提交订单将订单转为待核实中，判断当前审核人是否为空，若空设置
+                        bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.InVerify;
+
+                        if (bizProcessesAudit.Auditor == null)
+                        {
+                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.InVerify, bizProcessesAudit.Id, auditor, auditComments, description);
+                            bizProcessesAudit.Auditor = auditor;
                         }
-                        #endregion
+                        break;
+                    case Enumeration.AuditFlowV1Status.VerifyCorrect:
+                        //订单核实正确将订单转为待处理，审核人空
+
+                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.VerifyedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
+                        var bizProcessesAuditDetailsDealted = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.AuditFlowV1Step.DealtedReject).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                        if (bizProcessesAuditDetailsDealted == null)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.WaitDealt;
+                            bizProcessesAudit.Auditor = null;
+                            bizProcessesAudit.TempAuditComments = null;
+                        }
+                        else
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.InDealt;
+                            bizProcessesAudit.Auditor = bizProcessesAuditDetailsDealted.Auditor;
+                        }
+                        break;
+                    case Enumeration.AuditFlowV1Status.VerifyIncorrect:
+                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.VerifyedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
+                        bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.VerifyIncorrect;
+                        bizProcessesAudit.Auditor = auditor;
+                        bizProcessesAudit.EndTime = this.DateTime;
+                        bizProcessesAudit.TempAuditComments = null;
+                        break;
+                    case Enumeration.AuditFlowV1Status.InDealt:
+                        //提交订单将订单转为待处理中，判断当前审核人是否为空，若空设置
+                        bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.InDealt;
+                        if (bizProcessesAudit.Auditor == null)
+                        {
+                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.InDealt, bizProcessesAudit.Id, auditor, auditComments, description);
+                            bizProcessesAudit.Auditor = auditor;
+                        }
+                        break;
+                    case Enumeration.AuditFlowV1Status.DealtSuccess:
+                        //订单核实正确将订单转为待处理，审核人空
+                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.DealtedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
+                        bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.DealtSuccess;
+                        bizProcessesAudit.Auditor = auditor;
+                        bizProcessesAudit.EndTime = this.DateTime;
+                        bizProcessesAudit.TempAuditComments = null;
+                        break;
+                    case Enumeration.AuditFlowV1Status.DealtFailure:
+                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.DealtedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
+                        bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.DealtFailure;
+                        bizProcessesAudit.Auditor = auditor;
+                        bizProcessesAudit.EndTime = this.DateTime;
+                        bizProcessesAudit.TempAuditComments = null;
+                        break;
+                    case Enumeration.AuditFlowV1Status.DealtReject:
+                        var bizProcessesAuditDetailsVerifyed = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.AuditFlowV1Step.VerifyedComplete).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                        if (bizProcessesAuditDetailsVerifyed != null)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.InVerify;
+                            bizProcessesAudit.Auditor = bizProcessesAuditDetailsVerifyed.Auditor;
+                            bizProcessesAudit.TempAuditComments = null;
+                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.DealtedReject, bizProcessesAudit.Id, auditor, auditComments, description);
+                        }
                         break;
                 }
+                #endregion
+
 
                 CurrentDb.SaveChanges();
-
                 var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderBy(m => m.CreateTime).ToList();
-
                 bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
             }
 
             return bizProcessesAudit;
         }
+
+
 
         public BizProcessesAudit SaveTempAuditComments(int bizProcessesAuditId, int auditor, string auditComments)
         {

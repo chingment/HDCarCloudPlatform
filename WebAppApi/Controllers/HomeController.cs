@@ -177,7 +177,7 @@ namespace WebAppApi.Controllers
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             // model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
 
-            //model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
+            model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
 

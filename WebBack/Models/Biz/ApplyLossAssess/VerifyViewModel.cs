@@ -7,7 +7,7 @@ using System.Web;
 
 namespace WebBack.Models.Biz.ApplyLossAssess
 {
-    public class VerifyOrderViewModel : BaseViewModel
+    public class VerifyViewModel : BaseViewModel
     {
         private Lumos.Entity.Merchant _merchant = new Lumos.Entity.Merchant();
 
@@ -16,14 +16,14 @@ namespace WebBack.Models.Biz.ApplyLossAssess
         private Lumos.Entity.BizProcessesAudit _bizProcessesAudit = new Lumos.Entity.BizProcessesAudit();
 
 
-        public VerifyOrderViewModel()
+        public VerifyViewModel()
         {
 
         }
 
-        public VerifyOrderViewModel(int id)
+        public VerifyViewModel(int id)
         {
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeApplyLossAssessDealtStatus(this.Operater, id, Enumeration.ApplyLossAssessDealtStatus.InDealt, "后台人员正在处理中");
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(id, Enumeration.AuditFlowV1Status.InVerify, this.Operater, null, "已取单，正在核实");
             if (bizProcessesAudit != null)
             {
                 _bizProcessesAudit = bizProcessesAudit;

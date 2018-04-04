@@ -8,7 +8,7 @@ namespace WebBack.Models.Biz.TalentDemand
 {
     public class SearchCondition : BaseSearchCondition
     {
-        public Enumeration.TalentDemandAuditStatus AuditStatus { get; set; }
+        public Enumeration.AuditFlowV1Status AuditStatus { get; set; }
 
         public Enumeration.OrderStatus Status { get; set; }
     }

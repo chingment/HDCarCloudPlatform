@@ -4,28 +4,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
-namespace WebBack.Models.Biz.TalentDemand
+namespace WebBack.Models.Biz.ApplyLossAssess
 {
-    public class VerifyViewModel : BaseViewModel
+    public class DealtViewModel : BaseViewModel
     {
         private Lumos.Entity.Merchant _merchant = new Lumos.Entity.Merchant();
 
-        private Lumos.Entity.OrderToTalentDemand _orderToTalentDemand = new Lumos.Entity.OrderToTalentDemand();
+        private Lumos.Entity.OrderToApplyLossAssess _orderToApplyLossAssess = new Lumos.Entity.OrderToApplyLossAssess();
 
         private Lumos.Entity.BizProcessesAudit _bizProcessesAudit = new Lumos.Entity.BizProcessesAudit();
 
 
-        public VerifyViewModel()
+        public DealtViewModel()
         {
 
         }
 
-        public VerifyViewModel(int id)
+        public DealtViewModel(int id)
         {
-
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(id, Enumeration.AuditFlowV1Status.InVerify, this.Operater, null, "已取单，正在核实");
-
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(id, Enumeration.AuditFlowV1Status.InDealt, this.Operater, null, "已取单，正在处理");
             if (bizProcessesAudit != null)
             {
                 _bizProcessesAudit = bizProcessesAudit;
@@ -37,12 +34,12 @@ namespace WebBack.Models.Biz.TalentDemand
                 }
 
 
-                var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(m => m.Id == bizProcessesAudit.AduitReferenceId).FirstOrDefault();
-                if (orderToTalentDemand != null)
+                var orderToApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(m => m.Id == bizProcessesAudit.AduitReferenceId).FirstOrDefault();
+                if (orderToApplyLossAssess != null)
                 {
-                    _orderToTalentDemand = orderToTalentDemand;
+                    _orderToApplyLossAssess = orderToApplyLossAssess;
 
-                    var merchant = CurrentDb.Merchant.Where(m => m.Id == orderToTalentDemand.MerchantId).FirstOrDefault();
+                    var merchant = CurrentDb.Merchant.Where(m => m.Id == orderToApplyLossAssess.MerchantId).FirstOrDefault();
                     if (merchant != null)
                     {
                         _merchant = merchant;
@@ -65,15 +62,15 @@ namespace WebBack.Models.Biz.TalentDemand
             }
         }
 
-        public Lumos.Entity.OrderToTalentDemand OrderToTalentDemand
+        public Lumos.Entity.OrderToApplyLossAssess OrderToApplyLossAssess
         {
             get
             {
-                return _orderToTalentDemand;
+                return _orderToApplyLossAssess;
             }
             set
             {
-                _orderToTalentDemand = value;
+                _orderToApplyLossAssess = value;
             }
         }
 

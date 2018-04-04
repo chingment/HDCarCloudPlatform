@@ -1,4 +1,4 @@
-﻿@model WebBack.Models.Biz.ApplyLossAssess.DealtViewModel
+﻿@model WebBack.Models.Biz.ApplyLossAssess.VerifyViewModel
 @{
     ViewBag.Title = "Dealt";
     Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
@@ -25,7 +25,7 @@
 
             var win = art.dialog.open.origin;
             var auditStatus = $.lumos.getUrlParamValue("auditStatus");
-            if (auditStatus == "@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitDealt)") {
+            if (auditStatus == "@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitVerify)") {
                 win.listTable.loadData();
             }
 
@@ -36,8 +36,8 @@
 
             $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
 
-            $("#Model_BizProcessesAudit_TempAuditComments").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
-         
+            $("#Model_OrderToApplyLossAssess_Remarks").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
+
 
         });
 
@@ -46,21 +46,21 @@
         function submit(operate, fun) {
             var form = $("#form1");
             var msg = "";
-            var txt_AuditComments = $("#Model_BizProcessesAudit_TempAuditComments").val();
+            var model_OrderToApplyLossAssess_Remarks = $("#Model_OrderToApplyLossAssess_Remarks").val();
 
             if (operate == operateType.save) {
                 msg = "确定要保存？";
                 $(form).find('*').setInputRequired(false);
             }
             if (operate == operateType.submit) {
-                msg = "确定处理完成？";
+                msg = "确定完成？";
                 $(form).find('*').setInputRequired(true);
             }
             else if (operate == operateType.cancle) {
-                msg = "确定处理失败？";
+                msg = "确定要取消该订单？";
                 $(form).find('*').setInputRequired(false);
 
-                if (txt_AuditComments == "") {
+                if (model_OrderToApplyLossAssess_Remarks == "") {
                     $.lumos.tips('请输入告知商户备注');
                     return;
                 }
@@ -68,15 +68,18 @@
 
             var isValid = $.formValidator.pageIsValid();
             if (isValid) {
+
                 art.dialog.confirm(msg, function () {
                     var l_Data = $("#form1").serializeArray();
                     l_Data.push({ name: "Model.Operate", value: operate });
+
                     $.lumos.postJson({
                         isUseHandling: true,
-                        url: "/Biz/ApplyLossAssess/Dealt",
+                        url: "/Biz/ApplyLossAssess/Verify",
                         data: l_Data,
                         success: function (data) {
                             fun(data);
+
                         }
                     });
                 });
@@ -93,6 +96,7 @@
     <input name="Model.OrderToApplyLossAssess.Id" type="hidden" value="@Model.OrderToApplyLossAssess.Id" />
     <input name="MerchantId" type="hidden" value="@Model.OrderToApplyLossAssess.MerchantId" />
     <input name="Model.BizProcessesAudit.Id" type="hidden" value="@Model.BizProcessesAudit.Id" />
+
 
     <div class="gbr-row-title clearfix">
         <div class="pull-left">

@@ -8,7 +8,7 @@ namespace WebBack.Models.Biz.ApplyLossAssess
 {
     public class SearchCondition : BaseSearchCondition
     {
-        public Enumeration.ApplyLossAssessDealtStatus DealtStatus { get; set; }
+        public Enumeration.AuditFlowV1Status AuditStatus { get; set; }
 
         public Enumeration.OrderStatus Status { get; set; }
     }

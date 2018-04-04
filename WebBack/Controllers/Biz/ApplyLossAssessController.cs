@@ -24,7 +24,7 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.定损点申请)]
-        public ViewResult DealtList()
+        public ViewResult ListByDealt()
         {
             return View();
         }
@@ -32,7 +32,21 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.定损点申请)]
         public ViewResult Dealt(int id)
         {
-            VerifyOrderViewModel model = new VerifyOrderViewModel(id);
+            DealtViewModel model = new DealtViewModel(id);
+
+            return View(model);
+        }
+
+        [OwnAuthorize(PermissionCode.定损点申请)]
+        public ViewResult ListByVerify()
+        {
+            return View();
+        }
+
+        [OwnAuthorize(PermissionCode.定损点申请)]
+        public ViewResult Verify(int id)
+        {
+            VerifyViewModel model = new VerifyViewModel(id);
 
             return View(model);
         }
@@ -87,11 +101,13 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
+
+
         [OwnAuthorize(PermissionCode.定损点申请)]
-        public CustomJsonResult GetDealtList(SearchCondition condition)
+        public CustomJsonResult GetListByVerify(SearchCondition condition)
         {
-            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitDealt select h.Id).Count();
-            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitVerify select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.InVerify && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToApplyLossAssess on
@@ -102,13 +118,13 @@ namespace WebBack.Controllers.Biz
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.InsuranceCompanyId, o.InsuranceCompanyName, o.ApplyTime, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
-            if (condition.DealtStatus == Enumeration.ApplyLossAssessDealtStatus.WaitDealt)
+            if (condition.AuditStatus == Enumeration.AuditFlowV1Status.WaitVerify)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.WaitDealt);
+                query = query.Where(m => m.Status == (int)Enumeration.AuditFlowV1Status.WaitVerify);
             }
-            else if (condition.DealtStatus == Enumeration.ApplyLossAssessDealtStatus.InDealt)
+            else if (condition.AuditStatus == Enumeration.AuditFlowV1Status.InVerify)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.ApplyLossAssessDealtStatus.InDealt && m.Auditor == this.CurrentUserId);
+                query = query.Where(m => m.Status == (int)Enumeration.AuditFlowV1Status.InVerify && m.Auditor == this.CurrentUserId);
             }
 
 
@@ -136,11 +152,69 @@ namespace WebBack.Controllers.Biz
                     item.InsuranceCompanyId,
                     item.InsuranceCompanyName,
                     item.ApplyTime,
-                    DealtStatus = item.Status
+                    AuditStatus = item.Status
                 });
             }
 
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitVerifyOrderCount = waitVerifyOrderCount, inVerifyOrderCount = inVerifyOrderCount } };
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitCount = waitCount, inCount = inCount } };
+
+            return Json(ResultType.Success, pageEntity, "");
+        }
+
+        [OwnAuthorize(PermissionCode.定损点申请)]
+        public CustomJsonResult GetListByDealt(SearchCondition condition)
+        {
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitDealt select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
+
+            var query = (from b in CurrentDb.BizProcessesAudit
+                         join o in CurrentDb.OrderToApplyLossAssess on
+                         b.AduitReferenceId equals o.Id
+                         join m in CurrentDb.Merchant on o.MerchantId equals m.Id
+                         where b.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess
+
+
+                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.InsuranceCompanyId, o.InsuranceCompanyName, o.ApplyTime, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
+
+            if (condition.AuditStatus == Enumeration.AuditFlowV1Status.WaitDealt)
+            {
+                query = query.Where(m => m.Status == (int)Enumeration.AuditFlowV1Status.WaitDealt);
+            }
+            else if (condition.AuditStatus == Enumeration.AuditFlowV1Status.InDealt)
+            {
+                query = query.Where(m => m.Status == (int)Enumeration.AuditFlowV1Status.InDealt && m.Auditor == this.CurrentUserId);
+            }
+
+
+
+            int total = query.Count();
+
+            int pageIndex = condition.PageIndex;
+            int pageSize = 10;
+            query = query.OrderBy(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            List<object> list = new List<object>();
+
+            foreach (var item in query)
+            {
+                list.Add(new
+                {
+                    item.Id,
+                    item.ClientCode,
+                    item.Sn,
+                    item.YYZZ_Name,
+                    item.ProductName,
+                    item.SubmitTime,
+                    item.ContactName,
+                    item.ContactPhoneNumber,
+                    item.InsuranceCompanyId,
+                    item.InsuranceCompanyName,
+                    item.ApplyTime,
+                    AuditStatus = item.Status
+                });
+            }
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitCount = waitCount, inCount = inCount } };
 
             return Json(ResultType.Success, pageEntity, "");
         }
@@ -148,11 +222,22 @@ namespace WebBack.Controllers.Biz
 
         [OwnAuthorize(PermissionCode.定损点申请)]
         [HttpPost]
-        public CustomJsonResult Dealt(VerifyOrderViewModel model)
+        public CustomJsonResult Dealt(DealtViewModel model)
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.Order.DealtApplyLossAssess(this.CurrentUserId, model.Operate, model.OrderToApplyLossAssess, model.BizProcessesAudit);
+            reuslt = BizFactory.ApplyLossAssess.Dealt(this.CurrentUserId, model.Operate, model.OrderToApplyLossAssess, model.BizProcessesAudit);
+
+            return reuslt;
+        }
+
+        [OwnAuthorize(PermissionCode.定损点申请)]
+        [HttpPost]
+        public CustomJsonResult Verify(VerifyViewModel model)
+        {
+            CustomJsonResult reuslt = new CustomJsonResult();
+
+            reuslt = BizFactory.ApplyLossAssess.Verify(this.CurrentUserId, model.Operate, model.OrderToApplyLossAssess, model.BizProcessesAudit);
 
             return reuslt;
         }

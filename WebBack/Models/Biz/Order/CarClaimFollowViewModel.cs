@@ -44,7 +44,7 @@ namespace WebBack.Models.Biz.Order
                     _merchant = merchant;
                 }
 
-                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.CarClaim, id);
+                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.OrderToCarClaim, id);
 
             }
 

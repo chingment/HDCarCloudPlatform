@@ -446,17 +446,21 @@ namespace Lumos.Entity
             [Remark("未知")]
             Unknow = 0,
             [Remark("车险订单")]
-            CarInsure = 1,
+            OrderToCarInsure = 1,
             [Remark("车险理赔")]
-            CarClaim = 2,
+            OrderToCarClaim = 2,
             [Remark("商户资料审核")]
             MerchantAudit = 3,
             [Remark("人才输送")]
-            TalentDemand = 4,
+            OrderToTalentDemand = 4,
             [Remark("定损点申请")]
-            ApplyLossAssess = 5,
+            OrderToApplyLossAssess = 5,
             [Remark("违章处理")]
-            LllegalDealt = 6
+            OrderToLllegalDealt = 6,
+            [Remark("贷款")]
+            OrderToCredit = 7,
+            [Remark("贷款")]
+            OrderToInsurance = 8
         }
 
         public enum MerchantStatus

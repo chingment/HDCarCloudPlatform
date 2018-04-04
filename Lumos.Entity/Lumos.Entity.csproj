@@ -86,6 +86,8 @@
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
     <Compile Include="Biz\OrderPayTrans.cs" />
     <Compile Include="Biz\OrderToApplyLossAssess .cs" />
+    <Compile Include="Biz\OrderToCredit.cs" />
+    <Compile Include="Biz\OrderToInsurance.cs" />
     <Compile Include="Biz\OrderToLllegalDealt.cs" />
     <Compile Include="Biz\OrderToLllegalDealtDetails.cs" />
     <Compile Include="Biz\OrderToLllegalQueryRecharge.cs" />

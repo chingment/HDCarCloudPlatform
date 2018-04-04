@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
-        //private string host = "http://120.79.233.231";
+        // private string host = "http://localhost:16665";
+        private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -169,7 +169,7 @@ namespace WebAppApi.Controllers
             int merchantId = 241;
             int posMachineId = 148;
 
-           // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
+            // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
             // model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
@@ -190,7 +190,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18032710180000001279"));
 
-            //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+            model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));

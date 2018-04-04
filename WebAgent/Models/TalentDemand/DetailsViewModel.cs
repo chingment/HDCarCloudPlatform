@@ -34,7 +34,7 @@ namespace WebAgent.Models.TalentDemand
                 }
 
 
-                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.TalentDemand, id);
+                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.OrderToTalentDemand, id);
 
             }
         }

@@ -72,7 +72,7 @@ namespace WebAgent.Models.CarInsureOffer
                     }
                 }
 
-                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.CarInsure, id);
+                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.OrderToCarInsure, id);
             }
 
 

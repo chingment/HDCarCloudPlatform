@@ -911,7 +911,7 @@ namespace WebAppApi.Controllers
             orderToTalentDemand.Quantity = model.Quantity;
             orderToTalentDemand.UseEndTime = model.UseEndTime;
             orderToTalentDemand.UseStartTime = model.UseStartTime;
-            IResult result = BizFactory.TalentDemand.Submit(model.UserId, orderToTalentDemand);
+            IResult result = BizFactory.OrderToTalentDemand.Submit(model.UserId, orderToTalentDemand);
             return new APIResponse(result);
 
         }
@@ -931,7 +931,7 @@ namespace WebAppApi.Controllers
             orderToApplyLossAssess.PosMachineId = model.PosMachineId;
             orderToApplyLossAssess.InsuranceCompanyId = model.InsuranceCompanyId;
             orderToApplyLossAssess.IsAgreeService = model.IsAgreeService;
-            IResult result = BizFactory.ApplyLossAssess.Submit(model.UserId, orderToApplyLossAssess);
+            IResult result = BizFactory.OrderToApplyLossAssess.Submit(model.UserId, orderToApplyLossAssess);
             return new APIResponse(result);
 
         }
@@ -954,6 +954,25 @@ namespace WebAppApi.Controllers
 
 
             IResult result = BizFactory.Order.SubmitLllegalQueryScoreRecharge(model.UserId, orderToLllegalQueryRecharge);
+            return new APIResponse(result);
+
+        }
+
+        [HttpPost]
+        public APIResponse SubmitCredit(SubmitCreditModel model)
+        {
+            //业务人员模拟数据
+            if (model.MerchantId == this.SalesmanMerchantId)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
+            }
+
+            OrderToCredit orderToCredit = new OrderToCredit();
+            orderToCredit.UserId = model.UserId;
+            orderToCredit.MerchantId = model.MerchantId;
+            orderToCredit.Creditline = model.Creditline;
+            orderToCredit.CreditClass = model.CreditClass;
+            IResult result = BizFactory.OrderToCredit.Submit(model.UserId, orderToCredit);
             return new APIResponse(result);
 
         }

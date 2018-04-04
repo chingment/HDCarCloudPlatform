@@ -35,7 +35,7 @@ namespace Lumos.BLL.Biz.Task
                             order.CancleTime = this.DateTime;
 
                             order.Status = Enumeration.OrderStatus.Cancled;
-                            var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(c => c.AduitReferenceId == order.Id && c.AduitType == Enumeration.BizProcessesAuditType.CarInsure).FirstOrDefault();
+                            var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(c => c.AduitReferenceId == order.Id && c.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure).FirstOrDefault();
 
                             BizFactory.BizProcessesAudit.ChangeAuditDetails(0, Enumeration.CarInsureOfferDealtStep.Cancle, l_bizProcessesAudit.Id, 0, null, "超过1天未支付，系统自动取消，请重新提交报价", this.DateTime);
 

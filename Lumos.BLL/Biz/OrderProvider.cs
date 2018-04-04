@@ -66,7 +66,7 @@ namespace Lumos.BLL
                 CurrentDb.OrderToCarInsure.Add(order);
                 CurrentDb.SaveChanges();
 
-                SnModel snModel = Sn.Build(SnType.CarInsure, order.Id);
+                SnModel snModel = Sn.Build(SnType.OrderToCarInsure, order.Id);
 
                 order.Sn = snModel.Sn;
                 order.TradeSnByWechat = snModel.TradeSnByWechat;
@@ -96,7 +96,7 @@ namespace Lumos.BLL
                 }
 
 
-                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.CarInsure, order.Id);
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsure, order.Id, Enumeration.CarInsureOfferDealtStatus.WaitOffer);
 
                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Submit, bizProcessesAudit.Id, operater, orderToCarInsure.ClientRequire, "商户提交投保订单，等待报价", this.DateTime);
 
@@ -128,7 +128,7 @@ namespace Lumos.BLL
                     l_orderToCarInsure.Mender = operater;
 
 
-                    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitReferenceId == l_orderToCarInsure.Id && m.AduitType == Enumeration.BizProcessesAuditType.CarInsure).FirstOrDefault();
+                    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitReferenceId == l_orderToCarInsure.Id && m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure).FirstOrDefault();
 
                     BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Fllow, bizProcessesAudit.Id, operater, orderToCarInsure.ClientRequire, "商户再次提交投保订单", this.DateTime);
 
@@ -350,7 +350,7 @@ namespace Lumos.BLL
                 CurrentDb.OrderToCarClaim.Add(orderToCarClaim);
                 CurrentDb.SaveChanges();
 
-                SnModel snModel = Sn.Build(SnType.CarClaim, orderToCarClaim.Id);
+                SnModel snModel = Sn.Build(SnType.OrderToCarClaim, orderToCarClaim.Id);
 
                 orderToCarClaim.Sn = snModel.Sn;
                 orderToCarClaim.TradeSnByWechat = snModel.TradeSnByWechat;
@@ -358,7 +358,7 @@ namespace Lumos.BLL
 
 
                 //状态改为待核实
-                 BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.CarClaim, orderToCarClaim.Id);
+                 BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarClaim, orderToCarClaim.Id, Enumeration.CarClaimDealtStatus.WaitVerifyOrder);
                  BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarClaimDealtStep.Submit, bizProcessesAudit.Id, operater, orderToCarClaim.ClientRequire, "商户提交理赔需求", this.DateTime);
 
 
@@ -396,7 +396,7 @@ namespace Lumos.BLL
                     orderToCarClaim.LastUpdateTime = this.DateTime;
                     orderToCarClaim.Mender = operater;
 
-                    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitReferenceId == orderToCarClaim.Id && m.AduitType == Enumeration.BizProcessesAuditType.CarClaim).FirstOrDefault();
+                    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitReferenceId == orderToCarClaim.Id && m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim).FirstOrDefault();
 
                     BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarClaimDealtStep.UploadEstimateListImg, bizProcessesAudit.Id, operater, "定损单已经上传，正在核实", "商户提交定损单", this.DateTime);
 
@@ -519,7 +519,7 @@ namespace Lumos.BLL
                         CurrentDb.OrderToCarClaim.Add(estimateOrderToCarClaim);
                         CurrentDb.SaveChanges();
 
-                        SnModel snModel = Sn.Build(SnType.CarClaim, estimateOrderToCarClaim.Id);
+                        SnModel snModel = Sn.Build(SnType.OrderToCarClaim, estimateOrderToCarClaim.Id);
 
                         estimateOrderToCarClaim.Sn = snModel.Sn;
                         estimateOrderToCarClaim.TradeSnByWechat = snModel.TradeSnByWechat;
@@ -686,7 +686,7 @@ namespace Lumos.BLL
 
 
 
-                var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.CarInsure && m.AduitReferenceId == order.Id).FirstOrDefault();
+                var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.AduitReferenceId == order.Id).FirstOrDefault();
                 if (bizProcessesAudit != null)
                 {
                     BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, bizProcessesAudit.Id, operater, null, "取消订单", this.DateTime);
@@ -761,7 +761,7 @@ namespace Lumos.BLL
                 CurrentDb.OrderToCarInsure.Add(newOrder);
                 CurrentDb.SaveChanges();
 
-                SnModel snModel = Sn.Build(SnType.CarInsure, newOrder.Id);
+                SnModel snModel = Sn.Build(SnType.OrderToCarInsure, newOrder.Id);
 
                 newOrder.Sn = snModel.Sn;
                 newOrder.TradeSnByWechat = snModel.TradeSnByWechat;
@@ -805,7 +805,7 @@ namespace Lumos.BLL
                     }
                 }
 
-                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.CarInsure, newOrder.Id);
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsure, newOrder.Id, Enumeration.CarInsureOfferDealtStatus.WaitOffer);
 
                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Submit, bizProcessesAudit.Id, operater, newOrder.ClientRequire, "商户重新报价，等待报价", this.DateTime);
 
@@ -845,7 +845,7 @@ namespace Lumos.BLL
 
 
 
-                SnModel snModel = Sn.Build(SnType.LllegalQueryRecharge, orderToLllegalQueryRecharge.Id);
+                SnModel snModel = Sn.Build(SnType.OrderToLllegalQueryRecharge, orderToLllegalQueryRecharge.Id);
 
                 orderToLllegalQueryRecharge.Sn = snModel.Sn;
                 orderToLllegalQueryRecharge.TradeSnByWechat = snModel.TradeSnByWechat;
@@ -917,7 +917,7 @@ namespace Lumos.BLL
                 CurrentDb.OrderToLllegalDealt.Add(orderToLllegalDealt);
                 CurrentDb.SaveChanges();
 
-                SnModel snModel = Sn.Build(SnType.LllegalQueryRecharge, orderToLllegalDealt.Id);
+                SnModel snModel = Sn.Build(SnType.OrderToLllegalQueryRecharge, orderToLllegalDealt.Id);
 
                 orderToLllegalDealt.Sn = snModel.Sn;
                 orderToLllegalDealt.TradeSnByWechat = snModel.TradeSnByWechat;

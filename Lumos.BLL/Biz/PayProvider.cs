@@ -635,7 +635,7 @@ namespace Lumos.BLL
                 orderToCarInsure.Mender = operater;
 
 
-                var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.CarInsure && m.AduitReferenceId == orderToCarInsure.Id).FirstOrDefault();
+                var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.AduitReferenceId == orderToCarInsure.Id).FirstOrDefault();
                 if (bizProcessesAudit != null)
                 {
                     BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, bizProcessesAudit.Id, orderToCarInsure.Creator, null, "支付完成", this.DateTime);
@@ -698,7 +698,7 @@ namespace Lumos.BLL
                     CurrentDb.SaveChanges();
 
 
-                    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.CarClaim && m.AduitReferenceId == orderToCarClaim.HandOrderId.Value).FirstOrDefault();
+                    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim && m.AduitReferenceId == orderToCarClaim.HandOrderId.Value).FirstOrDefault();
                     if (bizProcessesAudit != null)
                     {
                         BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarClaimDealtStep.Complete, bizProcessesAudit.Id, operater, null, "支付完成", this.DateTime);

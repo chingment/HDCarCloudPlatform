@@ -48,7 +48,7 @@ namespace Lumos.BLL.Biz.Task
                     CurrentDb.OrderToServiceFee.Add(orderToServiceFee);
                     CurrentDb.SaveChanges();
 
-                    SnModel snModel = Sn.Build(SnType.ServiceFee, orderToServiceFee.Id);
+                    SnModel snModel = Sn.Build(SnType.OrderToServiceFee, orderToServiceFee.Id);
                     orderToServiceFee.Sn = snModel.Sn;
                     orderToServiceFee.TradeSnByWechat = snModel.TradeSnByWechat;
                     orderToServiceFee.TradeSnByAlipay = snModel.TradeSnByAlipay;

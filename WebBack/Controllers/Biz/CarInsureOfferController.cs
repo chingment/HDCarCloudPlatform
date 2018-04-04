@@ -120,14 +120,14 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.车险订单报价)]
         public CustomJsonResult GetDealtList(SearchCondition condition)
         {
-            var waitOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer select h.Id).Count();
-            var inOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.InOffer && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer select h.Id).Count();
+            var inOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.InOffer && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToCarInsure on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.CarInsure
+                         where b.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure
 
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.ProductName, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });

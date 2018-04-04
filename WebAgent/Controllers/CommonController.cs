@@ -170,9 +170,9 @@ namespace WebAgent.Controllers
         public CustomJsonResult GetMessageTipCount()
         {
 
-            var waitCarInOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer select h.Id).Count();
-            var waitCarClaimVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder select h.Id).Count();
-            var waitCarClaimVerifyAmonuntCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyAmount select h.Id).Count();
+            var waitCarInOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer select h.Id).Count();
+            var waitCarClaimVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder select h.Id).Count();
+            var waitCarClaimVerifyAmonuntCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyAmount select h.Id).Count();
 
             var count = new { waitCarInOffer = waitCarInOfferCount, waitCarClaimVerifyOrder = waitCarClaimVerifyOrderCount, waitCarClaimVerifyAmonunt = waitCarClaimVerifyAmonuntCount };
 

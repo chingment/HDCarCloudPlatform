@@ -44,7 +44,7 @@ namespace WebAgent.Models.CarClaim
                     _estimateMerchant = estimateMerchant;
                 }
 
-                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.CarClaim, id);
+                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.OrderToCarClaim, id);
 
             }
 

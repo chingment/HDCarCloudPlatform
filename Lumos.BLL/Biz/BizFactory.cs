@@ -41,19 +41,19 @@ namespace Lumos.BLL
             }
         }
 
-        public static TalentDemandProvider TalentDemand
+        public static OrderToTalentDemandProvider OrderToTalentDemand
         {
             get
             {
-                return new TalentDemandProvider();
+                return new OrderToTalentDemandProvider();
             }
         }
 
-        public static ApplyLossAssessProvider ApplyLossAssess
+        public static OrderToApplyLossAssessProvider OrderToApplyLossAssess
         {
             get
             {
-                return new ApplyLossAssessProvider();
+                return new OrderToApplyLossAssessProvider();
             }
         }
 
@@ -119,6 +119,14 @@ namespace Lumos.BLL
             get
             {
                 return new CarInsurePlanProvider();
+            }
+        }
+
+        public static OrderToCreditProvider OrderToCredit
+        {
+            get
+            {
+                return new OrderToCreditProvider();
             }
         }
 

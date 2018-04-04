@@ -102,14 +102,14 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.人才需求核实)]
         public CustomJsonResult GetListByVerify(SearchCondition condition)
         {
-            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitVerify select h.Id).Count();
-            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.InVerify && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitVerify select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.InVerify && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToTalentDemand on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.TalentDemand
+                         where b.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand
 
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
@@ -160,14 +160,14 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.人才需求核实)]
         public CustomJsonResult GetListByDealt(SearchCondition condition)
         {
-            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitDealt select h.Id).Count();
-            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.TalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitDealt select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand) && h.Status == (int)Enumeration.AuditFlowV1Status.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToTalentDemand on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.TalentDemand
+                         where b.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand
 
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
@@ -220,7 +220,7 @@ namespace WebBack.Controllers.Biz
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.TalentDemand.Verify(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
+            reuslt = BizFactory.OrderToTalentDemand.Verify(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
 
             return reuslt;
         }
@@ -231,7 +231,7 @@ namespace WebBack.Controllers.Biz
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.TalentDemand.Dealt(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
+            reuslt = BizFactory.OrderToTalentDemand.Dealt(this.CurrentUserId, model.Operate, model.OrderToTalentDemand, model.BizProcessesAudit);
 
             return reuslt;
         }

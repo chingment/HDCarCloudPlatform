@@ -106,14 +106,14 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.定损点申请)]
         public CustomJsonResult GetListByVerify(SearchCondition condition)
         {
-            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitVerify select h.Id).Count();
-            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.InVerify && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitVerify select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.InVerify && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToApplyLossAssess on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess
+                         where b.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess
 
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.InsuranceCompanyId, o.InsuranceCompanyName, o.ApplyTime, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
@@ -164,14 +164,14 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.定损点申请)]
         public CustomJsonResult GetListByDealt(SearchCondition condition)
         {
-            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitDealt select h.Id).Count();
-            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.WaitDealt select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess) && h.Status == (int)Enumeration.AuditFlowV1Status.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToApplyLossAssess on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.ApplyLossAssess
+                         where b.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess
 
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.InsuranceCompanyId, o.InsuranceCompanyName, o.ApplyTime, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
@@ -226,7 +226,7 @@ namespace WebBack.Controllers.Biz
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.ApplyLossAssess.Dealt(this.CurrentUserId, model.Operate, model.OrderToApplyLossAssess, model.BizProcessesAudit);
+            reuslt = BizFactory.OrderToApplyLossAssess.Dealt(this.CurrentUserId, model.Operate, model.OrderToApplyLossAssess, model.BizProcessesAudit);
 
             return reuslt;
         }
@@ -237,7 +237,7 @@ namespace WebBack.Controllers.Biz
         {
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            reuslt = BizFactory.ApplyLossAssess.Verify(this.CurrentUserId, model.Operate, model.OrderToApplyLossAssess, model.BizProcessesAudit);
+            reuslt = BizFactory.OrderToApplyLossAssess.Verify(this.CurrentUserId, model.Operate, model.OrderToApplyLossAssess, model.BizProcessesAudit);
 
             return reuslt;
         }

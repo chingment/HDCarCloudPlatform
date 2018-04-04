@@ -97,14 +97,14 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.违章处理)]
         public CustomJsonResult GetDealtList(SearchCondition condition)
         {
-            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.LllegalDealt) && h.Status == (int)Enumeration.LllegalDealtStatus.WaitDealt select h.Id).Count();
-            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.LllegalDealt) && h.Status == (int)Enumeration.LllegalDealtStatus.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToLllegalDealt) && h.Status == (int)Enumeration.LllegalDealtStatus.WaitDealt select h.Id).Count();
+            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToLllegalDealt) && h.Status == (int)Enumeration.LllegalDealtStatus.InDealt && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToLllegalDealt on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.LllegalDealt
+                         where b.AduitType == Enumeration.BizProcessesAuditType.OrderToLllegalDealt
 
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.CarNo, o.SumCount, o.SumPoint, o.SumFine, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });

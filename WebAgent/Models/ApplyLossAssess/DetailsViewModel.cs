@@ -34,7 +34,7 @@ namespace WebAgent.Models.ApplyLossAssess
                 }
 
 
-                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.ApplyLossAssess, id);
+                _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.OrderToApplyLossAssess, id);
 
             }
         }

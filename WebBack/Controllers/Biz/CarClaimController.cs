@@ -107,14 +107,14 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.理赔需求核实)]
         public CustomJsonResult GetVerifyOrderList(SearchCondition condition)
         {
-            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder select h.Id).Count();
-            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyOrder && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder select h.Id).Count();
+            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyOrder && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToCarClaim on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.CarClaim
+                         where b.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim
 
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.ProductName, o.HandPerson, o.HandPersonPhone, o.CarPlateNo, o.SubmitTime, b.Status, b.CreateTime, b.Auditor, o.InsuranceCompanyName });
@@ -200,14 +200,14 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.理赔金额核实)]
         public CustomJsonResult GetVerifyAmountList(SearchCondition condition)
         {
-            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyAmount select h.Id).Count();
-            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.CarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyAmount && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyAmount select h.Id).Count();
+            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyAmount && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToCarClaim on
                          b.AduitReferenceId equals o.Id
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
-                         where b.AduitType == Enumeration.BizProcessesAuditType.CarClaim
+                         where b.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim
 
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.ProductName, o.HandPerson, o.HandPersonPhone, o.CarPlateNo, o.SubmitTime, b.Status, b.CreateTime, b.Auditor, o.InsuranceCompanyName });

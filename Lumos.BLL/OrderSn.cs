@@ -8,17 +8,19 @@ namespace Lumos.BLL
 {
     public enum SnType
     {
-        CarInsure = 1,
-        Withdraw = 2,
+        OrderToCarInsure = 1,
         FundTrans = 3,
-        CarClaim = 4,
-        ServiceFee = 5,
-        TalentDemand = 6,
-        ApplyLossAssess = 7,
+        OrderToCarClaim = 4,
+        OrderToServiceFee = 5,
+        OrderToTalentDemand = 6,
+        OrderToApplyLossAssess = 7,
         LllegalQueryScoreTrans = 8,
-        LllegalQueryRecharge = 9,
-        LllegalDealt = 10,
-        OrderPayTrans=11
+        OrderToLllegalQueryRecharge = 9,
+        OrderToLllegalDealt = 10,
+        OrderPayTrans=11,
+        OrderToCredit=12,
+        OrderToInsurance = 13
+
     }
 
     public class SnModel

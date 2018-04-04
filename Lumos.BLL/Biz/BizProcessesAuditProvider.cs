@@ -9,7 +9,7 @@ namespace Lumos.BLL
 {
     public class BizProcessesAuditProvider : BaseProvider
     {
-        public BizProcessesAudit Add(int operater, Enumeration.BizProcessesAuditType type, int referenceid)
+        public BizProcessesAudit Add(int operater, Enumeration.BizProcessesAuditType type, int referenceid, object status)
         {
             DateTime nowDate = DateTime.Now;
             BizProcessesAudit bizProcessesAudit = new BizProcessesAudit();
@@ -17,7 +17,7 @@ namespace Lumos.BLL
             string aduitTypeEnumName = "" + type.GetType().FullName + ", Lumos.Entity";
             bizProcessesAudit.AduitTypeEnumName = aduitTypeEnumName;
             bizProcessesAudit.AduitReferenceId = referenceid;
-            bizProcessesAudit.Status = 0;
+            bizProcessesAudit.Status = Convert.ToInt32(status);
             bizProcessesAudit.StartTime = nowDate;
             bizProcessesAudit.Creator = operater;
             bizProcessesAudit.CreateTime = nowDate;

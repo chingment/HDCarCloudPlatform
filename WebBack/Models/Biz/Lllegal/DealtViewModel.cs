@@ -25,7 +25,7 @@ namespace WebBack.Models.Biz.Lllegal
 
         public DealtViewModel(int id)
         {
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeLllegalDealStatus(this.Operater, id, Enumeration.LllegalDealtStatus.InDealt, "后台人员正在处理中");
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(id, Enumeration.AuditFlowV1Status.InDealt, this.Operater, null, "已取单，正在处理");
             if (bizProcessesAudit != null)
             {
                 _bizProcessesAudit = bizProcessesAudit;

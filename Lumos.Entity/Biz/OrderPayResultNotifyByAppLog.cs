@@ -48,5 +48,6 @@ namespace Lumos.Entity
         public string OrderSn { get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }
+
     }
 }

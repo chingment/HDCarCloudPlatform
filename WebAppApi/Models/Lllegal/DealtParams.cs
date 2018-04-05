@@ -12,6 +12,7 @@ namespace WebAppApi.Models.Lllegal
         public int MerchantId { get; set; }
         public int PosMachineId { get; set; }
         public string CarNo { get; set; }
+        public bool IsGetConfirmInfo { get; set; }
         public List<LllegalRecord> LllegalRecord { get; set; }
     }
 }

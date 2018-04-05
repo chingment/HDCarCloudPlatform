@@ -7,10 +7,20 @@
     <script type="text/javascript">
 
         var listTable;
-
+        var auditStatus={"waitDealt": @((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitDealt),"inDealt":@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.InDealt) };
         $(document).ready(function () {
+
+            $("#AuditStatus").val(auditStatus.waitDealt);
+            $('#btn_Wait').attr("auditStatus",auditStatus.waitDealt);
+            $('#btn_In').attr("auditStatus",auditStatus.inDealt);
+            $('#btn_In,#btn_Wait').live('click',function(){
+                var status=$(this).attr("auditStatus");
+                $("#AuditStatus").val(status);
+                listTable.loadData(0);
+            });
+
             listTable = $("#list_table").loadDataTable({
-                url: "/Biz/Lllegal/GetDealtList",
+                url: "/Biz/Lllegal/GetListByDealt",
                 pageIndex: 0,
                 searchParams: $("#form1").serializeArray(),
                 searchButtonId: "btn_Search",
@@ -39,14 +49,14 @@
                 },
                 refreshInterval: 0,
                 success: function (data) {
-                    $('#waitVerifyOrderCount').text(data.status.waitVerifyOrderCount);
-                    $('#inVerifyOrderCount').text(data.status.inVerifyOrderCount);
+                    $('#waitCount').text(data.status.waitCount);
+                    $('#inCount').text(data.status.inCount);
                 },
                 operate: {
                     "dealt": function (obj) {
 
                         function dealt(obj) {
-                            var url = '/Biz/Lllegal/Dealt?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
+                            var url = '/Biz/Lllegal/Dealt?id=' + obj.id + "&auditStatus=" + obj.dealtStatus;
                             var title = '处理订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",
@@ -58,7 +68,7 @@
                                 cancelVal: '关闭',
                                 cancel: true,
                                 button: [{
-                                    name: '完成',
+                                    name: '处理完成',
                                     callback: function () {
 
                                         this.iframe.contentWindow.submit(operateType.submit, function (d) {
@@ -71,48 +81,59 @@
                                         return false;
                                     },
                                     focus: true
+                                },
+                                {
+                                    name: '处理失败',
+                                    callback: function () {
+
+                                        this.iframe.contentWindow.submit(operateType.cancle, function (d) {
+                                            if (d.result == resultType.success) {
+                                                dialog.close();
+                                                listTable.loadData();
+                                            }
+                                            $.lumos.tips(d.message);
+                                        });
+                                        return false;
+                                    }
+                                }, {
+                                    name: '暂存',
+                                    callback: function () {
+
+                                        this.iframe.contentWindow.submit(operateType.save, function (d) {
+                                            $.lumos.tips(d.message);
+                                        });
+                                        return false;
+                                    }
                                 }]
                             });
                         }
 
-                        if (obj.dealtStatus == @((int)Lumos.Entity.Enumeration.LllegalDealtStatus.WaitDealt)) {
+                        if (obj.auditStatus == auditStatus.waitDealt) {
                             art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
-
                                 dealt(obj)
-
-                        });
-                    }
-                else {
+                            });
+                        }
+                        else {
                             dealt(obj);
-        }
-        }
-        }
+                        }
+                    }
+                }
 
+            });
         });
-
-        });
-
-
-
-
-        function search(status) {
-            $("#DealtStatus").val(status);
-            listTable.loadData(0);
-        }
-
 
     </script>
 }
 
 <form id="form1" name="form1">
     @Html.AntiForgeryToken()
-    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.LllegalDealtStatus.WaitDealt)" />
+    <input type="hidden" name="AuditStatus" id="AuditStatus" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.LllegalDealtStatus.WaitDealt))" class="status-bar-btn selected">待处理<span class="waitVerifyOrderCount">(<span id="waitVerifyOrderCount">0</span>)</span></span>
+            <span id="btn_Wait" class="status-bar-btn selected">待处理<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.LllegalDealtStatus.InDealt))" class="status-bar-btn">处理中<span class="inVerifyOrderCount"> (<span id="inVerifyOrderCount">0</span>)</span></span>
+            <span id="btn_In" class="status-bar-btn">处理中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
         </div>
         <div class="clear"></div>
     </div>

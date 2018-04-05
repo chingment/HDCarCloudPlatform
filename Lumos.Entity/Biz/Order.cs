@@ -99,6 +99,10 @@ namespace Lumos.Entity
 
         public int? AgentId { get; set; }
 
+        public int BizProcessesAuditId { get; set; }
+
+        public bool IsManVerifyPay { get; set; }
+
         //public bool IsPayQuery { get; set; }
     }
 }

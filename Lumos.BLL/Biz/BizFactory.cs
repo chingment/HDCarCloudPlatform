@@ -138,5 +138,13 @@ namespace Lumos.BLL
             }
         }
 
+        public static OrderToLllegalDealtProvider OrderToLllegalDealt
+        {
+            get
+            {
+                return new OrderToLllegalDealtProvider();
+            }
+        }
+
     }
 }

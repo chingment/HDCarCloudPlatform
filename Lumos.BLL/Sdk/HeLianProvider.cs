@@ -215,7 +215,7 @@ namespace Lumos.BLL
                             var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
                             if (details != null)
                             {
-                                var hasDealt = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
+                                var hasDealt = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.InDealt).Count();
                                 var hasCompleted = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed).Count();
 
 

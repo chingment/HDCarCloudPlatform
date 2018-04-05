@@ -337,7 +337,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("罚款", orderToLllegalDealt.SumFine.ToF2Price()));
 
                                 var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(c => c.OrderId == m.Id).ToList();
-                                var dealtcount = orderToLllegalDealtDetails.Where(c => c.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
+                                var dealtcount = orderToLllegalDealtDetails.Where(c => c.Status == Enumeration.OrderToLllegalDealtDetailsStatus.InDealt).Count();
                                 if (dealtcount > 0)
                                 {
                                     orderModel.StatusName = "已付，处理中";
@@ -854,7 +854,7 @@ namespace WebAppApi.Controllers
                             orderLllegalDealtDetailsModel.LllegalRecord.Add(record);
                         }
 
-                        var dealtcount = orderToLllegalDealtDetails.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Dealt).Count();
+                        var dealtcount = orderToLllegalDealtDetails.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.InDealt).Count();
                         if (dealtcount > 0)
                         {
                             orderLllegalDealtDetailsModel.StatusName = "已付，处理中";

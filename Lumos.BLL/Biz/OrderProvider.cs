@@ -100,6 +100,9 @@ namespace Lumos.BLL
 
                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Submit, bizProcessesAudit.Id, operater, orderToCarInsure.ClientRequire, "商户提交投保订单，等待报价", this.DateTime);
 
+
+                order.BizProcessesAuditId = bizProcessesAudit.Id;
+
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -128,11 +131,11 @@ namespace Lumos.BLL
                     l_orderToCarInsure.Mender = operater;
 
 
-                    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitReferenceId == l_orderToCarInsure.Id && m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure).FirstOrDefault();
 
-                    BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Fllow, bizProcessesAudit.Id, operater, orderToCarInsure.ClientRequire, "商户再次提交投保订单", this.DateTime);
+                    BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Fllow, l_orderToCarInsure.BizProcessesAuditId, operater, orderToCarInsure.ClientRequire, "商户再次提交投保订单", this.DateTime);
 
-                    BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.WaitOffer);
+                    BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, l_orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureOfferDealtStatus.WaitOffer);
+
 
                     CurrentDb.SaveChanges();
                     ts.Complete();
@@ -358,9 +361,10 @@ namespace Lumos.BLL
 
 
                 //状态改为待核实
-                 BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarClaim, orderToCarClaim.Id, Enumeration.CarClaimDealtStatus.WaitVerifyOrder);
-                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarClaimDealtStep.Submit, bizProcessesAudit.Id, operater, orderToCarClaim.ClientRequire, "商户提交理赔需求", this.DateTime);
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarClaim, orderToCarClaim.Id, Enumeration.CarClaimDealtStatus.WaitVerifyOrder);
+                BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarClaimDealtStep.Submit, bizProcessesAudit.Id, operater, orderToCarClaim.ClientRequire, "商户提交理赔需求", this.DateTime);
 
+                orderToCarClaim.BizProcessesAuditId = bizProcessesAudit.Id;
 
                 CurrentDb.SaveChanges();
                 ts.Complete();
@@ -402,6 +406,7 @@ namespace Lumos.BLL
 
                     BizFactory.BizProcessesAudit.ChangeCarClaimDealtStatus(operater, bizProcessesAudit.Id, Enumeration.CarClaimDealtStatus.WaitVerifyAmount);
 
+                    orderToCarClaim.BizProcessesAuditId = bizProcessesAudit.Id;
 
                     CurrentDb.SaveChanges();
                     ts.Complete();
@@ -686,18 +691,13 @@ namespace Lumos.BLL
 
 
 
-                var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.AduitReferenceId == order.Id).FirstOrDefault();
-                if (bizProcessesAudit != null)
+                switch (order.ProductType)
                 {
-                    BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, bizProcessesAudit.Id, operater, null, "取消订单", this.DateTime);
-                    BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.ClientCancle);
+                    case Enumeration.ProductType.InsureForCarForInsure:
+                        BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, order.BizProcessesAuditId, operater, null, "取消订单", this.DateTime);
+                        BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, order.BizProcessesAuditId, Enumeration.CarInsureOfferDealtStatus.ClientCancle);
+                        break;
                 }
-
-
-                //BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.CarInsureOffer, order.Id, Enumeration.CarInsureOfferDealtStatus.ClientCancle, "");
-
-                //BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Submit, bizProcessesAudit.Id, operater, "", "商户取消订单", this.DateTime);
-
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -887,180 +887,6 @@ namespace Lumos.BLL
 
 
             return result;
-        }
-
-        public CustomJsonResult SubmitLllegalDealt(int operater, OrderToLllegalDealt orderToLllegalDealt, List<OrderToLllegalDealtDetails> orderToLllegalDealtDetails)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-
-            using (TransactionScope ts = new TransactionScope())
-            {
-                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalDealt.UserId).FirstOrDefault();
-                var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.LllegalDealt).FirstOrDefault();
-
-                orderToLllegalDealt.SalesmanId = merchant.SalesmanId ?? 0;
-                orderToLllegalDealt.AgentId = merchant.AgentId ?? 0;
-                orderToLllegalDealt.ProductId = product.Id;
-                orderToLllegalDealt.ProductType = product.Type;
-                orderToLllegalDealt.ProductName = product.Name;
-                orderToLllegalDealt.Status = Enumeration.OrderStatus.WaitPay;
-                orderToLllegalDealt.SubmitTime = this.DateTime;
-                orderToLllegalDealt.CreateTime = this.DateTime;
-                orderToLllegalDealt.Creator = operater;
-                orderToLllegalDealt.SumCount = orderToLllegalDealtDetails.Count();
-                orderToLllegalDealt.SumFine = orderToLllegalDealtDetails.Sum(m => m.Fine);
-                orderToLllegalDealt.SumPoint = orderToLllegalDealtDetails.Sum(m => m.Point);
-                orderToLllegalDealt.SumServiceFees = orderToLllegalDealtDetails.Sum(m => m.ServiceFee);
-                orderToLllegalDealt.SumLateFees = orderToLllegalDealtDetails.Sum(m => m.Late_fees);
-                orderToLllegalDealt.Price = orderToLllegalDealt.SumFine + orderToLllegalDealt.SumServiceFees + orderToLllegalDealt.SumLateFees;
-                CurrentDb.OrderToLllegalDealt.Add(orderToLllegalDealt);
-                CurrentDb.SaveChanges();
-
-                SnModel snModel = Sn.Build(SnType.OrderToLllegalQueryRecharge, orderToLllegalDealt.Id);
-
-                orderToLllegalDealt.Sn = snModel.Sn;
-                orderToLllegalDealt.TradeSnByWechat = snModel.TradeSnByWechat;
-                orderToLllegalDealt.TradeSnByAlipay = snModel.TradeSnByAlipay;
-                CurrentDb.SaveChanges();
-
-
-                foreach (var item in orderToLllegalDealtDetails)
-                {
-
-                    item.OrderId = orderToLllegalDealt.Id;
-                    item.Status = Enumeration.OrderToLllegalDealtDetailsStatus.WaitPay;
-                    item.CreateTime = this.DateTime;
-                    item.Creator = operater;
-
-                    CurrentDb.OrderToLllegalDealtDetails.Add(item);
-                    CurrentDb.SaveChanges();
-                }
-
-
-
-                OrderConfirmInfo yOrder = new OrderConfirmInfo();
-
-                yOrder.OrderId = orderToLllegalDealt.Id;
-                yOrder.OrderSn = orderToLllegalDealt.Sn;
-                yOrder.remarks = orderToLllegalDealt.Remarks;
-                yOrder.productType = orderToLllegalDealt.ProductType;
-                yOrder.productName = orderToLllegalDealt.ProductName;
-
-
-
-                //yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalDealt.Sn.NullToEmpty()));
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("车牌号码", orderToLllegalDealt.CarNo.NullToEmpty()));
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("违章", string.Format("{0}次", orderToLllegalDealt.SumCount)));
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("扣分", orderToLllegalDealt.SumPoint.NullToEmpty()));
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("罚款", orderToLllegalDealt.SumFine.NullToEmpty()));
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalDealt.Price.NullToEmpty())));
-
-
-                #region 支持的支付方式
-                int[] payMethods = new int[1] { 1 };
-
-                foreach (var payWayId in payMethods)
-                {
-                    var payWay = new PayWay();
-                    payWay.id = payWayId;
-                    yOrder.payMethod.Add(payWay);
-                }
-                #endregion
-
-
-                ts.Complete();
-
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功", yOrder);
-            }
-
-
-            return result;
-        }
-
-        public CustomJsonResult DealtLllegalDealt(int operater, Enumeration.OperateType operate, OrderToLllegalDealt orderToLllegalDealt, BizProcessesAudit bizProcessesAudit)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-
-            using (TransactionScope ts = new TransactionScope())
-            {
-
-                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.CurrentDetails.BizProcessesAuditId && (m.Status == (int)Enumeration.LllegalDealtStatus.WaitDealt || m.Status == (int)Enumeration.LllegalDealtStatus.InDealt)).FirstOrDefault();
-
-                if (bizProcessesAudit == null)
-                {
-                    return new CustomJsonResult(ResultType.Success, "该订单已经处理完成");
-                }
-
-                if (bizProcessesAudit.Auditor != null)
-                {
-                    if (bizProcessesAudit.Auditor.Value != operater)
-                    {
-                        return new CustomJsonResult(ResultType.Failure, "该订单其他用户正在处理");
-                    }
-                }
-
-
-                var l_orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(m => m.Id == orderToLllegalDealt.Id).FirstOrDefault();
-
-
-                l_orderToLllegalDealt.Remarks = orderToLllegalDealt.Remarks;
-
-                bizProcessesAudit.CurrentDetails.AuditComments = orderToLllegalDealt.Remarks;
-
-                switch (operate)
-                {
-                    case Enumeration.OperateType.Save:
-
-                        result = new CustomJsonResult(ResultType.Success, "保存成功");
-
-                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.LllegalDealtStep.Dealt, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, null);
-
-                        break;
-                    case Enumeration.OperateType.Cancle:
-
-                        l_orderToLllegalDealt.Status = Enumeration.OrderStatus.Cancled;
-                        l_orderToLllegalDealt.CancleTime = this.DateTime;
-
-                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员撤销订单", this.DateTime);
-
-                        BizFactory.BizProcessesAudit.ChangeLllegalDealStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.LllegalDealtStatus.StaffCancle);
-
-                        result = new CustomJsonResult(ResultType.Success, "撤销成功");
-
-                        break;
-                    case Enumeration.OperateType.Submit:
-
-                        l_orderToLllegalDealt.Status = Enumeration.OrderStatus.Completed;
-                        l_orderToLllegalDealt.CompleteTime = this.DateTime;
-
-                        var orderToLllegalDealtDetails = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.OrderId == l_orderToLllegalDealt.Id).ToList();
-                        if (orderToLllegalDealtDetails != null)
-                        {
-                            foreach (var item in orderToLllegalDealtDetails)
-                            {
-                                item.Status = Enumeration.OrderToLllegalDealtDetailsStatus.Completed;
-                                CurrentDb.SaveChanges();
-                            }
-                        }
-
-                        BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员核实正确", this.DateTime);
-
-                        BizFactory.BizProcessesAudit.ChangeLllegalDealStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.LllegalDealtStatus.Complete, "核实正确");
-
-                        result = new CustomJsonResult(ResultType.Success, "提交成功");
-                        break;
-
-                }
-
-
-
-                CurrentDb.SaveChanges();
-                ts.Complete();
-            }
-
-            return result;
-
         }
 
 

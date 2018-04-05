@@ -543,124 +543,6 @@ namespace Lumos.BLL
             return bizProcessesAudit;
         }
 
-
-        public BizProcessesAudit ChangeLllegalDealStatus(int operater, int bizProcessesAuditId, Enumeration.LllegalDealtStatus changestatus, string description = null, DateTime? endTime = null)
-        {
-
-            var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
-            if (bizProcessesAudit != null)
-            {
-                if (bizProcessesAudit.EndTime == null)
-                {
-                    if (
-                       bizProcessesAudit.Status != (int)Enumeration.LllegalDealtStatus.Complete
-                        && bizProcessesAudit.Status != (int)Enumeration.LllegalDealtStatus.ClientCancle
-                           && bizProcessesAudit.Status != (int)Enumeration.LllegalDealtStatus.StaffCancle
-                        )
-                    {
-                        Enumeration.LllegalDealtStatus old_Status = (Enumeration.LllegalDealtStatus)bizProcessesAudit.Status;
-                        bizProcessesAudit.Mender = operater;
-                        bizProcessesAudit.LastUpdateTime = DateTime.Now;
-
-
-                        if (endTime != null)
-                        {
-                            bizProcessesAudit.EndTime = endTime.Value;
-                        }
-
-                        if (changestatus == Enumeration.LllegalDealtStatus.WaitDealt)
-                        {
-
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.LllegalDealtStep.Dealt).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                            if (bizProcessesAuditDetails == null)
-                            {
-                                bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.WaitDealt;
-                                bizProcessesAudit.Auditor = null;
-
-                            }
-                            else
-                            {
-                                bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.InDealt;
-                                bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
-
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.LllegalDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
-                            }
-
-                        }
-                        else if (changestatus == Enumeration.LllegalDealtStatus.InDealt)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.InDealt;
-                            if (bizProcessesAudit.Auditor == null)
-                            {
-                                bizProcessesAudit.Auditor = operater;
-
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.LllegalDealtStep.Dealt, bizProcessesAudit.Id, operater, null, description);
-
-                            }
-
-                        }
-
-                        else if (changestatus == Enumeration.LllegalDealtStatus.ClientCancle)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.ClientCancle;
-                            bizProcessesAudit.Auditor = operater;
-
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
-
-                        }
-                        else if (changestatus == Enumeration.LllegalDealtStatus.StaffCancle)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.StaffCancle;
-                            bizProcessesAudit.Auditor = operater;
-                            bizProcessesAudit.EndTime = this.DateTime;
-
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
-                        }
-                        else if (changestatus == Enumeration.LllegalDealtStatus.Complete)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.LllegalDealtStatus.Complete;
-                            bizProcessesAudit.Auditor = operater;
-                            bizProcessesAudit.EndTime = this.DateTime;
-
-                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.LllegalDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
-
-                        }
-                    }
-
-                    CurrentDb.SaveChanges();
-                }
-
-
-                var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderByDescending(m => m.AuditTime).ToList();
-
-                bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
-
-
-                Enumeration.LllegalDealtStep merchantAuditStep = Enumeration.LllegalDealtStep.Unknow;
-                if (changestatus == Enumeration.LllegalDealtStatus.WaitDealt || changestatus == Enumeration.LllegalDealtStatus.InDealt)
-                {
-                    merchantAuditStep = Enumeration.LllegalDealtStep.Dealt;
-                }
-                var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                if (currentDetails != null)
-                {
-                    bizProcessesAudit.CurrentDetails = currentDetails;
-
-                    var auditComments = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep && m.AuditComments != null).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                    if (auditComments != null)
-                    {
-                        bizProcessesAudit.CurrentDetails.AuditComments = auditComments.AuditComments;
-                    }
-                }
-
-
-            }
-
-            return bizProcessesAudit;
-        }
-
-
-
         //public BizProcessesAudit ChangeStatus(int bizProcessesAuditId, object auditStatus, int auditor, string auditComments, string description = null)
         //{
         //    DateTime nowDate = DateTime.Now;
@@ -817,6 +699,23 @@ namespace Lumos.BLL
                         bizProcessesAudit.Auditor = auditor;
                         bizProcessesAudit.EndTime = this.DateTime;
                         bizProcessesAudit.TempAuditComments = null;
+                        break;
+                    case Enumeration.AuditFlowV1Status.waitGoDealt:
+                        //订单核实正确将订单转为待处理，审核人空
+
+                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.VerifyedComplete, bizProcessesAudit.Id, auditor, auditComments, description);
+                        bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.waitGoDealt;
+                        bizProcessesAudit.Auditor = null;
+                        bizProcessesAudit.TempAuditComments = null;
+
+                        break;
+                    case Enumeration.AuditFlowV1Status.WaitDealt:
+                        //订单核实正确将订单转为待处理，审核人空
+                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.AuditFlowV1Step.InDealt, bizProcessesAudit.Id, auditor, auditComments, description);
+                        bizProcessesAudit.Status = (int)Enumeration.AuditFlowV1Status.WaitDealt;
+                        bizProcessesAudit.Auditor = null;
+                        bizProcessesAudit.TempAuditComments = null;
+
                         break;
                     case Enumeration.AuditFlowV1Status.InDealt:
                         //提交订单将订单转为待处理中，判断当前审核人是否为空，若空设置

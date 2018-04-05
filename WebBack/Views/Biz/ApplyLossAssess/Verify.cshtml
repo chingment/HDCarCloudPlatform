@@ -53,11 +53,11 @@
                 $(form).find('*').setInputRequired(false);
             }
             if (operate == operateType.submit) {
-                msg = "确定完成？";
+                msg = "确定核实正确，转入处理？";
                 $(form).find('*').setInputRequired(true);
             }
             else if (operate == operateType.cancle) {
-                msg = "确定要取消该订单？";
+                msg = "确定核实无效，作废？";
                 $(form).find('*').setInputRequired(false);
 
                 if (model_OrderToApplyLossAssess_Remarks == "") {

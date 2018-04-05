@@ -19,5 +19,7 @@ namespace WebAppApi.Models.Order
         public string IsOfferPrice { get; set; }
 
         public List<LllegalRecord> LllegalRecord { get; set; }
+
+        public bool IsGetConfirmInfo { get; set; }
     }
 }

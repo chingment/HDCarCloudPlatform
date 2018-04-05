@@ -66,6 +66,7 @@
     <Compile Include="..\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Biz\OrderToLllegalDealtProvider.cs" />
     <Compile Include="Biz\OrderToApplyLossAssessProvider..cs" />
     <Compile Include="Biz\ApplyPosProvider.cs" />
     <Compile Include="Biz\AppSettingsProvider.cs" />

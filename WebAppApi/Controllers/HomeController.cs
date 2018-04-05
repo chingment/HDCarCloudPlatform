@@ -30,7 +30,7 @@ namespace WebAppApi.Controllers
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
         private string host = "http://localhost:16665";
-       // private string host = "http://120.79.233.231";
+        // private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -175,11 +175,11 @@ namespace WebAppApi.Controllers
             // model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
-            // model.Add("提交违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId));
-
-            model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
-            model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-            model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
+            model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId,false));
+           // model.Add("提交待支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, true));
+            // model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
+            //  model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+            //  model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
 
             // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
 
@@ -190,9 +190,9 @@ namespace WebAppApi.Controllers
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
             // model.Add("获取支付结果查询", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
-            //model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18032710180000001279"));
+           // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-           // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+            // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
@@ -311,7 +311,7 @@ namespace WebAppApi.Controllers
 
         }
 
-        public string PayResultNotify(int userId, int merchantId, int posMachineId, string orderSn)
+        public string PayResultNotify(int userId, int merchantId, int posMachineId, string orderSn, string paysn)
         {
             OrderPayResultNotifyByAppLog model = new OrderPayResultNotifyByAppLog();
 
@@ -328,6 +328,7 @@ namespace WebAppApi.Controllers
             model.AuthCode = "1";
             model.TransDate = "1";
             model.TransTime = "1";
+            model.Order = paysn;
             model.OrderSn = orderSn;
             model.CreateTime = DateTime.Now;
             model.Creator = 0;
@@ -1585,7 +1586,7 @@ namespace WebAppApi.Controllers
         }
 
 
-        public string SubmitLllegalDealt(int userId, int merchantId, int posMachineId)
+        public string SubmitLllegalDealt(int userId, int merchantId, int posMachineId, bool isget)
         {
 
             SubmitLllegalDealtModel model1 = new SubmitLllegalDealtModel();
@@ -1594,6 +1595,7 @@ namespace WebAppApi.Controllers
             model1.PosMachineId = posMachineId;
             model1.CarNo = "粤AT88888";
             model1.IsOfferPrice = "true";
+            model1.IsGetConfirmInfo = isget;
             List<LllegalRecord> record = new List<LllegalRecord>();
 
 
@@ -1605,9 +1607,9 @@ namespace WebAppApi.Controllers
 
             model1.LllegalRecord = record;
 
-            // string a1 = JsonConvert.SerializeObject(model1);
+            string a1 = JsonConvert.SerializeObject(model1);
 
-            string a1 = "{\"lllegalRecord\":[{\"bookNo\":\"4401107901494580\",\"bookType\":\"6001A\",\"bookTypeName\":\"非现场未处理违章数据\",\"lllegalCode\":\"1344\",\"cityCode\":\"440110\",\"lllegalTime\":\"2017-07-11 13:33:00\",\"point\":\"3.0\",\"offerType\":\"3\",\"ofserTypeName\":\"扣分单\",\"fine\":\"200.0\",\"serviceFee\":\"435.0\",\"late_fees\":\"200.0\",\"content\":\"免资料；2-3个工作日.超证另通知\",\"lllegalDesc\":\"机动车违反禁令标志指示的\",\"lllegalCity\":\"广东省广州市\",\"address\":\"元岗横路_元岗横路路段\"}],\"merchantId\":241,\"carNo\":\"粤YGY662\",\"userId\":1215,\"posMachineId\":149}";
+            // string a1 = "{\"lllegalRecord\":[{\"bookNo\":\"4401107901494580\",\"bookType\":\"6001A\",\"bookTypeName\":\"非现场未处理违章数据\",\"lllegalCode\":\"1344\",\"cityCode\":\"440110\",\"lllegalTime\":\"2017-07-11 13:33:00\",\"point\":\"3.0\",\"offerType\":\"3\",\"ofserTypeName\":\"扣分单\",\"fine\":\"200.0\",\"serviceFee\":\"435.0\",\"late_fees\":\"200.0\",\"content\":\"免资料；2-3个工作日.超证另通知\",\"lllegalDesc\":\"机动车违反禁令标志指示的\",\"lllegalCity\":\"广东省广州市\",\"address\":\"元岗横路_元岗横路路段\"}],\"merchantId\":241,\"carNo\":\"粤YGY662\",\"userId\":1215,\"posMachineId\":149}";
             string signStr = Signature.Compute(key, secret, timespan, a1);
 
             Dictionary<string, string> headers1 = new Dictionary<string, string>();

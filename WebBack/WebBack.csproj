@@ -226,6 +226,7 @@
     <Compile Include="Models\Biz\Lllegal\DetailsByQueryRechargeViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\DetailsByDealtViewModel.cs" />
     <Compile Include="Models\Biz\Lllegal\SearchCondition.cs" />
+    <Compile Include="Models\Biz\Lllegal\VerifyViewModel.cs" />
     <Compile Include="Models\Biz\Order\CarClaimFollowViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\SearchCondition.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\DealtViewModel.cs" />
@@ -1287,6 +1288,8 @@
     <Content Include="Views\Biz\Insurance\ListByDealt.cshtml" />
     <Content Include="Views\Biz\Insurance\ListByVerify.cshtml" />
     <Content Include="Views\Biz\Insurance\Verify.cshtml" />
+    <Content Include="Views\Biz\Lllegal\ListByVerify.cshtml" />
+    <Content Include="Views\Biz\Lllegal\Verify.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

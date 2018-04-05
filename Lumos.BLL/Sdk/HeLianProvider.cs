@@ -55,11 +55,13 @@ namespace Lumos.BLL
         public string lllegalCity { get; set; }
         public string address { get; set; }
 
-        public bool needDealt { get; set; }
+        //public bool needDealt { get; set; }
 
         public string status { get; set; }
 
-        public bool canDealt { get; set; }
+        ///public bool canDealt { get; set; }
+
+        public bool canPay { get; set; }
     }
 
 
@@ -157,10 +159,20 @@ namespace Lumos.BLL
                         lllegalRecord.lllegalCity = m.lllegalCity;
                         lllegalRecord.lllegalTime = m.lllegalTime;
                         lllegalRecord.point = m.point;
+
                         lllegalRecord.fine = m.fine;
+                        if (lllegalRecord.point == 0)
+                        {
+                            lllegalRecord.serviceFee = m.serviceFee + 3;//非扣分单
+                        }
+                        else
+                        {
+                            lllegalRecord.serviceFee = m.serviceFee;
+                        }
+
+                        lllegalRecord.serviceFee = m.serviceFee;
                         lllegalRecord.address = m.address;
                         lllegalRecord.content = m.content;
-                        lllegalRecord.serviceFee = m.serviceFee;
                         lllegalRecord.late_fees = m.late_fees;
 
                         lllegalRecords.Add(lllegalRecord);
@@ -209,8 +221,16 @@ namespace Lumos.BLL
                             }
 
                             record.status = "待处理";
-                            record.canDealt = true;
-                            record.needDealt = true;
+
+
+                            if (record.point == 0)
+                            {
+                                record.canPay = true;
+                            }
+                            else
+                            {
+                                record.canPay = false;
+                            }
 
                             var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
                             if (details != null)
@@ -222,15 +242,13 @@ namespace Lumos.BLL
                                 if (hasDealt > 0)
                                 {
                                     record.status = "处理中";
-                                    record.canDealt = false;
-                                    record.needDealt = false;
+                                    record.canPay = false;
                                 }
 
                                 if (hasCompleted > 0)
                                 {
                                     record.status = "完成";
-                                    record.canDealt = false;
-                                    record.needDealt = false;
+                                    record.canPay = false;
                                 }
 
                             }

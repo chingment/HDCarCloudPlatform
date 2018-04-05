@@ -32,6 +32,9 @@ namespace Lumos.BLL
                 orderToLllegalDealt.SumCount = orderToLllegalDealtDetails.Count();
                 orderToLllegalDealt.SumFine = orderToLllegalDealtDetails.Sum(m => m.Fine);
                 orderToLllegalDealt.SumPoint = orderToLllegalDealtDetails.Sum(m => m.Point);
+
+
+
                 orderToLllegalDealt.SumServiceFees = orderToLllegalDealtDetails.Sum(m => m.ServiceFee);
                 orderToLllegalDealt.SumLateFees = orderToLllegalDealtDetails.Sum(m => m.Late_fees);
                 orderToLllegalDealt.Price = orderToLllegalDealt.SumFine + orderToLllegalDealt.SumServiceFees + orderToLllegalDealt.SumLateFees;

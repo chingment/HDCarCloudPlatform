@@ -210,6 +210,7 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "没有最新的数据");
             }
 
+            model.ServiceTelphone = "服务热线：400-00-00-00 （9：00~18：00）";
             model.LastUpdateTime = lastUpdateTime.Value;
 
             #region 获取bannder

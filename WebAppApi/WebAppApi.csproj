@@ -181,6 +181,7 @@
     <Compile Include="Models\CarService\CarInsKindModel.cs" />
     <Compile Include="Models\CarService\CarInsPlanKindParentModel.cs" />
     <Compile Include="Models\CarService\ReInsureOfferModel.cs" />
+    <Compile Include="Models\ExtendedApp\PosCreditViewModel.cs" />
     <Compile Include="Models\Lllegal\QueryParams.cs" />
     <Compile Include="Models\Lllegal\DealtParams.cs" />
     <Compile Include="Models\Order\GetPayTranSnParams.cs" />
@@ -223,6 +224,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\Resource\581c3a194247d4.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -260,6 +262,7 @@
     <Content Include="Views\Resource\yonggongxieyi.cshtml" />
     <Content Include="Views\Resource\lipeixieyi.cshtml" />
     <Content Include="Views\ExtendedApp\ComeInSoon.cshtml" />
+    <Content Include="Views\ExtendedApp\poscredit.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

@@ -10,6 +10,7 @@ namespace WebAppApi.Models.Account
 {
     public class HomeModel
     {
+        public string ServiceTelphone { get; set; }
 
         public DateTime LastUpdateTime { get; set; }
 
@@ -27,6 +28,6 @@ namespace WebAppApi.Models.Account
 
         public List<ExtendedAppModel> ExtendedApp { get; set; }
 
-        public int LllegalQueryScore{ get;set;}
+        public int LllegalQueryScore { get; set; }
     }
 }

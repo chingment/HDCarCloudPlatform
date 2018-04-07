@@ -35,17 +35,17 @@ namespace WebAppApi.Controllers
                 }
                 else
                 {
-                    order = order.Where(m => m.Status == status && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt));
+                    order = order.Where(m => m.Status == status && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt && m.ProductType != Enumeration.ProductType.Credit));
                 }
             }
             else
             {
                 order = order.Where(m =>
-                (m.Status == Enumeration.OrderStatus.Submitted && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
-                || (m.Status == Enumeration.OrderStatus.Follow && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
-                || (m.Status == Enumeration.OrderStatus.WaitPay && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
+                (m.Status == Enumeration.OrderStatus.Submitted && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt && m.ProductType != Enumeration.ProductType.Credit))
+                || (m.Status == Enumeration.OrderStatus.Follow && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt && m.ProductType != Enumeration.ProductType.Credit))
+                || (m.Status == Enumeration.OrderStatus.WaitPay && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt && m.ProductType != Enumeration.ProductType.Credit))
                 || (m.Status == Enumeration.OrderStatus.Completed)
-                || (m.Status == Enumeration.OrderStatus.Cancled && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
+                || (m.Status == Enumeration.OrderStatus.Cancled && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt && m.ProductType != Enumeration.ProductType.Credit))
                 );
             }
 

@@ -164,7 +164,7 @@ namespace WebAppApi.Controllers
             //int userId = 1216;
             //int merchantId = 242;
             //int posMachineId = 149;
-
+            //http://localhost:16665/ExtendedApp/poscredit?userId=1215&merchantId=241&posMachineId=148
             int userId = 1215;
             int merchantId = 241;
             int posMachineId = 148;

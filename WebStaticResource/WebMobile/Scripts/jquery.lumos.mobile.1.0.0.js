@@ -468,6 +468,26 @@
                     _success(d);
                 }
             });
+        },
+
+        confirm: function (opts) {
+            opts = $.extend({
+                title: " 确定要删除?",
+                ok: function () { return false; }
+            }, opts || {});
+
+            var comfirmdialog = $('.comfirmdialog');
+            $(comfirmdialog).show();
+
+            $('.comfirmdialog-btn-canlce').unbind('click').bind('click', function () {
+
+                $(comfirmdialog).hide();
+            });
+
+            $('.comfirmdialog-btn-sure').unbind('click').bind('click', function () {
+                opts.ok();
+                $(comfirmdialog).hide();
+            });
         }
 
     }

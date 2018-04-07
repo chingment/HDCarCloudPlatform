@@ -55,18 +55,19 @@ namespace Lumos.BLL
         public string lllegalCity { get; set; }
         public string address { get; set; }
 
-        //public bool needDealt { get; set; }
+        public bool needDealt { get; set; }
 
         public string status { get; set; }
 
-        ///public bool canDealt { get; set; }
+        public bool canDealt { get; set; }
 
-        public bool canPay { get; set; }
     }
 
 
     public class LllegalQueryResult
     {
+        public string DealtTip { get; set; }
+
         public int QueryScore { get; set; }
 
         public string CarNo { get; set; }
@@ -225,11 +226,11 @@ namespace Lumos.BLL
 
                             if (record.point == 0)
                             {
-                                record.canPay = true;
+                                record.canDealt = true;
                             }
                             else
                             {
-                                record.canPay = false;
+                                record.canDealt = false;
                             }
 
                             var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
@@ -242,13 +243,13 @@ namespace Lumos.BLL
                                 if (hasDealt > 0)
                                 {
                                     record.status = "处理中";
-                                    record.canPay = false;
+                                    record.canDealt = false;
                                 }
 
                                 if (hasCompleted > 0)
                                 {
                                     record.status = "完成";
-                                    record.canPay = false;
+                                    record.canDealt = false;
                                 }
 
                             }
@@ -256,7 +257,7 @@ namespace Lumos.BLL
                     }
                 }
 
-
+                queryResult.DealtTip = "扣分单需处理，请咨询客服";
                 queryResult.SumCount = lllegalRecords.Count().ToString();
                 queryResult.SumFine = lllegalRecords.Sum(m => m.fine).ToString();
                 queryResult.SumPoint = lllegalRecords.Sum(m => m.point).ToString();

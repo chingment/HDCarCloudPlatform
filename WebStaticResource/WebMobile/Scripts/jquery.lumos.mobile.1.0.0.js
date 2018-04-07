@@ -476,8 +476,11 @@
                 ok: function () { return false; }
             }, opts || {});
 
+
             var comfirmdialog = $('.comfirmdialog');
             $(comfirmdialog).show();
+
+            $('.comfirmdialog-title span').text(opts.title);
 
             $('.comfirmdialog-btn-canlce').unbind('click').bind('click', function () {
 

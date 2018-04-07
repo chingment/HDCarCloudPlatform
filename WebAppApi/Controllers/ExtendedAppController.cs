@@ -53,7 +53,7 @@ namespace WebAppApi.Controllers
             orderToCredit.UserId = model.UserId; ;
             orderToCredit.MerchantId = model.MerchantId;
             orderToCredit.PosMachineId = model.PosMachineId;
-            orderToCredit.CreditClass = "POS";
+            orderToCredit.CreditClass = "POS贷";
             orderToCredit.Creditline = 50000;
             reuslt = BizFactory.OrderToCredit.Submit(model.UserId, orderToCredit);
             return reuslt;

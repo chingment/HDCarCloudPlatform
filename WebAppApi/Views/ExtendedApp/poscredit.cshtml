@@ -24,7 +24,7 @@
             $('#btn_submit').live('click', function () {
 
                 $.lumos.confirm({
-                    title: "确定要删除此商品吗？", ok: function () {
+                    title: "确定要提交申请POS贷？", ok: function () {
 
                         var l_Data = $("#form1").serializeArray();
                         $.lumos.postJson({
@@ -40,7 +40,6 @@
                                 }
                             }
                         });
-
                     }
                 });
 
@@ -61,7 +60,7 @@
     <input type="hidden" name="Model.MerchantId" value="@Model.MerchantId" />
     <input type="hidden" name="Model.PosMachineId" value="@Model.PosMachineId" />
     <div style="background-color:red;height:560px">
-        <div id="btn_submit" style="background-color:red;top:275px;left:100px; position:absolute;width:150px;height:25px;">&nbsp;</div>
+        <div id="btn_submit" style="top:275px;left:100px; position:absolute;width:150px;height:25px;">&nbsp;</div>
         <img src="~/Images/Resource/581c3a194247d4.png" style="width:100%;height:100%" />
     </div>
 </form>

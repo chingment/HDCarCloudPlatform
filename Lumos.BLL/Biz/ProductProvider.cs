@@ -310,7 +310,7 @@ namespace Lumos.BLL
                 product.MainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
                 product.Creator = operater;
                 product.CreateTime = this.DateTime;
-
+                product.Status = Enumeration.ProductStatus.OnLine;
                 CurrentDb.Product.Add(product);
                 CurrentDb.SaveChanges();
 

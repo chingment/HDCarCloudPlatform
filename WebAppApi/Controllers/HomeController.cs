@@ -30,7 +30,7 @@ namespace WebAppApi.Controllers
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
         //private string host = "http://localhost:16665";
-         private string host = "http://120.79.233.231";
+        private string host = "http://120.79.233.231";
 
         // private string host = "https://www.ins-uplink.cn";
 
@@ -169,14 +169,16 @@ namespace WebAppApi.Controllers
             int merchantId = 241;
             int posMachineId = 148;
 
+            model.Add("获取产品", GetProductList(userId, merchantId, posMachineId, 0));
+
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
             // model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
-            model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId,false));
-           // model.Add("提交待支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, true));
+            //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
+            // model.Add("提交待支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, true));
             // model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
             //  model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             //  model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
@@ -190,7 +192,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
             // model.Add("获取支付结果查询", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
-           // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
+            // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
             // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
@@ -1679,6 +1681,35 @@ namespace WebAppApi.Controllers
 
             return respon_data4;
 
+        }
+
+
+        public string GetProductList(int userId, int merchantId, int posMachineId, int pageIndex)
+        {
+
+            int type = 0;
+            int categoryId = 0;
+            int kindId = 0;
+            string name = "我";
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("userId", userId.ToString());
+            parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
+            parames.Add("pageIndex", pageIndex.ToString());
+            parames.Add("type", type.ToString());
+            parames.Add("categoryId", categoryId.ToString());
+            parames.Add("kindId", kindId.ToString());
+            parames.Add("name", name.ToString());
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/Product/GetList?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId + "&pageIndex=" + pageIndex + "&type=" + type + "&categoryId=" + categoryId + "&kindId=" + kindId + "&name=" + name, headers);
+
+            return result;
         }
     }
 }

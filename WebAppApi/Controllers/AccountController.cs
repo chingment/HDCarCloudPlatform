@@ -59,7 +59,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse Login(LoginModel model)
         {
-            if (model.UserName.IndexOf("AG") > -1)
+            if (model.UserName.ToLower().IndexOf("ag") > -1)
             {
                 return SalesmanLogin(model);
             }
@@ -72,22 +72,34 @@ namespace WebAppApi.Controllers
 
         private APIResponse ClientLogin(LoginModel model)
         {
+            string testAccount = "15989287032";
+            string testDeviceId = "000000000000000";
+
             var clientUser = CurrentDb.SysClientUser.Where(m => m.UserName == model.UserName).FirstOrDefault();
             if (clientUser == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，用户名不存在");
             }
 
+
             if (!PassWordHelper.VerifyHashedPassword(clientUser.PasswordHash, model.Password))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，用户密码错误");
             }
 
+
             var posMachine = CurrentDb.PosMachine.Where(m => m.DeviceId == model.DeviceId).FirstOrDefault();
 
-            if (posMachine == null)
+            if (model.UserName != testAccount)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备没有注册");
+                if (posMachine == null)
+                {
+                    return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备没有注册");
+                }
+            }
+            else
+            {
+                posMachine = CurrentDb.PosMachine.Where(m => m.DeviceId == testDeviceId).FirstOrDefault();
             }
 
             var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.UserId == clientUser.Id && m.MerchantId == clientUser.MerchantId).FirstOrDefault();
@@ -100,7 +112,7 @@ namespace WebAppApi.Controllers
             if (merchantPosMachine.PosMachineId != posMachine.Id)
             {
                 //内测账号，不验证设备ID
-                if (model.UserName != "15989287032")
+                if (model.UserName != testAccount)
                 {
                     return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备与用户不匹配");
                 }

@@ -296,6 +296,13 @@ namespace Lumos.BLL
                 using (TransactionScope ts = new TransactionScope())
                 {
                     var order = CurrentDb.Order.Where(m => m.Id == notifyLog.OrderId).FirstOrDefault();
+
+                    if (order == null)
+                    {
+                        Log.Warn("订单找不到");
+                        return new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "订单找不到");
+                    }
+
                     if (order != null)
                     {
                         notifyLog.Amount = order.Price;
@@ -337,7 +344,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.ErrorFormat("后台订单支付确认订单号({0})结果反馈发生异常，原因：{1}", notifyLog.OrderSn, ex.StackTrace);
+                Log.ErrorFormat("后台订单支付确认订单号({0})结果反馈发生异常，原因：{1}", notifyLog.OrderSn, ex.InnerException);
 
                 result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付失败");
             }
@@ -372,7 +379,14 @@ namespace Lumos.BLL
                     return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未在就绪支付状态");
                 }
 
+
                 var haoYiLianFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.HaoYiLian).FirstOrDefault();
+
+                if (haoYiLianFund == null)
+                {
+                    Log.Warn("找不到haoYiLianFund");
+                }
+
                 haoYiLianFund.Balance += orderToServiceFee.Price;
                 haoYiLianFund.Mender = operater;
                 haoYiLianFund.LastUpdateTime = this.DateTime;
@@ -392,6 +406,12 @@ namespace Lumos.BLL
 
 
                 var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.MerchantId == orderToServiceFee.MerchantId && m.PosMachineId == orderToServiceFee.PosMachineId).FirstOrDefault();
+
+                if (merchantPosMachine == null)
+                {
+                    Log.Warn("找不到merchantPosMachine");
+                }
+
                 merchantPosMachine.ExpiryTime = this.DateTime.AddYears(1);
 
                 if (merchantPosMachine.ActiveTime == null)
@@ -412,7 +432,18 @@ namespace Lumos.BLL
 
 
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == orderToServiceFee.MerchantId).FirstOrDefault();
+
+                if (merchant == null)
+                {
+                    Log.Warn("找不到merchant");
+                }
+
                 var posMachine = CurrentDb.PosMachine.Where(m => m.Id == orderToServiceFee.PosMachineId).FirstOrDefault();
+
+                if (posMachine == null)
+                {
+                    Log.Warn("找不到posMachine");
+                }
 
                 if (orderToServiceFee.SalesmanId == null)
                 {

@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebAgent.Models.ServiceFee;
 
-namespace WebAgent.Controllers.Biz
+namespace WebAgent.Controllers
 {
     public class ServiceFeeController : OwnBaseController
     {

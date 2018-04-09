@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebAgent.Models.ApplyLossAssess;
 
-namespace WebAgent.Controllers.Biz
+namespace WebAgent.Controllers
 {
     public class ApplyLossAssessController : OwnBaseController
     {

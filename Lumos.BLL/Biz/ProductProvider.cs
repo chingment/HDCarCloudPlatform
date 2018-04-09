@@ -299,9 +299,14 @@ namespace Lumos.BLL
 
             using (TransactionScope ts = new TransactionScope())
             {
-                product.ProductCategory = product.ProductCategory.Trim();
+                //todo 暂时写死
+                product.ProductCategory = "团体意外险";
+                product.ProductCategoryId = 1002001;
+                product.Type = Enumeration.ProductType.InsureForYiWaiXian;
+                product.ProductKindIds = BuildProductKindIds("100010001");
+                product.ProductKindNames = "意外险";
+
                 product.Supplier = product.Supplier.NullToEmpty();
-                product.ProductKindIds = BuildProductKindIds(product.ProductKindIds);
                 product.MainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
                 product.Creator = operater;
                 product.CreateTime = this.DateTime;

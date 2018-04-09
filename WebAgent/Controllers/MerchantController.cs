@@ -9,7 +9,7 @@ using WebAgent.Models.Biz.Merchant;
 using Lumos.Common;
 using Lumos.BLL;
 
-namespace WebAgent.Controllers.Biz
+namespace WebAgent.Controllers
 {
     public class MerchantController : OwnBaseController
     {

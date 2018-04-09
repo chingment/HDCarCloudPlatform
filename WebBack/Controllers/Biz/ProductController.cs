@@ -107,9 +107,10 @@ namespace WebBack.Controllers.Biz
         [HttpPost]
         public CustomJsonResult GetListByInsurance(WebBack.Models.Biz.Product.SearchCondition condition)
         {
+            // u.ProductCategoryId.ToString().StartsWith(condition.CategoryId.ToString()) &&
             var query = (from u in CurrentDb.Product
                          where (condition.Name == null || u.Name.Contains(condition.Name)) &&
-                         (SqlFunctions.StringConvert((double)u.Type)).StartsWith("2")
+                          u.ProductCategoryId.ToString().StartsWith("1002")
                          select new { u.Id, u.Name, u.MainImg, u.CreateTime, u.Supplier, u.ProductCategory });
 
             int total = query.Count();

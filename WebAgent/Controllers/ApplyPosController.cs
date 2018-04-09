@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebAgent.Models.ApplyPos;
 
-namespace WebAgent.Controllers.Biz
+namespace WebAgent.Controllers
 {
     public class ApplyPosController : OwnBaseController
     {

@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebAgent.Models.CarInsureOffer;
 
-namespace WebAgent.Controllers.Biz
+namespace WebAgent.Controllers
 {
     public class CarInsureOfferController : OwnBaseController
     {

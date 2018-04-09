@@ -22,41 +22,41 @@
 
             $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
             $("#Model_Product_Name").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 60, onError: "商品名称不能为空,且不超过60个字符" });
-            $("#Model_Product_ProductCategoryId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择商品分类" });
-            $("#Model_Product_SupplierId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择供应商" });
-            $("#Model_Product_ProductKindIds").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择分类模块" });
+            //$("#Model_Product_ProductCategoryId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择商品分类" });
+            $("#Model_Product_SupplierId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择保险公司" });
+            //$("#Model_Product_ProductKindIds").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择分类模块" });
             $("#Model_DispalyImgs_ImgUrl_0").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传商品封面图片" });
             $("#Model_Product_Price").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.01, max: 10000, onError: "价格范围在0.01~10000.00之间" });
             $("#Model_Product_Price").decimalInput(2);
-            $("#Model_Product_ProductCategoryId").chosen({ search_contains: true, onlytext: true });
+            //$("#Model_Product_ProductCategoryId").chosen({ search_contains: true, onlytext: true });
             $("#Model_Product_SupplierId").chosen({ search_contains: true, onlytext: true });
-            $("#ddl_ProductKindIds").chosen({ search_contains: true, onlytext: true });
-            $("#ddl_ProductKindIds").live("change", function () {
+            //$("#ddl_ProductKindIds").chosen({ search_contains: true, onlytext: true });
+            //$("#ddl_ProductKindIds").live("change", function () {
 
-                var v = "";
-                var t = "";
-                var sels = $(this).find("option:selected");
+            //    var v = "";
+            //    var t = "";
+            //    var sels = $(this).find("option:selected");
 
-                for (var i = 0; i < sels.length; i++) {
-                    var _v = $(sels[i]).val();
-                    _v = _v.replace(/&nbsp;/ig, "");
-                    _v = $.trim(_v);
-                    v += _v + ",";
+            //    for (var i = 0; i < sels.length; i++) {
+            //        var _v = $(sels[i]).val();
+            //        _v = _v.replace(/&nbsp;/ig, "");
+            //        _v = $.trim(_v);
+            //        v += _v + ",";
 
-                    var _t = $(sels[i]).text();
-                    _t = _t.replace(/&nbsp;/ig, "");
-                    _t = $.trim(_t);
-                    t += _t + ",";
-                }
+            //        var _t = $(sels[i]).text();
+            //        _t = _t.replace(/&nbsp;/ig, "");
+            //        _t = $.trim(_t);
+            //        t += _t + ",";
+            //    }
 
-                if (v != "") {
-                    v = v.substring(0, v.length - 1);
-                    t = t.substring(0, t.length - 1);
-                }
+            //    if (v != "") {
+            //        v = v.substring(0, v.length - 1);
+            //        t = t.substring(0, t.length - 1);
+            //    }
 
-                $("#Model_Product_ProductKindIds").val(v);
-                $('#Model_Product_ProductKindNames').val(t);
-            });
+            //    $("#Model_Product_ProductKindIds").val(v);
+            //    $('#Model_Product_ProductKindNames').val(t);
+            //});
 
 
 
@@ -118,25 +118,25 @@
                     <input id="Model_Product_Name" name="Model.Product.Name" type="text" class="input-control" value="" style="width:300px;" />
                 </td>
             </tr>
-            <tr>
-                <td class="f-tb-t">
-                    分类：
-                </td>
-                <td class="f-tb-c">
-                    <input id="Model_Product_ProductCategory" name="Model.Product.ProductCategory" type="hidden" value="" />
-                    @Html.initProductCategory("Model.Product.ProductCategoryId", Model.Category)
-                </td>
-            </tr>
-            <tr>
-                <td class="f-tb-t">
-                    分类模块：
-                </td>
-                <td class="f-tb-c">
-                    <input id="Model_Product_ProductKindNames" name="Model.Product.ProductKindNames" type="hidden" value="" />
-                    <input id="Model_Product_ProductKindIds" name="Model.Product.ProductKindIds" type="hidden" value="" />
-                    @Html.initProductKind("ddl.ProductKindIds", Model.Kind)
-                </td>
-            </tr>
+            @*<tr>
+                    <td class="f-tb-t">
+                        分类：
+                    </td>
+                    <td class="f-tb-c">
+                        <input id="Model_Product_ProductCategory" name="Model.Product.ProductCategory" type="hidden" value="" />
+                        @Html.initProductCategory("Model.Product.ProductCategoryId", Model.Category)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="f-tb-t">
+                        分类模块：
+                    </td>
+                    <td class="f-tb-c">
+                        <input id="Model_Product_ProductKindNames" name="Model.Product.ProductKindNames" type="hidden" value="" />
+                        <input id="Model_Product_ProductKindIds" name="Model.Product.ProductKindIds" type="hidden" value="" />
+                        @Html.initProductKind("ddl.ProductKindIds", Model.Kind)
+                    </td>
+                </tr>*@
             <tr>
                 <td class="f-tb-t">
                     保险公司：

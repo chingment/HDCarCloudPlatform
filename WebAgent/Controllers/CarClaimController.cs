@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebAgent.Models.CarClaim;
 
-namespace WebAgent.Controllers.Biz
+namespace WebAgent.Controllers
 {
     public class CarClaimController : OwnBaseController
     {

@@ -40,26 +40,32 @@
                         var url = "";
                         var title = "";
 
-                        if (obj.productType == 2011 || obj.productType == 2012) {
-                            url = '/Biz/CarInsureOffer/Details?id=' + obj.id;
-                            title = '查看订单';
+
+                        title = '查看订单';
+                        switch (obj.productType) {
+                            case 300001:
+                                url = '/CarInsureOffer/Details?id=' + obj.id;
+                                break;
+                            case 300002:
+                                url = '/CarClaim/Details?id=' + obj.id;
+                                break;
+                            case 300003:
+                                url = '/ServiceFee/Details?id=' + obj.id;
+                                break;
+                            case 300004:
+                                url = '/TalentDemand/Details?id=' + obj.id;
+                                break;
+                            case 300005:
+                                url = '/ApplyLossAssess/Details?id=' + obj.id;
+                                break;
+                            case 300006:
+                                url = '/Lllegal/DetailsByQueryRecharge?id=' + obj.id;
+                                break;
+                            case 300007:
+                                url = '/Lllegal/DetailsByDealt?id=' + obj.id;
+                                break;
                         }
-                        else if (obj.productType == 2013) {
-                            url = '/Biz/CarClaim/Details?id=' + obj.id;
-                            title = '查看订单';
-                        }
-                        else if (obj.productType == 401) {
-                            url = '/Biz/TalentDemand/Details?id=' + obj.id;
-                            title = '查看订单';
-                        }
-                        else if (obj.productType == 501) {
-                            url = '/Biz/ApplyLossAssess/Details?id=' + obj.id;
-                            title = '查看订单';
-                        }
-                        else if (obj.productType == 301) {
-                            url = '/Biz/ServiceFee/Details?id=' + obj.id;
-                            title = '查看订单';
-                        }
+
                         art.dialog.open(url, {
                             id: "openDialog", title: title, width: '900px', height: '600px', lock: true, drag: false, cancelVal: '关闭', cancel: true
                         });

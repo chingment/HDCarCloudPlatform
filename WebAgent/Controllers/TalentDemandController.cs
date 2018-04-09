@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebAgent.Models.TalentDemand;
 
-namespace WebAgent.Controllers.Biz
+namespace WebAgent.Controllers
 {
     public class TalentDemandController : OwnBaseController
     {

@@ -43,7 +43,7 @@ namespace WebBack.Controllers.Biz
 
             return reuslt;
         }
-        public ViewResult Edit(int id=0)
+        public ViewResult Edit(int id = 0)
         {
             EditViewModel model = new EditViewModel(id);
             return View(model);
@@ -63,7 +63,7 @@ namespace WebBack.Controllers.Biz
         public CustomJsonResult GetList(BaseSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
-            var query = (from i in CurrentDb.InsuranceCompany
+            var query = (from i in CurrentDb.Company
                          where
                                  (name.Length == 0 || i.Name.Contains(name))
 
@@ -73,7 +73,7 @@ namespace WebBack.Controllers.Biz
 
             int pageIndex = condition.PageIndex;
             int pageSize = 10;
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.Id).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             List<object> list = new List<object>();
 
@@ -93,5 +93,5 @@ namespace WebBack.Controllers.Biz
             return Json(ResultType.Success, pageEntity, "");
         }
 
-	}
+    }
 }

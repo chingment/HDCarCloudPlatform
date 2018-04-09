@@ -1,0 +1,113 @@
+﻿@model WebBack.Models.Biz.Supplier.EditViewModel
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+@section scripts{
+    <script type="text/javascript">
+        $(this).ready(function () {
+            $.formValidator.initConfig({ formID: "form1", onSuccess: function () { return add(); } });
+            $("#Model_Supplier_Code").formValidator({ onShow: "&nbsp;", onFocus: "不能为空,且不超过50个字符", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 50, empty: { leftEmpty: false, emptyError: "不能为空" }, onError: "不能为空,且不超过50个字符" });
+            $("#Model_Supplier_Name").formValidator({ onShow: "&nbsp;", onFocus: "不能为空,且不超过50个字符", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 50, empty: { leftEmpty: false, emptyError: "不能为空" }, onError: "不能为空,且不超过50个字符" });
+            $("#Model_Supplier_PhoneNumber").formValidator({ onShow: "&nbsp;", onFocus: "不能为空,且不超过50个字符", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 50, empty: { leftEmpty: false, emptyError: "不能为空" }, onError: "不能为空,且不超过50个字符" });
+            $("#Model_Supplier_Address").formValidator({ onShow: "&nbsp;", onFocus: "不能为空,且不超过100个字符", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 100, empty: { leftEmpty: false, emptyError: "不能为空" }, onError: "不能为空,且不超过100个字符" });
+            $("#Model_Supplier_Description").formValidator({ onShow: "&nbsp;", onFocus: "不超过500个字符", onCorrect: "&nbsp;", empty: true, onEmpty: "&nbsp;" }).inputValidator({ min: 0, max: 500, onError: "不超过500个字符" });
+            $("#Model_Supplier_Status").formValidator({ onShow: "&nbsp;", onFocus: "请选择", onCorrect: "&nbsp;", onEmpty: "&nbsp;" }).inputValidator({ min: 1, max: 500, onError: "请选择" });
+        });
+
+        function add() {
+            art.dialog.confirm(
+                '确定要保存？',
+                function () {
+                    var postData = $("#form1").serializeArray();
+                    $.lumos.postJson({
+                        url: "/Biz/Supplier/Edit",
+                        data: postData,
+                        success: function (d) {
+
+                            if (d.result == resultType.success) {
+                                $.lumos.parentDialog().listTable.loadData();
+                                $.lumos.tips(d.message, true);
+                            }
+                            else {
+                                $.lumos.tips(d.message);
+                            }
+
+                        }
+                    });
+                });
+            return false;
+        }
+
+    </script>
+}
+
+
+<div class="gbr-row">
+    <form id="form1" name="form1" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="Model.Supplier.Id" value="@Model.Supplier.Id" />
+        <table class="f-tb" cellpadding="0" cellspacing="1">
+            <tr>
+                <td class="f-tb-t" style="width:50px;">
+                    代码：
+                </td>
+                <td class="f-tb-c">
+                    @Model.Supplier.Code
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t" style="width:50px;">
+                    名称：
+                </td>
+                <td class="f-tb-c">
+                    @Model.Supplier.Name
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t" style="width:50px;">
+                    联系电话：
+                </td>
+                <td class="f-tb-c">
+                    <input name="Model.Supplier.PhoneNumber" value="@Model.Supplier.PhoneNumber" class="input-control" autocomplete="off" type="text" id="Model_Supplier_PhoneNumber" style="width: 128px;" clear="on" />
+                    <span id="Model_Supplier_PhoneNumberTip"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t" style="width:50px;">
+                    地址：
+                </td>
+                <td class="f-tb-c">
+                    <input name="Model.Supplier.Address" value="@Model.Supplier.Address" class="input-control" autocomplete="off" type="text" id="Model_Supplier_Address" style="width: 128px;" clear="on" />
+                    <span id="Model_Supplier_AddressTip"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t" style="width:50px;">
+                    状态：
+                </td>
+                <td class="f-tb-c">
+                    @(Html.initEnumeration<Lumos.Entity.Enumeration.SupplierStatus>(Lumos.Entity.Enumeration.InputType.Select, "Model.Supplier.Status", new { @class = "select-control", defaulttext = "请选择", hidevalue = new Lumos.Entity.Enumeration.SupplierStatus[] { Lumos.Entity.Enumeration.SupplierStatus.Unknow }, selectedvalue = new Lumos.Entity.Enumeration.SupplierStatus[] { Model.Supplier.Status } }))
+                    <span id="Model_Distributor_StatusTip"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t" style="width:50px;">
+                    备注：
+                </td>
+                <td class="f-tb-c">
+                    <textarea name="Model.Supplier.Description" rows="5" cols="42" id="Model_Supplier_Description" class="input-control">@Model.Supplier.Description</textarea>
+                    <span id="Model_Supplier_DescriptionTip"></span>
+                </td>
+            </tr>
+            <tr style="display:none">
+                <td class="f-tb-t"></td>
+                <td class="f-tb-c">
+                    <input type="submit" name="btn_Submit" id="btn_Submit" value="确定" class="btn btn-sure" />
+                    <input type="button" name="btn_Cancle" id="btn_Cancle" value="关闭" class="btn btn-close dialog-close" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+

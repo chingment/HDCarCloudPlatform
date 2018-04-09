@@ -66,6 +66,8 @@
     <Compile Include="..\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Biz\Model\ProductDetailInfo.cs" />
+    <Compile Include="Biz\Model\ProductKindSimple.cs" />
     <Compile Include="Biz\OrderToLllegalDealtProvider.cs" />
     <Compile Include="Biz\OrderToApplyLossAssessProvider..cs" />
     <Compile Include="Biz\ApplyPosProvider.cs" />
@@ -85,8 +87,11 @@
     <Compile Include="Biz\OrderToInsuranceProvider.cs" />
     <Compile Include="Biz\PayProvider.cs" />
     <Compile Include="Biz\PosMachineProvider.cs" />
+    <Compile Include="Biz\ProductCategoryProvider.cs" />
+    <Compile Include="Biz\ProductKindProvider.cs" />
     <Compile Include="Biz\ProductProvider.cs" />
     <Compile Include="Biz\OrderToTalentDemandProvider.cs" />
+    <Compile Include="Biz\SupplierProvider.cs" />
     <Compile Include="Biz\Task\TaskForMerchant.cs" />
     <Compile Include="Sdk\FangWeiProvider.cs" />
     <Compile Include="Biz\SmsProvider.cs" />

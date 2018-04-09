@@ -225,52 +225,30 @@ namespace Lumos.Entity
         public enum ProductType
         {
             Unknow = 0,
-            [Remark("商品")]
+            [Remark("普通商品")]
             Goods = 1,
-            //[Remark("汽车用品")]
-            //GoodsForCar = 101,
-            //[Remark("机油")]
-            //GoodsForCarForMachineOil = 1011,
-            //[Remark("轮胎")]
-            //GoodsForCarForTyre = 1012,
-            //[Remark("座垫")]
-            //GoodsForCarForCushion = 1013,
-            //[Remark("香水")]
-            //GoodsForCarForPerfume = 1014,
-            //[Remark("空气净化")]
-            //GoodsForCarForAirPurge = 1015,
-            //[Remark("方向盘套")]
-            //GoodsForCarForSteeringWheelCover = 1016,
-            //[Remark("座套")]
-            //GoodsForCarForSeatCover = 1017,
-            //[Remark("头枕")]
-            //GoodsForCarForHeadPillow = 1018,
-            [Remark("保险")]
+            [Remark("保险产品")]
             Insure = 2,
-            [Remark("车险")]
-            InsureForCar = 201,
-            [Remark("车险投保")]
-            InsureForCarForInsure = 2011,
             [Remark("意外险")]
-            InsureForYiWaiXian = 2021,
-            //[Remark("车险续保")]
-            //InsureForCarForRenewal = 2012,
+            InsureForYiWaiXian = 200001,
+            [Remark("业务订单")]
+            Biz = 3,
+            [Remark("车险投保")]
+            InsureForCarForInsure = 300001,
             [Remark("车险理赔")]
-            InsureForCarForClaim = 2013,
-            //[Remark("保险通")]
-            //InsureForPopular = 202,
+            InsureForCarForClaim = 300002,
             [Remark("POS机服务费")]
-            PosMachineServiceFee = 301,
+            PosMachineServiceFee = 300003,
             [Remark("人才输送")]
-            TalentDemand = 401,
+            TalentDemand = 300004,
             [Remark("申请定损点")]
-            ApplyLossAssess = 501,
+            ApplyLossAssess = 300005,
             [Remark("违章查询积分充值")]
-            LllegalQueryRecharge = 601,
+            LllegalQueryRecharge = 300006,
             [Remark("违章处理")]
-            LllegalDealt = 602,
+            LllegalDealt = 300007,
             [Remark("贷款申请")]
-            Credit = 701
+            Credit = 300008
 
         }
 
@@ -614,6 +592,56 @@ namespace Lumos.Entity
             InDealt = 2,
             [Remark("已完成")]
             Completed = 3
+        }
+
+        public enum ProductCategoryStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("正常")]
+            Valid = 1,
+            [Remark("停用")]
+            Invalid = 2
+        }
+
+        public enum ProductKindStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("正常")]
+            Valid = 1,
+            [Remark("停用")]
+            Invalid = 2
+        }
+
+        public enum CompanyStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("正常")]
+            Valid = 1,
+            [Remark("停用")]
+            Invalid = 2
+        }
+
+        public enum CompanyType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("保险公司")]
+            InsuranceCompany = 1,
+            [Remark("供应商")]
+            Supplier = 2
+        }
+
+        public enum InventoryOperateType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("增加")]
+            Increase = 1,
+            [Remark("减少")]
+            Decrease = 2
         }
 
     }

@@ -37,11 +37,9 @@ namespace Lumos.DAL
 
         public IDbSet<CarKind> CarKind { get; set; }
 
-        public IDbSet<InsuranceCompany> InsuranceCompany { get; set; }
+        public IDbSet<Company> Company { get; set; }
 
         public IDbSet<CarInsuranceCompany> CarInsuranceCompany { get; set; }
-
-        public IDbSet<Product> Product { get; set; }
 
         public IDbSet<Order> Order { get; set; }
 
@@ -102,6 +100,22 @@ namespace Lumos.DAL
         public IDbSet<OrderToLllegalDealtDetails> OrderToLllegalDealtDetails { get; set; }
 
         public IDbSet<OrderPayTrans> OrderPayTrans { get; set; }
+
+        public IDbSet<ProductCategory> ProductCategory { get; set; }
+
+        public IDbSet<ProductKind> ProductKind { get; set; }
+
+        public IDbSet<Product> Product { get; set; }
+
+        public IDbSet<ProductSku> ProductSku { get; set; }
+
+        public IDbSet<ProductSpecDataSet> ProductSpecDataSet { get; set; }
+
+        public IDbSet<ProductSpecDataSetValue> ProductSpecDataSetValue { get; set; }
+
+        public IDbSet<Inventory> Inventory { get; set; }
+
+        public IDbSet<InventoryOperateHis> InventoryOperateHis { get; set; }
 
         //public FxDbContext()
         //    : base("DefaultConnection")

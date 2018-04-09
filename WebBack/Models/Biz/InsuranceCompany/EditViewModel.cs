@@ -7,7 +7,7 @@ namespace WebBack.Models.Biz.InsuranceCompany
 {
     public class EditViewModel:BaseViewModel
     {
-        private Lumos.Entity.InsuranceCompany _insuranceCompany = new Lumos.Entity.InsuranceCompany();
+        private Lumos.Entity.Company _insuranceCompany = new Lumos.Entity.Company();
         private string _creator = "";
         private string _mender = "";
         public string Creator
@@ -43,7 +43,7 @@ namespace WebBack.Models.Biz.InsuranceCompany
         {
             //var insuranceCompany = CurrentDb.InsuranceCompany.Where(m => m.Id == id).FirstOrDefault();
 
-            var query = (from i in CurrentDb.InsuranceCompany
+            var query = (from i in CurrentDb.Company
                          join u1 in CurrentDb.SysStaffUser on i.Creator equals u1.Id into tmp1
                          from tt1 in tmp1.DefaultIfEmpty()
                          join u2 in CurrentDb.SysStaffUser on i.Mender equals u2.Id into tmp2
@@ -53,7 +53,7 @@ namespace WebBack.Models.Biz.InsuranceCompany
 
              select new { i.Id, i.ImgUrl, Creator = tt1 == null ? "" : tt1.FullName, i.Name, i.LastUpdateTime, Mender = tt2 == null ? "" : tt2.FullName, i.CreateTime }).FirstOrDefault();
 
-            var insuranceCompany =   new Lumos.Entity.InsuranceCompany();
+            var insuranceCompany =   new Lumos.Entity.Company();
             insuranceCompany.Id = query.Id;
             insuranceCompany.Name = query.Name;
             insuranceCompany.ImgUrl = query.ImgUrl;
@@ -69,7 +69,7 @@ namespace WebBack.Models.Biz.InsuranceCompany
             }
         }
 
-        public Lumos.Entity.InsuranceCompany InsuranceCompany
+        public Lumos.Entity.Company InsuranceCompany
         {
             get
             {

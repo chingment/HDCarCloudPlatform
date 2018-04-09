@@ -138,7 +138,7 @@ namespace WebAppApi.Controllers
                                 var orderToCredit = CurrentDb.OrderToCredit.Where(c => c.Id == m.Id).FirstOrDefault();
 
                                 orderModel.OrderField.Add(new OrderField("贷款类别", orderToCredit.CreditClass));
-                                orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
+                                //orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
                                 orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
 
                                 break;
@@ -352,7 +352,7 @@ namespace WebAppApi.Controllers
                                 var orderToCredit = CurrentDb.OrderToCredit.Where(c => c.Id == m.Id).FirstOrDefault();
 
                                 orderModel.OrderField.Add(new OrderField("贷款类别", orderToCredit.CreditClass));
-                                orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
+                                //orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
 
 
                                 break;
@@ -414,7 +414,7 @@ namespace WebAppApi.Controllers
                                 var orderToCredit = CurrentDb.OrderToCredit.Where(c => c.Id == m.Id).FirstOrDefault();
 
                                 orderModel.OrderField.Add(new OrderField("贷款类别", orderToCredit.CreditClass));
-                                orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
+                                //orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
 
                                 break;

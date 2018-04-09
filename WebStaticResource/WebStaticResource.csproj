@@ -211,6 +211,7 @@
     <Content Include="WebBack\Scripts\ArtDialog\skins\opera\s2.png" />
     <Content Include="WebBack\Scripts\ArtDialog\skins\simple.css" />
     <Content Include="WebBack\Scripts\ArtDialog\skins\twitter.css" />
+    <Content Include="WebBack\Scripts\chosen.jquery.js" />
     <Content Include="WebBack\Scripts\CloudCarousel.1.0.5.js" />
     <Content Include="WebBack\Scripts\DatePicker\calendar.js" />
     <Content Include="WebBack\Scripts\DatePicker\config.js" />

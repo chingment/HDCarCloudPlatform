@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHomeIframeMainList.cshtml";
+}
+
+<script type="text/javascript">
+
+    var listTable;
+
+    $(document).ready(function () {
+        listTable = $("#list_table").loadDataTable({
+            url: "/Biz/Supplier/GetList",
+            pageIndex: 0,
+            searchParams: $("#form1").serializeArray(),
+            searchButtonId: "btn_Search",
+            containerId: "form1",
+            rowDataCombie: function (p_index, p_row) {
+                var l_Strlimt = "";
+                l_Strlimt += "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" operate=\\\"edit\\\"   class=\\\"a-btn a-btn-edit\\\"  >修改</a>")";
+                var l_StrRows = "";
+                l_StrRows += "<tr>";
+                l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
+                l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.code + "\"   >" + p_row.code + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.name + "\">" + p_row.name + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.phoneNumber + "\">" + p_row.phoneNumber + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.address + "\">" + p_row.address + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.status + "\">" + p_row.status + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
+                l_StrRows += "<td class=\"operation\">";
+                l_StrRows += l_Strlimt;
+                l_StrRows += "</td>";
+                l_StrRows += "</tr>";
+                return l_StrRows;
+            },
+            operate: {
+                "delete": function (obj) {
+                    var array = new Array();
+                    $.each(obj, function (i, n) {
+                        array.push({ name: "userIds", value: n.id });
+                    });
+
+                    $.lumos.postJson({
+                        url: "/Biz/Supplier/Delete",
+                        data: array,
+                        success: function (d) {
+                            listTable.loadData(0);
+                            $.lumos.tips(d.message);
+                        }
+                    });
+                },
+                "edit": function (obj) {
+
+                    var url = '/Biz/Supplier/Edit?id=' + obj.id;
+                    var title = '修改';
+                    art.dialog.open(url, {
+                        id: "openDialog", title: title, width: '650px', height: '500px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '保存', ok: function () {
+                            this.iframe.contentWindow.$('#form1').submit();
+                            return false;
+                        }
+                    });
+                }
+            }
+        });
+
+        $("#btn_Add").click(function () {
+            var url = '/Biz/Supplier/Add';
+            var title = '新建';
+            art.dialog.open(url, {
+                id: "openDialog", title: title, width: '650px', height: '500px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '确定', ok: function () {
+                    this.iframe.contentWindow.$('#form1').submit();
+                    return false;
+                }
+            });
+        });
+
+    });
+
+
+</script>
+
+<form id="form1" name="form1">
+    @Html.AntiForgeryToken()
+    <div class="search-bar">
+        <div class="filter">
+            <span class="filter-label">名称：</span>
+            <span class="filter-input">
+                <input type="text" class="input-control" name="Name" />
+            </span>
+        </div>
+        <div class="filter">
+            <span class="filter-label">代码：</span>
+            <span class="filter-input">
+                <input type="text" class="input-control" name="Code" />
+            </span>
+        </div>
+        <div class="filter">
+            <input type="button" class="btn btn-search" id="btn_Search" value="查询" />
+        </div>
+        <div class="filter fright">
+            <input type="button" class="btn btn-add" id="btn_Add" value="新建" />
+
+        </div>
+    </div>
+    <div class="list">
+        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:10%" class="no">
+                        序号
+                    </th>
+                    <th style="width:10%">
+                        代码
+                    </th>
+                    <th style="width:20%">
+                        名称
+                    </th>
+                    <th style="width:10%">
+                        联系电话
+                    </th>
+                    <th style="width:20%">
+                        地址
+                    </th>
+                    <th style="width:10%">
+                        状态
+                    </th>
+                    <th style="width:10%">
+                        创建日期
+                    </th>
+                    <th style="width:10%" class="operation">
+                        操作
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="8">
+                        <div class="pull-left">
+                        </div>
+                        <div class="pull-right pagination">
+                            <div class="pagination-info">
+                            </div>
+                            <div class="pagination-index">
+                            </div>
+                            <div class="pagination-goto">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+

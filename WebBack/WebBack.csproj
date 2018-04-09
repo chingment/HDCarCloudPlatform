@@ -166,7 +166,9 @@
     <Compile Include="Controllers\Biz\MerchantController.cs" />
     <Compile Include="Controllers\Biz\OrderController.cs" />
     <Compile Include="Controllers\Biz\PosMachineController.cs" />
+    <Compile Include="Controllers\Biz\ProductCategoryController.cs" />
     <Compile Include="Controllers\Biz\ProductController.cs" />
+    <Compile Include="Controllers\Biz\ProductKindController.cs" />
     <Compile Include="Controllers\Biz\ReportController.cs" />
     <Compile Include="Controllers\Biz\ServiceFeeController.cs" />
     <Compile Include="Controllers\Biz\TalentDemandController.cs" />
@@ -253,9 +255,20 @@
     <Compile Include="Models\Biz\PosMachine\EditViewModel.cs" />
     <Compile Include="Models\Biz\ExtendedApp\SearchCondition.cs" />
     <Compile Include="Models\Biz\PosMachine\SearchCondition.cs" />
-    <Compile Include="Models\Biz\Product\AddGoodsViewModel.cs" />
-    <Compile Include="Models\Biz\Product\EditGoodsViewModel.cs" />
+    <Compile Include="Models\Biz\ProductCategory\AddViewModel.cs" />
+    <Compile Include="Models\Biz\ProductCategory\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\ProductCategory\EditViewModel.cs" />
+    <Compile Include="Models\Biz\ProductCategory\ListViewModel.cs" />
+    <Compile Include="Models\Biz\ProductCategory\ProductSearchCondition.cs" />
+    <Compile Include="Models\Biz\ProductKind\AddViewModel.cs" />
+    <Compile Include="Models\Biz\ProductKind\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\ProductKind\EditViewModel.cs" />
+    <Compile Include="Models\Biz\ProductKind\ProductSearchCondition.cs" />
+    <Compile Include="Models\Biz\Product\AddByInsuranceViewModel.cs" />
+    <Compile Include="Models\Biz\Product\AddViewModel.cs" />
+    <Compile Include="Models\Biz\Product\EditViewModel.cs" />
     <Compile Include="Models\Biz\Product\SearchCondition.cs" />
+    <Compile Include="Models\Biz\Product\SelectSpecViewModel.cs" />
     <Compile Include="Models\Biz\Report\CarInsureViewModel.cs" />
     <Compile Include="Models\Biz\Report\DepositRentViewModel.cs" />
     <Compile Include="Models\Biz\Report\MerchantViewModel.cs" />
@@ -1191,6 +1204,7 @@
     <Content Include="Scripts\ckfinder\skins\v1\uipanel.css" />
     <Content Include="Scripts\ckfinder\translations.txt" />
     <Content Include="Static\404.html" />
+    <Content Include="Static\default1.jpg" />
     <Content Include="Views\Biz\CarInsuranceCompany\Add.cshtml" />
     <Content Include="Views\Biz\CarInsuranceCompany\List.cshtml" />
     <Content Include="Views\Biz\InsuranceCompany\Add.cshtml" />
@@ -1208,11 +1222,8 @@
     <Content Include="Views\Biz\CarInsuranceCompany\InsuranceCompanyList.cshtml" />
     <Content Include="Views\Sys\StaffUser\SelectList.cshtml" />
     <Content Include="Views\Sys\Banner\TypeList.cshtml" />
-    <Content Include="Views\Biz\Product\GoodsList.cshtml" />
-    <Content Include="Views\Biz\Product\AddGoods.cshtml" />
     <Content Include="Views\Sys\Banner\EditBanner.cshtml" />
     <Content Include="Views\Sys\Banner\BannerDetails.cshtml" />
-    <Content Include="Views\Biz\Product\AppGoodsDetails.cshtml" />
     <Content Include="Views\Biz\Report\Withdraw.cshtml" />
     <Content Include="Views\Shared\_LayoutHomeMainReport.cshtml" />
     <Content Include="Views\Biz\Report\Merchant.cshtml" />
@@ -1226,7 +1237,6 @@
     <Content Include="Views\Biz\PosMachine\MerchantPosMachineList.cshtml" />
     <Content Include="Views\Shared\UpLoadFile.cshtml" />
     <Content Include="Views\Biz\Report\NoActiveAccount.cshtml" />
-    <Content Include="Views\Biz\Product\EditGoods.cshtml" />
     <Content Include="Views\Biz\Order\CarInsurePay.cshtml" />
     <Content Include="Views\Sys\SalesmanUser\Add.cshtml" />
     <Content Include="Views\Sys\SalesmanUser\Edit.cshtml" />
@@ -1290,6 +1300,21 @@
     <Content Include="Views\Biz\Insurance\Verify.cshtml" />
     <Content Include="Views\Biz\Lllegal\ListByVerify.cshtml" />
     <Content Include="Views\Biz\Lllegal\Verify.cshtml" />
+    <Content Include="Views\Biz\Product\Add.cshtml" />
+    <Content Include="Views\Biz\Product\Edit.cshtml" />
+    <Content Include="Views\Biz\Product\List.cshtml" />
+    <Content Include="Views\Biz\Product\SelectSpec.cshtml" />
+    <Content Include="Views\Biz\ProductCategory\Add.cshtml" />
+    <Content Include="Views\Biz\ProductCategory\List.cshtml" />
+    <Content Include="Views\Biz\ProductCategory\Sort.cshtml" />
+    <Content Include="Views\Biz\ProductKind\Add.cshtml" />
+    <Content Include="Views\Biz\ProductKind\List.cshtml" />
+    <Content Include="Views\Biz\ProductKind\Sort.cshtml" />
+    <Content Include="Views\Biz\Supplier\Add.cshtml" />
+    <Content Include="Views\Biz\Supplier\Edit.cshtml" />
+    <Content Include="Views\Biz\Supplier\List.cshtml" />
+    <Content Include="Views\Biz\Product\ListByInsurance.cshtml" />
+    <Content Include="Views\Biz\Product\AddByInsurance.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

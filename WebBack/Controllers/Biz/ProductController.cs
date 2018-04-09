@@ -1,8 +1,11 @@
-﻿using Lumos.BLL;
+﻿using Lumos;
+using Lumos.BLL;
 using Lumos.Entity;
 using Lumos.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,36 +13,64 @@ using WebBack.Models.Biz.Product;
 
 namespace WebBack.Controllers.Biz
 {
-    [OwnAuthorize(PermissionCode.商品设置)]
     public class ProductController : OwnBaseController
     {
-        // GET: Prodcut
-        public ViewResult GoodsList()
+        // GET: Product
+        public ActionResult List()
         {
             return View();
         }
 
-        public ViewResult AddGoods()
+        public ActionResult ListByInsurance()
         {
             return View();
         }
 
-        public ViewResult EditGoods(int id)
+        public ViewResult Edit(int id)
         {
-            EditGoodsViewModel model = new EditGoodsViewModel(id);
+            EditViewModel model = new EditViewModel();
+            model.LoadData(id);
+
             return View(model);
         }
 
-        public ViewResult AppGoodsDetails()
+        public ViewResult Add()
+        {
+            AddViewModel model = new AddViewModel();
+            model.LoadData();
+
+            return View(model);
+        }
+
+        public ViewResult AddByInsurance()
+        {
+            AddByInsuranceViewModel model = new AddByInsuranceViewModel();
+            model.LoadData();
+
+            return View(model);
+        }
+
+        public ViewResult SelectSpec()
         {
             return View();
         }
 
-        public CustomJsonResult GetGoodsList(SearchCondition condition)
+
+
+        public CustomJsonResult GetSelectSpec()
         {
-            var query = (from p in CurrentDb.Product
-                         where ((int)p.Type).ToString().StartsWith("1")
-                         select new { p.Id, p.Name, p.Type, p.MainImgUrl, p.CreateTime, p.Status });
+            SelectSpecViewModel model = new SelectSpecViewModel();
+
+            return Json(ResultType.Success, model, "");
+        }
+
+        [HttpPost]
+        public CustomJsonResult GetList(WebBack.Models.Biz.Product.SearchCondition condition)
+        {
+            var query = (from u in CurrentDb.Product
+                         where (condition.Name == null || u.Name.Contains(condition.Name)) &&
+                         SqlFunctions.StringConvert((double)u.Type).StartsWith("1")
+                         select new { u.Id, u.Name, u.MainImg, u.CreateTime, u.Supplier, u.ProductCategory });
 
             int total = query.Count();
 
@@ -47,24 +78,23 @@ namespace WebBack.Controllers.Biz
             int pageSize = 10;
             query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
-
+            var list1 = query.ToList();
 
             List<object> list = new List<object>();
 
-            foreach (var item in query)
+            foreach (var item in list1)
             {
+                var skus = CurrentDb.ProductSku.Where(m => m.ProductId == item.Id).ToList();
+
                 list.Add(new
                 {
                     Id = item.Id,
                     Name = item.Name,
-                    Type = item.Type.GetCnName(),
-                    Price = 0,
-                    ImgUrl = item.MainImgUrl,
-                    LinkUrl = BizFactory.Product.GetLinkUrl(item.Type,"88888", item.Id),
-                    Status = item.Status,
-                    StatusName = item.Status.GetCnName(),
-                    CreateTime = item.CreateTime
-
+                    MainImg = item.MainImg,
+                    Supplier = item.Supplier,
+                    ProductCategory = item.ProductCategory,
+                    CreateTime = item.CreateTime,
+                    skus = skus
                 });
             }
 
@@ -75,34 +105,73 @@ namespace WebBack.Controllers.Biz
         }
 
         [HttpPost]
-        public CustomJsonResult AddGoods(AddGoodsViewModel model)
+        public CustomJsonResult GetListByInsurance(WebBack.Models.Biz.Product.SearchCondition condition)
         {
-            CustomJsonResult reuslt = new CustomJsonResult();
-            model.Product.ElseImgUrls = Newtonsoft.Json.JsonConvert.SerializeObject(model.ElseImgUrls);
-            reuslt = BizFactory.Product.Add(this.CurrentUserId, model.Product);
+            var query = (from u in CurrentDb.Product
+                         where (condition.Name == null || u.Name.Contains(condition.Name)) &&
+                         (SqlFunctions.StringConvert((double)u.Type)).StartsWith("2")
+                         select new { u.Id, u.Name, u.MainImg, u.CreateTime, u.Supplier, u.ProductCategory });
 
-            return reuslt;
+            int total = query.Count();
+
+            int pageIndex = condition.PageIndex;
+            int pageSize = 10;
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+            var list1 = query.ToList();
+
+            List<object> list = new List<object>();
+
+            foreach (var item in list1)
+            {
+                var skus = CurrentDb.ProductSku.Where(m => m.ProductId == item.Id).ToList();
+
+                list.Add(new
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    MainImg = item.MainImg,
+                    Supplier = item.Supplier,
+                    ProductCategory = item.ProductCategory,
+                    CreateTime = item.CreateTime,
+                    skus = skus
+                });
+            }
+
+
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list };
+
+            return Json(ResultType.Success, pageEntity, "");
         }
 
         [HttpPost]
-        public CustomJsonResult EditGoods(EditGoodsViewModel model)
+        public CustomJsonResult Add(AddViewModel model)
         {
-            CustomJsonResult reuslt = new CustomJsonResult();
-            model.Product.ElseImgUrls = Newtonsoft.Json.JsonConvert.SerializeObject(model.ElseImgUrls);
-            reuslt = BizFactory.Product.Edit(this.CurrentUserId, model.Product);
+            var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
 
-            return reuslt;
+            model.Product.DispalyImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
+
+            return BizFactory.Product.Add(this.CurrentUserId, model.Product, model.ProductSku);
         }
 
         [HttpPost]
-        public CustomJsonResult OffLine(int id)
+        public CustomJsonResult AddByInsurance(AddViewModel model)
         {
-            CustomJsonResult reuslt = new CustomJsonResult();
+            var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
 
-            reuslt = BizFactory.Product.OffLine(this.CurrentUserId, id);
+            model.Product.DispalyImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
 
-            return reuslt;
+            return BizFactory.Product.AddByInsurance(this.CurrentUserId, model.Product, model.ProductSku);
         }
 
+        [HttpPost]
+        public CustomJsonResult Edit(EditViewModel model)
+        {
+            var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
+
+            model.Product.DispalyImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
+
+            return BizFactory.Product.Edit(this.CurrentUserId, model.Product, model.ProductSku);
+        }
     }
 }

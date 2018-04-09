@@ -92,7 +92,7 @@ namespace WebAppApi.Controllers
 
             List<OrderToCarInsureOfferCompany> orderToCarInsureOfferCompanys = new List<OrderToCarInsureOfferCompany>();
 
-            var insureOfferCompanys = CurrentDb.InsuranceCompany.ToList();
+            var insureOfferCompanys = CurrentDb.Company.ToList();
             foreach (var m in model.InsuranceCompanyId)
             {
                 var insureOfferCompany = insureOfferCompanys.Where(q => q.Id == m).FirstOrDefault();

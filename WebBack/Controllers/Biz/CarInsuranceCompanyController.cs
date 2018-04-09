@@ -76,12 +76,12 @@ namespace WebBack.Controllers.Biz
         {
             string name = condition.Name.ToSearchString();
             var query = (from c in CurrentDb.CarInsuranceCompany
-                         join i in CurrentDb.InsuranceCompany on c.InsuranceCompanyId equals i.Id into tmp0
+                         join i in CurrentDb.Company on c.InsuranceCompanyId equals i.Id into tmp0
                          from tt0 in tmp0.DefaultIfEmpty()
                          where
                                  (name.Length == 0 || tt0.Name.Contains(name))
 
-                         select new { c.Id, c.InsuranceCompanyId, c.Status, c.InsuranceCompanyImgUrl, tt0.Name, c.CreateTime,c.CanInsure,c.CanClaims,c.CanApplyLossAssess });
+                         select new { c.Id, c.InsuranceCompanyId, c.Status, c.InsuranceCompanyImgUrl, tt0.Name, c.CreateTime, c.CanInsure, c.CanClaims, c.CanApplyLossAssess });
 
             int total = query.Count();
 
@@ -100,9 +100,9 @@ namespace WebBack.Controllers.Biz
                     item.Name,
                     item.InsuranceCompanyImgUrl,
                     item.CreateTime,
-                    Status= item.Status,
+                    Status = item.Status,
                     StatusName = item.Status.GetCnName(),
-                    CanInsure = (item.CanInsure == true?"是":"否"),
+                    CanInsure = (item.CanInsure == true ? "是" : "否"),
                     CanClaims = (item.CanClaims == true ? "是" : "否"),
                     CanApplyLossAssess = (item.CanApplyLossAssess == true ? "是" : "否"),
                 });
@@ -122,8 +122,10 @@ namespace WebBack.Controllers.Biz
         public CustomJsonResult GetInsuranceCompanyList(BaseSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
-            var query = (from i in CurrentDb.InsuranceCompany
+            var query = (from i in CurrentDb.Company
                          where
+                           i.Status == Enumeration.CompanyStatus.Valid
+                           && i.Type == Enumeration.CompanyType.InsuranceCompany &&
                                  (name.Length == 0 || i.Name.Contains(name)) && !(CurrentDb.CarInsuranceCompany.Any(m => m.InsuranceCompanyId == i.Id))
 
                          select new { i.Id, i.ImgUrl, i.Name, i.LastUpdateTime, i.CreateTime });

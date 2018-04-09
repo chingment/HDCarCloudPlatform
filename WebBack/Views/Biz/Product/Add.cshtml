@@ -1,0 +1,547 @@
+﻿@model WebBack.Models.Biz.Product.AddViewModel
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section styles{
+    <style type="text/css">
+        #list_GoodsPic tr > td {
+            width: 100px;
+            padding: 10px;
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/ckeditor/config.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_Product_Name").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 60, onError: "商品名称不能为空,且不超过60个字符" });
+            $("#Model_Product_ProductCategoryId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择商品分类" });
+            $("#Model_Product_SupplierId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择供应商" });
+            $("#Model_Product_ProductKindIds").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择分类模块" });
+            $("#Model_DispalyImgs_ImgUrl_0").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传商品封面图片" });
+            $("#Model_Product_Price").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.01, max: 10000, onError: "价格范围在0.01~10000.00之间" });
+            $("#Model_Product_Price").decimalInput(2);
+            $("#Model_Product_Quantity").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).regexValidator({ regExp: regexEnum.intege1, onError: "库存请输入正整数" });;
+            $("#Model_Product_ProductCategoryId").chosen({ search_contains: true, onlytext: true });
+            $("#Model_Product_SupplierId").chosen({ search_contains: true, onlytext: true });
+            $("#ddl_ProductKindIds").chosen({ search_contains: true, onlytext: true });
+            $("#ddl_ProductKindIds").live("change", function () {
+
+                var v = "";
+                var t = "";
+                var sels = $(this).find("option:selected");
+
+                for (var i = 0; i < sels.length; i++) {
+                    var _v = $(sels[i]).val();
+                    _v = _v.replace(/&nbsp;/ig, "");
+                    _v = $.trim(_v);
+                    v += _v + ",";
+
+                    var _t = $(sels[i]).text();
+                    _t = _t.replace(/&nbsp;/ig, "");
+                    _t = $.trim(_t);
+                    t += _t + ",";
+                }
+
+                if (v != "") {
+                    v = v.substring(0, v.length - 1);
+                    t = t.substring(0, t.length - 1);
+                }
+
+                $("#Model_Product_ProductKindIds").val(v);
+                $('#Model_Product_ProductKindNames').val(t);
+            });
+
+            $('#btn_selectspec').live('click', function () {
+                var dialog = art.dialog.open('/Biz/Product/SelectSpec', {
+                    id: "openDialog565", title: '选择规格', width: '600px', height: '480px', lock: true, drag: false, cancelVal: '关闭', cancel: true, okVal: '确定', ok: function () {
+                        this.iframe.contentWindow.submit(function (spec) {
+                            loadSpec(spec);
+                            dialog.close();
+                        });
+                        return false;
+                    }
+                });
+            });
+
+            $('#Model_Product_IsMultiSpec').live("change", function () {
+
+                var isChecked = $(this).attr('checked');
+
+                if (typeof isChecked == 'undefined') {
+                    $('.tr_isIsMultiSpec_true').hide();
+                    $('.tr_isIsMultiSpec_false').show();
+                    $("#Model_Product_Price").attr("disabled", false).unFormValidator(false);
+                    $("#Model_Product_Quantity").attr("disabled", false).unFormValidator(false);
+                    $("#specValComGrid").find('input').attr("disabled", true).unFormValidator(true);
+                }
+                else {
+                    $('.tr_isIsMultiSpec_true').show();
+                    $('.tr_isIsMultiSpec_false').hide();
+                    $("#Model_Product_Price").attr("disabled", true).unFormValidator(true);
+                    $("#Model_Product_Quantity").attr("disabled", true).unFormValidator(true);
+                    $("#specValComGrid").find('input').attr("disabled", false).unFormValidator(false);
+                }
+
+            });
+
+        });
+
+        var selSpec = [];
+
+        function loadSpec(catalogSpec) {
+
+            selSpec = catalogSpec;
+            var l_html = "";
+            if (catalogSpec.length > 0) {
+
+                for (var i = 0; i < catalogSpec.length; i++) {
+                    l_html += "<tr>";
+                    l_html += "<td style=\" width:50px;vertical-align: top;\" >";
+                    l_html += "<input name='specName' type='hidden' value='" + catalogSpec[i].name + "' /> ";
+                    l_html += "<input name='specId' type='hidden' value='" + catalogSpec[i].id + "' /> ";
+                    l_html += "<span>" + catalogSpec[i].name + "</span>";
+                    l_html += "</td>";
+
+                    var catalogSpecValue = catalogSpec[i].value;
+                    if (catalogSpecValue.length > 0) {
+
+                        l_html += "<td style=\"width:100%;white-space: normal;\">";
+
+                        var l_chbox = "";
+
+                        for (var j = 0; j < catalogSpecValue.length; j++) {
+
+                            var checked = "";
+                            if (isHasSelSpec(catalogSpec[i].id, catalogSpecValue[j].id)) {
+                                checked = "checked";
+                            }
+
+
+                            l_chbox += " <input  id='checkboxggzitemid" + i + j + "' " + checked + " type='checkbox' value='" + catalogSpecValue[j].id + "' name='specValueId' title='" + catalogSpecValue[j].name + "' onclick=changeGgListIem('" + catalogSpec.length + "','checkboxggzitem" + i + "') /><label for='checkboxggzitemid" + i + j + "'>" + catalogSpecValue[j].name + "</label>";
+                        }
+                        l_html += l_chbox + "</td>";
+                    }
+
+                    l_html += "</tr>";
+
+                }
+            }
+
+            $("#spec_select_list tbody").html(l_html);
+        }
+
+        function submit(fun) {
+
+            var form = $("#form1");
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+                var isChecked = $('#Model_Product_IsMultiSpec').attr('checked');
+                if (typeof isChecked != 'undefined') {
+                    if (selSpecArr.length == 0) {
+                        $.lumos.tips("请选择规格")
+                        return;
+                    }
+                    if ($('#specValComGrid table tbody tr').length < 2) {
+                        $.lumos.tips("开启多规格，必须要用两个或者以上的商品Sku")
+                        return;
+                    }
+                }
+
+                $("#Model_Product_Details").val(CKEDITOR.instances.Model_Product_Details.getData());
+                $('#Model_Product_Supplier').val($("#Model_Product_SupplierId option:selected").text());
+                $('#Model_Product_ProductCategory').val($("#Model_Product_ProductCategoryId option:selected").text());
+
+                art.dialog.confirm(
+               '确定要提交？',
+                function () {
+                    var l_Data = $(form).serializeArray();
+                    $.lumos.postJson({
+                        url: "/Biz/Product/Add",
+                        data: l_Data,
+                        success: function (d) {
+                            fun(d);
+                        }
+                    });
+                });
+            }
+
+            return false;
+        }
+
+
+        var specStruct = { id: 0, name: "", value: [] };
+        var specValueStruct = { id: 0, name: "" };
+
+        function CombineArray(arr1, arr2) {
+            var arrResultSub = new Array();
+            for (var i = 0; i < arr1.length; i++) {
+                for (var k = 0; k < arr2.length; k++) {
+                    arrResultSub[arrResultSub.length] = arr1[i] + "," + arr2[k].name + ":" + arr2[k].id;
+                }
+            }
+            return arrResultSub;
+        }
+
+        var selSpecArr = [];
+
+        function isHasSelSpec(id, val) {
+
+            var isflag = false;
+            $.each(selSpecArr, function (index, p_row) {
+
+                if (p_row.id == id) {
+
+                    $.each(p_row.value, function (i, p) {
+
+                        if (p.id == val) {
+                            isflag = true;
+                            return;
+                        }
+                    });
+                }
+            });
+
+            return isflag;
+        }
+
+        function changeGgListIem(ggCount, id) {
+
+
+
+            selSpecArr = [];
+
+            $('#spec_select_list tbody tr ').each(function () {
+
+                var specChecked = $(this).find('input:checked');
+
+                if (specChecked.length > 0) {
+                    var specId = $(this).find('input[name=specId]').val();
+                    var specName = $(this).find('input[name=specName]').val();
+                    var specObj = specStruct.constructor();
+                    specObj.id = specId;
+                    specObj.name = specName;
+
+
+                    var specValueChecked = $(this).find('input[name=specValueId]:checked');
+
+
+                    var specValue = [];
+                    $(specValueChecked).each(function () {
+
+                        var specValueObj = specValueStruct.constructor();
+                        specValueObj.id = $(this).val();
+                        specValueObj.name = $(this).next().text();
+
+
+                        specValue.push(specValueObj);
+
+
+                    });
+
+                    specObj.value = specValue;
+
+                    selSpecArr.push(specObj);
+
+
+
+                }
+            });
+
+
+
+            $('#Model_Product_SpecsJson').val(JSON.stringify(selSpecArr));
+
+
+
+            var specValComGrid = $("#specValComGrid");
+
+            $(specValComGrid).html("");
+
+
+
+            if (selSpecArr.length > 0) {
+
+                var l_tablehtml = "<table style='table-layout: fixed; width: 100%; margin-bottom:5px;' class='list-tb' cellpadding='0' cellspacing='0'>"
+                var l_tableth = " <thead>";
+                var l_tableth1 = "<tr>";
+
+                var arrResult = new Array();
+                var specArr = selSpecArr;   //和JSON.parse()的功能一样，生成了数组
+                for (var z = 0; z < specArr.length; z++) {
+                    l_tableth1 += "<th>" + specArr[z].name + "</th>";
+                }
+
+                for (var z = 0; z < specArr[0].value.length; z++) {
+
+                    arrResult[arrResult.length] = specArr[0].value[z].name + ":" + specArr[0].value[z].id;
+                }
+
+                l_tableth1 += "<th >销售价</th>";
+                l_tableth1 += "<th >库存</th>";
+                l_tableth1 += "</tr>";
+
+
+
+
+                l_tableth += l_tableth1;
+
+                l_tablehtml += l_tableth + "</thead>";
+
+                for (var i = 1; i < specArr.length; i++) {
+                    arrResult = CombineArray(arrResult, specArr[i].value);
+                }
+
+
+
+                var l_tabletr = "<tbody>";
+
+                for (var j = 0; j < arrResult.length; j++) {
+
+                    var l_spec_desc = arrResult[j].replace(/,/g, ';');
+                    var arr_spec_desc = l_spec_desc.split(';');
+                    var ll_spec_desc = "[";
+                    for (var k = 0; k < arr_spec_desc.length; k++) {
+                        ll_spec_desc += "{\"id\":\"" + specArr[k].id + "\",\"name\":\"" + specArr[k].name + "\",\"value\":{\"id\":\"" + arr_spec_desc[k].split(':')[1] + "\",\"name\":\"" + arr_spec_desc[k].split(':')[0] + "\"}},";
+                    }
+                    ll_spec_desc = ll_spec_desc.substring(0, ll_spec_desc.length - 1);
+                    ll_spec_desc += "]";
+
+
+                    //var l_specids = arrResult[j].replace(/,/g, ';');
+                    //var arr_specids = l_specids.split(';');
+                    //var ll_specids = "";
+                    //for (var k = 0; k < arr_specids.length; k++) {
+                    //    ll_specids += specArr[k].id + ":" + arr_specids[k].split(':')[1] + ",";
+                    //}
+                    //ll_specids = ll_specids.substring(0, ll_specids.length - 1);
+                    //ll_specids += "";
+
+
+                    var l_item = arrResult[j].split(',');
+                    for (var i = 0; i < l_item.length; i++) {
+                        var ll_item = l_item[i].split(':');
+                        l_tabletr += "<td>" + ll_item[0] + "</td>";
+                    }
+
+                    l_tabletr += "<td>";
+                    l_tabletr += "<input name='Model.ProductSku[" + j + "].Price' id='Model_ProductSku_Price_" + j + "' class='input-control price'  style='width:45px;' type='text' value='' />";
+                    //l_tabletr += "<input name='Model.ProductSku[" + j + "].Spec2'   style='width:45px;'  value='" + ll_specids + "' />";
+                    l_tabletr += "<input name='Model.ProductSku[" + j + "].Spec'   style='width:45px;'  value='" + ll_spec_desc + "' type='hidden' />";
+                    l_tabletr += "</td>";
+
+                    l_tabletr += "<td>";
+                    l_tabletr += "<input name='Model.ProductSku[" + j + "].Quantity' id='Model_ProductSku_Quantity_" + j + "' class='input-control'  style='width:45px;' type='text' value='' />";
+                    l_tabletr += "</td>";
+
+                    l_tabletr += "</tr>";
+                }
+                l_tablehtml += l_tabletr + "</tbody></table>";
+                $("#specValComGrid").html(l_tablehtml);
+
+
+                var prices = $("#specValComGrid").find('.price');
+
+                for (var i = 0; i < prices.length; i++) {
+                    $('#Model_ProductSku_Price_' + i).formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.01, max: 10000, onError: "金额范围在0.01~10000.00之间" });
+                    $('#Model_ProductSku_Price_' + i).decimalInput(2);
+                    $('#Model_ProductSku_Quantity_' + i).formValidator({ onShow: "", onFocus: "", onCorrect: "" }).regexValidator({ regExp: regexEnum.intege1, onError: "库存请输入正整数" });;
+                }
+
+            }
+            else {
+
+                $("#specValComGrid").html("");
+            }
+
+        }
+
+
+    </script>
+}
+
+<div class="gbr-row">
+    <form id="form1" name="form1" method="post">
+        @Html.AntiForgeryToken()
+        <input id="Model_Product_SpecsJson" name="Model.Product.SpecsJson" type="hidden" value="" />
+        <table class="f-tb" cellpadding="0" cellspacing="1">
+            <tr>
+                <td class="f-tb-t" style="width:50px">
+                    商品名称：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_Name" name="Model.Product.Name" type="text" class="input-control" value="" style="width:300px;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    商品分类：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_ProductCategory" name="Model.Product.ProductCategory" type="hidden" value="" />
+                    @Html.initProductCategory("Model.Product.ProductCategoryId", Model.Category)
+                </td>
+            </tr>
+
+            <tr>
+                <td class="f-tb-t">
+                    供应商：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_Supplier" name="Model.Product.Supplier" type="hidden" value="" />
+                    @Html.initSupplier("Model.Product.SupplierId", Model.Supplier)
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    分类模块：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_ProductKindNames" name="Model.Product.ProductKindNames" type="hidden" value="" />
+                    <input id="Model_Product_ProductKindIds" name="Model.Product.ProductKindIds" type="hidden" value="" />
+                    @Html.initProductKind("ddl.ProductKindIds", Model.Kind)
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    简介：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_BriefIntro" name="Model.Product.BriefIntro" type="text" class="input-control" value="" style="width:500px;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    图片：
+                </td>
+                <td class="f-tb-c">
+                    @*<div class="cked-title">
+                            <label class="frm_label" for="">
+                                <span class="tip" style="float:left;">建议尺寸：320 * 320</span>
+                            </label>
+                        </div>*@
+                    <div>
+                        <table class="f-tb1-detail" id="list_GoodsPic" style="text-align:center;width:auto">
+                            <tr style="vertical-align:top">
+
+                                @for (var i = 0; i < Model.DispalyImgs.Count; i++)
+                                {
+                                    <td>
+                                        <div>
+                                            <span class="uploadimgbox" upload="true">
+                                                <span class="uploadimg" inputname="Model.DispalyImgs[@i].ImgUrl" path="product">
+                                                    <img src="~/Static/default1.jpg" />
+                                                    <span class="uploadimg-click" style="">上传</span>
+                                                    <input id="Model_DispalyImgs_ImgUrl_@i" value="" name="Model.DispalyImgs[@i].ImgUrl" type="hidden" />
+                                                    <input id="Model_DispalyImgs_Priority_@i" value="@Model.DispalyImgs[i].Priority" name="Model.DispalyImgs[@i].Priority" type="hidden" />
+                                                    <input id="Model_DispalyImgs_Name_@i" value="@Model.DispalyImgs[i].Name" name="Model.DispalyImgs[@i].Name" type="hidden" />
+                                                    <input id="Model_DispalyImgs_IsMain_@i" value="@(Model.DispalyImgs[i].IsMain==true?"true":"false")" name="Model.DispalyImgs[@i].IsMain" type="hidden" />
+                                                </span>
+                                                <span class="uploadimg-view" style="">预览</span>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span>@Model.DispalyImgs[i].Name</span>
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        </table>
+                    </div>
+
+
+                </td>
+            </tr>
+
+            <tr>
+                <td class="f-tb-t" style="width:50px">
+                    是否多规格：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_IsMultiSpec" name="Model.Product.IsMultiSpec" type="checkbox" /><label></label>
+                </td>
+            </tr>
+
+            <tr class="tr_isIsMultiSpec_true" style="display:none">
+                <td class="f-tb-t" style="width:50px"></td>
+                <td class="f-tb-c">
+                    <div style="line-height:40px;height:40px;">
+                        <input type="button" class="btn btn-select" id="btn_selectspec" value="选择规格" />
+                    </div>
+                    <div>
+                        <table id="spec_select_list" style="table-layout: fixed; width: 100%; margin-bottom:5px;" class='list-tb' cellpadding='0' cellspacing='0'>
+                            <thead>
+                                <tr>
+                                    <th style="width:80px">
+                                        规格名称
+                                    </th>
+                                    <th style="width:100%">
+                                        规格值
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+            <tr class="tr_isIsMultiSpec_true" style="display:none">
+                <td class="f-tb-t" style="width:50px">
+                    商品规格：
+                </td>
+                <td class="f-tb-c">
+                    <div id="specValComGrid">
+                    </div>
+                </td>
+            </tr>
+            <tr class="tr_isIsMultiSpec_false">
+                <td class="f-tb-t" style="width:50px">
+                    商品价格：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_Price" name="Model.ProductSku[0].Price" type="text" class="input-control" value="" style="width:80px;" />
+                </td>
+            </tr>
+            <tr class="tr_isIsMultiSpec_false">
+                <td class="f-tb-t" style="width:50px">
+                    商品库存：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_Quantity" name="Model.ProductSku[0].Quantity" type="text" class="input-control" value="" style="width:80px;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t" style="width:50px">
+                    服务描述：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_ServiceDesc" name="Model.Product.ServiceDesc" type="text" class="input-control" value="" style="width:400px;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t" style="width:50px">
+                    商品描述：
+                </td>
+                <td class="f-tb-c">
+                    <textarea id="Model_Product_Details" name="Model.Product.Details" class="ckeditor"></textarea>
+                </td>
+            </tr>
+        </table>
+
+
+
+    </form>
+</div>
+

@@ -75,6 +75,8 @@
     <Compile Include="Biz\ExtendedApp.cs" />
     <Compile Include="Biz\ExtendedAppAccessLog.cs" />
     <Compile Include="Biz\Fund.cs" />
+    <Compile Include="Biz\Inventory.cs" />
+    <Compile Include="Biz\InventoryOperateHis.cs" />
     <Compile Include="Biz\LllegalQueryLog.cs" />
     <Compile Include="Biz\LllegalQueryScore.cs" />
     <Compile Include="Biz\LllegalQueryScoreTrans.cs" />
@@ -100,6 +102,12 @@
     <Compile Include="Biz\OrderToCarClaim.cs" />
     <Compile Include="Biz\OrderToCarInsureOfferCompany.cs" />
     <Compile Include="Biz\OrderToCarInsureOfferKind.cs" />
+    <Compile Include="Biz\ProductCategory.cs" />
+    <Compile Include="Biz\ProductKind.cs" />
+    <Compile Include="Biz\ProductSku.cs" />
+    <Compile Include="Biz\ProductSpecDataSet.cs" />
+    <Compile Include="Biz\ProductSpecDataSetValue.cs" />
+    <Compile Include="ImgSet.cs" />
     <Compile Include="Model\PayConfirmModel.cs" />
     <Compile Include="Biz\PosMachine.cs" />
     <Compile Include="Biz\Product.cs" />

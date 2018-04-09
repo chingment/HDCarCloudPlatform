@@ -146,5 +146,29 @@ namespace Lumos.BLL
             }
         }
 
+        public static SupplierProvider Supplier
+        {
+            get
+            {
+                return new SupplierProvider();
+            }
+        }
+
+        public static ProductCategoryProvider ProductCategory
+        {
+            get
+            {
+                return new ProductCategoryProvider();
+            }
+        }
+
+        public static ProductKindProvider ProductKind
+        {
+            get
+            {
+                return new ProductKindProvider();
+            }
+        }
+
     }
 }

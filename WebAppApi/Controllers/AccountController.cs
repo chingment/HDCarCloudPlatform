@@ -235,7 +235,7 @@ namespace WebAppApi.Controllers
             #region 获取 投保公司,理赔公司
 
             var carInsCompanys = (from u in CurrentDb.CarInsuranceCompany
-                                  join r in CurrentDb.InsuranceCompany on u.InsuranceCompanyId equals r.Id
+                                  join r in CurrentDb.Company on u.InsuranceCompanyId equals r.Id
                                   where u.Status == Enumeration.CarInsuranceCompanyStatus.Normal
                                   select new { r.Id, r.Name, u.InsuranceCompanyImgUrl, u.CanClaims, u.CanInsure, u.CanApplyLossAssess, u.Priority }).Distinct().OrderByDescending(m => m.Priority);
 

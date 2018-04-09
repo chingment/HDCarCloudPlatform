@@ -31,7 +31,7 @@ namespace System
             }
             else
             {
-                return s.ToString();
+                return s.ToString().Trim();
             }
         }
 

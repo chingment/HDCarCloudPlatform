@@ -331,7 +331,7 @@ namespace Lumos.BLL
                 //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
 
-                var insuranceCompany = CurrentDb.InsuranceCompany.Where(m => m.Id == orderToCarClaim.InsuranceCompanyId).FirstOrDefault();
+                var insuranceCompany = CurrentDb.Company.Where(m => m.Id == orderToCarClaim.InsuranceCompanyId).FirstOrDefault();
 
                 //2011为车险理赔
                 var product = CurrentDb.Product.Where(m => m.Id == 2013).FirstOrDefault();

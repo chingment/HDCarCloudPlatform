@@ -9,9 +9,9 @@ namespace WebBack.Models.Biz.InsuranceCompany
 {
     public class AddViewModel : BaseViewModel
     {
-        private Lumos.Entity.InsuranceCompany _insuranceCompany = new Lumos.Entity.InsuranceCompany();
+        private Lumos.Entity.Company _insuranceCompany = new Lumos.Entity.Company();
 
-        public Lumos.Entity.InsuranceCompany InsuranceCompany
+        public Lumos.Entity.Company InsuranceCompany
         {
             get
             {

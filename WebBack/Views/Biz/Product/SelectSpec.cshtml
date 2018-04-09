@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "SelectSpec";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+<script type="text/javascript">
+
+    var selSpec;
+
+    function isHasSelSpec(id, val) {
+
+        var isflag = false;
+        $.each(selSpec, function (index, p_row) {
+
+            if (p_row.id == id) {
+
+                $.each(p_row.value, function (i, p) {
+
+                    if (p.id == val) {
+                        isflag = true;
+                        return;
+                    }
+                });
+            }
+        });
+
+        return isflag;
+    }
+
+    var catalogSpec;
+    $(document).ready(function () {
+
+        selSpec = $.lumos.parentDialog().selSpec;
+
+        $.lumos.postJson({
+            url: "/Biz/Product/GetSelectSpec",
+            success: function (d) {
+
+
+                catalogSpec = d.data.specs;
+
+                var l_html = "";
+                if (catalogSpec.length > 0) {
+
+                    for (var i = 0; i < catalogSpec.length; i++) {
+                        l_html += "<tr>";
+                        l_html += "<td style=\"vertical-align: top;\">";
+                        l_html += "<input name='specName' type='hidden' value='" + catalogSpec[i].name + "' /> ";
+                        l_html += "<input name='specId' type='hidden' value='" + catalogSpec[i].id + "' /> ";
+                        l_html += "<span>" + catalogSpec[i].name + "</span>";
+                        l_html += "</td>";
+
+                        var catalogSpecValue = catalogSpec[i].value;
+                        if (catalogSpecValue.length > 0) {
+
+                            l_html += "<td style=\"white-space: normal;\">";
+
+                            var l_chbox = "";
+
+                            for (var j = 0; j < catalogSpecValue.length; j++) {
+
+                                var checked = "";
+                                if (isHasSelSpec(catalogSpec[i].id, catalogSpecValue[j].id)) {
+                                    checked = "checked";
+                                }
+
+                                l_chbox += " <input  id='specValue_" + i + j + "' " + checked + "  type='checkbox' value='" + catalogSpecValue[j].id + "' name='specValueId'  /><label for='specValue_" + i + j + "'>" + catalogSpecValue[j].name + "</label>";
+                            }
+                            l_html += l_chbox + "</td>";
+                        }
+
+                        l_html += "</tr>";
+
+                    }
+                }
+
+                $("#list_table tbody").html(l_html);
+            }
+        });
+
+    });
+
+    var specStruct = { id: 0, name: "", value: [] };
+    var specValueStruct = { id: 0, name: "" };
+
+    function submit(fun) {
+
+        var selSpecArr = [];
+
+        $('#list_table tbody tr ').each(function () {
+
+            var specChecked = $(this).find('input:checked');
+
+            if (specChecked.length > 0) {
+                var specId = $(this).find('input[name=specId]').val();
+                var specName = $(this).find('input[name=specName]').val();
+                var specObj = specStruct.constructor();
+                specObj.id = specId;
+                specObj.name = specName;
+
+
+                var specValueChecked = $(this).find('input[name=specValueId]:checked');
+
+
+                var specValue = [];
+                $(specValueChecked).each(function () {
+
+                    var specValueObj = specValueStruct.constructor();
+                    specValueObj.id = $(this).val();
+                    specValueObj.name = $(this).next().text();
+
+
+                    specValue.push(specValueObj);
+
+
+                });
+
+                specObj.value = specValue;
+
+                selSpecArr.push(specObj);
+
+
+
+            }
+        });
+
+        fun(selSpecArr);
+    }
+
+
+</script>
+
+<form id="form1" name="form1">
+    @Html.AntiForgeryToken()
+
+    <div class="list">
+        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:100px">
+                        规格名称
+                    </th>
+                    <th style="width:100%">
+                        规格值
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</form>
+

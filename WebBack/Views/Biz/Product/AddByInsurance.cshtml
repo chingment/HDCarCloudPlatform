@@ -1,0 +1,217 @@
+﻿@model WebBack.Models.Biz.Product.AddByInsuranceViewModel
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
+}
+
+@section styles{
+    <style type="text/css">
+        #list_GoodsPic tr > td {
+            width: 100px;
+            padding: 10px;
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/ckeditor/config.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_Product_Name").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 60, onError: "商品名称不能为空,且不超过60个字符" });
+            $("#Model_Product_ProductCategoryId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择商品分类" });
+            $("#Model_Product_SupplierId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择供应商" });
+            $("#Model_Product_ProductKindIds").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择分类模块" });
+            $("#Model_DispalyImgs_ImgUrl_0").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传商品封面图片" });
+            $("#Model_Product_Price").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.01, max: 10000, onError: "价格范围在0.01~10000.00之间" });
+            $("#Model_Product_Price").decimalInput(2);
+            $("#Model_Product_ProductCategoryId").chosen({ search_contains: true, onlytext: true });
+            $("#Model_Product_SupplierId").chosen({ search_contains: true, onlytext: true });
+            $("#ddl_ProductKindIds").chosen({ search_contains: true, onlytext: true });
+            $("#ddl_ProductKindIds").live("change", function () {
+
+                var v = "";
+                var t = "";
+                var sels = $(this).find("option:selected");
+
+                for (var i = 0; i < sels.length; i++) {
+                    var _v = $(sels[i]).val();
+                    _v = _v.replace(/&nbsp;/ig, "");
+                    _v = $.trim(_v);
+                    v += _v + ",";
+
+                    var _t = $(sels[i]).text();
+                    _t = _t.replace(/&nbsp;/ig, "");
+                    _t = $.trim(_t);
+                    t += _t + ",";
+                }
+
+                if (v != "") {
+                    v = v.substring(0, v.length - 1);
+                    t = t.substring(0, t.length - 1);
+                }
+
+                $("#Model_Product_ProductKindIds").val(v);
+                $('#Model_Product_ProductKindNames').val(t);
+            });
+
+
+
+
+        });
+
+        function submit(fun) {
+
+            var form = $("#form1");
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+                var isChecked = $('#Model_Product_IsMultiSpec').attr('checked');
+                if (typeof isChecked != 'undefined') {
+                    if (selSpecArr.length == 0) {
+                        $.lumos.tips("请选择规格")
+                        return;
+                    }
+                    if ($('#specValComGrid table tbody tr').length < 2) {
+                        $.lumos.tips("开启多规格，必须要用两个或者以上的商品Sku")
+                        return;
+                    }
+                }
+
+                $("#Model_Product_Details").val(CKEDITOR.instances.Model_Product_Details.getData());
+                $('#Model_Product_Supplier').val($("#Model_Product_SupplierId option:selected").text());
+                $('#Model_Product_ProductCategory').val($("#Model_Product_ProductCategoryId option:selected").text());
+
+                art.dialog.confirm(
+               '确定要提交？',
+                function () {
+                    var l_Data = $(form).serializeArray();
+                    $.lumos.postJson({
+                        url: "/Biz/Product/AddByInsurance",
+                        data: l_Data,
+                        success: function (d) {
+                            fun(d);
+                        }
+                    });
+                });
+            }
+
+            return false;
+        }
+
+
+    </script>
+}
+
+<div class="gbr-row">
+    <form id="form1" name="form1" method="post">
+        @Html.AntiForgeryToken()
+        <input id="Model_Product_SpecsJson" name="Model.Product.SpecsJson" type="hidden" value="" />
+        <table class="f-tb" cellpadding="0" cellspacing="1">
+            <tr>
+                <td class="f-tb-t" style="width:50px">
+                    名称：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_Name" name="Model.Product.Name" type="text" class="input-control" value="" style="width:300px;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    分类：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_ProductCategory" name="Model.Product.ProductCategory" type="hidden" value="" />
+                    @Html.initProductCategory("Model.Product.ProductCategoryId", Model.Category)
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    分类模块：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_ProductKindNames" name="Model.Product.ProductKindNames" type="hidden" value="" />
+                    <input id="Model_Product_ProductKindIds" name="Model.Product.ProductKindIds" type="hidden" value="" />
+                    @Html.initProductKind("ddl.ProductKindIds", Model.Kind)
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    保险公司：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_Supplier" name="Model.Product.Supplier" type="hidden" value="" />
+                    @Html.initSupplier("Model.Product.SupplierId", Model.Supplier)
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    简介：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_BriefIntro" name="Model.Product.BriefIntro" type="text" class="input-control" value="" style="width:500px;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t">
+                    图片：
+                </td>
+                <td class="f-tb-c">
+                    @*<div class="cked-title">
+                            <label class="frm_label" for="">
+                                <span class="tip" style="float:left;">建议尺寸：320 * 320</span>
+                            </label>
+                        </div>*@
+                    <div>
+                        <table class="f-tb1-detail" id="list_GoodsPic" style="text-align:center;width:auto">
+                            <tr style="vertical-align:top">
+
+                                @for (var i = 0; i < Model.DispalyImgs.Count; i++)
+                                {
+                                    <td>
+                                        <div>
+                                            <span class="uploadimgbox" upload="true">
+                                                <span class="uploadimg" inputname="Model.DispalyImgs[@i].ImgUrl" path="product">
+                                                    <img src="~/Static/default1.jpg" />
+                                                    <span class="uploadimg-click" style="">上传</span>
+                                                    <input id="Model_DispalyImgs_ImgUrl_@i" value="" name="Model.DispalyImgs[@i].ImgUrl" type="hidden" />
+                                                    <input id="Model_DispalyImgs_Priority_@i" value="@Model.DispalyImgs[i].Priority" name="Model.DispalyImgs[@i].Priority" type="hidden" />
+                                                    <input id="Model_DispalyImgs_Name_@i" value="@Model.DispalyImgs[i].Name" name="Model.DispalyImgs[@i].Name" type="hidden" />
+                                                    <input id="Model_DispalyImgs_IsMain_@i" value="@(Model.DispalyImgs[i].IsMain==true?"true":"false")" name="Model.DispalyImgs[@i].IsMain" type="hidden" />
+                                                </span>
+                                                <span class="uploadimg-view" style="">预览</span>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span>@Model.DispalyImgs[i].Name</span>
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        </table>
+                    </div>
+
+
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t" style="width:50px">
+                    价格：
+                </td>
+                <td class="f-tb-c">
+                    <input id="Model_Product_Price" name="Model.ProductSku[0].Price" type="text" class="input-control" value="" style="width:80px;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="f-tb-t" style="width:50px">
+                    描述：
+                </td>
+                <td class="f-tb-c">
+                    <textarea id="Model_Product_Details" name="Model.Product.Details" class="ckeditor"></textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

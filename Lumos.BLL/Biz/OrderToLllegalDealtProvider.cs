@@ -19,7 +19,7 @@ namespace Lumos.BLL
             {
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalDealt.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.LllegalDealt).FirstOrDefault();
+                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.LllegalDealt).FirstOrDefault();
 
                 orderToLllegalDealt.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToLllegalDealt.AgentId = merchant.AgentId ?? 0;

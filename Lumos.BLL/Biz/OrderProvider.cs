@@ -334,7 +334,7 @@ namespace Lumos.BLL
                 var insuranceCompany = CurrentDb.Company.Where(m => m.Id == orderToCarClaim.InsuranceCompanyId).FirstOrDefault();
 
                 //2011为车险理赔
-                var product = CurrentDb.Product.Where(m => m.Id == 2013).FirstOrDefault();
+                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.InsureForCarForClaim).FirstOrDefault();
 
 
                 orderToCarClaim.SalesmanId = merchant.SalesmanId ?? 0;
@@ -829,7 +829,7 @@ namespace Lumos.BLL
             {
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalQueryRecharge.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.LllegalQueryRecharge).FirstOrDefault();
+                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.LllegalQueryRecharge).FirstOrDefault();
 
                 orderToLllegalQueryRecharge.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToLllegalQueryRecharge.AgentId = merchant.AgentId ?? 0;

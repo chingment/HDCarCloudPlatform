@@ -10,7 +10,7 @@ using System.Transactions;
 
 namespace Lumos.BLL
 {
-   public class OrderToInsuranceProvider : BaseProvider
+    public class OrderToInsuranceProvider : BaseProvider
     {
         public CustomJsonResult Submit(int operater, OrderToInsurance orderToInsurance)
         {
@@ -23,13 +23,13 @@ namespace Lumos.BLL
                 //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
 
-                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.InsureForYiWaiXian).FirstOrDefault();
+                //var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.InsureForYiWaiXian).FirstOrDefault();
 
                 orderToInsurance.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToInsurance.AgentId = merchant.AgentId ?? 0;
-                orderToInsurance.ProductId = product.Id;
-                orderToInsurance.ProductType = product.Type;
-                orderToInsurance.ProductName = product.Name;
+               // orderToInsurance.ProductId = product.Id;
+                //orderToInsurance.ProductType = product.Type;
+                //orderToInsurance.ProductName = product.Name;
                 orderToInsurance.Status = Enumeration.OrderStatus.Submitted;
                 orderToInsurance.SubmitTime = this.DateTime;
                 orderToInsurance.CreateTime = this.DateTime;

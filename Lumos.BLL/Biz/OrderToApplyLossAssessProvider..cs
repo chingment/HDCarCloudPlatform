@@ -19,7 +19,7 @@ namespace Lumos.BLL
             {
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToApplyLossAssess.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.ApplyLossAssess).FirstOrDefault();
+                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.ApplyLossAssess).FirstOrDefault();
 
                 var insuranceCompany = CurrentDb.Company.Where(m => m.Id == orderToApplyLossAssess.InsuranceCompanyId).FirstOrDefault();
                 orderToApplyLossAssess.SalesmanId = merchant.SalesmanId ?? 0;

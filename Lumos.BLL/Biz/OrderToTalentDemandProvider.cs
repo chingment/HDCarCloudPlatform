@@ -22,7 +22,7 @@ namespace Lumos.BLL
                 //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
 
-                var product = CurrentDb.Product.Where(m => m.Id == (int)Enumeration.ProductType.TalentDemand).FirstOrDefault();
+                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.TalentDemand).FirstOrDefault();
 
                 orderToTalentDemand.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToTalentDemand.AgentId = merchant.AgentId ?? 0;

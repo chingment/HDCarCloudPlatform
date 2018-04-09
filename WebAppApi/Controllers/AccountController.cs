@@ -163,9 +163,13 @@ namespace WebAppApi.Controllers
 
             LoginResultModel resultModel = new LoginResultModel();
 
+
+            var agent = CurrentDb.SysAgentUser.Where(m => m.Id == salesman.AgentId).FirstOrDefault();
+
+
             DateTime nowDate = DateTime.Now;
             resultModel.UserId = salesman.Id;
-            resultModel.MerchantId = this.SalesmanMerchantId;
+            resultModel.MerchantId = salesman.AgentId;
             resultModel.PosMachineId = 0;
             resultModel.UserName = salesman.UserName;
             resultModel.MerchantCode = "88888888";
@@ -353,11 +357,16 @@ namespace WebAppApi.Controllers
             #endregion
 
             #region 检查流量费 是否到期后，需支付的订单
-            var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.UserId == userId && m.MerchantId == merchantId && m.PosMachineId == posMachineId && m.Status == Enumeration.OrderStatus.WaitPay).FirstOrDefault();
-            if (orderToServiceFee != null)
+
+            if (!IsSaleman(userId))
             {
-                model.OrderInfo = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee);
+                var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.UserId == userId && m.MerchantId == merchantId && m.PosMachineId == posMachineId && m.Status == Enumeration.OrderStatus.WaitPay).FirstOrDefault();
+                if (orderToServiceFee != null)
+                {
+                    model.OrderInfo = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee);
+                }
             }
+
             #endregion
 
             #region 第三方服务

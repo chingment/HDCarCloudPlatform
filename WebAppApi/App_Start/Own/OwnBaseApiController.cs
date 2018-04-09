@@ -17,17 +17,6 @@ namespace WebAppApi
         private APIResult _result = new APIResult();
         private LumosDbContext _currentDb;
 
-        private int _salesmanMerchantId = 0;
-
-        public int SalesmanMerchantId
-        {
-            get
-            {
-                return _salesmanMerchantId;
-            }
-        }
-
-
         public APIResult Result
         {
             get
@@ -158,6 +147,28 @@ namespace WebAppApi
 
 
             return remarks;
+        }
+
+        public bool IsSaleman(int userId)
+        {
+            var user = CurrentDb.SysUser.Where(m => m.Id == userId).FirstOrDefault();
+
+            if (user == null)
+                return true;
+
+            if (user.UserName.Length < 2)
+                return false;
+
+            string pfrix = user.UserName.Substring(0, 2);
+
+            if (pfrix.ToLower() == "ag")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -22,9 +22,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse SubmitInsure(SubmitInsureModel model)
         {
-
-            //业务人员模拟数据
-            if (model.MerchantId == this.SalesmanMerchantId)
+            if (IsSaleman(model.UserId))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
             }
@@ -168,8 +166,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse SubmitClaim(SubmitClaimModel model)
         {
-            //业务人员模拟数据
-            if (model.MerchantId == this.SalesmanMerchantId)
+            if (IsSaleman(model.UserId))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
             }
@@ -191,6 +188,10 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse SubmitEstimateList(SubmitEstimateListModel model)
         {
+            if (IsSaleman(model.UserId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
+            }
 
             string estimateListImg = "";
             if (model.ImgData != null)

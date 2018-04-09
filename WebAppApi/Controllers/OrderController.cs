@@ -908,10 +908,9 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse PayConfirm(PayConfirmModel model)
         {
-            //业务人员模拟数据
-            if (model.MerchantId == this.SalesmanMerchantId)
+            if (IsSaleman(model.UserId))
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能支付");
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
             }
 
             IResult result = BizFactory.Pay.Confirm(model.UserId, model);
@@ -935,8 +934,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse SubmitTalentDemand(SubmitTalentDemandModel model)
         {
-            //业务人员模拟数据
-            if (model.MerchantId == this.SalesmanMerchantId)
+            if (IsSaleman(model.UserId))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
             }
@@ -957,8 +955,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse SubmitApplyLossAssess(SubmitApplyLossAssessModel model)
         {
-            //业务人员模拟数据
-            if (model.MerchantId == this.SalesmanMerchantId)
+            if (IsSaleman(model.UserId))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
             }
@@ -977,8 +974,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse SubmitLllegalQueryScoreRecharge(SubmitLllegalQueryScoreRechargeModel model)
         {
-            //业务人员模拟数据
-            if (model.MerchantId == this.SalesmanMerchantId)
+            if (IsSaleman(model.UserId))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
             }
@@ -987,9 +983,9 @@ namespace WebAppApi.Controllers
             orderToLllegalQueryRecharge.UserId = model.UserId;
             orderToLllegalQueryRecharge.MerchantId = model.MerchantId;
             orderToLllegalQueryRecharge.PosMachineId = model.PosMachineId;
-            orderToLllegalQueryRecharge.Price = 50;
+            orderToLllegalQueryRecharge.Price = 5;
             orderToLllegalQueryRecharge.Score = 50;
-
+            orderToLllegalQueryRecharge.PriceVersion = "2018.04.09";
 
             IResult result = BizFactory.Order.SubmitLllegalQueryScoreRecharge(model.UserId, orderToLllegalQueryRecharge);
             return new APIResponse(result);
@@ -999,8 +995,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse SubmitCredit(SubmitCreditModel model)
         {
-            //业务人员模拟数据
-            if (model.MerchantId == this.SalesmanMerchantId)
+            if (IsSaleman(model.UserId))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
             }

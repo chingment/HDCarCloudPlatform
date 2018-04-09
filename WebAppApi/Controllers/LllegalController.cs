@@ -17,7 +17,15 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse<LllegalQueryResult> Query(LllegalQueryParams model)
         {
-            var result = SdkFactory.HeLian.Query(model.UserId, model);
+            CustomJsonResult<LllegalQueryResult> result;
+            if (IsSaleman(model.UserId))
+            {
+                result = new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能查询订单", null);
+            }
+            else
+            {
+                result = SdkFactory.HeLian.Query(model.UserId, model);
+            }
 
             return new APIResponse<LllegalQueryResult>(result);
 
@@ -25,8 +33,7 @@ namespace WebAppApi.Controllers
 
         public APIResponse Dealt(DealtParams model)
         {
-            //业务人员模拟数据
-            if (model.MerchantId == this.SalesmanMerchantId)
+            if (IsSaleman(model.UserId))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
             }

@@ -12,5 +12,7 @@ namespace WebAppApi.Models.Order
         public int MerchantId { get; set; }
 
         public int PosMachineId { get; set; }
+
+        public int ProductSkuId { get; set; }
     }
 }

@@ -19,13 +19,13 @@ namespace Lumos.Entity
         [MaxLength(256)]
         public string ProductName { get; set; }
 
-        //public int InsuranceCompanyId { get; set; }
-        //[MaxLength(128)]
-        //public string InsuranceCompanyName { get; set; }
+        public int ProductSkuId { get; set; }
 
-        //public int ProductSkuId { get; set; }
+        public string ProductSkuName { get; set; }
+        public int InsuranceCompanyId { get; set; }
+        [MaxLength(128)]
+        public string InsuranceCompanyName { get; set; }
 
-        //public string ProductSkuName { get; set; }
 
         //public int PeopleNumber { get; set; }
 

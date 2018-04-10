@@ -65,6 +65,25 @@ namespace Lumos.BLL
             return "";
         }
 
+        public List<ImgSet> GetDispalyImgs(string imgSetJson)
+        {
+            if (string.IsNullOrEmpty(imgSetJson))
+                return new List<ImgSet>();
+
+            List<ImgSet> imgs = new List<ImgSet>();
+            var list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ImgSet>>(imgSetJson);
+
+            foreach (var m in list)
+            {
+                if (!string.IsNullOrEmpty(m.ImgUrl))
+                {
+                    imgs.Add(m);
+                }
+            }
+
+            return imgs;
+        }
+
 
         private string GetSpec2(string spec)
         {

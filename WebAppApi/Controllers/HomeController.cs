@@ -32,7 +32,7 @@ namespace WebAppApi.Controllers
         //private string host = "http://localhost:16665";
         //private string host = "http://120.79.233.231";
         private string host = "http://api.gzhaoyilian.com";
-        // private string host = "https://www.ins-uplink.cn";
+       // private string host = "https://www.ins-uplink.cn";
 
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
@@ -165,11 +165,18 @@ namespace WebAppApi.Controllers
             //int merchantId = 242;
             //int posMachineId = 149;
             //http://localhost:16665/ExtendedApp/poscredit?userId=1215&merchantId=241&posMachineId=148
-            int userId = 1215;
-            int merchantId = 241;
-            int posMachineId = 148;
+            //int userId = 1215;
+            //int merchantId = 241;
+            //int posMachineId = 148;
 
-            model.Add("获取产品", GetProductList(userId, merchantId, posMachineId, 0));
+            int userId = 1234;
+            int merchantId = 258;
+            int posMachineId = 153;
+
+
+            model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
+
+            // model.Add("获取产品", GetProductList(userId, merchantId, posMachineId, 0));
 
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
@@ -1709,6 +1716,32 @@ namespace WebAppApi.Controllers
             string result = http.HttpGet("" + host + "/api/Product/GetList?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId + "&pageIndex=" + pageIndex + "&type=" + type + "&categoryId=" + categoryId + "&kindId=" + kindId + "&name=" + name, headers);
 
             return result;
+        }
+
+        public string SubmitInsurance(int userId, int merchantId, int posMachineId)
+        {
+
+            SubmitInsuranceModel model1 = new SubmitInsuranceModel();
+            model1.UserId = userId;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+            model1.ProductSkuId = 1;
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/SubmitInsurance", a1, headers1);
+
+            return respon_data4;
+
         }
     }
 }

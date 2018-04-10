@@ -74,6 +74,18 @@
             <td class="c">
                 <span>@Model.OrderToInsurance.InsuranceCompanyName</span>
             </td>
+            <td class="t"></td>
+            <td class="c"></td>
+        </tr>
+        <tr>
+            <td class="t">产品名称：</td>
+            <td class="c">
+                <span>@Model.OrderToInsurance.ProductSkuName</span>
+            </td>
+            <td class="t">产品类型：</td>
+            <td class="c">
+                <span>@Model.OrderToInsurance.ProductType.GetCnName()</span>
+            </td>
         </tr>
     </table>
     @Html.Partial("AuditFlowTrace", Model.BizProcessesAuditDetails)

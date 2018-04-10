@@ -202,6 +202,7 @@
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\Order\OrderCarInsureOfferCompanyModel.cs" />
     <Compile Include="Models\Order\OrderCreditDetailsModel.cs" />
+    <Compile Include="Models\Order\OrderInsuranceDetailsModel.cs" />
     <Compile Include="Models\Order\OrderLllegalDealtDetailsModel.cs" />
     <Compile Include="Models\Order\OrderLllegalQueryRechargeDetailsModel.cs" />
     <Compile Include="Models\Order\OrderServiceFeeDetailsModel.cs" />

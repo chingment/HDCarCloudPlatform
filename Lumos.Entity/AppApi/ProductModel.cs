@@ -18,10 +18,15 @@ namespace Lumos.Entity.AppApi
 
         public decimal Price { get; set; }
 
-        public decimal ShowPrice { get; set; }
+        public string ShowPrice { get; set; }
 
         public string BriefIntro { get; set; }
 
         public bool IsHot { get; set; }
+
+        public string Details { get; set; }
+
+
+        public List<ImgSet> DispalyImgs { get; set; }
     }
 }

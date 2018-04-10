@@ -142,6 +142,14 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
 
                                 break;
+                            case Enumeration.OrderType.Insure:
+
+                                var orderToInsurance = CurrentDb.OrderToInsurance.Where(c => c.Id == m.Id).FirstOrDefault();
+                                orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsuranceCompanyName));
+                                orderModel.OrderField.Add(new OrderField("产品名称", orderToInsurance.ProductSkuName));
+                                orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
+
+                                break;
 
                         }
                         #endregion
@@ -356,6 +364,13 @@ namespace WebAppApi.Controllers
 
 
                                 break;
+                            case Enumeration.OrderType.Insure:
+
+                                var orderToInsurance = CurrentDb.OrderToInsurance.Where(c => c.Id == m.Id).FirstOrDefault();
+                                orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsuranceCompanyName));
+                                orderModel.OrderField.Add(new OrderField("产品名称", orderToInsurance.ProductSkuName));
+
+                                break;
                         }
                         #endregion
 
@@ -417,6 +432,13 @@ namespace WebAppApi.Controllers
                                 //orderModel.OrderField.Add(new OrderField("申请金额", orderToCredit.Creditline.ToF2Price()));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
 
+                                break;
+                            case Enumeration.OrderType.Insure:
+
+                                var orderToInsurance = CurrentDb.OrderToInsurance.Where(c => c.Id == m.Id).FirstOrDefault();
+                                orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsuranceCompanyName));
+                                orderModel.OrderField.Add(new OrderField("产品名称", orderToInsurance.ProductSkuName));
+                                orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
                         }
 
@@ -891,6 +913,29 @@ namespace WebAppApi.Controllers
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderCreditDetailsModel };
                     return new APIResponse(result);
                 #endregion
+                case Enumeration.OrderType.Insure:
+                    #region Credit
+                    OrderInsuranceDetailsModel orderInsuranceDetailsModel = new OrderInsuranceDetailsModel();
+                    var orderToInsurance = CurrentDb.OrderToInsurance.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToInsurance != null)
+                    {
+                        orderInsuranceDetailsModel.Id = orderToInsurance.Id;
+                        orderInsuranceDetailsModel.Sn = orderToInsurance.Sn;
+                        orderInsuranceDetailsModel.SubmitTime = orderToInsurance.SubmitTime.ToUnifiedFormatDateTime();
+                        orderInsuranceDetailsModel.CompleteTime = orderToInsurance.CompleteTime.ToUnifiedFormatDateTime();
+                        orderInsuranceDetailsModel.PayTime = orderToInsurance.PayTime.ToUnifiedFormatDateTime();
+                        orderInsuranceDetailsModel.CancleTime = orderToInsurance.CancleTime.ToUnifiedFormatDateTime();
+                        orderInsuranceDetailsModel.Status = orderToInsurance.Status;
+                        orderInsuranceDetailsModel.StatusName = orderToInsurance.Status.GetCnName();
+                        orderInsuranceDetailsModel.FollowStatus = orderToInsurance.FollowStatus;
+                        orderInsuranceDetailsModel.Remarks = orderToInsurance.Remarks.NullToEmpty();
+                        orderInsuranceDetailsModel.InsuranceCompanyName = orderToInsurance.InsuranceCompanyName;
+                        orderInsuranceDetailsModel.ProductSkuName = orderToInsurance.ProductSkuName;
+                    }
+
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderInsuranceDetailsModel };
+                    return new APIResponse(result);
+                #endregion
                 default:
                     result = new APIResult() { Result = ResultType.Failure, Code = ResultCode.Failure, Message = "未知产品类型" };
                     return new APIResponse(result);
@@ -1021,7 +1066,8 @@ namespace WebAppApi.Controllers
             OrderToInsurance orderToInsurance = new OrderToInsurance();
             orderToInsurance.UserId = model.UserId;
             orderToInsurance.MerchantId = model.MerchantId;
-
+            orderToInsurance.PosMachineId = model.PosMachineId;
+            orderToInsurance.ProductSkuId = model.ProductSkuId;
             IResult result = BizFactory.OrderToInsurance.Submit(model.UserId, orderToInsurance);
             return new APIResponse(result);
 

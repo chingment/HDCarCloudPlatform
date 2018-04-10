@@ -18,20 +18,22 @@ namespace Lumos.BLL
 
             using (TransactionScope ts = new TransactionScope())
             {
-                //用户信息
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToInsurance.UserId).FirstOrDefault();
-                //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-
-                //var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.InsureForYiWaiXian).FirstOrDefault();
+                var productSku = CurrentDb.ProductSku.Where(m => m.Id == orderToInsurance.ProductSkuId).FirstOrDefault();
+                var product = CurrentDb.Product.Where(m => m.Id == productSku.ProductId).FirstOrDefault();
 
                 orderToInsurance.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToInsurance.AgentId = merchant.AgentId ?? 0;
-                orderToInsurance.ProductId = 0;
                 orderToInsurance.Type = Enumeration.OrderType.Insure;
                 orderToInsurance.TypeName = Enumeration.OrderType.Insure.GetCnName();
-                orderToInsurance.ProductType = Enumeration.ProductType.InsureForYiWaiXian;
-                orderToInsurance.ProductName = Enumeration.ProductType.InsureForYiWaiXian.GetCnName();
+                orderToInsurance.ProductId = product.Id;
+                orderToInsurance.ProductType = product.Type;
+                orderToInsurance.ProductName = product.Name;
+                orderToInsurance.ProductSkuId = productSku.Id;
+                orderToInsurance.ProductSkuName = productSku.Name;
+                orderToInsurance.InsuranceCompanyId = product.SupplierId;
+                orderToInsurance.InsuranceCompanyName = product.Supplier;
                 orderToInsurance.Status = Enumeration.OrderStatus.Submitted;
                 orderToInsurance.SubmitTime = this.DateTime;
                 orderToInsurance.CreateTime = this.DateTime;
@@ -83,7 +85,7 @@ namespace Lumos.BLL
                     }
                 }
 
-                var l_orderToInsurance = CurrentDb.OrderToCredit.Where(m => m.Id == orderToInsurance.Id).FirstOrDefault();
+                var l_orderToInsurance = CurrentDb.OrderToInsurance.Where(m => m.Id == orderToInsurance.Id).FirstOrDefault();
 
                 l_orderToInsurance.Remarks = bizProcessesAudit.TempAuditComments;
 
@@ -136,7 +138,7 @@ namespace Lumos.BLL
                     }
                 }
 
-                var l_orderToInsurance = CurrentDb.OrderToCredit.Where(m => m.Id == orderToInsurance.Id).FirstOrDefault();
+                var l_orderToInsurance = CurrentDb.OrderToInsurance.Where(m => m.Id == orderToInsurance.Id).FirstOrDefault();
 
                 l_orderToInsurance.Remarks = bizProcessesAudit.TempAuditComments;
 

@@ -27,7 +27,7 @@ namespace WebAppApi.Controllers
         {
             var query = (from o in CurrentDb.Product
                          where
-                         o.Status == Enumeration.ProductStatus.OnLine 
+                         o.Status == Enumeration.ProductStatus.OnLine
                          select new { o.Id, o.BriefIntro, o.Name, o.IsHot, o.IsMultiSpec, o.ProductCategoryId, o.ProductKindIds, o.DispalyImgs, o.CreateTime }
                          );
 
@@ -73,8 +73,10 @@ namespace WebAppApi.Controllers
                     productModel.BriefIntro = m.BriefIntro;
                     productModel.IsHot = m.IsHot;
                     productModel.Price = productSku.Price;
-                    productModel.ShowPrice = productSku.ShowPrice;
+                    productModel.ShowPrice = productSku.ShowPrice.ToF2Price();
+                    productModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(productSku.DispalyImgs);
                     productModel.MainImg = BizFactory.Product.GetMainImg(m.DispalyImgs);
+                    productModel.Details = productSku.Details;
                     model.Add(productModel);
                 }
             }

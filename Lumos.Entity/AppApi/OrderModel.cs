@@ -16,9 +16,9 @@ namespace Lumos.Entity.AppApi
 
         public string Sn { get; set; }
 
-        public string Product { get; set; }
+        public string typeName { get; set; }
 
-        public Enumeration.ProductType ProductType { get; set; }
+        public Enumeration.OrderType type { get; set; }
 
         public Enumeration.OrderStatus Status { get; set; }
 

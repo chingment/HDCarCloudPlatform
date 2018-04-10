@@ -27,15 +27,18 @@ namespace WebAppApi.Controllers
         {
             var query = (from o in CurrentDb.Product
                          where
-                         o.Status == Enumeration.ProductStatus.OnLine &&
-                         (name.Length == 0 || o.Name.Contains(name))
+                         o.Status == Enumeration.ProductStatus.OnLine 
                          select new { o.Id, o.BriefIntro, o.Name, o.IsHot, o.IsMultiSpec, o.ProductCategoryId, o.ProductKindIds, o.DispalyImgs, o.CreateTime }
                          );
 
+            if (name != null && name.Length > 0)
+            {
+                query = query.Where(p => p.Name.Contains(name));
+            }
 
             if (type != Enumeration.ProductType.Unknow)
             {
-                query = query.Where(p => p.ProductCategoryId.ToString().StartsWith(categoryId.ToString()));
+                //query = query.Where(p => p.ProductCategoryId.ToString().StartsWith(categoryId.ToString()));
             }
 
             if (categoryId != 0)

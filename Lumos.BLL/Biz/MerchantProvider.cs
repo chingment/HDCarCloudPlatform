@@ -125,9 +125,8 @@ namespace Lumos.BLL
                 orderToServiceFee.PosMachineId = posMachine.Id;
                 orderToServiceFee.UserId = sysClientUser.Id;
                 orderToServiceFee.SubmitTime = this.DateTime;
-                orderToServiceFee.ProductType = Enumeration.ProductType.PosMachineServiceFee;
-                orderToServiceFee.ProductName = Enumeration.ProductType.PosMachineServiceFee.GetCnName();
-                orderToServiceFee.ProductId = (int)Enumeration.ProductType.PosMachineServiceFee;
+                orderToServiceFee.Type = Enumeration.OrderType.PosMachineServiceFee;
+                orderToServiceFee.TypeName = Enumeration.OrderType.PosMachineServiceFee.GetCnName();
                 orderToServiceFee.Deposit = calculateServiceFee.Deposit;
                 orderToServiceFee.MobileTrafficFee = calculateServiceFee.MobileTrafficFee;
                 orderToServiceFee.PriceVersion = calculateServiceFee.Version;
@@ -542,8 +541,8 @@ namespace Lumos.BLL
             yOrder.OrderId = orderToServiceFee.Id;
             yOrder.OrderSn = orderToServiceFee.Sn;
             yOrder.remarks = orderToServiceFee.Remarks;
-            yOrder.productType = orderToServiceFee.ProductType;
-            yOrder.productName = orderToServiceFee.ProductName;
+            yOrder.orderType = orderToServiceFee.Type;
+            yOrder.orderTypeName = orderToServiceFee.Type.GetCnName();
 
             //yOrder.confirmField.Add(new OrderField("订单编号", orderToServiceFee.Sn.NullToEmpty()));
 

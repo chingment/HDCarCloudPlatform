@@ -73,7 +73,7 @@ namespace WebBack.Controllers.Biz
                         (sn.Length == 0 || o.Sn.Contains(sn)) &&
                             (clientCode.Length == 0 || m.ClientCode.Contains(clientCode)) &&
                                 (clientCode.Length == 0 || m.YYZZ_Name.Contains(clientCode))
-                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.CarNo, o.SumCount, o.SumPoint, o.SumFine, o.SubmitTime, o.Status, o.CreateTime });
+                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.TypeName, o.CarNo, o.SumCount, o.SumPoint, o.SumFine, o.SubmitTime, o.Status, o.CreateTime });
 
             int total = query.Count();
 
@@ -97,7 +97,7 @@ namespace WebBack.Controllers.Biz
                     item.SumFine,
                     item.SumCount,
                     item.SumPoint,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     Status = item.Status.GetCnName()
                 });
@@ -121,7 +121,7 @@ namespace WebBack.Controllers.Biz
                          where b.AduitType == Enumeration.BizProcessesAuditType.OrderToLllegalDealt
 
 
-                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.CarNo, o.SumCount, o.SumPoint, o.SumFine, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
+                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.TypeName, o.CarNo, o.SumCount, o.SumPoint, o.SumFine, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
             if (condition.AuditStatus == Enumeration.AuditFlowV1Status.WaitDealt)
             {
@@ -156,7 +156,7 @@ namespace WebBack.Controllers.Biz
                     item.SumFine,
                     item.SumCount,
                     item.SumPoint,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     AuditStatus = item.Status
                 });
@@ -180,7 +180,7 @@ namespace WebBack.Controllers.Biz
                          where b.AduitType == Enumeration.BizProcessesAuditType.OrderToLllegalDealt
 
 
-                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.CarNo, o.SumCount, o.SumPoint, o.SumFine, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
+                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.TypeName, o.CarNo, o.SumCount, o.SumPoint, o.SumFine, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
             if (condition.AuditStatus == Enumeration.AuditFlowV1Status.WaitVerify)
             {
@@ -215,7 +215,7 @@ namespace WebBack.Controllers.Biz
                     item.SumFine,
                     item.SumCount,
                     item.SumPoint,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     AuditStatus = item.Status
                 });

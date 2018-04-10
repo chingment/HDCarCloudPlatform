@@ -83,7 +83,7 @@ namespace WebBack.Controllers.Biz
                                 (clientCode.Length == 0 || m.YYZZ_Name.Contains(clientCode))
 
 
-                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.ProductName, o.ProductType, o.SubmitTime, o.Status, o.CreateTime });
+                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.TypeName,o.Type, o.SubmitTime, o.Status, o.CreateTime });
 
 
 
@@ -104,7 +104,7 @@ namespace WebBack.Controllers.Biz
                     item.Sn,
                     item.YYZZ_Name,
                     item.ContactPhoneNumber,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     Status = item.Status.GetCnName()
                 });
@@ -130,7 +130,7 @@ namespace WebBack.Controllers.Biz
                          where b.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure
 
 
-                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.ProductName, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
+                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.TypeName, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
             if (condition.DealtStatus == Enumeration.CarInsureOfferDealtStatus.WaitOffer)
             {
@@ -160,7 +160,7 @@ namespace WebBack.Controllers.Biz
                     item.Sn,
                     item.YYZZ_Name,
                     item.ContactPhoneNumber,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     DealtStatus = item.Status
                 });

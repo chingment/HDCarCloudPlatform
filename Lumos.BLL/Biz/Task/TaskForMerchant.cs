@@ -23,7 +23,7 @@ namespace Lumos.BLL.Biz.Task
             {
                 merchantPosMachine.Status = Enumeration.MerchantPosMachineStatus.Expiry;
 
-                var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Status == Enumeration.OrderStatus.WaitPay && m.ProductType == Entity.Enumeration.ProductType.PosMachineServiceFee && m.UserId == merchantPosMachine.UserId && m.MerchantId == merchantPosMachine.MerchantId && m.PosMachineId == merchantPosMachine.PosMachineId).FirstOrDefault();
+                var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Status == Enumeration.OrderStatus.WaitPay && m.Type == Entity.Enumeration.OrderType.PosMachineServiceFee && m.UserId == merchantPosMachine.UserId && m.MerchantId == merchantPosMachine.MerchantId && m.PosMachineId == merchantPosMachine.PosMachineId).FirstOrDefault();
                 if (orderToServiceFee == null)
                 {
 
@@ -35,9 +35,8 @@ namespace Lumos.BLL.Biz.Task
                     orderToServiceFee.PosMachineId = merchantPosMachine.PosMachineId;
                     orderToServiceFee.UserId = merchantPosMachine.UserId;
                     orderToServiceFee.SubmitTime = this.DateTime;
-                    orderToServiceFee.ProductType = Enumeration.ProductType.PosMachineServiceFee;
-                    orderToServiceFee.ProductName = Enumeration.ProductType.PosMachineServiceFee.GetCnName();
-                    orderToServiceFee.ProductId = (int)Enumeration.ProductType.PosMachineServiceFee;
+                    orderToServiceFee.Type = Enumeration.OrderType.PosMachineServiceFee;
+                    orderToServiceFee.TypeName = Enumeration.OrderType.PosMachineServiceFee.GetCnName();
                     orderToServiceFee.Deposit = 0;
                     orderToServiceFee.MobileTrafficFee = calculateServiceFee.MobileTrafficFee;
                     orderToServiceFee.PriceVersion = calculateServiceFee.Version;

@@ -19,14 +19,14 @@ namespace Lumos.BLL
             {
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToApplyLossAssess.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.ApplyLossAssess).FirstOrDefault();
+     
 
                 var insuranceCompany = CurrentDb.Company.Where(m => m.Id == orderToApplyLossAssess.InsuranceCompanyId).FirstOrDefault();
                 orderToApplyLossAssess.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToApplyLossAssess.AgentId = merchant.AgentId ?? 0;
-                orderToApplyLossAssess.ProductId = product.Id;
-                orderToApplyLossAssess.ProductType = product.Type;
-                orderToApplyLossAssess.ProductName = product.Name;
+
+                orderToApplyLossAssess.Type = Enumeration.OrderType.ApplyLossAssess;
+                orderToApplyLossAssess.TypeName = Enumeration.OrderType.ApplyLossAssess.GetCnName();
                 orderToApplyLossAssess.InsuranceCompanyName = insuranceCompany.Name;
                 orderToApplyLossAssess.Status = Enumeration.OrderStatus.Submitted;
                 orderToApplyLossAssess.ApplyTime = this.DateTime;

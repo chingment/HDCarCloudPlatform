@@ -43,7 +43,7 @@ namespace WebAgent.Controllers
                                 (clientCode.Length == 0 || m.YYZZ_Name.Contains(clientCode))
 
 
-                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.ProductName, o.ProductType, o.SubmitTime, o.Status, o.CreateTime });
+                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.TypeName,o.Type, o.SubmitTime, o.Status, o.CreateTime });
 
 
 
@@ -64,7 +64,7 @@ namespace WebAgent.Controllers
                     item.Sn,
                     item.YYZZ_Name,
                     item.ContactPhoneNumber,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     Status = item.Status.GetCnName()
                 });

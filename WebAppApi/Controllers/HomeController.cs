@@ -30,8 +30,8 @@ namespace WebAppApi.Controllers
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
         //private string host = "http://localhost:16665";
-        private string host = "http://120.79.233.231";
-
+        //private string host = "http://120.79.233.231";
+        private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
 
         private string YBS_key = "ybs_test";
@@ -362,7 +362,7 @@ namespace WebAppApi.Controllers
             model.MerchantId = 20;
             model.OrderId = 217;
             model.OrderSn = "CI1702072325220217";
-            model.ProductType = Enumeration.ProductType.InsureForCarForInsure;
+            model.OrderType = Enumeration.OrderType.InsureForCarForInsure;
             model.Params = new { offerId = 232, shippingAddress = "jhjh" };
 
 
@@ -817,7 +817,6 @@ namespace WebAppApi.Controllers
             model.UserId = userId;
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
-            model.Type = Enumeration.ProductType.InsureForCarForInsure;
             model.InsurePlanId = 1;
             model.InsuranceCompanyId = new int[1] { 1 };
 
@@ -892,7 +891,7 @@ namespace WebAppApi.Controllers
 
             SubmitInsureModel model = new SubmitInsureModel();
             model.UserId = userId;
-            model.Type = Enumeration.ProductType.InsureForCarForInsure;
+            //model.Type = Enumeration.ProductType.InsureForCarForInsure;
             model.InsurePlanId = 1;
             model.InsuranceCompanyId = new int[1] { 1 };
 
@@ -1690,7 +1689,7 @@ namespace WebAppApi.Controllers
             int type = 0;
             int categoryId = 0;
             int kindId = 0;
-            string name = "我";
+            string name = "";
             Dictionary<string, string> parames = new Dictionary<string, string>();
             parames.Add("userId", userId.ToString());
             parames.Add("merchantId", merchantId.ToString());

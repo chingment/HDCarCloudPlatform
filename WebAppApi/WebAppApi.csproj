@@ -208,6 +208,7 @@
     <Compile Include="Models\Order\OrderTalentDemandDetailsModel.cs" />
     <Compile Include="Models\Order\SubmitApplyLossAssessModel.cs" />
     <Compile Include="Models\Order\SubmitCreditModel.cs" />
+    <Compile Include="Models\Order\SubmitInsuranceModel.cs" />
     <Compile Include="Models\Order\SubmitLllegalDealtModel.cs" />
     <Compile Include="Models\Order\SubmitLllegalQueryScoreRechargeModel.cs" />
     <Compile Include="Models\Order\SubmitTalentDemandModel.cs" />

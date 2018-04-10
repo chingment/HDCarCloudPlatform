@@ -41,7 +41,7 @@ namespace WebAgent.Controllers
                         (sn.Length == 0 || o.Sn.Contains(sn)) &&
                             (clientCode.Length == 0 || m.ClientCode.Contains(clientCode)) &&
                                 (clientCode.Length == 0 || m.YYZZ_Name.Contains(clientCode))
-                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.Quantity, o.WorkJob, o.SubmitTime, o.Status, o.CreateTime });
+                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.TypeName,o.Type, o.Quantity, o.WorkJob, o.SubmitTime, o.Status, o.CreateTime });
 
             int total = query.Count();
 
@@ -63,7 +63,7 @@ namespace WebAgent.Controllers
                     item.ContactName,
                     item.ContactPhoneNumber,
                     WorkJob =item.WorkJob.GetCnName(),
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     Status = item.Status.GetCnName()
                 });

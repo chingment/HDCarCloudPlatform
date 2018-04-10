@@ -31,12 +31,10 @@ namespace Lumos.Entity
 
         public int UserId { get; set; }
 
-        public int ProductId { get; set; }
-
-        public Enumeration.ProductType ProductType { get; set; }
+        public Enumeration.OrderType Type { get; set; }
 
         [MaxLength(256)]
-        public string ProductName { get; set; }
+        public string TypeName { get; set; }
 
         [MaxLength(128)]
         public string Contact { get; set; }

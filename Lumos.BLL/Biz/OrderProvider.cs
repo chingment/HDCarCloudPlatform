@@ -24,8 +24,7 @@ namespace Lumos.BLL
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToCarInsure.UserId).FirstOrDefault();
                 //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-                //2011为车险投保产品,2012为车险续保产品
-                var product = CurrentDb.Product.Where(m => m.Type == orderToCarInsure.ProductType).FirstOrDefault();
+
 
 
                 order.MerchantId = merchant.Id;
@@ -33,9 +32,8 @@ namespace Lumos.BLL
                 order.UserId = merchant.UserId;
                 order.SalesmanId = merchant.SalesmanId ?? 0;
                 order.AgentId = merchant.AgentId ?? 0;
-                order.ProductId = product.Id;
-                order.ProductName = product.Name;
-                order.ProductType = product.Type;
+                order.Type = Enumeration.OrderType.InsureForCarForInsure;
+                order.TypeName = Enumeration.OrderType.InsureForCarForInsure.GetCnName();
                 order.ClientRequire = orderToCarInsure.ClientRequire;
                 order.InsuranceCompanyId = orderToCarInsure.InsuranceCompanyId;
                 order.InsuranceCompanyName = orderToCarInsure.InsuranceCompanyName;
@@ -333,15 +331,12 @@ namespace Lumos.BLL
 
                 var insuranceCompany = CurrentDb.Company.Where(m => m.Id == orderToCarClaim.InsuranceCompanyId).FirstOrDefault();
 
-                //2011为车险理赔
-                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.InsureForCarForClaim).FirstOrDefault();
-
 
                 orderToCarClaim.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToCarClaim.AgentId = merchant.AgentId ?? 0;
-                orderToCarClaim.ProductId = product.Id;
-                orderToCarClaim.ProductType = product.Type;
-                orderToCarClaim.ProductName = product.Name;
+
+                orderToCarClaim.Type =  Enumeration.OrderType.InsureForCarForClaim;
+                orderToCarClaim.TypeName = Enumeration.OrderType.InsureForCarForClaim.GetCnName();
                 orderToCarClaim.MerchantId = merchant.Id;
                 orderToCarClaim.PosMachineId = orderToCarClaim.PosMachineId;
                 orderToCarClaim.UserId = merchant.UserId;
@@ -512,9 +507,8 @@ namespace Lumos.BLL
                         estimateOrderToCarClaim.Remarks = estimateMerchantRemarks;//告知维修厂备注
 
 
-                        estimateOrderToCarClaim.ProductId = l_orderToCarClaim.ProductId;
-                        estimateOrderToCarClaim.ProductName = l_orderToCarClaim.ProductName;
-                        estimateOrderToCarClaim.ProductType = l_orderToCarClaim.ProductType;
+                        estimateOrderToCarClaim.Type = l_orderToCarClaim.Type;
+                        estimateOrderToCarClaim.TypeName = l_orderToCarClaim.TypeName;
                         estimateOrderToCarClaim.PId = l_orderToCarClaim.Id;
                         estimateOrderToCarClaim.ClientRequire = l_orderToCarClaim.ClientRequire;
 
@@ -691,9 +685,9 @@ namespace Lumos.BLL
 
 
 
-                switch (order.ProductType)
+                switch (order.Type)
                 {
-                    case Enumeration.ProductType.InsureForCarForInsure:
+                    case Enumeration.OrderType.InsureForCarForInsure:
                         BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, order.BizProcessesAuditId, operater, null, "取消订单", this.DateTime);
                         BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, order.BizProcessesAuditId, Enumeration.CarInsureOfferDealtStatus.ClientCancle);
                         break;
@@ -721,9 +715,9 @@ namespace Lumos.BLL
                 newOrder.MerchantId = oldOrder.MerchantId;
                 newOrder.PosMachineId = oldOrder.PosMachineId;
                 newOrder.UserId = oldOrder.UserId;
-                newOrder.ProductId = oldOrder.ProductId;
-                newOrder.ProductName = oldOrder.ProductName;
-                newOrder.ProductType = oldOrder.ProductType;
+         
+                //newOrder.ProductName = oldOrder.ProductName;
+                //newOrder.ProductType = oldOrder.ProductType;
                 newOrder.ClientRequire = oldOrder.ClientRequire;
                 newOrder.InsuranceCompanyId = oldOrder.InsuranceCompanyId;
                 newOrder.InsuranceCompanyName = oldOrder.InsuranceCompanyName;
@@ -829,13 +823,12 @@ namespace Lumos.BLL
             {
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalQueryRecharge.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.LllegalQueryRecharge).FirstOrDefault();
-
+     
                 orderToLllegalQueryRecharge.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToLllegalQueryRecharge.AgentId = merchant.AgentId ?? 0;
-                orderToLllegalQueryRecharge.ProductId = product.Id;
-                orderToLllegalQueryRecharge.ProductType = product.Type;
-                orderToLllegalQueryRecharge.ProductName = product.Name;
+
+                orderToLllegalQueryRecharge.Type = Enumeration.OrderType.LllegalQueryRecharge;
+                orderToLllegalQueryRecharge.TypeName = Enumeration.OrderType.LllegalQueryRecharge.GetCnName();
                 orderToLllegalQueryRecharge.Status = Enumeration.OrderStatus.WaitPay;
                 orderToLllegalQueryRecharge.SubmitTime = this.DateTime;
                 orderToLllegalQueryRecharge.CreateTime = this.DateTime;
@@ -860,8 +853,8 @@ namespace Lumos.BLL
                 yOrder.OrderId = orderToLllegalQueryRecharge.Id;
                 yOrder.OrderSn = orderToLllegalQueryRecharge.Sn;
                 yOrder.remarks = orderToLllegalQueryRecharge.Remarks;
-                yOrder.productType = orderToLllegalQueryRecharge.ProductType;
-                yOrder.productName = orderToLllegalQueryRecharge.ProductName;
+                yOrder.orderType = orderToLllegalQueryRecharge.Type;
+                yOrder.orderTypeName = orderToLllegalQueryRecharge.TypeName;
 
                 // yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalQueryRecharge.Sn.NullToEmpty()));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("积分", string.Format("{0}", orderToLllegalQueryRecharge.Score)));

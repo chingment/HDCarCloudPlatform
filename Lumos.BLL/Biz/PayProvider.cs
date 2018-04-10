@@ -22,9 +22,9 @@ namespace Lumos.BLL
 
         public string OrderSn { get; set; }
 
-        public Enumeration.ProductType productType { get; set; }
+        public Enumeration.OrderType orderType { get; set; }
 
-        public string productName { get; set; }
+        public string orderTypeName { get; set; }
 
         public string remarks { get; set; }
 
@@ -67,37 +67,37 @@ namespace Lumos.BLL
 
 
 
-            var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).FirstOrDefault();
+            //var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).FirstOrDefault();
 
-            if (order == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
-            }
+            //if (order == null)
+            //{
+            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
+            //}
 
-            PayQueryResult resultData = new PayQueryResult();
+            //PayQueryResult resultData = new PayQueryResult();
 
-            resultData.OrderSn = order.Sn;
-            resultData.ProductType = order.ProductType;
-            resultData.Status = (int)order.Status;
-            resultData.Remarks = order.Status.GetCnName();
-
-
-            PrintDataModel printData = new PrintDataModel();
-
-            printData.MerchantName = "好易联";
-            printData.MerchantCode = "354422";
-            printData.ProductName = order.ProductName;
-            printData.TradeType = "消费";
-            printData.TradeNo = order.Sn;
-            printData.TradePayMethod = order.PayWay.GetCnName();
-            printData.TradeAmount = order.Price.ToF2Price();
-            printData.TradeDateTime = order.PayTime.ToUnifiedFormatDateTime();
-            printData.ServiceHotline = "4400000000";
-
-            resultData.PrintData = printData;
+            //resultData.OrderSn = order.Sn;
+            //resultData.ProductType = order.ProductType;
+            //resultData.Status = (int)order.Status;
+            //resultData.Remarks = order.Status.GetCnName();
 
 
-            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
+            //PrintDataModel printData = new PrintDataModel();
+
+            //printData.MerchantName = "好易联";
+            //printData.MerchantCode = "354422";
+            //printData.ProductName = order.ProductName;
+            //printData.TradeType = "消费";
+            //printData.TradeNo = order.Sn;
+            //printData.TradePayMethod = order.PayWay.GetCnName();
+            //printData.TradeAmount = order.Price.ToF2Price();
+            //printData.TradeDateTime = order.PayTime.ToUnifiedFormatDateTime();
+            //printData.ServiceHotline = "4400000000";
+
+            //resultData.PrintData = printData;
+
+
+            //result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
 
             return result;
         }
@@ -111,9 +111,9 @@ namespace Lumos.BLL
             {
                 OrderConfirmInfo yOrder = new OrderConfirmInfo();
 
-                switch (model.ProductType)
+                switch (model.OrderType)
                 {
-                    case Enumeration.ProductType.PosMachineServiceFee:
+                    case Enumeration.OrderType.PosMachineServiceFee:
                         #region 服务费
                         var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Sn == model.OrderSn).FirstOrDefault();
                         //yOrder = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee);
@@ -208,15 +208,15 @@ namespace Lumos.BLL
                     receiveNotifyLog.UserId = order.UserId;
                     receiveNotifyLog.Creator = 0;
                     receiveNotifyLog.CreateTime = DateTime.Now;
-                    switch (order.ProductType)
+                    switch (order.Type)
                     {
-                        case Enumeration.ProductType.PosMachineServiceFee:
+                        case Enumeration.OrderType.PosMachineServiceFee:
                             result = PayServiceFeeCompleted(operater, order.Sn);
                             break;
-                        case Enumeration.ProductType.LllegalQueryRecharge:
+                        case Enumeration.OrderType.LllegalQueryRecharge:
                             result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
                             break;
-                        case Enumeration.ProductType.LllegalDealt:
+                        case Enumeration.OrderType.LllegalDealt:
                             result = PayLllegalDealtCompleted(operater, order.Sn);
                             break;
                     }
@@ -262,9 +262,9 @@ namespace Lumos.BLL
 
                     if (receiveNotifyLog.ResultCode == "00" || receiveNotifyLog.ResultCode == "T5")
                     {
-                        switch (order.ProductType)
+                        switch (order.Type)
                         {
-                            case Enumeration.ProductType.PosMachineServiceFee:
+                            case Enumeration.OrderType.PosMachineServiceFee:
                                 result = PayServiceFeeCompleted(operater, order.Sn);
                                 break;
                         }
@@ -312,18 +312,18 @@ namespace Lumos.BLL
                         notifyLog.CreateTime = this.DateTime;
                         notifyLog.Creator = operater;
 
-                        switch (order.ProductType)
+                        switch (order.Type)
                         {
-                            case Enumeration.ProductType.PosMachineServiceFee:
+                            case Enumeration.OrderType.PosMachineServiceFee:
                                 result = PayServiceFeeCompleted(operater, order.Sn);
                                 break;
-                            case Enumeration.ProductType.InsureForCarForInsure:
+                            case Enumeration.OrderType.InsureForCarForInsure:
                                 result = PayCarInsureCompleted(operater, order.Sn);
                                 break;
-                            case Enumeration.ProductType.LllegalQueryRecharge:
+                            case Enumeration.OrderType.LllegalQueryRecharge:
                                 result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
                                 break;
-                            case Enumeration.ProductType.LllegalDealt:
+                            case Enumeration.OrderType.LllegalDealt:
                                 result = PayLllegalDealtCompleted(operater, order.Sn);
                                 break;
                         }

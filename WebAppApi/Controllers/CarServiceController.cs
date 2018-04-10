@@ -33,8 +33,8 @@ namespace WebAppApi.Controllers
             orderToCarInsure.MerchantId = model.MerchantId;
             orderToCarInsure.PosMachineId = model.PosMachineId;
             orderToCarInsure.InsurePlanId = model.InsurePlanId;
-            orderToCarInsure.ProductType = model.Type;
-
+            orderToCarInsure.Type = Enumeration.OrderType.InsureForCarForInsure;
+            orderToCarInsure.TypeName = Enumeration.OrderType.InsureForCarForInsure.GetCnName();
 
             if (model.ImgData != null)
             {

@@ -18,12 +18,12 @@ namespace WebAppApi.Controllers
     public class OrderController : OwnBaseApiController
     {
         [HttpGet]
-        public APIResponse GetList(int userId, int merchantId, int posMachineId, int pageIndex, Enumeration.OrderStatus status, Enumeration.ProductType productType)
+        public APIResponse GetList(int userId, int merchantId, int posMachineId, int pageIndex, Enumeration.OrderStatus status, Enumeration.OrderType type)
         {
             var order = (from o in CurrentDb.Order
                          where o.MerchantId == merchantId
 
-                         select new { o.Id, o.Sn, o.ProductType, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus }
+                         select new { o.Id, o.Sn, o.Type, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus }
                          );
 
 
@@ -35,23 +35,23 @@ namespace WebAppApi.Controllers
                 }
                 else
                 {
-                    order = order.Where(m => m.Status == status && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt));
+                    order = order.Where(m => m.Status == status && (m.Type != Enumeration.OrderType.LllegalQueryRecharge && m.Type != Enumeration.OrderType.LllegalDealt));
                 }
             }
             else
             {
                 order = order.Where(m =>
-                (m.Status == Enumeration.OrderStatus.Submitted && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
-                || (m.Status == Enumeration.OrderStatus.Follow && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
-                || (m.Status == Enumeration.OrderStatus.WaitPay && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
+                (m.Status == Enumeration.OrderStatus.Submitted && (m.Type != Enumeration.OrderType.LllegalQueryRecharge && m.Type != Enumeration.OrderType.LllegalDealt))
+                || (m.Status == Enumeration.OrderStatus.Follow && (m.Type != Enumeration.OrderType.LllegalQueryRecharge && m.Type != Enumeration.OrderType.LllegalDealt))
+                || (m.Status == Enumeration.OrderStatus.WaitPay && (m.Type != Enumeration.OrderType.LllegalQueryRecharge && m.Type != Enumeration.OrderType.LllegalDealt))
                 || (m.Status == Enumeration.OrderStatus.Completed)
-                || (m.Status == Enumeration.OrderStatus.Cancled && (m.ProductType != Enumeration.ProductType.LllegalQueryRecharge && m.ProductType != Enumeration.ProductType.LllegalDealt))
+                || (m.Status == Enumeration.OrderStatus.Cancled && (m.Type != Enumeration.OrderType.LllegalQueryRecharge && m.Type != Enumeration.OrderType.LllegalDealt))
                 );
             }
 
-            if (productType != Enumeration.ProductType.Unknow)
+            if (type != Enumeration.OrderType.Unknow)
             {
-                order = order.Where(m => m.ProductType == productType);
+                order = order.Where(m => m.Type == type);
             }
 
 
@@ -68,8 +68,8 @@ namespace WebAppApi.Controllers
                 OrderModel orderModel = new OrderModel();
                 orderModel.Id = m.Id;
                 orderModel.Sn = m.Sn;
-                orderModel.Product = m.ProductType.GetCnName();
-                orderModel.ProductType = m.ProductType;
+                orderModel.typeName = m.Type.GetCnName();
+                orderModel.type = m.Type;
                 orderModel.Status = m.Status;
                 orderModel.Price = m.Price;
                 switch (m.Status)
@@ -80,9 +80,9 @@ namespace WebAppApi.Controllers
                         orderModel.Remarks = m.SubmitTime.ToUnifiedFormatDateTime();//备注提交时间
                         orderModel.StatusName = "已提交";
 
-                        switch (m.ProductType)
+                        switch (m.Type)
                         {
-                            case Enumeration.ProductType.InsureForCarForInsure:
+                            case Enumeration.OrderType.InsureForCarForInsure:
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarOwner.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("身份证号码", orderToCarInsure.CarOwnerIdNumber.NullToEmpty()));
@@ -90,7 +90,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("状态", "请稍侯，报价中"));
 
                                 break;
-                            case Enumeration.ProductType.InsureForCarForClaim:
+                            case Enumeration.OrderType.InsureForCarForClaim:
 
                                 var orderToCarClaim = CurrentDb.OrderToCarClaim.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("保险公司", orderToCarClaim.InsuranceCompanyName.NullToEmpty()));
@@ -98,14 +98,14 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("对接人", string.Format("{0},{1}", orderToCarClaim.HandPerson.NullToEmpty(), orderToCarClaim.HandPersonPhone.NullToEmpty())));
                                 orderModel.OrderField.Add(new OrderField("状态", "请稍侯，理赔呼叫中"));
                                 break;
-                            case Enumeration.ProductType.TalentDemand:
+                            case Enumeration.OrderType.TalentDemand:
 
                                 var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
                                 orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
                                 break;
-                            case Enumeration.ProductType.PosMachineServiceFee:
+                            case Enumeration.OrderType.PosMachineServiceFee:
 
                                 var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(c => c.Id == m.Id).FirstOrDefault();
                                 if (orderToServiceFee.Deposit > 0)
@@ -116,7 +116,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("流量费", orderToServiceFee.MobileTrafficFee.ToF2Price()));
 
                                 break;
-                            case Enumeration.ProductType.ApplyLossAssess:
+                            case Enumeration.OrderType.ApplyLossAssess:
 
                                 var orderToApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -125,7 +125,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
 
                                 break;
-                            case Enumeration.ProductType.LllegalQueryRecharge:
+                            case Enumeration.OrderType.LllegalQueryRecharge:
 
                                 var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -133,7 +133,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("积分", orderToLllegalQueryRecharge.Score.ToString()));
 
                                 break;
-                            case Enumeration.ProductType.Credit:
+                            case Enumeration.OrderType.Credit:
 
                                 var orderToCredit = CurrentDb.OrderToCredit.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -155,9 +155,9 @@ namespace WebAppApi.Controllers
 
                         orderModel.StatusName = "跟进中";
                         orderModel.FollowStatus = m.FollowStatus;
-                        switch (m.ProductType)
+                        switch (m.Type)
                         {
-                            case Enumeration.ProductType.InsureForCarForInsure:
+                            case Enumeration.OrderType.InsureForCarForInsure:
 
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarOwner.NullToEmpty()));
@@ -170,7 +170,7 @@ namespace WebAppApi.Controllers
                                 }
 
                                 break;
-                            case Enumeration.ProductType.InsureForCarForClaim:
+                            case Enumeration.OrderType.InsureForCarForClaim:
 
                                 var orderToCarClaim = CurrentDb.OrderToCarClaim.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("保险公司", orderToCarClaim.InsuranceCompanyName.NullToEmpty()));
@@ -196,7 +196,7 @@ namespace WebAppApi.Controllers
 
                                 orderModel.OrderField.Add(new OrderField("进度", followStatus.GetCnName()));
                                 break;
-                            case Enumeration.ProductType.TalentDemand:
+                            case Enumeration.OrderType.TalentDemand:
 
                                 var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
@@ -211,9 +211,9 @@ namespace WebAppApi.Controllers
                     case Enumeration.OrderStatus.WaitPay:
 
                         #region 待支付
-                        switch (m.ProductType)
+                        switch (m.Type)
                         {
-                            case Enumeration.ProductType.InsureForCarForInsure:
+                            case Enumeration.OrderType.InsureForCarForInsure:
                                 orderModel.Remarks = "";
 
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
@@ -227,7 +227,7 @@ namespace WebAppApi.Controllers
                                 }
 
                                 break;
-                            case Enumeration.ProductType.InsureForCarForClaim:
+                            case Enumeration.OrderType.InsureForCarForClaim:
                                 orderModel.Remarks = string.Format("应付金额:{0}元", m.Price.ToF2Price());//理赔 理赔金额
 
                                 var orderToCarClaim = CurrentDb.OrderToCarClaim.Where(c => c.Id == m.Id).FirstOrDefault();
@@ -237,7 +237,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("定损单总价", string.Format("{0}元", orderToCarClaim.EstimatePrice.ToF2Price())));
 
                                 break;
-                            case Enumeration.ProductType.PosMachineServiceFee:
+                            case Enumeration.OrderType.PosMachineServiceFee:
 
                                 var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(c => c.Id == m.Id).FirstOrDefault();
                                 if (orderToServiceFee.Deposit > 0)
@@ -249,7 +249,7 @@ namespace WebAppApi.Controllers
 
 
                                 break;
-                            case Enumeration.ProductType.LllegalQueryRecharge:
+                            case Enumeration.OrderType.LllegalQueryRecharge:
 
                                 var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -269,9 +269,9 @@ namespace WebAppApi.Controllers
                         orderModel.Remarks = m.CompleteTime.ToUnifiedFormatDateTime();//备注完成时间
                         orderModel.StatusName = "已完成";
 
-                        switch (m.ProductType)
+                        switch (m.Type)
                         {
-                            case Enumeration.ProductType.InsureForCarForInsure:
+                            case Enumeration.OrderType.InsureForCarForInsure:
 
 
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
@@ -282,7 +282,7 @@ namespace WebAppApi.Controllers
 
 
                                 break;
-                            case Enumeration.ProductType.InsureForCarForClaim:
+                            case Enumeration.OrderType.InsureForCarForClaim:
                                 orderModel.Remarks = string.Format("合计:{0}", m.Price);//理赔 理赔金额
 
                                 var orderToCarClaim = CurrentDb.OrderToCarClaim.Where(c => c.Id == m.Id).FirstOrDefault();
@@ -293,14 +293,14 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("合计", orderToCarClaim.Price.ToF2Price()));
 
                                 break;
-                            case Enumeration.ProductType.TalentDemand:
+                            case Enumeration.OrderType.TalentDemand:
 
                                 var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
 
                                 break;
-                            case Enumeration.ProductType.PosMachineServiceFee:
+                            case Enumeration.OrderType.PosMachineServiceFee:
 
                                 var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(c => c.Id == m.Id).FirstOrDefault();
                                 if (orderToServiceFee.Deposit > 0)
@@ -311,7 +311,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("流量费", orderToServiceFee.MobileTrafficFee.ToF2Price()));
                                 orderModel.OrderField.Add(new OrderField("到期时间", orderToServiceFee.ExpiryTime.ToUnifiedFormatDate()));
                                 break;
-                            case Enumeration.ProductType.ApplyLossAssess:
+                            case Enumeration.OrderType.ApplyLossAssess:
 
                                 var orderToApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -319,7 +319,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("申请时间", orderToApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime()));
 
                                 break;
-                            case Enumeration.ProductType.LllegalQueryRecharge:
+                            case Enumeration.OrderType.LllegalQueryRecharge:
 
                                 var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -327,7 +327,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("积分", orderToLllegalQueryRecharge.Score.ToString()));
 
                                 break;
-                            case Enumeration.ProductType.LllegalDealt:
+                            case Enumeration.OrderType.LllegalDealt:
 
                                 var orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -347,7 +347,7 @@ namespace WebAppApi.Controllers
                                 }
 
                                 break;
-                            case Enumeration.ProductType.Credit:
+                            case Enumeration.OrderType.Credit:
 
                                 var orderToCredit = CurrentDb.OrderToCredit.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -367,9 +367,9 @@ namespace WebAppApi.Controllers
                         orderModel.StatusName = "已取消";
 
 
-                        switch (m.ProductType)
+                        switch (m.Type)
                         {
-                            case Enumeration.ProductType.InsureForCarForInsure:
+                            case Enumeration.OrderType.InsureForCarForInsure:
 
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarOwner.NullToEmpty()));
@@ -377,7 +377,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarPlateNo.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
-                            case Enumeration.ProductType.InsureForCarForClaim:
+                            case Enumeration.OrderType.InsureForCarForClaim:
 
                                 var orderToCarClaim = CurrentDb.OrderToCarClaim.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("保险公司", orderToCarClaim.InsuranceCompanyName.NullToEmpty()));
@@ -386,13 +386,13 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
 
                                 break;
-                            case Enumeration.ProductType.TalentDemand:
+                            case Enumeration.OrderType.TalentDemand:
                                 var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("工种", orderToTalentDemand.WorkJob.GetCnName().NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("人数", orderToTalentDemand.Quantity.ToString()));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
-                            case Enumeration.ProductType.ApplyLossAssess:
+                            case Enumeration.OrderType.ApplyLossAssess:
 
                                 var orderToApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -400,7 +400,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("申请时间", orderToApplyLossAssess.ApplyTime.ToUnifiedFormatDateTime()));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
-                            case Enumeration.ProductType.LllegalQueryRecharge:
+                            case Enumeration.OrderType.LllegalQueryRecharge:
 
                                 var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -409,7 +409,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
 
                                 break;
-                            case Enumeration.ProductType.Credit:
+                            case Enumeration.OrderType.Credit:
 
                                 var orderToCredit = CurrentDb.OrderToCredit.Where(c => c.Id == m.Id).FirstOrDefault();
 
@@ -437,12 +437,12 @@ namespace WebAppApi.Controllers
         }
 
         [HttpGet]
-        public APIResponse GetDetails(int userId, int merchantId, int posMachineId, int orderId, Enumeration.ProductType productType)
+        public APIResponse GetDetails(int userId, int merchantId, int posMachineId, int orderId, Enumeration.OrderType type)
         {
             APIResult result = null;
-            switch (productType)
+            switch (type)
             {
-                case Enumeration.ProductType.InsureForCarForInsure:
+                case Enumeration.OrderType.InsureForCarForInsure:
                     #region 投保
                     OrderCarInsureDetailsModel orderCarInsureDetailsModel = new OrderCarInsureDetailsModel();
                     var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
@@ -625,7 +625,7 @@ namespace WebAppApi.Controllers
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderCarInsureDetailsModel };
                     return new APIResponse(result);
                 #endregion
-                case Enumeration.ProductType.InsureForCarForClaim:
+                case Enumeration.OrderType.InsureForCarForClaim:
                     #region 理赔
                     OrderCarClaimDetailsModel orderCarClaimDetailsModel = new OrderCarClaimDetailsModel();
                     var orderToCarEstimate = CurrentDb.OrderToCarClaim.Where(m => m.Id == orderId).FirstOrDefault();
@@ -687,7 +687,7 @@ namespace WebAppApi.Controllers
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderCarClaimDetailsModel };
                     return new APIResponse(result);
                 #endregion
-                case Enumeration.ProductType.PosMachineServiceFee:
+                case Enumeration.OrderType.PosMachineServiceFee:
                     #region  PosMachineDepositRent
                     OrderServiceFeeDetailsModel orderServiceFeeDetailsModel = new OrderServiceFeeDetailsModel();
                     var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Id == orderId).FirstOrDefault();
@@ -714,15 +714,15 @@ namespace WebAppApi.Controllers
 
                         PrintDataModel printData = new PrintDataModel();
 
-                        printData.MerchantName = "好易联";
-                        printData.MerchantCode = "354422";
-                        printData.ProductName = orderToServiceFee.ProductName;
-                        printData.TradeType = "消费";
-                        printData.TradeNo = orderToServiceFee.Sn;
-                        printData.TradePayMethod = orderToServiceFee.PayWay.GetCnName();
-                        printData.TradeAmount = orderToServiceFee.Price.ToF2Price();
-                        printData.TradeDateTime = orderToServiceFee.PayTime.ToUnifiedFormatDateTime();
-                        printData.ServiceHotline = "4400000000";
+                        //printData.MerchantName = "好易联";
+                        //printData.MerchantCode = "354422";
+                        //printData.ProductName = orderToServiceFee.ProductName;
+                        //printData.TradeType = "消费";
+                        //printData.TradeNo = orderToServiceFee.Sn;
+                        //printData.TradePayMethod = orderToServiceFee.PayWay.GetCnName();
+                        //printData.TradeAmount = orderToServiceFee.Price.ToF2Price();
+                        //printData.TradeDateTime = orderToServiceFee.PayTime.ToUnifiedFormatDateTime();
+                        //printData.ServiceHotline = "4400000000";
 
                         orderServiceFeeDetailsModel.PrintData = printData;
                     }
@@ -731,7 +731,7 @@ namespace WebAppApi.Controllers
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderServiceFeeDetailsModel };
                     return new APIResponse(result);
                 #endregion
-                case Enumeration.ProductType.TalentDemand:
+                case Enumeration.OrderType.TalentDemand:
                     #region TalentDemand
                     OrderTalentDemandDetailsModel orderTalentDemandDetailsModel = new OrderTalentDemandDetailsModel();
                     var orderToTalentDemand = CurrentDb.OrderToTalentDemand.Where(m => m.Id == orderId).FirstOrDefault();
@@ -757,7 +757,7 @@ namespace WebAppApi.Controllers
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderTalentDemandDetailsModel };
                     return new APIResponse(result);
                 #endregion
-                case Enumeration.ProductType.ApplyLossAssess:
+                case Enumeration.OrderType.ApplyLossAssess:
                     #region ApplyLossAssess
                     OrderApplyLossAssessDetailsModel orderApplyLossAssessDetailsModel = new OrderApplyLossAssessDetailsModel();
                     var orderApplyLossAssess = CurrentDb.OrderToApplyLossAssess.Where(m => m.Id == orderId).FirstOrDefault();
@@ -781,7 +781,7 @@ namespace WebAppApi.Controllers
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderApplyLossAssessDetailsModel };
                     return new APIResponse(result);
                 #endregion
-                case Enumeration.ProductType.LllegalQueryRecharge:
+                case Enumeration.OrderType.LllegalQueryRecharge:
                     #region LllegalQueryRecharge
                     OrderLllegalQueryRechargeDetailsModel orderLllegalQueryRechargeDetailsModel = new OrderLllegalQueryRechargeDetailsModel();
                     var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(m => m.Id == orderId).FirstOrDefault();
@@ -804,7 +804,7 @@ namespace WebAppApi.Controllers
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderLllegalQueryRechargeDetailsModel };
                     return new APIResponse(result);
                 #endregion
-                case Enumeration.ProductType.LllegalDealt:
+                case Enumeration.OrderType.LllegalDealt:
                     #region LllegalDealt
                     OrderLllegalDealtDetailsModel orderLllegalDealtDetailsModel = new OrderLllegalDealtDetailsModel();
                     var orderToLllegalDealt = CurrentDb.OrderToLllegalDealt.Where(m => m.Id == orderId).FirstOrDefault();
@@ -868,7 +868,7 @@ namespace WebAppApi.Controllers
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderLllegalDealtDetailsModel };
                     return new APIResponse(result);
                 #endregion
-                case Enumeration.ProductType.Credit:
+                case Enumeration.OrderType.Credit:
                     #region Credit
                     OrderCreditDetailsModel orderCreditDetailsModel = new OrderCreditDetailsModel();
                     var orderToCredit = CurrentDb.OrderToCredit.Where(m => m.Id == orderId).FirstOrDefault();
@@ -1006,6 +1006,23 @@ namespace WebAppApi.Controllers
             orderToCredit.Creditline = model.Creditline;
             orderToCredit.CreditClass = model.CreditClass;
             IResult result = BizFactory.OrderToCredit.Submit(model.UserId, orderToCredit);
+            return new APIResponse(result);
+
+        }
+
+        [HttpPost]
+        public APIResponse SubmitInsurance(SubmitInsuranceModel model)
+        {
+            if (IsSaleman(model.UserId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
+            }
+
+            OrderToInsurance orderToInsurance = new OrderToInsurance();
+            orderToInsurance.UserId = model.UserId;
+            orderToInsurance.MerchantId = model.MerchantId;
+
+            IResult result = BizFactory.OrderToInsurance.Submit(model.UserId, orderToInsurance);
             return new APIResponse(result);
 
         }

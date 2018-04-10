@@ -71,7 +71,7 @@ namespace WebBack.Controllers.Biz
                         (sn.Length == 0 || o.Sn.Contains(sn)) &&
                             (clientCode.Length == 0 || m.ClientCode.Contains(clientCode)) &&
                                 (clientCode.Length == 0 || m.YYZZ_Name.Contains(clientCode))
-                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.ProductName, o.HandPerson, o.HandPersonPhone, o.CarPlateNo, o.SubmitTime, o.Status, o.CreateTime, o.InsuranceCompanyName });
+                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.TypeName,o.Type, o.HandPerson, o.HandPersonPhone, o.CarPlateNo, o.SubmitTime, o.Status, o.CreateTime, o.InsuranceCompanyName });
 
             int total = query.Count();
 
@@ -92,7 +92,7 @@ namespace WebBack.Controllers.Biz
                     item.HandPerson,
                     item.HandPersonPhone,
                     item.CarPlateNo,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     item.InsuranceCompanyName,
                     Status = item.Status.GetCnName()
@@ -117,7 +117,7 @@ namespace WebBack.Controllers.Biz
                          where b.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim
 
 
-                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.ProductName, o.HandPerson, o.HandPersonPhone, o.CarPlateNo, o.SubmitTime, b.Status, b.CreateTime, b.Auditor, o.InsuranceCompanyName });
+                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.TypeName, o.HandPerson, o.HandPersonPhone, o.CarPlateNo, o.SubmitTime, b.Status, b.CreateTime, b.Auditor, o.InsuranceCompanyName });
 
             if (condition.DealtStatus == Enumeration.CarClaimDealtStatus.WaitVerifyOrder)
             {
@@ -149,7 +149,7 @@ namespace WebBack.Controllers.Biz
                     item.HandPerson,
                     item.HandPersonPhone,
                     item.CarPlateNo,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     item.InsuranceCompanyName,
                     DealtStatus = item.Status
@@ -210,7 +210,7 @@ namespace WebBack.Controllers.Biz
                          where b.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim
 
 
-                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.ProductName, o.HandPerson, o.HandPersonPhone, o.CarPlateNo, o.SubmitTime, b.Status, b.CreateTime, b.Auditor, o.InsuranceCompanyName });
+                         select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, o.TypeName, o.HandPerson, o.HandPersonPhone, o.CarPlateNo, o.SubmitTime, b.Status, b.CreateTime, b.Auditor, o.InsuranceCompanyName });
 
             if (condition.DealtStatus == Enumeration.CarClaimDealtStatus.WaitVerifyAmount)
             {
@@ -242,7 +242,7 @@ namespace WebBack.Controllers.Biz
                     item.HandPerson,
                     item.HandPersonPhone,
                     item.CarPlateNo,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     item.InsuranceCompanyName,
                     DealtStatus = item.Status

@@ -40,7 +40,7 @@ namespace WebAgent.Controllers
                         (sn.Length == 0 || o.Sn.Contains(sn)) &&
                             (clientCode.Length == 0 || m.ClientCode.Contains(clientCode)) &&
                                 (clientCode.Length == 0 || m.YYZZ_Name.Contains(clientCode))
-                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.ProductName, o.InsuranceCompanyId, o.InsuranceCompanyName, o.ApplyTime, o.SubmitTime, o.Status, o.CreateTime });
+                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, o.Type, o.TypeName, o.InsuranceCompanyId, o.InsuranceCompanyName, o.ApplyTime, o.SubmitTime, o.Status, o.CreateTime });
 
             int total = query.Count();
 
@@ -58,7 +58,7 @@ namespace WebAgent.Controllers
                     item.ClientCode,
                     item.Sn,
                     item.YYZZ_Name,
-                    item.ProductName,
+                    item.TypeName,
                     item.SubmitTime,
                     item.ContactName,
                     item.ContactPhoneNumber,

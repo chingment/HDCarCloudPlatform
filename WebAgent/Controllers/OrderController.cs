@@ -46,7 +46,7 @@ namespace WebAgent.Controllers
                                  &&
                                  o.AgentId == this.CurrentUserId
 
-                         select new { o.Id, m.ClientCode, m.YYZZ_Name, o.Sn, o.ProductType, o.ProductName, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, o.ContactPhoneNumber, o.Contact }
+                         select new { o.Id, m.ClientCode, m.YYZZ_Name, o.Sn, o.Type,o.TypeName,o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, o.ContactPhoneNumber, o.Contact }
                         );
 
 
@@ -74,8 +74,8 @@ namespace WebAgent.Controllers
                     item.Sn,
                     item.YYZZ_Name,
                     item.ContactPhoneNumber,
-                    item.ProductName,
-                    item.ProductType,
+                    item.TypeName,
+                    item.Type,
                     item.SubmitTime,
                     Status = item.Status.GetCnName()
                 });

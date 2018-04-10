@@ -27,8 +27,6 @@ namespace WebAppApi.Models.CarService
 
         public List<InsureKindModel> InsureKind { get; set; }
 
-        public Enumeration.ProductType Type { get; set; }
-
         public Dictionary<string, ImageModel> ImgData { get; set; }
 
     }

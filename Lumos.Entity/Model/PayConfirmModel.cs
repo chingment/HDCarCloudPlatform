@@ -19,7 +19,7 @@ namespace Lumos.Entity
 
         public string OrderSn { get; set; }
 
-        public Enumeration.ProductType ProductType { get; set; }
+        public Enumeration.OrderType OrderType { get; set; }
 
         public object Params { get; set; }
     }

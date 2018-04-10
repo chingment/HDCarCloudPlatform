@@ -24,9 +24,9 @@ namespace Lumos.BLL.Biz.Task
             foreach (var order in orders)
             {
 
-                switch (order.ProductType)
+                switch (order.Type)
                 {
-                    case Enumeration.ProductType.InsureForCarForInsure:
+                    case Enumeration.OrderType.InsureForCarForInsure:
 
                         //处理提交之后24内没有支付的车险订单,以报价完成时间
                         var orderToCarForInsure = CurrentDb.OrderToCarInsure.Where(m => m.Sn == order.Sn && SqlFunctions.DateDiff("hour", m.EndOfferTime, this.DateTime) >= m.AutoCancelByHour).FirstOrDefault();
@@ -45,7 +45,7 @@ namespace Lumos.BLL.Biz.Task
                         }
 
                         break;
-                    case Enumeration.ProductType.PosMachineServiceFee:
+                    case Enumeration.OrderType.PosMachineServiceFee:
 
                         var receiveNotifyLog = SdkFactory.MinShunPay.PayQuery(0, order);
 

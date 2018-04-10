@@ -19,13 +19,12 @@ namespace Lumos.BLL
             {
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalDealt.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.LllegalDealt).FirstOrDefault();
+
 
                 orderToLllegalDealt.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToLllegalDealt.AgentId = merchant.AgentId ?? 0;
-                orderToLllegalDealt.ProductId = product.Id;
-                orderToLllegalDealt.ProductType = product.Type;
-                orderToLllegalDealt.ProductName = product.Name;
+                orderToLllegalDealt.Type = Enumeration.OrderType.LllegalDealt;
+                orderToLllegalDealt.TypeName = Enumeration.OrderType.LllegalDealt.GetCnName();
                 orderToLllegalDealt.SubmitTime = this.DateTime;
                 orderToLllegalDealt.CreateTime = this.DateTime;
                 orderToLllegalDealt.Creator = operater;
@@ -72,8 +71,8 @@ namespace Lumos.BLL
                     yOrder.OrderId = orderToLllegalDealt.Id;
                     yOrder.OrderSn = orderToLllegalDealt.Sn;
                     yOrder.remarks = orderToLllegalDealt.Remarks;
-                    yOrder.productType = orderToLllegalDealt.ProductType;
-                    yOrder.productName = orderToLllegalDealt.ProductName;
+                    yOrder.orderType = orderToLllegalDealt.Type;
+                    yOrder.orderTypeName = orderToLllegalDealt.TypeName;
 
 
 

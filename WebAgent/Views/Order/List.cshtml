@@ -23,7 +23,7 @@
                     l_StrRows += "<tr>";
                     l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
                     l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.sn + "\"   >" + p_row.sn + "</td>";
-                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.productName + "\">" + p_row.productName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.typeName + "\">" + p_row.typeName + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\">" + p_row.clientCode + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactPhoneNumber + "\">" + p_row.contactPhoneNumber + "</td>";
@@ -42,7 +42,7 @@
 
 
                         title = '查看订单';
-                        switch (obj.productType) {
+                        switch (obj.type) {
                             case 300001:
                                 url = '/CarInsureOffer/Details?id=' + obj.id;
                                 break;

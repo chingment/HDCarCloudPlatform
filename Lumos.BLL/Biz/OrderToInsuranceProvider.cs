@@ -27,9 +27,11 @@ namespace Lumos.BLL
 
                 orderToInsurance.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToInsurance.AgentId = merchant.AgentId ?? 0;
-               // orderToInsurance.ProductId = product.Id;
-                //orderToInsurance.ProductType = product.Type;
-                //orderToInsurance.ProductName = product.Name;
+                orderToInsurance.ProductId = 0;
+                orderToInsurance.Type = Enumeration.OrderType.Insure;
+                orderToInsurance.TypeName = Enumeration.OrderType.Insure.GetCnName();
+                orderToInsurance.ProductType = Enumeration.ProductType.InsureForYiWaiXian;
+                orderToInsurance.ProductName = Enumeration.ProductType.InsureForYiWaiXian.GetCnName();
                 orderToInsurance.Status = Enumeration.OrderStatus.Submitted;
                 orderToInsurance.SubmitTime = this.DateTime;
                 orderToInsurance.CreateTime = this.DateTime;

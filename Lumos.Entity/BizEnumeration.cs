@@ -230,8 +230,18 @@ namespace Lumos.Entity
             [Remark("保险产品")]
             Insure = 2,
             [Remark("意外险")]
-            InsureForYiWaiXian = 200001,
-            [Remark("业务订单")]
+            InsureForYiWaiXian = 200001
+        }
+
+
+        public enum OrderType
+        {
+            Unknow = 0,
+            [Remark("商品")]
+            Goods = 1,
+            [Remark("保险")]
+            Insure = 2,
+            [Remark("业务")]
             Biz = 3,
             [Remark("车险投保")]
             InsureForCarForInsure = 300001,

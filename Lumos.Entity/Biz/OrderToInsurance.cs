@@ -12,6 +12,13 @@ namespace Lumos.Entity
     [Table("OrderToInsurance")]
     public class OrderToInsurance : Order
     {
+        public int ProductId { get; set; }
+
+        public Enumeration.ProductType ProductType { get; set; }
+
+        [MaxLength(256)]
+        public string ProductName { get; set; }
+
         //public int InsuranceCompanyId { get; set; }
         //[MaxLength(128)]
         //public string InsuranceCompanyName { get; set; }

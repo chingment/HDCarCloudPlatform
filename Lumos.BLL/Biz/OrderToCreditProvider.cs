@@ -22,13 +22,11 @@ namespace Lumos.BLL
                 //商户信息
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
 
-                var product = CurrentDb.Product.Where(m => m.Type == Enumeration.ProductType.Credit).FirstOrDefault();
 
                 orderToCredit.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToCredit.AgentId = merchant.AgentId ?? 0;
-                orderToCredit.ProductId = product.Id;
-                orderToCredit.ProductType = product.Type;
-                orderToCredit.ProductName = product.Name;
+                orderToCredit.Type = Enumeration.OrderType.Credit;
+                orderToCredit.TypeName = Enumeration.OrderType.Credit.GetCnName();
                 orderToCredit.Status = Enumeration.OrderStatus.Submitted;
                 orderToCredit.SubmitTime = this.DateTime;
                 orderToCredit.CreateTime = this.DateTime;

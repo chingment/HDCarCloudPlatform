@@ -78,7 +78,7 @@ namespace WebAppApi.Controllers
                 }
             }
 
-            IResult result = BizFactory.OrderToLllegalDealt.Submit(model.UserId, model.IsGetConfirmInfo, orderToLllegalDealt, orderToLllegalDealtDetails);
+            IResult result = BizFactory.OrderToLllegalDealt.Submit(model.UserId, true, orderToLllegalDealt, orderToLllegalDealtDetails);
             return new APIResponse(result);
 
         }

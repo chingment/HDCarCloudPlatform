@@ -29,9 +29,9 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
+        private string host = "http://localhost:16665";
         //private string host = "http://120.79.233.231";
-        private string host = "http://api.gzhaoyilian.com";
+       // private string host = "http://api.gzhaoyilian.com";
        // private string host = "https://www.ins-uplink.cn";
 
         private string YBS_key = "ybs_test";
@@ -174,14 +174,14 @@ namespace WebAppApi.Controllers
             int posMachineId = 153;
 
 
-            model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
+           // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
             // model.Add("获取产品", GetProductList(userId, merchantId, posMachineId, 0));
 
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
-            // model.Add("违章查询", SubmittLllegalQuery(1001, 1, 2));
+             model.Add("违章查询", SubmittLllegalQuery(1215, 241, 148));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
@@ -1513,12 +1513,15 @@ namespace WebAppApi.Controllers
 
         public string SubmittLllegalQuery(int userId, int merchantId, int posMachineId)
         {
-
+            //pms.CarNo = "粤YGY662";
+            //pms.CarType = "02";
+            //pms.EnginNo = "713477";
+            //pms.RackNo = "004711";
             LllegalQueryParams pms = new LllegalQueryParams();
             pms.MerchantId = merchantId;
             pms.PosMachineId = posMachineId;
             pms.UserId = userId;
-            pms.CarNo = "粤YGY662";
+            pms.CarNo = "粤E58H56";
             pms.CarType = "02";
             pms.EnginNo = "713477";
             pms.RackNo = "004711";

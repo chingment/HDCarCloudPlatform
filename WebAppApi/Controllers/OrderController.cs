@@ -931,6 +931,7 @@ namespace WebAppApi.Controllers
                         orderInsuranceDetailsModel.Remarks = orderToInsurance.Remarks.NullToEmpty();
                         orderInsuranceDetailsModel.InsuranceCompanyName = orderToInsurance.InsuranceCompanyName;
                         orderInsuranceDetailsModel.ProductSkuName = orderToInsurance.ProductSkuName;
+                        orderInsuranceDetailsModel.ProductTypeName = orderToInsurance.ProductType.GetCnName();
                     }
 
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderInsuranceDetailsModel };

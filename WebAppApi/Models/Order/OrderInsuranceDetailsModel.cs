@@ -10,5 +10,7 @@ namespace WebAppApi.Models.Order
         public string InsuranceCompanyName { get; set; }
 
         public string ProductSkuName { get; set; }
+
+        public string ProductTypeName { get; set; }
     }
 }

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebAppApi.Models.Banner
+namespace WebAppApi.Models.Resource
 {
-    public class DetailsViewModel:BaseViewModel
+    
+    public class DetailsViewModelByBanner : BaseViewModel
     {
         private Lumos.Entity.SysBanner _sysBanner = new Lumos.Entity.SysBanner();
 
@@ -21,12 +22,12 @@ namespace WebAppApi.Models.Banner
             }
         }
 
-        public DetailsViewModel()
+        public DetailsViewModelByBanner()
         {
 
         }
 
-        public DetailsViewModel(int id)
+        public DetailsViewModelByBanner(int id)
         {
             var sysBanner = CurrentDb.SysBanner.Where(m => m.Id == id).FirstOrDefault();
             if (sysBanner != null)

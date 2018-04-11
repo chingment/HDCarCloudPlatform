@@ -13,7 +13,6 @@ using System.Net.Http;
 using System.Web.Http;
 using WebAppApi.Models;
 using WebAppApi.Models.Account;
-using WebAppApi.Models.Banner;
 using WebAppApi.Models.CarService;
 
 namespace WebAppApi.Controllers
@@ -76,7 +75,7 @@ namespace WebAppApi.Controllers
                     productModel.ShowPrice = productSku.ShowPrice.ToF2Price();
                     productModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(productSku.DispalyImgs);
                     productModel.MainImg = BizFactory.Product.GetMainImg(m.DispalyImgs);
-                    productModel.Details = productSku.Details;
+                    productModel.DetailsUrl = BizFactory.Product.GetDetailsUrl(m.Id);
                     model.Add(productModel);
                 }
             }

@@ -24,7 +24,7 @@ namespace Lumos.Entity.AppApi
 
         public bool IsHot { get; set; }
 
-        public string Details { get; set; }
+        public string DetailsUrl { get; set; }
 
 
         public List<ImgSet> DispalyImgs { get; set; }

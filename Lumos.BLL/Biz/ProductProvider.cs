@@ -51,6 +51,15 @@ namespace Lumos.BLL
 
     public class ProductProvider : BaseProvider
     {
+        public string GetDetailsUrl(int id)
+        {
+            string linkUrl = "";
+
+            linkUrl = string.Format("{0}/Resource/PrdDetails/{1}", BizFactory.AppSettings.WebAppServerUrl, id);
+
+            return linkUrl;
+        }
+
         public string GetMainImg(string imgSetJson)
         {
             if (string.IsNullOrEmpty(imgSetJson))
@@ -453,10 +462,7 @@ namespace Lumos.BLL
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", productDetailInfo);
         }
 
-        private string GetDetailsUrl(int skuid)
-        {
-            return "/ProductSku/Details?id=" + skuid;
-        }
+
 
     }
 }

@@ -31,8 +31,8 @@ namespace WebAppApi.Controllers
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
         private string host = "http://localhost:16665";
         //private string host = "http://120.79.233.231";
-       // private string host = "http://api.gzhaoyilian.com";
-       // private string host = "https://www.ins-uplink.cn";
+        // private string host = "http://api.gzhaoyilian.com";
+        // private string host = "https://www.ins-uplink.cn";
 
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
@@ -174,14 +174,14 @@ namespace WebAppApi.Controllers
             int posMachineId = 153;
 
 
-           // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
+            // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
             // model.Add("获取产品", GetProductList(userId, merchantId, posMachineId, 0));
 
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
-             model.Add("违章查询", SubmittLllegalQuery(1215, 241, 148));
+            // model.Add("违章查询", SubmittLllegalQuery(1215, 241, 148));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
@@ -190,7 +190,7 @@ namespace WebAppApi.Controllers
             //  model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             //  model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
 
-            // model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-02-09 15:14:28")));
+             model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             // model.Add("登录接口", Login(userName, passWord, deviceId));

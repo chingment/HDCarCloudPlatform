@@ -1,9 +1,9 @@
 ﻿using Lumos.BLL;
+using Lumos.BLL.Service.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebAppApi.Models.Banner;
 using WebAppApi.Models.CarService;
 
 namespace WebAppApi.Models.Account
@@ -29,5 +29,7 @@ namespace WebAppApi.Models.Account
         public List<ExtendedAppModel> ExtendedApp { get; set; }
 
         public int LllegalQueryScore { get; set; }
+
+        public List<ProductKindModel> ProductKinds { get; set; }
     }
 }

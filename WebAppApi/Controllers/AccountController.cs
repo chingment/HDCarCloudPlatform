@@ -1,4 +1,5 @@
 ﻿using Lumos.BLL;
+using Lumos.BLL.Service;
 using Lumos.DAL;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
@@ -11,7 +12,6 @@ using System.Net.Http;
 using System.Web.Http;
 using WebAppApi.Models;
 using WebAppApi.Models.Account;
-using WebAppApi.Models.Banner;
 using WebAppApi.Models.CarService;
 
 namespace WebAppApi.Controllers
@@ -400,14 +400,18 @@ namespace WebAppApi.Controllers
             }
 
             model.ExtendedApp = extendedAppModel;
-            #endregion 
+            #endregion
 
-
+            #region 查询违章积分
             var lllegalQueryScore = CurrentDb.LllegalQueryScore.Where(m => m.UserId == userId).FirstOrDefault();
             if (lllegalQueryScore != null)
             {
                 model.LllegalQueryScore = lllegalQueryScore.Score;
             }
+            #endregion
+
+
+            model.ProductKinds = ServiceFactory.Product.GetKinds();
 
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
             return new APIResponse(result);

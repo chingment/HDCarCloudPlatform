@@ -105,6 +105,10 @@
     <Compile Include="Sdk\HeLianProvider.cs" />
     <Compile Include="Sdk\MinShunPayProvider.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
+    <Compile Include="Service\Model\ProductChildKindModel.cs" />
+    <Compile Include="Service\Model\ProductKindModel.cs" />
+    <Compile Include="Service\ProductService.cs" />
+    <Compile Include="Service\ServiceFactory.cs" />
     <Compile Include="Sys\AuthorizeRelayProvider.cs" />
     <Compile Include="Sys\SysAppKeySecretProvider.cs" />
     <Compile Include="Sys\SysBannerProvider.cs" />

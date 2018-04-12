@@ -218,7 +218,7 @@ namespace Lumos.BLL
                             {
                                 record.serviceFee = priceresult.serviceFee;
                                 record.fine = priceresult.fine;
-                                record.late_fees = priceresult.fine;
+                                record.late_fees = priceresult.late_fees;
                             }
 
                             record.status = "待处理";

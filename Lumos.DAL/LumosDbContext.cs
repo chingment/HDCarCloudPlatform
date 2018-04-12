@@ -117,6 +117,8 @@ namespace Lumos.DAL
 
         public IDbSet<InventoryOperateHis> InventoryOperateHis { get; set; }
 
+        public IDbSet<Cart> Cart { get; set; }
+
         //public FxDbContext()
         //    : base("DefaultConnection")
         //{

@@ -30,6 +30,5 @@ namespace WebAppApi.Models.Account
 
         public int LllegalQueryScore { get; set; }
 
-        public List<ProductKindModel> ProductKinds { get; set; }
     }
 }

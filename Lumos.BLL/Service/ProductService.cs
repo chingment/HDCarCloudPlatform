@@ -10,19 +10,22 @@ namespace Lumos.BLL.Service
     public class ProductService : BaseProvider
     {
 
-        public List<ProductKindModel> GetKinds()
+        public ProductKindModel GetKinds()
         {
-            var productKindModels = new List<ProductKindModel>();
+            var productKindModels = new ProductKindModel();
+
+
+            var productParentKindModels = new List<ProductParentKindModel>();
 
             var productKinds = CurrentDb.ProductKind.Where(m => m.Status == Entity.Enumeration.ProductKindStatus.Valid).ToList();
 
             var productParentKinds = productKinds.Where(m => m.PId == 1).ToList();
-            foreach (var item in productKinds)
+            foreach (var item in productParentKinds)
             {
-                var productKindModel = new ProductKindModel();
-                productKindModel.Id = item.Id;
-                productKindModel.Name = item.Name;
-                productKindModel.ImgUrl = item.MainImg;
+                var productParentKindModel = new ProductParentKindModel();
+                productParentKindModel.Id = item.Id;
+                productParentKindModel.Name = item.Name;
+                productParentKindModel.ImgUrl = item.MainImg;
 
                 var productChildKinds = productKinds.Where(m => m.PId == item.Id).ToList();
 
@@ -34,14 +37,33 @@ namespace Lumos.BLL.Service
                     productChildKindModel.Name = item2.Name;
                     productChildKindModel.ImgUrl = item2.MainImg;
 
-                    productKindModel.Child.Add(productChildKindModel);
+                    productParentKindModel.Child.Add(productChildKindModel);
                 }
 
-                productKindModels.Add(productKindModel);
+                productParentKindModels.Add(productParentKindModel);
 
             }
 
+            productKindModels.List = productParentKindModels;
+
             return productKindModels;
+        }
+
+
+        public ProductSkuModel GetSkuModel(int productSkuId)
+        {
+            var productSkuModel = new ProductSkuModel();
+
+            var prdSku = CurrentDb.ProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
+            productSkuModel.Id = prdSku.Id;
+            productSkuModel.ProductId = prdSku.ProductId;
+            productSkuModel.Name = prdSku.Name;
+            productSkuModel.ProductId = prdSku.ProductId;
+            productSkuModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(prdSku.DispalyImgs);
+            productSkuModel.MainImg = BizFactory.Product.GetMainImg(prdSku.DispalyImgs);
+            productSkuModel.UnitPrice = prdSku.Price;
+ 
+            return productSkuModel;
         }
     }
 }

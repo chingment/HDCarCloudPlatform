@@ -15,5 +15,13 @@ namespace Lumos.BLL.Service
                 return new ProductService();
             }
         }
+
+        public static CartService Cart
+        {
+            get
+            {
+                return new CartService();
+            }
+        }
     }
 }

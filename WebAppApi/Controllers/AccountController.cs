@@ -410,9 +410,6 @@ namespace WebAppApi.Controllers
             }
             #endregion
 
-
-            model.ProductKinds = ServiceFactory.Product.GetKinds();
-
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
             return new APIResponse(result);
         }

@@ -654,5 +654,33 @@ namespace Lumos.Entity
             Decrease = 2
         }
 
+        public enum CartOperateType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("选择")]
+            Selected = 1,
+            [Remark("加")]
+            Increase = 2,
+            [Remark("减")]
+            Decrease = 3,
+            [Remark("删除")]
+            Delete = 4
+        }
+
+        public enum CartStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("等待结算")]
+            WaitSettle = 1,
+            [Remark("结算中")]
+            Settling = 2,
+            [Remark("结算完成")]
+            SettleCompleted = 3,
+            [Remark("已删除")]
+            Deleted = 4
+        }
+
     }
 }

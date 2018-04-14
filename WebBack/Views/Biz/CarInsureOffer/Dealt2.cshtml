@@ -20,7 +20,7 @@
     <script type="text/javascript">
 
         var offerKinds= @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OrderToCarInsureOfferKind));
-        var productType=@((int)Model.OrderToCarInsure.ProductType)
+        var productType=@((int)Model.OrderToCarInsure.Type)
         function loadOfferKindsTable(offerKinds){
             var obj_tbody=$('#list_table_offerkinds tbody');
             $(obj_tbody).html('');

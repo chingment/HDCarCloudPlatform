@@ -1400,7 +1400,7 @@ namespace WebAppApi.Controllers
             SubmitTalentDemandModel model1 = new SubmitTalentDemandModel();
             model1.UserId = userId;
             model1.Quantity = 2;
-            model1.WorkJob = Enumeration.WorkJob.机修;
+            model1.WorkJob = Enumeration.WorkJob.周末兼职;
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;
             model1.UseStartTime = DateTime.Now;

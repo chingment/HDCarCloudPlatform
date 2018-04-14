@@ -59,7 +59,7 @@ namespace Lumos.Entity
         [MaxLength(2048)]
         public string Spec3 { get; set; }
 
-        public int Status { get; set; }
+        public Enumeration.ProductStatus Status { get; set; }
 
         public bool IsHot { get; set; }
 

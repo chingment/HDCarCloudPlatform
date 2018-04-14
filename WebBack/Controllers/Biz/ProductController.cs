@@ -68,8 +68,7 @@ namespace WebBack.Controllers.Biz
         public CustomJsonResult GetList(WebBack.Models.Biz.Product.SearchCondition condition)
         {
             var query = (from u in CurrentDb.Product
-                         where (condition.Name == null || u.Name.Contains(condition.Name)) &&
-                         SqlFunctions.StringConvert((double)u.Type).StartsWith("1")
+                         where (condition.Name == null || u.Name.Contains(condition.Name)) 
                          select new { u.Id, u.Name, u.MainImg, u.CreateTime, u.Supplier, u.ProductCategory });
 
             int total = query.Count();

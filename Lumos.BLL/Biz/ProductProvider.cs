@@ -186,6 +186,7 @@ namespace Lumos.BLL
                 product.Supplier = product.Supplier.Trim();
                 product.ProductKindIds = BuildProductKindIds(product.ProductKindIds);
                 product.MainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
+                product.Status = Enumeration.ProductStatus.OnLine;
                 product.Creator = operater;
                 product.CreateTime = this.DateTime;
 
@@ -207,7 +208,7 @@ namespace Lumos.BLL
                     prdSku.Details = product.Details;
                     prdSku.Spec2 = GetSpec2(prdSku.Spec);
                     prdSku.Spec3 = GetSpec3(prdSku.Spec);
-
+                    prdSku.Status = product.Status;
                     if (string.IsNullOrEmpty(prdSku.Spec3))
                     {
                         prdSku.Name = product.Name;

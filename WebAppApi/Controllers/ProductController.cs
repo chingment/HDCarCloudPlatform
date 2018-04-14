@@ -47,6 +47,7 @@ namespace WebAppApi.Controllers
 
             if (kindId != 0)
             {
+
                 string strkindId = BizFactory.Product.BuildProductKindIdForSearch(kindId.ToString());
 
                 query = query.Where(p => SqlFunctions.CharIndex(strkindId, p.ProductKindIds) > 0);

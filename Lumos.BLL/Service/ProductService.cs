@@ -26,7 +26,7 @@ namespace Lumos.BLL.Service
                 productParentKindModel.Id = item.Id;
                 productParentKindModel.Name = item.Name;
                 productParentKindModel.ImgUrl = item.MainImg;
-
+                productParentKindModel.Selected = false;
                 var productChildKinds = productKinds.Where(m => m.PId == item.Id).ToList();
 
                 foreach (var item2 in productChildKinds)
@@ -36,12 +36,22 @@ namespace Lumos.BLL.Service
                     productChildKindModel.Id = item2.Id;
                     productChildKindModel.Name = item2.Name;
                     productChildKindModel.ImgUrl = item2.MainImg;
+                    productParentKindModel.Selected = false;
 
                     productParentKindModel.Child.Add(productChildKindModel);
                 }
 
                 productParentKindModels.Add(productParentKindModel);
 
+            }
+
+            var selectedCount = productParentKindModels.Where(m => m.Selected == true).Count();
+            if (selectedCount == 0)
+            {
+                if (productParentKindModels.Count > 0)
+                {
+                    productParentKindModels[0].Selected = true;
+                }
             }
 
             productKindModels.List = productParentKindModels;
@@ -62,7 +72,7 @@ namespace Lumos.BLL.Service
             productSkuModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(prdSku.DispalyImgs);
             productSkuModel.MainImg = BizFactory.Product.GetMainImg(prdSku.DispalyImgs);
             productSkuModel.UnitPrice = prdSku.Price;
- 
+
             return productSkuModel;
         }
     }

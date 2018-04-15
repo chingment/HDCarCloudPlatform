@@ -53,7 +53,7 @@ namespace WebAppApi.Controllers
                 query = query.Where(p => SqlFunctions.CharIndex(strkindId, p.ProductKindIds) > 0);
             }
 
-            int pageSize = 4;
+            int pageSize = 10;
 
             query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 

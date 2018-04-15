@@ -14,7 +14,7 @@ namespace WebSSO
         /// <returns></returns>
         public static string GetWebName()
         {
-            return "登录";
+            return "好易联平台-登录";
         }
     }
 }

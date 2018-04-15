@@ -45,7 +45,7 @@ namespace WebAgent
         /// <returns></returns>
         public static string GetWebName()
         {
-            return "车险代理商平台";
+            return "好易联代理商平台";
         }
 
     }

@@ -45,7 +45,7 @@ namespace WebBack
         /// <returns></returns>
         public static string GetWebName()
         {
-            return "车险平台";
+            return "好易联平台";
         }
     }
 }

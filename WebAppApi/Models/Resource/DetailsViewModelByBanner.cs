@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebAppApi.Models.Resource
 {
-    
+
     public class DetailsViewModelByBanner : BaseViewModel
     {
         private Lumos.Entity.SysBanner _sysBanner = new Lumos.Entity.SysBanner();
@@ -32,6 +32,8 @@ namespace WebAppApi.Models.Resource
             var sysBanner = CurrentDb.SysBanner.Where(m => m.Id == id).FirstOrDefault();
             if (sysBanner != null)
             {
+                sysBanner.ReadCount += 1;
+                CurrentDb.SaveChanges();
                 _sysBanner = sysBanner;
             }
         }

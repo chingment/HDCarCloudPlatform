@@ -228,8 +228,8 @@ namespace WebBack.Controllers.Biz
 
             var query = (from o in CurrentDb.OrderPayTrans
 
-                         where o.OrderId == condition.OrderId
-                         &&
+                         where
+                           (condition.OrderId == 0 || o.OrderId == condition.OrderId) &&
                         (condition.Sn == null || o.Sn.Contains(condition.Sn))
                          select new { o.Id, o.Sn, o.OrderSn, o.Amount, o.TransType, o.CreateTime }
                         );
@@ -250,8 +250,8 @@ namespace WebBack.Controllers.Biz
                     item.Id,
                     item.Sn,
                     item.OrderSn,
-                    item.Amount,
-                    item.TransType,
+                    Amount = (int.Parse(item.Amount) * 0.01),
+                    TransType = (item.TransType == 67 ? "微信" : "支付宝"),
                     item.CreateTime
                 });
             }

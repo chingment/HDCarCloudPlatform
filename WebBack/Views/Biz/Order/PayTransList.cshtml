@@ -38,7 +38,7 @@
 
 <form id="form1" name="form1">
     @Html.AntiForgeryToken()
-    <input type="hidden" class="input-control" name="OrderId" value="@Request.QueryString["id"]" />
+    <input type="hidden" class="input-control" name="OrderId" value="@(Request.QueryString["id"]==null?"0":@Request.QueryString["id"].ToString())" />
     <div class="search-bar">
         <div class="filter">
             <span class="filter-label">流水号：</span>

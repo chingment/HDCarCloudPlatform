@@ -162,7 +162,7 @@ namespace WebAppApi.Controllers
 
         private APIResponse SalesmanLogin(LoginModel model)
         {
-            var salesman = CurrentDb.SysSalesmanUser.Where(m => m.UserName == model.UserName).FirstOrDefault();
+            var salesman = CurrentDb.SysUser.Where(m => m.UserName == model.UserName).FirstOrDefault();
             if (salesman == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，用户名不存在");
@@ -176,12 +176,12 @@ namespace WebAppApi.Controllers
             LoginResultModel resultModel = new LoginResultModel();
 
 
-            var agent = CurrentDb.SysAgentUser.Where(m => m.Id == salesman.AgentId).FirstOrDefault();
+            //var agent = CurrentDb.SysAgentUser.Where(m => m.Id == salesman.AgentId).FirstOrDefault();
 
 
             DateTime nowDate = DateTime.Now;
             resultModel.UserId = salesman.Id;
-            resultModel.MerchantId = salesman.AgentId;
+            resultModel.MerchantId = 0;
             resultModel.PosMachineId = 0;
             resultModel.UserName = salesman.UserName;
             resultModel.MerchantCode = "88888888";

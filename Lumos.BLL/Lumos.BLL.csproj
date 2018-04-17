@@ -113,10 +113,14 @@
     <Compile Include="Service\Model\CartModel.cs" />
     <Compile Include="Service\Model\IndexModel.cs" />
     <Compile Include="Service\Model\ProductChildKindModel.cs" />
+    <Compile Include="Service\Model\ProductDetailsModel.cs" />
     <Compile Include="Service\Model\ProductKindModel.cs" />
     <Compile Include="Service\Model\ProductParentKindModel.cs" />
+    <Compile Include="Service\Model\ProductSkuDetailsModel.cs" />
     <Compile Include="Service\Model\ProductSkuModel.cs" />
     <Compile Include="Service\Model\PersonalModel.cs" />
+    <Compile Include="Service\Model\SpecModel.cs" />
+    <Compile Include="Service\Model\SpecValueModel.cs" />
     <Compile Include="Service\Model\UserInfoModel.cs" />
     <Compile Include="Service\PersonalService.cs" />
     <Compile Include="Service\ProductService.cs" />

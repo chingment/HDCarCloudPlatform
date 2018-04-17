@@ -17,33 +17,8 @@ namespace Lumos.Entity
 
         public int ProductId { get; set; }
 
-        public int ProductGalleryColumnId { get; set; }
-
-        public int ProductCategoryId { get; set; }
-
-        [MaxLength(256)]
-        public string ProductCategory { get; set; }
-
-        public int SupplierId { get; set; }
-
-        [MaxLength(256)]
-        public string Supplier { get; set; }
-
         [MaxLength(128)]
         public string Name { get; set; }
-
-        [MaxLength(256)]
-        public string MainImg { get; set; }
-
-        [MaxLength(2048)]
-        public string DispalyImgs { get; set; }
-
-        [MaxLength(512)]
-        public string BriefIntro { get; set; }
-
-        public string Details { get; set; }
-
-        public string ServiceDesc { get; set; }
 
         public decimal Price { get; set; }
 
@@ -62,12 +37,6 @@ namespace Lumos.Entity
         public Enumeration.ProductStatus Status { get; set; }
 
         public bool IsHot { get; set; }
-
-        [MaxLength(512)]
-        public string ProductKindIds { get; set; }
-
-        [MaxLength(512)]
-        public string ProductKindNames { get; set; }
 
         public int Creator { get; set; }
 

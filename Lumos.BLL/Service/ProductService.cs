@@ -65,15 +65,59 @@ namespace Lumos.BLL.Service
             var productSkuModel = new ProductSkuModel();
 
             var prdSku = CurrentDb.ProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
+            var prd = CurrentDb.Product.Where(m => m.Id == prdSku.Id).FirstOrDefault();
             productSkuModel.Id = prdSku.Id;
             productSkuModel.ProductId = prdSku.ProductId;
             productSkuModel.Name = prdSku.Name;
             productSkuModel.ProductId = prdSku.ProductId;
-            productSkuModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(prdSku.DispalyImgs);
-            productSkuModel.MainImg = BizFactory.Product.GetMainImg(prdSku.DispalyImgs);
+            productSkuModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(prd.DispalyImgs);
+            productSkuModel.MainImg = BizFactory.Product.GetMainImg(prd.DispalyImgs);
             productSkuModel.UnitPrice = prdSku.Price;
 
             return productSkuModel;
         }
+
+
+        public ProductSkuDetailsModel GetSkuDetals(int productSkuId)
+        {
+            var productSkuDetailsModel = new ProductSkuDetailsModel();
+
+            var productSku = CurrentDb.ProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
+            var product = CurrentDb.Product.Where(m => m.Id == productSku.ProductId).FirstOrDefault();
+
+            productSkuDetailsModel.Id = productSku.Id;
+            productSkuDetailsModel.Name = productSku.Name;
+            productSkuDetailsModel.ProductId = productSku.ProductId;
+            productSkuDetailsModel.ServiceDesc = product.ServiceDesc;
+            productSkuDetailsModel.Details = product.Details;
+            productSkuDetailsModel.UnitPrice = productSku.Price.ToF2Price();
+            productSkuDetailsModel.ShowPrice = productSku.ShowPrice.ToF2Price();
+
+
+            try
+            {
+                if (!string.IsNullOrEmpty(product.DispalyImgs))
+                {
+
+                    var dispalyImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Lumos.Entity.ImgSet>>(product.SpecsJson);
+
+                    dispalyImgs = dispalyImgs.Where(m => m.ImgUrl != null && m.ImgUrl.Length > 0).ToList();
+                    productSkuDetailsModel.DispalyImgs = dispalyImgs;
+
+                }
+
+                if (!string.IsNullOrEmpty(product.SpecsJson))
+                {
+                    productSkuDetailsModel.Specs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SpecModel>>(product.SpecsJson);
+                }
+            }
+            catch
+            {
+
+            }
+
+            return productSkuDetailsModel;
+        }
+
     }
 }

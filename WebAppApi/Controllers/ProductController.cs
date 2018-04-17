@@ -1,4 +1,5 @@
 ﻿using Lumos.BLL;
+using Lumos.BLL.Service;
 using Lumos.DAL;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
@@ -74,12 +75,24 @@ namespace WebAppApi.Controllers
                     productModel.IsHot = m.IsHot;
                     productModel.Price = productSku.Price;
                     productModel.ShowPrice = productSku.ShowPrice.ToF2Price();
-                    productModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(productSku.DispalyImgs);
+                    productModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(m.DispalyImgs);
                     productModel.MainImg = BizFactory.Product.GetMainImg(m.DispalyImgs);
                     productModel.DetailsUrl = BizFactory.Product.GetDetailsUrl(m.Id);
                     model.Add(productModel);
                 }
             }
+
+            APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
+
+            return new APIResponse(result);
+        }
+
+
+        [HttpGet]
+        public APIResponse GetDetails(int userId, int productSkuId)
+        {
+
+            var model = ServiceFactory.Product.GetSkuDetals(productSkuId);
 
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
 

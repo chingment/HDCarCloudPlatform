@@ -65,7 +65,7 @@ namespace Lumos.BLL.Service
             var productSkuModel = new ProductSkuModel();
 
             var prdSku = CurrentDb.ProductSku.Where(m => m.Id == productSkuId).FirstOrDefault();
-            var prd = CurrentDb.Product.Where(m => m.Id == prdSku.Id).FirstOrDefault();
+            var prd = CurrentDb.Product.Where(m => m.Id == prdSku.ProductId).FirstOrDefault();
             productSkuModel.Id = prdSku.Id;
             productSkuModel.ProductId = prdSku.ProductId;
             productSkuModel.Name = prdSku.Name;
@@ -89,6 +89,7 @@ namespace Lumos.BLL.Service
             productSkuDetailsModel.Name = productSku.Name;
             productSkuDetailsModel.ProductId = productSku.ProductId;
             productSkuDetailsModel.ServiceDesc = product.ServiceDesc;
+            productSkuDetailsModel.BriefIntro = product.BriefIntro;
             productSkuDetailsModel.Details = product.Details;
             productSkuDetailsModel.UnitPrice = productSku.Price.ToF2Price();
             productSkuDetailsModel.ShowPrice = productSku.ShowPrice.ToF2Price();
@@ -99,7 +100,7 @@ namespace Lumos.BLL.Service
                 if (!string.IsNullOrEmpty(product.DispalyImgs))
                 {
 
-                    var dispalyImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Lumos.Entity.ImgSet>>(product.SpecsJson);
+                    var dispalyImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Lumos.Entity.ImgSet>>(product.DispalyImgs);
 
                     dispalyImgs = dispalyImgs.Where(m => m.ImgUrl != null && m.ImgUrl.Length > 0).ToList();
                     productSkuDetailsModel.DispalyImgs = dispalyImgs;

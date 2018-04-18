@@ -18,7 +18,7 @@ namespace WebAppApi
             ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
             Exception ex = actionExecutedContext.Exception;
             log.Error("API调用出现异常", ex);
-            log.Error(ex.Message);
+            log.Error(ex.InnerException.Message);
         }
     }
 

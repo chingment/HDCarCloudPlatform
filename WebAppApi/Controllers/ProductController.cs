@@ -89,7 +89,7 @@ namespace WebAppApi.Controllers
 
 
         [HttpGet]
-        public APIResponse GetDetails(int userId, int productSkuId)
+        public APIResponse GetSkuDetails(int userId, int productSkuId)
         {
 
             var model = ServiceFactory.Product.GetSkuDetals(productSkuId);

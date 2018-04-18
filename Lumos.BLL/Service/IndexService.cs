@@ -15,21 +15,21 @@ namespace Lumos.BLL.Service
             var model = new IndexModel();
 
 
-            var banner = CurrentDb.SysBanner.Where(m => m.Type == Enumeration.BannerType.MainHomeTop && m.Status == Enumeration.SysBannerStatus.Release).ToList();
+            //var banner = CurrentDb.SysBanner.Where(m => m.Type == Enumeration.BannerType.MainHomeTop && m.Status == Enumeration.SysBannerStatus.Release).ToList();
 
-            List<BannerModel> bannerModels = new List<BannerModel>();
+            //List<BannerModel> bannerModels = new List<BannerModel>();
 
-            foreach (var m in banner)
-            {
-                var bannerModel = new BannerModel();
-                bannerModel.Id = m.Id;
-                bannerModel.Title = m.Title;
-                bannerModel.LinkUrl = SysFactory.Banner.GetLinkUrl(m.Id);
-                bannerModel.ImgUrl = m.ImgUrl;
-                bannerModels.Add(bannerModel);
-            }
+            //foreach (var m in banner)
+            //{
+            //    var bannerModel = new BannerModel();
+            //    bannerModel.Id = m.Id;
+            //    bannerModel.Title = m.Title;
+            //    bannerModel.LinkUrl = SysFactory.Banner.GetLinkUrl(m.Id);
+            //    bannerModel.ImgUrl = m.ImgUrl;
+            //    bannerModels.Add(bannerModel);
+            //}
 
-            model.Banner = bannerModels;
+            //model.Banner = bannerModels;
 
 
             return model;

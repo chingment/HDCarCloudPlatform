@@ -335,7 +335,7 @@ namespace Lumos.BLL
                 orderToCarClaim.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToCarClaim.AgentId = merchant.AgentId ?? 0;
 
-                orderToCarClaim.Type =  Enumeration.OrderType.InsureForCarForClaim;
+                orderToCarClaim.Type = Enumeration.OrderType.InsureForCarForClaim;
                 orderToCarClaim.TypeName = Enumeration.OrderType.InsureForCarForClaim.GetCnName();
                 orderToCarClaim.MerchantId = merchant.Id;
                 orderToCarClaim.PosMachineId = orderToCarClaim.PosMachineId;
@@ -715,7 +715,7 @@ namespace Lumos.BLL
                 newOrder.MerchantId = oldOrder.MerchantId;
                 newOrder.PosMachineId = oldOrder.PosMachineId;
                 newOrder.UserId = oldOrder.UserId;
-         
+
                 //newOrder.ProductName = oldOrder.ProductName;
                 //newOrder.ProductType = oldOrder.ProductType;
                 newOrder.ClientRequire = oldOrder.ClientRequire;
@@ -823,7 +823,7 @@ namespace Lumos.BLL
             {
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToLllegalQueryRecharge.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-     
+
                 orderToLllegalQueryRecharge.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToLllegalQueryRecharge.AgentId = merchant.AgentId ?? 0;
 
@@ -905,13 +905,17 @@ namespace Lumos.BLL
                 l_orderPayTrans.OrderSn = orderPayTrans.OrderSn;
                 l_orderPayTrans.TransType = orderPayTrans.TransType;
 
-
+                string orderPrice = "";
                 if (BizFactory.AppSettings.IsTest)
                 {
+
+                    orderPrice = "0.01";
                     l_orderPayTrans.Amount = "1";
                 }
                 else
                 {
+
+                    orderPrice = order.Price.ToF2Price();
                     l_orderPayTrans.Amount = Convert.ToInt32((order.Price * 100)).ToString();
                 }
 
@@ -928,7 +932,7 @@ namespace Lumos.BLL
                 ts.Complete();
 
 
-                var model = new { orderId = orderPayTrans.OrderId, orderSn = orderPayTrans.OrderSn, payTransSn = l_orderPayTrans.Sn, transType = l_orderPayTrans.TransType, amount = l_orderPayTrans.Amount };
+                var model = new { orderId = orderPayTrans.OrderId, orderSn = orderPayTrans.OrderSn, payTransSn = l_orderPayTrans.Sn, transType = l_orderPayTrans.TransType, amount = l_orderPayTrans.Amount, orderPrice= orderPrice };
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", model);
 

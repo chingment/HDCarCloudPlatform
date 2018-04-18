@@ -186,8 +186,9 @@ namespace Lumos.BLL
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
+                    var oredd = CurrentDb.OrderPayTrans.Where(m => m.Sn == receiveNotifyLog.OrderSn).FirstOrDefault();
 
-                    var order = CurrentDb.Order.Where(m => m.Sn == receiveNotifyLog.OrderSn).FirstOrDefault();
+                    var order = CurrentDb.Order.Where(m => m.Sn == oredd.OrderSn).FirstOrDefault();
 
                     if (order == null)
                     {

@@ -168,7 +168,8 @@ namespace Lumos.BLL
                         }
                         else
                         {
-                            lllegalRecord.serviceFee = m.serviceFee;
+                            decimal addfee = m.point * 5;
+                            lllegalRecord.serviceFee = m.serviceFee+ addfee;
                         }
 
                         lllegalRecord.serviceFee = m.serviceFee;

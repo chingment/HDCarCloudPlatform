@@ -36,7 +36,7 @@ namespace Lumos.BLL.Service
                 }
             }
 
-            cartModel.Count = cartModel.List.Count();
+            cartModel.Count = cartModel.List.Sum(m=>m.Quantity);
             cartModel.SumPrice = cartModel.List.Sum(m => m.SumPrice);
             cartModel.SumPriceBySelected = cartModel.List.Where(m => m.Selected == true).Sum(m => m.SumPrice);
             cartModel.CountBySelected = cartModel.List.Where(m => m.Selected == true).Count();
@@ -58,60 +58,56 @@ namespace Lumos.BLL.Service
                     foreach (var item in procudtSkus)
                     {
                         var mod_Cart = CurrentDb.Cart.Where(m => m.UserId == userId && m.ProductSkuId == item.SkuId && m.Status == Enumeration.CartStatus.WaitSettle).FirstOrDefault();
-                        if (mod_Cart != null)
+
+                        Log.Info("购物车操作：" + operate);
+                        switch (operate)
                         {
-                            Log.Info("购物车操作：" + operate);
-                            switch (operate)
-                            {
-                                case Enumeration.CartOperateType.Selected:
-                                    Log.Info("购物车操作：选择");
-
-                                    mod_Cart.Selected = item.Selected;
-                                    break;
-                                case Enumeration.CartOperateType.Decrease:
-                                    Log.Info("购物车操作：减少");
-                                    if (mod_Cart.Quantity >= 2)
-                                    {
-                                        mod_Cart.Quantity -= 1;
-                                        mod_Cart.LastUpdateTime = this.DateTime;
-                                        mod_Cart.Mender = operater;
-                                    }
-                                    break;
-                                case Enumeration.CartOperateType.Increase:
-                                    Log.Info("购物车操作：增加");
-                                    var skuModel = ServiceFactory.Product.GetSkuModel(item.SkuId);
-
-                                    if (mod_Cart == null)
-                                    {
-                                        mod_Cart = new Cart();
-                                        mod_Cart.UserId = userId;
-                                        mod_Cart.ProductId = skuModel.ProductId;
-                                        mod_Cart.ProductSkuId = skuModel.Id;
-                                        mod_Cart.ProductSkuName = skuModel.Name;
-                                        mod_Cart.ProductSkuMainImg = skuModel.MainImg;
-                                        mod_Cart.CreateTime = this.DateTime;
-                                        mod_Cart.Creator = operater;
-                                        mod_Cart.Quantity = 1;
-                                        mod_Cart.Status = Enumeration.CartStatus.WaitSettle;
-                                        CurrentDb.Cart.Add(mod_Cart);
-                                    }
-                                    else
-                                    {
-                                        mod_Cart.Quantity += 1;
-                                        mod_Cart.LastUpdateTime = this.DateTime;
-                                        mod_Cart.Mender = operater;
-                                    }
-                                    break;
-                                case Enumeration.CartOperateType.Delete:
-                                    Log.Info("购物车操作：删除");
-                                    mod_Cart.Status = Enumeration.CartStatus.Deleted;
+                            case Enumeration.CartOperateType.Selected:
+                                Log.Info("购物车操作：选择");
+                                mod_Cart.Selected = item.Selected;
+                                break;
+                            case Enumeration.CartOperateType.Decrease:
+                                Log.Info("购物车操作：减少");
+                                if (mod_Cart.Quantity >= 2)
+                                {
+                                    mod_Cart.Quantity -= 1;
                                     mod_Cart.LastUpdateTime = this.DateTime;
                                     mod_Cart.Mender = operater;
-                                    break;
-                            }
+                                }
+                                break;
+                            case Enumeration.CartOperateType.Increase:
+                                Log.Info("购物车操作：增加");
+                                var skuModel = ServiceFactory.Product.GetSkuModel(item.SkuId);
+
+                                if (mod_Cart == null)
+                                {
+                                    mod_Cart = new Cart();
+                                    mod_Cart.UserId = userId;
+                                    mod_Cart.ProductId = skuModel.ProductId;
+                                    mod_Cart.ProductSkuId = skuModel.Id;
+                                    mod_Cart.ProductSkuName = skuModel.Name;
+                                    mod_Cart.ProductSkuMainImg = skuModel.MainImg;
+                                    mod_Cart.CreateTime = this.DateTime;
+                                    mod_Cart.Creator = operater;
+                                    mod_Cart.Quantity = 1;
+                                    mod_Cart.Status = Enumeration.CartStatus.WaitSettle;
+                                    CurrentDb.Cart.Add(mod_Cart);
+                                }
+                                else
+                                {
+                                    mod_Cart.Quantity += 1;
+                                    mod_Cart.LastUpdateTime = this.DateTime;
+                                    mod_Cart.Mender = operater;
+                                }
+                                break;
+                            case Enumeration.CartOperateType.Delete:
+                                Log.Info("购物车操作：删除");
+                                mod_Cart.Status = Enumeration.CartStatus.Deleted;
+                                mod_Cart.LastUpdateTime = this.DateTime;
+                                mod_Cart.Mender = operater;
+                                break;
                         }
                     }
-
 
                     CurrentDb.SaveChanges();
 

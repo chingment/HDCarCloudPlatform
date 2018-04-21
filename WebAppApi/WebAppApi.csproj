@@ -131,6 +131,7 @@
     <Folder Include="Views\Global\" />
     <Folder Include="Views\Lllegal\" />
     <Folder Include="Views\Product\" />
+    <Folder Include="Views\ShippingAddress\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\ShippingAddressController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Controllers\MinShunController.cs" />
     <Compile Include="Global.asax.cs">

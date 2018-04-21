@@ -125,6 +125,7 @@
     <Compile Include="Service\PersonalService.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\ServiceFactory.cs" />
+    <Compile Include="Service\ShippingAddressService.cs" />
     <Compile Include="Sys\AuthorizeRelayProvider.cs" />
     <Compile Include="Sys\SysAppKeySecretProvider.cs" />
     <Compile Include="Sys\SysBannerProvider.cs" />

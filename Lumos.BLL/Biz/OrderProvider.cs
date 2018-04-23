@@ -887,8 +887,11 @@ namespace Lumos.BLL
         {
             CustomJsonResult result = new CustomJsonResult();
 
+            return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时没有开通该支付方式");
+
             using (TransactionScope ts = new TransactionScope())
             {
+
 
                 var order = CurrentDb.Order.Where(m => m.UserId == orderPayTrans.UserId && m.Id == orderPayTrans.OrderId && m.Sn == orderPayTrans.OrderSn).FirstOrDefault();
                 if (order == null)
@@ -932,7 +935,7 @@ namespace Lumos.BLL
                 ts.Complete();
 
 
-                var model = new { orderId = orderPayTrans.OrderId, orderSn = orderPayTrans.OrderSn, payTransSn = l_orderPayTrans.Sn, transType = l_orderPayTrans.TransType, amount = l_orderPayTrans.Amount, orderPrice= orderPrice };
+                var model = new { orderId = orderPayTrans.OrderId, orderSn = orderPayTrans.OrderSn, payTransSn = l_orderPayTrans.Sn, transType = l_orderPayTrans.TransType, amount = l_orderPayTrans.Amount, orderPrice = orderPrice };
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", model);
 

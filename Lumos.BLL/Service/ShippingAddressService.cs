@@ -11,18 +11,37 @@ namespace Lumos.BLL.Service
 {
     public class ShippingAddressService : BaseProvider
     {
+
+
+
+
+
         public CustomJsonResult Edit(int operater, ShippingAddress shippingAddress)
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            using (TransactionScope ts = new TransactionScope())
+
+            if (shippingAddress.Id == 0)
+            {
+                shippingAddress.CreateTime = this.DateTime;
+                shippingAddress.Creator = operater;
+                CurrentDb.ShippingAddress.Add(shippingAddress);
+                CurrentDb.SaveChanges();
+            }
+            else
             {
 
+                var l_shippingAddress = CurrentDb.ShippingAddress.Where(m => m.Id == shippingAddress.Id).FirstOrDefault();
 
+                l_shippingAddress.Receiver = shippingAddress.Receiver;
+                l_shippingAddress.PhoneNumber = shippingAddress.PhoneNumber;
+                l_shippingAddress.Area = shippingAddress.Area;
+                l_shippingAddress.Address = shippingAddress.Address;
+                l_shippingAddress.IsDefault = shippingAddress.IsDefault;
+                CurrentDb.SaveChanges();
             }
 
-
-            return result;
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
         }
     }
 }

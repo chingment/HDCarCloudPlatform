@@ -30,7 +30,7 @@ namespace WebAppApi.Controllers
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
         //private string host = "http://localhost:16665";
-        private string host = "http://120.79.233.231";
+        private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
 
@@ -191,7 +191,10 @@ namespace WebAppApi.Controllers
             //  model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
 
              //model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
-            model.Add("获取全局数据", GlobalDataSet(1215, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
+            //model.Add("获取全局数据", GlobalDataSet(1215, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
+
+            model.Add("获取地址", GetShippingAddress(1215));
+    
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             // model.Add("登录接口", Login(userName, passWord, deviceId));
 
@@ -1765,6 +1768,27 @@ namespace WebAppApi.Controllers
 
             return respon_data4;
 
+        }
+
+        public string GetShippingAddress(int userId)
+        {
+
+            int type = 0;
+            int categoryId = 0;
+            int kindId = 0;
+            string name = "";
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("userId", userId.ToString());
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/ShippingAddress/GetList?userId=" + userId.ToString(), headers);
+
+            return result;
         }
     }
 }

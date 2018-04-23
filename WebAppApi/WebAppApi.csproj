@@ -224,6 +224,7 @@
     <Compile Include="Models\Order\PayModel.cs" />
     <Compile Include="Models\CarService\SubmitFollowInsureModel.cs" />
     <Compile Include="Models\Resource\DetailsViewModelByProduct.cs" />
+    <Compile Include="Models\ShippingAddress\EditModel.cs" />
     <Compile Include="Models\Sms\GetCreateAccountCodeModel.cs" />
     <Compile Include="Models\Sms\GetCreateAccountCodeResultModel.cs" />
     <Compile Include="Models\Sms\GetForgetPwdCodeModel.cs" />

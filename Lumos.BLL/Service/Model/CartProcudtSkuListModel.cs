@@ -8,6 +8,7 @@ namespace Lumos.BLL.Service.Model
 {
     public class CartProcudtSkuListModel
     {
+        public int CartId { get; set; }
         public int SkuId { get; set; }
         public string SkuName { get; set; }
         public string SkuMainImg { get; set; }

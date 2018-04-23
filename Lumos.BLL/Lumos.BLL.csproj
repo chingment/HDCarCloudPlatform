@@ -112,6 +112,9 @@
     <Compile Include="Service\Model\CartProcudtSkuListModel.cs" />
     <Compile Include="Service\Model\CartModel.cs" />
     <Compile Include="Service\Model\IndexModel.cs" />
+    <Compile Include="Service\Model\OrderConfirmModel.cs" />
+    <Compile Include="Service\Model\OrderConfirmResultModel.cs" />
+    <Compile Include="Service\Model\OrderConfirmSkuModel.cs" />
     <Compile Include="Service\Model\ProductChildKindModel.cs" />
     <Compile Include="Service\Model\ProductDetailsModel.cs" />
     <Compile Include="Service\Model\ProductKindModel.cs" />
@@ -119,9 +122,11 @@
     <Compile Include="Service\Model\ProductSkuDetailsModel.cs" />
     <Compile Include="Service\Model\ProductSkuModel.cs" />
     <Compile Include="Service\Model\PersonalModel.cs" />
+    <Compile Include="Service\Model\ShippingAddressModel.cs" />
     <Compile Include="Service\Model\SpecModel.cs" />
     <Compile Include="Service\Model\SpecValueModel.cs" />
     <Compile Include="Service\Model\UserInfoModel.cs" />
+    <Compile Include="Service\OrderService.cs" />
     <Compile Include="Service\PersonalService.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\ServiceFactory.cs" />

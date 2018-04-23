@@ -25,6 +25,7 @@ namespace Lumos.BLL.Service
                 if (skuModel != null)
                 {
                     var cartProcudtSkuModel = new CartProcudtSkuListModel();
+                    cartProcudtSkuModel.CartId = item.Id;
                     cartProcudtSkuModel.SkuId = skuModel.Id;
                     cartProcudtSkuModel.SkuName = skuModel.Name;
                     cartProcudtSkuModel.SkuMainImg = skuModel.MainImg;

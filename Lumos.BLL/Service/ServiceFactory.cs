@@ -47,5 +47,13 @@ namespace Lumos.BLL.Service
                 return new ShippingAddressService();
             }
         }
+
+        public static OrderService Order
+        {
+            get
+            {
+                return new OrderService();
+            }
+        }
     }
 }

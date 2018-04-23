@@ -59,6 +59,7 @@ namespace WebAppApi.Controllers
         public APIResponse Edit(EditModel model)
         {
             var shippingAddress = new ShippingAddress();
+            shippingAddress.Id = model.Id;
             shippingAddress.UserId = model.UserId;
             shippingAddress.PhoneNumber = model.PhoneNumber;
             shippingAddress.Receiver = model.Receiver;

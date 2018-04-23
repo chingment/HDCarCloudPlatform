@@ -27,6 +27,7 @@ namespace Lumos.BLL.Service
                 shippingAddress.Creator = operater;
                 CurrentDb.ShippingAddress.Add(shippingAddress);
                 CurrentDb.SaveChanges();
+
             }
             else
             {
@@ -40,6 +41,22 @@ namespace Lumos.BLL.Service
                 l_shippingAddress.IsDefault = shippingAddress.IsDefault;
                 CurrentDb.SaveChanges();
             }
+
+            if (shippingAddress.IsDefault)
+            {
+                var list = CurrentDb.ShippingAddress.Where(m => m.Id == shippingAddress.Id).ToList();
+
+
+                foreach (var item in list)
+                {
+                    if (item.Id != shippingAddress.Id)
+                    {
+                        item.IsDefault = false;
+                        CurrentDb.SaveChanges();
+                    }
+                }
+            }
+
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
         }

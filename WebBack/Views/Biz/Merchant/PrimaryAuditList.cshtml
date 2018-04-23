@@ -21,12 +21,12 @@
                 var l_StrRows = "";
                 l_StrRows += "<tr>";
                 l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
-                l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.clientCode + "\"   >" + p_row.clientCode + "</td>";
+                l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.userName + "\"   >" + p_row.userName + "</td>";
+                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\"   >" + p_row.clientCode + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.type + "\">" + p_row.type + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.repairCapacity + "\">" + p_row.repairCapacity + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.area + "\">" + p_row.area + "</td>";
-                l_StrRows += "<td class=\"overflow\" title=\"" + p_row.contactName + "\">" + p_row.contactName + "</td>";
                 l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
                 l_StrRows += "<td class=\"operation\">";
                 l_StrRows += l_Strlimt;
@@ -133,6 +133,9 @@
                         序号
                     </th>
                     <th style="width:10%">
+                        账号
+                    </th>
+                    <th style="width:10%">
                         商户代码
                     </th>
                     <th style="width:15%">
@@ -146,9 +149,6 @@
                     </th>
                     <th style="width:10%">
                         所在地区
-                    </th>
-                    <th style="width:10%">
-                        联系人
                     </th>
                     <th style="width:10%">
                         开户时间

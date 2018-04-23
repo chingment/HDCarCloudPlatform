@@ -277,8 +277,12 @@ namespace WebBack.Controllers.Biz
             var query = (from b in CurrentDb.BizProcessesAudit
                          join m in CurrentDb.Merchant on
                         b.AduitReferenceId equals m.Id
+
+                         join u in CurrentDb.SysClientUser on m.UserId equals u.Id
+
+
                          where (b.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit)
-                         select new { b.Id, b.Status, b.Auditor, m.ClientCode, m.Type, m.RepairCapacity, m.Area, m.YYZZ_Name, m.FR_Name, m.ContactName, m.CreateTime });
+                         select new { b.Id, b.Status, b.Auditor, u.UserName, m.ClientCode, m.Type, m.RepairCapacity, m.Area, m.YYZZ_Name, m.FR_Name, m.ContactName, m.CreateTime });
 
             if (condition.AuditStatus == Enumeration.MerchantAuditStatus.WaitPrimaryAudit)
             {
@@ -302,6 +306,7 @@ namespace WebBack.Controllers.Biz
                 list.Add(new
                 {
                     item.Id,
+                    item.UserName,
                     item.ClientCode,
                     item.YYZZ_Name,
                     item.ContactName,

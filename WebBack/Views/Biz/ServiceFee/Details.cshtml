@@ -19,6 +19,28 @@
 
 <form id="form1" name="form1">
     @AntiForgery.GetHtml()
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>账号信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t" style="width:80px">账号：</td>
+            <td class="c">
+                <span>@Model.SysClientUser.UserName</span>
+            </td>
+            <td class="t" style="width:80px">注册时间：</td>
+            <td class="c">
+                <span>@Model.SysClientUser.RegisterTime</span>
+            </td>
+        </tr>
+    </table>
+
     <div class="gbr-row-title clearfix">
         <div class="pull-left">
             <h5>商户信息</h5>

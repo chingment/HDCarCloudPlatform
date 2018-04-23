@@ -9,6 +9,8 @@ namespace WebBack.Models.Biz.ServiceFee
 {
     public class DetailsViewModel : BaseViewModel
     {
+        private Lumos.Entity.SysClientUser _sysClientUser = new Lumos.Entity.SysClientUser();
+
         private Lumos.Entity.Merchant _merchant = new Lumos.Entity.Merchant();
 
         private Lumos.Entity.OrderToServiceFee _orderToServiceFee = new Lumos.Entity.OrderToServiceFee();
@@ -33,6 +35,11 @@ namespace WebBack.Models.Biz.ServiceFee
                     _merchant = merchant;
                 }
 
+                var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToServiceFee.UserId).FirstOrDefault();
+                if (sysClientUser != null)
+                {
+                    _sysClientUser = sysClientUser;
+                }
 
                 //_bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.SE, id);
 
@@ -72,6 +79,18 @@ namespace WebBack.Models.Biz.ServiceFee
             set
             {
                 _bizProcessesAuditDetails = value;
+            }
+        }
+
+        public Lumos.Entity.SysClientUser SysClientUser
+        {
+            get
+            {
+                return _sysClientUser;
+            }
+            set
+            {
+                _sysClientUser = value;
             }
         }
     }

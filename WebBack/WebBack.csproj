@@ -1381,6 +1381,10 @@
       <Project>{8479fcaf-4aef-40d4-b76d-246282522fb7}</Project>
       <Name>MySDK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YdtSdk\YdtSdk.csproj">
+      <Project>{539b0cc5-1802-4a6c-b081-c7e35071d21c}</Project>
+      <Name>YdtSdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\mipb.pubxml" />

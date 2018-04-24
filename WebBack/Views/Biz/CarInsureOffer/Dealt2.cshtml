@@ -20,7 +20,7 @@
     <script type="text/javascript">
 
         var offerKinds= @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OrderToCarInsureOfferKind));
-        var productType=@((int)Model.OrderToCarInsure.ProductType)
+        var productType=@((int)Model.OrderToCarInsure.Type)
         function loadOfferKindsTable(offerKinds){
             var obj_tbody=$('#list_table_offerkinds tbody');
             $(obj_tbody).html('');
@@ -254,6 +254,22 @@
                 var keyword=$('#txt_Keyword').val();
                 var vin=$('#txt_Vin').val();
                 var firstRegisterDate=$('#txt_FirstRegisterDate').val();
+
+
+                if(keyword=='') {
+                    art.dialog.tips('请输入品牌型号');
+                    return;
+                }
+
+                if(vin=='') {
+                    art.dialog.tips('请输入识别代号');
+                    return;
+                }
+
+                if(firstRegisterDate=='') {
+                    art.dialog.tips('初登日期');
+                    return;
+                }
 
                 $.lumos.postJson({
                     isUseHandling: true,
@@ -686,7 +702,7 @@
         </tr>
     </table>
 
-    <div class="gbr-row-title clearfix" style="display:none;">
+    <div class="gbr-row-title clearfix" >
         <div class="pull-left">
             <h5>车辆查询</h5>
         </div>
@@ -694,7 +710,7 @@
             <h6></h6>
         </div>
     </div>
-    <table class="f-tb1-detail" style="display:none;">
+    <table class="f-tb1-detail">
         <tr>
             <td class="t">品牌型号：</td>
             <td class="c">
@@ -717,7 +733,7 @@
     </table>
 
 
-    <table id="list_carmodel_table" class="list-tb" cellpadding="0" cellspacing="0" style="display:none;">
+    <table id="list_carmodel_table" class="list-tb" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
                 <th style="width:5%" class="no">
@@ -839,7 +855,7 @@
                     <span><input type="text" class="input-control" name="Model.OrderToCarInsure.PeriodEnd" id="Model_OrderToCarInsure_PeriodEnd" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_OrderToCarInsure_PeriodEnd\')}' })" style="width:175px;" value="@Model.OrderToCarInsure.PeriodEnd.ToUnifiedFormatDate()" /></span>
                 </td>*@
         </tr>
-        <tr style="display:none;">
+        <tr>
             <td class="c" colspan="4" style="text-align:center;">
                 <span>
 

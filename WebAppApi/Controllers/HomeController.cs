@@ -29,8 +29,8 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
-        private string host = "https://demo.gzhaoyilian.com";
+        private string host = "http://localhost:16665";
+        //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
 
@@ -165,13 +165,13 @@ namespace WebAppApi.Controllers
             //int merchantId = 242;
             //int posMachineId = 149;
             //http://localhost:16665/ExtendedApp/poscredit?userId=1215&merchantId=241&posMachineId=148
-            //int userId = 1215;
-            //int merchantId = 241;
-            //int posMachineId = 148;
+            int userId = 1215;
+            int merchantId = 241;
+            int posMachineId = 148;
 
-            int userId = 1234;
-            int merchantId = 258;
-            int posMachineId = 153;
+            //int userId = 1234;
+            //int merchantId = 258;
+            //int posMachineId = 153;
 
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
@@ -193,7 +193,7 @@ namespace WebAppApi.Controllers
              //model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
             //model.Add("获取全局数据", GlobalDataSet(1215, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
 
-            model.Add("获取地址", GetShippingAddress(1215));
+            //model.Add("获取地址", GetShippingAddress(1215));
     
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             // model.Add("登录接口", Login(userName, passWord, deviceId));
@@ -204,7 +204,7 @@ namespace WebAppApi.Controllers
 
             // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-            // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+             model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));

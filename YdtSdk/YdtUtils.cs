@@ -40,13 +40,13 @@ namespace YdtSdk
         {
             TokenAu au = new TokenAu();
             YdtApi c = new YdtApi();
-            YdtToken ydtToken = new YdtToken("quanxiantong", "quanxiantong123456789");
+            YdtToken ydtToken = new YdtToken("hylian", "hylian_2018");
             var ydtTokenResult = c.DoGet(ydtToken);
 
             // ydtTokenResult
 
 
-            YdtEmLogin ydtEmLogin = new YdtEmLogin(ydtTokenResult.data.token, "11012013014", "7c4a8d09ca3762af61e59520943dc26494f8941b");
+            YdtEmLogin ydtEmLogin = new YdtEmLogin(ydtTokenResult.data.token, "15012405333", "7c4a8d09ca3762af61e59520943dc26494f8941b");
             var ydtEmLoginResult = c.DoGet(ydtEmLogin);
 
             au.token = ydtTokenResult.data.token;

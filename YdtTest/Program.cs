@@ -15,18 +15,18 @@ namespace YdtTest
     {
         static void Main(string[] args)
         {
-            Bitmap m_Bitmap = WebSnapshotsHelper.GetWebSiteThumbnail("http://www.cnblogs.com/", 800, 1200, 800, 1200); //宽高根据要获取快照的网页决定
+           // Bitmap m_Bitmap = WebSnapshotsHelper.GetWebSiteThumbnail("http://www.cnblogs.com/", 800, 1200, 800, 1200); //宽高根据要获取快照的网页决定
             //m_Bitmap.Save("render_img.bmp", System.Drawing.Imaging.ImageFormat.Bmp); //图片格式可以自由控制
 
 
             YdtApi c = new YdtApi();
-            YdtToken ydtToken = new YdtToken("quanxiantong", "quanxiantong123456789");
+            YdtToken ydtToken = new YdtToken("hylian", "hylian_2018");
             var ydtTokenResult = c.DoGet(ydtToken);
 
             // ydtTokenResult
 
 
-            YdtEmLogin ydtEmLogin = new YdtEmLogin(ydtTokenResult.data.token, "11012013014", "7c4a8d09ca3762af61e59520943dc26494f8941b");
+            YdtEmLogin ydtEmLogin = new YdtEmLogin(ydtTokenResult.data.token, "15012405333", "7c4a8d09ca3762af61e59520943dc26494f8941b");
             var ydtEmLoginResult = c.DoGet(ydtEmLogin);
 
 

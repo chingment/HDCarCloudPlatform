@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebBack.Models.Biz.CarInsureOffer;
+using YdtSdk;
 
 namespace WebBack.Controllers.Biz
 {
@@ -251,17 +252,17 @@ namespace WebBack.Controllers.Biz
         public JsonResult CarModelQuery(string keyword, string vin, string firstRegisterDate)
         {
             JsonResult rtn = new JsonResult();
-            //YdtApi c = new YdtApi();
-            //YdtToken ydtToken = new YdtToken("quanxiantong", "quanxiantong123456789");
-            //var ydtTokenResult = c.DoGet(ydtToken);
+            YdtApi c = new YdtApi();
+            YdtToken ydtToken = new YdtToken("hylian", "hylian_2018");
+            var ydtTokenResult = c.DoGet(ydtToken);
 
-            //YdtEmLogin ydtEmLogin = new YdtEmLogin(ydtTokenResult.data.token, "11012013014", "7c4a8d09ca3762af61e59520943dc26494f8941b");
-            //var ydtEmLoginResult = c.DoGet(ydtEmLogin);
+            YdtEmLogin ydtEmLogin = new YdtEmLogin(ydtTokenResult.data.token, "15012405333", "7c4a8d09ca3762af61e59520943dc26494f8941b");
+            var ydtEmLoginResult = c.DoGet(ydtEmLogin);
 
-            //YdtInscarCar ydtInscarCar = new YdtInscarCar(ydtTokenResult.data.token, ydtEmLoginResult.data.session, keyword, vin, firstRegisterDate);
-            //var ydtInscarCarResult = c.DoGet(ydtInscarCar);
+            YdtInscarCar ydtInscarCar = new YdtInscarCar(ydtTokenResult.data.token, ydtEmLoginResult.data.session, keyword, vin, firstRegisterDate);
+            var ydtInscarCarResult = c.DoGet(ydtInscarCar);
 
-            //rtn.Data = ydtInscarCarResult;
+            rtn.Data = ydtInscarCarResult;
             return rtn;
         }
 
@@ -272,9 +273,9 @@ namespace WebBack.Controllers.Biz
 
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            //model.OrderToCarInsure.PeriodEnd = model.OrderToCarInsure.PeriodStart.Value.AddYears(1).AddDays(-1);
+            model.OrderToCarInsure.PeriodEnd = model.OrderToCarInsure.PeriodStart.Value.AddYears(1).AddDays(-1);
 
-            //reuslt = YdtUtils.GetCarInsOffer(model.OrderToCarInsure, model.OrderToCarInsureOfferCompany, model.OrderToCarInsureOfferKind);
+            reuslt = YdtUtils.GetCarInsOffer(model.OrderToCarInsure, model.OrderToCarInsureOfferCompany, model.OrderToCarInsureOfferKind);
 
             return reuslt;
         }

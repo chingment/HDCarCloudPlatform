@@ -30,7 +30,7 @@ namespace YdtSdk
 
     public class YdtApi : IYdtApi
     {
-        public string serverUrl = "http://test.hybao.cc:6100";
+        public string serverUrl = "http://test.hybao.cc:6200";
 
 
         public YdtApi()

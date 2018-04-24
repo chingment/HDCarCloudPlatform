@@ -128,6 +128,7 @@ namespace WebBack.Controllers.Biz
 
             var query = (from o in CurrentDb.Order
                          join m in CurrentDb.Merchant on o.MerchantId equals m.Id
+                         join u in CurrentDb.SysClientUser on o.UserId equals u.Id
                          where
 
                          o.Status == Enumeration.OrderStatus.WaitPay
@@ -137,7 +138,7 @@ namespace WebBack.Controllers.Biz
                                  (sn.Length == 0 || o.Sn.Contains(sn))
 
 
-                         select new { o.Id, m.ClientCode, m.YYZZ_Name, o.Sn, o.Type, o.TypeName, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, o.ContactPhoneNumber, o.Contact }
+                         select new { o.Id, m.ClientCode,u.UserName, m.YYZZ_Name, o.Sn, o.Type, o.TypeName, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, o.ContactPhoneNumber, o.Contact }
                         );
 
 
@@ -156,6 +157,7 @@ namespace WebBack.Controllers.Biz
                 {
                     item.Id,
                     item.ClientCode,
+                    item.UserName,
                     item.Sn,
                     item.YYZZ_Name,
                     item.ContactPhoneNumber,

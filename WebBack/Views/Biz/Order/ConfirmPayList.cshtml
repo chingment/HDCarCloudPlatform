@@ -24,6 +24,7 @@
                     l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
                     l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.sn + "\"   >" + p_row.sn + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.typeName + "\">" + p_row.typeName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.userName + "\"   >" + p_row.userName + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\">" + p_row.clientCode + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
                     l_StrRows += "<td class=\"overflow\" title=\"" + p_row.status + "\">" + p_row.status + "</td>";
@@ -143,10 +144,13 @@
                     <th style="width:15%">
                         类型
                     </th>
-                    <th style="width:15%">
+                    <th style="width:10%">
+                        账号
+                    </th>
+                    <th style="width:10%">
                         商户代码
                     </th>
-                    <th style="width:15%">
+                    <th style="width:10%">
                         商户名称
                     </th>
                     <th style="width:10%">
@@ -163,7 +167,7 @@
             <tbody></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="8">
+                    <td colspan="9">
                         <div class="pull-left">
                             <span class="load-tip"></span>
                         </div>

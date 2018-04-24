@@ -84,15 +84,15 @@
     <Compile Include="YdtUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Lumos.Common.csproj">
+    <ProjectReference Include="..\Lumos.Common\Lumos.Common.csproj">
       <Project>{241bdf50-401f-44bf-81cd-acc2ffc3a952}</Project>
       <Name>Lumos.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Entity\Lumos.Entity.csproj">
+    <ProjectReference Include="..\Lumos.Entity\Lumos.Entity.csproj">
       <Project>{c19704c7-7d89-42e8-9f15-d8c1a1a0c525}</Project>
       <Name>Lumos.Entity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MVC\Lumos.Mvc.csproj">
+    <ProjectReference Include="..\Lumos.MVC\Lumos.Mvc.csproj">
       <Project>{ed113ad7-1b20-4b05-8961-9b701e51734c}</Project>
       <Name>Lumos.Mvc</Name>
     </ProjectReference>

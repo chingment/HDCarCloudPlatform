@@ -144,6 +144,30 @@
     <input type="hidden" name="Model.Merchant.Id" value="@Model.Merchant.Id" />
     <input name="Model.BizProcessesAudit.CurrentDetails.Id" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.Id" />
     <input name="Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" />
+
+
+
+    <div class="gbr-row-title clearfix">
+        <div class="pull-left">
+            <h5>账号信息</h5>
+        </div>
+        <div class="pull-right f-tb1-item-pull-right">
+            <h6></h6>
+        </div>
+    </div>
+    <table class="f-tb1-detail">
+        <tr>
+            <td class="t" style="width:80px">账号：</td>
+            <td class="c">
+                <span>@Model.SysClientUser.UserName</span>
+            </td>
+            <td class="t" style="width:80px">注册时间：</td>
+            <td class="c">
+                <span>@Model.SysClientUser.RegisterTime</span>
+            </td>
+        </tr>
+    </table>
+
     <div class="gbr-row-title clearfix">
         <div class="pull-left">
             <h5>商户基本信息</h5>

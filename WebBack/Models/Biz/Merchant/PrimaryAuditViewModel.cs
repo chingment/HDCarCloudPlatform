@@ -9,6 +9,8 @@ namespace WebBack.Models.Biz.Merchant
 {
     public class PrimaryAuditViewModel : BaseViewModel
     {
+        private Lumos.Entity.SysClientUser _sysClientUser = new Lumos.Entity.SysClientUser();
+
         private Lumos.Entity.Merchant _merchant = new Lumos.Entity.Merchant();
 
         private SysSalesmanUser _salesman;
@@ -195,9 +197,27 @@ namespace WebBack.Models.Biz.Merchant
                     {
                         _merchantEstimateCompany = merchantEstimateCompany;
                     }
+
+                    var sysClientUser = CurrentDb.SysClientUser.Where(m => m.Id == merchant.UserId).FirstOrDefault();
+                    if (sysClientUser != null)
+                    {
+                        _sysClientUser = sysClientUser;
+                    }
                 }
             }
 
+        }
+
+        public Lumos.Entity.SysClientUser SysClientUser
+        {
+            get
+            {
+                return _sysClientUser;
+            }
+            set
+            {
+                _sysClientUser = value;
+            }
         }
 
     }

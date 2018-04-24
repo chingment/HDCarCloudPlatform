@@ -44,7 +44,7 @@ namespace Lumos.BLL.Service
 
             if (shippingAddress.IsDefault)
             {
-                var list = CurrentDb.ShippingAddress.Where(m => m.Id == shippingAddress.Id).ToList();
+                var list = CurrentDb.ShippingAddress.Where(m => m.UserId == shippingAddress.UserId).ToList();
 
 
                 foreach (var item in list)

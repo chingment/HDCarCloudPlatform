@@ -13,7 +13,7 @@ namespace Lumos.BLL.Service.Model
             this.Skus = new List<OrderConfirmSkuModel>();
         }
 
-        public ShippingAddressModel ShippingAddress { get; set; }
+        public List<ShippingAddressModel> ShippingAddress { get; set; }
 
         public List<OrderConfirmSkuModel> Skus { get; set; }
     }

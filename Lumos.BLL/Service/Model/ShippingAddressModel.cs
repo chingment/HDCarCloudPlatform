@@ -14,5 +14,7 @@ namespace Lumos.BLL.Service.Model
         public string Area { get; set; }
         public string AreaCode { get; set; }
         public string Address { get; set; }
+        public bool CanSelectElse { get; set; }
+        public string TagName { get; set; }
     }
 }

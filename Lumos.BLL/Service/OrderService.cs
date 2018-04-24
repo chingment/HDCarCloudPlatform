@@ -43,9 +43,21 @@ namespace Lumos.BLL.Service
                 shippingAddressModel.PhoneNumber = shippingAddress.PhoneNumber;
                 shippingAddressModel.Area = shippingAddress.Area;
                 shippingAddressModel.Address = shippingAddress.Address;
-                model.ShippingAddress = shippingAddressModel;
+                shippingAddressModel.TagName = "快递地址";
+                shippingAddressModel.CanSelectElse = true;
+                model.ShippingAddress.Add(shippingAddressModel);
 
             }
+
+            var shippingAddressModel2 = new ShippingAddressModel();
+            shippingAddressModel2.Id = 0;
+            shippingAddressModel2.Receiver = "邱庆文";
+            shippingAddressModel2.PhoneNumber = "15989287032";
+            shippingAddressModel2.Area = "";
+            shippingAddressModel2.Address = "广州工商学院";
+            shippingAddressModel2.TagName = "自提地址";
+            shippingAddressModel2.CanSelectElse = false;
+            model.ShippingAddress.Add(shippingAddressModel2);
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", model);
         }

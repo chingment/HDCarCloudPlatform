@@ -253,11 +253,18 @@ namespace YdtSdk
             insCarInquiryModel.coverages = YdtDataMap.GetCoverages(kinds, ydtInscarAdvicevalueResult.data.actualPrice, order.CarSeat);
 
 
+            var YdtInscarGetInquiryInfoModel = new YdtInscarGetInquiryInfoModel();
+            YdtInscarGetInquiryInfoModel.orderSeq = ydtInscarCarResult.data.orderSeq;
+
+            var ydtInscarGetInquiryInfo = new YdtInscarGetInquiryInfo(au.token, au.session, YdtPostDataType.Json, YdtInscarGetInquiryInfoModel);
+            var ydtInscarGetInquiryInfoResult = ydtApi.DoPost(ydtInscarGetInquiryInfo);
+
 
             foreach (var company in offerCompany)
             {
                 var insCompany = YdtDataMap.GetCompanyCode(company.InsuranceCompanyId);
                 insCarInquiryModel.companyCode = insCompany.YdtCode;//"006000";
+                insCarInquiryModel.channelId = insCompany.ChannelId;
                 YdtInscarInquiry ydtInscarInquiry = new YdtInscarInquiry(au.token, au.session, YdtPostDataType.Json, insCarInquiryModel);
                 var ydtInscarInquiryResult = ydtApi.DoPost(ydtInscarInquiry);
 
@@ -316,6 +323,10 @@ namespace YdtSdk
                                             }
                                         }
                                     }
+                                    else if(coverage.code == "004")
+                                    {
+                                        offerImgCoverage.Coverage = coverage.unitAmount.ToF2Price();
+                                    }
                                     else if (coverage.name.IndexOf("不计免赔") > -1)
                                     {
                                         offerImgCoverage.Coverage = "";
@@ -371,7 +382,7 @@ namespace YdtSdk
 
 
 
-                    Bitmap m_Bitmap = WebSnapshotsHelper.GetWebSiteThumbnail("http://localhost:12060/App/CarInsureOffer/OfferImg", 1280, height, 1280, height, postData); //宽高根据要获取快照的网页决定
+                    Bitmap m_Bitmap = WebSnapshotsHelper.GetWebSiteThumbnail("http://localhost:12060/Biz/CarInsureOffer/OfferImg", 1280, height, 1280, height, postData); //宽高根据要获取快照的网页决定
 
                     byte[] bytes = Bitmap2Byte(m_Bitmap);
 

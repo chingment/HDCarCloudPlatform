@@ -21,6 +21,7 @@ namespace YdtSdk
     public class InsCarInquiryModel
     {
         public int auto { get; set; }
+        public int channelId { get; set; }
         public string orderSeq { get; set; }
         public string companyCode { get; set; }
         public int risk { get; set; }

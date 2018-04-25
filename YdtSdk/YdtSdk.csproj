@@ -63,6 +63,7 @@
     <Compile Include="Model\InsOfferImgModel.cs" />
     <Compile Include="Model\UploadModel.cs" />
     <Compile Include="Model\YdtDataMap.cs" />
+    <Compile Include="Model\YdtInscarGetInquiryInfoModel.cs" />
     <Compile Include="Model\YdtInscarInquiryOffer.cs" />
     <Compile Include="Model\YdtInsComanyModel.cs" />
     <Compile Include="Model\YdtInsCoverageModel.cs" />
@@ -71,6 +72,8 @@
     <Compile Include="Post\IYdtApiPostRequest.cs" />
     <Compile Include="Post\YdtInscarAddbase.cs" />
     <Compile Include="Post\YdtInscarAddbaseResult.cs" />
+    <Compile Include="Post\YdtInscarGetInquiryInfo.cs" />
+    <Compile Include="Post\YdtInscarGetInquiryInfoResultData.cs" />
     <Compile Include="Post\YdtInscarInquiry.cs" />
     <Compile Include="Post\YdtInscarInquiryResultData.cs" />
     <Compile Include="Post\YdtUpload.cs" />

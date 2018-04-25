@@ -280,6 +280,18 @@ namespace WebBack.Controllers.Biz
             return reuslt;
         }
 
+        [AllowAnonymous]
+        public ViewResult OfferImg(OfferImgModel model)
+        {
+            //var a = Request;
+            //OfferImgModel model = new OfferImgModel();
+
+            //if (Session["offerImgModel"] != null)
+            //{
+            //    model = (OfferImgModel)Session["offerImgModel"];
+            //}
+            return View(model);
+        }
 
 
     }

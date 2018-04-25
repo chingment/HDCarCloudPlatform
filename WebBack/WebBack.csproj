@@ -1315,6 +1315,7 @@
     <Content Include="Views\Biz\Supplier\List.cshtml" />
     <Content Include="Views\Biz\Product\ListByInsurance.cshtml" />
     <Content Include="Views\Biz\Product\AddByInsurance.cshtml" />
+    <Content Include="Views\Biz\CarInsureOffer\OfferImg.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

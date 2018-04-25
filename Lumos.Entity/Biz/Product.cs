@@ -65,5 +65,7 @@ namespace Lumos.Entity
 
         public DateTime? LastUpdateTime { get; set; }
 
+
+
     }
 }

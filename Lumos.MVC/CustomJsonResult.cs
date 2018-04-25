@@ -181,6 +181,8 @@ namespace Lumos.Mvc
 
             try
             {
+                json.Append("\"result\": " + (int)this._result + ",");
+
                 if (this._data != null)
                 {
                     if (this._data is string)
@@ -211,8 +213,6 @@ namespace Lumos.Mvc
                         json.Append("\"data\":" + JsonConvert.SerializeObject(this._data, Formatting.None, this.JsonSerializerSettings) + ",");
                     }
                 }
-                json.Append("\"result\": " + (int)this._result + ",");
-
 
                 if (this._code != ResultCode.Unknown)
                 {

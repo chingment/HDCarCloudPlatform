@@ -10,13 +10,13 @@ namespace Lumos.BLL.Service.Model
     {
         public int CartId  {  get;set;  }
 
-        public int ProductSkuId { get; set; }
+        public int SkuId { get; set; }
 
         public int Quantity { get; set; }
 
-        public string ProductSkuName { get; set; }
+        public string SkuName { get; set; }
 
-        public string ProductSkuMainImg { get; set; }
+        public string SkuMainImg { get; set; }
 
         public string Price { get; set; }
     }

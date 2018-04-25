@@ -25,11 +25,11 @@ namespace Lumos.BLL.Service
             {
                 foreach (var item in confirm.Skus)
                 {
-                    var productSku = CurrentDb.ProductSku.Where(m => m.Id == item.ProductSkuId).FirstOrDefault();
+                    var productSku = CurrentDb.ProductSku.Where(m => m.Id == item.SkuId).FirstOrDefault();
                     var product = CurrentDb.Product.Where(m => m.Id == productSku.ProductId).FirstOrDefault();
 
-                    item.ProductSkuMainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
-                    item.ProductSkuName = productSku.Name;
+                    item.SkuMainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
+                    item.SkuName = productSku.Name;
                     item.Price = productSku.Price.ToF2Price();
 
                     skus.Add(item);

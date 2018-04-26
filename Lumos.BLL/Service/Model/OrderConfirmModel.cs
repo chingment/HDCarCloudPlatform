@@ -10,8 +10,7 @@ namespace Lumos.BLL.Service.Model
     {
         public int UserId { get; set; }
         public List<OrderConfirmSkuModel> Skus { get; set; }
-
-        public List<CouponModel> Coupon { get; set; }
+        public List<int> CouponId { get; set; }
 
     }
 }

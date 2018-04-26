@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Lumos.BLL.Service.Model
 {
+
     public class CouponModel
     {
-        public int Id { get; set; }
+        public string Tip { get; set; }
 
-        public string Name { get; set; }
+        public int CanUseQuantity { get; set; }
+
+        public List<int> SelecedCouponId { get; set; }
     }
 }

@@ -682,5 +682,15 @@ namespace Lumos.Entity
             Deleted = 4
         }
 
+        public enum ChannelType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("快递商品")]
+            Express = 1,
+            [Remark("自助商品")]
+            SelfPick = 2
+        }
+
     }
 }

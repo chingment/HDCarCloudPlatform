@@ -11,6 +11,6 @@ namespace Lumos.BLL.Service.Model
         public string ImgUrl { get; set; }
         public string Name { get; set; }
         public string Amount { get; set; }
-        public bool IsDcrease { get; set; }ReceptionMode
+        public bool IsDcrease { get; set; }
     }
 }

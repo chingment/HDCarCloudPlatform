@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lumos.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,5 +20,10 @@ namespace Lumos.BLL.Service.Model
         public string SkuMainImg { get; set; }
 
         public string Price { get; set; }
+
+        public int ChannelId { get; set; }
+        public Enumeration.ChannelType ChannelType { get; set; }
+
+
     }
 }

@@ -26,9 +26,9 @@ namespace Lumos.Entity
         public DateTime CreateTime { get; set; }
         public int? Mender { get; set; }
         public DateTime? LastUpdateTime { get; set; }
-
         public bool Selected { get; set; }
-
         public Enumeration.CartStatus Status { get; set; }
+        public int ChannelId { get; set; }
+        public Enumeration.ChannelType ChannelType { get; set; }
     }
 }

@@ -19,6 +19,9 @@ namespace Lumos.BLL.Service
 
             var carts = CurrentDb.Cart.Where(m => m.UserId == userId && m.Status == Enumeration.CartStatus.WaitSettle).ToList();
 
+
+            var skus = new List<CartProcudtSkuListModel>();
+
             foreach (var item in carts)
             {
                 var skuModel = ServiceFactory.Product.GetSkuModel(item.ProductSkuId);
@@ -33,14 +36,43 @@ namespace Lumos.BLL.Service
                     cartProcudtSkuModel.Quantity = item.Quantity;
                     cartProcudtSkuModel.SumPrice = item.Quantity * skuModel.UnitPrice;
                     cartProcudtSkuModel.Selected = item.Selected;
-                    cartModel.List.Add(cartProcudtSkuModel);
+                    cartProcudtSkuModel.ChannelId = item.ChannelId;
+                    cartProcudtSkuModel.ChannelType = item.ChannelType;
+                    skus.Add(cartProcudtSkuModel);
                 }
             }
 
-            cartModel.Count = cartModel.List.Sum(m=>m.Quantity);
-            cartModel.SumPrice = cartModel.List.Sum(m => m.SumPrice);
-            cartModel.SumPriceBySelected = cartModel.List.Where(m => m.Selected == true).Sum(m => m.SumPrice);
-            cartModel.CountBySelected = cartModel.List.Where(m => m.Selected == true).Count();
+
+            var channels = (from c in carts select new { c.ChannelId, c.ChannelType }).Distinct();
+
+
+            foreach (var item in channels)
+            {
+
+                var carBlock = new CartBlock();
+                carBlock.ChannelId = item.ChannelId;
+                carBlock.ChannelType = item.ChannelType;
+                carBlock.Skus = skus.Where(m => m.ChannelId == item.ChannelId && m.ChannelType == item.ChannelType).ToList();
+
+                switch (item.ChannelType)
+                {
+                    case Enumeration.ChannelType.SelfPick:
+                        carBlock.TagName = "自提商品";
+                        break;
+                    case Enumeration.ChannelType.Express:
+                        carBlock.TagName = "快递商品";
+                        break;
+                }
+
+                cartModel.Block.Add(carBlock);
+            }
+
+
+
+            cartModel.Count = skus.Sum(m => m.Quantity);
+            cartModel.SumPrice = skus.Sum(m => m.SumPrice);
+            cartModel.SumPriceBySelected = skus.Where(m => m.Selected == true).Sum(m => m.SumPrice);
+            cartModel.CountBySelected = skus.Where(m => m.Selected == true).Count();
 
             return cartModel;
         }
@@ -58,7 +90,7 @@ namespace Lumos.BLL.Service
 
                     foreach (var item in procudtSkus)
                     {
-                        var mod_Cart = CurrentDb.Cart.Where(m => m.UserId == userId && m.ProductSkuId == item.SkuId && m.Status == Enumeration.CartStatus.WaitSettle).FirstOrDefault();
+                        var mod_Cart = CurrentDb.Cart.Where(m => m.UserId == userId && m.ProductSkuId == item.SkuId && m.ChannelId == item.ChannelId && m.ChannelType == item.ChannelType && m.Status == Enumeration.CartStatus.WaitSettle).FirstOrDefault();
 
                         Log.Info("购物车操作：" + operate);
                         switch (operate)
@@ -91,6 +123,8 @@ namespace Lumos.BLL.Service
                                     mod_Cart.CreateTime = this.DateTime;
                                     mod_Cart.Creator = operater;
                                     mod_Cart.Quantity = 1;
+                                    mod_Cart.ChannelId = item.ChannelId;
+                                    mod_Cart.ChannelType = item.ChannelType;
                                     mod_Cart.Status = Enumeration.CartStatus.WaitSettle;
                                     CurrentDb.Cart.Add(mod_Cart);
                                 }

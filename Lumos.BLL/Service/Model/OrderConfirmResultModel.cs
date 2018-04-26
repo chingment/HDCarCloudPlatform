@@ -31,7 +31,7 @@ namespace Lumos.BLL.Service.Model
         //选择的优惠卷
         public List<CouponModel> Coupon { get; set; }
         //订单块
-        public List<OrderBlock> OrderBlock { get; set; }
+        public List<OrderBlock> Block { get; set; }
         //小计项目
         public List<SubtotalItem> SubtotalItem { get; set; }
         //实际支付金额

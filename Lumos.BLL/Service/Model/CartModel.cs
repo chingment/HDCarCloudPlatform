@@ -6,14 +6,27 @@ using System.Threading.Tasks;
 
 namespace Lumos.BLL.Service.Model
 {
+
+    public class CartBlock
+    {
+
+        public string TagName { get; set; }
+
+        public List<CartProcudtSkuListModel> Skus { get; set; }
+
+        public int ChannelId { get; set; }
+
+        public Entity.Enumeration.ChannelType ChannelType { get; set; }
+    }
+
     public class CartModel
     {
         public CartModel()
         {
-            this.List = new List<CartProcudtSkuListModel>();
+            this.Block = new List<CartBlock>();
         }
 
-        public List<CartProcudtSkuListModel> List { get; set; }
+        public List<CartBlock> Block { get; set; }
 
         public int Count { get; set; }
 

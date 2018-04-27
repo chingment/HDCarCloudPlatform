@@ -6,12 +6,27 @@ using System.Threading.Tasks;
 
 namespace Lumos.BLL.Service.Model
 {
+    public enum TipType
+    {
+        Unknow = 0,
+        NoCanUse = 1,
+        CanUse = 2,
+        InUse = 3
+    }
 
     public class OrderConfirmCouponModel
     {
-        public string Tip { get; set; }
 
-        public int CanUseQuantity { get; set; }
+        public OrderConfirmCouponModel()
+        {
+
+        }
+
+        public TipType TipType { get; set; }
+
+        public string TipMsg { get; set; }
+
+        //public int CanUseQuantity { get; set; }
 
         public List<int> SelecedCouponId { get; set; }
     }

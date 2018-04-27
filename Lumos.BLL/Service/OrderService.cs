@@ -69,8 +69,6 @@ namespace Lumos.BLL.Service
 
             var orderBlock = new List<OrderBlock>();
 
-            Log.Info("orderBlock=>>>>>>>>>>>>>>>>>>>");
-
             var skus_SelfExpress = skus.Where(m => m.ChannelType == Enumeration.ChannelType.Express).ToList();
             if (skus_SelfExpress.Count > 0)
             {
@@ -113,51 +111,57 @@ namespace Lumos.BLL.Service
 
             model.Block = orderBlock;
 
-            if (confirm.CouponId != null)
+
+
+            if (confirm.CouponId == null || confirm.CouponId.Count == 0)
             {
-                if (confirm.CouponId.Count > 0)
+                var couponsCount = CurrentDb.Coupon.Where(m => m.UserId == confirm.UserId && m.Status == Entity.Enumeration.CouponStatus.WaitUse && m.EndTime > DateTime.Now).Count();
+
+                if (couponsCount == 0)
                 {
-
-                    Log.Info("CouponId=>>>>>>>>>>>>>>>>>>>1");
-
-                    var coupons = CurrentDb.Coupon.Where(m => m.UserId == confirm.UserId && confirm.CouponId.Contains(m.Id)).ToList();
-
-                    foreach (var item in coupons)
-                    {
-                        var amount = 0m;
-                        switch (item.Type)
-                        {
-                            case Enumeration.CouponType.FullCut:
-                            case Enumeration.CouponType.UnLimitedCut:
-                                if (skuAmountByActual >= item.LimitAmount)
-                                {
-                                    amount = -item.Discount;
-                                    skuAmountByActual = skuAmountByActual - item.Discount;
-
-                                    subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
-                                }
-
-                                break;
-                            case Enumeration.CouponType.Discount:
-
-                                amount = skuAmountByActual - (skuAmountByActual * item.Discount);
-
-                                skuAmountByActual = skuAmountByActual * item.Discount;
-
-                                subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
-
-                                break;
-                        }
-                    }
+                    model.Coupon = new OrderConfirmCouponModel { TipMsg = "暂无可用优惠卷", TipType = TipType.NoCanUse };
                 }
                 else
                 {
-                    Log.Info("CouponId=>>>>>>>>>>>>>>>>>>>0");
+                    model.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}个可用", couponsCount), TipType = TipType.CanUse };
                 }
             }
             else
             {
-                Log.Info("CouponId=>>>>>>>>>>>>>>>>>>>NULL");
+
+                var coupons = CurrentDb.Coupon.Where(m => m.UserId == confirm.UserId && confirm.CouponId.Contains(m.Id)).ToList();
+
+                foreach (var item in coupons)
+                {
+                    var amount = 0m;
+                    switch (item.Type)
+                    {
+                        case Enumeration.CouponType.FullCut:
+                        case Enumeration.CouponType.UnLimitedCut:
+                            if (skuAmountByActual >= item.LimitAmount)
+                            {
+                                amount = -item.Discount;
+                                skuAmountByActual = skuAmountByActual - item.Discount;
+
+                                //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
+
+                                model.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}", amount.ToF2Price()), TipType = TipType.InUse };
+
+                            }
+
+                            break;
+                        case Enumeration.CouponType.Discount:
+
+                            amount = skuAmountByActual - (skuAmountByActual * (item.Discount / 10));
+
+                            skuAmountByActual = skuAmountByActual * (item.Discount / 10);
+
+                            // subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
+                            model.Coupon = new OrderConfirmCouponModel { TipMsg = string.Format("{0}", amount.ToF2Price()), TipType = TipType.InUse };
+                            break;
+                    }
+                }
+
             }
 
 

@@ -17,7 +17,7 @@ namespace Lumos.BLL.Service
 
             var productParentKindModels = new List<ProductParentKindModel>();
 
-            var productKinds = CurrentDb.ProductKind.Where(m => m.Status == Entity.Enumeration.ProductKindStatus.Valid).ToList();
+            var productKinds = CurrentDb.ProductKind.Where(m => m.Status == Entity.Enumeration.ProductKindStatus.Valid && m.IsDelete == false).ToList();
 
             var productParentKinds = productKinds.Where(m => m.PId == 1).ToList();
             foreach (var item in productParentKinds)

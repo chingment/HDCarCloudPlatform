@@ -66,6 +66,7 @@
     <Compile Include="..\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Biz\CouponProvider.cs" />
     <Compile Include="Biz\Model\ProductDetailInfo.cs" />
     <Compile Include="Biz\Model\ProductKindSimple.cs" />
     <Compile Include="Biz\OrderToLllegalDealtProvider.cs" />

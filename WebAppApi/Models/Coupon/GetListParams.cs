@@ -11,5 +11,7 @@ namespace WebAppApi.Models.Coupon
         public int UserId { get; set; }
         public bool IsGetHis { get; set; }
         public List<OrderConfirmSkuModel> Skus { get; set; }
-    }
+
+        public List<int> CouponId { get; set; }
+    } 
 }

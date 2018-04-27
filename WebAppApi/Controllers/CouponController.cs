@@ -19,7 +19,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse GetList(GetListParams pms)
         {
-            var model = ServiceFactory.Coupon.List(pms.UserId, pms.UserId, pms.IsGetHis, pms.Skus);
+            var model = ServiceFactory.Coupon.List(pms.UserId, pms.UserId, pms.IsGetHis, pms.CouponId, pms.Skus);
 
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
 

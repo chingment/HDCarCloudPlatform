@@ -13,17 +13,17 @@ namespace Lumos.BLL.Service
 
     public class CouponService : BaseProvider
     {
-        public List<CouponModel> List(int operater, int userId, bool isGetHis, List<OrderConfirmSkuModel> skus)
+        public List<CouponModel> List(int operater, int userId, bool isGetHis, List<int> couponId, List<OrderConfirmSkuModel> skus)
         {
 
             List<Coupon> coupons;
             if (!isGetHis)
             {
-                coupons = CurrentDb.Coupon.Where(m => m.UserId == userId && m.Status == Entity.Enumeration.CouponStatus.Normal && m.EndTime > DateTime.Now && m.IsDelete == false).ToList();
+                coupons = CurrentDb.Coupon.Where(m => m.UserId == userId && m.Status == Entity.Enumeration.CouponStatus.WaitUse && m.EndTime > DateTime.Now).ToList();
             }
             else
             {
-                coupons = CurrentDb.Coupon.Where(m => m.UserId == userId && (m.Status == Entity.Enumeration.CouponStatus.Used || m.Status == Entity.Enumeration.CouponStatus.Expired) && m.EndTime < DateTime.Now && m.IsDelete == false).ToList();
+                coupons = CurrentDb.Coupon.Where(m => m.UserId == userId && (m.Status == Entity.Enumeration.CouponStatus.Used || m.Status == Entity.Enumeration.CouponStatus.Expired) && m.EndTime < DateTime.Now).ToList();
             }
 
             var couponsModel = new List<CouponModel>();
@@ -57,6 +57,15 @@ namespace Lumos.BLL.Service
 
                 couponModel.ValidDate = "有效到" + item.EndTime.ToUnifiedFormatDate();
                 couponModel.Description = "全场使用";
+
+                if (couponId != null)
+                {
+                    if (couponId.Contains(item.Id))
+                    {
+                        couponModel.IsSelected = true;
+                    }
+                }
+
                 couponsModel.Add(couponModel);
             }
 

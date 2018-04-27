@@ -21,7 +21,6 @@ namespace Lumos.Entity
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public Enumeration.CouponStatus Status { get; set; }
-        public bool IsDelete { get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public int? Mender { get; set; }

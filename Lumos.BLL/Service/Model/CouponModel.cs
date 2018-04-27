@@ -23,5 +23,7 @@ namespace Lumos.BLL.Service.Model
         public bool CanSelected { get; set; }
 
         public string DiscountTip { get; set; }
+
+        public bool IsSelected { get; set; }
     }
 }

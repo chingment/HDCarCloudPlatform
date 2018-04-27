@@ -696,12 +696,16 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("正常")]
-            Normal = 1,
+            [Remark("待使用")]
+            WaitUse = 1,
             [Remark("已使用")]
             Used = 2,
             [Remark("已过期")]
-            Expired = 3
+            Expired = 3,
+            [Remark("已删除")]
+            Delete = 4,
+            [Remark("冻结")]
+            Frozen = 5
         }
 
         public enum CouponSourceType

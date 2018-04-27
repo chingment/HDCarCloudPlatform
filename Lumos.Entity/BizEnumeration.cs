@@ -692,5 +692,38 @@ namespace Lumos.Entity
             SelfPick = 2
         }
 
+        public enum CouponStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("正常")]
+            Normal = 1,
+            [Remark("已使用")]
+            Used = 2,
+            [Remark("已过期")]
+            Expired = 3
+        }
+
+        public enum CouponSourceType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("领取")]
+            Receive = 1,
+            [Remark("派送")]
+            Give = 2
+        }
+
+        public enum CouponType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("满减券")]
+            FullCut = 1,
+            [Remark("立减券")]
+            UnLimitedCut = 2,
+            [Remark("折扣券")]
+            Discount = 3
+        }
     }
 }

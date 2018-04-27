@@ -55,5 +55,13 @@ namespace Lumos.BLL.Service
                 return new OrderService();
             }
         }
+
+        public static CouponService Coupon
+        {
+            get
+            {
+                return new CouponService();
+            }
+        }
     }
 }

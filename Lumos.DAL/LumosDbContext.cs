@@ -121,6 +121,9 @@ namespace Lumos.DAL
 
         public IDbSet<Cart> Cart { get; set; }
 
+
+        public IDbSet<Coupon> Coupon { get; set; }
+
         //public FxDbContext()
         //    : base("DefaultConnection")
         //{

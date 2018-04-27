@@ -106,12 +106,14 @@
     <Compile Include="Sdk\MinShunPayProvider.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Service\CartService.cs" />
+    <Compile Include="Service\CouponService.cs" />
     <Compile Include="Service\IndexService.cs" />
     <Compile Include="Service\Model\BannerModel.cs" />
     <Compile Include="Service\Model\CartProcudtSkuListByOperateModel.cs" />
     <Compile Include="Service\Model\CartProcudtSkuListModel.cs" />
     <Compile Include="Service\Model\CartModel.cs" />
     <Compile Include="Service\Model\CouponModel.cs" />
+    <Compile Include="Service\Model\OrderConfirmCouponModel.cs" />
     <Compile Include="Service\Model\IndexModel.cs" />
     <Compile Include="Service\Model\OrderConfirmModel.cs" />
     <Compile Include="Service\Model\OrderConfirmResultModel.cs" />
@@ -126,7 +128,7 @@
     <Compile Include="Service\Model\ShippingAddressModel.cs" />
     <Compile Include="Service\Model\SpecModel.cs" />
     <Compile Include="Service\Model\SpecValueModel.cs" />
-    <Compile Include="Service\Model\SubtotalItem.cs" />
+    <Compile Include="Service\Model\OrderConfirmSubtotalItemModel.cs" />
     <Compile Include="Service\Model\UserInfoModel.cs" />
     <Compile Include="Service\OrderService.cs" />
     <Compile Include="Service\PersonalService.cs" />

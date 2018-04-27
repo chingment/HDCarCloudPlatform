@@ -74,6 +74,7 @@
     <Compile Include="Biz\CarInsurePlanKind.cs" />
     <Compile Include="Biz\CarKind.cs" />
     <Compile Include="Biz\Cart.cs" />
+    <Compile Include="Biz\Coupon.cs" />
     <Compile Include="Biz\ExtendedApp.cs" />
     <Compile Include="Biz\ExtendedAppAccessLog.cs" />
     <Compile Include="Biz\Fund.cs" />

@@ -21,6 +21,8 @@ namespace Lumos.BLL.Service.Model
 
         public string Price { get; set; }
 
+        public string PriceByVip { get; set; }
+
         public int ChannelId { get; set; }
         public Enumeration.ChannelType ChannelType { get; set; }
 

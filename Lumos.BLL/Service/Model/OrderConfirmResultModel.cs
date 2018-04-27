@@ -24,16 +24,15 @@ namespace Lumos.BLL.Service.Model
     {
         public OrderConfirmResultModel()
         {
-            this.Coupon = new List<CouponModel>();
-            this.SubtotalItem = new List<SubtotalItem>();
+            this.SubtotalItem = new List<OrderConfirmSubtotalItemModel>();
         }
 
         //选择的优惠卷
-        public List<CouponModel> Coupon { get; set; }
+        public OrderConfirmCouponModel Coupon { get; set; }
         //订单块
         public List<OrderBlock> Block { get; set; }
         //小计项目
-        public List<SubtotalItem> SubtotalItem { get; set; }
+        public List<OrderConfirmSubtotalItemModel> SubtotalItem { get; set; }
         //实际支付金额
         public string ActualAmount { get; set; }
         //原金额

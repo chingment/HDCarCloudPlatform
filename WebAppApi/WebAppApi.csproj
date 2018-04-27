@@ -128,6 +128,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Car\" />
+    <Folder Include="Views\Coupon\" />
     <Folder Include="Views\Global\" />
     <Folder Include="Views\Lllegal\" />
     <Folder Include="Views\Product\" />
@@ -161,6 +162,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CarServiceController.cs" />
+    <Compile Include="Controllers\CouponController.cs" />
     <Compile Include="Controllers\ExtendedAppController.cs" />
     <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\TalentDemandWorkJobModel.cs" />
     <Compile Include="Models\Cart\OperateParams.cs" />
+    <Compile Include="Models\Coupon\GetListParams.cs" />
     <Compile Include="Models\Global\DataSetModel.cs" />
     <Compile Include="Models\Resource\BannerModel.cs" />
     <Compile Include="Models\Resource\DetailsViewModelByBanner.cs" />

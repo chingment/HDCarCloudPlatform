@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lumos.BLL.Service.Model
 {
-    public class SubtotalItem
+    public class OrderConfirmSubtotalItemModel
     {
         public string ImgUrl { get; set; }
         public string Name { get; set; }

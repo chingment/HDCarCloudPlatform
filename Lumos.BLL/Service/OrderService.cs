@@ -18,8 +18,13 @@ namespace Lumos.BLL.Service
 
             var model = new OrderConfirmResultModel();
 
-
+            var subtotalItem = new List<OrderConfirmSubtotalItemModel>();
             var skus = new List<OrderConfirmSkuModel>();
+
+            decimal skuAmountByActual = 0;//总价
+            decimal skuAmountByOriginal = 0;//总价
+            decimal skuAmountByMemebr = 0;//普通用户总价
+            decimal skuAmountByVip = 0;//会员用户总价
 
             if (confirm.Skus != null)
             {
@@ -27,19 +32,41 @@ namespace Lumos.BLL.Service
                 {
                     var productSku = CurrentDb.ProductSku.Where(m => m.Id == item.SkuId).FirstOrDefault();
                     var product = CurrentDb.Product.Where(m => m.Id == productSku.ProductId).FirstOrDefault();
-
                     item.SkuMainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
                     item.SkuName = productSku.Name;
                     item.Price = productSku.Price.ToF2Price();
+                    item.PriceByVip = (productSku.Price * 0.9m).ToF2Price();
+
+                    skuAmountByOriginal += (productSku.Price * item.Quantity);
+                    skuAmountByMemebr += (productSku.Price * item.Quantity);
+                    skuAmountByVip += (productSku.Price * 0.9m * item.Quantity);
 
                     skus.Add(item);
-
                 }
             }
+
+            bool isVip = true;
+
+
+
+
+            if (isVip)
+            {
+                skuAmountByActual = skuAmountByVip;
+
+                var discount = "-" + (skuAmountByMemebr - skuAmountByVip).ToF2Price();
+                subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "会员优惠", Amount = discount, IsDcrease = true });
+            }
+            else
+            {
+                skuAmountByActual = skuAmountByMemebr;
+            }
+
 
 
             var orderBlock = new List<OrderBlock>();
 
+            Log.Info("orderBlock=>>>>>>>>>>>>>>>>>>>");
 
             var skus_SelfExpress = skus.Where(m => m.ChannelType == Enumeration.ChannelType.Express).ToList();
             if (skus_SelfExpress.Count > 0)
@@ -83,19 +110,62 @@ namespace Lumos.BLL.Service
 
             model.Block = orderBlock;
 
-            
+            if (confirm.CouponId != null)
+            {
+                if (confirm.CouponId.Count > 0)
+                {
 
-            var subtotalItem = new List<SubtotalItem>();
+                    Log.Info("CouponId=>>>>>>>>>>>>>>>>>>>1");
+
+                    var coupons = CurrentDb.Coupon.Where(m => m.UserId == confirm.UserId && confirm.CouponId.Contains(m.Id)).ToList();
+
+                    foreach (var item in coupons)
+                    {
+                        var amount = 0m;
+                        switch (item.Type)
+                        {
+                            case Enumeration.CouponType.FullCut:
+                            case Enumeration.CouponType.UnLimitedCut:
+                                if (skuAmountByActual >= item.LimitAmount)
+                                {
+                                    amount = -item.Discount;
+                                    skuAmountByActual = skuAmountByActual - item.Discount;
+
+                                    subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
+                                }
+
+                                break;
+                            case Enumeration.CouponType.Discount:
+
+                                amount = skuAmountByActual - (skuAmountByActual * item.Discount);
+
+                                skuAmountByActual = skuAmountByActual * item.Discount;
+
+                                subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = item.Name, Amount = string.Format("{0}", amount.ToF2Price()), IsDcrease = true });
+
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    Log.Info("CouponId=>>>>>>>>>>>>>>>>>>>0");
+                }
+            }
+            else
+            {
+                Log.Info("CouponId=>>>>>>>>>>>>>>>>>>>NULL");
+            }
 
 
-            subtotalItem.Add(new SubtotalItem { ImgUrl = "", Name = "满5减3元", Amount = "-9", IsDcrease = true });
-            subtotalItem.Add(new SubtotalItem { ImgUrl = "", Name = "优惠卷", Amount = "-10", IsDcrease = true });
+            //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "满5减3元", Amount = "-9", IsDcrease = true });
+            //subtotalItem.Add(new OrderConfirmSubtotalItemModel { ImgUrl = "", Name = "优惠卷", Amount = "-10", IsDcrease = true });
 
             model.SubtotalItem = subtotalItem;
 
 
-            model.ActualAmount = "101元";
-            model.OriginalAmount = "120元";
+            model.ActualAmount = skuAmountByActual.ToF2Price();
+            model.OriginalAmount = skuAmountByOriginal.ToF2Price();
 
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", model);

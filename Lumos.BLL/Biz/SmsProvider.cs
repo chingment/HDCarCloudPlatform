@@ -33,14 +33,14 @@ namespace Lumos.BLL
         public CustomJsonResult SendCarInsureOfferComplete(int userId, string phone, string orderSn, string carOwner, string carPlateno)
         {
             string token = null;
-            CustomJsonResult result = SmsHelper.Send("SMS_129757235", "{\"ordersn\":\"" + orderSn + "\",\"carowner\":\"" + carOwner + "\",\"carplateno\":\"" + carPlateno + "\"}", phone, out token);
+            CustomJsonResult result = SmsHelper.Send("SMS_129762769", "{\"ordersn\":\"" + orderSn + "\",\"carowner\":\"" + carOwner + "\",\"carplateno\":\"" + carPlateno + "\"}", phone, out token);
             return result;
         }
 
         public CustomJsonResult SendCarInsureOfferFollow(int userId, string phone, string orderSn, string carOwner, string carPlateno)
         {
             string token = null;
-            CustomJsonResult result = SmsHelper.Send("SMS_129757237", "{\"ordersn\":\"" + orderSn + "\",\"carowner\":\"" + carOwner + "\",\"carplateno\":\"" + carPlateno + "\"}", phone, out token);
+            CustomJsonResult result = SmsHelper.Send("SMS_129747724", "{\"ordersn\":\"" + orderSn + "\",\"carowner\":\"" + carOwner + "\",\"carplateno\":\"" + carPlateno + "\"}", phone, out token);
             return result;
         }
 

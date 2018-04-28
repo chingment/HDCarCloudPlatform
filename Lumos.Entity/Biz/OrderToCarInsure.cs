@@ -109,5 +109,11 @@ namespace Lumos.Entity
 
         public string CarModelName { get; set; }
 
+        [MaxLength(256)]
+
+        public string DrivingLicenceFaceImgKey { get; set; }
+        [MaxLength(256)]
+        public string IdentityCardFaceImgKey { get; set; }
+
     }
 }

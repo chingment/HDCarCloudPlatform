@@ -891,8 +891,8 @@ namespace WebAppApi.Controllers
 
             model.ImgData = new Dictionary<string, ImageModel>();
 
-            //model.ImgData.Add("CZ_CL_XSZ_Img", CZ_CL_XSZ_Img);
-            //model.ImgData.Add("CZ_SFZ_Img", CZ_SFZ_Img);
+            model.ImgData.Add("CZ_CL_XSZ_Img", CZ_CL_XSZ_Img);
+            model.ImgData.Add("CZ_SFZ_Img", CZ_SFZ_Img);
             //model.ImgData.Add("CCSJM_WSZM_Img", CCSJM_WSZM_Img);
             //model.ImgData.Add("YCZ_CLDJZ_Img", YCZ_CLDJZ_Img);
 
@@ -925,25 +925,37 @@ namespace WebAppApi.Controllers
             model.InsurePlanId = 1;
             model.InsuranceCompanyId = new int[1] { 1 };
 
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 3, YdtCode = "001", Name = "车损险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 4, YdtCode = "002", Name = "三者险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 5, YdtCode = "003", Name = "司机险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 6, YdtCode = "004", Name = "乘客险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 7, YdtCode = "005", Name = "盗抢险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 8, YdtCode = "006", Name = "玻璃险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 9, YdtCode = "007", Name = "划痕险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 12, YdtCode = "008", Name = "自燃险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 11, YdtCode = "009", Name = "涉水险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 17, YdtCode = "010", Name = "指定维修厂" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 10, YdtCode = "011", Name = "无法找到第三方险" });
+
 
             List<InsureKindModel> insureKindModel = new List<InsureKindModel>();
             insureKindModel.Add(new InsureKindModel() { Id = 1, Value = "", Details = "", IsWaiverDeductible = false });
             insureKindModel.Add(new InsureKindModel() { Id = 2, Value = "", Details = "", IsWaiverDeductible = false });
             insureKindModel.Add(new InsureKindModel() { Id = 3, Value = "2000", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 4, Value = "20w", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 5, Value = "30w", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 6, Value = "40w", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 7, Value = "3000", Details = "" });
+            insureKindModel.Add(new InsureKindModel() { Id = 4, Value = "100w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new InsureKindModel() { Id = 5, Value = "20w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new InsureKindModel() { Id = 6, Value = "2w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new InsureKindModel() { Id = 7, Value = "", Details = "" });
             insureKindModel.Add(new InsureKindModel() { Id = 8, Value = "国产", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 9, Value = "1000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 10, Value = "2000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 11, Value = "3000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 12, Value = "4000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 13, Value = "5000", Details = "购买机动" });
-            insureKindModel.Add(new InsureKindModel() { Id = 14, Value = "100/天", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 15, Value = "6000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 16, Value = "7000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 17, Value = "8000", Details = "" });
+            insureKindModel.Add(new InsureKindModel() { Id = 9, Value = "2000", Details = "" });
+            insureKindModel.Add(new InsureKindModel() { Id = 10, Value = "", Details = "" });
+            insureKindModel.Add(new InsureKindModel() { Id = 11, Value = "", Details = "" });
+            insureKindModel.Add(new InsureKindModel() { Id = 12, Value = "", Details = "" });
+            //insureKindModel.Add(new InsureKindModel() { Id = 13, Value = "5000", Details = "购买机动" });
+            //insureKindModel.Add(new InsureKindModel() { Id = 14, Value = "100/天", Details = "" });
+            //insureKindModel.Add(new InsureKindModel() { Id = 15, Value = "6000", Details = "" });
+            //insureKindModel.Add(new InsureKindModel() { Id = 16, Value = "7000", Details = "" });
+            insureKindModel.Add(new InsureKindModel() { Id = 17, Value = "", Details = "" });
 
 
             model.InsureKind = insureKindModel;

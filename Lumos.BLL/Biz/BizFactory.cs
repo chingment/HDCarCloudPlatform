@@ -170,5 +170,13 @@ namespace Lumos.BLL
             }
         }
 
+        public static CarInsureOfferProvider CarInsureOffer
+        {
+            get
+            {
+                return new CarInsureOfferProvider();
+            }
+        }
+
     }
 }

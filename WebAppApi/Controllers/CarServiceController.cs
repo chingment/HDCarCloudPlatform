@@ -41,38 +41,43 @@ namespace WebAppApi.Controllers
                 var key_CZ_CL_XSZ_Img = "CZ_CL_XSZ_Img";
                 if (model.ImgData.ContainsKey(key_CZ_CL_XSZ_Img))
                 {
-                    orderToCarInsure.CZ_CL_XSZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_CL_XSZ_Img], "CarInsure");
-
-                    //DrivingLicenceVO drivingLicence = AnXin.GetDrivingLicenceByImageBase64(model.ImgData[key_CZ_CL_XSZ_Img].Data);
-
-                    //if (drivingLicence != null)
-                    //{
-                    //    orderToCarInsure.CarOwner = drivingLicence.owner;
-                    //    orderToCarInsure.CarOwnerAddress = drivingLicence.address;
-                    //    orderToCarInsure.CarModel = drivingLicence.model;
-                    //    orderToCarInsure.CarPlateNo = drivingLicence.plateNum;
-                    //    orderToCarInsure.CarEngineNo = drivingLicence.engineNo;
-                    //    orderToCarInsure.CarVin = drivingLicence.vin;
-                    //    //orderToCarInsure.CarVechicheType = drivingLicence.vehicleType;
-                    //    orderToCarInsure.CarIssueDate = drivingLicence.issueDate;
-                    //    //orderToCarInsure.CarUserCharacter = drivingLicence.userCharacter;
-                    //    orderToCarInsure.CarRegisterDate = drivingLicence.registerDate;
-                    //}
+                    //orderToCarInsure.CZ_CL_XSZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_CL_XSZ_Img], "CarInsure");
+                    orderToCarInsure.CZ_CL_XSZ_ImgUrl = "http://file.gzhaoyilian.com/Upload/demo_jsz.jpg";
+                    var drivingLicenceInfo = BizFactory.CarInsureOffer.GetDrivingLicenceInfoFromImgUrl(orderToCarInsure.CZ_CL_XSZ_ImgUrl);
+                    if (drivingLicenceInfo != null)
+                    {
+                        orderToCarInsure.CarOwner = drivingLicenceInfo.owner;
+                        orderToCarInsure.CarOwnerAddress = drivingLicenceInfo.address;
+                        orderToCarInsure.CarModel = drivingLicenceInfo.model;
+                        orderToCarInsure.CarPlateNo = drivingLicenceInfo.plateNum;
+                        orderToCarInsure.CarEngineNo = drivingLicenceInfo.engineNo;
+                        orderToCarInsure.CarVin = drivingLicenceInfo.vin;
+                        //orderToCarInsure.CarVechicheType = drivingLicence.vehicleType;
+                        //orderToCarInsure.CarUserCharacter = drivingLicence.userCharacter;
+                        if (CommonUtils.IsDateTime(drivingLicenceInfo.issueDate))
+                        {
+                            orderToCarInsure.CarIssueDate =DateTime.Parse(drivingLicenceInfo.issueDate).ToUnifiedFormatDate();
+                        }
+                        if (CommonUtils.IsDateTime(drivingLicenceInfo.registerDate))
+                        {
+                            orderToCarInsure.CarRegisterDate = DateTime.Parse(drivingLicenceInfo.registerDate).ToUnifiedFormatDate();
+                        }
+                        orderToCarInsure.DrivingLicenceFaceImgKey = drivingLicenceInfo.fileKey;
+                    }
 
                 }
 
                 var key_CZ_SFZ_Img = "CZ_SFZ_Img";
                 if (model.ImgData.ContainsKey(key_CZ_SFZ_Img))
                 {
-                    orderToCarInsure.CZ_SFZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_SFZ_Img], "CarInsure");
-
-                    //IdentityCardVO identityCardVO = AnXin.GetIdentityCardByImageBase64(model.ImgData[key_CZ_SFZ_Img].Data);
-
-                    //if (identityCardVO != null)
-                    //{
-                    //    orderToCarInsure.CarOwnerIdNumber = identityCardVO.idNumber;
-                    //}
-
+                    orderToCarInsure.CZ_SFZ_ImgUrl = "http://file.gzhaoyilian.com/Upload/demo_sfz.jpg";
+                    //orderToCarInsure.CZ_SFZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_SFZ_Img], "CarInsure");
+                    var identityCardInfo = BizFactory.CarInsureOffer.GetIdentityCardInfoFromImgUrl(orderToCarInsure.CZ_SFZ_ImgUrl);
+                    if (identityCardInfo != null)
+                    {
+                        orderToCarInsure.CarOwnerIdNumber = identityCardInfo.idNumber;
+                        orderToCarInsure.IdentityCardFaceImgKey = identityCardInfo.fileKey;
+                    }
                 }
 
                 var key_CCSJM_WSZM_Img = "CCSJM_WSZM_Img";

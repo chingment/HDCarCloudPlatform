@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -71,6 +72,7 @@ namespace YdtSdk
 
         public YdtApiBaseResult<T> DoPost<T>(IYdtApiPostRequest<T> request)
         {
+            ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
             string realServerUrl = GetServerUrl(this.serverUrl, request.ApiName);
             WebUtils webUtils = new WebUtils();
@@ -85,9 +87,14 @@ namespace YdtSdk
                 postData = JsonConvert.SerializeObject(request.PostData);
             }
 
+            log.Info("Ydt-request-url>>>>" + realServerUrl);
+
             string body = webUtils.DoPost(realServerUrl, request.GetUrlParameters(), postData, null);
 
+            log.Info("Ydt-request-result>>>>" + body);
+
             var rsp1 = JsonConvert.DeserializeObject<YdtApiBaseResult<object>>(body);
+           
 
             if (rsp1.code == 0)
             {

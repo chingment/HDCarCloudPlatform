@@ -27,6 +27,7 @@ namespace YdtSdk
 
         private static List<YdtInsCoverageModel> YdtInsCoverageList()
         {
+
             List<YdtInsCoverageModel> list = new List<YdtInsCoverageModel>();
             list.Add(new YdtInsCoverageModel { UpLinkCode = 3, YdtCode = "001", Name = "车损险" });
             list.Add(new YdtInsCoverageModel { UpLinkCode = 4, YdtCode = "002", Name = "三者险" });
@@ -38,7 +39,7 @@ namespace YdtSdk
             list.Add(new YdtInsCoverageModel { UpLinkCode = 12, YdtCode = "008", Name = "自燃险" });
             list.Add(new YdtInsCoverageModel { UpLinkCode = 11, YdtCode = "009", Name = "涉水险" });
             list.Add(new YdtInsCoverageModel { UpLinkCode = 17, YdtCode = "010", Name = "指定维修厂" });
-
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 10, YdtCode = "011", Name = "无法找到第三方险" });
             return list;
         }
 

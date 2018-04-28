@@ -1,6 +1,7 @@
 ﻿using Lumos.Common;
 using Lumos.Entity;
 using Lumos.Mvc;
+using Lumos.Redis;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -36,21 +37,32 @@ namespace YdtSdk
             }
         }
 
+
+
         public static TokenAu GetToken()
         {
-            TokenAu au = new TokenAu();
-            YdtApi c = new YdtApi();
-            YdtToken ydtToken = new YdtToken("hylian", "hylian_2018");
-            var ydtTokenResult = c.DoGet(ydtToken);
+            var redisClient = new RedisClient<TokenAu>();
 
-            // ydtTokenResult
+            string key = "ydt_toekn";
+            TokenAu au = redisClient.KGet(key);
+            if (au == null)
+            {
+
+                YdtApi c = new YdtApi();
+                YdtToken ydtToken = new YdtToken("hylian", "hylian_2018");
+                var ydtTokenResult = c.DoGet(ydtToken);
+
+                YdtEmLogin ydtEmLogin = new YdtEmLogin(ydtTokenResult.data.token, "15012405333", "7c4a8d09ca3762af61e59520943dc26494f8941b");
+                var ydtEmLoginResult = c.DoGet(ydtEmLogin);
+
+                au = new TokenAu();
+                au.token = ydtTokenResult.data.token;
+                au.session = ydtEmLoginResult.data.session;
+
+                redisClient.KSet(key, au, new TimeSpan(1, 0, 0));
+            }
 
 
-            YdtEmLogin ydtEmLogin = new YdtEmLogin(ydtTokenResult.data.token, "15012405333", "7c4a8d09ca3762af61e59520943dc26494f8941b");
-            var ydtEmLoginResult = c.DoGet(ydtEmLogin);
-
-            au.token = ydtTokenResult.data.token;
-            au.session = ydtEmLoginResult.data.session;
             return au;
 
         }
@@ -156,16 +168,23 @@ namespace YdtSdk
             insured.mobile = order.RecipientPhoneNumber;
             insured.address = order.RecipientAddress;
 
-            YdtUpload ydtUpdate_SFZ = new YdtUpload(au.token, au.session, "1", order.CZ_SFZ_ImgUrl);
-            var ydtUpdateResult_SFZ = ydtApi.DoPostFile(ydtUpdate_SFZ, Path.GetFileName(order.CZ_SFZ_ImgUrl));
-
-            if (ydtUpdateResult_SFZ.code != 0)
+            if (string.IsNullOrEmpty(order.IdentityCardFaceImgKey))
             {
-                return new CustomJsonResult(ResultType.Failure, ydtUpdateResult_SFZ.msg);
-            }
+                YdtUpload ydtUpdate_SFZ = new YdtUpload(au.token, au.session, "1", order.CZ_SFZ_ImgUrl);
+                var ydtUpdateResult_SFZ = ydtApi.DoPostFile(ydtUpdate_SFZ, Path.GetFileName(order.CZ_SFZ_ImgUrl));
 
-            insured.identityFacePic = ydtUpdateResult_SFZ.data.file.key;
-            insured.identityBackPic = ydtUpdateResult_SFZ.data.file.key;
+                if (ydtUpdateResult_SFZ.code != 0)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ydtUpdateResult_SFZ.msg);
+                }
+                insured.identityFacePic = ydtUpdateResult_SFZ.data.file.key;
+                insured.identityBackPic = ydtUpdateResult_SFZ.data.file.key;
+            }
+            else
+            {
+                insured.identityFacePic = order.IdentityCardFaceImgKey;
+                insured.identityBackPic = order.IdentityCardFaceImgKey;
+            }
 
             InsCustomers holder = new InsCustomers();
             holder.insuredFlag = 2;
@@ -189,22 +208,30 @@ namespace YdtSdk
             customers.Add(insured);
             customers.Add(holder);
             customers.Add(carOwner);
-            #endregion 
+            #endregion
 
 
             model.customers = customers;
 
+            InsPicModel insPic = new InsPicModel();
 
-            var ydtUpdate = new YdtUpload(au.token, au.session, "1", order.CZ_SFZ_ImgUrl);
-            var ydtUpdateResult = ydtApi.DoPostFile(ydtUpdate, Path.GetFileName(order.CZ_SFZ_ImgUrl));
-            if (ydtUpdateResult.code != 0)
+            if (string.IsNullOrEmpty(order.IdentityCardFaceImgKey))
             {
-                return new CustomJsonResult(ResultType.Failure, ydtUpdateResult.msg);
+                var ydtUpdate = new YdtUpload(au.token, au.session, "1", order.CZ_CL_XSZ_ImgUrl);
+                var ydtUpdateResult = ydtApi.DoPostFile(ydtUpdate, Path.GetFileName(order.CZ_CL_XSZ_ImgUrl));
+                if (ydtUpdateResult.code != 0)
+                {
+                    return new CustomJsonResult(ResultType.Failure, ydtUpdateResult.msg);
+                }
+                insPic.licensePic = ydtUpdateResult.data.file.key;
+            }
+            else
+            {
+                insPic.licensePic = order.DrivingLicenceFaceImgKey;
             }
 
             #region pic
-            InsPicModel insPic = new InsPicModel();
-            insPic.licensePic = ydtUpdateResult.data.file.key;
+
             insPic.licenseOtherPic = "";
             insPic.carCertPic = "";
             insPic.carInvoicePic = "";
@@ -323,7 +350,7 @@ namespace YdtSdk
                                             }
                                         }
                                     }
-                                    else if(coverage.code == "004")
+                                    else if (coverage.code == "004")
                                     {
                                         offerImgCoverage.Coverage = coverage.unitAmount.ToF2Price();
                                     }
@@ -409,6 +436,70 @@ namespace YdtSdk
             result.Data = offerList;
 
             return result;
+        }
+
+        public static YdtIdentityInfo GetIdentityInfoByUrl(string url)
+        {
+            YdtIdentityInfo identityInfo = null;
+
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            var ydtUploadByIdentity = new YdtUploadByIdentity(au.token, au.session, url);
+            var ydtUploadByIdentityResult = ydtApi.DoPostFile(ydtUploadByIdentity, Path.GetFileName(url));
+
+            if (ydtUploadByIdentityResult.code == 0)
+            {
+                if (ydtUploadByIdentityResult.data != null)
+                {
+                    identityInfo = new YdtIdentityInfo();
+
+                    identityInfo.num = ydtUploadByIdentityResult.data.identity.num;
+                    identityInfo.name = ydtUploadByIdentityResult.data.identity.name;
+                    identityInfo.sex = ydtUploadByIdentityResult.data.identity.sex;
+                    identityInfo.birthday = ydtUploadByIdentityResult.data.identity.birthday;
+                    identityInfo.nationality = ydtUploadByIdentityResult.data.identity.nationality;
+                    identityInfo.address = ydtUploadByIdentityResult.data.identity.address;
+                    identityInfo.fileKey = ydtUploadByIdentityResult.data.file.key;
+                }
+            }
+
+
+            return identityInfo;
+        }
+
+        public static YdtLicenseInfo GetLicenseInfoByUrl(string url)
+        {
+            YdtLicenseInfo licenseInfo = null;
+
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            var ydtUploadByLicense = new YdtUploadByLicense(au.token, au.session, url);
+            var ydtUploadByLicenseResult = ydtApi.DoPostFile(ydtUploadByLicense, Path.GetFileName(url));
+
+
+            if (ydtUploadByLicenseResult.code == 0)
+            {
+                if (ydtUploadByLicenseResult.data != null)
+                {
+                    licenseInfo = new YdtLicenseInfo();
+
+                    licenseInfo.owner = ydtUploadByLicenseResult.data.license.owner;
+                    licenseInfo.plateNum = ydtUploadByLicenseResult.data.license.plateNum;
+                    licenseInfo.vehicleType = ydtUploadByLicenseResult.data.license.vehicleType;
+                    licenseInfo.model = ydtUploadByLicenseResult.data.license.model;
+                    licenseInfo.vin = ydtUploadByLicenseResult.data.license.vin;
+                    licenseInfo.engineNum = ydtUploadByLicenseResult.data.license.engineNum;
+                    licenseInfo.registerDate = ydtUploadByLicenseResult.data.license.registerDate;
+                    licenseInfo.issueDate = ydtUploadByLicenseResult.data.license.issueDate;
+                    licenseInfo.fileKey = ydtUploadByLicenseResult.data.file.key;
+
+
+                }
+            }
+
+            return licenseInfo;
         }
     }
 }

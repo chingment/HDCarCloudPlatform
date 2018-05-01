@@ -181,7 +181,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
-            // model.Add("违章查询", SubmittLllegalQuery(1215, 241, 148));
+             model.Add("违章查询", SubmittLllegalQuery(userId, merchantId, posMachineId));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
@@ -190,7 +190,7 @@ namespace WebAppApi.Controllers
             //  model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             //  model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
 
-             model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
+             //model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
 
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             // model.Add("登录接口", Login(userName, passWord, deviceId));
@@ -1521,10 +1521,10 @@ namespace WebAppApi.Controllers
             pms.MerchantId = merchantId;
             pms.PosMachineId = posMachineId;
             pms.UserId = userId;
-            pms.CarNo = "粤E58H56";
+            pms.CarNo = "粤A973MQ";
             pms.CarType = "02";
-            pms.EnginNo = "713477";
-            pms.RackNo = "004711";
+            pms.EnginNo = "53910D";
+            pms.RackNo = "076188";
             pms.IsCompany = "false";
             pms.IsOfferPrice = "false";
             //SubmitApplyLossAssessModel model1 = new SubmitApplyLossAssessModel();

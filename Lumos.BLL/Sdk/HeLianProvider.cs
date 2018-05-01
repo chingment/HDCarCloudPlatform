@@ -169,7 +169,7 @@ namespace Lumos.BLL
                         else
                         {
                             decimal addfee = m.point * 5;
-                            lllegalRecord.serviceFee = m.serviceFee+ addfee;
+                            lllegalRecord.serviceFee = m.serviceFee + addfee;
                         }
 
                         lllegalRecord.serviceFee = m.serviceFee;
@@ -199,63 +199,79 @@ namespace Lumos.BLL
                 string msg = "";
                 if (queryResult.IsOfferPrice)
                 {
-                    var api_result1 = HeLianApi.CarQueryGetLllegalPrice(p1);
 
-                    if (api_result1.resultCode != "0")
+                    if (api_result.data == null)
                     {
-                        return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, api_result1.resultMsg, null);
+                        msg = api_result.resultMsg;
                     }
-
-                    msg = api_result1.resultMsg;
-
-                    var d1 = api_result1.data;
-
-                    if (d1 != null)
+                    else if (api_result.data.Count == 0)
                     {
-                        foreach (var record in lllegalRecords)
+                        msg = api_result.resultMsg;
+                    }
+                    else
+                    {
+                        var api_result1 = HeLianApi.CarQueryGetLllegalPrice(p1);
+
+                        if (api_result1.resultCode != "0")
                         {
-                            var priceresult = d1.Where(m => m.bookNo == record.bookNo).FirstOrDefault();
-                            if (priceresult != null)
+                            return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, api_result1.resultMsg, null);
+                        }
+
+                        msg = api_result1.resultMsg;
+
+                        var d1 = api_result1.data;
+
+                        if (d1 != null)
+                        {
+                            foreach (var record in lllegalRecords)
                             {
-                                record.serviceFee = priceresult.serviceFee;
-                                record.fine = priceresult.fine;
-                                record.late_fees = priceresult.late_fees;
-                            }
-
-                            record.status = "待处理";
-
-
-                            if (record.point == 0)
-                            {
-                                record.canDealt = true;
-                            }
-                            else
-                            {
-                                record.canDealt = false;
-                            }
-
-                            var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
-                            if (details != null)
-                            {
-                                var hasDealt = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.InDealt).Count();
-                                var hasCompleted = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed).Count();
-
-
-                                if (hasDealt > 0)
+                                var priceresult = d1.Where(m => m.bookNo == record.bookNo).FirstOrDefault();
+                                if (priceresult != null)
                                 {
-                                    record.status = "处理中";
+                                    record.serviceFee = priceresult.serviceFee;
+                                    record.fine = priceresult.fine;
+                                    record.late_fees = priceresult.late_fees;
+                                }
+
+                                record.status = "待处理";
+
+
+                                if (record.point == 0)
+                                {
+                                    record.canDealt = true;
+                                }
+                                else
+                                {
                                     record.canDealt = false;
                                 }
 
-                                if (hasCompleted > 0)
+                                var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
+                                if (details != null)
                                 {
-                                    record.status = "完成";
-                                    record.canDealt = false;
-                                }
+                                    var hasDealt = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.InDealt).Count();
+                                    var hasCompleted = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed).Count();
 
+
+                                    if (hasDealt > 0)
+                                    {
+                                        record.status = "处理中";
+                                        record.canDealt = false;
+                                    }
+
+                                    if (hasCompleted > 0)
+                                    {
+                                        record.status = "完成";
+                                        record.canDealt = false;
+                                    }
+
+                                }
                             }
                         }
                     }
+                }
+                else
+                {
+                    msg = api_result.resultMsg;
                 }
 
                 queryResult.DealtTip = "扣分单需处理，请咨询客服";

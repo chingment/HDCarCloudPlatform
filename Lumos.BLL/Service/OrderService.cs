@@ -177,5 +177,17 @@ namespace Lumos.BLL.Service
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", model);
         }
+
+        public CustomJsonResult<Lumos.Entity.Order> GoSettle(int operater, OrderConfirmModel model)
+        {
+            var result = new CustomJsonResult<Lumos.Entity.Order>();
+
+            Lumos.Entity.Order mod_Order = null;
+            List<Lumos.Entity.OrderChildDetails> mod_OrderChildDetails = null;
+            List<Lumos.Entity.OrderChildProductSkuDetails> mod_OrderChildProductSkuDetails = null;
+
+
+            return result;
+        }
     }
 }

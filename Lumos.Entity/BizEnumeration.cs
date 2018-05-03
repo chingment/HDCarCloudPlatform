@@ -322,6 +322,39 @@ namespace Lumos.Entity
             Cancled = 5
         }
 
+        public enum OrderChildDetailsStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("待支付")]
+            WaitPay = 1,
+            //[Remark("已支付")]
+            //Payed = 2,
+            [Remark("正在生成取货码")]
+            PickCodeBuilding = 3,
+            //[Remark("生成取货码失败")]
+            //PickCodeBuildFailure = 4,
+            [Remark("待提货")]
+            WaitTake = 5,
+            //[Remark("退款处理中")]
+            //ReFunding = 6,
+            //[Remark("已退款")]
+            //ReFunded = 7,
+            [Remark("已取货")]
+            Picked = 8,
+            [Remark("已取消")]
+            Cancled = 9,
+            [Remark("待发货")]
+            WaitSend = 10,
+            [Remark("已发货")]
+            Sent = 11,
+            [Remark("已签收")]
+            Received = 12,
+            [Remark("取货失败")]
+            PickedFailure = 13
+        }
+
+
         public enum OrderToCarInsureFollowStatus
         {
             [Remark("未知")]
@@ -728,6 +761,16 @@ namespace Lumos.Entity
             UnLimitedCut = 2,
             [Remark("折扣券")]
             Discount = 3
+        }
+
+        public enum ReceptionMode
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("机器自取")]
+            Machine = 1,
+            [Remark("快递专送")]
+            Express = 2
         }
     }
 }

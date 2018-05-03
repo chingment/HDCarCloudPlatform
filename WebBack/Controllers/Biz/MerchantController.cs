@@ -100,11 +100,12 @@ namespace WebBack.Controllers.Biz
             var list = (from p in CurrentDb.MerchantPosMachine
                         join u in CurrentDb.Merchant on p.MerchantId equals u.Id
                         join c in CurrentDb.PosMachine on p.PosMachineId equals c.Id
+                        join e in CurrentDb.SysClientUser on p.UserId equals e.Id
                         where (merchantName.Length == 0 || u.YYZZ_Name.Contains(merchantName)) &&
                         (clientCode.Length == 0 || u.ClientCode.Contains(clientCode)) &&
                                 (posMerchantNumber.Length == 0 || p.PosMerchantNumber.Contains(posMerchantNumber)) &&
                                    (deviceId.Length == 0 || c.DeviceId.Contains(deviceId))
-                        select new { u.Id, PosMachineId = c.Id, MerchantName = u.YYZZ_Name, u.ClientCode, p.PosMerchantNumber, c.DeviceId, u.CreateTime,u.ContactName,u.ContactPhoneNumber });
+                        select new { u.Id, PosMachineId = c.Id, MerchantName = u.YYZZ_Name, u.ClientCode, p.PosMerchantNumber, c.DeviceId, u.CreateTime, u.ContactName, u.ContactPhoneNumber, e.UserName });
 
             int total = list.Count();
 

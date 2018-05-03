@@ -111,11 +111,13 @@
                 operate: {
                     "dealt": function (obj) {
                         switch (obj.aduitType) {
-                            case 1:
-                                carInsureOffer(obj)
-                                break;
                             case 2:
-                                carInsureOffer(obj)
+                                if (obj.auditStatus == 1 || obj.auditStatus == 2) {
+                                    carClaimsVerifyOrder(obj);
+                                }
+                                else if (obj.auditStatus == 4 || obj.auditStatus == 5) {
+                                    carClaimsVerifyAmount(obj)
+                                }
                                 break;
                             case 4:
                             case 5:
@@ -172,18 +174,12 @@
                 operate: {
                     "dealt": function (obj) {
                         switch (obj.aduitType) {
-                            case 1:
-                                carInsureOffer(obj)
-                                break;
-                            case 2:
-                                carInsureOffer(obj)
-                                break;
                             case 4:
                             case 5:
                             case 6:
                             case 7:
                             case 8:
-                                auditFlowV1ByVerify(obj)
+                                auditFlowV1ByDealt(obj)
                                 break;
                         }
                     }
@@ -272,6 +268,123 @@
             }
         }
 
+        function carClaimsVerifyOrder(obj) {
+
+            function dealt(obj) {
+                var url = '../CarClaim/VerifyOrder?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
+                var title = '处理理赔订单-' + obj.sn;
+                var dialog = art.dialog.open(url, {
+                    id: "openDialog2",
+                    title: title,
+                    width: '900px',
+                    height: '600px',
+                    lock: true,
+                    drag: false,
+                    cancelVal: '关闭',
+                    cancel: true,
+                    button: [{
+                        name: '确定派单',
+                        callback: function () {
+
+                            this.iframe.contentWindow.submit(operateType.submit, function (d) {
+                                if (d.result == resultType.success) {
+                                    dialog.close();
+                                    listTable.loadData();
+                                }
+                                $.lumos.tips(d.message);
+                            });
+                            return false;
+                        },
+                        focus: true
+                    },
+                    {
+                        name: '撤销',
+                        callback: function () {
+
+                            this.iframe.contentWindow.submit(operateType.cancle, function (d) {
+                                if (d.result == resultType.success) {
+                                    dialog.close();
+                                    listTable.loadData();
+                                }
+                                $.lumos.tips(d.message);
+                            });
+                            return false;
+                        }
+                    },
+                    {
+                        name: '暂存',
+                        callback: function () {
+
+                            this.iframe.contentWindow.submit(operateType.save, function (d) {
+                                $.lumos.tips(d.message);
+                            });
+                            return false;
+                        }
+                    }]
+                });
+            }
+            if (obj.auditStatus == 1) {
+                art.dialog.confirm('您确定要处理订单号' + obj.sn + '，确定后该订单由您来处理？', function () {
+                    dealt(obj)
+                });
+            }
+            else {
+                dealt(obj);
+            }
+        }
+
+        function carClaimsVerifyAmount(obj) {
+
+            function dealt(obj) {
+                var url = '../CarClaim/VerifyAmount?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
+                var title = '处理理赔订单-' + obj.sn;
+                var dialog = art.dialog.open(url, {
+                    id: "openDialog2",
+                    title: title,
+                    width: '800px',
+                    height: '600px',
+                    lock: true,
+                    drag: false,
+                    cancelVal: '关闭',
+                    cancel: true,
+                    button: [{
+                        name: '确定',
+                        callback: function () {
+
+                            this.iframe.contentWindow.submit(operateType.submit, function (d) {
+                                if (d.result == resultType.success) {
+                                    dialog.close();
+                                    listTable.loadData();
+                                }
+                                $.lumos.tips(d.message);
+                            });
+                            return false;
+                        },
+                        focus: true
+                    },
+                    {
+                        name: '暂存',
+                        callback: function () {
+
+                            this.iframe.contentWindow.submit(operateType.save, function (d) {
+                                $.lumos.tips(d.message);
+                            });
+                            return false;
+                        }
+                    }]
+                });
+            }
+
+            if (obj.auditStatus == 4) {
+                art.dialog.confirm('您确定要处理订单号' + obj.sn + '，确定后该订单由您来处理？', function () {
+                    dealt(obj)
+                });
+            }
+            else {
+                dealt(obj);
+            }
+        }
+
         function auditFlowV1ByVerify(obj) {
 
             function dealt(obj) {
@@ -286,7 +399,7 @@
                         controller = "ApplyLossAssess";
                         break;
                     case 6:
-                        controller = "LllegalDealt";
+                        controller = "Lllegal";
                         break;
                     case 7:
                         controller = "Credit";
@@ -373,7 +486,7 @@
                         controller = "ApplyLossAssess";
                         break;
                     case 6:
-                        controller = "LllegalDealt";
+                        controller = "Lllegal";
                         break;
                     case 7:
                         controller = "Credit";
@@ -401,7 +514,7 @@
                             this.iframe.contentWindow.submit(operateType.submit, function (d) {
                                 if (d.result == resultType.success) {
                                     dialog.close();
-                                    listTableTaskByHandle.loadData();
+                                    listTableTaskByDealt.loadData();
                                 }
                                 $.lumos.tips(d.message);
                             });
@@ -416,7 +529,7 @@
                             this.iframe.contentWindow.submit(operateType.cancle, function (d) {
                                 if (d.result == resultType.success) {
                                     dialog.close();
-                                    listTableTaskByHandle.loadData();
+                                    listTableTaskByDealt.loadData();
                                 }
                                 $.lumos.tips(d.message);
                             });
@@ -521,7 +634,7 @@
 </form>
 
 
-<div  style="margin-top:20px;">
+<div style="margin-top:20px;">
     <form id="form_verify" name="form_verify" style="display:block;width:49%;float:left">
         @Html.AntiForgeryToken()
         <input type="hidden" name="AuditStatus" id="AuditStatus" value="" />
@@ -602,7 +715,7 @@
             <div class="clear"></div>
         </div>
         <div class="list">
-            <table id="list_table_TaskByDealt" class="list-tb" cellpadding="0" cellspacing="0" style="height:350px;"> 
+            <table id="list_table_TaskByDealt" class="list-tb" cellpadding="0" cellspacing="0" style="height:350px;">
                 <thead>
                     <tr>
                         <th style="width:5%" class="no">

@@ -61,6 +61,35 @@ namespace Lumos.BLL.Biz.Task
 
             }
 
+
+            //var bizProcessesAudit = CurrentDb.BizProcessesAudit.ToList();
+
+            //foreach (var item in bizProcessesAudit)
+            //{
+            //    Order order
+            //    switch (item.AduitType)
+            //    {
+            //        case Enumeration.BizProcessesAuditType.OrderToCarInsure:
+            //            order = CurrentDb.or.Where(m => m.Id == item.AduitReferenceId).FirstOrDefault();
+            //            if(or)
+            //            break;
+            //        case Enumeration.BizProcessesAuditType.OrderToCarClaim:
+            //            break;
+            //        case Enumeration.BizProcessesAuditType.MerchantAudit:
+            //            break;
+            //        case Enumeration.BizProcessesAuditType.OrderToTalentDemand:
+            //            break;
+            //        case Enumeration.BizProcessesAuditType.OrderToApplyLossAssess:
+            //            break;
+            //        case Enumeration.BizProcessesAuditType.OrderToLllegalDealt:
+            //            break;
+            //        case Enumeration.BizProcessesAuditType.OrderToCredit:
+            //            break;
+            //        case Enumeration.BizProcessesAuditType.OrderToInsurance:
+            //            break;
+            //    }
+            //}
+
             return result;
 
         }

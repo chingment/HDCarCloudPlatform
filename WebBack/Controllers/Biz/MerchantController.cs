@@ -275,8 +275,8 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.商户资料初审)]
         public CustomJsonResult GetPrimaryAuditList(SearchCondition condition)
         {
-            var waitAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.WaitPrimaryAudit select h.Id).Count();
-            var inAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.InPrimaryAudit && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.WaitPrimaryAudit select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.InPrimaryAudit && h.Auditor == this.CurrentUserId select h.Id).Count();
 
 
             var query = (from b in CurrentDb.BizProcessesAudit
@@ -323,7 +323,7 @@ namespace WebBack.Controllers.Biz
                 });
             }
 
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitAuditCount = waitAuditCount, inAuditCount = inAuditCount } };
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitCount = waitCount, inCount = inCount } };
 
             return Json(ResultType.Success, pageEntity, "");
         }
@@ -338,8 +338,8 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.商户资料复审)]
         public CustomJsonResult GetSeniorAuditList(SearchCondition condition)
         {
-            var waitAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.WaitSeniorAudit select h.Id).Count();
-            var inAuditCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.InSeniorAudit && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.WaitSeniorAudit select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.MerchantAudit) && h.Status == (int)Enumeration.MerchantAuditStatus.InSeniorAudit && h.Auditor == this.CurrentUserId select h.Id).Count();
 
 
             var query = (from b in CurrentDb.BizProcessesAudit
@@ -381,7 +381,7 @@ namespace WebBack.Controllers.Biz
                 });
             }
 
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitAuditCount = waitAuditCount, inAuditCount = inAuditCount } };
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitCount = waitCount, inCount = inCount } };
 
             return Json(ResultType.Success, pageEntity, "");
         }

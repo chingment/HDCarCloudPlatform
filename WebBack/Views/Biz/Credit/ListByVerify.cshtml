@@ -7,12 +7,12 @@
     <script type="text/javascript">
 
         var listTable;
-        var auditStatus={"waitVerify": @((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitVerify),"inVerify":@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.InVerify) };
+        var auditStatus={"wait": @((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitVerify),"in":@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.InVerify) };
         $(document).ready(function () {
 
-            $("#AuditStatus").val(auditStatus.waitVerify);
-            $('#btn_Wait').attr("auditStatus", auditStatus.waitVerify);
-            $('#btn_In').attr("auditStatus", auditStatus.inVerify);
+            $("#AuditStatus").val(auditStatus.wait);
+            $('#btn_Wait').attr("auditStatus", auditStatus.wait);
+            $('#btn_In').attr("auditStatus", auditStatus.in);
             $('#btn_In,#btn_Wait').live('click', function () {
                 var status = $(this).attr("auditStatus");
                 $("#AuditStatus").val(status);
@@ -105,7 +105,7 @@
                             });
                         }
 
-                        if (obj.dealtStatus == auditStatus.waitVerify) {
+                        if (obj.dealtStatus == auditStatus.wait) {
                             art.dialog.confirm('您确定要处理订单号' + obj.sn + '，确定后该订单由您来处理？', function () {
                                 dealt(obj)
                             });

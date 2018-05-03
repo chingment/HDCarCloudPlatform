@@ -63,7 +63,7 @@ namespace Lumos.BLL
 
 
                 OrderConfirmInfo yOrder = new OrderConfirmInfo();
-                var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToLllegalDealt, orderToLllegalDealt.Id, Enumeration.AuditFlowV1Status.Submit);
+                var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToLllegalDealt, orderToLllegalDealt.UserId, orderToLllegalDealt.MerchantId, orderToLllegalDealt.Id, Enumeration.AuditFlowV1Status.Submit);
                 if (isGetConfirmInfo)
                 {
                     orderToLllegalDealt.Status = Enumeration.OrderStatus.WaitPay;

@@ -7,8 +7,19 @@
 <script type="text/javascript">
 
     var listTable;
-
+    var auditStatus={"wait": @((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitPrimaryAudit),"in":@((int)Lumos.Entity.Enumeration.MerchantAuditStatus.InPrimaryAudit) };
     $(document).ready(function () {
+      
+        $("#AuditStatus").val(auditStatus.wait);
+        $('#btn_Wait').attr("auditStatus",auditStatus.wait);
+        $('#btn_In').attr("auditStatus",auditStatus.in);
+        $('#btn_In,#btn_Wait').live('click',function(){
+            var status=$(this).attr("auditStatus");
+            $("#AuditStatus").val(status);
+            listTable.loadData(0);
+        });
+        
+        
         listTable = $("#list_table").loadDataTable({
             url: "../Merchant/GetPrimaryAuditList",
             pageIndex: 0,
@@ -80,8 +91,7 @@
                     }
 
 
-
-                    if (obj.auditStatus == @((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitPrimaryAudit)) {
+                    if (obj.auditStatus == auditStatus.wait) {
                         art.dialog.confirm('您确定要处理商户代码为'+obj.clientCode+'的资料，确定后该资料由您来完善？', function () {
                             audit(obj)
                         });
@@ -94,20 +104,12 @@
             },
             refreshInterval: 60000,
             success: function (data) {
-                $('#waitAuditCount').text(data.status.waitAuditCount);
-                $('#inAuditCount').text(data.status.inAuditCount);
+                $('#waitCount').text(data.status.waitCount);
+                $('#inCount').text(data.status.inCount);
             }
         });
 
     });
-
-
-
-
-    function search(status) {
-        $("#AuditStatus").val(status);
-        listTable.loadData(0);
-    }
 
 
 </script>
@@ -115,13 +117,13 @@
 <form id="form1" name="form1">
 
     @Html.AntiForgeryToken()
-    <input type="hidden" name="AuditStatus" id="AuditStatus" value="@((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitPrimaryAudit)" />
+    <input type="hidden" name="AuditStatus" id="AuditStatus" value="" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.MerchantAuditStatus.WaitPrimaryAudit))" class="status-bar-btn selected">待审核<span class="waitAuditCount">(<span id="waitAuditCount">0</span>)</span></span>
+            <span id="btn_Wait" class="status-bar-btn selected">待审核<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.MerchantAuditStatus.InPrimaryAudit))" class="status-bar-btn">审核中<span class="inAuditCount"> (<span id="inAuditCount">0</span>)</span></span>
+            <span id="btn_In" class="status-bar-btn">审核中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
         </div>
         <div class="clear"></div>
     </div>

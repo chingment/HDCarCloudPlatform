@@ -120,8 +120,8 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.车险订单报价)]
         public CustomJsonResult GetDealtList(SearchCondition condition)
         {
-            var waitOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer select h.Id).Count();
-            var inOfferCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.InOffer && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waiCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.InOffer && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToCarInsure on
@@ -162,11 +162,11 @@ namespace WebBack.Controllers.Biz
                     item.ContactPhoneNumber,
                     item.TypeName,
                     item.SubmitTime,
-                    DealtStatus = item.Status
+                    AuditStatus = item.Status
                 });
             }
 
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitOfferCount = waitOfferCount, inOfferCount = inOfferCount } };
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waiCount = waiCount, inCount = inCount } };
 
 
 

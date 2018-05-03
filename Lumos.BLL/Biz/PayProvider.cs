@@ -462,7 +462,7 @@ namespace Lumos.BLL
 
                     if (merchant.Id != 258 && merchant.Id != 265 && merchant.Id!=266)
                     {
-                        BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, orderToServiceFee.MerchantId, Enumeration.MerchantAuditStatus.WaitPrimaryAudit);
+                        BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, orderToServiceFee.UserId, orderToServiceFee.MerchantId, orderToServiceFee.MerchantId, Enumeration.MerchantAuditStatus.WaitPrimaryAudit);
                     }
 
                     CurrentDb.SaveChanges();

@@ -285,6 +285,7 @@
     <Compile Include="Models\Home\ChangePasswordModel.cs" />
     <Compile Include="Models\Home\LoginModel.cs" />
     <Compile Include="Models\BaseSearchCondition.cs" />
+    <Compile Include="Models\Home\TaskByHandleSearchCondition.cs" />
     <Compile Include="Models\Sys\AgentUser\AddViewModel.cs" />
     <Compile Include="Models\Sys\AgentUser\EditViewModel.cs" />
     <Compile Include="Models\Sys\AgentUser\SearchCondition.cs" />

@@ -381,7 +381,7 @@ namespace Lumos.Entity
             OrderToLllegalDealt = 6,
             [Remark("贷款")]
             OrderToCredit = 7,
-            [Remark("贷款")]
+            [Remark("保险产品订单")]
             OrderToInsurance = 8
         }
 

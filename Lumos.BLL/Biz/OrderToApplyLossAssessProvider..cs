@@ -42,7 +42,7 @@ namespace Lumos.BLL
                 orderToApplyLossAssess.TradeSnByWechat = snModel.TradeSnByWechat;
                 orderToApplyLossAssess.TradeSnByAlipay = snModel.TradeSnByAlipay;
 
-                var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToApplyLossAssess, orderToApplyLossAssess.Id, Enumeration.AuditFlowV1Status.Submit);
+                var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToApplyLossAssess, orderToApplyLossAssess.UserId, orderToApplyLossAssess.MerchantId, orderToApplyLossAssess.Id, Enumeration.AuditFlowV1Status.Submit);
                 BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.Submit, operater, null, "提交订单，等待取单");
 
                 orderToApplyLossAssess.BizProcessesAuditId = bizProcessesAudit.Id;

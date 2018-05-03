@@ -7,8 +7,18 @@
     <script type="text/javascript">
 
         var listTable;
-
+        var auditStatus={"wait": @((int)Lumos.Entity.Enumeration.CarInsureOfferDealtStatus.WaitOffer),"in":@((int)Lumos.Entity.Enumeration.CarInsureOfferDealtStatus.InOffer) };
         $(document).ready(function () {
+
+            $("#AuditStatus").val(auditStatus.wait);
+            $('#btn_Wait').attr("auditStatus", auditStatus.wait);
+            $('#btn_In').attr("auditStatus", auditStatus.in);
+            $('#btn_In,#btn_Wait').live('click', function () {
+                var status = $(this).attr("auditStatus");
+                $("#AuditStatus").val(status);
+                listTable.loadData(0);
+            });
+
 
             listTable = $("#list_table").loadDataTable({
                 url: "../CarInsureOffer/GetDealtList",
@@ -36,14 +46,14 @@
                 },
                 refreshInterval: 60000,
                 success: function (data) {
-                    $('#waitOfferCount').text(data.status.waitOfferCount);
-                    $('#inOfferCount').text(data.status.inOfferCount);
+                    $('#waitCount').text(data.status.waitCount);
+                    $('#inCount').text(data.status.inCount);
                 },
                 operate: {
                     "dealt": function (obj) {
 
                         function dealt(obj) {
-                            var url = '/Biz/CarInsureOffer/Dealt2?id=' + obj.id + "&dealtStatus=" + obj.dealtStatus;
+                            var url = '/Biz/CarInsureOffer/Dealt2?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
                             var title = '处理订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",
@@ -110,7 +120,7 @@
                             });
                         }
 
-                        if (obj.dealtStatus == 1) {
+                        if (obj.auditStatus == auditStatus.wait) {
                             art.dialog.confirm('您确定要处理订单号'+obj.sn+'，确定后该订单由您来处理？', function () {
                                 dealt(obj)
                             });
@@ -149,31 +159,22 @@
 
         });
 
-
-
-
-        function search(status) {
-            $("#DealtStatus").val(status);
-            listTable.loadData(0);
-        }
-
-
     </script>
 }
 
 <form id="form1" name="form1">
     @Html.AntiForgeryToken()
-    <input type="hidden" name="DealtStatus" id="DealtStatus" value="@((int)Lumos.Entity.Enumeration.CarInsureOfferDealtStatus.WaitOffer)" />
+    <input type="hidden" name="AuditStatus" id="AuditStatus" value="" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.CarInsureOfferDealtStatus.WaitOffer))" class="status-bar-btn selected">待报价<span class="waitOfferCount">(<span id="waitOfferCount">0</span>)</span></span>
+            <span id="btn_Wait" class="status-bar-btn selected">待报价<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span onclick="search(@((int)Lumos.Entity.Enumeration.CarInsureOfferDealtStatus.InOffer))" class="status-bar-btn">报价中<span class="inOfferCount"> (<span id="inOfferCount">0</span>)</span></span>
+            <span id="btn_In" class="status-bar-btn">报价中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
         </div>
         @*<div class="filter" style="float:right">
-            <input type="button" class="btn btn-add" id="btn_Add" value="新建报价单" />
-        </div>*@
+                <input type="button" class="btn btn-add" id="btn_Add" value="新建报价单" />
+            </div>*@
         <div class="clear"></div>
     </div>
     <div class="list">

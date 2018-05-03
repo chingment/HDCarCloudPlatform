@@ -15,6 +15,10 @@ namespace Lumos.Entity
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        public int UserId { get; set; }
+
+        public int MerchantId { get; set; }
+
         [MaxLength(128)]
         public string AduitTypeEnumName { get; set; }
 

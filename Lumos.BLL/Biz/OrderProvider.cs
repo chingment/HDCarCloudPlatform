@@ -94,7 +94,7 @@ namespace Lumos.BLL
                 }
 
 
-                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsure, order.Id, Enumeration.CarInsureOfferDealtStatus.WaitOffer);
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsure, order.UserId, order.MerchantId, order.Id, Enumeration.CarInsureOfferDealtStatus.WaitOffer);
 
                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Submit, bizProcessesAudit.Id, operater, orderToCarInsure.ClientRequire, "商户提交投保订单，等待报价", this.DateTime);
 
@@ -356,7 +356,7 @@ namespace Lumos.BLL
 
 
                 //状态改为待核实
-                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarClaim, orderToCarClaim.Id, Enumeration.CarClaimDealtStatus.WaitVerifyOrder);
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarClaim, orderToCarClaim.UserId, orderToCarClaim.MerchantId, orderToCarClaim.Id, Enumeration.CarClaimDealtStatus.WaitVerifyOrder);
                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarClaimDealtStep.Submit, bizProcessesAudit.Id, operater, orderToCarClaim.ClientRequire, "商户提交理赔需求", this.DateTime);
 
                 orderToCarClaim.BizProcessesAuditId = bizProcessesAudit.Id;
@@ -799,7 +799,7 @@ namespace Lumos.BLL
                     }
                 }
 
-                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsure, newOrder.Id, Enumeration.CarInsureOfferDealtStatus.WaitOffer);
+                BizProcessesAudit bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsure, newOrder.UserId, newOrder.MerchantId, newOrder.Id, Enumeration.CarInsureOfferDealtStatus.WaitOffer);
 
                 BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Submit, bizProcessesAudit.Id, operater, newOrder.ClientRequire, "商户重新报价，等待报价", this.DateTime);
 

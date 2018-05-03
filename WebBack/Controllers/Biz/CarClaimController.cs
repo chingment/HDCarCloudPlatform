@@ -107,8 +107,8 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.理赔需求核实)]
         public CustomJsonResult GetVerifyOrderList(SearchCondition condition)
         {
-            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder select h.Id).Count();
-            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyOrder && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyOrder && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToCarClaim on
@@ -152,11 +152,11 @@ namespace WebBack.Controllers.Biz
                     item.TypeName,
                     item.SubmitTime,
                     item.InsuranceCompanyName,
-                    DealtStatus = item.Status
+                    AuditStatus = item.Status
                 });
             }
 
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitVerifyOrderCount = waitVerifyOrderCount, inVerifyOrderCount = inVerifyOrderCount } };
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitCount = waitCount, inCount = inCount } };
 
             return Json(ResultType.Success, pageEntity, "");
         }
@@ -200,8 +200,8 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.理赔金额核实)]
         public CustomJsonResult GetVerifyAmountList(SearchCondition condition)
         {
-            var waitVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyAmount select h.Id).Count();
-            var inVerifyOrderCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyAmount && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waitCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.WaitVerifyAmount select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim) && h.Status == (int)Enumeration.CarClaimDealtStatus.InVerifyAmount && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToCarClaim on
@@ -245,11 +245,11 @@ namespace WebBack.Controllers.Biz
                     item.TypeName,
                     item.SubmitTime,
                     item.InsuranceCompanyName,
-                    DealtStatus = item.Status
+                    AuditStatus = item.Status
                 });
             }
 
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitVerifyOrderCount = waitVerifyOrderCount, inVerifyOrderCount = inVerifyOrderCount } };
+            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list, Status = new { waitCount = waitCount, inCount = inCount } };
 
             return Json(ResultType.Success, pageEntity, "");
         }

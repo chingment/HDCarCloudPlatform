@@ -52,7 +52,7 @@
                     l_StrRows += "</tr>";
                     return l_StrRows;
                 },
-                refreshInterval: 0,
+                refreshInterval: 10000,
                 success: function (data) {
                     $('#form_carinsoffer').find('#waitCount').text(data.status.waitCount);
                     $('#form_carinsoffer').find('#inCount').text(data.status.inCount);
@@ -103,7 +103,7 @@
                     l_StrRows += "</tr>";
                     return l_StrRows;
                 },
-                refreshInterval: 0,
+                refreshInterval: 10000,
                 success: function (data) {
                     $('#form_verify').find('#waitCount').text(data.status.waitCount);
                     $('#form_verify').find('#inCount').text(data.status.inCount);
@@ -166,7 +166,7 @@
                     l_StrRows += "</tr>";
                     return l_StrRows;
                 },
-                refreshInterval: 0,
+                refreshInterval: 10000,
                 success: function (data) {
                     $('#form_dealt').find('#waitCount').text(data.status.waitCount);
                     $('#form_dealt').find('#inCount').text(data.status.inCount);

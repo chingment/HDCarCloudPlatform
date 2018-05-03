@@ -132,11 +132,11 @@ namespace WebBack.Controllers.Biz
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.TypeName, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
-            if (condition.DealtStatus == Enumeration.CarInsureOfferDealtStatus.WaitOffer)
+            if (condition.AuditStatus == Enumeration.CarInsureOfferDealtStatus.WaitOffer)
             {
                 query = query.Where(m => m.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer);
             }
-            else if (condition.DealtStatus == Enumeration.CarInsureOfferDealtStatus.InOffer)
+            else if (condition.AuditStatus == Enumeration.CarInsureOfferDealtStatus.InOffer)
             {
                 query = query.Where(m => m.Status == (int)Enumeration.CarInsureOfferDealtStatus.InOffer && m.Auditor == this.CurrentUserId);
             }

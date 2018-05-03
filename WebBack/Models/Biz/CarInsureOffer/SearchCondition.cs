@@ -8,7 +8,7 @@ namespace WebBack.Models.Biz.CarInsureOffer
 {
     public class SearchCondition: BaseSearchCondition
     {
-        public Enumeration.CarInsureOfferDealtStatus DealtStatus { get; set; }
+        public Enumeration.CarInsureOfferDealtStatus AuditStatus { get; set; }
 
         public Enumeration.OrderStatus Status { get; set; }
     }

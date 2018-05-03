@@ -211,13 +211,13 @@ namespace WebBack.Controllers
             var waitCount = (from m in CurrentDb.BizProcessesAudit
                              where
 (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim && (m.Status == 1)) ||
-((m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand || m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand ||
+((m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToLllegalDealt ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToCredit ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToInsurance
 
-) && (m.Status == 2 || m.Status == 8))
+) && (m.Status == 2))
 
                              select m.Id).Count();
 
@@ -225,13 +225,13 @@ m.AduitType == Enumeration.BizProcessesAuditType.OrderToInsurance
             var inCount = (from m in CurrentDb.BizProcessesAudit
                            where
 (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim && (m.Status == 2)) ||
-((m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand || m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand ||
+((m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand || 
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToLllegalDealt ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToCredit ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToInsurance
 
-) && (m.Status == 3 || m.Status == 9))
+) && (m.Status == 3))
 && m.Auditor == this.CurrentUserId
 
 
@@ -253,7 +253,7 @@ m.AduitType == Enumeration.BizProcessesAuditType.OrderToInsurance
                 m.AduitType == Enumeration.BizProcessesAuditType.OrderToCredit ||
                  m.AduitType == Enumeration.BizProcessesAuditType.OrderToInsurance
 
-                ) && (m.Status == 2 || m.Status == 8))
+                ) && (m.Status == 2))
 
 
                 );
@@ -268,7 +268,7 @@ m.AduitType == Enumeration.BizProcessesAuditType.OrderToInsurance
                m.AduitType == Enumeration.BizProcessesAuditType.OrderToCredit ||
                 m.AduitType == Enumeration.BizProcessesAuditType.OrderToInsurance
 
-               ) && (m.Status == 3 || m.Status == 9)))
+               ) && (m.Status == 3)))
               && m.Auditor == this.CurrentUserId
 
 

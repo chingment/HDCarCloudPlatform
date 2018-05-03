@@ -184,11 +184,11 @@ namespace WebAppApi.Controllers
             // model.Add("违章查询", SubmittLllegalQuery(userId, merchantId, posMachineId));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
-            //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
+            model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
             // model.Add("提交待支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, true));
-            // model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
-           //  model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-          //   model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
+             model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
+             model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+             model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
 
              //model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
 
@@ -206,7 +206,7 @@ namespace WebAppApi.Controllers
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
             //model.Add("获取订单", GetOrder(15, 1, 0));
-            // model.Add("提交理赔需求1", SubmitClaim(userId, merchantId, posMachineId,"邱大文", Enumeration.RepairsType.EstimateRepair));
+            model.Add("提交理赔需求1", SubmitClaim(userId, merchantId, posMachineId,"邱大文", Enumeration.RepairsType.EstimateRepair));
             //model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));
             //model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, posMachineId, 1255, Enumeration.ProductType.PosMachineServiceFee));
             //model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));

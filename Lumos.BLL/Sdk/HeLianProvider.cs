@@ -162,6 +162,7 @@ namespace Lumos.BLL
                         lllegalRecord.point = m.point;
 
                         lllegalRecord.fine = m.fine;
+
                         if (lllegalRecord.point == 0)
                         {
                             lllegalRecord.serviceFee = m.serviceFee + 3;//非扣分单
@@ -172,7 +173,6 @@ namespace Lumos.BLL
                             lllegalRecord.serviceFee = m.serviceFee + addfee;
                         }
 
-                        lllegalRecord.serviceFee = m.serviceFee;
                         lllegalRecord.address = m.address;
                         lllegalRecord.content = m.content;
                         lllegalRecord.late_fees = m.late_fees;

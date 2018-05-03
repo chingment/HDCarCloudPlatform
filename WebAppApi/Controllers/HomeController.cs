@@ -165,30 +165,30 @@ namespace WebAppApi.Controllers
             //int merchantId = 242;
             //int posMachineId = 149;
             //http://localhost:16665/ExtendedApp/poscredit?userId=1215&merchantId=241&posMachineId=148
-            //int userId = 1215;
-            //int merchantId = 241;
-            //int posMachineId = 148;
+            int userId = 1215;
+            int merchantId = 241;
+            int posMachineId = 148;
 
-            int userId = 1234;
-            int merchantId = 258;
-            int posMachineId = 153;
+            //int userId = 1234;
+            //int merchantId = 258;
+            //int posMachineId = 153;
 
 
-            // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
+             model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
             // model.Add("获取产品", GetProductList(userId, merchantId, posMachineId, 0));
 
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
-             model.Add("违章查询", SubmittLllegalQuery(userId, merchantId, posMachineId));
+            // model.Add("违章查询", SubmittLllegalQuery(userId, merchantId, posMachineId));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
             // model.Add("提交待支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, true));
             // model.Add("提交定损点申请", SubmittApplyLossAssess(userId, merchantId, posMachineId));
-            //  model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
-            //  model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
+           //  model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
+          //   model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
 
              //model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
 
@@ -201,12 +201,12 @@ namespace WebAppApi.Controllers
 
             // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-            // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+             model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
             //model.Add("获取订单", GetOrder(15, 1, 0));
-            //model.Add("提交理赔需求1", SubmitClaim(userId, "邱大文", Enumeration.RepairsType.EstimateRepair));
+            // model.Add("提交理赔需求1", SubmitClaim(userId, merchantId, posMachineId,"邱大文", Enumeration.RepairsType.EstimateRepair));
             //model.Add("提交理赔需求2", SubmitClaim(userId, "邱庆文", Enumeration.RepairsType.EstimateRepair));
             //model.Add("获取订单详情1", GetOrderDetails(userId, merchantId, posMachineId, 1255, Enumeration.ProductType.PosMachineServiceFee));
             //model.Add("获取订单详情2", GetOrderDetails(userId, merchantId, 121, Enumeration.ProductType.InsureForCarForClaim));
@@ -1200,11 +1200,13 @@ namespace WebAppApi.Controllers
 
 
 
-        public string SubmitClaim(int userId, string handPerson, Enumeration.RepairsType estimateRepair)
+        public string SubmitClaim(int userId,int merchantId,int posMachineId, string handPerson, Enumeration.RepairsType estimateRepair)
         {
 
             SubmitClaimModel model1 = new SubmitClaimModel();
             model1.UserId = userId;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
             model1.RepairsType = estimateRepair;
             model1.InsuranceCompanyId = 1;
             model1.HandPerson = handPerson;

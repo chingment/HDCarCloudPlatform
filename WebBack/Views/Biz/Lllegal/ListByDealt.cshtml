@@ -54,9 +54,9 @@
                 },
                 operate: {
                     "dealt": function (obj) {
-
+                   
                         function dealt(obj) {
-                            var url = '/Biz/Lllegal/Dealt?id=' + obj.id + "&auditStatus=" + obj.dealtStatus;
+                            var url = '/Biz/Lllegal/Dealt?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
                             var title = '处理订单-' + obj.sn;
                             var dialog = art.dialog.open(url, {
                                 id: "openDialog2",

@@ -9,27 +9,29 @@
 @section scripts{
     <script type="text/javascript">
 
-        var listTable;
-
+        var listTableTaskByCarInsOffer;
+        var listTableTaskByVerify;
+        var listTableTaskByDealt;
         var auditStatus = { "wait": 1, "in": 2 };
         $(document).ready(function () {
 
-            $("#AuditStatus").val(auditStatus.wait);
-            $('#btn_Wait').attr("auditStatus", auditStatus.wait);
-            $('#btn_In').attr("auditStatus", auditStatus.in);
-            $('#btn_In,#btn_Wait').live('click', function () {
+            $('#form_carinsoffer').find("#AuditStatus").val(auditStatus.wait);
+            $('#form_carinsoffer').find('#btn_Wait').attr("auditStatus", auditStatus.wait);
+            $('#form_carinsoffer').find('#btn_In').attr("auditStatus", auditStatus.in);
+            $('#form_carinsoffer').find('.status-bar-btn').live('click', function () {
                 var status = $(this).attr("auditStatus");
-                $("#auditStatus").val(status);
-                listTable.loadData(0);
+                $('#form_carinsoffer').find("#AuditStatus").val(status);
+                listTableTaskByCarInsOffer.loadData(0);
             });
 
 
-            listTable = $("#list_table").loadDataTable({
-                url: "/Home/GetTaskByHandle",
+            listTableTaskByCarInsOffer = $("#list_table_carinsoffer").loadDataTable({
+                url: "/Home/GetTaskByCarInsOffer",
                 pageIndex: 0,
-                searchParams: $("#form1").serializeArray(),
+                searchParams: $("#form_carinsoffer").serializeArray(),
                 searchButtonId: "btn_Search",
-                containerId: "form1",
+                containerId: "form_carinsoffer",
+                useEmptyRow: true,
                 rowDataCombie: function (p_index, p_row) {
                     var l_Strlimt = "";
                     l_Strlimt += "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" class=\\\"a-btn a-btn-edit\\\" operate=\\\"dealt\\\">处理</a>")";
@@ -52,8 +54,59 @@
                 },
                 refreshInterval: 0,
                 success: function (data) {
-                    $('#waitCount').text(data.status.waitCount);
-                    $('#inCount').text(data.status.inCount);
+                    $('#form_carinsoffer').find('#waitCount').text(data.status.waitCount);
+                    $('#form_carinsoffer').find('#inCount').text(data.status.inCount);
+                },
+                operate: {
+                    "dealt": function (obj) {
+                        switch (obj.aduitType) {
+                            case 1:
+                                carInsureOffer(obj)
+                                break;
+                        }
+                    }
+                }
+            });
+
+
+            $('#form_verify').find("#AuditStatus").val(auditStatus.wait);
+            $('#form_verify').find('#btn_Wait').attr("auditStatus", auditStatus.wait);
+            $('#form_verify').find('#btn_In').attr("auditStatus", auditStatus.in);
+            $('#form_verify').find('.status-bar-btn').live('click', function () {
+                var status = $(this).attr("auditStatus");
+                $('#form_verify').find("#AuditStatus").val(status);
+                listTableTaskByVerify.loadData(0);
+            });
+
+            listTableTaskByVerify = $("#list_table_TaskByVerify").loadDataTable({
+                url: "/Home/GetTaskByVerify",
+                pageIndex: 0,
+                searchParams: $("#form_verify").serializeArray(),
+                searchButtonId: "btn_Search",
+                containerId: "form_verify",
+                useEmptyRow: true,
+                rowDataCombie: function (p_index, p_row) {
+                    var l_Strlimt = "";
+                    l_Strlimt += "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" class=\\\"a-btn a-btn-edit\\\" operate=\\\"dealt\\\">处理</a>")";
+                    var l_StrRows = "";
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
+                    l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.sn + "\"   >" + p_row.sn + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\"   >" + p_row.clientCode + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.aduitTypeName + "\">" + p_row.aduitTypeName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.statusName + "\">" + p_row.statusName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
+                    l_StrRows += "<td class=\"operation\">";
+                    l_StrRows += l_Strlimt;
+                    l_StrRows += "</td>";
+                    l_StrRows += "</tr>";
+                    return l_StrRows;
+                },
+                refreshInterval: 0,
+                success: function (data) {
+                    $('#form_verify').find('#waitCount').text(data.status.waitCount);
+                    $('#form_verify').find('#inCount').text(data.status.inCount);
                 },
                 operate: {
                     "dealt": function (obj) {
@@ -75,6 +128,69 @@
                     }
                 }
             });
+
+
+            $('#form_dealt').find("#AuditStatus").val(auditStatus.wait);
+            $('#form_dealt').find('#btn_Wait').attr("auditStatus", auditStatus.wait);
+            $('#form_dealt').find('#btn_In').attr("auditStatus", auditStatus.in);
+            $('#form_dealt').find('.status-bar-btn').live('click', function () {
+                var status = $(this).attr("auditStatus");
+                $('#form_dealt').find("#AuditStatus").val(status);
+                listTableTaskByDealt.loadData(0);
+            });
+
+            listTableTaskByDealt = $("#list_table_TaskByDealt").loadDataTable({
+                url: "/Home/GetTaskByDealt",
+                pageIndex: 0,
+                searchParams: $("#form_dealt").serializeArray(),
+                searchButtonId: "btn_Search",
+                containerId: "form_dealt",
+                useEmptyRow: true,
+                rowDataCombie: function (p_index, p_row) {
+                    var l_Strlimt = "";
+                    l_Strlimt += "@Html.IsInPermission("<a href=\\\"javascript:void(0)\\\" class=\\\"a-btn a-btn-edit\\\" operate=\\\"dealt\\\">处理</a>")";
+                    var l_StrRows = "";
+                    l_StrRows += "<tr>";
+                    l_StrRows += "<td class=\"no\" >" + (p_index + 1) + "</td>";
+                    l_StrRows += "<td class=\"overflow tipitem\" title=\"" + p_row.sn + "\"   >" + p_row.sn + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.clientCode + "\"   >" + p_row.clientCode + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.yyzZ_Name + "\">" + p_row.yyzZ_Name + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.aduitTypeName + "\">" + p_row.aduitTypeName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.statusName + "\">" + p_row.statusName + "</td>";
+                    l_StrRows += "<td class=\"overflow\" title=\"" + p_row.createTime + "\">" + p_row.createTime + "</td>";
+                    l_StrRows += "<td class=\"operation\">";
+                    l_StrRows += l_Strlimt;
+                    l_StrRows += "</td>";
+                    l_StrRows += "</tr>";
+                    return l_StrRows;
+                },
+                refreshInterval: 0,
+                success: function (data) {
+                    $('#form_dealt').find('#waitCount').text(data.status.waitCount);
+                    $('#form_dealt').find('#inCount').text(data.status.inCount);
+                },
+                operate: {
+                    "dealt": function (obj) {
+                        switch (obj.aduitType) {
+                            case 1:
+                                carInsureOffer(obj)
+                                break;
+                            case 2:
+                                carInsureOffer(obj)
+                                break;
+                            case 4:
+                            case 5:
+                            case 6:
+                            case 7:
+                            case 8:
+                                auditFlowV1ByVerify(obj)
+                                break;
+                        }
+                    }
+                }
+            });
+
+
         });
 
         function carInsureOffer(obj) {
@@ -97,7 +213,7 @@
                             this.iframe.contentWindow.submit(operateType.submit, function (d) {
                                 if (d.result == resultType.success) {
                                     dialog.close();
-                                    listTable.loadData();
+                                    listTableTaskByCarInsOffer.loadData();
                                 }
                                 $.lumos.tips(d.message);
                             });
@@ -112,7 +228,7 @@
                             this.iframe.contentWindow.submit(operateType.reject, function (d) {
                                 if (d.result == resultType.success) {
                                     dialog.close();
-                                    listTable.loadData();
+                                    listTableTaskByCarInsOffer.loadData();
                                 }
                                 $.lumos.tips(d.message);
                             });
@@ -126,7 +242,7 @@
                             this.iframe.contentWindow.submit(operateType.cancle, function (d) {
                                 if (d.result == resultType.success) {
                                     dialog.close();
-                                    listTable.loadData();
+                                    listTableTaskByCarInsOffer.loadData();
                                 }
                                 $.lumos.tips(d.message);
                             });
@@ -155,9 +271,6 @@
                 dealt(obj);
             }
         }
-
-
-
 
         function auditFlowV1ByVerify(obj) {
 
@@ -201,7 +314,7 @@
                             this.iframe.contentWindow.submit(operateType.submit, function (d) {
                                 if (d.result == resultType.success) {
                                     dialog.close();
-                                    listTable.loadData();
+                                    listTableTaskByVerify.loadData();
                                 }
                                 $.lumos.tips(d.message);
                             });
@@ -216,7 +329,7 @@
                             this.iframe.contentWindow.submit(operateType.cancle, function (d) {
                                 if (d.result == resultType.success) {
                                     dialog.close();
-                                    listTable.loadData();
+                                    listTableTaskByVerify.loadData();
                                 }
                                 $.lumos.tips(d.message);
                             });
@@ -288,7 +401,7 @@
                             this.iframe.contentWindow.submit(operateType.submit, function (d) {
                                 if (d.result == resultType.success) {
                                     dialog.close();
-                                    listTable.loadData();
+                                    listTableTaskByHandle.loadData();
                                 }
                                 $.lumos.tips(d.message);
                             });
@@ -303,7 +416,7 @@
                             this.iframe.contentWindow.submit(operateType.cancle, function (d) {
                                 if (d.result == resultType.success) {
                                     dialog.close();
-                                    listTable.loadData();
+                                    listTableTaskByHandle.loadData();
                                 }
                                 $.lumos.tips(d.message);
                             });
@@ -334,21 +447,20 @@
     </script>
 }
 
-
-<form id="form1" name="form1">
+<form id="form_carinsoffer" name="form_carinsoffer">
     @Html.AntiForgeryToken()
     <input type="hidden" name="AuditStatus" id="AuditStatus" value="" />
     <div class="search-bar status-bar">
         <div class="filter">
-            <span id="btn_Wait" class="status-bar-btn selected">待处理<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
+            <span id="btn_Wait" class="status-bar-btn selected">待报价<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
         </div>
         <div class="filter">
-            <span id="btn_In" class="status-bar-btn">处理中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
+            <span id="btn_In" class="status-bar-btn">报价中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
         </div>
         <div class="clear"></div>
     </div>
     <div class="list">
-        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
+        <table id="list_table_carinsoffer" class="list-tb" cellpadding="0" cellspacing="0">
             <thead>
                 <tr>
                     <th style="width:5%" class="no">
@@ -407,4 +519,142 @@
         </table>
     </div>
 </form>
+
+
+<div  style="margin-top:20px;">
+    <form id="form_verify" name="form_verify" style="display:block;width:49%;float:left">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="AuditStatus" id="AuditStatus" value="" />
+        <div class="search-bar status-bar">
+            <div class="filter">
+                <span id="btn_Wait" class="status-bar-btn selected">待核实<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
+            </div>
+            <div class="filter">
+                <span id="btn_In" class="status-bar-btn">核实中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="list">
+            <table id="list_table_TaskByVerify" class="list-tb" cellpadding="0" cellspacing="0" style="height:350px;">
+                <thead>
+                    <tr>
+                        <th style="width:5%" class="no">
+                            序号
+                        </th>
+                        <th style="width:10%">
+                            订单号
+                        </th>
+                        <th style="width:10%">
+                            商户代码
+                        </th>
+                        <th style="width:10%">
+                            商户名称
+                        </th>
+                        <th style="width:10%">
+                            业务类型
+                        </th>
+                        <th style="width:10%">
+                            状态
+                        </th>
+                        <th style="width:10%">
+                            提交时间
+                        </th>
+                        <th style="width:5%" class="operation">
+                            操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8">
+                            <div class="pull-left">
+                                <span class="load-tip"></span>
+                            </div>
+                            <div class="pull-right pagination">
+                                <div class="pagination-info">
+
+                                </div>
+                                <div class="pagination-index">
+
+                                </div>
+                                <div class="pagination-goto">
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </form>
+
+    <form id="form_dealt" name="form_dealt" style="display:block;width:49%;float:right">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="AuditStatus" id="AuditStatus" value="" />
+        <div class="search-bar status-bar">
+            <div class="filter">
+                <span id="btn_Wait" class="status-bar-btn selected">待处理<span class="waitCount">(<span id="waitCount">0</span>)</span></span>
+            </div>
+            <div class="filter">
+                <span id="btn_In" class="status-bar-btn">处理中<span class="inCount"> (<span id="inCount">0</span>)</span></span>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="list">
+            <table id="list_table_TaskByDealt" class="list-tb" cellpadding="0" cellspacing="0" style="height:350px;"> 
+                <thead>
+                    <tr>
+                        <th style="width:5%" class="no">
+                            序号
+                        </th>
+                        <th style="width:10%">
+                            订单号
+                        </th>
+                        <th style="width:10%">
+                            商户代码
+                        </th>
+                        <th style="width:10%">
+                            商户名称
+                        </th>
+                        <th style="width:10%">
+                            业务类型
+                        </th>
+                        <th style="width:10%">
+                            状态
+                        </th>
+                        <th style="width:10%">
+                            提交时间
+                        </th>
+                        <th style="width:5%" class="operation">
+                            操作
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8">
+                            <div class="pull-left">
+                                <span class="load-tip"></span>
+                            </div>
+                            <div class="pull-right pagination">
+                                <div class="pagination-info">
+
+                                </div>
+                                <div class="pagination-index">
+
+                                </div>
+                                <div class="pagination-goto">
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </form>
+
+</div>
 

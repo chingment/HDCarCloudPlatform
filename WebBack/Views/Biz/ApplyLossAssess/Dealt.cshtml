@@ -26,7 +26,13 @@
             var win = art.dialog.open.origin;
             var auditStatus = $.lumos.getUrlParamValue("auditStatus");
             if (auditStatus == "@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitDealt)") {
-                win.listTable.loadData();
+                if (typeof win.listTable != "undefined") {
+                    win.listTable.loadData();
+                }
+
+                if (typeof win.listTableTaskByVerify != "undefined") {
+                    win.listTableTaskByDealt.loadData();
+                }
             }
 
             @if (Model.IsHasOperater)    {
@@ -37,7 +43,7 @@
             $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
 
             $("#Model_BizProcessesAudit_TempAuditComments").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
-         
+
 
         });
 

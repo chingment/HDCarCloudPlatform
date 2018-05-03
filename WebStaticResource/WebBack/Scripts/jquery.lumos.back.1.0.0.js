@@ -689,7 +689,8 @@
             containerId: 'form1',//表单的容器
             success: function (data) { },
             refreshInterval: 0,
-            isShowLoading: true
+            isShowLoading: true,
+            useEmptyRow: false
         }, opts || {});
 
         var _thisTable = $(this); //当前table
@@ -701,7 +702,7 @@
         var _searchButtonId = opts.searchButtonId;
         var _refreshInterval = opts.refreshInterval;
         var _isShowLoading = opts.isShowLoading;
-
+        var _useEmptyRow = opts.useEmptyRow;
 
         if (_searchParams == null) {
             _searchParams = new Array();
@@ -852,17 +853,17 @@
                     field.value = 10;
                 }
                 else {
-                    field.value = $("*[name='" + field.name + "']").val();
+
+                    field.value = $(_container).find("*[name='" + field.name + "']").val();
                     // alert(field.value)
                 }
             });
 
-
-            //alert(JSON.stringify(searchparams))
             // alert(currentPageIndex)
             var loading;
             var loadingtip = $(_thisTable).find('.load-tip');
             var l_StrRows = ""; //行数据
+
 
             $.lumos.postJson({
                 type: "post",
@@ -940,11 +941,13 @@
                         }
 
                         var row = opts.rowDataCombie(p_index, p_row); //加载行数据
+
                         var objRow = $(row).appendTo(tr_body); //追加行到tbody
 
                         $(objRow).data("keyval", p_row);
                         $(objRow).find('.keyval').data("keyval", p_row);
                     });
+
 
                     // $(_thisTable).find("tbody").append(l_StrRows); //追加所有行
 
@@ -969,10 +972,31 @@
 
                     }
 
-                    //空数据提示
-                    if (list_Data.length == 0) {
-                        var headLen = $(_thisTable).find("thead tr th").length;
-                        $(_thisTable).find("tbody").append("<tr><td colspan=\"" + headLen + "\" class=\"emptytip\">" + _emptyTip + "</td></tr>");
+
+                    if (_useEmptyRow) {
+                        if (dataContent.rows.length != dataContent.pageSize) {
+
+                            var trlength = dataContent.pageSize - dataContent.rows.length;
+                            var tdlength = $(_thisTable).find('thead tr th').length;
+
+                            for (var i = 0; i < trlength; i++) {
+                                var emptyRowHtml = "<tr>"
+
+                                for (var j = 0; j < tdlength; j++) {
+                                    emptyRowHtml += "<td></td>";
+                                }
+                                emptyRowHtml += "</tr>";
+                                $(tr_body).append(emptyRowHtml)
+                            }
+                        }
+                    }
+                    else {
+
+                        //空数据提示
+                        if (list_Data.length == 0) {
+                            var headLen = $(_thisTable).find("thead tr th").length;
+                            $(_thisTable).find("tbody").append("<tr><td colspan=\"" + headLen + "\" class=\"emptytip\">" + _emptyTip + "</td></tr>");
+                        }
                     }
                 }
 
@@ -1662,7 +1686,7 @@
         };
 
         return this;
-		
+
     }
 
 })(jQuery);

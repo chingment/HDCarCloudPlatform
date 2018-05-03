@@ -82,8 +82,9 @@
 
             });
 
-            $('.status-bar span').click(function () {
-                $('.status-bar span').removeClass('selected')
+            $('.status-bar > div > span').click(function () {
+                var parent = $(this).parent().parent();;
+                $(parent).find('span').removeClass('selected')
                 $(this).addClass('selected')
             });
 

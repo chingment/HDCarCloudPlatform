@@ -18,5 +18,10 @@ namespace WebBack.Models.Biz.PosMachine
         public string NoInDeviceIds { get; set; }
 
         public int AgentId { get; set; }
-}
+
+        public string PosMerchantNumber { get; set; }
+
+        public string MerchantName { get; set; }
+
+    }
 }

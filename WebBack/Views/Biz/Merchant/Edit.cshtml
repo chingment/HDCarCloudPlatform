@@ -42,6 +42,7 @@
             $("#Model_Merchant_FR_ValidPeriodStart").formValidator({ empty: true }).inputValidator({ min: 0, max: 20, onError: "[营业执照信息]法人身份证有效期(开始)不能为空" }).regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]法人身份证有效期格式不正确,格式例子:2016-08-08" });
             $("#Model_Merchant_FR_ValidPeriodEnd").formValidator({ empty: true }).inputValidator({ min: 0, max: 20, onError: "[营业执照信息]法人身份证有效期(结束)不能为空" }).regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "[营业执照信息]法人身份证有效期格式不正确,格式例子:2016-08-08" });
 
+            $("#Model_MerchantPosMachine_PosMerchantNumber_0").formValidator().inputValidator({ min: 1, max: 100, onError: "POS机商户号不能为空,且不超过100个字符" });
 
             //$("#Model_MerchantPosMachine_Deposit_0").formValidator().inputValidator({ min: 1, max: 100, onError: "请输入押金，金额范围在0.01~10000.00之间" });
             //$("#Model_MerchantPosMachine_Rent_0").formValidator().inputValidator({ min: 1, max: 100, onError: "请输入租金，金额范围在0.01~10000.00之间" });
@@ -377,9 +378,9 @@
                 <td class="c" style="width:250px">
                     <span>@Model.MerchantPosMachine[i].PosMachine.DeviceId</span>
                 </td>
-                <td class="t">机身号：</td>
+                <td class="t">POS机商户号：</td>
                 <td class="c">
-                    <span>@Model.MerchantPosMachine[i].PosMachine.FuselageNumber</span>
+                    <span><input type="text" class="input-control" name="Model.MerchantPosMachine[@i].PosMerchantNumber" id="Model_MerchantPosMachine_PosMerchantNumber_@i" value="@Model.MerchantPosMachine[i].PosMerchantNumber" /></span>
                 </td>
             </tr>
             <tr>
@@ -390,6 +391,12 @@
                 <td class="t">版本号：</td>
                 <td class="c">
                     <span>@Model.MerchantPosMachine[i].PosMachine.Version</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t">机身号：</td>
+                <td class="c" colspan="3">
+                    <span>@Model.MerchantPosMachine[i].PosMachine.FuselageNumber</span>
                 </td>
             </tr>
             <tr>

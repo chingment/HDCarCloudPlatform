@@ -93,14 +93,18 @@ namespace WebBack.Controllers.Biz
         public CustomJsonResult GetPosMachineList(Models.Biz.PosMachine.SearchCondition condition)
         {
 
-
-            string fuselageNumber = condition.FuselageNumber.ToSearchString();
-            string terminalNumber = condition.TerminalNumber.ToSearchString();
-            var list = (from p in CurrentDb.PosMachine
-                        where (fuselageNumber.Length == 0 || p.FuselageNumber.Contains(fuselageNumber)) &&
-                                (terminalNumber.Length == 0 || p.TerminalNumber.Contains(terminalNumber)) &&
-                                p.IsUse == false
-                        select new { p.Id, p.FuselageNumber, p.TerminalNumber, p.CreateTime, p.Version, p.DeviceId });
+            string clientCode = condition.ClientCode.ToSearchString();
+            string merchantName = condition.MerchantName.ToSearchString();
+            string posMerchantNumber = condition.PosMerchantNumber.ToSearchString();
+            string deviceId = condition.DeviceId.ToSearchString();
+            var list = (from p in CurrentDb.MerchantPosMachine
+                        join u in CurrentDb.Merchant on p.MerchantId equals u.Id
+                        join c in CurrentDb.PosMachine on p.PosMachineId equals c.Id
+                        where (merchantName.Length == 0 || u.YYZZ_Name.Contains(merchantName)) &&
+                        (clientCode.Length == 0 || u.ClientCode.Contains(clientCode)) &&
+                                (posMerchantNumber.Length == 0 || p.PosMerchantNumber.Contains(posMerchantNumber)) &&
+                                   (deviceId.Length == 0 || c.DeviceId.Contains(deviceId))
+                        select new { u.Id, PosMachineId = c.Id, MerchantName = u.YYZZ_Name, u.ClientCode, p.PosMerchantNumber, c.DeviceId, u.CreateTime,u.ContactName,u.ContactPhoneNumber });
 
             int total = list.Count();
 

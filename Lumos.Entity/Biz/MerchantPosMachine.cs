@@ -45,6 +45,8 @@ namespace Lumos.Entity
 
         public DateTime? LastUpdateTime { get; set; }
 
+        [MaxLength(128)]
+        public string PosMerchantNumber { get; set; }
 
         [NotMapped]
         public PosMachine PosMachine { get; set; }

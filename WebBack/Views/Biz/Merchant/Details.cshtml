@@ -232,9 +232,9 @@
                             <td class="c">
                                 <span>@Model.MerchantPosMachine[i].PosMachine.DeviceId</span>
                             </td>
-                            <td class="t">机身号：</td>
+                            <td class="t">POS机商户号：</td>
                             <td class="c">
-                                <span>@Model.MerchantPosMachine[i].PosMachine.FuselageNumber</span>
+                                <span>@Model.MerchantPosMachine[i].PosMerchantNumber</span>
                             </td>
                         </tr>
                         <tr>
@@ -245,6 +245,12 @@
                             <td class="t">版本号：</td>
                             <td class="c">
                                 <span>@Model.MerchantPosMachine[i].PosMachine.Version</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t">机身号：</td>
+                            <td class="c" colspan="3">
+                                <span>@Model.MerchantPosMachine[i].PosMachine.FuselageNumber</span>
                             </td>
                         </tr>
                         <tr>

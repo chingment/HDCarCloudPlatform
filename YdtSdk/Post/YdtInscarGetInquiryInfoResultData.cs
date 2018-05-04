@@ -15,20 +15,20 @@ namespace YdtSdk
     public class channel
     {
         public int channelId { get; set; }
-        public int code { get; set; }
+        public string code { get; set; }
         public string descp { get; set; }
         public string inquiry { get; set; }
         public string message { get; set; }
         public string name { get; set; }
-        public string opType { get; set; }
-        public string remote { get; set; }
-        public string sort { get; set; }
+        public int opType { get; set; }
+        public int remote { get; set; }
+        public int sort { get; set; }
 
     }
 
     public class YdtInscarGetInquiryInfoResultData
     {
-        public string areaId { get; set; }
+        public int areaId { get; set; }
         public string licensePic { get; set; }
         public List<channel> channelList { get; set; }
         public List<plan> planList { get; set; }

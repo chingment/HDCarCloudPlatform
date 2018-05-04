@@ -10,6 +10,6 @@ namespace YdtSdk
     {
         public string orderSeq { get; set; }
 
-        //public int areaId { get; set; }
+        public int areaId { get; set; }
     }
 }

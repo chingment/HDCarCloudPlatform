@@ -19,6 +19,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebAppApi.Models;
 using WebAppApi.Models.Account;
+using WebAppApi.Models.CarIns;
 using WebAppApi.Models.CarService;
 using WebAppApi.Models.Order;
 
@@ -173,6 +174,7 @@ namespace WebAppApi.Controllers
             //int merchantId = 258;
             //int posMachineId = 153;
 
+            CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
@@ -190,11 +192,11 @@ namespace WebAppApi.Controllers
             //  model.Add("提交人才输送订单", SubmitTalentDemand(userId, merchantId, posMachineId));
             //  model.Add("提交POS机流水贷款", SubmitCredit(userId, merchantId, posMachineId));
 
-             //model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
+            //model.Add("获取主页数据", GetAccoutHome(userId, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
             //model.Add("获取全局数据", GlobalDataSet(1215, merchantId, posMachineId, DateTime.Parse("2018-04-09 15:14:28")));
 
             //model.Add("获取地址", GetShippingAddress(1215));
-    
+
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             // model.Add("登录接口", Login(userName, passWord, deviceId));
 
@@ -204,7 +206,7 @@ namespace WebAppApi.Controllers
 
             // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-             model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+            // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
@@ -1801,6 +1803,55 @@ namespace WebAppApi.Controllers
             string result = http.HttpGet("" + host + "/api/ShippingAddress/GetList?userId=" + userId.ToString(), headers);
 
             return result;
+        }
+
+
+        public void CarIns(int userId, int merchantId, int posMachineId)
+        {
+            CarIns_GetCarInfo(userId, merchantId, posMachineId);
+        }
+
+
+        public string CarIns_GetCarInfo(int userId, int merchantId, int posMachineId)
+        {
+
+            string base64string1 = GetImagesBase64String(@"d:\demo_jsz.jpg");
+
+            CarInfoPms model1 = new CarInfoPms();
+            //  model1.KeyWordType = KeyWordType.LicenseImg;
+            // model1.KeyWord = "粤AT810P";
+
+            model1.KeywordType = KeyWordType.LicenseImg;
+            model1.Keyword = base64string1;
+
+
+            //SubmitEstimateListModel model = new SubmitEstimateListModel();
+            //model.UserId = userId;
+            //model.OrderId = orderId;
+
+            //string a1 = JsonConvert.SerializeObject(model);
+            //if (a1.IndexOf("ImgData") > -1)
+            //{
+            //    int x = a1.IndexOf("ImgData");
+            //    a1 = a1.Substring(0, x - 2);
+            //    a1 += "}";
+            //}
+
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/GetCarInfo", a1, headers1);
+
+            return respon_data4;
         }
     }
 }

@@ -162,7 +162,7 @@ namespace YdtSdk
             List<InsCustomers> customers = new List<InsCustomers>();
 
             InsCustomers insured = new InsCustomers();
-            insured.insuredFlag = 1;
+            insured.insuredFlag = "1";
             insured.name = order.CarOwner;
             insured.certNo = order.CarOwnerIdNumber;
             insured.mobile = order.RecipientPhoneNumber;
@@ -187,7 +187,7 @@ namespace YdtSdk
             }
 
             InsCustomers holder = new InsCustomers();
-            holder.insuredFlag = 2;
+            holder.insuredFlag = "2";
             holder.name = insured.name;
             holder.certNo = insured.certNo;
             holder.mobile = insured.mobile;
@@ -196,7 +196,7 @@ namespace YdtSdk
             holder.identityBackPic = insured.identityBackPic;
 
             InsCustomers carOwner = new InsCustomers();
-            carOwner.insuredFlag = 3;
+            carOwner.insuredFlag = "3";
             carOwner.name = insured.name;
             carOwner.certNo = insured.certNo;
             carOwner.mobile = insured.mobile;
@@ -500,6 +500,42 @@ namespace YdtSdk
             }
 
             return licenseInfo;
+        }
+
+
+        public static YdtInsCarApiSearchResultData GetInsCarInfo(string licensePlateNo)
+        {
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            var ydtInsCarApiSearch = new YdtInsCarApiSearch(au.token, au.session, licensePlateNo);
+            var ydtInsCarApiSearchResult = ydtApi.DoGet(ydtInsCarApiSearch);
+
+            return ydtInsCarApiSearchResult.data;
+        }
+
+        public static List<YdtInscarCarResultData> CarModelQuery(string keyword, string vin, string firstRegisterDate)
+        {
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+            YdtInscarCar ydtInscarCar = new YdtInscarCar(au.token, au.session, keyword, vin, firstRegisterDate);
+            var ydtInscarCarResult = ydtApi.DoGet(ydtInscarCar);
+
+            return ydtInscarCarResult.data;
+        }
+
+
+        public static YdtInscarGetInquiryInfoResultData GetInquiryInfo(string orderSeq, int areaId)
+        {
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+            var ydtInscarGetInquiryInfoModel = new YdtInscarGetInquiryInfoModel();
+            ydtInscarGetInquiryInfoModel.orderSeq = orderSeq;
+            ydtInscarGetInquiryInfoModel.areaId = areaId;
+            var ydtInscarGetInquiryInfo = new YdtInscarGetInquiryInfo(au.token, au.session, YdtPostDataType.Json, ydtInscarGetInquiryInfoModel);
+            var ydtInscarGetInquiryInfoResult = ydtApi.DoPost(ydtInscarGetInquiryInfo);
+
+            return ydtInscarGetInquiryInfoResult.data;
         }
     }
 }

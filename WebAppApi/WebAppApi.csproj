@@ -164,6 +164,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CarInsController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CarServiceController.cs" />
     <Compile Include="Controllers\CouponController.cs" />
@@ -188,6 +189,19 @@
     <Compile Include="Models\Account\LoginResultModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\TalentDemandWorkJobModel.cs" />
+    <Compile Include="Models\CarIns\CarInfoModel.cs" />
+    <Compile Include="Models\CarIns\CarInfoPms.cs" />
+    <Compile Include="Models\CarIns\CarInfoResult.cs" />
+    <Compile Include="Models\CarIns\CarInsureBaseInfo.cs" />
+    <Compile Include="Models\CarIns\CarModelInfoModel.cs" />
+    <Compile Include="Models\CarIns\CarModelInfoPms.cs" />
+    <Compile Include="Models\CarIns\CarModelInfoResult.cs" />
+    <Compile Include="Models\CarIns\CustomerModel.cs" />
+    <Compile Include="Models\CarIns\EditBaseInfoPms.cs" />
+    <Compile Include="Models\CarIns\EditBaseInfoResult.cs" />
+    <Compile Include="Models\CarIns\InsComanyInfoPms.cs" />
+    <Compile Include="Models\CarIns\InsComanyInfoResult.cs" />
+    <Compile Include="Models\CarIns\InsInquiryPms.cs" />
     <Compile Include="Models\Cart\OperateParams.cs" />
     <Compile Include="Models\Coupon\GetListParams.cs" />
     <Compile Include="Models\Global\DataSetModel.cs" />
@@ -345,6 +359,10 @@
     <ProjectReference Include="..\MySDK\MySDK.csproj">
       <Project>{8479fcaf-4aef-40d4-b76d-246282522fb7}</Project>
       <Name>MySDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YdtSdk\YdtSdk.csproj">
+      <Project>{539b0cc5-1802-4a6c-b081-c7e35071d21c}</Project>
+      <Name>YdtSdk</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

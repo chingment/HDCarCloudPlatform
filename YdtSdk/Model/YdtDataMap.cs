@@ -29,17 +29,17 @@ namespace YdtSdk
         {
 
             List<YdtInsCoverageModel> list = new List<YdtInsCoverageModel>();
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 3, YdtCode = "001", Name = "车损险" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 4, YdtCode = "002", Name = "三者险" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 5, YdtCode = "003", Name = "司机险" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 6, YdtCode = "004", Name = "乘客险" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 7, YdtCode = "005", Name = "盗抢险" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 8, YdtCode = "006", Name = "玻璃险" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 9, YdtCode = "007", Name = "划痕险" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 12, YdtCode = "008", Name = "自燃险" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 11, YdtCode = "009", Name = "涉水险" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 17, YdtCode = "010", Name = "指定维修厂" });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 10, YdtCode = "011", Name = "无法找到第三方险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 3, Code = "001", Name = "车损险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 4, Code = "002", Name = "三者险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 5, Code = "003", Name = "司机险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 6, Code = "004", Name = "乘客险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 7, Code = "005", Name = "盗抢险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 8, Code = "006", Name = "玻璃险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 9, Code = "007", Name = "划痕险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 12, Code = "008", Name = "自燃险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 11, Code = "009", Name = "涉水险" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 17, Code = "010", Name = "指定维修厂" });
+            list.Add(new YdtInsCoverageModel { UpLinkCode = 10, Code = "011", Name = "无法找到第三方险" });
             return list;
         }
 
@@ -83,7 +83,7 @@ namespace YdtSdk
                 if (coverage != null)
                 {
                     CoveragesModel model = new CoveragesModel();
-                    model.code = coverage.YdtCode;
+                    model.code = coverage.Code;
 
                     #region 是否免损
                     switch (kind.KindId)

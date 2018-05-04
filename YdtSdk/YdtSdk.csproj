@@ -57,6 +57,8 @@
     <Compile Include="Get\IYdtApiGetRequest.cs" />
     <Compile Include="Get\YdtEmLogin.cs" />
     <Compile Include="Get\YdtEmLoginResult.cs" />
+    <Compile Include="Get\YdtInsCarApiSearch.cs" />
+    <Compile Include="Get\YdtInsCarApiSearchResultData.cs" />
     <Compile Include="Get\YdtInscarCar.cs" />
     <Compile Include="Get\YdtInscarCarResult.cs" />
     <Compile Include="Get\YdtToken.cs" />

@@ -7,6 +7,7 @@ namespace WebAppApi.Models.CarIns
 {
     public class EditBaseInfoPms
     {
+        string OrderSeq { get; set; }
         public string Auto { get; set; }
         public CarInfoModel Car { get; set; }
         public List<CustomerModel> Customers { get; set; }

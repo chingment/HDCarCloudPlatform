@@ -160,9 +160,12 @@ namespace Lumos.BLL
                         lllegalRecord.lllegalCity = m.lllegalCity;
                         lllegalRecord.lllegalTime = m.lllegalTime;
                         lllegalRecord.point = m.point;
-
                         lllegalRecord.fine = m.fine;
+                        lllegalRecord.late_fees = m.late_fees;
+                        lllegalRecord.address = m.address;
+                        lllegalRecord.content = m.content;
 
+                        //处理服务费规则
                         if (lllegalRecord.point == 0)
                         {
                             lllegalRecord.serviceFee = m.serviceFee + 3;//非扣分单
@@ -173,9 +176,6 @@ namespace Lumos.BLL
                             lllegalRecord.serviceFee = m.serviceFee + addfee;
                         }
 
-                        lllegalRecord.address = m.address;
-                        lllegalRecord.content = m.content;
-                        lllegalRecord.late_fees = m.late_fees;
 
                         lllegalRecords.Add(lllegalRecord);
 

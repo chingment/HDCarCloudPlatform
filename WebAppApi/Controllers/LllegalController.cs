@@ -74,7 +74,7 @@ namespace WebAppApi.Controllers
                     orderToLllegalDealtDetail.Point = item.point;
                     orderToLllegalDealtDetail.ServiceFee = item.serviceFee;
                     orderToLllegalDealtDetail.NeedUrgent = item.needUrgent;
-                    orderToLllegalDealtDetail.UrgentFee = item.urgentfee;
+                    orderToLllegalDealtDetail.UrgentFee = item.urgentFee;
                     orderToLllegalDealtDetails.Add(orderToLllegalDealtDetail);
                 }
             }

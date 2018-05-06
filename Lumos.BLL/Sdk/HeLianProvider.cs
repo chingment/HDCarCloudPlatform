@@ -64,7 +64,7 @@ namespace Lumos.BLL
 
         public bool canUrgent { get; set; }
 
-        public decimal urgentfee { get; set; }
+        public decimal urgentFee { get; set; }
 
         public bool needUrgent { get; set; }
 
@@ -196,7 +196,7 @@ namespace Lumos.BLL
                         var serviceFeeModel = CalServiceFee(record.offerType, record.serviceFee, record.point);
 
                         record.serviceFee = serviceFeeModel.ServiceFee;
-                        record.urgentfee = serviceFeeModel.UrgentFee;
+                        record.urgentFee = serviceFeeModel.UrgentFee;
                         record.canUrgent = serviceFeeModel.CanUrgentFee;
 
                         record.status = "待处理";
@@ -384,7 +384,7 @@ namespace Lumos.BLL
 
 
                                     record.serviceFee = serviceFeeModel.ServiceFee;
-                                    record.urgentfee = serviceFeeModel.UrgentFee;
+                                    record.urgentFee = serviceFeeModel.UrgentFee;
                                     record.canUrgent = serviceFeeModel.CanUrgentFee;
 
                                     record.status = "待处理";

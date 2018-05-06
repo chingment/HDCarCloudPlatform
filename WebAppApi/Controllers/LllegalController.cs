@@ -73,7 +73,8 @@ namespace WebAppApi.Controllers
                     orderToLllegalDealtDetail.OfserTypeName = item.ofserTypeName;
                     orderToLllegalDealtDetail.Point = item.point;
                     orderToLllegalDealtDetail.ServiceFee = item.serviceFee;
-
+                    orderToLllegalDealtDetail.NeedUrgent = item.needUrgent;
+                    orderToLllegalDealtDetail.UrgentFee = item.urgentfee;
                     orderToLllegalDealtDetails.Add(orderToLllegalDealtDetail);
                 }
             }

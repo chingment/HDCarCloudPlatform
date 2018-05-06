@@ -3,6 +3,7 @@ using Lumos.Entity;
 using Lumos.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,6 +62,12 @@ namespace Lumos.BLL
 
         public bool canDealt { get; set; }
 
+        public bool canUrgent { get; set; }
+
+        public decimal urgentfee { get; set; }
+
+        public bool needUrgent { get; set; }
+
     }
 
 
@@ -83,14 +90,158 @@ namespace Lumos.BLL
         public bool IsOfferPrice { get; set; }
     }
 
+    public class ServiceFeeModel
+    {
+        public decimal ServiceFee { get; set; }
+
+        public decimal UrgentFee { get; set; }
+
+        public string Version { get; set; }
+
+        public bool CanUrgentFee { get; set; }
+    }
+
     public class HeLianProvider : BaseProvider
     {
+
+
+        public static ServiceFeeModel CalServiceFee(string offerType, decimal origServiceFee, decimal point)
+        {
+            ServiceFeeModel feeModel = new ServiceFeeModel();
+            decimal addfee = 0;
+            //处理服务费规则
+            switch (offerType)
+            {
+                case "1"://联网单
+                    feeModel.CanUrgentFee = false;
+                    feeModel.UrgentFee = 5;
+                    break;
+                case "2"://当地单
+                case "7":
+                case "8":
+                    feeModel.CanUrgentFee = true;
+                    addfee = 3;
+                    feeModel.ServiceFee = origServiceFee + addfee;//非扣分单
+                    break;
+                case "3"://扣分单
+                case "6":
+                    feeModel.CanUrgentFee = false;
+                    addfee = point * 5;
+                    feeModel.ServiceFee = origServiceFee + addfee;
+                    break;
+                case "4"://行政处罚
+                    feeModel.CanUrgentFee = false;
+                    addfee = 300;
+                    feeModel.ServiceFee = origServiceFee + addfee;
+                    break;
+            }
+
+            //feeModel.CanUrgentFee = true;
+            //feeModel.UrgentFee = 5;
+
+            //if (point == 0)
+            //{
+            //    feeModel.ServiceFee = origServiceFee + 3;//非扣分单
+            //}
+            //else
+            //{
+            //    decimal addfee = point * 5;
+            //    feeModel.ServiceFee = origServiceFee + addfee;
+            //}
+
+            return feeModel;
+        }
+
+
         public CustomJsonResult<LllegalQueryResult> Query(int operater, LllegalQueryParams pms)
         {
             CustomJsonResult<LllegalQueryResult> result = new CustomJsonResult<LllegalQueryResult>();
 
             using (TransactionScope ts = new TransactionScope())
             {
+
+                LllegalQueryResult queryResult = null;
+
+                if (BizFactory.AppSettings.IsTest)
+                {
+                    string strout = "";
+
+                    string strfile = "Test_Lllegal.txt";
+
+
+                    using (StreamReader sr = new StreamReader(System.Web.HttpContext.Current.Server.MapPath(strfile), System.Text.Encoding.Default))
+                    {
+                        strout = sr.ReadToEnd();
+                    }
+
+                    var t_lllegalRecords = new List<LllegalRecord>();
+
+                    if (!string.IsNullOrEmpty(strout))
+                    {
+                        t_lllegalRecords = Newtonsoft.Json.JsonConvert.DeserializeObject<List<LllegalRecord>>(strout);
+                    }
+
+                    queryResult = new LllegalQueryResult();
+
+                    queryResult.IsOfferPrice = pms.IsOfferPrice == "true" ? true : false;
+                    queryResult.CarNo = pms.CarNo;
+
+
+
+
+
+                    foreach (var record in t_lllegalRecords)
+                    {
+
+                        var serviceFeeModel = CalServiceFee(record.offerType, record.serviceFee, record.point);
+
+                        record.serviceFee = serviceFeeModel.ServiceFee;
+                        record.urgentfee = serviceFeeModel.UrgentFee;
+                        record.canUrgent = serviceFeeModel.CanUrgentFee;
+
+                        record.status = "待处理";
+
+                        if (record.point == 0)
+                        {
+                            record.canDealt = true;
+                        }
+                        else
+                        {
+                            record.canDealt = false;
+                        }
+
+                        var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
+                        if (details != null)
+                        {
+                            var hasDealt = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.InDealt).Count();
+                            var hasCompleted = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed).Count();
+
+
+                            if (hasDealt > 0)
+                            {
+                                record.status = "处理中";
+                                record.canDealt = false;
+                            }
+
+                            if (hasCompleted > 0)
+                            {
+                                record.status = "完成";
+                                record.canDealt = false;
+                            }
+
+                        }
+                    }
+                    queryResult.Record = t_lllegalRecords;
+                    queryResult.DealtTip = "扣分单需处理，请咨询客服";
+                    queryResult.SumCount = t_lllegalRecords.Count().ToString();
+                    queryResult.SumFine = t_lllegalRecords.Sum(m => m.fine).ToString();
+                    queryResult.SumPoint = t_lllegalRecords.Sum(m => m.point).ToString();
+
+
+                    return new CustomJsonResult<LllegalQueryResult>(ResultType.Success, ResultCode.Success, "查询成功", queryResult);
+
+                }
+
                 if (pms.EnginNo.Length < 6)
                 {
                     return new CustomJsonResult<LllegalQueryResult>(ResultType.Failure, ResultCode.Failure, "请输入发动机号后6位", null);
@@ -137,17 +288,6 @@ namespace Lumos.BLL
                 {
                     foreach (var m in d)
                     {
-                        DataLllegal dl = new DataLllegal();
-                        dl.bookNo = m.bookNo;
-                        dl.bookType = m.bookType;
-                        dl.cityCode = m.cityCode;
-                        dl.lllegalCode = m.lllegalCode;
-                        dl.lllegalTime = m.lllegalTime;
-                        dl.point = m.point;
-                        dl.fine = m.fine;
-                        dl.lllegalAddress = m.address;
-                        dataLllegal.Add(dl);
-
                         LllegalRecord lllegalRecord = new LllegalRecord();
                         lllegalRecord.bookNo = m.bookNo;
                         lllegalRecord.bookType = m.bookType;
@@ -164,34 +304,12 @@ namespace Lumos.BLL
                         lllegalRecord.late_fees = m.late_fees;
                         lllegalRecord.address = m.address;
                         lllegalRecord.content = m.content;
-
-                        //处理服务费规则
-                        if (lllegalRecord.point == 0)
-                        {
-                            lllegalRecord.serviceFee = m.serviceFee + 3;//非扣分单
-                        }
-                        else
-                        {
-                            decimal addfee = m.point * 5;
-                            lllegalRecord.serviceFee = m.serviceFee + addfee;
-                        }
-
-
                         lllegalRecords.Add(lllegalRecord);
 
                     }
                 }
 
-                CarQueryGetLllegalPrice_Params p1 = new CarQueryGetLllegalPrice_Params();
-
-                p1.carNo = pms.CarNo;
-                p1.enginNo = pms.EnginNo;
-                p1.rackNo = pms.RackNo;
-                p1.isCompany = pms.IsCompany;
-                p1.carType = pms.CarType;
-                p1.dataLllegal = dataLllegal;
-
-                var queryResult = new LllegalQueryResult();
+                queryResult = new LllegalQueryResult();
 
                 queryResult.IsOfferPrice = pms.IsOfferPrice == "true" ? true : false;
                 queryResult.CarNo = pms.CarNo;
@@ -210,6 +328,30 @@ namespace Lumos.BLL
                     }
                     else
                     {
+                        CarQueryGetLllegalPrice_Params p1 = new CarQueryGetLllegalPrice_Params();
+
+                        p1.carNo = pms.CarNo;
+                        p1.enginNo = pms.EnginNo;
+                        p1.rackNo = pms.RackNo;
+                        p1.isCompany = pms.IsCompany;
+                        p1.carType = pms.CarType;
+
+                        foreach (var record in lllegalRecords)
+                        {
+                            DataLllegal dl = new DataLllegal();
+                            dl.bookNo = record.bookNo;
+                            dl.bookType = record.bookType;
+                            dl.cityCode = record.cityCode;
+                            dl.lllegalCode = record.lllegalCode;
+                            dl.lllegalTime = record.lllegalTime;
+                            dl.point = record.point;
+                            dl.fine = record.fine;
+                            dl.lllegalAddress = record.address;
+                            dataLllegal.Add(dl);
+                        }
+
+                        p1.dataLllegal = dataLllegal;
+
                         var api_result1 = HeLianApi.CarQueryGetLllegalPrice(p1);
 
                         if (api_result1.resultCode != "0")
@@ -232,13 +374,20 @@ namespace Lumos.BLL
                                     var priceresult = d1.Where(m => m.bookNo == record.bookNo).FirstOrDefault();
                                     if (priceresult != null)
                                     {
-                                        record.serviceFee = priceresult.serviceFee;
                                         record.fine = priceresult.fine;
                                         record.late_fees = priceresult.late_fees;
+                                        record.serviceFee = priceresult.serviceFee;
+                                        record.point = priceresult.point;
                                     }
 
-                                    record.status = "待处理";
+                                    var serviceFeeModel = CalServiceFee(record.offerType, record.serviceFee, record.point);
 
+
+                                    record.serviceFee = serviceFeeModel.ServiceFee;
+                                    record.urgentfee = serviceFeeModel.UrgentFee;
+                                    record.canUrgent = serviceFeeModel.CanUrgentFee;
+
+                                    record.status = "待处理";
 
                                     if (record.point == 0)
                                     {

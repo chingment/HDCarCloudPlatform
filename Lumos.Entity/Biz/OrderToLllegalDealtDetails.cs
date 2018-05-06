@@ -46,5 +46,9 @@ namespace Lumos.Entity
         public Enumeration.OrderToLllegalDealtDetailsStatus Status { get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }
+
+        public bool NeedUrgent { get; set; }
+
+        public decimal UrgentFee { get; set; }
     }
 }

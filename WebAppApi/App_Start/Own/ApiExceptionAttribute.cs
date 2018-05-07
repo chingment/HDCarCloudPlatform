@@ -19,6 +19,7 @@ namespace WebAppApi
             Exception ex = actionExecutedContext.Exception;
             log.Error("API调用出现异常", ex);
             log.Error(ex.InnerException.Message);
+            log.Error(ex.StackTrace);
         }
     }
 

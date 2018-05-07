@@ -22,12 +22,12 @@ namespace WebAppApi.Controllers
     [BaseAuthorizeAttribute]
     public class CarInsController : OwnBaseApiController
     {
-        [BaseAuthorizeAttribute]
         [HttpPost]
         public APIResponse GetCarInfo(CarInfoPms pms)
         {
-            var carInfoResult = new CarInfoResult();
+            Log.Info("GetCarInfoGetCarInfoGetCarInfo");
 
+            var carInfoResult = new CarInfoResult();
 
             var carInfo = new CarInfoModel();
             var customers = new List<CustomerModel>();

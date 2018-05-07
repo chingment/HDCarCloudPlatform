@@ -30,8 +30,8 @@ namespace WebAppApi.Controllers
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
         //private string host = "http://localhost:16665";
-        private string host = "http://120.79.233.231";
-        // private string host = "http://api.gzhaoyilian.com";
+        //private string host = "http://120.79.233.231";
+        private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
 
         private string YBS_key = "ybs_test";
@@ -122,7 +122,7 @@ namespace WebAppApi.Controllers
             pms.EnginNo = "713477";
             pms.RackNo = "004711";
             pms.IsCompany = "false";
-
+            pms.IsOfferPrice = "true";
             // var res = SdkFactory.HeLian.Query(0, pms);
 
 
@@ -156,7 +156,7 @@ namespace WebAppApi.Controllers
 
             Dictionary<string, string> model = new Dictionary<string, string>();
 
-            string userName = "15989287031";
+            string userName = "15989287032";
             string passWord = "123456";
             string newPassWord = "888888";
             string deviceId = "861097039013879";
@@ -165,13 +165,13 @@ namespace WebAppApi.Controllers
             //int merchantId = 242;
             //int posMachineId = 149;
             //http://localhost:16665/ExtendedApp/poscredit?userId=1215&merchantId=241&posMachineId=148
-            int userId = 1215;
-            int merchantId = 241;
-            int posMachineId = 148;
+            //int userId = 1215;
+            //int merchantId = 241;
+            //int posMachineId = 148;
 
-            //int userId = 1234;
-            //int merchantId = 258;
-            //int posMachineId = 153;
+            int userId = 1234;
+            int merchantId = 258;
+            int posMachineId = 153;
 
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
@@ -181,7 +181,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
-             model.Add("违章查询", SubmittLllegalQuery(userId, merchantId, posMachineId));
+            model.Add("违章查询", SubmittLllegalQuery(userId, merchantId, posMachineId));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
@@ -1522,13 +1522,23 @@ namespace WebAppApi.Controllers
             LllegalQueryParams pms = new LllegalQueryParams();
             pms.MerchantId = merchantId;
             pms.PosMachineId = posMachineId;
+
             pms.UserId = userId;
-            pms.CarNo = "粤A973MQ";
+            pms.CarNo = "粤YGY662";
             pms.CarType = "02";
-            pms.EnginNo = "53910D";
-            pms.RackNo = "076188";
+            pms.EnginNo = "713477";
+            pms.RackNo = "004711";
             pms.IsCompany = "false";
-            pms.IsOfferPrice = "false";
+            pms.IsOfferPrice = "true";
+
+
+            //pms.UserId = userId;
+            //pms.CarNo = "粤A973MQ";
+            //pms.CarType = "02";
+            //pms.EnginNo = "53910D";
+            //pms.RackNo = "076188";
+            //pms.IsCompany = "false";
+            //pms.IsOfferPrice = "false";
             //SubmitApplyLossAssessModel model1 = new SubmitApplyLossAssessModel();
             //model1.UserId = userId;
             //model1.InsuranceCompanyId = 2;

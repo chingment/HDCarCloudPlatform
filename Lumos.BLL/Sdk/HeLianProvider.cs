@@ -101,6 +101,8 @@ namespace Lumos.BLL
         public bool CanUrgentFee { get; set; }
 
         public bool CanDealt { get; set; }
+
+        public string StatusName { get; set; }
     }
 
     public class HeLianProvider : BaseProvider
@@ -111,52 +113,47 @@ namespace Lumos.BLL
         {
             ServiceFeeModel feeModel = new ServiceFeeModel();
             decimal addfee = 0;
-            ////处理服务费规则
-            //switch (offerType)
-            //{
-            //    case "0"://无法处理
-            //        feeModel.CanDealt = false;
-            //        break;
-            //    case "1"://联网单
-            //        feeModel.CanDealt = true;
-            //        feeModel.CanUrgentFee = false;
-            //        feeModel.UrgentFee = 5;
-            //        break;
-            //    case "2"://当地单
-            //    case "7":
-            //    case "8":
-            //        feeModel.CanDealt = true;
-            //        feeModel.CanUrgentFee = true;
-            //        addfee = 3;
-            //        feeModel.ServiceFee = origServiceFee + addfee;//非扣分单
-            //        break;
-            //    case "3"://扣分单
-            //    case "6":
-            //        feeModel.CanDealt = true;
-            //        feeModel.CanUrgentFee = false;
-            //        addfee = point * 5;
-            //        feeModel.ServiceFee = origServiceFee + addfee;
-            //        break;
-            //    case "4"://行政处罚
-            //        feeModel.CanDealt = true;
-            //        feeModel.CanUrgentFee = false;
-            //        addfee = 300;
-            //        feeModel.ServiceFee = origServiceFee + addfee;
-            //        break;
-            //}
-
-
+            feeModel.StatusName = "待处理";
+            //处理服务费规则
+            switch (offerType)
+            {
+                case "0"://无法处理
+                    feeModel.CanDealt = false;
+                    feeModel.StatusName = "无法处理";
+                    feeModel.ServiceFee = origServiceFee;
+                    break;
+                case "1"://联网单
+                    feeModel.UrgentFee = 10;
+                    addfee = 3;
+                    feeModel.ServiceFee = origServiceFee + addfee;//非扣分单
+                    break;
+                case "2"://当地单
+                case "7":
+                case "8":
+                    addfee = 10;
+                    feeModel.ServiceFee = origServiceFee + addfee;//非扣分单
+                    break;
+                case "3"://扣分单
+                case "6":
+                    addfee = point * 5;
+                    feeModel.ServiceFee = origServiceFee + addfee;
+                    break;
+                case "4"://行政处罚
+                    addfee = 300;
+                    feeModel.ServiceFee = origServiceFee + addfee;
+                    break;
+            }
 
             if (point == 0)
             {
-                addfee = 3;
-                feeModel.ServiceFee = origServiceFee + addfee;//非扣分单
+                feeModel.UrgentFee = 10;
+                feeModel.CanUrgentFee = true;
                 feeModel.CanDealt = true;
             }
             else
             {
-                addfee = point * 5;
-                feeModel.ServiceFee = origServiceFee + addfee;
+                feeModel.UrgentFee = 0;
+                feeModel.CanUrgentFee = false;
                 feeModel.CanDealt = false;
             }
 
@@ -393,7 +390,7 @@ namespace Lumos.BLL
                                     record.urgentFee = serviceFeeModel.UrgentFee;
                                     record.canUrgent = serviceFeeModel.CanUrgentFee;
                                     record.canDealt = serviceFeeModel.CanDealt;
-                                    record.status = "待处理";
+                                    record.status = serviceFeeModel.StatusName;
 
 
                                     var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();

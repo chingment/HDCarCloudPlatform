@@ -31,12 +31,12 @@ namespace Lumos.BLL
                 orderToLllegalDealt.SumCount = orderToLllegalDealtDetails.Count();
                 orderToLllegalDealt.SumFine = orderToLllegalDealtDetails.Sum(m => m.Fine);
                 orderToLllegalDealt.SumPoint = orderToLllegalDealtDetails.Sum(m => m.Point);
-
+                orderToLllegalDealt.SumUrgentFee = orderToLllegalDealtDetails.Sum(m => m.UrgentFee);
 
 
                 orderToLllegalDealt.SumServiceFees = orderToLllegalDealtDetails.Sum(m => m.ServiceFee);
                 orderToLllegalDealt.SumLateFees = orderToLllegalDealtDetails.Sum(m => m.Late_fees);
-                orderToLllegalDealt.Price = orderToLllegalDealt.SumFine + orderToLllegalDealt.SumServiceFees + orderToLllegalDealt.SumLateFees;
+                orderToLllegalDealt.Price = orderToLllegalDealt.SumFine + orderToLllegalDealt.SumServiceFees + orderToLllegalDealt.SumLateFees + orderToLllegalDealt.SumUrgentFee; ;
                 CurrentDb.OrderToLllegalDealt.Add(orderToLllegalDealt);
                 CurrentDb.SaveChanges();
 
@@ -80,7 +80,14 @@ namespace Lumos.BLL
                     yOrder.confirmField.Add(new Entity.AppApi.OrderField("车牌号码", orderToLllegalDealt.CarNo.NullToEmpty()));
                     yOrder.confirmField.Add(new Entity.AppApi.OrderField("违章", string.Format("{0}次", orderToLllegalDealt.SumCount)));
                     yOrder.confirmField.Add(new Entity.AppApi.OrderField("扣分", orderToLllegalDealt.SumPoint.NullToEmpty()));
+                    if (orderToLllegalDealt.SumUrgentFee > 0)
+                    {
+                        yOrder.confirmField.Add(new Entity.AppApi.OrderField("加急费", orderToLllegalDealt.SumUrgentFee.NullToEmpty()));
+                    }
                     yOrder.confirmField.Add(new Entity.AppApi.OrderField("罚款", orderToLllegalDealt.SumFine.NullToEmpty()));
+
+
+
                     yOrder.confirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalDealt.Price.NullToEmpty())));
 
 

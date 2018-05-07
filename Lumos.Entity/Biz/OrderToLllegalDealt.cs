@@ -15,6 +15,8 @@ namespace Lumos.Entity
 
         public decimal SumFine { get; set; }
 
+        public decimal SumUrgentFee { get; set; }
+
         public int SumCount { get; set; }
 
         public decimal SumLateFees { get; set; }

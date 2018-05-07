@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +32,8 @@ namespace YdtSdk
 
     public class YdtApi : IYdtApi
     {
+        ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public string serverUrl = "http://test.hybao.cc:6200";
 
 
@@ -52,7 +55,7 @@ namespace YdtSdk
             WebUtils webUtils = new WebUtils();
             string body = webUtils.DoGet(realServerUrl, request.GetUrlParameters(), null);
 
-
+            log.Info("Ydt->result:" + body);
 
             if (body.IndexOf("\"code\":") == -1)
             {
@@ -94,7 +97,7 @@ namespace YdtSdk
             log.Info("Ydt-request-result>>>>" + body);
 
             var rsp1 = JsonConvert.DeserializeObject<YdtApiBaseResult<object>>(body);
-           
+
 
             if (rsp1.code == 0)
             {

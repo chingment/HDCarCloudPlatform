@@ -111,61 +111,54 @@ namespace Lumos.BLL
         {
             ServiceFeeModel feeModel = new ServiceFeeModel();
             decimal addfee = 0;
-            //处理服务费规则
-            switch (offerType)
-            {
-                case "0"://无法处理
-                    feeModel.CanDealt = false;
-                    break;
-                case "1"://联网单
-                    feeModel.CanDealt = true;
-                    feeModel.CanUrgentFee = false;
-                    feeModel.UrgentFee = 5;
-                    break;
-                case "2"://当地单
-                case "7":
-                case "8":
-                    feeModel.CanDealt = true;
-                    feeModel.CanUrgentFee = true;
-                    addfee = 3;
-                    feeModel.ServiceFee = origServiceFee + addfee;//非扣分单
-                    break;
-                case "3"://扣分单
-                case "6":
-                    feeModel.CanDealt = true;
-                    feeModel.CanUrgentFee = false;
-                    addfee = point * 5;
-                    feeModel.ServiceFee = origServiceFee + addfee;
-                    break;
-                case "4"://行政处罚
-                    feeModel.CanDealt = true;
-                    feeModel.CanUrgentFee = false;
-                    addfee = 300;
-                    feeModel.ServiceFee = origServiceFee + addfee;
-                    break;
-            }
+            ////处理服务费规则
+            //switch (offerType)
+            //{
+            //    case "0"://无法处理
+            //        feeModel.CanDealt = false;
+            //        break;
+            //    case "1"://联网单
+            //        feeModel.CanDealt = true;
+            //        feeModel.CanUrgentFee = false;
+            //        feeModel.UrgentFee = 5;
+            //        break;
+            //    case "2"://当地单
+            //    case "7":
+            //    case "8":
+            //        feeModel.CanDealt = true;
+            //        feeModel.CanUrgentFee = true;
+            //        addfee = 3;
+            //        feeModel.ServiceFee = origServiceFee + addfee;//非扣分单
+            //        break;
+            //    case "3"://扣分单
+            //    case "6":
+            //        feeModel.CanDealt = true;
+            //        feeModel.CanUrgentFee = false;
+            //        addfee = point * 5;
+            //        feeModel.ServiceFee = origServiceFee + addfee;
+            //        break;
+            //    case "4"://行政处罚
+            //        feeModel.CanDealt = true;
+            //        feeModel.CanUrgentFee = false;
+            //        addfee = 300;
+            //        feeModel.ServiceFee = origServiceFee + addfee;
+            //        break;
+            //}
+
+
 
             if (point == 0)
             {
+                addfee = 3;
+                feeModel.ServiceFee = origServiceFee + addfee;//非扣分单
                 feeModel.CanDealt = true;
             }
             else
             {
+                addfee = point * 5;
+                feeModel.ServiceFee = origServiceFee + addfee;
                 feeModel.CanDealt = false;
             }
-
-            //feeModel.CanUrgentFee = true;
-            //feeModel.UrgentFee = 5;
-
-            //if (point == 0)
-            //{
-            //    feeModel.ServiceFee = origServiceFee + 3;//非扣分单
-            //}
-            //else
-            //{
-            //    decimal addfee = point * 5;
-            //    feeModel.ServiceFee = origServiceFee + addfee;
-            //}
 
             return feeModel;
         }

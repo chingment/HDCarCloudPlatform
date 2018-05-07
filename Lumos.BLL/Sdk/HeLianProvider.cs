@@ -45,7 +45,7 @@ namespace Lumos.BLL
         public string lllegalCode { get; set; }
         public string cityCode { get; set; }
         public string lllegalTime { get; set; }
-        public decimal point { get; set; }
+        public int point { get; set; }
         public string offerType { get; set; }
         public string ofserTypeName { get; set; }
         public decimal fine { get; set; }
@@ -374,6 +374,7 @@ namespace Lumos.BLL
 
                             if (d1 != null)
                             {
+
                                 foreach (var record in lllegalRecords)
                                 {
                                     var priceresult = d1.Where(m => m.bookNo == record.bookNo).FirstOrDefault();
@@ -400,7 +401,6 @@ namespace Lumos.BLL
                                     {
                                         var hasDealt = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.InDealt).Count();
                                         var hasCompleted = details.Where(m => m.Status == Enumeration.OrderToLllegalDealtDetailsStatus.Completed).Count();
-
 
                                         if (hasDealt > 0)
                                         {

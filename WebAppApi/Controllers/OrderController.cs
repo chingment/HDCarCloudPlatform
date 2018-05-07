@@ -862,7 +862,7 @@ namespace WebAppApi.Controllers
                             record.lllegalCode = item.LllegalCode;
                             record.cityCode = item.CityCode;
                             record.lllegalTime = item.LllegalTime;
-                            record.point = item.Point;
+                            record.point = (int)item.Point;
                             record.offerType = item.OfferType;
                             record.ofserTypeName = item.OfserTypeName;
                             record.fine = item.Fine;

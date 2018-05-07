@@ -37,12 +37,11 @@ namespace WebAppApi.Controllers
             {
                 case KeyWordType.LicenseImg:
 
+                    string[] arr_Keyword = pms.Keyword.Split('@');
                     ImageModel imgModel = new ImageModel();
-                    imgModel.Type = ".jpg";
-                    imgModel.Data = pms.Keyword;
+                    imgModel.Data = arr_Keyword[0];
+                    imgModel.Type = arr_Keyword[1];
                     string imgurl = GetUploadImageUrl(imgModel, "CarInsure");
-
-                    //string imgurl = "http://file.gzhaoyilian.com/Upload/demo_jsz.jpg";
                     drivingLicenceInfo = BizFactory.CarInsureOffer.GetDrivingLicenceInfoFromImgUrl(imgurl);
                     if (drivingLicenceInfo == null)
                     {
@@ -63,7 +62,6 @@ namespace WebAppApi.Controllers
                     {
                         return ResponseResult(ResultType.Failure, ResultCode.Failure, "请输入车牌号码");
                     }
-
 
                     licensePlateNo = pms.Keyword;
                     break;

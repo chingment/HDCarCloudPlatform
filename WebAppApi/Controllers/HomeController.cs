@@ -1822,7 +1822,7 @@ namespace WebAppApi.Controllers
             // model1.KeyWord = "粤AT810P";
 
             model1.KeywordType = KeyWordType.LicenseImg;
-            model1.Keyword = base64string1;
+            model1.Keyword = base64string1 + "@.jpg";
 
 
             //SubmitEstimateListModel model = new SubmitEstimateListModel();

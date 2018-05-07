@@ -1029,9 +1029,9 @@ namespace WebAppApi.Controllers
             orderToLllegalQueryRecharge.UserId = model.UserId;
             orderToLllegalQueryRecharge.MerchantId = model.MerchantId;
             orderToLllegalQueryRecharge.PosMachineId = model.PosMachineId;
-            orderToLllegalQueryRecharge.Price = 5;
+            orderToLllegalQueryRecharge.Price = 7.5m;
             orderToLllegalQueryRecharge.Score = 50;
-            orderToLllegalQueryRecharge.PriceVersion = "2018.04.09";
+            orderToLllegalQueryRecharge.PriceVersion = "2018.05.07";
 
             IResult result = BizFactory.Order.SubmitLllegalQueryScoreRecharge(model.UserId, orderToLllegalQueryRecharge);
             return new APIResponse(result);

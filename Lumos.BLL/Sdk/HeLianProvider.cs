@@ -182,6 +182,7 @@ namespace Lumos.BLL
 
                 if (BizFactory.AppSettings.IsTest)
                 {
+                    #region  测试
                     string strout = "";
 
                     string strfile = "Test_Lllegal.txt";
@@ -216,17 +217,9 @@ namespace Lumos.BLL
                         record.serviceFee = serviceFeeModel.ServiceFee;
                         record.urgentFee = serviceFeeModel.UrgentFee;
                         record.canUrgent = serviceFeeModel.CanUrgentFee;
-
+                        record.canDealt = serviceFeeModel.CanDealt;
                         record.status = "待处理";
 
-                        if (record.point == 0)
-                        {
-                            record.canDealt = true;
-                        }
-                        else
-                        {
-                            record.canDealt = false;
-                        }
 
                         var details = CurrentDb.OrderToLllegalDealtDetails.Where(m => m.BookNo == record.bookNo).ToList();
                         if (details != null)
@@ -258,6 +251,7 @@ namespace Lumos.BLL
 
                     return new CustomJsonResult<LllegalQueryResult>(ResultType.Success, ResultCode.Success, "查询成功", queryResult);
 
+                    #endregion
                 }
 
                 if (pms.EnginNo.Length < 6)

@@ -30,8 +30,8 @@ namespace WebAppApi.Controllers
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
         //private string host = "http://localhost:16665";
-        //private string host = "http://120.79.233.231";
-        private string host = "http://api.gzhaoyilian.com";
+        private string host = "http://120.79.233.231";
+       // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
 
         private string YBS_key = "ybs_test";
@@ -181,7 +181,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
-            model.Add("违章查询", SubmittLllegalQuery(userId, merchantId, posMachineId));
+           // model.Add("违章查询", SubmittLllegalQuery(userId, merchantId, posMachineId));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));

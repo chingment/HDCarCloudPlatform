@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
+        private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        private string host = "http://120.79.233.231";
+        //private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -112,6 +112,8 @@ namespace WebAppApi.Controllers
             return Math.Round(d, 2);
         }
 
+        Dictionary<string, string> model = new Dictionary<string, string>();
+
         public ActionResult Index()
         {
 
@@ -155,7 +157,7 @@ namespace WebAppApi.Controllers
 
             ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-            Dictionary<string, string> model = new Dictionary<string, string>();
+
 
             string userName = "15989287031";
             string passWord = "123456";
@@ -1808,7 +1810,7 @@ namespace WebAppApi.Controllers
 
         public void CarIns(int userId, int merchantId, int posMachineId)
         {
-            CarIns_GetCarInfo(userId, merchantId, posMachineId);
+            model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
         }
 
 

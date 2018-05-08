@@ -75,7 +75,7 @@ namespace WebAppApi.Controllers
 
             if (ydtInsCarApiSearchResultData != null)
             {
-                carInfo.Belong = ydtInsCarApiSearchResultData.Belong;
+                carInfo.Belong = ydtInsCarApiSearchResultData.Belong ?? "1";
                 carInfo.CarType = "1";
                 if (ydtInsCarApiSearchResultData.Car != null)
                 {
@@ -104,7 +104,14 @@ namespace WebAppApi.Controllers
                 carInfo.ChgownerType = carInfo.ChgownerType ?? "0";//是否过户，0：否，1：是
             }
 
+            carInfo.Belong = ydtInsCarApiSearchResultData.Belong ?? "1";//车辆归属     1：私人，2：公司
+            carInfo.ChgownerType = carInfo.ChgownerType ?? "0";//是否过户              0：否，1：是
+
             carInfoResult.Car = carInfo;
+
+            carInfoResult.Customers.Add(new CustomerModel { InsuredFlag = "1" });
+            carInfoResult.Customers.Add(new CustomerModel { InsuredFlag = "2" });
+            carInfoResult.Customers.Add(new CustomerModel { InsuredFlag = "3" });
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", carInfoResult);
         }

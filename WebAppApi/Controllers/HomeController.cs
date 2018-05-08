@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
+       // private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        //private string host = "http://120.79.233.231";
+        private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -1811,6 +1811,7 @@ namespace WebAppApi.Controllers
         public void CarIns(int userId, int merchantId, int posMachineId)
         {
             model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+            model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId));
         }
 
 
@@ -1854,6 +1855,29 @@ namespace WebAppApi.Controllers
             string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/GetCarInfo", a1, headers1);
 
             return respon_data4;
+        }
+
+        public string CarIns_GetCarModelInfo(int userId, int merchantId, int posMachineId)
+        {
+
+            string keyword = "LFMAPE2C8B0906269";
+            string vin = "LFMAPE2C8B0906269";
+            string firstRegisterDate = "2018-05-05";
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("keyword", keyword);
+            parames.Add("vin", vin);
+            parames.Add("firstRegisterDate", firstRegisterDate);
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/CarIns/GetCarModelInfo?keyword=" + keyword.ToString() + "&vin=" + vin + "&firstRegisterDate=" + firstRegisterDate, headers);
+
+            return result;
         }
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebAppApi.Models.CarIns
+namespace Lumos.Entity
 {
-    public class InsComanyInfoPms
+    public class CarInsComanyInfoPms
     {
         public string OrderSeq { get; set; }
 

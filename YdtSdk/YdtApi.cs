@@ -57,7 +57,7 @@ namespace YdtSdk
 
             log.Info("Ydt->result:" + body);
 
-            if (body.IndexOf("\"code\":") == -1)
+            if (body.IndexOf("\"{\"code\":") == -1)
             {
                 body = "{\"code\":0,\"msg\":\"成功\",\"data\":" + body + "}";
             }

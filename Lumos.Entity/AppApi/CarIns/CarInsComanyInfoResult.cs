@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebAppApi.Models.CarIns
+namespace Lumos.Entity
 {
     public class Channel
     {
+        public int CompanyId { get; set; }
+        public string CompanyImg { get; set; }
         public int ChannelId { get; set; }
         public string Code { get; set; }
         public string Descp { get; set; }
@@ -17,6 +19,8 @@ namespace WebAppApi.Models.CarIns
         public int Remote { get; set; }
         public int Sort { get; set; }
 
+        public string ImgUrl { get; set; }
+
     }
 
     public class Area
@@ -26,8 +30,14 @@ namespace WebAppApi.Models.CarIns
         public string AreaName { get; set; }
     }
 
-    public class InsComanyInfoResult
+    public class CarInsComanyInfoResult
     {
+        public CarInsComanyInfoResult()
+        {
+            this.Channels = new List<Channel>();
+            this.Areas = new List<Area>();
+        }
+
         public int AreaId { get; set; }
 
         public string LicensePicKey { get; set; }

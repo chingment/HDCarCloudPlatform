@@ -5,6 +5,7 @@ using Lumos.Common;
 using Lumos.DAL;
 using Lumos.Entity;
 using Lumos.Entity.AppApi;
+using Lumos.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -19,7 +20,6 @@ using System.Web;
 using System.Web.Mvc;
 using WebAppApi.Models;
 using WebAppApi.Models.Account;
-using WebAppApi.Models.CarIns;
 using WebAppApi.Models.CarService;
 using WebAppApi.Models.Order;
 
@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-       // private string host = "http://localhost:16665";
+        private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        private string host = "http://120.79.233.231";
+        //private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -855,24 +855,24 @@ namespace WebAppApi.Controllers
             model.InsuranceCompanyId = new int[1] { 1 };
 
 
-            List<InsureKindModel> insureKindModel = new List<InsureKindModel>();
-            insureKindModel.Add(new InsureKindModel() { Id = 1, Value = "", Details = "", IsWaiverDeductible = false });
-            insureKindModel.Add(new InsureKindModel() { Id = 2, Value = "", Details = "", IsWaiverDeductible = false });
-            insureKindModel.Add(new InsureKindModel() { Id = 3, Value = "2000", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 4, Value = "20w", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 5, Value = "30w", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 6, Value = "40w", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 7, Value = "3000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 8, Value = "国产", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 9, Value = "1000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 10, Value = "2000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 11, Value = "3000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 12, Value = "4000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 13, Value = "5000", Details = "购买机动" });
-            insureKindModel.Add(new InsureKindModel() { Id = 14, Value = "100/天", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 15, Value = "6000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 16, Value = "7000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 17, Value = "8000", Details = "" });
+            List<CarInsInsureKindModel> insureKindModel = new List<CarInsInsureKindModel>();
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 1, Value = "", Details = "", IsWaiverDeductible = false });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 2, Value = "", Details = "", IsWaiverDeductible = false });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 3, Value = "2000", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 4, Value = "20w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 5, Value = "30w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 6, Value = "40w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 7, Value = "3000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 8, Value = "国产", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 9, Value = "1000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 10, Value = "2000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 11, Value = "3000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 12, Value = "4000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 13, Value = "5000", Details = "购买机动" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 14, Value = "100/天", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 15, Value = "6000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 16, Value = "7000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 17, Value = "8000", Details = "" });
 
 
             model.InsureKind = insureKindModel;
@@ -942,24 +942,24 @@ namespace WebAppApi.Controllers
             //list.Add(new YdtInsCoverageModel { UpLinkCode = 10, YdtCode = "011", Name = "无法找到第三方险" });
 
 
-            List<InsureKindModel> insureKindModel = new List<InsureKindModel>();
-            insureKindModel.Add(new InsureKindModel() { Id = 1, Value = "", Details = "", IsWaiverDeductible = false });
-            insureKindModel.Add(new InsureKindModel() { Id = 2, Value = "", Details = "", IsWaiverDeductible = false });
-            insureKindModel.Add(new InsureKindModel() { Id = 3, Value = "2000", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 4, Value = "100w", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 5, Value = "20w", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 6, Value = "2w", Details = "", IsWaiverDeductible = true });
-            insureKindModel.Add(new InsureKindModel() { Id = 7, Value = "", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 8, Value = "国产", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 9, Value = "2000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 10, Value = "", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 11, Value = "", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 12, Value = "", Details = "" });
+            List<CarInsInsureKindModel> insureKindModel = new List<CarInsInsureKindModel>();
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 1, Value = "", Details = "", IsWaiverDeductible = false });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 2, Value = "", Details = "", IsWaiverDeductible = false });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 3, Value = "2000", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 4, Value = "100w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 5, Value = "20w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 6, Value = "2w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 7, Value = "", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 8, Value = "国产", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 9, Value = "2000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 10, Value = "", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 11, Value = "", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 12, Value = "", Details = "" });
             //insureKindModel.Add(new InsureKindModel() { Id = 13, Value = "5000", Details = "购买机动" });
             //insureKindModel.Add(new InsureKindModel() { Id = 14, Value = "100/天", Details = "" });
             //insureKindModel.Add(new InsureKindModel() { Id = 15, Value = "6000", Details = "" });
             //insureKindModel.Add(new InsureKindModel() { Id = 16, Value = "7000", Details = "" });
-            insureKindModel.Add(new InsureKindModel() { Id = 17, Value = "", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 17, Value = "", Details = "" });
 
 
             model.InsureKind = insureKindModel;
@@ -1810,20 +1810,46 @@ namespace WebAppApi.Controllers
 
         public void CarIns(int userId, int merchantId, int posMachineId)
         {
-            model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
-            model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId));
+
+
+            //model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+            // model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId));
+
+            //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+            // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
+            // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId));
+
+
+            //string s_CarIns_GetCarInfo = CarIns_GetCarInfo(userId, merchantId, posMachineId);
+
+            //CustomJsonResult<CarInfoResult> s1 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInfoResult>>(s_CarIns_GetCarInfo);
+
+
+            //string s_CarIns_GetCarModelInfo = CarIns_GetCarModelInfo(userId, merchantId, posMachineId);
+
+            //CustomJsonResult<CarModelInfoResult> s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarModelInfoResult>>(s_CarIns_GetCarModelInfo);
+
+            string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
+
+            CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
+
+            if (s3.Result == ResultType.Success)
+            {
+                model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.OrderSeq));
+
+            }
         }
 
 
         public string CarIns_GetCarInfo(int userId, int merchantId, int posMachineId)
         {
 
-            string base64string1 = GetImagesBase64String(@"d:\demo_jsz.jpg");
+            //string base64string1 = GetImagesBase64String(@"d:\demo_jsz.jpg");
 
             CarInfoPms model1 = new CarInfoPms();
             model1.KeywordType = KeyWordType.LicensePlateNo;
-            model1.Keyword = "粤AT810P";
-
+            model1.Keyword = "粤A9RS97";
+           // model1.Keyword = "粤AT810P";
             //model1.KeywordType = KeyWordType.LicenseImg;
             // model1.Keyword = base64string1 + "@.jpg";
 
@@ -1860,9 +1886,9 @@ namespace WebAppApi.Controllers
         public string CarIns_GetCarModelInfo(int userId, int merchantId, int posMachineId)
         {
 
-            string keyword = "LFMAPE2C8B0906269";
-            string vin = "LFMAPE2C8B0906269";
-            string firstRegisterDate = "2018-05-05";
+            string keyword = "LFV3A23C6E3095934";
+            string vin = "LFV3A23C6E3095934";
+            string firstRegisterDate = "2016-06-12";
             Dictionary<string, string> parames = new Dictionary<string, string>();
             parames.Add("keyword", keyword);
             parames.Add("vin", vin);
@@ -1878,6 +1904,142 @@ namespace WebAppApi.Controllers
             string result = http.HttpGet("" + host + "/api/CarIns/GetCarModelInfo?keyword=" + keyword.ToString() + "&vin=" + vin + "&firstRegisterDate=" + firstRegisterDate, headers);
 
             return result;
+        }
+
+
+        public string CarIns_EditBaseInfo(int userId, int merchantId, int posMachineId)
+        {
+
+            CarInsEditBaseInfoPms model = new CarInsEditBaseInfoPms();
+           // model.OrderSeq = "46379";
+            model.Auto = "1";
+            model.Car.Belong = "1";
+            model.Car.LicensePlateNo = "粤A9RS97";
+            model.Car.Vin = "LFV3A23C6E3095934";
+            model.Car.EngineNo = "242956";
+            model.Car.FirstRegisterDate = "2015-08-11";
+            model.Car.ModelCode = "FV7207FCDWG";
+            model.Car.ModelName = "FV7207FCDWG";
+            model.Car.Displacement = "2000";
+            model.Car.MarketYear = "2012";
+            model.Car.RatedPassengerCapacity = 5;
+            model.Car.ReplacementValue = 266300;
+            model.Car.ChgownerType = "0";
+            model.Car.ChgownerDate = "";
+            model.Car.Tonnage = "";
+            model.Car.WholeWeight = "";
+
+            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱元刚", CertNo = "440182198804141553", Mobile = "15989287032", Address = "广东省花都区" });
+
+            string a1 = JsonConvert.SerializeObject(model);
+            // a1= "{\"auto\":\"1\",\"car\":{\"belong\":\"1\",\"carType\":\"1\",\"licensePlateNo\":\"粤AT810P\",\"vin\":\"LFMAPE2C8B0906269\",\"engineNo\":\"E764059\",\"firstRegisterDate\":\"2011-03-15\",\"displacement\":\"1600\",\"ratedPassengerCapacity\":\"108800\",\"replacementValue\":\"108800\",\"chgownerType\":\"1\"},\"orderSeq\":\"\",\"customers\":[{\"name\":\"黄大爷\"},{\"name\":\"黄大爷\"},{\"name\":\"黄大爷\",\"certNo\":\"\"}]}";
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/EditBaseInfo", a1, headers1);
+
+            return respon_data4;
+        }
+
+        public string CarIns_InsComanyInfo(int userId, int merchantId, int posMachineId)
+        {
+
+            CarInsComanyInfoPms model = new CarInsComanyInfoPms();
+            model.OrderSeq = "5b2e835c-15cd-4a53-b8c6-fedd9a26693d";
+            model.AreaId = 440100;
+
+            string a1 = JsonConvert.SerializeObject(model);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/InsComanyInfo", a1, headers1);
+
+            return respon_data4;
+        }
+
+
+        public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, string orderSeq)
+        {
+            CarInsInquiryPms model = new CarInsInquiryPms();
+            model.Auto = 1;
+            model.OrderSeq = orderSeq;
+            model.BiStartDate = "2018-05-11";
+            model.CiStartDate = "2018-05-11";
+            model.ChannelId = 1;
+            model.CompanyCode = "006000";
+
+            model.Car.Belong = "1";
+            model.Car.LicensePlateNo = "粤L29K83";
+            model.Car.Vin = "LS4ASM2E2GF021746";
+            model.Car.EngineNo = "GA8U020728";
+            model.Car.FirstRegisterDate = "2011-03-15";
+            model.Car.ModelCode = "CAD2586CQC";
+            model.Car.ModelName = "长安SC6458A5多用途乘用车";
+            model.Car.Displacement = "1500";
+            model.Car.MarketYear = "2015";
+            model.Car.RatedPassengerCapacity = 5;
+            model.Car.ReplacementValue = 52900;
+            model.Car.ChgownerType = "0";
+            model.Car.ChgownerDate = "";
+            model.Car.Tonnage = "";
+            model.Car.WholeWeight = "";
+
+
+            List<CarInsInsureKindModel> insureKindModel = new List<CarInsInsureKindModel>();
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 1, Value = "", Details = "", IsWaiverDeductible = false });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 2, Value = "", Details = "", IsWaiverDeductible = false });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 3, Value = "2000", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 4, Value = "100w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 5, Value = "20w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 6, Value = "2w", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 7, Value = "", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 8, Value = "国产", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 9, Value = "2000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 10, Value = "", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 11, Value = "", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 12, Value = "", Details = "" });
+            //insureKindModel.Add(new InsureKindModel() { Id = 13, Value = "5000", Details = "购买机动" });
+            //insureKindModel.Add(new InsureKindModel() { Id = 14, Value = "100/天", Details = "" });
+            //insureKindModel.Add(new InsureKindModel() { Id = 15, Value = "6000", Details = "" });
+            //insureKindModel.Add(new InsureKindModel() { Id = 16, Value = "7000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 17, Value = "", Details = "" });
+
+
+            model.InsureKind = insureKindModel;
+
+
+            string a1 = JsonConvert.SerializeObject(model);
+
+
+
+            //a1 = "{\"car\":{\"replacementValue\":\"52900\",\"firstRegisterDate\":\"2011-03-15\"},\"auto\":1,\"channelId\":19,\"orderSeq\":\"5b2e835c-15cd-4a53-b8c6-fedd9a26693d\",\"companyCode\":\"002000\",\"risk\":3,\"biStartDate\":\"2018-05-05\",\"ciStartDate\":\"2018-05-05\",\"coverages\":[{\"code\":\"001\",\"compensation\":1,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"002\",\"compensation\":1,\"amount\":200000.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"003\",\"compensation\":1,\"amount\":300000.0,\"unitAmount\":300000.0,\"quantity\":1,\"glassType\":0},{\"code\":\"004\",\"compensation\":1,\"amount\":-400000.0,\"unitAmount\":400000.0,\"quantity\":-1,\"glassType\":0},{\"code\":\"005\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"006\",\"compensation\":0,\"amount\":0.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":1},{\"code\":\"007\",\"compensation\":0,\"amount\":1000.0,\"unitAmount\":1000.0,\"quantity\":1,\"glassType\":0},{\"code\":\"011\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"009\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"008\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"010\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0}]}";
+
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            // string a1 = "a1=das&a2=323";
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/InsInquiry", a1, headers1);
+
+            return respon_data4;
         }
     }
 }

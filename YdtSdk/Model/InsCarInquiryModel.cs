@@ -28,5 +28,6 @@ namespace YdtSdk
         public string biStartDate { get; set; }
         public string ciStartDate { get; set; }
         public List<CoveragesModel> coverages { get; set; }
+        public string notifyUrl { get; set; }
     }
 }

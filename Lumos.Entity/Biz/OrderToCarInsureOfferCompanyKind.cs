@@ -8,31 +8,30 @@ using System.Threading.Tasks;
 
 namespace Lumos.Entity
 {
-    [Table("OrderToCarInsureOfferKind")]
-    public class OrderToCarInsureOfferKind
+    [Table("OrderToCarInsureOfferCompanyKind")]
+    public class OrderToCarInsureOfferCompanyKind
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int OrderId { get; set; }
+        public int InsuranceCompanyId { get; set; }
         public int KindId { get; set; }
-
-
         [MaxLength(1024)]
         public string PartnerKindId { get; set; }
         [MaxLength(128)]
-        public string KindValue { get; set; }
-        [MaxLength(1024)]
-        public string KindDetails { get; set; }
-        public bool IsWaiverDeductible { get; set; }
+        public string KindName { get; set; }
+        public int? Quantity { get; set; }
+        public int? GlassType { get; set; }
+        public decimal? UnitAmount { get; set; }
+        public decimal BasicPremium { get; set; }
+        public decimal Discount { get; set; }
+        public decimal StandardPremium { get; set; }
+        public decimal Amount { get; set; }
+        public decimal? Premium { get; set; }
+        public int Compensation { get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public int? Mender { get; set; }
         public DateTime? LastUpdateTime { get; set; }
-        [MaxLength(128)]
-        public string KindName { get; set; }
-        [MaxLength(128)]
-        public string KindUnit { get; set; }
-        public int KindQuantity { get; set; }
-        public int KindGlassType { get; set; }
     }
 }

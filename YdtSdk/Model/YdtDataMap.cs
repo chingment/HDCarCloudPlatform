@@ -9,10 +9,10 @@ namespace YdtSdk
 {
     public class YdtDataMap
     {
-        private static List<YdtInsComanyModel> YdtInsComanyList()
+        public static List<YdtInsComanyModel> YdtInsComanyList()
         {
             List<YdtInsComanyModel> list = new List<YdtInsComanyModel>();
-            list.Add(new YdtInsComanyModel { UpLinkCode = 1, YdtCode = "002000", Name = "平安保险",PrintName= "平安保险有限公司", ChannelId= 19 });
+            list.Add(new YdtInsComanyModel { UpLinkCode = 1, YdtCode = "002000", Name = "平安保险", PrintName = "平安保险有限公司", ChannelId = 19 });
             list.Add(new YdtInsComanyModel { UpLinkCode = 2, YdtCode = "008000", Name = "太平洋保险", PrintName = "太平洋保险有限公司" });
             list.Add(new YdtInsComanyModel { UpLinkCode = 3, YdtCode = "003000", Name = "阳光保险", PrintName = "阳光保险有限公司", ChannelId = 12 });
             list.Add(new YdtInsComanyModel { UpLinkCode = 4, YdtCode = "", Name = "亚太保险", PrintName = "亚太保险有限公司" });
@@ -25,7 +25,7 @@ namespace YdtSdk
             return list;
         }
 
-        private static List<YdtInsCoverageModel> YdtInsCoverageList()
+        public static List<YdtInsCoverageModel> YdtInsCoverageList()
         {
 
             List<YdtInsCoverageModel> list = new List<YdtInsCoverageModel>();
@@ -46,6 +46,13 @@ namespace YdtSdk
         public static YdtInsComanyModel GetCompanyCode(int uplinkInsCarCompanyId)
         {
             var comany = YdtInsComanyList().Where(m => m.UpLinkCode == uplinkInsCarCompanyId).FirstOrDefault();
+
+            return comany;
+        }
+
+        public static YdtInsComanyModel GetCompanyByCode(string code)
+        {
+            var comany = YdtInsComanyList().Where(m => m.YdtCode == code).FirstOrDefault();
 
             return comany;
         }
@@ -172,23 +179,23 @@ namespace YdtSdk
                     if (kind.KindId == 9)
                     {
                         model.unitAmount = GetCoverageAmount(kind.KindValue);
-                        model.quantity =1;
+                        model.quantity = 1;
                         model.amount = GetCoverageAmount(kind.KindValue);
                     }
 
-                        #endregion
+                    #endregion
 
 
-                        //model.amount = kind.KindValue;
+                    //model.amount = kind.KindValue;
 
-                        // model.unitAmount = kind.KindValue;
+                    // model.unitAmount = kind.KindValue;
 
-                        //  model.quantity = kind.KindValue;
+                    //  model.quantity = kind.KindValue;
 
 
-                        //  model.glassType = kind.KindValue;
+                    //  model.glassType = kind.KindValue;
 
-                        list.Add(model);
+                    list.Add(model);
                 }
             }
 
@@ -216,6 +223,7 @@ namespace YdtSdk
             return 3;
 
         }
+
 
     }
 }

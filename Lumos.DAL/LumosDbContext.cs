@@ -124,6 +124,14 @@ namespace Lumos.DAL
 
         public IDbSet<Coupon> Coupon { get; set; }
 
+        public IDbSet<InsCarInfo> InsCarInfo { get; set; }
+
+
+        public IDbSet<OrderToCarInsureAuto> OrderToCarInsureAuto { get; set; }
+
+        public IDbSet<OrderToCarInsureOfferCompanyKind> OrderToCarInsureOfferCompanyKind { get; set; }
+
+
         //public FxDbContext()
         //    : base("DefaultConnection")
         //{

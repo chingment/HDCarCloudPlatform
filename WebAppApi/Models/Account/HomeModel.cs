@@ -1,5 +1,6 @@
 ﻿using Lumos.BLL;
 using Lumos.BLL.Service.Model;
+using Lumos.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

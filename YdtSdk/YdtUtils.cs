@@ -47,7 +47,6 @@ namespace YdtSdk
             TokenAu au = redisClient.KGet(key);
             if (au == null)
             {
-
                 YdtApi c = new YdtApi();
                 YdtToken ydtToken = new YdtToken("hylian", "hylian_2018");
                 var ydtTokenResult = c.DoGet(ydtToken);
@@ -360,10 +359,7 @@ namespace YdtSdk
                                     }
                                     else
                                     {
-                                        if (coverage.amount != null)
-                                        {
-                                            offerImgCoverage.Coverage = coverage.amount.Value.ToF2Price();
-                                        }
+                                        offerImgCoverage.Coverage = coverage.amount.ToF2Price();
                                     }
 
                                     offerImgModel.CommercialCoverageInfo.Coverages.Add(offerImgCoverage);
@@ -536,6 +532,112 @@ namespace YdtSdk
             var ydtInscarGetInquiryInfoResult = ydtApi.DoPost(ydtInscarGetInquiryInfo);
 
             return ydtInscarGetInquiryInfoResult.data;
+        }
+
+
+        public static CustomJsonResult<string> EditBaseInfo(InscarEditbaseModel model)
+        {
+            CustomJsonResult<string> result = new CustomJsonResult<string>();
+
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            if (string.IsNullOrEmpty(model.orderSeq))
+            {
+                InscarAddbaseModel addModel = new InscarAddbaseModel();
+                addModel.auto = model.auto;
+                addModel.belong = model.belong;
+                addModel.carType = model.carType;
+                addModel.car = model.car;
+                addModel.customers = model.customers;
+                addModel.pic = model.pic;
+                YdtInscarAddbase ydtInscarAddbase = new YdtInscarAddbase(au.token, au.session, YdtPostDataType.Json, addModel);
+                var ydtInscarCarResult = ydtApi.DoPost(ydtInscarAddbase);
+
+                if (ydtInscarCarResult.code != 0)
+                {
+                    return new CustomJsonResult<string>(ResultType.Failure, ResultCode.Failure, ydtInscarCarResult.msg, null);
+                }
+
+                result.Result = ResultType.Success;
+                result.Code = ResultCode.Success;
+                result.Data = ydtInscarCarResult.data.orderSeq;
+            }
+            else
+            {
+                YdtInscarUpatebase ydtInscarUpdatebase = new YdtInscarUpatebase(au.token, au.session, YdtPostDataType.Json, model);
+                var ydtInscarCarResult = ydtApi.DoPost(ydtInscarUpdatebase);
+
+                if (ydtInscarCarResult.code != 0)
+                {
+                    return new CustomJsonResult<string>(ResultType.Failure, ResultCode.Failure, ydtInscarCarResult.msg, null);
+                }
+
+                result.Result = ResultType.Success;
+                result.Code = ResultCode.Success;
+                result.Data = ydtInscarCarResult.data.orderSeq;
+            }
+
+            return result;
+        }
+
+
+
+
+        public static CustomJsonResult<YdtInscarInquiryResultData> GetInsInquiryByAuto(InsCarInquiryModel model)
+        {
+            var result = new CustomJsonResult<YdtInscarInquiryResultData>();
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            YdtInscarInquiry ydtInscarInquiry = new YdtInscarInquiry(au.token, au.session, YdtPostDataType.Json, model);
+            var ydtInscarInquiryResult = ydtApi.DoPost(ydtInscarInquiry);
+
+            if (ydtInscarInquiryResult.code != 0)
+            {
+                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInquiryResult.msg, null);
+            }
+
+            return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInscarInquiryResult.msg, ydtInscarInquiryResult.data);
+        }
+
+        public static CustomJsonResult<YdtInscarInquiryResultData> GetInsInquiryByArtificial(InsCarInquiryModel model)
+        {
+            var result = new CustomJsonResult<YdtInscarInquiryResultData>();
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            YdtInscarInquiry ydtInscarInquiry = new YdtInscarInquiry(au.token, au.session, YdtPostDataType.Json, model);
+            var ydtInscarInquiryResult = ydtApi.DoPost(ydtInscarInquiry);
+
+            if (ydtInscarInquiryResult.code != 0)
+            {
+                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInquiryResult.msg, null);
+            }
+
+            return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInscarInquiryResult.msg, ydtInscarInquiryResult.data);
+        }
+
+
+        public static CustomJsonResult<decimal> GetAdviceValue(string startDate, string registDate, decimal replacementValue)
+        {
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            var insCarAdvicevalueModel = new InsCarAdvicevalueModel();
+            insCarAdvicevalueModel.startDate = startDate;
+            insCarAdvicevalueModel.registDate = registDate;
+            insCarAdvicevalueModel.replacementValue = replacementValue;
+
+            var ydtInscarAdvicevalue = new YdtInscarAdvicevalue(au.token, au.session, YdtPostDataType.Json, insCarAdvicevalueModel);
+            var ydtInscarAdvicevalueResult = ydtApi.DoPost(ydtInscarAdvicevalue);
+
+            if (ydtInscarAdvicevalueResult.code != 0)
+            {
+                return new CustomJsonResult<decimal>(ResultType.Failure, ResultCode.Failure, ydtInscarAdvicevalueResult.msg, 0);
+            }
+
+            return new CustomJsonResult<decimal>(ResultType.Success, ResultCode.Success, ydtInscarAdvicevalueResult.msg, ydtInscarAdvicevalueResult.data.actualPrice);
         }
     }
 }

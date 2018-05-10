@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebAppApi.Models.CarIns
+namespace Lumos.Entity
 {
-    public class CustomerModel
+    public class CarInsCustomerModel
     {
         public string InsuredFlag { get; set; }
         public string Name { get; set; }

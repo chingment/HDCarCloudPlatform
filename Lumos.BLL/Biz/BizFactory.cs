@@ -178,5 +178,13 @@ namespace Lumos.BLL
             }
         }
 
+        public static InsCarProvider InsCar
+        {
+            get
+            {
+                return new InsCarProvider();
+            }
+        }
+
     }
 }

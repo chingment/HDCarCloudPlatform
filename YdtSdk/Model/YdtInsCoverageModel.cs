@@ -14,7 +14,7 @@ namespace YdtSdk
 
         public string Name { get; set; }
 
-        public string Compensation { get; set; }
+        public int Compensation { get; set; }
 
         public decimal Amount { get; set; }
 

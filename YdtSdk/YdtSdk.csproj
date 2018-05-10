@@ -76,11 +76,13 @@
     <Compile Include="Model\YdtInscarInquiryOffer.cs" />
     <Compile Include="Model\YdtInsComanyModel.cs" />
     <Compile Include="Model\YdtInsCoverageModel.cs" />
+    <Compile Include="Post\YdtInscarUpatebase.cs" />
     <Compile Include="Post\YdtInscarAdvicevalue.cs" />
     <Compile Include="Post\YdtInscarAdvicevalueResultData.cs" />
     <Compile Include="Post\IYdtApiPostRequest.cs" />
     <Compile Include="Post\YdtInscarAddbase.cs" />
     <Compile Include="Post\YdtInscarAddbaseResult.cs" />
+    <Compile Include="Post\YdtInscarUpdatebaseResultData.cs" />
     <Compile Include="Post\YdtInscarGetInquiryInfo.cs" />
     <Compile Include="Post\YdtInscarGetInquiryInfoResultData.cs" />
     <Compile Include="Post\YdtInscarInquiry.cs" />

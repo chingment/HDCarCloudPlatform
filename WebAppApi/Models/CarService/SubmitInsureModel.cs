@@ -25,7 +25,7 @@ namespace WebAppApi.Models.CarService
 
         public int[] InsuranceCompanyId { get; set; }
 
-        public List<InsureKindModel> InsureKind { get; set; }
+        public List<CarInsInsureKindModel> InsureKind { get; set; }
 
         public Dictionary<string, ImageModel> ImgData { get; set; }
 

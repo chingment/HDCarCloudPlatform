@@ -489,6 +489,24 @@ namespace WebAppApi.Controllers
             model.coverages = GetCoverages(pms.InsureKind, actualPrice, pms.Car.RatedPassengerCapacity);
 
 
+            var updateOrderOfferPms = new UpdateOrderOfferPms();
+            updateOrderOfferPms.Auto = pms.Auto;
+            updateOrderOfferPms.PartnerOrderId = pms.OrderSeq;
+            updateOrderOfferPms.PartnerChannelId = pms.ChannelId;
+            updateOrderOfferPms.PartnerCompanyId = pms.CompanyCode;
+            updateOrderOfferPms.PartnerRisk = model.risk;
+            updateOrderOfferPms.BiStartDate = model.biStartDate;
+            updateOrderOfferPms.CiStartDate = model.ciStartDate;
+            updateOrderOfferPms.Coverages = model.coverages;
+
+
+            var result_UpdateOfferByBefore = BizFactory.InsCar.UpdateOfferByBefore(0, updateOrderOfferPms);
+
+            if (result_UpdateOfferByBefore.Result != ResultType.Success)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, result_UpdateOfferByBefore.Message);
+            }
+
             CustomJsonResult<YdtInscarInquiryResultData> offerResult = null;
             //0 人工报价，1 自动报价
             if (pms.Auto == 0)
@@ -516,92 +534,18 @@ namespace WebAppApi.Controllers
             #region 构造结果
             var offerResultData = offerResult.Data;
 
-            var updateOrderOfferPms = new UpdateOrderOfferPms();
-            updateOrderOfferPms.Auto = pms.Auto;
-            updateOrderOfferPms.PartnerOrderId = offerResultData.orderSeq;
             updateOrderOfferPms.PartnerInquirySeq = offerResultData.inquirySeq;
-            updateOrderOfferPms.PartnerChannelId = pms.ChannelId;
-            updateOrderOfferPms.PartnerCompanyId = pms.CompanyCode;
-            updateOrderOfferPms.PartnerRisk = model.risk;
             updateOrderOfferPms.Inquirys = offerResultData.inquirys;
             updateOrderOfferPms.Coverages = offerResultData.coverages;
-            updateOrderOfferPms.BiStartDate = model.biStartDate;
-            updateOrderOfferPms.CiStartDate = model.ciStartDate;
 
-            BizFactory.InsCar.UpdateOrderOffer(0, updateOrderOfferPms);
+            var result_UpdateOfferByAfter = BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
 
             CarInsInquiryResult result = new CarInsInquiryResult();
-            result.Company = "";
-            result.Car = pms.Car;
+            result.Company = null;
             result.InquirySeq = offerResultData.inquirySeq;
             result.OrderSeq = offerResultData.orderSeq;
-
-
-
-
-            if (offerResultData.coverages != null)
-            {
-                var coverages = offerResultData.coverages;
-                foreach (var coverage in coverages)
-                {
-                    CarInsCoverageModel offerImgCoverage = new CarInsCoverageModel();
-                    offerImgCoverage.Name = coverage.name;
-                    offerImgCoverage.Discount = coverage.discount;
-                    offerImgCoverage.Premium = coverage.standardPremium;
-
-                    if (coverage.code == "006")
-                    {
-                        if (coverage.glassType != null)
-                        {
-                            if (coverage.glassType.Value == 1)
-                            {
-                                offerImgCoverage.Coverage = "国产";
-                            }
-                            else
-                            {
-                                offerImgCoverage.Coverage = "进口";
-                            }
-                        }
-                    }
-                    else if (coverage.code == "004")
-                    {
-                        offerImgCoverage.Coverage = coverage.unitAmount.ToF2Price();
-                    }
-                    else if (coverage.name.IndexOf("不计免赔") > -1)
-                    {
-                        offerImgCoverage.Coverage = "";
-                    }
-                    else
-                    {
-                        offerImgCoverage.Coverage = coverage.amount.ToF2Price();
-                    }
-
-                    result.CommercialCoverageInfo.Coverages.Add(offerImgCoverage);
-                }
-                result.CommercialCoverageInfo.PeriodStart = pms.BiStartDate;
-                result.CommercialCoverageInfo.PeriodEnd = "";
-            }
-
-            if (offerResultData.inquirys != null)
-            {
-                var commercial = offerResultData.inquirys.Where(m => m.risk == 1).FirstOrDefault();
-                if (commercial != null)
-                {
-                    result.CommercialCoverageInfo.SumPremium = commercial.standardPremium;
-                }
-
-                var compulsory = offerResultData.inquirys.Where(m => m.risk == 2).FirstOrDefault();
-
-                if (compulsory != null)
-                {
-                    result.CompulsoryInfo.PeriodStart = pms.CiStartDate;
-                    result.CompulsoryInfo.PeriodEnd = "";
-                    result.CompulsoryInfo.Premium = compulsory.standardPremium - compulsory.sumPayTax;
-                    result.TravelTax = compulsory.sumPayTax;
-                }
-            }
-
-            result.SumPremium = offerResultData.inquirys.Sum(m => m.standardPremium);
+            result.InsureItem = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsureAuto, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
+            result.SumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value;
             #endregion
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "报价成功", result);
@@ -653,16 +597,16 @@ namespace WebAppApi.Controllers
             return amount;
         }
 
-        public static List<CoveragesModel> GetCoverages(List<CarInsInsureKindModel> kinds, decimal oldAmount, int carSeat)
+        public static List<CoverageModel> GetCoverages(List<CarInsInsureKindModel> kinds, decimal oldAmount, int carSeat)
         {
-            List<CoveragesModel> list = new List<CoveragesModel>();
+            List<CoverageModel> list = new List<CoverageModel>();
             var ydtInsCoverageList = YdtDataMap.YdtInsCoverageList();
             foreach (var kind in kinds)
             {
                 var coverage = ydtInsCoverageList.Where(m => m.UpLinkCode == kind.Id).FirstOrDefault();
                 if (coverage != null)
                 {
-                    CoveragesModel model = new CoveragesModel();
+                    CoverageModel model = new CoverageModel();
                     model.code = coverage.Code;
 
                     #region 是否免损
@@ -731,7 +675,7 @@ namespace WebAppApi.Controllers
                     {
                         model.unitAmount = GetCoverageAmount(kind.Value);
                         model.quantity = 1;
-                        model.amount = model.unitAmount * model.quantity;
+                        model.amount = model.unitAmount.Value * model.quantity.Value;
                     }
 
                     #endregion
@@ -743,7 +687,7 @@ namespace WebAppApi.Controllers
 
                         model.unitAmount = GetCoverageAmount(kind.Value);
                         model.quantity = sCarSeat;
-                        model.amount = model.unitAmount * model.quantity;
+                        model.amount = model.unitAmount.Value * model.quantity.Value;
                     }
                     #endregion
 
@@ -759,20 +703,80 @@ namespace WebAppApi.Controllers
                     #endregion
 
 
-                    //model.amount = kind.KindValue;
-
-                    // model.unitAmount = kind.KindValue;
-
-                    //  model.quantity = kind.KindValue;
-
-
-                    //  model.glassType = kind.KindValue;
-
                     list.Add(model);
                 }
             }
 
             return list;
+        }
+
+
+        public static List<ItemParentField> GetInsureItem(OrderToCarInsureAuto carInsureAuto, OrderToCarInsureOfferCompany carInsureOfferCompany, List<OrderToCarInsureOfferCompanyKind> carInsureOfferCompanyKinds)
+        {
+            List<ItemParentField> parents = new List<ItemParentField>();
+
+
+            if (carInsureOfferCompany != null)
+            {
+
+                if (carInsureOfferCompany.CompulsoryPrice != null)
+                {
+                    if (carInsureOfferCompany.CompulsoryPrice.Value > 0)
+                    {
+                        var parentsByCompulsory = new ItemParentField();
+                        parentsByCompulsory.Field = "交强险";
+                        parentsByCompulsory.Value = carInsureOfferCompany.CompulsoryPrice.ToF2Price();
+                        parents.Add(parentsByCompulsory);
+                    }
+                }
+                if (carInsureOfferCompany.TravelTaxPrice != null)
+                {
+                    if (carInsureOfferCompany.TravelTaxPrice != null)
+                    {
+                        var parentsByTravelTax = new ItemParentField();
+                        parentsByTravelTax.Field = "车船稅";
+                        parentsByTravelTax.Value = carInsureOfferCompany.TravelTaxPrice.ToF2Price();
+                        parents.Add(parentsByTravelTax);
+                    }
+                }
+
+
+                if (carInsureOfferCompany.CommercialPrice != null)
+                {
+                    if (carInsureOfferCompany.CommercialPrice != null)
+                    {
+                        var parentsByCommercial = new ItemParentField();
+                        parentsByCommercial.Field = "商业险";
+                        parentsByCommercial.Value = carInsureOfferCompany.CommercialPrice.ToF2Price();
+
+                        foreach (var kind in carInsureOfferCompanyKinds)
+                        {
+                            parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, kind.StandardPremium.ToF2Price()));
+                        }
+
+                        parents.Add(parentsByCommercial);
+                    }
+                }
+            }
+
+
+            var parentsByCarInfo = new ItemParentField("车辆信息", "");
+
+            parentsByCarInfo.Child.Add(new ItemChildField("车牌号码", carInsureAuto.LicensePlateNo));
+            parentsByCarInfo.Child.Add(new ItemChildField("品牌型号", carInsureAuto.ModelName));
+            parentsByCarInfo.Child.Add(new ItemChildField("配置信息", "大众FV720FCDWG桥车 2012款 19884ML 5座"));
+            parentsByCarInfo.Child.Add(new ItemChildField("注册日期", carInsureAuto.FirstRegisterDate));
+            parentsByCarInfo.Child.Add(new ItemChildField("车架号", carInsureAuto.Vin));
+            parentsByCarInfo.Child.Add(new ItemChildField("发动机", carInsureAuto.EngineNo));
+            parentsByCarInfo.Child.Add(new ItemChildField("是否过户", carInsureAuto.ChgownerType == "0" ? "否" : "是"));
+            if (carInsureAuto.ChgownerType == "1")
+            {
+                parents.Add(new ItemParentField("过户日期", carInsureAuto.ChgownerDate));
+            }
+
+            parents.Add(parentsByCarInfo);
+
+            return parents;
         }
     }
 }

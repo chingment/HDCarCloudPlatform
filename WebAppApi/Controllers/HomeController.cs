@@ -1974,10 +1974,10 @@ namespace WebAppApi.Controllers
         public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, string orderSeq)
         {
             CarInsInquiryPms model = new CarInsInquiryPms();
-            model.Auto = 1;
+            model.Auto = 0;
             model.OrderSeq = orderSeq;
-            model.BiStartDate = "2018-05-11";
-            model.CiStartDate = "2018-05-11";
+            model.BiStartDate = "2018-05-12";
+            model.CiStartDate = "2018-05-12";
             model.ChannelId = 1;
             model.CompanyCode = "006000";
 

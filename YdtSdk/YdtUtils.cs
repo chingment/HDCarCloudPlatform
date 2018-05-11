@@ -595,7 +595,7 @@ namespace YdtSdk
 
             if (ydtInscarInquiryResult.code != 0)
             {
-                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInquiryResult.msg, null);
+                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInquiryResult.msg + "(" + ydtInscarInquiryResult.extmsg + ")", null);
             }
 
             return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInscarInquiryResult.msg, ydtInscarInquiryResult.data);

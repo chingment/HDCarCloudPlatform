@@ -27,7 +27,7 @@ namespace YdtSdk
         public int risk { get; set; }
         public string biStartDate { get; set; }
         public string ciStartDate { get; set; }
-        public List<CoveragesModel> coverages { get; set; }
+        public List<CoverageModel> coverages { get; set; }
         public string notifyUrl { get; set; }
     }
 }

@@ -80,16 +80,16 @@ namespace YdtSdk
             return amount;
         }
 
-        public static List<CoveragesModel> GetCoverages(List<OrderToCarInsureOfferKind> kinds, decimal oldAmount, int carSeat)
+        public static List<CoverageModel> GetCoverages(List<OrderToCarInsureOfferKind> kinds, decimal oldAmount, int carSeat)
         {
-            List<CoveragesModel> list = new List<CoveragesModel>();
+            List<CoverageModel> list = new List<CoverageModel>();
             var ydtInsCoverageList = YdtInsCoverageList();
             foreach (var kind in kinds)
             {
                 var coverage = ydtInsCoverageList.Where(m => m.UpLinkCode == kind.KindId).FirstOrDefault();
                 if (coverage != null)
                 {
-                    CoveragesModel model = new CoveragesModel();
+                    CoverageModel model = new CoverageModel();
                     model.code = coverage.Code;
 
                     #region 是否免损
@@ -158,7 +158,7 @@ namespace YdtSdk
                     {
                         model.unitAmount = GetCoverageAmount(kind.KindValue);
                         model.quantity = 1;
-                        model.amount = model.unitAmount * model.quantity;
+                        model.amount = model.unitAmount.Value * model.quantity.Value;
                     }
 
                     #endregion
@@ -170,7 +170,7 @@ namespace YdtSdk
 
                         model.unitAmount = GetCoverageAmount(kind.KindValue);
                         model.quantity = sCarSeat;
-                        model.amount = model.unitAmount * model.quantity;
+                        model.amount = model.unitAmount.Value * model.quantity.Value;
                     }
                     #endregion
 

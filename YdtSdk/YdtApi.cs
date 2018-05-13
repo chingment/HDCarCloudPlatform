@@ -21,6 +21,12 @@ namespace YdtSdk
         Stream = 6
     }
 
+    public class YdtResult
+    {
+        public string msg { get; set; }
+        public int code { get; set; }
+    }
+
     public interface IYdtApi
     {
         YdtApiBaseResult<T> DoGet<T>(IYdtApiGetRequest<T> request);
@@ -55,20 +61,25 @@ namespace YdtSdk
             WebUtils webUtils = new WebUtils();
             string body = webUtils.DoGet(realServerUrl, request.GetUrlParameters(), null);
 
-            log.Info("Ydt->result:" + body);
+            var rsp = new YdtApiBaseResult<T>();
 
-            if (body.IndexOf("\"{\"code\":") == -1)
+            try
             {
-                body = "{\"code\":0,\"msg\":\"成功\",\"data\":" + body + "}";
+                log.Info("Ydt->result:" + body);
+
+                YdtResult ydtResult = JsonConvert.DeserializeObject<YdtResult>(body);
+
+                if (ydtResult.code == 0)
+                {
+                    body = "{\"code\":0,\"msg\":\"成功\",\"data\":" + body + "}";
+                }
+
+                rsp = JsonConvert.DeserializeObject<YdtApiBaseResult<T>>(body);
             }
-
-            var rsp = JsonConvert.DeserializeObject<YdtApiBaseResult<T>>(body);
-
-
-
-
-
-
+            catch (Exception ex)
+            {
+                log.Error("解释 Ydt->result 错误:" + body);
+            }
             return rsp;
         }
 

@@ -1812,8 +1812,8 @@ namespace WebAppApi.Controllers
         {
 
 
-            //model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
-            // model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId));
+            model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+             model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId));
 
             //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
             // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
@@ -1829,15 +1829,15 @@ namespace WebAppApi.Controllers
 
             //CustomJsonResult<CarModelInfoResult> s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarModelInfoResult>>(s_CarIns_GetCarModelInfo);
 
-            string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
+            //string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
 
-            CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
+            //CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
 
-            if (s3.Result == ResultType.Success)
-            {
-                model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.OrderSeq));
+            //if (s3.Result == ResultType.Success)
+            //{
+                //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.OrderSeq));
 
-            }
+           // }
         }
 
 

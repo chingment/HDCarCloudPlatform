@@ -223,6 +223,8 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.Amount = item.amount;
                                 orderToCarInsureOfferCompanyKind.Creator = operater;
                                 orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
+                                orderToCarInsureOfferCompanyKind.IsCompensation = partnerKind.IsCompensation;
+                                orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
                                 CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
                                 CurrentDb.SaveChanges();
                             }
@@ -310,32 +312,47 @@ namespace Lumos.BLL
 
                     var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == l_OrderToCarInsureAuto.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).ToList();
 
+
+
                     foreach (var item in orderToCarInsureOfferCompanyKinds)
                     {
-                        var coverage = pms.Coverages.Where(m => m.code == item.PartnerKindId).FirstOrDefault();
-                        if (coverage != null)
+                        CurrentDb.OrderToCarInsureOfferCompanyKind.Remove(item);
+                        CurrentDb.SaveChanges();
+                    }
+
+                    var out_carInsureOfferCompanyKinds = new List<OrderToCarInsureOfferCompanyKind>();
+                    if (pms.Coverages != null)
+                    {
+                        foreach (var item in pms.Coverages)
                         {
-                            item.Compensation = coverage.compensation;
-                            item.Quantity = coverage.quantity;
-                            item.GlassType = coverage.glassType;
-                            item.BasicPremium = coverage.basicPremium;
-                            item.Discount = coverage.discount;
-                            item.StandardPremium = coverage.standardPremium;
-                            item.Amount = coverage.amount;
-                            item.Premium = coverage.premium;
-                            item.Mender = operater;
-                            item.LastUpdateTime = this.DateTime;
+                            var partnerKind = YdtDataMap.YdtInsCoverageList().Where(m => m.Code == item.code).FirstOrDefault();
+                            if (partnerKind != null)
+                            {
+                                var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
+                                orderToCarInsureOfferCompanyKind.OrderId = l_OrderToCarInsureAuto.Id;
+                                orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                                orderToCarInsureOfferCompanyKind.KindId = partnerKind.UpLinkCode;
+                                orderToCarInsureOfferCompanyKind.PartnerKindId = partnerKind.Code;
+                                orderToCarInsureOfferCompanyKind.Compensation = item.compensation;
+                                orderToCarInsureOfferCompanyKind.KindName = partnerKind.Name;
+                                orderToCarInsureOfferCompanyKind.Quantity = item.quantity;
+                                orderToCarInsureOfferCompanyKind.GlassType = item.glassType;
+                                orderToCarInsureOfferCompanyKind.Amount = item.amount;
+                                orderToCarInsureOfferCompanyKind.StandardPremium = item.standardPremium;
+                                orderToCarInsureOfferCompanyKind.BasicPremium = item.basicPremium;
+                                orderToCarInsureOfferCompanyKind.Premium = item.premium;
+                                orderToCarInsureOfferCompanyKind.UnitAmount = item.unitAmount;
+                                orderToCarInsureOfferCompanyKind.Discount = item.discount;
+                                orderToCarInsureOfferCompanyKind.IsCompensation = partnerKind.IsCompensation;
+                                orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
+                                orderToCarInsureOfferCompanyKind.Creator = operater;
+                                orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
+                                CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
+                                CurrentDb.SaveChanges();
 
-                            //if(item.Compensation==1)
-                            //{
-                            //    switch(m.code)
-                            //}
-
-
-                            CurrentDb.SaveChanges();
+                                out_carInsureOfferCompanyKinds.Add(orderToCarInsureOfferCompanyKind);
+                            }
                         }
-
-
                     }
 
                     CurrentDb.SaveChanges();
@@ -343,7 +360,7 @@ namespace Lumos.BLL
 
                     resultData.CarInsureAuto = l_OrderToCarInsureAuto;
                     resultData.CarInsureOfferCompany = orderToCarInsureOfferCompany;
-                    resultData.CarInsureOfferCompanyKinds = orderToCarInsureOfferCompanyKinds;
+                    resultData.CarInsureOfferCompanyKinds = out_carInsureOfferCompanyKinds;
                     return new CustomJsonResult<UpdateOfferByAfterResult>(ResultType.Success, ResultCode.Success, "", resultData);
                 }
 

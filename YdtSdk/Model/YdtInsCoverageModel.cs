@@ -14,7 +14,7 @@ namespace YdtSdk
 
         public string Name { get; set; }
 
-        public int Compensation { get; set; }
+        public bool IsCompensation { get; set; }
 
         public decimal Amount { get; set; }
 
@@ -23,5 +23,7 @@ namespace YdtSdk
         public string Quantity { get; set; }
 
         public string GlassType { get; set; }
+
+        public int Priority { get; set; }
     }
 }

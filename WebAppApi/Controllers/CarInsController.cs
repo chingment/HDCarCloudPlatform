@@ -541,7 +541,23 @@ namespace WebAppApi.Controllers
             var result_UpdateOfferByAfter = BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
 
             CarInsInquiryResult result = new CarInsInquiryResult();
-            result.Company = null;
+
+            var channel = new Channel();
+            var insCompany = YdtDataMap.GetCompanyByCode(pms.CompanyCode);
+            if (insCompany != null)
+            {
+                var company = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == insCompany.UpLinkCode).FirstOrDefault();
+                if (company != null)
+                {
+                    channel.ChannelId = pms.ChannelId;
+                    channel.Code = pms.CompanyCode;
+                    channel.CompanyId = company.InsuranceCompanyId;
+                    channel.CompanyImg = company.InsuranceCompanyImgUrl;
+                }
+            }
+
+
+            result.Company = channel;
             result.InquirySeq = offerResultData.inquirySeq;
             result.OrderSeq = offerResultData.orderSeq;
             result.InsureItem = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsureAuto, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
@@ -749,9 +765,24 @@ namespace WebAppApi.Controllers
                         parentsByCommercial.Field = "商业险";
                         parentsByCommercial.Value = carInsureOfferCompany.CommercialPrice.ToF2Price();
 
-                        foreach (var kind in carInsureOfferCompanyKinds)
+                        var carInsureOfferCompanyKinds1 = carInsureOfferCompanyKinds.Where(m => m.IsCompensation == false).OrderBy(m => m.Priority).ToList();
+                        foreach (var kind in carInsureOfferCompanyKinds1)
                         {
                             parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, kind.StandardPremium.ToF2Price()));
+                        }
+
+                        var carInsureOfferCompanyKinds2 = carInsureOfferCompanyKinds.Where(m => m.IsCompensation == true).OrderBy(m => m.Priority).ToList();
+
+                        if (carInsureOfferCompanyKinds2.Count > 0)
+                        {
+                            decimal sumCompensation = 0;
+                            foreach (var kind in carInsureOfferCompanyKinds2)
+                            {
+                                sumCompensation += kind.StandardPremium;
+                                parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, "已投"));
+                            }
+
+                            parentsByCommercial.Child.Add(new ItemChildField("总计不免赔", sumCompensation.ToF2Price()));
                         }
 
                         parents.Add(parentsByCommercial);

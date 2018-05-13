@@ -1976,8 +1976,8 @@ namespace WebAppApi.Controllers
             CarInsInquiryPms model = new CarInsInquiryPms();
             model.Auto = 0;
             model.OrderSeq = orderSeq;
-            model.BiStartDate = "2018-05-12";
-            model.CiStartDate = "2018-05-12";
+            model.BiStartDate = "2018-05-13";
+            model.CiStartDate = "2018-05-13";
             model.ChannelId = 1;
             model.CompanyCode = "006000";
 
@@ -1998,6 +1998,18 @@ namespace WebAppApi.Controllers
             model.Car.WholeWeight = "";
 
 
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 3, Code = "001", Name = "车损险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 4, Code = "002", Name = "三者险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 5, Code = "003", Name = "司机险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 6, Code = "004", Name = "乘客险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 7, Code = "005", Name = "盗抢险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 8, Code = "006", Name = "玻璃险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 9, Code = "007", Name = "划痕险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 12, Code = "008", Name = "自燃险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 11, Code = "009", Name = "涉水险" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 17, Code = "010", Name = "指定维修厂" });
+            //list.Add(new YdtInsCoverageModel { UpLinkCode = 10, Code = "011", Name = "无法找到第三方险" });
+
             List<CarInsInsureKindModel> insureKindModel = new List<CarInsInsureKindModel>();
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 1, Value = "", Details = "", IsWaiverDeductible = false });
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 2, Value = "", Details = "", IsWaiverDeductible = false });
@@ -2007,10 +2019,10 @@ namespace WebAppApi.Controllers
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 6, Value = "2w", Details = "", IsWaiverDeductible = true });
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 7, Value = "", Details = "" });
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 8, Value = "国产", Details = "" });
-            insureKindModel.Add(new CarInsInsureKindModel() { Id = 9, Value = "2000", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 9, Value = "2000", Details = "", IsWaiverDeductible = true });
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 10, Value = "", Details = "" });
-            insureKindModel.Add(new CarInsInsureKindModel() { Id = 11, Value = "", Details = "" });
-            insureKindModel.Add(new CarInsInsureKindModel() { Id = 12, Value = "", Details = "" });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 11, Value = "", Details = "", IsWaiverDeductible = true });
+            insureKindModel.Add(new CarInsInsureKindModel() { Id = 12, Value = "", Details = "", IsWaiverDeductible = true });
             //insureKindModel.Add(new InsureKindModel() { Id = 13, Value = "5000", Details = "购买机动" });
             //insureKindModel.Add(new InsureKindModel() { Id = 14, Value = "100/天", Details = "" });
             //insureKindModel.Add(new InsureKindModel() { Id = 15, Value = "6000", Details = "" });

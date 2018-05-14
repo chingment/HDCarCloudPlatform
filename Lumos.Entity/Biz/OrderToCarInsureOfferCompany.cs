@@ -62,5 +62,7 @@ namespace Lumos.Entity
 
         public string PartnerRisk { get; set; }
 
+        public bool IsAuto { get; set; }
+
     }
 }

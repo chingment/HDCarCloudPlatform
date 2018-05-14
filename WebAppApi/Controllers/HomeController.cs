@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
+        private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        private string host = "http://120.79.233.231";
+        //private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -1849,7 +1849,7 @@ namespace WebAppApi.Controllers
             CarInfoPms model1 = new CarInfoPms();
             model1.KeywordType = KeyWordType.LicensePlateNo;
             model1.Keyword = "粤A9RS97";
-           // model1.Keyword = "粤AT810P";
+            // model1.Keyword = "粤AT810P";
             //model1.KeywordType = KeyWordType.LicenseImg;
             // model1.Keyword = base64string1 + "@.jpg";
 
@@ -1911,7 +1911,7 @@ namespace WebAppApi.Controllers
         {
 
             CarInsEditBaseInfoPms model = new CarInsEditBaseInfoPms();
-           // model.OrderSeq = "46379";
+            // model.OrderSeq = "46379";
             model.Auto = "1";
             model.Car.Belong = "1";
             model.Car.LicensePlateNo = "粤A9RS97";

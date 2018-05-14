@@ -50,7 +50,7 @@ namespace Lumos.Entity
         public CarInsInquiryResult()
         {
             this.InsureItem = new List<ItemParentField>();
-            this.Company = new Channel();
+            this.Channel = new Channel();
         }
 
         public Channel Channel { get; set; }

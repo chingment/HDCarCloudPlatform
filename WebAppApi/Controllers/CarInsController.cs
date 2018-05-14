@@ -7,9 +7,11 @@ using Lumos.Entity;
 using Lumos.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using WebAppApi.Models;
 using WebAppApi.Models.Account;
@@ -364,6 +366,7 @@ namespace WebAppApi.Controllers
 
             if (result.Result == ResultType.Success)
             {
+                editBaseInfoResult.Auto = "1";//默认自动报价
                 editBaseInfoResult.OrderSeq = result.Data.ToString();
                 editBaseInfoResult.Car = pms.Car;
                 editBaseInfoResult.Customers = pms.Customers;
@@ -511,7 +514,7 @@ namespace WebAppApi.Controllers
             //0 人工报价，1 自动报价
             if (pms.Auto == 0)
             {
-                model.notifyUrl = "http://www.test/Api/CarIns/OfferNotify";
+                model.notifyUrl = "http://120.79.233.231/Api/CarIns/OfferNotify";
 
                 offerResult = YdtUtils.GetInsInquiryByArtificial(model);
 
@@ -568,7 +571,21 @@ namespace WebAppApi.Controllers
             return ResponseResult(ResultType.Success, ResultCode.Success, "报价成功", result);
         }
 
-        public static int GetRisk(List<CarInsInsureKindModel> kinds)
+
+        [HttpPost]
+        [AllowAnonymous]
+        public APIResponse OfferNotify(ReceiveNotifyModel model)
+        {
+            Stream stream = HttpContext.Current.Request.InputStream;
+            stream.Seek(0, SeekOrigin.Begin);
+            string postData = new StreamReader(stream).ReadToEnd();
+
+            Log.Info("CarInsOfferNotify：" + postData);
+
+            var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
+            return new APIResponse(result);
+        }
+        private static int GetRisk(List<CarInsInsureKindModel> kinds)
         {
             if (kinds == null)
                 return 2;
@@ -591,7 +608,7 @@ namespace WebAppApi.Controllers
 
         }
 
-        public static decimal GetCoverageAmount(string d)
+        private static decimal GetCoverageAmount(string d)
         {
             if (string.IsNullOrEmpty(d))
                 return 0;

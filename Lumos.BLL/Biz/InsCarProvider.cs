@@ -152,6 +152,9 @@ namespace Lumos.BLL
                 {
                     var l_OrderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == pms.PartnerOrderId).FirstOrDefault();
 
+
+
+
                     var partnerCompany = YdtDataMap.YdtInsComanyList().Where(m => m.YdtCode == pms.PartnerCompanyId).FirstOrDefault();
 
                     if (partnerCompany == null)
@@ -177,6 +180,7 @@ namespace Lumos.BLL
                         orderToCarInsureOfferCompany.Mender = operater;
                     }
 
+                    orderToCarInsureOfferCompany.IsAuto = pms.Auto == 0 ? false : true;
                     orderToCarInsureOfferCompany.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
                     orderToCarInsureOfferCompany.InsuranceCompanyName = carInsuranceCompany.InsuranceCompanyName;
                     orderToCarInsureOfferCompany.InsuranceCompanyImgUrl = carInsuranceCompany.InsuranceCompanyImgUrl;

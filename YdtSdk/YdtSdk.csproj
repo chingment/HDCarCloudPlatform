@@ -76,6 +76,7 @@
     <Compile Include="Model\YdtInscarInquiryOffer.cs" />
     <Compile Include="Model\YdtInsComanyModel.cs" />
     <Compile Include="Model\YdtInsCoverageModel.cs" />
+    <Compile Include="Post\YdtInscarInquiryByArtificial.cs" />
     <Compile Include="Post\YdtInscarUpatebase.cs" />
     <Compile Include="Post\YdtInscarAdvicevalue.cs" />
     <Compile Include="Post\YdtInscarAdvicevalueResultData.cs" />

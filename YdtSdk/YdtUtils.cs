@@ -607,7 +607,7 @@ namespace YdtSdk
             var au = YdtUtils.GetToken();
             YdtApi ydtApi = new YdtApi();
 
-            YdtInscarInquiry ydtInscarInquiry = new YdtInscarInquiry(au.token, au.session, YdtPostDataType.Json, model);
+            YdtInscarInquiryByArtificial ydtInscarInquiry = new YdtInscarInquiryByArtificial(au.token, au.session, YdtPostDataType.Json, model);
             var ydtInscarInquiryResult = ydtApi.DoPost(ydtInscarInquiry);
 
             if (ydtInscarInquiryResult.code != 0)

@@ -239,7 +239,8 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                return new CustomJsonResult(ResultType.Failure, "本系统基础数据保存失败");
+                Log.Error("本系统基础数据保存失败1", ex);
+                return new CustomJsonResult(ResultType.Failure, "本系统基础数据保存失败1");
             }
         }
 
@@ -368,7 +369,8 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                return new CustomJsonResult<UpdateOfferByAfterResult>(ResultType.Failure, ResultCode.Failure, "本系统基础数据保存失败", null);
+                Log.Error("本系统基础数据保存失败2", ex);
+                return new CustomJsonResult<UpdateOfferByAfterResult>(ResultType.Failure, ResultCode.Failure, "本系统基础数据保存失败2", null);
             }
         }
 

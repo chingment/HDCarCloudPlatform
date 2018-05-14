@@ -53,7 +53,7 @@ namespace Lumos.Entity
             this.Company = new Channel();
         }
 
-        public Channel Company { get; set; }
+        public Channel Channel { get; set; }
 
         public List<ItemParentField> InsureItem { get; set; }
 

@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
+        //private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        //private string host = "http://120.79.233.231";
+        private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -1812,8 +1812,8 @@ namespace WebAppApi.Controllers
         {
 
 
-            model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
-             model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId));
+            //model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+            //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId));
 
             //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
             // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
@@ -1829,15 +1829,15 @@ namespace WebAppApi.Controllers
 
             //CustomJsonResult<CarModelInfoResult> s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarModelInfoResult>>(s_CarIns_GetCarModelInfo);
 
-            //string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
+            string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
 
-            //CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
+            CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
 
-            //if (s3.Result == ResultType.Success)
-            //{
-                //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.OrderSeq));
+            if (s3.Result == ResultType.Success)
+            {
+                model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.OrderSeq));
 
-           // }
+            }
         }
 
 
@@ -1976,8 +1976,8 @@ namespace WebAppApi.Controllers
             CarInsInquiryPms model = new CarInsInquiryPms();
             model.Auto = 0;
             model.OrderSeq = orderSeq;
-            model.BiStartDate = "2018-05-13";
-            model.CiStartDate = "2018-05-13";
+            model.BiStartDate = "2018-05-15";
+            model.CiStartDate = "2018-05-15";
             model.ChannelId = 1;
             model.CompanyCode = "006000";
 

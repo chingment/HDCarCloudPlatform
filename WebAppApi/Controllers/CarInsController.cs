@@ -549,6 +549,7 @@ namespace WebAppApi.Controllers
                 var company = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == insCompany.UpLinkCode).FirstOrDefault();
                 if (company != null)
                 {
+                    channel.Name = company.InsuranceCompanyName;
                     channel.ChannelId = pms.ChannelId;
                     channel.Code = pms.CompanyCode;
                     channel.CompanyId = company.InsuranceCompanyId;
@@ -557,7 +558,7 @@ namespace WebAppApi.Controllers
             }
 
 
-            result.Company = channel;
+            result.Channel = channel;
             result.InquirySeq = offerResultData.inquirySeq;
             result.OrderSeq = offerResultData.orderSeq;
             result.InsureItem = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsureAuto, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
@@ -613,7 +614,7 @@ namespace WebAppApi.Controllers
             return amount;
         }
 
-        public static List<CoverageModel> GetCoverages(List<CarInsInsureKindModel> kinds, decimal oldAmount, int carSeat)
+        private static List<CoverageModel> GetCoverages(List<CarInsInsureKindModel> kinds, decimal oldAmount, int carSeat)
         {
             List<CoverageModel> list = new List<CoverageModel>();
             var ydtInsCoverageList = YdtDataMap.YdtInsCoverageList();
@@ -727,7 +728,7 @@ namespace WebAppApi.Controllers
         }
 
 
-        public static List<ItemParentField> GetInsureItem(OrderToCarInsureAuto carInsureAuto, OrderToCarInsureOfferCompany carInsureOfferCompany, List<OrderToCarInsureOfferCompanyKind> carInsureOfferCompanyKinds)
+        private static List<ItemParentField> GetInsureItem(OrderToCarInsureAuto carInsureAuto, OrderToCarInsureOfferCompany carInsureOfferCompany, List<OrderToCarInsureOfferCompanyKind> carInsureOfferCompanyKinds)
         {
             List<ItemParentField> parents = new List<ItemParentField>();
 

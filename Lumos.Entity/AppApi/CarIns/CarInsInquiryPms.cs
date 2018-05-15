@@ -12,6 +12,13 @@ namespace Lumos.Entity
             this.InsureKind = new List<CarInsInsureKindModel>();
             this.Car = new CarInfoModel();
         }
+
+        public int UserId { get; set; }
+
+        public int MerchantId { get; set; }
+
+        public int PosMachineId { get; set; }
+
         public int Auto { get; set; }
 
         public string OrderSeq { get; set; }

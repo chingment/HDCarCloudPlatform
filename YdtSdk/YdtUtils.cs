@@ -581,9 +581,6 @@ namespace YdtSdk
             return result;
         }
 
-
-
-
         public static CustomJsonResult<YdtInscarInquiryResultData> GetInsInquiryByAuto(InsCarInquiryModel model)
         {
             var result = new CustomJsonResult<YdtInscarInquiryResultData>();
@@ -638,6 +635,26 @@ namespace YdtSdk
             }
 
             return new CustomJsonResult<decimal>(ResultType.Success, ResultCode.Success, ydtInscarAdvicevalueResult.msg, ydtInscarAdvicevalueResult.data.actualPrice);
+        }
+
+
+        public static CustomJsonResult<YdtInsCarQueryInquiryResultData> QueryInquiry(string orderSeq, string inquirySeq)
+        {
+            var result = new CustomJsonResult();
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+
+            var ydtInsCarQueryInquiry = new YdtInsCarQueryInquiry(au.token, au.session, inquirySeq, orderSeq);
+            var ydtInsCarQueryInquiryResult = ydtApi.DoGet(ydtInsCarQueryInquiry);
+
+            if (ydtInsCarQueryInquiryResult.code != 0)
+            {
+                return new CustomJsonResult<YdtInsCarQueryInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInsCarQueryInquiryResult.msg, null);
+            }
+
+            return new CustomJsonResult<YdtInsCarQueryInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInsCarQueryInquiryResult.msg, ydtInsCarQueryInquiryResult.data);
+
         }
     }
 }

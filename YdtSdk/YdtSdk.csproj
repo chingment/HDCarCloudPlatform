@@ -61,6 +61,8 @@
     <Compile Include="Get\YdtInsCarApiSearchResultData.cs" />
     <Compile Include="Get\YdtInscarCar.cs" />
     <Compile Include="Get\YdtInscarCarResult.cs" />
+    <Compile Include="Get\YdtInsCarQueryInquiry.cs" />
+    <Compile Include="Get\YdtInsCarQueryInquiryResultData.cs" />
     <Compile Include="Get\YdtToken.cs" />
     <Compile Include="Get\YdtTokenResult.cs" />
     <Compile Include="Model\InsCarAdvicevalueModel.cs" />

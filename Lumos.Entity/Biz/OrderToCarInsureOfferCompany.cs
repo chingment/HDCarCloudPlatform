@@ -64,5 +64,9 @@ namespace Lumos.Entity
 
         public bool IsAuto { get; set; }
 
+        public Enumeration.OfferResult OfferResult { get; set; }
+
+        public int TryGetApiOfferResultCount { get; set; }
+
     }
 }

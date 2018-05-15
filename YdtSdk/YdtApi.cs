@@ -105,7 +105,31 @@ namespace YdtSdk
 
             string body = webUtils.DoPost(realServerUrl, request.GetUrlParameters(), postData, null);
 
+            if (!string.IsNullOrEmpty(body))
+            {
+                if (realServerUrl.ToLower().IndexOf("ins_artificial/inquiry") > -1)
+                {
+                    string start = body.Substring(0, 1);
+
+                    if (start == "\"")
+                    {
+                        body = body.Substring(1, body.Length - 1);
+                    }
+
+                    string end = body.Substring(body.Length - 1, 1);
+
+                    if (end == "\"")
+                    {
+                        body = body.Substring(0, body.Length - 1);
+                    }
+
+                    body = body.Replace("\\\"", "\"");
+                }
+
+            }
             log.Info("Ydt-request-result>>>>" + body);
+
+
 
             var rsp1 = JsonConvert.DeserializeObject<YdtApiBaseResult<object>>(body);
 

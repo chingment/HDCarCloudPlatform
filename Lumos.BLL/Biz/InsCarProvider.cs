@@ -13,6 +13,9 @@ namespace Lumos.BLL
 
     public class UpdateOrderOfferPms
     {
+        public int UserId { get; set; }
+        public int MerchantId { get; set; }
+        public int PosMachineId { get; set; }
         public int Auto { get; set; }
         public string PartnerOrderId { get; set; }
         public string PartnerInquirySeq { get; set; }
@@ -20,11 +23,10 @@ namespace Lumos.BLL
         public string PartnerCompanyId { get; set; }
         public int PartnerRisk { get; set; }
         public List<InquiryModel> Inquirys { get; set; }
-
         public List<CoverageModel> Coverages { get; set; }
-
         public string CiStartDate { get; set; }
         public string BiStartDate { get; set; }
+        public Enumeration.OfferResult OfferResult { get; set; }
     }
 
     public class UpdateOfferByAfterResult
@@ -46,16 +48,19 @@ namespace Lumos.BLL
 
     public class InsCarProvider : BaseProvider
     {
-        public void UpdateOrder(int operater, string partnerOrderId, CarInfoModel carInfo, List<CarInsCustomerModel> customers)
+        public void UpdateOrder(int operater, int userId, int merchantId, int posMachineId, string partnerOrderId, CarInfoModel carInfo, List<CarInsCustomerModel> customers)
         {
             OrderToCarInsureAuto l_orderToCarInsureAuto = null;
 
-            l_orderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == partnerOrderId).FirstOrDefault();
+            l_orderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == partnerOrderId && m.UserId == userId).FirstOrDefault();
 
             if (l_orderToCarInsureAuto == null)
             {
                 l_orderToCarInsureAuto = new OrderToCarInsureAuto();
 
+                l_orderToCarInsureAuto.UserId = userId;
+                l_orderToCarInsureAuto.MerchantId = merchantId;
+                l_orderToCarInsureAuto.PosMachineId = posMachineId;
                 l_orderToCarInsureAuto.PartnerOrderId = partnerOrderId;
                 l_orderToCarInsureAuto.SubmitTime = this.DateTime;
                 l_orderToCarInsureAuto.CreateTime = this.DateTime;
@@ -150,9 +155,7 @@ namespace Lumos.BLL
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    var l_OrderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == pms.PartnerOrderId).FirstOrDefault();
-
-
+                    var l_OrderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId).FirstOrDefault();
 
 
                     var partnerCompany = YdtDataMap.YdtInsComanyList().Where(m => m.YdtCode == pms.PartnerCompanyId).FirstOrDefault();
@@ -258,7 +261,7 @@ namespace Lumos.BLL
                 {
                     var resultData = new UpdateOfferByAfterResult();
 
-                    var l_OrderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == pms.PartnerOrderId).FirstOrDefault();
+                    var l_OrderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId).FirstOrDefault();
 
                     var partnerCompany = YdtDataMap.YdtInsComanyList().Where(m => m.YdtCode == pms.PartnerCompanyId).FirstOrDefault();
 
@@ -266,6 +269,7 @@ namespace Lumos.BLL
 
                     var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == l_OrderToCarInsureAuto.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).FirstOrDefault();
 
+                    orderToCarInsureOfferCompany.OfferResult = pms.OfferResult;
                     orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquirySeq;
                     orderToCarInsureOfferCompany.LastUpdateTime = this.DateTime;
                     orderToCarInsureOfferCompany.Mender = operater;
@@ -359,6 +363,17 @@ namespace Lumos.BLL
                             }
                         }
                     }
+
+
+                    switch (pms.OfferResult)
+                    {
+                        case Enumeration.OfferResult.WaitArtificialOffer:
+                            var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsureAuto, l_OrderToCarInsureAuto.Id, Enumeration.AuditFlowV1Status.Submit);
+                            BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.Submit, operater, null, "提交订单，等待取单");
+                            break;
+
+                    }
+
 
                     CurrentDb.SaveChanges();
                     ts.Complete();

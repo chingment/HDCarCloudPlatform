@@ -95,6 +95,7 @@
     <Compile Include="Biz\ProductProvider.cs" />
     <Compile Include="Biz\OrderToTalentDemandProvider.cs" />
     <Compile Include="Biz\SupplierProvider.cs" />
+    <Compile Include="Biz\Task\TaskForCarInsQueryInquiry.cs" />
     <Compile Include="Biz\Task\TaskForMerchant.cs" />
     <Compile Include="Sdk\FangWeiProvider.cs" />
     <Compile Include="Biz\SmsProvider.cs" />

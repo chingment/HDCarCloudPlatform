@@ -21,6 +21,7 @@ using YdtSdk;
 namespace WebAppApi.Controllers
 {
 
+
     [BaseAuthorizeAttribute]
     public class CarInsController : OwnBaseApiController
     {
@@ -371,7 +372,7 @@ namespace WebAppApi.Controllers
                 editBaseInfoResult.Car = pms.Car;
                 editBaseInfoResult.Customers = pms.Customers;
 
-                BizFactory.InsCar.UpdateOrder(0, editBaseInfoResult.OrderSeq, editBaseInfoResult.Car, editBaseInfoResult.Customers);
+                BizFactory.InsCar.UpdateOrder(pms.UserId, pms.UserId, pms.MerchantId, pms.PosMachineId, editBaseInfoResult.OrderSeq, editBaseInfoResult.Car, editBaseInfoResult.Customers);
 
                 return ResponseResult(ResultType.Success, ResultCode.Success, result.Message, editBaseInfoResult);
             }
@@ -501,7 +502,7 @@ namespace WebAppApi.Controllers
             updateOrderOfferPms.BiStartDate = model.biStartDate;
             updateOrderOfferPms.CiStartDate = model.ciStartDate;
             updateOrderOfferPms.Coverages = model.coverages;
-
+            updateOrderOfferPms.OfferResult = Enumeration.OfferResult.WaitAutoOffer;
 
             var result_UpdateOfferByBefore = BizFactory.InsCar.UpdateOfferByBefore(0, updateOrderOfferPms);
 
@@ -518,10 +519,8 @@ namespace WebAppApi.Controllers
 
                 offerResult = YdtUtils.GetInsInquiryByArtificial(model);
 
-                if (offerResult.Result != ResultType.Success)
-                {
-                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "提交人工报价失败");
-                }
+                updateOrderOfferPms.OfferResult = Enumeration.OfferResult.WaitArtificialOffer;
+
             }
             else
             {
@@ -531,6 +530,8 @@ namespace WebAppApi.Controllers
                 {
                     return ResponseResult(ResultType.Failure, ResultCode.Failure, "获取自动报价失败");
                 }
+
+                updateOrderOfferPms.OfferResult = Enumeration.OfferResult.AutoOfferSuccess;
             }
 
 

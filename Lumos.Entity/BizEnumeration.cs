@@ -434,8 +434,10 @@ namespace Lumos.Entity
             OrderToLllegalDealt = 6,
             [Remark("贷款")]
             OrderToCredit = 7,
-            [Remark("贷款")]
-            OrderToInsurance = 8
+            [Remark("保险产品")]
+            OrderToInsurance = 8,
+            [Remark("车险订单")]
+            OrderToCarInsureAuto = 9
         }
 
         public enum MerchantStatus
@@ -791,6 +793,30 @@ namespace Lumos.Entity
             Machine = 1,
             [Remark("快递专送")]
             Express = 2
+        }
+
+        public enum OfferResult
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("等待自动报价")]
+            WaitAutoOffer = 1,
+            [Remark("自动报价成功")]
+            AutoOfferSuccess = 2,
+            [Remark("自动报价失败")]
+            AutoOfferFailure = 3,
+            [Remark("等待人工报价")]
+            WaitArtificialOffer = 4,
+            [Remark("人工报价成功")]
+            ArtificialOfferSuccess = 5,
+            [Remark("人工报价失败")]
+            ArtificialOfferFailure = 6,
+            [Remark("等待人工报价")]
+            WaitStaffOffer = 7,
+            [Remark("人工报价成功")]
+            StaffOfferSuccess = 8,
+            [Remark("人工报价失败")]
+            StaffOfferFailure = 9
         }
     }
 }

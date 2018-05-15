@@ -1912,6 +1912,9 @@ namespace WebAppApi.Controllers
 
             CarInsEditBaseInfoPms model = new CarInsEditBaseInfoPms();
             // model.OrderSeq = "46379";
+            model.UserId = userId;
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
             model.Auto = "1";
             model.Car.Belong = "1";
             model.Car.LicensePlateNo = "粤A9RS97";
@@ -1974,10 +1977,10 @@ namespace WebAppApi.Controllers
         public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, string orderSeq)
         {
             CarInsInquiryPms model = new CarInsInquiryPms();
-            model.Auto = 0;
+            model.Auto = 1;
             model.OrderSeq = orderSeq;
-            model.BiStartDate = "2018-05-15";
-            model.CiStartDate = "2018-05-15";
+            model.BiStartDate = "2018-05-20";
+            model.CiStartDate = "2018-05-20";
             model.ChannelId = 1;
             model.CompanyCode = "006000";
 

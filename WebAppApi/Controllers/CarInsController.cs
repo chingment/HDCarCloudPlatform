@@ -485,7 +485,10 @@ namespace WebAppApi.Controllers
             var ydtGetAdviceValue = YdtUtils.GetAdviceValue(insCarAdvicevalueModel.startDate, insCarAdvicevalueModel.registDate, insCarAdvicevalueModel.replacementValue);
             if (ydtGetAdviceValue.Result != ResultType.Success)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "折旧价计算失败", ydtGetAdviceValue.Message);
+                if (pms.Auto == 1)
+                {
+                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "折旧价计算失败", ydtGetAdviceValue.Message);
+                }
             }
 
             decimal actualPrice = ydtGetAdviceValue.Data;
@@ -536,40 +539,52 @@ namespace WebAppApi.Controllers
 
 
             #region 构造结果
+
+
             var offerResultData = offerResult.Data;
 
-            updateOrderOfferPms.PartnerInquirySeq = offerResultData.inquirySeq;
-            updateOrderOfferPms.Inquirys = offerResultData.inquirys;
-            updateOrderOfferPms.Coverages = offerResultData.coverages;
+            if (offerResultData != null)
+            {
+                updateOrderOfferPms.PartnerInquirySeq = offerResultData.inquirySeq;
+                updateOrderOfferPms.Inquirys = offerResultData.inquirys;
+                updateOrderOfferPms.Coverages = offerResultData.coverages;
+            }
 
             var result_UpdateOfferByAfter = BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
 
-            CarInsInquiryResult result = new CarInsInquiryResult();
-
-            var channel = new Channel();
-            var insCompany = YdtDataMap.GetCompanyByCode(pms.CompanyCode);
-            if (insCompany != null)
+            if (pms.Auto == 0)
             {
-                var company = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == insCompany.UpLinkCode).FirstOrDefault();
-                if (company != null)
+                return ResponseResult(ResultType.Success, ResultCode.Success, "提交人工报价成功", null);
+            }
+            else
+            {
+                CarInsInquiryResult result = new CarInsInquiryResult();
+                var channel = new Channel();
+                var insCompany = YdtDataMap.GetCompanyByCode(pms.CompanyCode);
+                if (insCompany != null)
                 {
-                    channel.Name = company.InsuranceCompanyName;
-                    channel.ChannelId = pms.ChannelId;
-                    channel.Code = pms.CompanyCode;
-                    channel.CompanyId = company.InsuranceCompanyId;
-                    channel.CompanyImg = company.InsuranceCompanyImgUrl;
+                    var company = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == insCompany.UpLinkCode).FirstOrDefault();
+                    if (company != null)
+                    {
+                        channel.Name = company.InsuranceCompanyName;
+                        channel.ChannelId = pms.ChannelId;
+                        channel.Code = pms.CompanyCode;
+                        channel.CompanyId = company.InsuranceCompanyId;
+                        channel.CompanyImg = company.InsuranceCompanyImgUrl;
+                    }
                 }
+
+                result.Channel = channel;
+                result.InquirySeq = offerResultData.inquirySeq;
+                result.OrderSeq = offerResultData.orderSeq;
+                result.InsureItem = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsureAuto, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
+                result.SumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value;
+
+                return ResponseResult(ResultType.Success, ResultCode.Success, "自动报价成功", result);
             }
 
-
-            result.Channel = channel;
-            result.InquirySeq = offerResultData.inquirySeq;
-            result.OrderSeq = offerResultData.orderSeq;
-            result.InsureItem = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsureAuto, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
-            result.SumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value;
             #endregion
 
-            return ResponseResult(ResultType.Success, ResultCode.Success, "报价成功", result);
         }
 
 

@@ -1829,15 +1829,15 @@ namespace WebAppApi.Controllers
 
             //CustomJsonResult<CarModelInfoResult> s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarModelInfoResult>>(s_CarIns_GetCarModelInfo);
 
-            string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
+            //string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
 
-            CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
+            //CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
 
-            if (s3.Result == ResultType.Success)
-            {
-                model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.OrderSeq));
+            //if (s3.Result == ResultType.Success)
+            //{
+                model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, "ac9d0a28-2c55-49a3-bb0e-81029eddb23a"));
 
-            }
+            //}
         }
 
 
@@ -1977,7 +1977,7 @@ namespace WebAppApi.Controllers
         public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, string orderSeq)
         {
             CarInsInquiryPms model = new CarInsInquiryPms();
-            model.Auto = 1;
+            model.Auto = 0;
             model.OrderSeq = orderSeq;
             model.BiStartDate = "2018-05-20";
             model.CiStartDate = "2018-05-20";

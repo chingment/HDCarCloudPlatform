@@ -12,39 +12,39 @@ namespace Lumos.Entity
     [Table("OrderToCarInsureAuto")]
     public class OrderToCarInsureAuto : Order
     {
-        public string Belong { get; set; }
+        public string CarBelong { get; set; }
         [MaxLength(128)]
         public string CarType { get; set; }
         [MaxLength(128)]
-        public string LicensePlateNo { get; set; }
+        public string CarLicensePlateNo { get; set; }
         [MaxLength(128)]
-        public string Vin { get; set; }
+        public string CarVin { get; set; }
         [MaxLength(128)]
-        public string EngineNo { get; set; }
+        public string CarEngineNo { get; set; }
         [MaxLength(128)]
-        public string FirstRegisterDate { get; set; }
+        public string CarFirstRegisterDate { get; set; }
         [MaxLength(128)]
-        public string ModelCode { get; set; }
+        public string CarModelCode { get; set; }
         [MaxLength(128)]
-        public string ModelName { get; set; }
+        public string CarModelName { get; set; }
         [MaxLength(128)]
-        public string Displacement { get; set; }
+        public string CarDisplacement { get; set; }
         [MaxLength(128)]
-        public string MarketYear { get; set; }
-        public int RatedPassengerCapacity { get; set; }
-        public decimal ReplacementValue { get; set; }
+        public string CarMarketYear { get; set; }
+        public int CarRatedPassengerCapacity { get; set; }
+        public decimal CarReplacementValue { get; set; }
         [MaxLength(128)]
-        public string ChgownerType { get; set; }
+        public string CarChgownerType { get; set; }
         [MaxLength(128)]
-        public string ChgownerDate { get; set; }
+        public string CarChgownerDate { get; set; }
         [MaxLength(128)]
-        public string Tonnage { get; set; }
+        public string CarTonnage { get; set; }
         [MaxLength(128)]
-        public string WholeWeight { get; set; }
+        public string CarWholeWeight { get; set; }
         [MaxLength(128)]
-        public string LicensePicKey { get; set; }
+        public string CarLicensePicKey { get; set; }
         [MaxLength(128)]
-        public string LicenseOtherPicKey { get; set; }
+        public string CarLicenseOtherPicKey { get; set; }
         [MaxLength(128)]
         public string CarCertPicKey { get; set; }
         [MaxLength(128)]
@@ -97,8 +97,32 @@ namespace Lumos.Entity
         public string InsuredIdentityBackPicKey { get; set; }
         [MaxLength(128)]
         public string InsuredOrgPicKey { get; set; }
-
         [MaxLength(128)]
         public string PartnerOrderId { get; set; }
+        [MaxLength(128)]
+        public string PartnerInquiryId { get; set; }
+        [MaxLength(128)]
+        public string PartnerChannelId { get; set; }
+        [MaxLength(128)]
+        public string PartnerCompanyId { get; set; }
+        [MaxLength(128)]
+        public string PartnerRisk { get; set; }
+        public int? InsCompanyId { get; set; }
+        [MaxLength(256)]
+        public string InsCompanyImgUrl { get; set; }
+        [MaxLength(128)]
+        public string InsCompanyName { get; set; }
+        [MaxLength(128)]
+        public string InsBiStartDate { get; set; }
+        [MaxLength(128)]
+        public string InsCiStartDate { get; set; }
+        public decimal? InsCommercialPrice { get; set; }
+        public decimal? InsTravelTaxPrice { get; set; }
+        public decimal? InsCompulsoryPrice { get; set; }
+        public decimal? InsTotalPrice { get; set; }
+        public Enumeration.OfferResult OfferResult { get; set; }
+        public int OfferTryCount { get; set; }
+
+        public bool OfferIsAuto { get; set; }
     }
 }

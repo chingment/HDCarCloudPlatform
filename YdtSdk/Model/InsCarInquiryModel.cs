@@ -21,11 +21,15 @@ namespace YdtSdk
     public class InsCarInquiryModel
     {
         public int auto { get; set; }
+        public int channelId { get; set; }
         public string orderSeq { get; set; }
         public string companyCode { get; set; }
         public int risk { get; set; }
         public string biStartDate { get; set; }
         public string ciStartDate { get; set; }
-        public List<CoveragesModel> coverages { get; set; }
+        public List<CoverageModel> coverages { get; set; }
+        public string notifyUrl { get; set; }
+
+        public List<InquiryModel> inquirys { get; set; }
     }
 }

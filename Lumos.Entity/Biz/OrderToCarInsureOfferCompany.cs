@@ -47,6 +47,26 @@ namespace Lumos.Entity
 
         [MaxLength(512)]
         public string InsuranceCompanyImgUrl { get; set; }
+        [MaxLength(128)]
+        public string BiStartDate { get; set; }
+        [MaxLength(128)]
+        public string CiStartDate { get; set; }
+        [MaxLength(128)]
+        public string PartnerInquiryId { get; set; }
+        [MaxLength(128)]
+        public string PartnerOrderId { get; set; }
+        [MaxLength(128)]
+        public string PartnerChannelId { get; set; }
+        [MaxLength(128)]
+        public string PartnerCompanyId { get; set; }
+
+        public string PartnerRisk { get; set; }
+
+        public bool IsAuto { get; set; }
+
+        public Enumeration.OfferResult OfferResult { get; set; }
+
+        public int TryGetApiOfferResultCount { get; set; }
 
     }
 }

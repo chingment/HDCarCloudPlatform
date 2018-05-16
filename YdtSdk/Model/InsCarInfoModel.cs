@@ -14,13 +14,13 @@ namespace YdtSdk
         public string firstRegisterDate { get; set; }
         public string modelCode { get; set; }
         public string modelName { get; set; }
-        public int displacement { get; set; }
+        public string displacement { get; set; }
         public string marketYear { get; set; }
         public int ratedPassengerCapacity { get; set; }
         public decimal replacementValue { get; set; }
         public string chgownerType { get; set; }
-        public int chgownerDate { get; set; }
-        public int tonnage { get; set; }
+        public string chgownerDate { get; set; }
+        public string tonnage { get; set; }
         public string wholeWeight { get; set; }
     }
 }

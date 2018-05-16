@@ -78,6 +78,26 @@ namespace Lumos.Entity
             Cancle = 5
         }
 
+        public enum CarInsureOfferAutoDealtStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("提交基础数据")]
+            WaitOffer = 1,
+            [Remark("等待自动报价")]
+            InOffer = 2,
+            [Remark("自动报价成功")]
+            OfferComplete = 3,
+            [Remark("自动报价失败")]
+            ClientFllow = 3,
+            [Remark("等待人工报价")]
+            StaffCancle = 4,
+            [Remark("人工报价成功")]
+            ClientCancle = 5,
+            [Remark("人工报价失败")]
+            Complete = 6
+        }
+
         public enum CarClaimDealtStatus
         {
             [Remark("未知")]
@@ -322,6 +342,39 @@ namespace Lumos.Entity
             Cancled = 5
         }
 
+        public enum OrderChildDetailsStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("待支付")]
+            WaitPay = 1,
+            //[Remark("已支付")]
+            //Payed = 2,
+            [Remark("正在生成取货码")]
+            PickCodeBuilding = 3,
+            //[Remark("生成取货码失败")]
+            //PickCodeBuildFailure = 4,
+            [Remark("待提货")]
+            WaitTake = 5,
+            //[Remark("退款处理中")]
+            //ReFunding = 6,
+            //[Remark("已退款")]
+            //ReFunded = 7,
+            [Remark("已取货")]
+            Picked = 8,
+            [Remark("已取消")]
+            Cancled = 9,
+            [Remark("待发货")]
+            WaitSend = 10,
+            [Remark("已发货")]
+            Sent = 11,
+            [Remark("已签收")]
+            Received = 12,
+            [Remark("取货失败")]
+            PickedFailure = 13
+        }
+
+
         public enum OrderToCarInsureFollowStatus
         {
             [Remark("未知")]
@@ -382,7 +435,9 @@ namespace Lumos.Entity
             [Remark("贷款")]
             OrderToCredit = 7,
             [Remark("保险产品订单")]
-            OrderToInsurance = 8
+            OrderToInsurance = 8,
+            [Remark("车险订单")]
+            OrderToCarInsureAuto = 9
         }
 
         public enum MerchantStatus
@@ -658,5 +713,114 @@ namespace Lumos.Entity
             Decrease = 2
         }
 
+        public enum CartOperateType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("选择")]
+            Selected = 1,
+            [Remark("加")]
+            Increase = 2,
+            [Remark("减")]
+            Decrease = 3,
+            [Remark("删除")]
+            Delete = 4
+        }
+
+        public enum CartStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("等待结算")]
+            WaitSettle = 1,
+            [Remark("结算中")]
+            Settling = 2,
+            [Remark("结算完成")]
+            SettleCompleted = 3,
+            [Remark("已删除")]
+            Deleted = 4
+        }
+
+        public enum ChannelType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("快递商品")]
+            Express = 1,
+            [Remark("自助商品")]
+            SelfPick = 2
+        }
+
+        public enum CouponStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("待使用")]
+            WaitUse = 1,
+            [Remark("已使用")]
+            Used = 2,
+            [Remark("已过期")]
+            Expired = 3,
+            [Remark("已删除")]
+            Delete = 4,
+            [Remark("冻结")]
+            Frozen = 5
+        }
+
+        public enum CouponSourceType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("领取")]
+            Receive = 1,
+            [Remark("派送")]
+            Give = 2
+        }
+
+        public enum CouponType
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("满减券")]
+            FullCut = 1,
+            [Remark("立减券")]
+            UnLimitedCut = 2,
+            [Remark("折扣券")]
+            Discount = 3
+        }
+
+        public enum ReceptionMode
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("机器自取")]
+            Machine = 1,
+            [Remark("快递专送")]
+            Express = 2
+        }
+
+        public enum OfferResult
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("等待自动报价")]
+            WaitAutoOffer = 1,
+            [Remark("自动报价成功")]
+            AutoOfferSuccess = 2,
+            [Remark("自动报价失败")]
+            AutoOfferFailure = 3,
+            [Remark("等待人工报价")]
+            WaitArtificialOffer = 4,
+            [Remark("人工报价成功")]
+            ArtificialOfferSuccess = 5,
+            [Remark("人工报价失败")]
+            ArtificialOfferFailure = 6,
+            [Remark("等待人工报价")]
+            WaitStaffOffer = 7,
+            [Remark("人工报价成功")]
+            StaffOfferSuccess = 8,
+            [Remark("人工报价失败")]
+            StaffOfferFailure = 9
+        }
     }
 }

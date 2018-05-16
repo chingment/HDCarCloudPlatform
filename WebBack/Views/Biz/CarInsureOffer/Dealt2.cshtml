@@ -263,6 +263,22 @@
                 var vin=$('#txt_Vin').val();
                 var firstRegisterDate=$('#txt_FirstRegisterDate').val();
 
+
+                if(keyword=='') {
+                    art.dialog.tips('请输入品牌型号');
+                    return;
+                }
+
+                if(vin=='') {
+                    art.dialog.tips('请输入识别代号');
+                    return;
+                }
+
+                if(firstRegisterDate=='') {
+                    art.dialog.tips('初登日期');
+                    return;
+                }
+
                 $.lumos.postJson({
                     isUseHandling: true,
                     url: "/Biz/CarInsureOffer/CarModelQuery",
@@ -490,6 +506,10 @@
     <input name="Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" />
 
     <input name="Model.OrderToCarInsure.CarModelName" type="hidden" id="Model_OrderToCarInsure_CarModelName" value="@Model.OrderToCarInsure.CarModelName" />
+    <input name="Model.OrderToCarInsure.DrivingLicenceFaceImgKey"  value="@Model.OrderToCarInsure.DrivingLicenceFaceImgKey" />
+    <input name="Model.OrderToCarInsure.IdentityCardFaceImgKey" value="@Model.OrderToCarInsure.IdentityCardFaceImgKey" />
+    <input name="Model.OrderToCarInsure.CZ_CL_XSZ_ImgUrl" value="@Model.OrderToCarInsure.CZ_CL_XSZ_ImgUrl" />
+    <input name="Model.OrderToCarInsure.CZ_SFZ_ImgUrl" value="@Model.OrderToCarInsure.CZ_SFZ_ImgUrl" />
 
     <div class="gbr-row-title clearfix">
         <div class="pull-left">
@@ -694,7 +714,7 @@
         </tr>
     </table>
 
-    <div class="gbr-row-title clearfix" style="display:none;">
+    <div class="gbr-row-title clearfix" >
         <div class="pull-left">
             <h5>车辆查询</h5>
         </div>
@@ -702,7 +722,7 @@
             <h6></h6>
         </div>
     </div>
-    <table class="f-tb1-detail" style="display:none;">
+    <table class="f-tb1-detail">
         <tr>
             <td class="t">品牌型号：</td>
             <td class="c">
@@ -725,7 +745,7 @@
     </table>
 
 
-    <table id="list_carmodel_table" class="list-tb" cellpadding="0" cellspacing="0" style="display:none;">
+    <table id="list_carmodel_table" class="list-tb" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
                 <th style="width:5%" class="no">
@@ -830,7 +850,7 @@
         <tr>
             <td class="t">承保期间（开始）：</td>
             <td class="c">
-                <span><input type="text" class="input-control" name="Model.OrderToCarInsure.PeriodStart" id="Model_OrderToCarInsure_PeriodStart" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_OrderToCarInsure_PeriodStart\')}' })" style="width:175px;" value="@(Model.OrderToCarInsure.PeriodStart==null?DateTime.Now.ToUnifiedFormatDate():Model.OrderToCarInsure.PeriodStart.ToUnifiedFormatDate())" /></span>
+                <span><input type="text" class="input-control" name="Model.OrderToCarInsure.PeriodStart" id="Model_OrderToCarInsure_PeriodStart" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_OrderToCarInsure_PeriodStart\')}' })" style="width:175px;" value="@(Model.OrderToCarInsure.PeriodStart==null?DateTime.Now.AddDays(1).ToUnifiedFormatDate():Model.OrderToCarInsure.PeriodStart.ToUnifiedFormatDate())" /></span>
             </td>
             <td class="t">是否含车损：</td>
             <td class="c">
@@ -847,7 +867,7 @@
                     <span><input type="text" class="input-control" name="Model.OrderToCarInsure.PeriodEnd" id="Model_OrderToCarInsure_PeriodEnd" onclick="WdatePicker({ minDate: '#F{$dp.$D(\'Model_OrderToCarInsure_PeriodEnd\')}' })" style="width:175px;" value="@Model.OrderToCarInsure.PeriodEnd.ToUnifiedFormatDate()" /></span>
                 </td>*@
         </tr>
-        <tr style="display:none;">
+        <tr>
             <td class="c" colspan="4" style="text-align:center;">
                 <span>
 

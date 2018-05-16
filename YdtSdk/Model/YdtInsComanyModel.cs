@@ -16,6 +16,8 @@ namespace YdtSdk
 
         public string PrintName { get; set; }
 
+        public int ChannelId { get; set; }
+
 
     }
 }

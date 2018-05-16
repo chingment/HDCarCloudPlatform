@@ -15,7 +15,7 @@ namespace System
 
         public static string ToF2Price(this decimal d)
         {
-            return d.ToString("f2");
+            return string.Format("{0:0.##}", d);
         }
 
         public static string ToPrice(this decimal? d)

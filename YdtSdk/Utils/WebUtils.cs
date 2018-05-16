@@ -17,7 +17,7 @@ namespace YdtSdk
     /// </summary>
     public sealed class WebUtils
     {
-        private int _timeout = 20000;
+        private int _timeout = 60000;
         private int _readWriteTimeout = 60000;
         private bool _ignoreSSLCheck = true;
 

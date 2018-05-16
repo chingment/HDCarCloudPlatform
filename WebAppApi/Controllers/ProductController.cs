@@ -1,4 +1,5 @@
 ﻿using Lumos.BLL;
+using Lumos.BLL.Service;
 using Lumos.DAL;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
@@ -47,12 +48,13 @@ namespace WebAppApi.Controllers
 
             if (kindId != 0)
             {
+
                 string strkindId = BizFactory.Product.BuildProductKindIdForSearch(kindId.ToString());
 
                 query = query.Where(p => SqlFunctions.CharIndex(strkindId, p.ProductKindIds) > 0);
             }
 
-            int pageSize = 4;
+            int pageSize = 10;
 
             query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
@@ -73,12 +75,24 @@ namespace WebAppApi.Controllers
                     productModel.IsHot = m.IsHot;
                     productModel.Price = productSku.Price;
                     productModel.ShowPrice = productSku.ShowPrice.ToF2Price();
-                    productModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(productSku.DispalyImgs);
+                    productModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(m.DispalyImgs);
                     productModel.MainImg = BizFactory.Product.GetMainImg(m.DispalyImgs);
                     productModel.DetailsUrl = BizFactory.Product.GetDetailsUrl(m.Id);
                     model.Add(productModel);
                 }
             }
+
+            APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
+
+            return new APIResponse(result);
+        }
+
+
+        [HttpGet]
+        public APIResponse GetSkuDetails(int userId, int productSkuId)
+        {
+
+            var model = ServiceFactory.Product.GetSkuDetals(productSkuId);
 
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
 

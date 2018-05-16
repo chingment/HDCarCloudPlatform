@@ -92,13 +92,6 @@ namespace Lumos.BLL
                         {
                             product.ProductKindIds = GetRemoveKindId(product.ProductKindIds, new string[1] { str_id });
 
-                            var productSkus = CurrentDb.ProductSku.Where(m => m.ProductId == product.Id).ToList();
-
-                            foreach (var productSku in productSkus)
-                            {
-                                productSku.ProductKindIds = GetRemoveKindId(productSku.ProductKindIds, new string[1] { str_id });
-                            }
-
                             CurrentDb.SaveChanges();
                         }
 
@@ -125,13 +118,6 @@ namespace Lumos.BLL
                 foreach (var product in products)
                 {
                     product.ProductKindIds = GetRemoveKindId(product.ProductKindIds, new string[1] { str_id });
-
-                    var productSkus = CurrentDb.ProductSku.Where(m => m.ProductId == product.Id).ToList();
-
-                    foreach (var productSku in productSkus)
-                    {
-                        productSku.ProductKindIds = GetRemoveKindId(productSku.ProductKindIds, new string[1] { str_id });
-                    }
 
                     CurrentDb.SaveChanges();
                 }

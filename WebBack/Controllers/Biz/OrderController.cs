@@ -71,7 +71,7 @@ namespace WebBack.Controllers.Biz
                                  (sn.Length == 0 || o.Sn.Contains(sn))
 
 
-                         select new { o.Id, m.ClientCode, m.YYZZ_Name, o.Sn, o.Type, o.TypeName, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, o.ContactPhoneNumber, o.Contact }
+                         select new { o.Id, m.ClientCode, m.YYZZ_Name, o.Sn, o.Type, o.TypeName, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus, m.ContactPhoneNumber}
                         );
 
 

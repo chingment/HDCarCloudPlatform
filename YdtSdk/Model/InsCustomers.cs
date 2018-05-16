@@ -8,7 +8,7 @@ namespace YdtSdk
 {
     public class InsCustomers
     {
-        public int insuredFlag { get; set; }
+        public string insuredFlag { get; set; }
         public string name { get; set; }
         public string certNo { get; set; }
         public string mobile { get; set; }

@@ -31,8 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net465\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis">
+      <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net45\StackExchange.Redis.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -50,8 +57,12 @@
     <Compile Include="Get\IYdtApiGetRequest.cs" />
     <Compile Include="Get\YdtEmLogin.cs" />
     <Compile Include="Get\YdtEmLoginResult.cs" />
+    <Compile Include="Get\YdtInsCarApiSearch.cs" />
+    <Compile Include="Get\YdtInsCarApiSearchResultData.cs" />
     <Compile Include="Get\YdtInscarCar.cs" />
     <Compile Include="Get\YdtInscarCarResult.cs" />
+    <Compile Include="Get\YdtInsCarQueryInquiry.cs" />
+    <Compile Include="Get\YdtInsCarQueryInquiryResultData.cs" />
     <Compile Include="Get\YdtToken.cs" />
     <Compile Include="Get\YdtTokenResult.cs" />
     <Compile Include="Model\InsCarAdvicevalueModel.cs" />
@@ -63,17 +74,25 @@
     <Compile Include="Model\InsOfferImgModel.cs" />
     <Compile Include="Model\UploadModel.cs" />
     <Compile Include="Model\YdtDataMap.cs" />
+    <Compile Include="Model\YdtInscarGetInquiryInfoModel.cs" />
     <Compile Include="Model\YdtInscarInquiryOffer.cs" />
     <Compile Include="Model\YdtInsComanyModel.cs" />
     <Compile Include="Model\YdtInsCoverageModel.cs" />
+    <Compile Include="Post\YdtInscarInquiryByArtificial.cs" />
+    <Compile Include="Post\YdtInscarUpatebase.cs" />
     <Compile Include="Post\YdtInscarAdvicevalue.cs" />
     <Compile Include="Post\YdtInscarAdvicevalueResultData.cs" />
     <Compile Include="Post\IYdtApiPostRequest.cs" />
     <Compile Include="Post\YdtInscarAddbase.cs" />
     <Compile Include="Post\YdtInscarAddbaseResult.cs" />
+    <Compile Include="Post\YdtInscarUpdatebaseResultData.cs" />
+    <Compile Include="Post\YdtInscarGetInquiryInfo.cs" />
+    <Compile Include="Post\YdtInscarGetInquiryInfoResultData.cs" />
     <Compile Include="Post\YdtInscarInquiry.cs" />
     <Compile Include="Post\YdtInscarInquiryResultData.cs" />
     <Compile Include="Post\YdtUpload.cs" />
+    <Compile Include="Post\YdtUploadByIdentity.cs" />
+    <Compile Include="Post\YdtUploadByLicense.cs" />
     <Compile Include="Post\YdtUploadResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Constants.cs" />
@@ -95,6 +114,10 @@
     <ProjectReference Include="..\Lumos.MVC\Lumos.Mvc.csproj">
       <Project>{ed113ad7-1b20-4b05-8961-9b701e51734c}</Project>
       <Name>Lumos.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lumos.Redis\Lumos.Redis.csproj">
+      <Project>{c165e6a0-dd43-4aa1-94b1-d4bf5420a80d}</Project>
+      <Name>Lumos.Redis</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

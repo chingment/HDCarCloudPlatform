@@ -11,6 +11,8 @@ using System.Web.Http;
 using WebAppApi.Models.Order;
 using Lumos.Entity.AppApi;
 using WebAppApi.Models;
+using Lumos.BLL.Service;
+using Lumos.BLL.Service.Model;
 
 namespace WebAppApi.Controllers
 {
@@ -1108,6 +1110,13 @@ namespace WebAppApi.Controllers
 
             return new APIResponse(result);
 
+        }
+
+        public APIResponse Confirm(OrderConfirmModel pms)
+        {
+            IResult result = ServiceFactory.Order.Confrim(pms.UserId, pms);
+
+            return new APIResponse(result);
         }
     }
 }

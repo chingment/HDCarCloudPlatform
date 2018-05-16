@@ -66,6 +66,9 @@
     <Compile Include="..\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Biz\CarInsureOfferProvider.cs" />
+    <Compile Include="Biz\CouponProvider.cs" />
+    <Compile Include="Biz\InsCarProvider.cs" />
     <Compile Include="Biz\Model\ProductDetailInfo.cs" />
     <Compile Include="Biz\Model\ProductKindSimple.cs" />
     <Compile Include="Biz\OrderToLllegalDealtProvider.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="Biz\ProductProvider.cs" />
     <Compile Include="Biz\OrderToTalentDemandProvider.cs" />
     <Compile Include="Biz\SupplierProvider.cs" />
+    <Compile Include="Biz\Task\TaskForCarInsQueryInquiry.cs" />
     <Compile Include="Biz\Task\TaskForMerchant.cs" />
     <Compile Include="Sdk\FangWeiProvider.cs" />
     <Compile Include="Biz\SmsProvider.cs" />
@@ -105,10 +109,36 @@
     <Compile Include="Sdk\HeLianProvider.cs" />
     <Compile Include="Sdk\MinShunPayProvider.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
+    <Compile Include="Service\CartService.cs" />
+    <Compile Include="Service\CouponService.cs" />
+    <Compile Include="Service\IndexService.cs" />
+    <Compile Include="Service\Model\BannerModel.cs" />
+    <Compile Include="Service\Model\CartProcudtSkuListByOperateModel.cs" />
+    <Compile Include="Service\Model\CartProcudtSkuListModel.cs" />
+    <Compile Include="Service\Model\CartModel.cs" />
+    <Compile Include="Service\Model\CouponModel.cs" />
+    <Compile Include="Service\Model\OrderConfirmCouponModel.cs" />
+    <Compile Include="Service\Model\IndexModel.cs" />
+    <Compile Include="Service\Model\OrderConfirmModel.cs" />
+    <Compile Include="Service\Model\OrderConfirmResultModel.cs" />
+    <Compile Include="Service\Model\OrderConfirmSkuModel.cs" />
     <Compile Include="Service\Model\ProductChildKindModel.cs" />
+    <Compile Include="Service\Model\ProductDetailsModel.cs" />
     <Compile Include="Service\Model\ProductKindModel.cs" />
+    <Compile Include="Service\Model\ProductParentKindModel.cs" />
+    <Compile Include="Service\Model\ProductSkuDetailsModel.cs" />
+    <Compile Include="Service\Model\ProductSkuModel.cs" />
+    <Compile Include="Service\Model\PersonalModel.cs" />
+    <Compile Include="Service\Model\ShippingAddressModel.cs" />
+    <Compile Include="Service\Model\SpecModel.cs" />
+    <Compile Include="Service\Model\SpecValueModel.cs" />
+    <Compile Include="Service\Model\OrderConfirmSubtotalItemModel.cs" />
+    <Compile Include="Service\Model\UserInfoModel.cs" />
+    <Compile Include="Service\OrderService.cs" />
+    <Compile Include="Service\PersonalService.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\ServiceFactory.cs" />
+    <Compile Include="Service\ShippingAddressService.cs" />
     <Compile Include="Sys\AuthorizeRelayProvider.cs" />
     <Compile Include="Sys\SysAppKeySecretProvider.cs" />
     <Compile Include="Sys\SysBannerProvider.cs" />
@@ -156,6 +186,10 @@
     <ProjectReference Include="..\MySDK\MySDK.csproj">
       <Project>{8479fcaf-4aef-40d4-b76d-246282522fb7}</Project>
       <Name>MySDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YdtSdk\YdtSdk.csproj">
+      <Project>{539b0cc5-1802-4a6c-b081-c7e35071d21c}</Project>
+      <Name>YdtSdk</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

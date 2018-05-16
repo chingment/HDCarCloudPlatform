@@ -8,20 +8,7 @@ namespace Lumos.BLL.Service.Model
 {
     public class ProductKindModel
     {
-
-        public ProductKindModel()
-        {
-            this.Child = new List<ProductChildKindModel>();
-        }
-
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string ImgUrl { get; set; }
-
-        public bool Selected { get; set; }
-
-        public List<ProductChildKindModel> Child { get; set; }
+        public List<ProductParentKindModel> List { get; set; }
+ 
     }
 }

@@ -102,14 +102,6 @@ namespace Lumos.BLL
                         {
                             product.ProductCategoryId = 0;
 
-                            var productSkus = CurrentDb.ProductSku.Where(m => m.ProductId == product.Id).ToList();
-
-                            foreach (var productSku in productSkus)
-                            {
-                                productSku.ProductCategoryId = 0;
-                            }
-
-                            CurrentDb.SaveChanges();
                         }
 
                         CurrentDb.SaveChanges();

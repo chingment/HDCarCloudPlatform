@@ -1,5 +1,6 @@
 ﻿using Lumos.BLL;
 using Lumos.BLL.Service.Model;
+using Lumos.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,5 @@ namespace WebAppApi.Models.Account
 
         public int LllegalQueryScore { get; set; }
 
-        public List<ProductKindModel> ProductKinds { get; set; }
     }
 }

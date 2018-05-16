@@ -36,15 +36,6 @@ namespace Lumos.Entity
         [MaxLength(256)]
         public string TypeName { get; set; }
 
-        [MaxLength(128)]
-        public string Contact { get; set; }
-
-        [MaxLength(128)]
-        public string ContactPhoneNumber { get; set; }
-
-        [MaxLength(512)]
-        public string ContactAddress { get; set; }
-
         public decimal Price { get; set; }
 
         [MaxLength(1024)]

@@ -18,10 +18,10 @@ namespace YdtSdk
 
         public string modelCode { get; set; }
         public string modelName { get; set; }
-        public int displacement { get; set; }
+        public string displacement { get; set; }
         public string marketYear { get; set; }
-        public int ratedPassengerCapacity { get; set; }
-        public decimal replacementValue { get; set; }
+        public string ratedPassengerCapacity { get; set; }
+        public string replacementValue { get; set; }
     }
 
 }

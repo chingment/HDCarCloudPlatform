@@ -52,6 +52,25 @@
     <Compile Include="..\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppApi\CarIns\CarInfoModel.cs" />
+    <Compile Include="AppApi\CarIns\CarInfoPms.cs" />
+    <Compile Include="AppApi\CarIns\CarInfoResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsComanyInfoPms.cs" />
+    <Compile Include="AppApi\CarIns\CarInsComanyInfoResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsCommercialCoverageInfo.cs" />
+    <Compile Include="AppApi\CarIns\CarInsCompulsoryInfo.cs" />
+    <Compile Include="AppApi\CarIns\CarInsCoverageModel.cs" />
+    <Compile Include="AppApi\CarIns\CarInsCustomerModel.cs" />
+    <Compile Include="AppApi\CarIns\CarInsEditBaseInfoPms.cs" />
+    <Compile Include="AppApi\CarIns\CarInsEditBaseInfoResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsInquiryPms.cs" />
+    <Compile Include="AppApi\CarIns\CarInsInquiryResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsKindModel.cs" />
+    <Compile Include="AppApi\CarIns\CarInsureBaseInfo.cs" />
+    <Compile Include="AppApi\CarIns\CarModelInfoModel.cs" />
+    <Compile Include="AppApi\CarIns\CarModelInfoPms.cs" />
+    <Compile Include="AppApi\CarIns\CarModelInfoResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsInsureKindModel.cs" />
     <Compile Include="AppApi\CodeDownloadResult.cs" />
     <Compile Include="AppApi\OrderField.cs" />
     <Compile Include="AppApi\OrderModel.cs" />
@@ -73,9 +92,12 @@
     <Compile Include="Biz\CarInsurePlan.cs" />
     <Compile Include="Biz\CarInsurePlanKind.cs" />
     <Compile Include="Biz\CarKind.cs" />
+    <Compile Include="Biz\Cart.cs" />
+    <Compile Include="Biz\Coupon.cs" />
     <Compile Include="Biz\ExtendedApp.cs" />
     <Compile Include="Biz\ExtendedAppAccessLog.cs" />
     <Compile Include="Biz\Fund.cs" />
+    <Compile Include="Biz\InsCarInfo.cs" />
     <Compile Include="Biz\Inventory.cs" />
     <Compile Include="Biz\InventoryOperateHis.cs" />
     <Compile Include="Biz\LllegalQueryLog.cs" />
@@ -83,12 +105,16 @@
     <Compile Include="Biz\LllegalQueryScoreTrans.cs" />
     <Compile Include="Biz\MerchantEstimateCompany.cs" />
     <Compile Include="Biz\MerchantPosMachineChangeHistory.cs" />
+    <Compile Include="Biz\OrderChildDetails.cs" />
     <Compile Include="Biz\OrderPayResultNotifyByAppLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyByMinShunLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyByStaffLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
     <Compile Include="Biz\OrderPayTrans.cs" />
+    <Compile Include="Biz\OrderChildProductSkuDetails.cs" />
     <Compile Include="Biz\OrderToApplyLossAssess .cs" />
+    <Compile Include="Biz\OrderToCarInsureAuto.cs" />
+    <Compile Include="Biz\OrderToCarInsureOfferCompanyKind.cs" />
     <Compile Include="Biz\OrderToCredit.cs" />
     <Compile Include="Biz\OrderToInsurance.cs" />
     <Compile Include="Biz\OrderToLllegalDealt.cs" />
@@ -113,6 +139,7 @@
     <Compile Include="Biz\PosMachine.cs" />
     <Compile Include="Biz\Product.cs" />
     <Compile Include="Biz\OrderToTalentDemand .cs" />
+    <Compile Include="Biz\ShippingAddress.cs" />
     <Compile Include="Sys\SysAgentUser.cs" />
     <Compile Include="Sys\SysOpenIdInfo.cs" />
     <Compile Include="Biz\FundTrans.cs" />

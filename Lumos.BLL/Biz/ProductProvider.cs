@@ -186,6 +186,7 @@ namespace Lumos.BLL
                 product.Supplier = product.Supplier.Trim();
                 product.ProductKindIds = BuildProductKindIds(product.ProductKindIds);
                 product.MainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
+                product.Status = Enumeration.ProductStatus.OnLine;
                 product.Creator = operater;
                 product.CreateTime = this.DateTime;
 
@@ -196,18 +197,10 @@ namespace Lumos.BLL
                 foreach (var prdSku in productSkus)
                 {
                     prdSku.ProductId = product.Id;
-                    prdSku.SupplierId = product.SupplierId;
-                    prdSku.Supplier = product.Supplier;
-                    prdSku.ProductCategoryId = product.ProductCategoryId;
-                    prdSku.ProductCategory = product.ProductCategory;
-                    prdSku.ProductKindIds = product.ProductKindIds;
-                    prdSku.ProductKindNames = product.ProductKindNames;
-                    prdSku.MainImg = product.MainImg;
-                    prdSku.DispalyImgs = product.DispalyImgs;
-                    prdSku.Details = product.Details;
+                
                     prdSku.Spec2 = GetSpec2(prdSku.Spec);
                     prdSku.Spec3 = GetSpec3(prdSku.Spec);
-
+                    prdSku.Status = product.Status;
                     if (string.IsNullOrEmpty(prdSku.Spec3))
                     {
                         prdSku.Name = product.Name;
@@ -294,17 +287,8 @@ namespace Lumos.BLL
                         var productSku = CurrentDb.ProductSku.Where(m => m.Id == prdSku.Id).FirstOrDefault();
                         if (productSku != null)
                         {
-                            productSku.SupplierId = l_product.SupplierId;
-                            productSku.Supplier = l_product.Supplier;
-                            productSku.ProductCategoryId = l_product.ProductCategoryId;
-                            productSku.ProductCategory = l_product.ProductCategory;
-                            productSku.ProductKindIds = l_product.ProductKindIds;
-                            productSku.ProductKindNames = l_product.ProductKindNames;
                             productSku.Name = l_product.Name;
                             productSku.Price = prdSku.Price;
-                            productSku.MainImg = l_product.MainImg;
-                            productSku.DispalyImgs = l_product.DispalyImgs;
-                            productSku.Details = l_product.Details;
                             productSku.Mender = operater;
                             productSku.LastUpdateTime = this.DateTime;
                             CurrentDb.SaveChanges();
@@ -346,15 +330,6 @@ namespace Lumos.BLL
                 foreach (var prdSku in productSkus)
                 {
                     prdSku.ProductId = product.Id;
-                    prdSku.SupplierId = product.SupplierId;
-                    prdSku.Supplier = product.Supplier;
-                    prdSku.ProductCategoryId = product.ProductCategoryId;
-                    prdSku.ProductCategory = product.ProductCategory;
-                    prdSku.ProductKindIds = product.ProductKindIds;
-                    prdSku.ProductKindNames = product.ProductKindNames;
-                    prdSku.MainImg = product.MainImg;
-                    prdSku.DispalyImgs = product.DispalyImgs;
-                    prdSku.Details = product.Details;
                     prdSku.Spec2 = GetSpec2(prdSku.Spec);
                     prdSku.Spec3 = GetSpec3(prdSku.Spec);
 

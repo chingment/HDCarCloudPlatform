@@ -1316,6 +1316,7 @@
     <Content Include="Views\Biz\Supplier\List.cshtml" />
     <Content Include="Views\Biz\Product\ListByInsurance.cshtml" />
     <Content Include="Views\Biz\Product\AddByInsurance.cshtml" />
+    <Content Include="Views\Biz\CarInsureOffer\OfferImg.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -1381,6 +1382,10 @@
     <ProjectReference Include="..\MySDK\MySDK.csproj">
       <Project>{8479fcaf-4aef-40d4-b76d-246282522fb7}</Project>
       <Name>MySDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YdtSdk\YdtSdk.csproj">
+      <Project>{539b0cc5-1802-4a6c-b081-c7e35071d21c}</Project>
+      <Name>YdtSdk</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

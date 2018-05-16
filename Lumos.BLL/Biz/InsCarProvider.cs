@@ -368,7 +368,7 @@ namespace Lumos.BLL
                     switch (pms.OfferResult)
                     {
                         case Enumeration.OfferResult.WaitArtificialOffer:
-                            var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsureAuto, l_OrderToCarInsureAuto.Id, Enumeration.AuditFlowV1Status.Submit);
+                            var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsureAuto, l_OrderToCarInsureAuto.UserId, l_OrderToCarInsureAuto.MerchantId, l_OrderToCarInsureAuto.Id, Enumeration.AuditFlowV1Status.Submit);
                             BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.Submit, operater, null, "提交订单，等待取单");
                             break;
 

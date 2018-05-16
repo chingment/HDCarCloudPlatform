@@ -86,9 +86,9 @@ namespace WebAppApi.Controllers
                         {
                             case Enumeration.OrderType.InsureForCarForInsure:
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
-                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarOwner.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField("身份证号码", orderToCarInsure.CarOwnerIdNumber.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarPlateNo.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarownerName.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("证件号码", orderToCarInsure.CarownerCertNo.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("状态", "请稍侯，报价中"));
 
                                 break;
@@ -170,8 +170,8 @@ namespace WebAppApi.Controllers
                             case Enumeration.OrderType.InsureForCarForInsure:
 
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
-                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarOwner.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarPlateNo.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarownerName.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
 
                                 var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(c => c.OrderId == m.Id).ToList();
                                 foreach (var c in orderToCarInsureOfferCompany)
@@ -227,8 +227,8 @@ namespace WebAppApi.Controllers
                                 orderModel.Remarks = "";
 
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
-                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarOwner.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarPlateNo.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarownerName.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
 
                                 var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(c => c.OrderId == m.Id).ToList();
                                 foreach (var c in orderToCarInsureOfferCompany)
@@ -285,10 +285,10 @@ namespace WebAppApi.Controllers
 
 
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
-                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarOwner.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField("身份证号码", orderToCarInsure.CarOwnerIdNumber.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarPlateNo.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField(orderToCarInsure.InsuranceCompanyName, string.Format("{0}元", orderToCarInsure.Price.ToF2Price())));
+                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarownerName.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("证件号码", orderToCarInsure.CarownerCertNo.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField(orderToCarInsure.InsCompanyName, string.Format("{0}元", orderToCarInsure.Price.ToF2Price())));
 
 
                                 break;
@@ -389,9 +389,9 @@ namespace WebAppApi.Controllers
                             case Enumeration.OrderType.InsureForCarForInsure:
 
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
-                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarOwner.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField("身份证号码", orderToCarInsure.CarOwnerIdNumber.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarPlateNo.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarownerName.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("证件号码", orderToCarInsure.CarownerCertNo.NullToEmpty()));
+                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
                             case Enumeration.OrderType.InsureForCarForClaim:
@@ -486,7 +486,7 @@ namespace WebAppApi.Controllers
                             orderCarInsureOfferCompanyModel.InsuranceCompanyName = m.InsuranceCompanyName;
 
 
-                            if (m.InsuranceCompanyId == orderToCarInsure.InsuranceCompanyId)
+                            if (m.InsuranceCompanyId == orderToCarInsure.InsCompanyId)
                             {
                                 orderCarInsureOfferCompanyModel.IsCheck = true;
                             }
@@ -552,11 +552,11 @@ namespace WebAppApi.Controllers
                         #endregion
 
                         #region 险种
-                        var orderToCarInsureOfferKind = CurrentDb.OrderToCarInsureOfferKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
+                        var orderToCarInsureOfferCompanyKind = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
                         var carKinds = CurrentDb.CarKind.ToList();
-                        if (orderToCarInsureOfferKind != null)
+                        if (orderToCarInsureOfferCompanyKind != null)
                         {
-                            foreach (var m in orderToCarInsureOfferKind)
+                            foreach (var m in orderToCarInsureOfferCompanyKind)
                             {
                                 var carKind = carKinds.Where(q => q.Id == m.KindId).FirstOrDefault();
                                 if (carKind != null)
@@ -571,22 +571,22 @@ namespace WebAppApi.Controllers
                         #endregion
 
                         #region 车主
-                        orderCarInsureDetailsModel.CarOwner = orderToCarInsure.CarOwner.NullToEmpty();
-                        orderCarInsureDetailsModel.CarPlateNo = orderToCarInsure.CarPlateNo.NullToEmpty();
-                        orderCarInsureDetailsModel.CarOwnerIdNumber = orderToCarInsure.CarOwnerIdNumber.NullToEmpty();
+                        orderCarInsureDetailsModel.CarOwner = orderToCarInsure.CarownerName.NullToEmpty();
+                        orderCarInsureDetailsModel.CarPlateNo = orderToCarInsure.CarLicensePlateNo.NullToEmpty();
+                        orderCarInsureDetailsModel.CarOwnerIdNumber = orderToCarInsure.CarownerCertNo.NullToEmpty();
                         #endregion
 
-                        orderCarInsureDetailsModel.InsuranceCompanyId = orderToCarInsure.InsuranceCompanyId;
-                        orderCarInsureDetailsModel.InsuranceCompanyName = orderToCarInsure.InsuranceCompanyName;
-                        orderCarInsureDetailsModel.InsureImgUrl = orderToCarInsure.InsureImgUrl;
+                        orderCarInsureDetailsModel.InsuranceCompanyId = orderToCarInsure.InsCompanyId;
+                        orderCarInsureDetailsModel.InsuranceCompanyName = orderToCarInsure.InsCompanyName;
+                        orderCarInsureDetailsModel.InsureImgUrl = orderToCarInsure.InsCompanyImgUrl;
 
                         orderCarInsureDetailsModel.Recipient = orderToCarInsure.Recipient.NullToEmpty();
                         orderCarInsureDetailsModel.RecipientAddress = orderToCarInsure.RecipientAddress.NullToEmpty();
                         orderCarInsureDetailsModel.RecipientPhoneNumber = orderToCarInsure.RecipientPhoneNumber.NullToEmpty();
 
-                        orderCarInsureDetailsModel.CommercialPrice = orderToCarInsure.CommercialPrice.ToF2Price();
-                        orderCarInsureDetailsModel.TravelTaxPrice = orderToCarInsure.TravelTaxPrice.ToF2Price();
-                        orderCarInsureDetailsModel.CompulsoryPrice = orderToCarInsure.CompulsoryPrice.ToF2Price();
+                        orderCarInsureDetailsModel.CommercialPrice = orderToCarInsure.InsCommercialPrice.ToF2Price();
+                        orderCarInsureDetailsModel.TravelTaxPrice = orderToCarInsure.InsTravelTaxPrice.ToF2Price();
+                        orderCarInsureDetailsModel.CompulsoryPrice = orderToCarInsure.InsCompulsoryPrice.ToF2Price();
                         orderCarInsureDetailsModel.Price = orderToCarInsure.Price.ToF2Price();
 
                         #region 证件

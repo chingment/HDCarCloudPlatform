@@ -14,7 +14,7 @@ namespace WebBack.Models.Biz.CarInsureOffer
         private Lumos.Entity.OrderToCarInsure _orderToCarInsure = new Lumos.Entity.OrderToCarInsure();
         private List<Lumos.Entity.CarInsuranceCompany> _carInsuranceCompany = new List<Lumos.Entity.CarInsuranceCompany>();
         private List<Lumos.Entity.OrderToCarInsureOfferCompany> _orderToCarInsureOfferCompany = new List<Lumos.Entity.OrderToCarInsureOfferCompany>();
-        private List<Lumos.Entity.OrderToCarInsureOfferKind> _orderToCarInsureOfferKind = new List<Lumos.Entity.OrderToCarInsureOfferKind>();
+        private List<Lumos.Entity.OrderToCarInsureOfferCompanyKind> _orderToCarInsureOfferCompanyKind = new List<Lumos.Entity.OrderToCarInsureOfferCompanyKind>();
         private List<InsurePlanKindModel> _insurePlanKinds;
 
 
@@ -121,15 +121,15 @@ namespace WebBack.Models.Biz.CarInsureOffer
             }
         }
 
-        public List<Lumos.Entity.OrderToCarInsureOfferKind> OrderToCarInsureOfferKind
+        public List<Lumos.Entity.OrderToCarInsureOfferCompanyKind> OrderToCarInsureOfferCompanyKind
         {
             get
             {
-                return _orderToCarInsureOfferKind;
+                return _orderToCarInsureOfferCompanyKind;
             }
             set
             {
-                _orderToCarInsureOfferKind = value;
+                _orderToCarInsureOfferCompanyKind = value;
             }
         }
 

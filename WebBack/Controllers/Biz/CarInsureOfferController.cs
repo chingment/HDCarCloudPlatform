@@ -53,6 +53,13 @@ namespace WebBack.Controllers.Biz
         }
 
         [OwnAuthorize(PermissionCode.车险订单报价)]
+        public ViewResult DealtByOffer(int id)
+        {
+            DealtByOfferViewModel model = new DealtByOfferViewModel(id);
+            return View(model);
+        }
+
+        [OwnAuthorize(PermissionCode.车险订单报价)]
         public ViewResult Edit(int id)
         {
             DealtViewModel model = new DealtViewModel(id);
@@ -84,7 +91,7 @@ namespace WebBack.Controllers.Biz
                                 (clientCode.Length == 0 || m.YYZZ_Name.Contains(clientCode))
 
 
-                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.TypeName,o.Type, o.SubmitTime, o.Status, o.CreateTime });
+                         select new { o.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.TypeName, o.Type, o.SubmitTime, o.Status, o.CreateTime });
 
 
 
@@ -121,8 +128,8 @@ namespace WebBack.Controllers.Biz
         [OwnAuthorize(PermissionCode.车险订单报价)]
         public CustomJsonResult GetDealtList(SearchCondition condition)
         {
-            var waiCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer select h.Id).Count();
-            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureOfferDealtStatus.InOffer && h.Auditor == this.CurrentUserId select h.Id).Count();
+            var waiCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureAuditStatus.WaitOffer select h.Id).Count();
+            var inCount = (from h in CurrentDb.BizProcessesAudit where (h.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure) && h.Status == (int)Enumeration.CarInsureAuditStatus.InOffer && h.Auditor == this.CurrentUserId select h.Id).Count();
 
             var query = (from b in CurrentDb.BizProcessesAudit
                          join o in CurrentDb.OrderToCarInsure on
@@ -133,13 +140,13 @@ namespace WebBack.Controllers.Biz
 
                          select new { b.Id, m.ClientCode, o.Sn, m.YYZZ_Name, m.ContactPhoneNumber, o.TypeName, o.SubmitTime, b.Status, b.CreateTime, b.Auditor });
 
-            if (condition.AuditStatus == Enumeration.CarInsureOfferDealtStatus.WaitOffer)
+            if (condition.AuditStatus == Enumeration.CarInsureAuditStatus.WaitOffer)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer);
+                query = query.Where(m => m.Status == (int)Enumeration.CarInsureAuditStatus.WaitOffer);
             }
-            else if (condition.AuditStatus == Enumeration.CarInsureOfferDealtStatus.InOffer)
+            else if (condition.AuditStatus == Enumeration.CarInsureAuditStatus.InOffer)
             {
-                query = query.Where(m => m.Status == (int)Enumeration.CarInsureOfferDealtStatus.InOffer && m.Auditor == this.CurrentUserId);
+                query = query.Where(m => m.Status == (int)Enumeration.CarInsureAuditStatus.InOffer && m.Auditor == this.CurrentUserId);
             }
 
 
@@ -229,7 +236,7 @@ namespace WebBack.Controllers.Biz
             CustomJsonResult reuslt = new CustomJsonResult();
 
             model.OrderToCarInsure.AutoCancelByHour = 24;
-            reuslt = BizFactory.Order.SubmitCarInsureOffer(this.CurrentUserId, model.Operate, model.OrderToCarInsure, model.OrderToCarInsureOfferCompany, model.OrderToCarInsureOfferKind, model.BizProcessesAudit);
+            reuslt = BizFactory.Order.SubmitCarInsureOffer(this.CurrentUserId, model.Operate, model.OrderToCarInsure, model.OrderToCarInsureOfferCompany, model.OrderToCarInsureOfferCompanyKind, model.BizProcessesAudit);
 
             return reuslt;
         }
@@ -273,9 +280,9 @@ namespace WebBack.Controllers.Biz
 
             CustomJsonResult reuslt = new CustomJsonResult();
 
-            model.OrderToCarInsure.PeriodEnd = model.OrderToCarInsure.PeriodStart.Value.AddYears(1).AddDays(-1);
+            //model.OrderToCarInsure.PeriodEnd = model.OrderToCarInsure.PeriodStart.Value.AddYears(1).AddDays(-1);
 
-            reuslt = YdtUtils.GetCarInsOffer(model.OrderToCarInsure, model.OrderToCarInsureOfferCompany, model.OrderToCarInsureOfferKind);
+            reuslt = YdtUtils.GetCarInsOffer(model.OrderToCarInsure, model.OrderToCarInsureOfferCompany, model.OrderToCarInsureOfferCompanyKind);
 
             return reuslt;
         }

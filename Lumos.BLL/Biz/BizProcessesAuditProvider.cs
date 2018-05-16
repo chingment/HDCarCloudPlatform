@@ -9,7 +9,7 @@ namespace Lumos.BLL
 {
     public class BizProcessesAuditProvider : BaseProvider
     {
-        public BizProcessesAudit Add(int operater, Enumeration.BizProcessesAuditType type,int userId,int merchantId, int referenceid, object status)
+        public BizProcessesAudit Add(int operater, Enumeration.BizProcessesAuditType type, int userId, int merchantId, int referenceid, object status)
         {
             DateTime nowDate = DateTime.Now;
             BizProcessesAudit bizProcessesAudit = new BizProcessesAudit();
@@ -260,142 +260,142 @@ namespace Lumos.BLL
             return bizProcessesAudit;
         }
 
-        public BizProcessesAudit ChangeCarInsureOfferDealtStatus(int operater, int bizProcessesAuditId, Enumeration.CarInsureOfferDealtStatus changestatus, string description = null, DateTime? endTime = null)
-        {
+        //public BizProcessesAudit ChangeCarInsureOfferDealtStatus(int operater, int bizProcessesAuditId, Enumeration.CarInsureOfferDealtStatus changestatus, string description = null, DateTime? endTime = null)
+        //{
 
-            var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
-            if (bizProcessesAudit != null)
-            {
-                if (bizProcessesAudit.EndTime == null)
-                {
-                    if (
-                       bizProcessesAudit.Status != (int)Enumeration.CarInsureOfferDealtStatus.Complete
-                        && bizProcessesAudit.Status != (int)Enumeration.CarInsureOfferDealtStatus.ClientCancle
-                           && bizProcessesAudit.Status != (int)Enumeration.CarInsureOfferDealtStatus.StaffCancle
-                        )
-                    {
-                        Enumeration.CarInsureOfferDealtStatus old_Status = (Enumeration.CarInsureOfferDealtStatus)bizProcessesAudit.Status;
-                        bizProcessesAudit.Mender = operater;
-                        bizProcessesAudit.LastUpdateTime = DateTime.Now;
-
-
-                        if (endTime != null)
-                        {
-                            bizProcessesAudit.EndTime = endTime.Value;
-                        }
-
-                        if (changestatus == Enumeration.CarInsureOfferDealtStatus.WaitOffer)
-                        {
-
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.CarInsureOfferDealtStep.Offer).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                            if (bizProcessesAuditDetails == null)
-                            {
-                                bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer;
-                                bizProcessesAudit.Auditor = null;
-
-                            }
-                            else
-                            {
-                                bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.InOffer;
-                                bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
-
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, "后台人员正在处理");
-                            }
-
-                        }
-                        else if (changestatus == Enumeration.CarInsureOfferDealtStatus.InOffer)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.InOffer;
-                            if (bizProcessesAudit.Auditor == null)
-                            {
-                                bizProcessesAudit.Auditor = operater;
-
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, operater, null, description);
-
-                            }
-
-                        }
-                        else if (changestatus == Enumeration.CarInsureOfferDealtStatus.ClientFllow)
-                        {
-
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && (m.AuditStep == (int)Enumeration.CarInsureOfferDealtStep.Submit || m.AuditStep == (int)Enumeration.CarInsureOfferDealtStep.Fllow)).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                            if (bizProcessesAuditDetails != null)
-                            {
-                                bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.ClientFllow;
-                                bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
-
-                                ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureOfferDealtStep.Fllow, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, description);
-                            }
+        //    var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
+        //    if (bizProcessesAudit != null)
+        //    {
+        //        if (bizProcessesAudit.EndTime == null)
+        //        {
+        //            if (
+        //               bizProcessesAudit.Status != (int)Enumeration.CarInsureOfferDealtStatus.Complete
+        //                && bizProcessesAudit.Status != (int)Enumeration.CarInsureOfferDealtStatus.ClientCancle
+        //                   && bizProcessesAudit.Status != (int)Enumeration.CarInsureOfferDealtStatus.StaffCancle
+        //                )
+        //            {
+        //                Enumeration.CarInsureOfferDealtStatus old_Status = (Enumeration.CarInsureOfferDealtStatus)bizProcessesAudit.Status;
+        //                bizProcessesAudit.Mender = operater;
+        //                bizProcessesAudit.LastUpdateTime = DateTime.Now;
 
 
+        //                if (endTime != null)
+        //                {
+        //                    bizProcessesAudit.EndTime = endTime.Value;
+        //                }
 
-                        }
-                        else if (changestatus == Enumeration.CarInsureOfferDealtStatus.ClientCancle)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.ClientCancle;
-                            bizProcessesAudit.Auditor = operater;
-                            bizProcessesAudit.EndTime = this.DateTime;
+        //                if (changestatus == Enumeration.CarInsureOfferDealtStatus.WaitOffer)
+        //                {
 
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+        //                    var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.CarInsureOfferDealtStep.Offer).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+        //                    if (bizProcessesAuditDetails == null)
+        //                    {
+        //                        bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.WaitOffer;
+        //                        bizProcessesAudit.Auditor = null;
 
-                        }
-                        else if (changestatus == Enumeration.CarInsureOfferDealtStatus.StaffCancle)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.StaffCancle;
-                            bizProcessesAudit.Auditor = operater;
-                            bizProcessesAudit.EndTime = this.DateTime;
+        //                    }
+        //                    else
+        //                    {
+        //                        bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.InOffer;
+        //                        bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
-                        }
-                        else if (changestatus == Enumeration.CarInsureOfferDealtStatus.OfferComplete)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.Complete;
-                            bizProcessesAudit.Auditor = operater;
+        //                        ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, "后台人员正在处理");
+        //                    }
 
+        //                }
+        //                else if (changestatus == Enumeration.CarInsureOfferDealtStatus.InOffer)
+        //                {
+        //                    bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.InOffer;
+        //                    if (bizProcessesAudit.Auditor == null)
+        //                    {
+        //                        bizProcessesAudit.Auditor = operater;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
-                        }
-                        else if (changestatus == Enumeration.CarInsureOfferDealtStatus.Complete)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.Complete;
-                            bizProcessesAudit.Auditor = operater;
-                            bizProcessesAudit.EndTime = this.DateTime;
+        //                        ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, operater, null, description);
 
-                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
-                        }
-                    }
+        //                    }
 
-                    CurrentDb.SaveChanges();
-                }
+        //                }
+        //                else if (changestatus == Enumeration.CarInsureOfferDealtStatus.ClientFllow)
+        //                {
 
-                var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderByDescending(m => m.AuditTime).ToList();
+        //                    var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && (m.AuditStep == (int)Enumeration.CarInsureOfferDealtStep.Submit || m.AuditStep == (int)Enumeration.CarInsureOfferDealtStep.Fllow)).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+        //                    if (bizProcessesAuditDetails != null)
+        //                    {
+        //                        bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.ClientFllow;
+        //                        bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
 
-                bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
-
-
-                Enumeration.CarInsureOfferDealtStep merchantAuditStep = Enumeration.CarInsureOfferDealtStep.Unknow;
-                if (changestatus == Enumeration.CarInsureOfferDealtStatus.WaitOffer || changestatus == Enumeration.CarInsureOfferDealtStatus.InOffer)
-                {
-                    merchantAuditStep = Enumeration.CarInsureOfferDealtStep.Offer;
-                }
-
-                var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                if (currentDetails != null)
-                {
-                    bizProcessesAudit.CurrentDetails = currentDetails;
-
-                    var auditComments = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep && m.AuditComments != null).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                    if (auditComments != null)
-                    {
-                        bizProcessesAudit.CurrentDetails.AuditComments = auditComments.AuditComments;
-                    }
-                }
+        //                        ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureOfferDealtStep.Fllow, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, description);
+        //                    }
 
 
-            }
 
-            return bizProcessesAudit;
-        }
+        //                }
+        //                else if (changestatus == Enumeration.CarInsureOfferDealtStatus.ClientCancle)
+        //                {
+        //                    bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.ClientCancle;
+        //                    bizProcessesAudit.Auditor = operater;
+        //                    bizProcessesAudit.EndTime = this.DateTime;
+
+        //                    ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+
+        //                }
+        //                else if (changestatus == Enumeration.CarInsureOfferDealtStatus.StaffCancle)
+        //                {
+        //                    bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.StaffCancle;
+        //                    bizProcessesAudit.Auditor = operater;
+        //                    bizProcessesAudit.EndTime = this.DateTime;
+
+        //                    ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+        //                }
+        //                else if (changestatus == Enumeration.CarInsureOfferDealtStatus.OfferComplete)
+        //                {
+        //                    bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.Complete;
+        //                    bizProcessesAudit.Auditor = operater;
+
+
+        //                    ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+        //                }
+        //                else if (changestatus == Enumeration.CarInsureOfferDealtStatus.Complete)
+        //                {
+        //                    bizProcessesAudit.Status = (int)Enumeration.CarInsureOfferDealtStatus.Complete;
+        //                    bizProcessesAudit.Auditor = operater;
+        //                    bizProcessesAudit.EndTime = this.DateTime;
+
+        //                    ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+        //                }
+        //            }
+
+        //            CurrentDb.SaveChanges();
+        //        }
+
+        //        var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderByDescending(m => m.AuditTime).ToList();
+
+        //        bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
+
+
+        //        Enumeration.CarInsureOfferDealtStep merchantAuditStep = Enumeration.CarInsureOfferDealtStep.Unknow;
+        //        if (changestatus == Enumeration.CarInsureOfferDealtStatus.WaitOffer || changestatus == Enumeration.CarInsureOfferDealtStatus.InOffer)
+        //        {
+        //            merchantAuditStep = Enumeration.CarInsureOfferDealtStep.Offer;
+        //        }
+
+        //        var currentDetails = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+        //        if (currentDetails != null)
+        //        {
+        //            bizProcessesAudit.CurrentDetails = currentDetails;
+
+        //            var auditComments = historicalDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)merchantAuditStep && m.AuditComments != null).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+        //            if (auditComments != null)
+        //            {
+        //                bizProcessesAudit.CurrentDetails.AuditComments = auditComments.AuditComments;
+        //            }
+        //        }
+
+
+        //    }
+
+        //    return bizProcessesAudit;
+        //}
 
         public BizProcessesAudit ChangeCarClaimDealtStatus(int operater, int bizProcessesAuditId, Enumeration.CarClaimDealtStatus changestatus, string description = null, DateTime? endTime = null)
         {
@@ -424,7 +424,7 @@ namespace Lumos.BLL
                         if (changestatus == Enumeration.CarClaimDealtStatus.WaitVerifyOrder)
                         {
 
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.CarInsureOfferDealtStep.Offer).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.CarInsureAuditStep.Offer).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                             if (bizProcessesAuditDetails == null)
                             {
                                 bizProcessesAudit.Status = (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder;
@@ -781,6 +781,94 @@ namespace Lumos.BLL
 
             return bizProcessesAudit;
         }
+
+
+        public BizProcessesAudit ChangeCarInsureStatus(int bizProcessesAuditId, Enumeration.CarInsureAuditStatus auditStatus, int auditor, string auditComments, string description = null)
+        {
+            DateTime nowDate = DateTime.Now;
+            var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
+            BizProcessesAuditDetails bizProcessesAuditDetails = null;
+            if (bizProcessesAudit != null)
+            {
+                bizProcessesAudit.Mender = auditor;
+                bizProcessesAudit.LastUpdateTime = nowDate;
+
+
+                #region TalentDemand
+                switch (auditStatus)
+                {
+                    case Enumeration.CarInsureAuditStatus.WaitOffer:
+                        //提交订单将订单转为待核实状态，审核人空
+                        //ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, auditor, auditComments, description);
+                        //bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.WaitOffer;
+                        //bizProcessesAudit.Auditor = null;
+
+                        bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.CarInsureAuditStep.Offer).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                        if (bizProcessesAuditDetails == null)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.WaitOffer;
+                            bizProcessesAudit.Auditor = null;
+
+                        }
+                        else
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.InOffer;
+                            bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
+
+                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, "后台人员正在处理");
+                        }
+
+                        break;
+                    case Enumeration.CarInsureAuditStatus.InOffer:
+                        //提交订单将订单转为待核实中，判断当前审核人是否为空，若空设置
+                        bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.InOffer;
+
+                        if (bizProcessesAudit.Auditor == null)
+                        {
+                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, auditor, auditComments, description);
+                            bizProcessesAudit.Auditor = auditor;
+                        }
+                        break;
+                    case Enumeration.CarInsureAuditStatus.ClientFllow:
+
+                        bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && (m.AuditStep == (int)Enumeration.CarInsureAuditStep.Submit || m.AuditStep == (int)Enumeration.CarInsureAuditStep.Fllow)).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                        if (bizProcessesAuditDetails != null)
+                        {
+                            bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.ClientFllow;
+                            bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
+
+                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureAuditStep.Fllow, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, description);
+                        }
+
+
+                        break;
+                    case Enumeration.CarInsureAuditStatus.CancleOffer:
+                        bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.CancleOffer;
+                        bizProcessesAudit.Auditor = auditor;
+                        bizProcessesAudit.EndTime = this.DateTime;
+
+                        ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+                        break;
+                    case Enumeration.CarInsureAuditStatus.OfferComplete:
+                        bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.OfferComplete;
+                        bizProcessesAudit.Auditor = auditor;
+                        bizProcessesAudit.EndTime = this.DateTime;
+
+                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+                        break;
+
+                }
+                #endregion
+
+
+                CurrentDb.SaveChanges();
+                var historicalDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id).OrderBy(m => m.CreateTime).ToList();
+                bizProcessesAudit.HistoricalDetails = historicalDetails.Where(m => m.AuditTime != null).ToList();
+            }
+
+            return bizProcessesAudit;
+        }
+
 
     }
 

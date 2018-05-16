@@ -47,6 +47,10 @@ namespace Lumos.BLL.Biz.Task
                     if (item.TryGetApiOfferResultCount >= 5)
                     {
                         item.OfferResult = Enumeration.OfferResult.WaitStaffOffer;
+
+                        var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == item.OrderId).FirstOrDefault();
+
+                        BizFactory.BizProcessesAudit.ChangeCarInsureStatus(orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.WaitOffer, 0, null, "由于接口报价失败，重试了5次，需人工报价");
                     }
 
                 }

@@ -113,7 +113,7 @@
     <Compile Include="Biz\OrderPayTrans.cs" />
     <Compile Include="Biz\OrderChildProductSkuDetails.cs" />
     <Compile Include="Biz\OrderToApplyLossAssess .cs" />
-    <Compile Include="Biz\OrderToCarInsureAuto.cs" />
+    <Compile Include="Biz\OrderToCarInsure.cs" />
     <Compile Include="Biz\OrderToCarInsureOfferCompanyKind.cs" />
     <Compile Include="Biz\OrderToCredit.cs" />
     <Compile Include="Biz\OrderToInsurance.cs" />
@@ -125,10 +125,8 @@
     <Compile Include="Biz\Merchant.cs" />
     <Compile Include="Biz\MerchantPosMachine.cs" />
     <Compile Include="Biz\Order.cs" />
-    <Compile Include="Biz\OrderToCarInsure.cs" />
     <Compile Include="Biz\OrderToCarClaim.cs" />
     <Compile Include="Biz\OrderToCarInsureOfferCompany.cs" />
-    <Compile Include="Biz\OrderToCarInsureOfferKind.cs" />
     <Compile Include="Biz\ProductCategory.cs" />
     <Compile Include="Biz\ProductKind.cs" />
     <Compile Include="Biz\ProductSku.cs" />

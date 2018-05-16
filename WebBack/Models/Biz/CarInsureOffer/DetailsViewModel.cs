@@ -12,7 +12,7 @@ namespace WebBack.Models.Biz.CarInsureOffer
         private Lumos.Entity.Merchant _merchant = new Lumos.Entity.Merchant();
         private Lumos.Entity.OrderToCarInsure _orderToCarInsure = new Lumos.Entity.OrderToCarInsure();
         private List<Lumos.Entity.OrderToCarInsureOfferCompany> _orderToCarInsureOfferCompany = new List<Lumos.Entity.OrderToCarInsureOfferCompany>();
-        private List<Lumos.Entity.OrderToCarInsureOfferKind> _orderToCarInsureOfferKind = new List<Lumos.Entity.OrderToCarInsureOfferKind>();
+        private List<Lumos.Entity.OrderToCarInsureOfferCompanyKind> _orderToCarInsureOfferCompanyKind = new List<Lumos.Entity.OrderToCarInsureOfferCompanyKind>();
 
         private List<Lumos.Entity.BizProcessesAuditDetails> _bizProcessesAuditDetails = new List<Lumos.Entity.BizProcessesAuditDetails>();
 
@@ -55,13 +55,13 @@ namespace WebBack.Models.Biz.CarInsureOffer
 
                 }
 
-                var orderToCarInsureOfferKind = CurrentDb.OrderToCarInsureOfferKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
+                var orderToCarInsureOfferCompanyKind = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
                 var carKinds = CurrentDb.CarKind.ToList();
-                if (orderToCarInsureOfferKind != null)
+                if (orderToCarInsureOfferCompanyKind != null)
                 {
-                    _orderToCarInsureOfferKind = orderToCarInsureOfferKind;
+                    _orderToCarInsureOfferCompanyKind = orderToCarInsureOfferCompanyKind;
 
-                    foreach (var m in _orderToCarInsureOfferKind)
+                    foreach (var m in _orderToCarInsureOfferCompanyKind)
                     {
                         var carKind = carKinds.Where(q => q.Id == m.KindId).FirstOrDefault();
                         if (carKind != null)
@@ -115,15 +115,15 @@ namespace WebBack.Models.Biz.CarInsureOffer
             }
         }
 
-        public List<Lumos.Entity.OrderToCarInsureOfferKind> OrderToCarInsureOfferKind
+        public List<Lumos.Entity.OrderToCarInsureOfferCompanyKind> OrderToCarInsureOfferCompanyKind
         {
             get
             {
-                return _orderToCarInsureOfferKind;
+                return _orderToCarInsureOfferCompanyKind;
             }
             set
             {
-                _orderToCarInsureOfferKind = value;
+                _orderToCarInsureOfferCompanyKind = value;
             }
         }
 

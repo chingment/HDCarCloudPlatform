@@ -669,8 +669,8 @@ namespace Lumos.BLL
                 var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.AduitReferenceId == orderToCarInsure.Id).FirstOrDefault();
                 if (bizProcessesAudit != null)
                 {
-                    BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, bizProcessesAudit.Id, orderToCarInsure.Creator, null, "支付完成", this.DateTime);
-                    BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(orderToCarInsure.Creator, bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.Complete);
+                    //BizFactory.BizProcessesAudit.ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureOfferDealtStep.Complete, bizProcessesAudit.Id, orderToCarInsure.Creator, null, "支付完成", this.DateTime);
+                    //BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(orderToCarInsure.Creator, bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.Complete);
                 }
 
                 CurrentDb.SaveChanges();

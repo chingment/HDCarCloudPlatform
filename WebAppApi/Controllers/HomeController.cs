@@ -208,7 +208,7 @@ namespace WebAppApi.Controllers
 
             // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-            // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+            //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
@@ -852,7 +852,7 @@ namespace WebAppApi.Controllers
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
             model.InsurePlanId = 1;
-            model.InsuranceCompanyId = new int[1] { 1 };
+            model.InsuranceCompanyId = new int[2] { 1, 2 };
 
 
             List<CarInsInsureKindModel> insureKindModel = new List<CarInsInsureKindModel>();
@@ -1829,15 +1829,15 @@ namespace WebAppApi.Controllers
 
             //CustomJsonResult<CarModelInfoResult> s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarModelInfoResult>>(s_CarIns_GetCarModelInfo);
 
-            //string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
+            string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
 
-            //CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
+            CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
 
-            //if (s3.Result == ResultType.Success)
-            //{
+            if (s3.Result == ResultType.Success)
+            {
                 model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, "ac9d0a28-2c55-49a3-bb0e-81029eddb23a"));
 
-            //}
+            }
         }
 
 
@@ -1978,6 +1978,9 @@ namespace WebAppApi.Controllers
         {
             CarInsInquiryPms model = new CarInsInquiryPms();
             model.Auto = 0;
+            model.UserId = userId;
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
             model.OrderSeq = orderSeq;
             model.BiStartDate = "2018-05-20";
             model.CiStartDate = "2018-05-20";

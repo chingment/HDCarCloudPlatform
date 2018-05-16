@@ -32,7 +32,7 @@ namespace WebAppApi.Controllers
             orderToCarInsure.UserId = model.UserId;
             orderToCarInsure.MerchantId = model.MerchantId;
             orderToCarInsure.PosMachineId = model.PosMachineId;
-            orderToCarInsure.InsurePlanId = model.InsurePlanId;
+            orderToCarInsure.InsPlanId = model.InsurePlanId;
             orderToCarInsure.Type = Enumeration.OrderType.InsureForCarForInsure;
             orderToCarInsure.TypeName = Enumeration.OrderType.InsureForCarForInsure.GetCnName();
 
@@ -46,10 +46,10 @@ namespace WebAppApi.Controllers
                     var drivingLicenceInfo = BizFactory.CarInsureOffer.GetDrivingLicenceInfoFromImgUrl(orderToCarInsure.CZ_CL_XSZ_ImgUrl);
                     if (drivingLicenceInfo != null)
                     {
-                        orderToCarInsure.CarOwner = drivingLicenceInfo.owner;
-                        orderToCarInsure.CarOwnerAddress = drivingLicenceInfo.address;
-                        orderToCarInsure.CarModel = drivingLicenceInfo.model;
-                        orderToCarInsure.CarPlateNo = drivingLicenceInfo.plateNum;
+                        orderToCarInsure.CarownerName = drivingLicenceInfo.owner;
+                        orderToCarInsure.CarownerAddress = drivingLicenceInfo.address;
+                        orderToCarInsure.CarModelCode = drivingLicenceInfo.model;
+                        orderToCarInsure.CarLicensePlateNo = drivingLicenceInfo.plateNum;
                         orderToCarInsure.CarEngineNo = drivingLicenceInfo.engineNo;
                         orderToCarInsure.CarVin = drivingLicenceInfo.vin;
                         //orderToCarInsure.CarVechicheType = drivingLicence.vehicleType;
@@ -60,9 +60,9 @@ namespace WebAppApi.Controllers
                         }
                         if (CommonUtils.IsDateTime(drivingLicenceInfo.registerDate))
                         {
-                            orderToCarInsure.CarRegisterDate = DateTime.Parse(drivingLicenceInfo.registerDate).ToUnifiedFormatDate();
+                            orderToCarInsure.CarFirstRegisterDate = DateTime.Parse(drivingLicenceInfo.registerDate).ToUnifiedFormatDate();
                         }
-                        orderToCarInsure.DrivingLicenceFaceImgKey = drivingLicenceInfo.fileKey;
+                        orderToCarInsure.CarLicensePicKey = drivingLicenceInfo.fileKey;
                     }
 
                 }
@@ -75,8 +75,8 @@ namespace WebAppApi.Controllers
                     var identityCardInfo = BizFactory.CarInsureOffer.GetIdentityCardInfoFromImgUrl(orderToCarInsure.CZ_SFZ_ImgUrl);
                     if (identityCardInfo != null)
                     {
-                        orderToCarInsure.CarOwnerIdNumber = identityCardInfo.idNumber;
-                        orderToCarInsure.IdentityCardFaceImgKey = identityCardInfo.fileKey;
+                        orderToCarInsure.CarownerCertNo = identityCardInfo.idNumber;
+                        orderToCarInsure.CarownerIdentityFacePicKey = identityCardInfo.fileKey;
                     }
                 }
 
@@ -106,11 +106,11 @@ namespace WebAppApi.Controllers
                 orderToCarInsureOfferCompanys.Add(orderToCarInsureOfferCompany);
             }
 
-            List<OrderToCarInsureOfferKind> orderToCarInsureOfferKinds = new List<OrderToCarInsureOfferKind>();
+            List<OrderToCarInsureOfferCompanyKind> orderToCarInsureOfferKinds = new List<OrderToCarInsureOfferCompanyKind>();
 
             foreach (var m in model.InsureKind)
             {
-                OrderToCarInsureOfferKind orderToCarInsureOfferKind = new OrderToCarInsureOfferKind();
+                OrderToCarInsureOfferCompanyKind orderToCarInsureOfferKind = new OrderToCarInsureOfferCompanyKind();
                 orderToCarInsureOfferKind.KindId = m.Id;
                 orderToCarInsureOfferKind.KindValue = m.Value;
                 orderToCarInsureOfferKind.KindDetails = m.Details;

@@ -498,6 +498,9 @@ namespace WebAppApi.Controllers
 
             var updateOrderOfferPms = new UpdateOrderOfferPms();
             updateOrderOfferPms.Auto = pms.Auto;
+            updateOrderOfferPms.UserId = pms.UserId;
+            updateOrderOfferPms.MerchantId = pms.MerchantId;
+            updateOrderOfferPms.PosMachineId = pms.PosMachineId;
             updateOrderOfferPms.PartnerOrderId = pms.OrderSeq;
             updateOrderOfferPms.PartnerChannelId = pms.ChannelId;
             updateOrderOfferPms.PartnerCompanyId = pms.CompanyCode;
@@ -520,7 +523,14 @@ namespace WebAppApi.Controllers
             {
                 model.notifyUrl = "http://120.79.233.231/Api/CarIns/OfferNotify";
 
-                offerResult = YdtUtils.GetInsInquiryByArtificial(model);
+                try
+                {
+                    offerResult = YdtUtils.GetInsInquiryByArtificial(model);
+                }
+                catch (Exception ex)
+                {
+
+                }
 
                 updateOrderOfferPms.OfferResult = Enumeration.OfferResult.WaitArtificialOffer;
 
@@ -541,13 +551,18 @@ namespace WebAppApi.Controllers
             #region 构造结果
 
 
-            var offerResultData = offerResult.Data;
+            YdtInscarInquiryResultData offerResultData = null;
 
-            if (offerResultData != null)
+            if (offerResult != null)
             {
-                updateOrderOfferPms.PartnerInquirySeq = offerResultData.inquirySeq;
-                updateOrderOfferPms.Inquirys = offerResultData.inquirys;
-                updateOrderOfferPms.Coverages = offerResultData.coverages;
+                offerResultData = offerResult.Data;
+
+                if (offerResultData != null)
+                {
+                    updateOrderOfferPms.PartnerInquirySeq = offerResultData.inquirySeq;
+                    updateOrderOfferPms.Inquirys = offerResultData.inquirys;
+                    updateOrderOfferPms.Coverages = offerResultData.coverages;
+                }
             }
 
             var result_UpdateOfferByAfter = BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
@@ -577,7 +592,7 @@ namespace WebAppApi.Controllers
                 result.Channel = channel;
                 result.InquirySeq = offerResultData.inquirySeq;
                 result.OrderSeq = offerResultData.orderSeq;
-                result.InsureItem = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsureAuto, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
+                result.InsureItem = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsure, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
                 result.SumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value;
 
                 return ResponseResult(ResultType.Success, ResultCode.Success, "自动报价成功", result);
@@ -761,7 +776,7 @@ namespace WebAppApi.Controllers
         }
 
 
-        private static List<ItemParentField> GetInsureItem(OrderToCarInsureAuto carInsureAuto, OrderToCarInsureOfferCompany carInsureOfferCompany, List<OrderToCarInsureOfferCompanyKind> carInsureOfferCompanyKinds)
+        private static List<ItemParentField> GetInsureItem(OrderToCarInsure carInsure, OrderToCarInsureOfferCompany carInsureOfferCompany, List<OrderToCarInsureOfferCompanyKind> carInsureOfferCompanyKinds)
         {
             List<ItemParentField> parents = new List<ItemParentField>();
 
@@ -827,16 +842,16 @@ namespace WebAppApi.Controllers
 
             var parentsByCarInfo = new ItemParentField("车辆信息", "");
 
-            parentsByCarInfo.Child.Add(new ItemChildField("车牌号码", carInsureAuto.LicensePlateNo));
-            parentsByCarInfo.Child.Add(new ItemChildField("品牌型号", carInsureAuto.ModelName));
+            parentsByCarInfo.Child.Add(new ItemChildField("车牌号码", carInsure.CarLicensePlateNo));
+            parentsByCarInfo.Child.Add(new ItemChildField("品牌型号", carInsure.CarModelName));
             parentsByCarInfo.Child.Add(new ItemChildField("配置信息", "大众FV720FCDWG桥车 2012款 19884ML 5座"));
-            parentsByCarInfo.Child.Add(new ItemChildField("注册日期", carInsureAuto.FirstRegisterDate));
-            parentsByCarInfo.Child.Add(new ItemChildField("车架号", carInsureAuto.Vin));
-            parentsByCarInfo.Child.Add(new ItemChildField("发动机", carInsureAuto.EngineNo));
-            parentsByCarInfo.Child.Add(new ItemChildField("是否过户", carInsureAuto.ChgownerType == "0" ? "否" : "是"));
-            if (carInsureAuto.ChgownerType == "1")
+            parentsByCarInfo.Child.Add(new ItemChildField("注册日期", carInsure.CarFirstRegisterDate));
+            parentsByCarInfo.Child.Add(new ItemChildField("车架号", carInsure.CarVin));
+            parentsByCarInfo.Child.Add(new ItemChildField("发动机", carInsure.CarEngineNo));
+            parentsByCarInfo.Child.Add(new ItemChildField("是否过户", carInsure.CarChgownerType == "0" ? "否" : "是"));
+            if (carInsure.CarChgownerType == "1")
             {
-                parents.Add(new ItemParentField("过户日期", carInsureAuto.ChgownerDate));
+                parents.Add(new ItemParentField("过户日期", carInsure.CarChgownerDate));
             }
 
             parents.Add(parentsByCarInfo);

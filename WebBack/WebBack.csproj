@@ -215,6 +215,7 @@
     <Compile Include="Models\Biz\CarInsuranceCompany\AddViewModel.cs" />
     <Compile Include="Models\Biz\CarInsuranceCompany\EditViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\AddViewModel.cs" />
+    <Compile Include="Models\Biz\CarInsureOffer\DealtByOfferViewModel.cs" />
     <Compile Include="Models\Biz\CarInsureOffer\SelectKindsViewModel.cs" />
     <Compile Include="Models\Biz\Credit\DealtViewModel.cs" />
     <Compile Include="Models\Biz\Credit\DetailsViewModel.cs" />
@@ -1317,6 +1318,7 @@
     <Content Include="Views\Biz\Product\ListByInsurance.cshtml" />
     <Content Include="Views\Biz\Product\AddByInsurance.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\OfferImg.cshtml" />
+    <Content Include="Views\Biz\CarInsureOffer\DealtByOffer.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

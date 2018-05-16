@@ -33,11 +33,11 @@ namespace Lumos.BLL
     {
         public UpdateOfferByAfterResult()
         {
-            this.CarInsureAuto = new OrderToCarInsureAuto();
+            this.CarInsure = new OrderToCarInsure();
             this.CarInsureOfferCompany = new OrderToCarInsureOfferCompany();
             this.CarInsureOfferCompanyKinds = new List<OrderToCarInsureOfferCompanyKind>();
         }
-        public OrderToCarInsureAuto CarInsureAuto { get; set; }
+        public OrderToCarInsure CarInsure { get; set; }
 
         public OrderToCarInsureOfferCompany CarInsureOfferCompany { get; set; }
 
@@ -50,100 +50,127 @@ namespace Lumos.BLL
     {
         public void UpdateOrder(int operater, int userId, int merchantId, int posMachineId, string partnerOrderId, CarInfoModel carInfo, List<CarInsCustomerModel> customers)
         {
-            OrderToCarInsureAuto l_orderToCarInsureAuto = null;
-
-            l_orderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == partnerOrderId && m.UserId == userId).FirstOrDefault();
-
-            if (l_orderToCarInsureAuto == null)
+            var result = new CustomJsonResult();
+            try
             {
-                l_orderToCarInsureAuto = new OrderToCarInsureAuto();
-
-                l_orderToCarInsureAuto.UserId = userId;
-                l_orderToCarInsureAuto.MerchantId = merchantId;
-                l_orderToCarInsureAuto.PosMachineId = posMachineId;
-                l_orderToCarInsureAuto.PartnerOrderId = partnerOrderId;
-                l_orderToCarInsureAuto.SubmitTime = this.DateTime;
-                l_orderToCarInsureAuto.CreateTime = this.DateTime;
-                l_orderToCarInsureAuto.Creator = operater;
-            }
-            else
-            {
-                l_orderToCarInsureAuto.LastUpdateTime = this.DateTime;
-                l_orderToCarInsureAuto.Mender = operater;
-            }
-
-            l_orderToCarInsureAuto.Belong = carInfo.Belong;
-            l_orderToCarInsureAuto.CarType = carInfo.CarType;
-            l_orderToCarInsureAuto.LicensePlateNo = carInfo.LicensePlateNo;
-            l_orderToCarInsureAuto.Vin = carInfo.Vin;
-            l_orderToCarInsureAuto.EngineNo = carInfo.EngineNo;
-            l_orderToCarInsureAuto.FirstRegisterDate = carInfo.FirstRegisterDate;
-            l_orderToCarInsureAuto.ModelCode = carInfo.ModelCode;
-            l_orderToCarInsureAuto.ModelName = carInfo.ModelName;
-            l_orderToCarInsureAuto.Displacement = carInfo.Displacement;
-            l_orderToCarInsureAuto.MarketYear = carInfo.MarketYear;
-            l_orderToCarInsureAuto.RatedPassengerCapacity = carInfo.RatedPassengerCapacity;
-            l_orderToCarInsureAuto.ReplacementValue = carInfo.ReplacementValue;
-            l_orderToCarInsureAuto.ChgownerType = carInfo.ChgownerType;
-            l_orderToCarInsureAuto.ChgownerDate = carInfo.ChgownerDate;
-            l_orderToCarInsureAuto.Tonnage = carInfo.Tonnage;
-            l_orderToCarInsureAuto.WholeWeight = carInfo.WholeWeight;
-            l_orderToCarInsureAuto.LicensePicKey = carInfo.LicensePicKey;
-            l_orderToCarInsureAuto.LicenseOtherPicKey = carInfo.LicenseOtherPicKey;
-            l_orderToCarInsureAuto.CarCertPicKey = carInfo.CarCertPicKey;
-            l_orderToCarInsureAuto.CarInvoicePicKey = carInfo.CarInvoicePicKey;
-
-            if (customers != null)
-            {
-                var carowner = customers.Where(m => m.InsuredFlag == "3").FirstOrDefault();
-                if (carowner != null)
+                using (TransactionScope ts = new TransactionScope())
                 {
-                    l_orderToCarInsureAuto.CarownerInsuredFlag = carowner.InsuredFlag;
-                    l_orderToCarInsureAuto.CarowneName = carowner.Name;
-                    l_orderToCarInsureAuto.CarowneCertNo = carowner.CertNo;
-                    l_orderToCarInsureAuto.CarowneMobile = carowner.Mobile;
-                    l_orderToCarInsureAuto.CarowneAddress = carowner.Address;
-                    l_orderToCarInsureAuto.CarowneIdentityFacePicKey = carowner.IdentityFacePicKey;
-                    l_orderToCarInsureAuto.CarowneIdentityBackPicKey = carowner.IdentityFacePicKey;
-                    l_orderToCarInsureAuto.CarowneOrgPicKey = carowner.OrgPicKey;
+                    OrderToCarInsure l_orderToCarInsure = null;
+
+                    l_orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == partnerOrderId && m.UserId == userId).FirstOrDefault();
+
+
+                    var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == userId).FirstOrDefault();
+                    var merchant = CurrentDb.Merchant.Where(m => m.Id == merchantId).FirstOrDefault();
+
+                    if (l_orderToCarInsure == null)
+                    {
+                        l_orderToCarInsure = new OrderToCarInsure();
+
+                        l_orderToCarInsure.Type = Enumeration.OrderType.InsureForCarForInsure;
+                        l_orderToCarInsure.TypeName = Enumeration.OrderType.InsureForCarForInsure.GetCnName();
+                        l_orderToCarInsure.SalesmanId = merchant.SalesmanId ?? 0;
+                        l_orderToCarInsure.AgentId = merchant.AgentId ?? 0;
+                        l_orderToCarInsure.Status = Enumeration.OrderStatus.Submitted;
+                        l_orderToCarInsure.SubmitTime = this.DateTime;
+                        l_orderToCarInsure.UserId = userId;
+                        l_orderToCarInsure.MerchantId = merchantId;
+                        l_orderToCarInsure.PosMachineId = posMachineId;
+                        l_orderToCarInsure.PartnerOrderId = partnerOrderId;
+                        l_orderToCarInsure.SubmitTime = this.DateTime;
+                        l_orderToCarInsure.CreateTime = this.DateTime;
+                        l_orderToCarInsure.Creator = operater;
+                    }
+                    else
+                    {
+                        l_orderToCarInsure.LastUpdateTime = this.DateTime;
+                        l_orderToCarInsure.Mender = operater;
+                    }
+
+                    l_orderToCarInsure.CarBelong = carInfo.Belong;
+                    l_orderToCarInsure.CarType = carInfo.CarType;
+                    l_orderToCarInsure.CarLicensePlateNo = carInfo.LicensePlateNo;
+                    l_orderToCarInsure.CarVin = carInfo.Vin;
+                    l_orderToCarInsure.CarEngineNo = carInfo.EngineNo;
+                    l_orderToCarInsure.CarFirstRegisterDate = carInfo.FirstRegisterDate;
+                    l_orderToCarInsure.CarModelCode = carInfo.ModelCode;
+                    l_orderToCarInsure.CarModelName = carInfo.ModelName;
+                    l_orderToCarInsure.CarDisplacement = carInfo.Displacement;
+                    l_orderToCarInsure.CarMarketYear = carInfo.MarketYear;
+                    l_orderToCarInsure.CarRatedPassengerCapacity = carInfo.RatedPassengerCapacity;
+                    l_orderToCarInsure.CarReplacementValue = carInfo.ReplacementValue;
+                    l_orderToCarInsure.CarChgownerType = carInfo.ChgownerType;
+                    l_orderToCarInsure.CarChgownerDate = carInfo.ChgownerDate;
+                    l_orderToCarInsure.CarTonnage = carInfo.Tonnage;
+                    l_orderToCarInsure.CarWholeWeight = carInfo.WholeWeight;
+                    l_orderToCarInsure.CarLicensePicKey = carInfo.LicensePicKey;
+                    l_orderToCarInsure.CarLicenseOtherPicKey = carInfo.LicenseOtherPicKey;
+                    l_orderToCarInsure.CarCertPicKey = carInfo.CarCertPicKey;
+                    l_orderToCarInsure.CarInvoicePicKey = carInfo.CarInvoicePicKey;
+
+                    if (customers != null)
+                    {
+                        var carowner = customers.Where(m => m.InsuredFlag == "3").FirstOrDefault();
+                        if (carowner != null)
+                        {
+                            l_orderToCarInsure.CarownerInsuredFlag = carowner.InsuredFlag;
+                            l_orderToCarInsure.CarownerName = carowner.Name;
+                            l_orderToCarInsure.CarownerCertNo = carowner.CertNo;
+                            l_orderToCarInsure.CarownerMobile = carowner.Mobile;
+                            l_orderToCarInsure.CarownerAddress = carowner.Address;
+                            l_orderToCarInsure.CarownerIdentityFacePicKey = carowner.IdentityFacePicKey;
+                            l_orderToCarInsure.CarownerIdentityBackPicKey = carowner.IdentityFacePicKey;
+                            l_orderToCarInsure.CarownerOrgPicKey = carowner.OrgPicKey;
+                        }
+
+                        var policyholder = customers.Where(m => m.InsuredFlag == "1").FirstOrDefault();
+                        if (policyholder != null)
+                        {
+                            l_orderToCarInsure.PolicyholderInsuredFlag = policyholder.InsuredFlag;
+                            l_orderToCarInsure.PolicyholderName = policyholder.Name;
+                            l_orderToCarInsure.PolicyholderCertNo = policyholder.CertNo;
+                            l_orderToCarInsure.PolicyholderMobile = policyholder.Mobile;
+                            l_orderToCarInsure.PolicyholderAddress = policyholder.Address;
+                            l_orderToCarInsure.PolicyholderIdentityFacePicKey = policyholder.IdentityFacePicKey;
+                            l_orderToCarInsure.PolicyholderIdentityBackPicKey = policyholder.IdentityFacePicKey;
+                            l_orderToCarInsure.PolicyholderOrgPicKey = policyholder.OrgPicKey;
+                        }
+
+
+                        var insured = customers.Where(m => m.InsuredFlag == "2").FirstOrDefault();
+                        if (insured != null)
+                        {
+                            l_orderToCarInsure.InsuredInsuredFlag = insured.InsuredFlag;
+                            l_orderToCarInsure.InsuredName = insured.Name;
+                            l_orderToCarInsure.InsuredCertNo = insured.CertNo;
+                            l_orderToCarInsure.InsuredMobile = insured.Mobile;
+                            l_orderToCarInsure.InsuredAddress = insured.Address;
+                            l_orderToCarInsure.InsuredIdentityFacePicKey = insured.IdentityFacePicKey;
+                            l_orderToCarInsure.InsuredIdentityBackPicKey = insured.IdentityFacePicKey;
+                            l_orderToCarInsure.InsuredOrgPicKey = insured.OrgPicKey;
+
+                        }
+                    }
+
+
+                    if (l_orderToCarInsure.Id == 0)
+                    {
+                        CurrentDb.OrderToCarInsure.Add(l_orderToCarInsure);
+                        CurrentDb.SaveChanges();
+                        SnModel snModel = Sn.Build(SnType.OrderToCarInsure, l_orderToCarInsure.Id);
+                        l_orderToCarInsure.Sn = snModel.Sn;
+                    }
+
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
                 }
 
-                var policyholder = customers.Where(m => m.InsuredFlag == "1").FirstOrDefault();
-                if (policyholder != null)
-                {
-                    l_orderToCarInsureAuto.PolicyholderInsuredFlag = policyholder.InsuredFlag;
-                    l_orderToCarInsureAuto.PolicyholderName = policyholder.Name;
-                    l_orderToCarInsureAuto.PolicyholderCertNo = policyholder.CertNo;
-                    l_orderToCarInsureAuto.PolicyholderMobile = policyholder.Mobile;
-                    l_orderToCarInsureAuto.PolicyholderAddress = policyholder.Address;
-                    l_orderToCarInsureAuto.PolicyholderIdentityFacePicKey = policyholder.IdentityFacePicKey;
-                    l_orderToCarInsureAuto.PolicyholderIdentityBackPicKey = policyholder.IdentityFacePicKey;
-                    l_orderToCarInsureAuto.PolicyholderOrgPicKey = policyholder.OrgPicKey;
-                }
-
-
-                var insured = customers.Where(m => m.InsuredFlag == "2").FirstOrDefault();
-                if (insured != null)
-                {
-                    l_orderToCarInsureAuto.InsuredInsuredFlag = insured.InsuredFlag;
-                    l_orderToCarInsureAuto.InsuredName = insured.Name;
-                    l_orderToCarInsureAuto.InsuredCertNo = insured.CertNo;
-                    l_orderToCarInsureAuto.InsuredMobile = insured.Mobile;
-                    l_orderToCarInsureAuto.InsuredAddress = insured.Address;
-                    l_orderToCarInsureAuto.InsuredIdentityFacePicKey = insured.IdentityFacePicKey;
-                    l_orderToCarInsureAuto.InsuredIdentityBackPicKey = insured.IdentityFacePicKey;
-                    l_orderToCarInsureAuto.InsuredOrgPicKey = insured.OrgPicKey;
-
-                }
             }
-
-
-            if (l_orderToCarInsureAuto.Id == 0)
+            catch (Exception ex)
             {
-                CurrentDb.OrderToCarInsureAuto.Add(l_orderToCarInsureAuto);
-            }
+                Log.Error("本系统基础数据保存失败1", ex);
 
-            CurrentDb.SaveChanges();
+            }
 
         }
 
@@ -155,7 +182,7 @@ namespace Lumos.BLL
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    var l_OrderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId).FirstOrDefault();
+                    var l_orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId).FirstOrDefault();
 
 
                     var partnerCompany = YdtDataMap.YdtInsComanyList().Where(m => m.YdtCode == pms.PartnerCompanyId).FirstOrDefault();
@@ -168,12 +195,12 @@ namespace Lumos.BLL
                         return new CustomJsonResult(ResultType.Failure, "找不到本系统的保险公司");
 
 
-                    var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == l_OrderToCarInsureAuto.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).FirstOrDefault();
+                    var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == l_orderToCarInsure.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).FirstOrDefault();
 
                     if (orderToCarInsureOfferCompany == null)
                     {
                         orderToCarInsureOfferCompany = new OrderToCarInsureOfferCompany();
-                        orderToCarInsureOfferCompany.OrderId = l_OrderToCarInsureAuto.Id;
+                        orderToCarInsureOfferCompany.OrderId = l_orderToCarInsure.Id;
                         orderToCarInsureOfferCompany.CreateTime = this.DateTime;
                         orderToCarInsureOfferCompany.Creator = operater;
                     }
@@ -189,7 +216,7 @@ namespace Lumos.BLL
                     orderToCarInsureOfferCompany.InsuranceCompanyImgUrl = carInsuranceCompany.InsuranceCompanyImgUrl;
                     orderToCarInsureOfferCompany.BiStartDate = pms.BiStartDate;
                     orderToCarInsureOfferCompany.CiStartDate = pms.CiStartDate;
-                    orderToCarInsureOfferCompany.PartnerOrderId = l_OrderToCarInsureAuto.PartnerOrderId;
+                    orderToCarInsureOfferCompany.PartnerOrderId = l_orderToCarInsure.PartnerOrderId;
                     orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquirySeq;
                     orderToCarInsureOfferCompany.PartnerCompanyId = pms.PartnerCompanyId;
                     orderToCarInsureOfferCompany.PartnerChannelId = pms.PartnerChannelId.ToString();
@@ -203,7 +230,7 @@ namespace Lumos.BLL
 
                     CurrentDb.SaveChanges();
 
-                    var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == l_OrderToCarInsureAuto.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).ToList();
+                    var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == l_orderToCarInsure.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).ToList();
 
                     foreach (var item in orderToCarInsureOfferCompanyKinds)
                     {
@@ -219,7 +246,7 @@ namespace Lumos.BLL
                             if (partnerKind != null)
                             {
                                 var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
-                                orderToCarInsureOfferCompanyKind.OrderId = l_OrderToCarInsureAuto.Id;
+                                orderToCarInsureOfferCompanyKind.OrderId = l_orderToCarInsure.Id;
                                 orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
                                 orderToCarInsureOfferCompanyKind.KindId = partnerKind.UpLinkCode;
                                 orderToCarInsureOfferCompanyKind.PartnerKindId = partnerKind.Code;
@@ -261,13 +288,13 @@ namespace Lumos.BLL
                 {
                     var resultData = new UpdateOfferByAfterResult();
 
-                    var l_OrderToCarInsureAuto = CurrentDb.OrderToCarInsureAuto.Where(m => m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId).FirstOrDefault();
+                    var l_orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId).FirstOrDefault();
 
                     var partnerCompany = YdtDataMap.YdtInsComanyList().Where(m => m.YdtCode == pms.PartnerCompanyId).FirstOrDefault();
 
                     var carInsuranceCompany = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == partnerCompany.UpLinkCode).FirstOrDefault();
 
-                    var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == l_OrderToCarInsureAuto.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).FirstOrDefault();
+                    var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == l_orderToCarInsure.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).FirstOrDefault();
 
                     orderToCarInsureOfferCompany.OfferResult = pms.OfferResult;
                     orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquirySeq;
@@ -319,7 +346,7 @@ namespace Lumos.BLL
                     orderToCarInsureOfferCompany.InsureTotalPrice = insureTotalPrice;
                     CurrentDb.SaveChanges();
 
-                    var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == l_OrderToCarInsureAuto.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).ToList();
+                    var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == l_orderToCarInsure.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).ToList();
 
 
 
@@ -338,7 +365,7 @@ namespace Lumos.BLL
                             if (partnerKind != null)
                             {
                                 var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
-                                orderToCarInsureOfferCompanyKind.OrderId = l_OrderToCarInsureAuto.Id;
+                                orderToCarInsureOfferCompanyKind.OrderId = l_orderToCarInsure.Id;
                                 orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
                                 orderToCarInsureOfferCompanyKind.KindId = partnerKind.UpLinkCode;
                                 orderToCarInsureOfferCompanyKind.PartnerKindId = partnerKind.Code;
@@ -368,8 +395,8 @@ namespace Lumos.BLL
                     switch (pms.OfferResult)
                     {
                         case Enumeration.OfferResult.WaitArtificialOffer:
-                            var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsureAuto, l_OrderToCarInsureAuto.UserId, l_OrderToCarInsureAuto.MerchantId, l_OrderToCarInsureAuto.Id, Enumeration.AuditFlowV1Status.Submit);
-                            BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.Submit, operater, null, "提交订单，等待取单");
+                            var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsure, l_orderToCarInsure.UserId, l_orderToCarInsure.MerchantId, l_orderToCarInsure.Id, Enumeration.AuditFlowV1Status.Submit);
+                            l_orderToCarInsure.BizProcessesAuditId = bizProcessesAudit.Id;
                             break;
 
                     }
@@ -378,7 +405,7 @@ namespace Lumos.BLL
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
-                    resultData.CarInsureAuto = l_OrderToCarInsureAuto;
+                    resultData.CarInsure = l_orderToCarInsure;
                     resultData.CarInsureOfferCompany = orderToCarInsureOfferCompany;
                     resultData.CarInsureOfferCompanyKinds = out_carInsureOfferCompanyKinds;
                     return new CustomJsonResult<UpdateOfferByAfterResult>(ResultType.Success, ResultCode.Success, "", resultData);

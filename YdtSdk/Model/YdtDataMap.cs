@@ -84,7 +84,7 @@ namespace YdtSdk
             return amount;
         }
 
-        public static List<CoverageModel> GetCoverages(List<OrderToCarInsureOfferKind> kinds, decimal oldAmount, int carSeat)
+        public static List<CoverageModel> GetCoverages(List<OrderToCarInsureOfferCompanyKind> kinds, decimal oldAmount, int carSeat)
         {
             List<CoverageModel> list = new List<CoverageModel>();
             var ydtInsCoverageList = YdtInsCoverageList();
@@ -206,7 +206,7 @@ namespace YdtSdk
             return list;
         }
 
-        public static int GetRisk(List<OrderToCarInsureOfferKind> kinds)
+        public static int GetRisk(List<OrderToCarInsureOfferCompanyKind> kinds)
         {
             if (kinds == null)
                 return 2;

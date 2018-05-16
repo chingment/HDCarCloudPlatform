@@ -64,14 +64,14 @@ namespace WebBack.Controllers
                              where
 
 (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 1)
-
                              select m.Id).Count();
 
 
             var inCount = (from m in CurrentDb.BizProcessesAudit
                            where
 
-(m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2)
+(m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2) 
+
 && m.Auditor == this.CurrentUserId
 
 
@@ -85,13 +85,14 @@ namespace WebBack.Controllers
 
             if (condition.AuditStatus == 1)
             {
-                query = query.Where(m => (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 1)
+                query = query.Where(m => (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 1) 
 
                 );
             }
             else if (condition.AuditStatus == 2)
             {
-                query = query.Where(m => (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2)
+                query = query.Where(m => ((m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2) 
+                )
               && m.Auditor == this.CurrentUserId
 
                );
@@ -122,61 +123,6 @@ namespace WebBack.Controllers
                                 break;
                             case 2:
                                 statusName = "报价中";
-                                break;
-                        }
-                        break;
-                    case Enumeration.BizProcessesAuditType.OrderToCarClaim:
-                        switch (item.Status)
-                        {
-                            case 1:
-                                statusName = "待核实需求";
-                                break;
-                            case 2:
-                                statusName = "需求核实中";
-                                break;
-                            case 4:
-                                statusName = "待核实金额";
-                                break;
-                            case 5:
-                                statusName = "核实金额中";
-                                break;
-                        }
-                        break;
-                    case Enumeration.BizProcessesAuditType.MerchantAudit:
-                        switch (item.Status)
-                        {
-                            case 2:
-                                statusName = "待初审";
-                                break;
-                            case 3:
-                                statusName = "初审中";
-                                break;
-                            case 4:
-                                statusName = "待复审";
-                                break;
-                            case 5:
-                                statusName = "复审中";
-                                break;
-                        }
-                        break;
-                    case Enumeration.BizProcessesAuditType.OrderToTalentDemand:
-                    case Enumeration.BizProcessesAuditType.OrderToApplyLossAssess:
-                    case Enumeration.BizProcessesAuditType.OrderToLllegalDealt:
-                    case Enumeration.BizProcessesAuditType.OrderToCredit:
-                    case Enumeration.BizProcessesAuditType.OrderToInsurance:
-                        switch (item.Status)
-                        {
-                            case 2:
-                                statusName = "待核实";
-                                break;
-                            case 3:
-                                statusName = "核实中";
-                                break;
-                            case 8:
-                                statusName = "待处理";
-                                break;
-                            case 9:
-                                statusName = "处理中";
                                 break;
                         }
                         break;
@@ -225,7 +171,7 @@ m.AduitType == Enumeration.BizProcessesAuditType.OrderToInsurance
             var inCount = (from m in CurrentDb.BizProcessesAudit
                            where
 (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim && (m.Status == 2)) ||
-((m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand || 
+((m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToLllegalDealt ||
 m.AduitType == Enumeration.BizProcessesAuditType.OrderToCredit ||

@@ -49,8 +49,6 @@ namespace Lumos.DAL
 
         public IDbSet<OrderToCarInsureOfferCompany> OrderToCarInsureOfferCompany { get; set; }
 
-        public IDbSet<OrderToCarInsureOfferKind> OrderToCarInsureOfferKind { get; set; }
-
         public IDbSet<OrderToCarClaim> OrderToCarClaim { get; set; }
 
         public IDbSet<OrderToTalentDemand> OrderToTalentDemand { get; set; }
@@ -125,9 +123,6 @@ namespace Lumos.DAL
         public IDbSet<Coupon> Coupon { get; set; }
 
         public IDbSet<InsCarInfo> InsCarInfo { get; set; }
-
-
-        public IDbSet<OrderToCarInsureAuto> OrderToCarInsureAuto { get; set; }
 
         public IDbSet<OrderToCarInsureOfferCompanyKind> OrderToCarInsureOfferCompanyKind { get; set; }
 

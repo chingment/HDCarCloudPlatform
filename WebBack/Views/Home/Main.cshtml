@@ -191,7 +191,7 @@
 
         function carInsureOffer(obj) {
             function dealt(obj) {
-                var url = '/Biz/CarInsureOffer/Dealt2?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
+                var url = '/Biz/CarInsureOffer/DealtByOffer?id=' + obj.id + "&auditStatus=" + obj.auditStatus;
                 var title = '处理订单-' + obj.sn;
                 var dialog = art.dialog.open(url, {
                     id: "openDialog2",

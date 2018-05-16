@@ -12,7 +12,7 @@ namespace WebBack.Models.Biz.CarInsureOffer
         private Lumos.Entity.Merchant _merchant = new Lumos.Entity.Merchant();
         private Lumos.Entity.OrderToCarInsure _orderToCarInsure = new Lumos.Entity.OrderToCarInsure();
         private List<Lumos.Entity.OrderToCarInsureOfferCompany> _orderToCarInsureOfferCompany = new List<Lumos.Entity.OrderToCarInsureOfferCompany>();
-        private List<Lumos.Entity.OrderToCarInsureOfferKind> _orderToCarInsureOfferKind = new List<Lumos.Entity.OrderToCarInsureOfferKind>();
+        private List<Lumos.Entity.OrderToCarInsureOfferCompanyKind> _orderToCarInsureOfferCompanyKind = new List<Lumos.Entity.OrderToCarInsureOfferCompanyKind>();
         private Lumos.Entity.BizProcessesAudit _bizProcessesAudit = new Lumos.Entity.BizProcessesAudit();
 
 
@@ -26,7 +26,7 @@ namespace WebBack.Models.Biz.CarInsureOffer
 
         public DealtViewModel(int id)
         {
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(this.Operater, id, Enumeration.CarInsureOfferDealtStatus.InOffer, "报价中");
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeCarInsureStatus(id, Enumeration.CarInsureAuditStatus.InOffer, this.Operater, null, "报价中");
             if (bizProcessesAudit != null)
             {
                 _bizProcessesAudit = bizProcessesAudit;
@@ -69,32 +69,32 @@ namespace WebBack.Models.Biz.CarInsureOffer
 
                     }
 
-                    var orderToCarInsureOfferKind = CurrentDb.OrderToCarInsureOfferKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
+                    var orderToCarInsureOfferCompanyKind = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
                     var carKinds = CurrentDb.CarKind.ToList();
-                    if (orderToCarInsureOfferKind != null)
+                    if (orderToCarInsureOfferCompanyKind != null)
                     {
-                        _orderToCarInsureOfferKind = orderToCarInsureOfferKind;
+                        _orderToCarInsureOfferCompanyKind = orderToCarInsureOfferCompanyKind;
 
-                        var isHasCompulsoryPrice = _orderToCarInsureOfferKind.Where(m => m.KindId == 1).FirstOrDefault();
+                        var isHasCompulsoryPrice = _orderToCarInsureOfferCompanyKind.Where(m => m.KindId == 1).FirstOrDefault();
                         if (isHasCompulsoryPrice != null)
                         {
                             _isHasCompulsoryPrice = true;
                         }
 
-                        var isHasTravelTaxPrice = _orderToCarInsureOfferKind.Where(m => m.KindId == 2).FirstOrDefault();
+                        var isHasTravelTaxPrice = _orderToCarInsureOfferCompanyKind.Where(m => m.KindId == 2).FirstOrDefault();
                         if (isHasTravelTaxPrice != null)
                         {
                             _isHasTravelTaxPrice = true;
                         }
 
-                        var isHasCommercialPrice = _orderToCarInsureOfferKind.Where(m => m.KindId >= 3).FirstOrDefault();
+                        var isHasCommercialPrice = _orderToCarInsureOfferCompanyKind.Where(m => m.KindId >= 3).FirstOrDefault();
                         if (isHasCommercialPrice != null)
                         {
                             _isHasCommercialPrice = true;
                         }
 
 
-                        foreach (var m in _orderToCarInsureOfferKind)
+                        foreach (var m in _orderToCarInsureOfferCompanyKind)
                         {
                             var carKind = carKinds.Where(q => q.Id == m.KindId).FirstOrDefault();
                             if (carKind != null)
@@ -181,15 +181,15 @@ namespace WebBack.Models.Biz.CarInsureOffer
             }
         }
 
-        public List<Lumos.Entity.OrderToCarInsureOfferKind> OrderToCarInsureOfferKind
+        public List<Lumos.Entity.OrderToCarInsureOfferCompanyKind> OrderToCarInsureOfferCompanyKind
         {
             get
             {
-                return _orderToCarInsureOfferKind;
+                return _orderToCarInsureOfferCompanyKind;
             }
             set
             {
-                _orderToCarInsureOfferKind = value;
+                _orderToCarInsureOfferCompanyKind = value;
             }
         }
 

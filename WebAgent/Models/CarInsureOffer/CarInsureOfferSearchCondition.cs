@@ -8,7 +8,7 @@ namespace WebAgent.Models.CarInsureOffer
 {
     public class CarInsureOfferSearchCondition:SearchCondition
     {
-        public Enumeration.CarInsureOfferDealtStatus DealtStatus { get; set; }
+        public Enumeration.CarInsureAuditStatus DealtStatus { get; set; }
 
         public Enumeration.OrderStatus Status { get; set; }
     }

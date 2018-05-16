@@ -35,5 +35,11 @@ namespace Lumos.Entity
         public DateTime? LastUpdateTime { get; set; }
         public bool IsCompensation { get; set; }
         public int Priority { get; set; }
+        public string KindValue { get; set; }
+        [MaxLength(1024)]
+        public string KindDetails { get; set; }
+        public bool IsWaiverDeductible { get; set; }
+        [MaxLength(128)]
+        public string KindUnit { get; set; }
     }
 }

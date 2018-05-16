@@ -42,7 +42,7 @@ namespace Lumos.Entity
             Disable = 2
         }
 
-        public enum CarInsureOfferDealtStatus
+        public enum CarInsureAuditStatus
         {
             [Remark("未知")]
             Unknow = 0,
@@ -53,16 +53,18 @@ namespace Lumos.Entity
             [Remark("报价完成")]
             OfferComplete = 3,
             [Remark("客户跟进")]
-            ClientFllow = 3,
-            [Remark("后台取消订单")]
-            StaffCancle = 4,
-            [Remark("客户取消订单")]
-            ClientCancle = 5,
-            [Remark("完成报价")]
-            Complete = 6
+            ClientFllow = 4,
+            [Remark("报价时取消订单")]
+            CancleOffer = 5,
+            [Remark("等待核保")]
+            WaitCheckInsure = 5,
+            [Remark("核保中")]
+            InCheckInsure = 5,
+            [Remark("核保完成")]
+            CheckInsureComplete = 6
         }
 
-        public enum CarInsureOfferDealtStep
+        public enum CarInsureAuditStep
         {
             [Remark("未知")]
             Unknow = 0,
@@ -78,25 +80,25 @@ namespace Lumos.Entity
             Cancle = 5
         }
 
-        public enum CarInsureOfferAutoDealtStatus
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("提交基础数据")]
-            WaitOffer = 1,
-            [Remark("等待自动报价")]
-            InOffer = 2,
-            [Remark("自动报价成功")]
-            OfferComplete = 3,
-            [Remark("自动报价失败")]
-            ClientFllow = 3,
-            [Remark("等待人工报价")]
-            StaffCancle = 4,
-            [Remark("人工报价成功")]
-            ClientCancle = 5,
-            [Remark("人工报价失败")]
-            Complete = 6
-        }
+        //public enum CarInsureOfferAutoDealtStatus
+        //{
+        //    [Remark("未知")]
+        //    Unknow = 0,
+        //    [Remark("提交基础数据")]
+        //    WaitOffer = 1,
+        //    [Remark("等待自动报价")]
+        //    InOffer = 2,
+        //    [Remark("自动报价成功")]
+        //    OfferComplete = 3,
+        //    [Remark("自动报价失败")]
+        //    ClientFllow = 3,
+        //    [Remark("等待人工报价")]
+        //    StaffCancle = 4,
+        //    [Remark("人工报价成功")]
+        //    ClientCancle = 5,
+        //    [Remark("人工报价失败")]
+        //    Complete = 6
+        //}
 
         public enum CarClaimDealtStatus
         {
@@ -435,9 +437,7 @@ namespace Lumos.Entity
             [Remark("贷款")]
             OrderToCredit = 7,
             [Remark("保险产品订单")]
-            OrderToInsurance = 8,
-            [Remark("车险订单")]
-            OrderToCarInsureAuto = 9
+            OrderToInsurance = 8
         }
 
         public enum MerchantStatus

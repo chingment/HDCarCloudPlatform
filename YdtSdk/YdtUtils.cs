@@ -67,7 +67,7 @@ namespace YdtSdk
         }
 
 
-        public static CustomJsonResult GetCarInsOffer(OrderToCarInsure order, List<OrderToCarInsureOfferCompany> offerCompany, List<OrderToCarInsureOfferKind> kinds)
+        public static CustomJsonResult GetCarInsOffer(OrderToCarInsure order, List<OrderToCarInsureOfferCompany> offerCompany, List<OrderToCarInsureOfferCompanyKind> kinds)
         {
 
             CustomJsonResult result = new CustomJsonResult();
@@ -109,19 +109,19 @@ namespace YdtSdk
 
             #region 车辆信息
             InsCarInfoModel carInfo = new InsCarInfoModel();
-            carInfo.licensePlateNo = order.CarPlateNo;
+            carInfo.licensePlateNo = order.CarLicensePlateNo;
             carInfo.vin = order.CarVin;
             carInfo.engineNo = order.CarEngineNo;
-            carInfo.modelCode = order.CarModel;
+            carInfo.modelCode = order.CarModelCode;
             carInfo.modelName = order.CarModelName;
-            carInfo.firstRegisterDate = order.CarRegisterDate;
+            carInfo.firstRegisterDate = order.CarFirstRegisterDate;
             // carInfo.displacement = ;
             // carInfo.marketYear = ;
 
             //switch (order.CarSeat)
             //{
             //    case Enumeration.CarSeat.S6:
-            carInfo.ratedPassengerCapacity = order.CarSeat;
+            carInfo.ratedPassengerCapacity = order.CarRatedPassengerCapacity;
             //        break;
             //    case Enumeration.CarSeat.S10:
             //        carInfo.ratedPassengerCapacity = 10;
@@ -140,9 +140,7 @@ namespace YdtSdk
             //        break;
             //}
 
-            carInfo.ratedPassengerCapacity = order.CarSeat;
-            carInfo.replacementValue = order.CarPurchasePrice.Value;
-            carInfo.licensePlateNo = order.CarPlateNo;
+            carInfo.replacementValue = order.CarReplacementValue.Value;
 
             //todo
             carInfo.replacementValue = 0;
@@ -162,12 +160,12 @@ namespace YdtSdk
 
             InsCustomers insured = new InsCustomers();
             insured.insuredFlag = "1";
-            insured.name = order.CarOwner;
-            insured.certNo = order.CarOwnerIdNumber;
+            insured.name = order.CarownerName;
+            insured.certNo = order.CarownerCertNo;
             insured.mobile = order.RecipientPhoneNumber;
             insured.address = order.RecipientAddress;
 
-            if (string.IsNullOrEmpty(order.IdentityCardFaceImgKey))
+            if (string.IsNullOrEmpty(order.CarownerIdentityFacePicKey))
             {
                 YdtUpload ydtUpdate_SFZ = new YdtUpload(au.token, au.session, "1", order.CZ_SFZ_ImgUrl);
                 var ydtUpdateResult_SFZ = ydtApi.DoPostFile(ydtUpdate_SFZ, Path.GetFileName(order.CZ_SFZ_ImgUrl));
@@ -181,8 +179,8 @@ namespace YdtSdk
             }
             else
             {
-                insured.identityFacePic = order.IdentityCardFaceImgKey;
-                insured.identityBackPic = order.IdentityCardFaceImgKey;
+                insured.identityFacePic = order.CarownerIdentityFacePicKey;
+                insured.identityBackPic = order.CarownerIdentityFacePicKey;
             }
 
             InsCustomers holder = new InsCustomers();
@@ -214,20 +212,20 @@ namespace YdtSdk
 
             InsPicModel insPic = new InsPicModel();
 
-            if (string.IsNullOrEmpty(order.IdentityCardFaceImgKey))
-            {
-                var ydtUpdate = new YdtUpload(au.token, au.session, "1", order.CZ_CL_XSZ_ImgUrl);
-                var ydtUpdateResult = ydtApi.DoPostFile(ydtUpdate, Path.GetFileName(order.CZ_CL_XSZ_ImgUrl));
-                if (ydtUpdateResult.code != 0)
-                {
-                    return new CustomJsonResult(ResultType.Failure, ydtUpdateResult.msg);
-                }
-                insPic.licensePic = ydtUpdateResult.data.file.key;
-            }
-            else
-            {
-                insPic.licensePic = order.DrivingLicenceFaceImgKey;
-            }
+            //if (string.IsNullOrEmpty(order.CarIdentityCardFaceImgKey))
+            //{
+            //    var ydtUpdate = new YdtUpload(au.token, au.session, "1", order.CZ_CL_XSZ_ImgUrl);
+            //    var ydtUpdateResult = ydtApi.DoPostFile(ydtUpdate, Path.GetFileName(order.CZ_CL_XSZ_ImgUrl));
+            //    if (ydtUpdateResult.code != 0)
+            //    {
+            //        return new CustomJsonResult(ResultType.Failure, ydtUpdateResult.msg);
+            //    }
+            //    insPic.licensePic = ydtUpdateResult.data.file.key;
+            //}
+            //else
+            //{
+            //    insPic.licensePic = order.DrivingLicenceFaceImgKey;
+            //}
 
             #region pic
 
@@ -249,9 +247,9 @@ namespace YdtSdk
             }
 
             var insCarAdvicevalueModel = new InsCarAdvicevalueModel();
-            insCarAdvicevalueModel.startDate = order.PeriodStart.Value.ToString("yyyy-MM-dd");
-            insCarAdvicevalueModel.registDate = order.CarRegisterDate;
-            insCarAdvicevalueModel.replacementValue = order.CarPurchasePrice.Value;
+            //insCarAdvicevalueModel.startDate = order.PeriodStart.Value.ToString("yyyy-MM-dd");
+            //insCarAdvicevalueModel.registDate = order.CarRegisterDate;
+            //insCarAdvicevalueModel.replacementValue = order.CarPurchasePrice.Value;
             var ydtInscarAdvicevalue = new YdtInscarAdvicevalue(au.token, au.session, YdtPostDataType.Json, insCarAdvicevalueModel);
             var ydtInscarAdvicevalueResult = ydtApi.DoPost(ydtInscarAdvicevalue);
 
@@ -267,16 +265,16 @@ namespace YdtSdk
 
             if (insCarInquiryModel.risk == 2 || insCarInquiryModel.risk == 3)
             {
-                insCarInquiryModel.ciStartDate = order.PeriodStart.Value.ToString("yyyy-MM-dd");
+                //insCarInquiryModel.ciStartDate = order.PeriodStart.Value.ToString("yyyy-MM-dd");
             }
 
             if (insCarInquiryModel.risk == 1 || insCarInquiryModel.risk == 3)
             {
-                insCarInquiryModel.biStartDate = order.PeriodStart.Value.ToString("yyyy-MM-dd");
+               // insCarInquiryModel.biStartDate = order.PeriodStart.Value.ToString("yyyy-MM-dd");
             }
 
 
-            insCarInquiryModel.coverages = YdtDataMap.GetCoverages(kinds, ydtInscarAdvicevalueResult.data.actualPrice, order.CarSeat);
+            insCarInquiryModel.coverages = YdtDataMap.GetCoverages(kinds, ydtInscarAdvicevalueResult.data.actualPrice, order.CarRatedPassengerCapacity);
 
 
             var YdtInscarGetInquiryInfoModel = new YdtInscarGetInquiryInfoModel();
@@ -311,8 +309,8 @@ namespace YdtSdk
                     offerImgModel.Offerer = "";
 
                     OfferImgCarInfo offerImgCarInfo = new OfferImgCarInfo();
-                    offerImgCarInfo.CarOwner = order.CarOwner;
-                    offerImgCarInfo.CarPlateNo = order.CarPlateNo;
+                    offerImgCarInfo.CarOwner = order.CarownerName;
+                    offerImgCarInfo.CarPlateNo = order.CarLicensePlateNo;
                     offerImgCarInfo.CarEngineNo = order.CarEngineNo;
                     offerImgCarInfo.CarVin = order.CarVin;
                     offerImgCarInfo.CarModelName = order.CarModelName;
@@ -364,8 +362,8 @@ namespace YdtSdk
 
                                     offerImgModel.CommercialCoverageInfo.Coverages.Add(offerImgCoverage);
                                 }
-                                offerImgModel.CommercialCoverageInfo.PeriodStart = order.PeriodStart;
-                                offerImgModel.CommercialCoverageInfo.PeriodEnd = order.PeriodEnd;
+                                //offerImgModel.CommercialCoverageInfo.PeriodStart = order.PeriodStart;
+                                //offerImgModel.CommercialCoverageInfo.PeriodEnd = order.PeriodEnd;
                             }
 
                             if (offer.Inquiry.data.inquirys != null)
@@ -380,8 +378,8 @@ namespace YdtSdk
 
                                 if (compulsory != null)
                                 {
-                                    offerImgModel.CompulsoryInfo.PeriodStart = order.PeriodStart;
-                                    offerImgModel.CompulsoryInfo.PeriodEnd = order.PeriodEnd;
+                                    //offerImgModel.CompulsoryInfo.PeriodStart = order.PeriodStart;
+                                    //offerImgModel.CompulsoryInfo.PeriodEnd = order.PeriodEnd;
                                     offerImgModel.CompulsoryInfo.Premium = compulsory.standardPremium - compulsory.sumPayTax;
                                     offerImgModel.TravelTax = compulsory.sumPayTax;
                                 }

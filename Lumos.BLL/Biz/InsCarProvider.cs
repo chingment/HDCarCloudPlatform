@@ -392,16 +392,6 @@ namespace Lumos.BLL
                     }
 
 
-                    switch (pms.OfferResult)
-                    {
-                        case Enumeration.OfferResult.WaitArtificialOffer:
-                            var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsure, l_orderToCarInsure.UserId, l_orderToCarInsure.MerchantId, l_orderToCarInsure.Id, Enumeration.AuditFlowV1Status.Submit);
-                            l_orderToCarInsure.BizProcessesAuditId = bizProcessesAudit.Id;
-                            break;
-
-                    }
-
-
                     CurrentDb.SaveChanges();
                     ts.Complete();
 

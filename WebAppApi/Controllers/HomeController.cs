@@ -208,8 +208,8 @@ namespace WebAppApi.Controllers
 
             // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-           // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
-             model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 1599));
+          //  model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+             model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 1600));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
             //model.Add("获取订单", GetOrder(15, 1, 0));

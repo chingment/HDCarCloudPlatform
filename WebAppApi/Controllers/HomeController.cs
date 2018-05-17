@@ -1828,7 +1828,7 @@ namespace WebAppApi.Controllers
             //string s_CarIns_GetCarModelInfo = CarIns_GetCarModelInfo(userId, merchantId, posMachineId);
 
             //CustomJsonResult<CarModelInfoResult> s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarModelInfoResult>>(s_CarIns_GetCarModelInfo);
-
+            //CarIn_Notify(1, 2, 3, "5", "4");
             string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
 
             CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
@@ -2058,6 +2058,47 @@ namespace WebAppApi.Controllers
             string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/InsInquiry", a1, headers1);
 
             return respon_data4;
+        }
+
+        public string CarIn_Notify(int userId, int merchantId, int posMachineId, string orderSn, string paysn)
+        {
+            OrderPayResultNotifyByAppLog model = new OrderPayResultNotifyByAppLog();
+
+
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
+            model.UserId = userId;
+            model.TransResult = "1";
+            model.Amount = "1";
+            model.CardNo = "1";
+            model.BatchNo = "1";
+            model.TraceNo = "1";
+            model.RefNo = "1";
+            model.AuthCode = "1";
+            model.TransDate = "1";
+            model.TransTime = "1";
+            model.Order = paysn;
+            model.OrderSn = orderSn;
+            model.CreateTime = DateTime.Now;
+            model.Creator = 0;
+            string a1 = JsonConvert.SerializeObject(model);
+
+
+
+            //string a1 = "{\"productType\":\"2013\",\"merchantId\":\"" + merchantId + "\",\"userId\":\"" + userId + "\",\"orderSn\":\"" + orderSn + "\",\"orderId\":\"" + orderId + "\",\"params\":{\"merchantId\":\"861440360120020\",\"amount\":\"000000414000\",\"terminalId\":\"9999999B\",\"batchNo\":\"000001\",\"merchantName\":\"银联测试商户\",\"issue\":\"null\",\"merchantNo\":\"null\",\"traceNo\":\"000017\",\"failureReason\":\"\",\"referenceNo\":\"022310580194\",\"type\":\"\",\"result\":\"1\",\"cardNo\":\"6212263602044931384\",\"merchantInfo\":{\"order_no\":\"" + orderSn + "\",\"insurance_company\":\"平安保险\",\"insurance_type\":\"\",\"customer_id_type\":\"01\",\"customer_id\":\"a\",\"customer_sex\":\"\",\"customer_name\":\"a\",\"customer_mobile_no\":\"\",\"customer_birthdate\":\"\",\"insurance_order_no\":\"aaa\",\"car_type\":\"a\",\"car_license\":\"a\",\"car_frame_no\":\"\",\"payer_id_type\":\"\",\"payer_id\":\"\",\"payer_name\":\"\",\"payer_mobile_no\":\"\",\"payer_address\":\"\",\"ybs_mer_code\":\"000567\",\"merchant_id\":\"861440360120020\",\"merchant_name\":\"\",\"phone_no\":\"\",\"cashier_id\":\"\",\"teller_id\":\"45567\"}}";
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/CarIns/OfferNotify", a1, headers);
+
+            return result;
+
         }
     }
 }

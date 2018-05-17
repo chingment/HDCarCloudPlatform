@@ -86,8 +86,93 @@
 
             loadOfferKindsTable(offerKinds);
 
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $("#Model_OrderToCarInsure_CarownerName").formValidator().inputValidator({ min: 1, max: 20, onError: "车主姓名不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarOwnerIdNumber").formValidator().inputValidator({ min: 1, max: 20, onError: "车主身份证号码不能为空,且不超过20个字符" });
+            $("#Model_OrderToCarInsure_CarLicensePlateNo").formValidator().inputValidator({ min: 1, max: 20, onError: "车牌号码不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarUserCharacter").formValidator().inputValidator({ min: 1, max: 20, onError: "请选择车辆使用性质" });
+            //$("#Model_OrderToCarInsure_CarModel").formValidator().inputValidator({ min: 1, max: 20, onError: "品牌型号不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarVin").formValidator().inputValidator({ min: 1, max: 20, onError: "车辆识别代号不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarEngineNo").formValidator().inputValidator({ min: 1, max: 20, onError: "发动机号不能为空,且不超过20个字符" });
+            //$("#Model_OrderToCarInsure_CarSeat").formValidator().inputValidator({ min: 1, max: 20, onError: "请选择核定载人数" });
+            //$("#Model_OrderToCarInsure_CarVechicheType").formValidator().inputValidator({ min: 1, max: 20, onError: "请选择车辆型号" });
+            //$("#Model_OrderToCarInsure_CarIssueDate").formValidator().regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "车辆发证日期格式不正确,格式例子:2016-08-08" });
+            //$("#Model_OrderToCarInsure_CarRegisterDate").formValidator().regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "车辆注册日期格式不正确,格式例子:2016-08-08" });
+            //$("#Model_OrderToCarInsure_PeriodStart").formValidator().regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "承保期间（开始）格式不正确,格式例子:2016-08-08" });
+            //$("#Model_OrderToCarInsure_PeriodEnd").formValidator().regexValidator({ min: 1, max: 20, regExp: regexEnum.date, onError: "承保期间（结束）格式不正确,格式例子:2016-08-08" });
+
+
+            $("#Model_BizProcessesAudit_TempAuditComments").formValidator({ onShow: "", onFocus: "", onCorrect: "", empty: true, onEmpty: "" }).inputValidator({ min: 0, max: 500, onError: "告知备注不超过500个字" });
+
+
+
+            $(".insureimgurl").each(function (i, e) {
+                var insurancecompanyname = $(e).parent().parent().find('.insurancecompanyname').text();
+                $(e).formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传" + insurancecompanyname + "报价单" });
+            });
 
         });
+
+
+        function submit(operate, fun) {
+            var form = $("#form1");
+            var msg = "";
+            var model_OrderToCarInsure_Remarks = $("#Model_BizProcessesAudit_TempAuditComments").val();
+            if (operate == operateType.save) {
+                msg = "确定要保存？";
+                $(form).find('*').setInputRequired(false);
+            }
+            else if (operate == operateType.submit) {
+                msg = "确定要提交报价？";
+                $(form).find('*').setInputRequired(true);
+            }
+            else if (operate == operateType.reject) {
+                msg = "确定要转给客户跟进？";
+                $(form).find('*').setInputRequired(false);
+
+                if (model_OrderToCarInsure_Remarks == "") {
+                    $.lumos.tips('请输入告知备注');
+                    return;
+                }
+            }
+            else if (operate == operateType.cancle) {
+                msg = "确定要取消该订单？";
+                $(form).find('*').setInputRequired(false);
+
+                if (model_OrderToCarInsure_Remarks == "") {
+                    $.lumos.tips('请输入告知备注');
+                    return;
+                }
+            }
+
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
+
+                art.dialog.confirm(msg, function () {
+                    var l_Data = $("#form1").serializeArray();
+                    l_Data.push({ name: "Model.Operate", value: operate });
+
+                    for (var i = 0; i < offerKinds.length; i++) {
+                        l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].KindId", value: offerKinds[i].kindId });
+                        l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].KindValue", value: offerKinds[i].kindValue });
+                        l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].KindDetails", value: offerKinds[i].kindDetails });
+                        l_Data.push({ name: "Model.OrderToCarInsureOfferKind[" + i + "].IsWaiverDeductible", value: offerKinds[i].isWaiverDeductible });
+                    }
+
+                    $.lumos.postJson({
+                        isUseHandling: true,
+                        url: "/Biz/CarInsureOffer/Dealt",
+                        data: l_Data,
+                        success: function (data) {
+                            fun(data);
+
+                        }
+                    });
+                });
+            }
+            return false;
+
+        }
 
 
     </script>
@@ -96,14 +181,8 @@
 <form id="form1" name="form1">
     @AntiForgery.GetHtml()
     <input name="Model.OrderToCarInsure.Id" type="hidden" value="@Model.OrderToCarInsure.Id" />
-    <input name="Model.BizProcessesAudit.CurrentDetails.Id" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.Id" />
-    <input name="Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" type="hidden" value="@Model.BizProcessesAudit.CurrentDetails.BizProcessesAuditId" />
-    <input name="Model.OrderToCarInsure.CarModelName" type="hidden" id="Model_OrderToCarInsure_CarModelName" value="@Model.OrderToCarInsure.CarModelName" />
-    @*<input name="Model.OrderToCarInsureAuto.DrivingLicenceFaceImgKey" value="@Model.OrderToCarInsureAuto.DrivingLicenceFaceImgKey" />
-        <input name="Model.OrderToCarInsureAuto.IdentityCardFaceImgKey" value="@Model.OrderToCarInsureAuto.IdentityCardFaceImgKey" />*@
-    @*<input name="Model.OrderToCarInsureAuto.CZ_CL_XSZ_ImgUrl" value="@Model.OrderToCarInsure.CZ_CL_XSZ_ImgUrl" />
-        <input name="Model.OrderToCarInsureAuto.CZ_SFZ_ImgUrl" value="@Model.OrderToCarInsure.CZ_SFZ_ImgUrl" />*@
-
+    <input name="Model.OrderToCarInsure.CarModelCode" type="hidden" id="Model_OrderToCarInsure_CarModelCode" value="@Model.OrderToCarInsure.CarModelCode" />
+    <input name="Model.BizProcessesAudit.Id" type="hidden" value="@Model.BizProcessesAudit.Id" />
     <div class="gbr-row-title clearfix">
         <div class="pull-left">
             <h5>商户信息</h5>
@@ -112,7 +191,6 @@
             <h6></h6>
         </div>
     </div>
-
     <table class="f-tb1-detail">
         <tr>
             <td class="t">商户代码：</td>
@@ -485,7 +563,7 @@
                     保险公司
                 </th>
                 <th style="width:70%">
-                    <span class="required-symbol">*</span>投保单图片
+                    <span class="required-symbol">*</span>报价单图片
                 </th>
             </tr>
         </thead>
@@ -519,7 +597,7 @@
     </table>
 
 
-    @Html.Partial("AuditFlowTrace", Model.BizProcessesAudit.HistoricalDetails)
+    @Html.Partial("AuditStatusFlowTrace", Model.BizProcessesAudit.HistoricalDetails)
 
     <div class="gbr-row-title clearfix">
         <div class="pull-left">
@@ -532,7 +610,7 @@
     <table class="f-tb1" cellpadding="0" cellspacing="1" style="width:96%">
         <tr>
             <td>
-                <textarea name="Model.OrderToCarInsure.Remarks" class="input-control" id="Model_OrderToCarInsure_Remarks" style="width:98%;">@Model.OrderToCarInsure.Remarks</textarea>
+                <textarea name="Model.BizProcessesAudit.TempAuditComments" class="input-control" id="Model_BizProcessesAudit_TempAuditComments" style="width:98%;">@Model.BizProcessesAudit.TempAuditComments</textarea>
             </td>
         </tr>
     </table>

@@ -94,7 +94,7 @@ namespace Lumos.BLL
 
                 var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToCarInsure, order.UserId, order.MerchantId, order.Id, Enumeration.AuditFlowV1Status.Submit);
                 order.BizProcessesAuditId = bizProcessesAudit.Id;
-                BizFactory.BizProcessesAudit.ChangeCarInsureStatus(order.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.WaitOffer, 0, null, "商户提交投保订单，等待报价");
+                BizFactory.BizProcessesAudit.ChangeCarInsureStatus(order.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.Sumbit, operater, null, "商户提交投保订单");
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
@@ -123,7 +123,7 @@ namespace Lumos.BLL
                     l_orderToCarInsure.Mender = operater;
 
 
-                    BizFactory.BizProcessesAudit.ChangeCarInsureStatus(l_orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.WaitOffer, operater, null, "商户提交投保订单，等待报价");
+                    BizFactory.BizProcessesAudit.ChangeCarInsureStatus(l_orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.Sumbit, operater, null, "商户再次提订单，等待报价");
 
                     CurrentDb.SaveChanges();
                     ts.Complete();
@@ -151,7 +151,7 @@ namespace Lumos.BLL
             {
 
 
-                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.CurrentDetails.BizProcessesAuditId && (m.Status == (int)Enumeration.CarInsureAuditStatus.WaitOffer || m.Status == (int)Enumeration.CarInsureAuditStatus.InOffer)).FirstOrDefault();
+                var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAudit.Id && (m.Status == (int)Enumeration.CarInsureAuditStatus.WaitOffer || m.Status == (int)Enumeration.CarInsureAuditStatus.InOffer)).FirstOrDefault();
 
                 if (l_bizProcessesAudit == null)
                 {
@@ -200,12 +200,6 @@ namespace Lumos.BLL
                 l_orderToCarInsure.Mender = operater;
 
 
-
-                bizProcessesAudit.CurrentDetails.AuditComments = orderToCarInsure.Remarks;
-
-
-
-
                 foreach (var m in orderToCarInsureOfferCompany)
                 {
                     var l_orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(q => q.Id == m.Id).FirstOrDefault();
@@ -250,9 +244,7 @@ namespace Lumos.BLL
 
                         result = new CustomJsonResult(ResultType.Success, "保存成功");
 
-                        BizFactory.BizProcessesAudit.ChangeCarInsureStatus(l_orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.InOffer, operater, bizProcessesAudit.CurrentDetails.AuditComments, "商户提交投保订单，等待报价");
-
-                        BizFactory.BizProcessesAudit.ChangeAuditDetailsAuditComments(operater, bizProcessesAudit.CurrentDetails.Id, bizProcessesAudit.CurrentDetails.AuditComments, null);
+                        BizFactory.BizProcessesAudit.SaveTempAuditComments(bizProcessesAudit.Id, operater, bizProcessesAudit.TempAuditComments);
 
                         break;
                     case Enumeration.OperateType.Reject:
@@ -261,14 +253,9 @@ namespace Lumos.BLL
                         l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitSubmit;
 
 
+                        BizFactory.BizProcessesAudit.ChangeCarInsureStatus(l_orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.ClientFllow, operater, bizProcessesAudit.TempAuditComments, "后台人员转给商户跟进");
 
-                        BizFactory.BizProcessesAudit.ChangeCarInsureStatus(l_orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.ClientFllow, operater, null, "后台人员转给商户跟进");
-
-                        // BizFactory.BizProcessesAudit.ChangeAuditDetailsAuditComments(operater, bizProcessesAudit.CurrentDetails.Id, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员转给商户跟进", this.DateTime);
-
-                        // BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, bizProcessesAudit.CurrentDetails.BizProcessesAuditId, Enumeration.CarInsureOfferDealtStatus.ClientFllow, "商户正在跟进");
-
-                        BizFactory.Sms.SendCarInsureOfferFollow(client.Id, client.PhoneNumber, l_orderToCarInsure.Sn, l_orderToCarInsure.CarownerName, l_orderToCarInsure.CarLicensePlateNo);
+                        //BizFactory.Sms.SendCarInsureOfferFollow(client.Id, client.PhoneNumber, l_orderToCarInsure.Sn, l_orderToCarInsure.CarownerName, l_orderToCarInsure.CarLicensePlateNo);
 
                         result = new CustomJsonResult(ResultType.Success, "转给客户跟进成功");
 
@@ -279,12 +266,7 @@ namespace Lumos.BLL
                         l_orderToCarInsure.EndOfferTime = this.DateTime;
                         l_orderToCarInsure.Status = Enumeration.OrderStatus.Cancled;
 
-
-                        //BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.CarInsureOfferDealtStep.Cancle, l_bizProcessesAudit.Id, operater, bizProcessesAudit.CurrentDetails.AuditComments, "后台人员撤销订单", this.DateTime);
-
-
-                        // BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, l_bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.StaffCancle);
-
+                        BizFactory.BizProcessesAudit.ChangeCarInsureStatus(l_orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.CancleOffer, operater, bizProcessesAudit.TempAuditComments, "后台人员撤销订单");
                         result = new CustomJsonResult(ResultType.Success, "撤销成功");
 
                         break;
@@ -294,10 +276,8 @@ namespace Lumos.BLL
                         l_orderToCarInsure.Status = Enumeration.OrderStatus.WaitPay;
                         l_orderToCarInsure.AutoCancelByHour = orderToCarInsure.AutoCancelByHour;
 
-                        // BizFactory.BizProcessesAudit.ChangeAuditDetails(operate, Enumeration.CarInsureOfferDealtStep.Offer, l_bizProcessesAudit.Id, operater, bizProcessesAudit.CurrentDetails.AuditComments, "报价完成", this.DateTime);
-                        // BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(operater, l_bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.OfferComplete);
-
-                        BizFactory.Sms.SendCarInsureOfferComplete(client.Id, client.PhoneNumber, l_orderToCarInsure.Sn, l_orderToCarInsure.CarownerName, l_orderToCarInsure.CarLicensePlateNo);
+                        BizFactory.BizProcessesAudit.ChangeCarInsureStatus(l_orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.OfferComplete, operater, bizProcessesAudit.TempAuditComments, "报价完成");
+                        //BizFactory.Sms.SendCarInsureOfferComplete(client.Id, client.PhoneNumber, l_orderToCarInsure.Sn, l_orderToCarInsure.CarownerName, l_orderToCarInsure.CarLicensePlateNo);
 
                         result = new CustomJsonResult(ResultType.Success, "提交成功");
                         break;

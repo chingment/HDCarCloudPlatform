@@ -26,7 +26,7 @@ namespace WebBack.Models.Biz.CarInsureOffer
 
         public DealtByOfferViewModel(int id)
         {
-            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeCarInsureStatus(id, Enumeration.CarInsureAuditStatus.InOffer, this.Operater, null, "报价中");
+            var bizProcessesAudit = BizFactory.BizProcessesAudit.ChangeCarInsureStatus(id, Enumeration.CarInsureAuditStatus.InOffer, this.Operater, null, "已取单，报价中");
             if (bizProcessesAudit != null)
             {
                 _bizProcessesAudit = bizProcessesAudit;

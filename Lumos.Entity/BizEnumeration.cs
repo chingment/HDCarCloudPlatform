@@ -46,39 +46,41 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
+            [Remark("提交订单")]
+            Sumbit = 1,
             [Remark("等待报价")]
-            WaitOffer = 1,
+            WaitOffer = 2,
             [Remark("报价中")]
-            InOffer = 2,
+            InOffer = 3,
             [Remark("报价完成")]
-            OfferComplete = 3,
+            OfferComplete = 4,
             [Remark("客户跟进")]
-            ClientFllow = 4,
+            ClientFllow = 5,
             [Remark("报价时取消订单")]
-            CancleOffer = 5,
+            CancleOffer = 6,
             [Remark("等待核保")]
-            WaitCheckInsure = 5,
+            WaitCheckInsure = 7,
             [Remark("核保中")]
-            InCheckInsure = 5,
+            InCheckInsure = 8,
             [Remark("核保完成")]
-            CheckInsureComplete = 6
+            CheckInsureComplete = 9
         }
 
-        public enum CarInsureAuditStep
-        {
-            [Remark("未知")]
-            Unknow = 0,
-            [Remark("提交")]
-            Submit = 1,
-            [Remark("报价")]
-            Offer = 2,
-            [Remark("跟进")]
-            Fllow = 3,
-            [Remark("完成")]
-            Complete = 4,
-            [Remark("取消")]
-            Cancle = 5
-        }
+        //public enum CarInsureAuditStep
+        //{
+        //    [Remark("未知")]
+        //    Unknow = 0,
+        //    [Remark("提交")]
+        //    Submit = 1,
+        //    [Remark("报价")]
+        //    Offer = 2,
+        //    [Remark("跟进")]
+        //    Fllow = 3,
+        //    [Remark("完成")]
+        //    Complete = 4,
+        //    [Remark("取消")]
+        //    Cancle = 5
+        //}
 
         //public enum CarInsureOfferAutoDealtStatus
         //{

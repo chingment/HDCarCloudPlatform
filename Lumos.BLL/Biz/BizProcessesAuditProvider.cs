@@ -95,6 +95,70 @@ namespace Lumos.BLL
 
         }
 
+        public void AddAuditStatusDetails(Enumeration.OperateType operate, Enumeration.BizProcessesAuditType aduitType, int aduitReferenceId, object auditStatus, int bizProcessesAuditId, int operater, string auditComments, string description, DateTime? auditTime = null)
+        {
+            DateTime nowDate = DateTime.Now;
+            var bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(m => m.Id == bizProcessesAuditId).FirstOrDefault();
+            if (bizProcessesAudit != null)
+            {
+                string auditStatusEnumName = "" + auditStatus.GetType().FullName + ", Lumos.Entity";
+                var detailsHistory = CurrentDb.BizProcessesAuditDetails.Where(m => m.AuditStatus == (int)auditStatus && m.BizProcessesAuditId == bizProcessesAudit.Id).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                if (detailsHistory == null)
+                {
+                    detailsHistory = new BizProcessesAuditDetails();
+                    detailsHistory.AduitType = aduitType;
+                    detailsHistory.AduitReferenceId = aduitReferenceId;
+                    detailsHistory.AuditStatus = (int)auditStatus;
+                    detailsHistory.AuditStatusEnumName = auditStatusEnumName;
+                    detailsHistory.BizProcessesAuditId = bizProcessesAuditId;
+                    detailsHistory.Auditor = operater;
+                    detailsHistory.AuditComments = auditComments;
+                    detailsHistory.Description = description;
+                    if (operate != Enumeration.OperateType.Save)
+                    {
+                        detailsHistory.AuditTime = nowDate;
+                    }
+                    detailsHistory.CreateTime = nowDate;
+                    detailsHistory.Creator = operater;
+                    CurrentDb.BizProcessesAuditDetails.Add(detailsHistory);
+                }
+                else
+                {
+                    if (detailsHistory.AuditTime == null)
+                    {
+                        detailsHistory.Auditor = operater;
+                        detailsHistory.AuditComments = auditComments;
+                        detailsHistory.Description = description;
+                        if (operate != Enumeration.OperateType.Save)
+                        {
+                            detailsHistory.AuditTime = nowDate;
+                        }
+
+                    }
+                    else
+                    {
+                        detailsHistory = new BizProcessesAuditDetails();
+                        detailsHistory.AduitType = aduitType;
+                        detailsHistory.AduitReferenceId = aduitReferenceId;
+                        detailsHistory.AuditStatus = (int)auditStatus;
+                        detailsHistory.AuditStatusEnumName = auditStatusEnumName;
+                        detailsHistory.BizProcessesAuditId = bizProcessesAuditId;
+                        detailsHistory.Auditor = operater;
+                        detailsHistory.AuditComments = auditComments;
+                        detailsHistory.Description = description;
+                        if (operate != Enumeration.OperateType.Save)
+                        {
+                            detailsHistory.AuditTime = nowDate;
+                        }
+                        detailsHistory.CreateTime = nowDate;
+                        detailsHistory.Creator = operater;
+                        CurrentDb.BizProcessesAuditDetails.Add(detailsHistory);
+                    }
+                }
+            }
+
+        }
+
         public void ChangeAuditDetailsAuditComments(int operater, int bizProcessesAuditDetailsId, string auditComments, string description, DateTime? auditTime = null)
         {
             DateTime nowDate = DateTime.Now;
@@ -424,7 +488,7 @@ namespace Lumos.BLL
                         if (changestatus == Enumeration.CarClaimDealtStatus.WaitVerifyOrder)
                         {
 
-                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.CarInsureAuditStep.Offer).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                            var bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStatus == (int)Enumeration.CarInsureAuditStatus.InOffer).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
                             if (bizProcessesAuditDetails == null)
                             {
                                 bizProcessesAudit.Status = (int)Enumeration.CarClaimDealtStatus.WaitVerifyOrder;
@@ -797,64 +861,63 @@ namespace Lumos.BLL
                 #region TalentDemand
                 switch (auditStatus)
                 {
-                    case Enumeration.CarInsureAuditStatus.WaitOffer:
-                        //提交订单将订单转为待核实状态，审核人空
-                        //ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, auditor, auditComments, description);
-                        //bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.WaitOffer;
-                        //bizProcessesAudit.Auditor = null;
+                    case Enumeration.CarInsureAuditStatus.Sumbit:
 
-                        bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && m.AuditStep == (int)Enumeration.CarInsureAuditStep.Offer).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+                        bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.Sumbit;
+                        bizProcessesAudit.Auditor = null;
+
+                        AddAuditStatusDetails(Enumeration.OperateType.Submit, bizProcessesAudit.AduitType, bizProcessesAudit.AduitReferenceId, Enumeration.CarInsureAuditStatus.Sumbit, bizProcessesAudit.Id, auditor, auditComments, description);
+
+                        bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && (m.AuditStatus == (int)Enumeration.CarInsureAuditStatus.InOffer)).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
+
                         if (bizProcessesAuditDetails == null)
                         {
-                            bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.WaitOffer;
-                            bizProcessesAudit.Auditor = null;
-
+                            ChangeCarInsureStatus(bizProcessesAuditId, Enumeration.CarInsureAuditStatus.WaitOffer, auditor, null, "等待取单报价");
                         }
                         else
                         {
-                            bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.InOffer;
-                            bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
-
-                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, "后台人员正在处理");
+                            ChangeCarInsureStatus(bizProcessesAudit.Id, Enumeration.CarInsureAuditStatus.InOffer, bizProcessesAuditDetails.Auditor.Value, null, "报价中");
                         }
+
+                        break;
+                    case Enumeration.CarInsureAuditStatus.WaitOffer:
+
+                        bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.WaitOffer;
+                        bizProcessesAudit.Auditor = null;
+
+                        AddAuditStatusDetails(Enumeration.OperateType.Submit, bizProcessesAudit.AduitType, bizProcessesAudit.AduitReferenceId, Enumeration.CarInsureAuditStatus.WaitOffer, bizProcessesAudit.Id, auditor, auditComments, description);
+
+
 
                         break;
                     case Enumeration.CarInsureAuditStatus.InOffer:
                         //提交订单将订单转为待核实中，判断当前审核人是否为空，若空设置
-                        bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.InOffer;
 
-                        if (bizProcessesAudit.Auditor == null)
-                        {
-                            ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, auditor, auditComments, description);
-                            bizProcessesAudit.Auditor = auditor;
-                        }
+                        bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.InOffer;
+                        bizProcessesAudit.Auditor = auditor;
+                        AddAuditStatusDetails(Enumeration.OperateType.Submit, bizProcessesAudit.AduitType, bizProcessesAudit.AduitReferenceId, Enumeration.CarInsureAuditStatus.InOffer, bizProcessesAudit.Id, auditor, auditComments, description);
+
                         break;
                     case Enumeration.CarInsureAuditStatus.ClientFllow:
 
-                        bizProcessesAuditDetails = CurrentDb.BizProcessesAuditDetails.Where(m => m.BizProcessesAuditId == bizProcessesAudit.Id && (m.AuditStep == (int)Enumeration.CarInsureAuditStep.Submit || m.AuditStep == (int)Enumeration.CarInsureAuditStep.Fllow)).OrderByDescending(m => m.CreateTime).Take(1).FirstOrDefault();
-                        if (bizProcessesAuditDetails != null)
-                        {
-                            bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.ClientFllow;
-                            bizProcessesAudit.Auditor = bizProcessesAuditDetails.Auditor;
+                        bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.ClientFllow;
+                        bizProcessesAudit.Auditor = null;
 
-                            ChangeAuditDetails(Enumeration.OperateType.Save, Enumeration.CarInsureAuditStep.Fllow, bizProcessesAudit.Id, bizProcessesAuditDetails.Auditor.Value, null, description);
-                        }
-
+                        AddAuditStatusDetails(Enumeration.OperateType.Submit, bizProcessesAudit.AduitType, bizProcessesAudit.AduitReferenceId, Enumeration.CarInsureAuditStatus.ClientFllow, bizProcessesAudit.Id, auditor, auditComments, description);
 
                         break;
                     case Enumeration.CarInsureAuditStatus.CancleOffer:
                         bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.CancleOffer;
                         bizProcessesAudit.Auditor = auditor;
                         bizProcessesAudit.EndTime = this.DateTime;
-
-                        ChangeAuditDetails(Enumeration.OperateType.Cancle, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+                        AddAuditStatusDetails(Enumeration.OperateType.Submit, bizProcessesAudit.AduitType, bizProcessesAudit.AduitReferenceId, Enumeration.CarInsureAuditStatus.CancleOffer, bizProcessesAudit.Id, auditor, auditComments, description);
                         break;
                     case Enumeration.CarInsureAuditStatus.OfferComplete:
                         bizProcessesAudit.Status = (int)Enumeration.CarInsureAuditStatus.OfferComplete;
                         bizProcessesAudit.Auditor = auditor;
                         bizProcessesAudit.EndTime = this.DateTime;
 
-                        ChangeAuditDetails(Enumeration.OperateType.Submit, Enumeration.CarInsureAuditStep.Offer, bizProcessesAudit.Id, bizProcessesAudit.Auditor.Value, null, description);
+                        AddAuditStatusDetails(Enumeration.OperateType.Submit, bizProcessesAudit.AduitType, bizProcessesAudit.AduitReferenceId, Enumeration.CarInsureAuditStatus.OfferComplete, bizProcessesAudit.Id, auditor, auditComments, description);
                         break;
 
                 }

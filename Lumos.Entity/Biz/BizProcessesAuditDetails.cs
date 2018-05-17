@@ -20,6 +20,11 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string AuditStepEnumName { get; set; }
 
+        public int AuditStatus{ get; set; }
+
+        [MaxLength(128)]
+        public string AuditStatusEnumName { get; set; }
+
         public int BizProcessesAuditId { get; set; }
 
         public int? Auditor { get; set; }
@@ -35,6 +40,10 @@ namespace Lumos.Entity
         public int Creator { get; set; }
 
         public DateTime CreateTime { get; set; }
+
+        public Enumeration.BizProcessesAuditType AduitType { get; set; }
+
+        public int AduitReferenceId { get; set; }
 
     }
 

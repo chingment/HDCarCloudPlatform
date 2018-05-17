@@ -63,14 +63,14 @@ namespace WebBack.Controllers
             var waitCount = (from m in CurrentDb.BizProcessesAudit
                              where
 
-(m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 1)
+(m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2)
                              select m.Id).Count();
 
 
             var inCount = (from m in CurrentDb.BizProcessesAudit
                            where
 
-(m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2) 
+(m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 3)
 
 && m.Auditor == this.CurrentUserId
 
@@ -85,13 +85,13 @@ namespace WebBack.Controllers
 
             if (condition.AuditStatus == 1)
             {
-                query = query.Where(m => (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 1) 
+                query = query.Where(m => (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2)
 
                 );
             }
             else if (condition.AuditStatus == 2)
             {
-                query = query.Where(m => ((m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2) 
+                query = query.Where(m => ((m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 3)
                 )
               && m.Auditor == this.CurrentUserId
 
@@ -118,10 +118,10 @@ namespace WebBack.Controllers
                     case Enumeration.BizProcessesAuditType.OrderToCarInsure:
                         switch (item.Status)
                         {
-                            case 1:
+                            case 2:
                                 statusName = "待报价";
                                 break;
-                            case 2:
+                            case 3:
                                 statusName = "报价中";
                                 break;
                         }

@@ -176,7 +176,7 @@ namespace WebAppApi.Controllers
             //int merchantId = 258;
             //int posMachineId = 153;
 
-            CarIns(userId, merchantId, posMachineId);
+            //CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
@@ -208,8 +208,8 @@ namespace WebAppApi.Controllers
 
             // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-            //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
-            //model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 2047));
+           // model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+             model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 1599));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
             //model.Add("获取订单", GetOrder(15, 1, 0));
@@ -1007,10 +1007,10 @@ namespace WebAppApi.Controllers
         {
 
 
-            string base64string1 = GetImagesBase64String(@"d:\a.jpg");
-            string base64string2 = GetImagesBase64String(@"d:\b.jpg");
-            string base64string3 = GetImagesBase64String(@"d:\c.jpg");
-            string base64string4 = GetImagesBase64String(@"d:\d.jpg");
+            string base64string1 = GetImagesBase64String(@"d:\a.png");
+            string base64string2 = GetImagesBase64String(@"d:\a.png");
+            string base64string3 = GetImagesBase64String(@"d:\a.png");
+            string base64string4 = GetImagesBase64String(@"d:\a.png");
 
             SubmitFollowInsureModel model = new SubmitFollowInsureModel();
             model.UserId = userId;

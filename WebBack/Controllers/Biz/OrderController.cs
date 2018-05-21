@@ -215,53 +215,5 @@ namespace WebBack.Controllers.Biz
             return result;
         }
 
-
-        public CustomJsonResult GetPayTransList(SearchCondition condition)
-        {
-
-
-            string clientCode = condition.ClientCode.ToSearchString();
-            string yYZZ_Name = condition.YYZZ_Name.ToSearchString();
-            string sn = condition.Sn.ToSearchString();
-
-
-            Enumeration.OrderStatus status = condition.Status;
-
-            var query = (from o in CurrentDb.OrderPayTrans
-
-                         where
-                           (condition.OrderId == 0 || o.OrderId == condition.OrderId) &&
-                        (condition.Sn == null || o.Sn.Contains(condition.Sn))
-                         select new { o.Id, o.Sn, o.OrderSn, o.Amount, o.TransType, o.CreateTime }
-                        );
-
-            int total = query.Count();
-
-            int pageIndex = condition.PageIndex;
-            int pageSize = 10;
-
-            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
-
-            List<object> list = new List<object>();
-
-            foreach (var item in query)
-            {
-                list.Add(new
-                {
-                    item.Id,
-                    item.Sn,
-                    item.OrderSn,
-                    Amount = (int.Parse(item.Amount) * 0.01),
-                    TransType = (item.TransType == 67 ? "微信" : "支付宝"),
-                    item.CreateTime
-                });
-            }
-
-
-            PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list };
-
-            return Json(ResultType.Success, pageEntity, "");
-
-        }
     }
 }

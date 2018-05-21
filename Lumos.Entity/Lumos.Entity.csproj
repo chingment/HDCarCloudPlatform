@@ -79,8 +79,8 @@
     <Compile Include="AppApi\PayQueryResult.cs" />
     <Compile Include="AppApi\PrintDataModel.cs" />
     <Compile Include="AppApi\ProductModel.cs" />
-    <Compile Include="AppApi\QrCodeDownloadParams.cs" />
-    <Compile Include="AppApi\QrCodeDownloadResult.cs" />
+    <Compile Include="AppApi\UnifiedOrderParams.cs" />
+    <Compile Include="AppApi\UnifiedOrderResult.cs" />
     <Compile Include="BizEnumeration.cs" />
     <Compile Include="Biz\Bank.cs" />
     <Compile Include="Biz\BankCard.cs" />
@@ -108,7 +108,6 @@
     <Compile Include="Biz\MerchantPosMachineChangeHistory.cs" />
     <Compile Include="Biz\OrderChildDetails.cs" />
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
-    <Compile Include="Biz\OrderPayTrans.cs" />
     <Compile Include="Biz\OrderChildProductSkuDetails.cs" />
     <Compile Include="Biz\OrderToApplyLossAssess .cs" />
     <Compile Include="Biz\OrderToCarInsure.cs" />

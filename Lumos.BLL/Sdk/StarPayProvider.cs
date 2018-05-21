@@ -14,7 +14,7 @@ namespace Lumos.BLL
     //{"total_amount":"1","amount":"1","message":"%E4%BA%A4%E6%98%93%E6%88%90%E5%8A%9F","sysTime":"20180521174712","result":"S","returnCode":"000000","orderNo":"000000045449433","payCode":"weixin://wxpay/bizpayurl?pr=GTUPgPT","logNo":"201805210364066601","tradeNo":"18050313180000001511","mercId":"800581000010155","signValue":"66637916cd7d71de453510db7c25dabf"}
     public class StarPayProvider : BaseProvider
     {
-        public CustomJsonResult QrCodeDownload(int operater, QrCodeDownloadParams pms)
+        public CustomJsonResult UnifiedOrder(int operater, UnifiedOrderParams pms)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -70,7 +70,7 @@ namespace Lumos.BLL
 
             CurrentDb.SaveChanges();
 
-            QrCodeDownloadResult resultData = new QrCodeDownloadResult();
+            UnifiedOrderResult resultData = new UnifiedOrderResult();
             resultData.OrderSn = order.Sn;
             resultData.MwebUrl = codeDownload_result.payCode;
             resultData.PayWay = order.PayWay;

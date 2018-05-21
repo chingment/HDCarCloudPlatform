@@ -88,8 +88,6 @@ namespace Lumos.DAL
 
         public IDbSet<OrderToLllegalDealtDetails> OrderToLllegalDealtDetails { get; set; }
 
-        public IDbSet<OrderPayTrans> OrderPayTrans { get; set; }
-
         public IDbSet<ProductCategory> ProductCategory { get; set; }
 
         public IDbSet<ProductKind> ProductKind { get; set; }

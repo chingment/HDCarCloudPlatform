@@ -52,6 +52,9 @@ namespace StarPaySdk
 
             _result = body;
 
+            if (string.IsNullOrEmpty(body))
+                return null;
+
             T rsp = JsonConvert.DeserializeObject<T>(body);
 
             if (rsp != null)

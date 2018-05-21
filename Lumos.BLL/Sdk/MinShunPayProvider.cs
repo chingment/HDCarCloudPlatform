@@ -12,7 +12,7 @@ namespace Lumos.BLL
 {
     public class MinShunPayProvider : BaseProvider
     {
-        public CustomJsonResult QrCodeDownload(int operater, QrCodeDownloadParams pms)
+        public CustomJsonResult QrCodeDownload(int operater, UnifiedOrderParams pms)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -66,7 +66,7 @@ namespace Lumos.BLL
             }
 
 
-            QrCodeDownloadResult resultData = new QrCodeDownloadResult();
+            UnifiedOrderResult resultData = new UnifiedOrderResult();
             resultData.OrderSn = order.Sn;
             resultData.MwebUrl = codeDownload_result.MWEB_URL;
             resultData.PayWay = order.PayWay;

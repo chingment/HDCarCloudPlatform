@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lumos.Entity.AppApi
 {
-    public class QrCodeDownloadResult
+    public class UnifiedOrderResult
     {
         public string OrderSn { get; set; }
 

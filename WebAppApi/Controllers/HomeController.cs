@@ -329,23 +329,23 @@ namespace WebAppApi.Controllers
 
         public string PayResultNotify(int userId, int merchantId, int posMachineId, string orderSn, string paysn)
         {
-            OrderPayResultNotifyByAppLog model = new OrderPayResultNotifyByAppLog();
+            OrderPayResultNotifyLog model = new OrderPayResultNotifyLog();
 
 
-            model.MerchantId = merchantId;
-            model.PosMachineId = posMachineId;
-            model.UserId = userId;
-            model.TransResult = "1";
-            model.Amount = "1";
-            model.CardNo = "1";
-            model.BatchNo = "1";
-            model.TraceNo = "1";
-            model.RefNo = "1";
-            model.AuthCode = "1";
-            model.TransDate = "1";
-            model.TransTime = "1";
-            model.Order = paysn;
-            model.OrderSn = orderSn;
+            //model.MerchantId = merchantId;
+            //model.PosMachineId = posMachineId;
+            //model.UserId = userId;
+            //model.TransResult = "1";
+            //model.Amount = "1";
+            //model.CardNo = "1";
+            //model.BatchNo = "1";
+            //model.TraceNo = "1";
+            //model.RefNo = "1";
+            //model.AuthCode = "1";
+            //model.TransDate = "1";
+            //model.TransTime = "1";
+            //model.Order = paysn;
+            //model.OrderSn = orderSn;
             model.CreateTime = DateTime.Now;
             model.Creator = 0;
             string a1 = JsonConvert.SerializeObject(model);
@@ -2064,23 +2064,23 @@ namespace WebAppApi.Controllers
 
         public string CarIn_Notify(int userId, int merchantId, int posMachineId, string orderSn, string paysn)
         {
-            OrderPayResultNotifyByAppLog model = new OrderPayResultNotifyByAppLog();
+            OrderPayResultNotifyLog model = new OrderPayResultNotifyLog();
 
 
-            model.MerchantId = merchantId;
-            model.PosMachineId = posMachineId;
-            model.UserId = userId;
-            model.TransResult = "1";
-            model.Amount = "1";
-            model.CardNo = "1";
-            model.BatchNo = "1";
-            model.TraceNo = "1";
-            model.RefNo = "1";
-            model.AuthCode = "1";
-            model.TransDate = "1";
-            model.TransTime = "1";
-            model.Order = paysn;
-            model.OrderSn = orderSn;
+            //model.MerchantId = merchantId;
+            //model.PosMachineId = posMachineId;
+            //model.UserId = userId;
+            //model.TransResult = "1";
+            //model.Amount = "1";
+            //model.CardNo = "1";
+            //model.BatchNo = "1";
+            //model.TraceNo = "1";
+            //model.RefNo = "1";
+            //model.AuthCode = "1";
+            //model.TransDate = "1";
+            //model.TransTime = "1";
+            //model.Order = paysn;
+            //model.OrderSn = orderSn;
             model.CreateTime = DateTime.Now;
             model.Creator = 0;
             string a1 = JsonConvert.SerializeObject(model);

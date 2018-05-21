@@ -82,56 +82,56 @@ namespace Lumos.BLL
         }
 
 
-        public OrderPayResultNotifyByPartnerPayOrgLog PayQuery(int operater, Order pms)
-        {
+        //public OrderPayResultNotifyByPartnerPayOrgLog PayQuery(int operater, Order pms)
+        //{
 
-            MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
+        //    MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
 
-            orderInfo.Price = 0.01m;
-            orderInfo.Remark = pms.Remarks;
-            orderInfo.SubmitTime = pms.SubmitTime;
-            orderInfo.TermId = pms.TermId;
-            orderInfo.SpbillIp = pms.SpbillIp;
+        //    orderInfo.Price = 0.01m;
+        //    orderInfo.Remark = pms.Remarks;
+        //    orderInfo.SubmitTime = pms.SubmitTime;
+        //    orderInfo.TermId = pms.TermId;
+        //    orderInfo.SpbillIp = pms.SpbillIp;
 
-            if (pms.PayWay == Enumeration.OrderPayWay.Wechat)
-            {
-                orderInfo.TranType = "180020";
-                orderInfo.OrderId = pms.TradeSnByWechat;
-            }
-            else if (pms.PayWay == Enumeration.OrderPayWay.Alipay)
-            {
-                orderInfo.TranType = "280020";
-                orderInfo.OrderId = pms.TradeSnByAlipay;
-            }
+        //    if (pms.PayWay == Enumeration.OrderPayWay.Wechat)
+        //    {
+        //        orderInfo.TranType = "180020";
+        //        orderInfo.OrderId = pms.TradeSnByWechat;
+        //    }
+        //    else if (pms.PayWay == Enumeration.OrderPayWay.Alipay)
+        //    {
+        //        orderInfo.TranType = "280020";
+        //        orderInfo.OrderId = pms.TradeSnByAlipay;
+        //    }
 
-            OrderPayResultNotifyByPartnerPayOrgLog receiveNotifyLog = null;
+        //    OrderPayResultNotifyByPartnerPayOrgLog receiveNotifyLog = null;
 
-            var payQuery_result = MinShunPayUtil.PayQuery(orderInfo);
-            if (payQuery_result == null)
-            {
+        //    var payQuery_result = MinShunPayUtil.PayQuery(orderInfo);
+        //    if (payQuery_result == null)
+        //    {
 
-            }
-            else
-            {
-                //receiveNotifyLog = new OrderPayResultNotifyByPartnerPayOrgLog();
-                //receiveNotifyLog.OrderId = payQuery_result.ORDERID;
-                //receiveNotifyLog.Mercid = payQuery_result.MERCID;
-                //receiveNotifyLog.Termid = payQuery_result.TERMID;
-                //receiveNotifyLog.Txnamt = payQuery_result.TXNAMT;
-                //receiveNotifyLog.ResultCode = payQuery_result.RESULT_CODE;
-                //receiveNotifyLog.ResultCodeName = GetResultCodeName(payQuery_result.RESULT_CODE);
-                //receiveNotifyLog.ResultMsg = payQuery_result.RESULT_MSG;
-                //receiveNotifyLog.Sign = payQuery_result.SIGN;
-                //receiveNotifyLog.MwebUrl = payQuery_result.MWEB_URL;
-                ////receiveNotifyLog.NotifyParty = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi;
-                ////receiveNotifyLog.NotifyPartyName = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi.GetCnName();
-                //receiveNotifyLog.Creator = 0;
-                //receiveNotifyLog.CreateTime = DateTime.Now;
-            }
+        //    }
+        //    else
+        //    {
+        //        //receiveNotifyLog = new OrderPayResultNotifyByPartnerPayOrgLog();
+        //        //receiveNotifyLog.OrderId = payQuery_result.ORDERID;
+        //        //receiveNotifyLog.Mercid = payQuery_result.MERCID;
+        //        //receiveNotifyLog.Termid = payQuery_result.TERMID;
+        //        //receiveNotifyLog.Txnamt = payQuery_result.TXNAMT;
+        //        //receiveNotifyLog.ResultCode = payQuery_result.RESULT_CODE;
+        //        //receiveNotifyLog.ResultCodeName = GetResultCodeName(payQuery_result.RESULT_CODE);
+        //        //receiveNotifyLog.ResultMsg = payQuery_result.RESULT_MSG;
+        //        //receiveNotifyLog.Sign = payQuery_result.SIGN;
+        //        //receiveNotifyLog.MwebUrl = payQuery_result.MWEB_URL;
+        //        ////receiveNotifyLog.NotifyParty = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi;
+        //        ////receiveNotifyLog.NotifyPartyName = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi.GetCnName();
+        //        //receiveNotifyLog.Creator = 0;
+        //        //receiveNotifyLog.CreateTime = DateTime.Now;
+        //    }
 
 
-            return receiveNotifyLog;
-        }
+        //    return receiveNotifyLog;
+        //}
 
 
         public bool CheckSign(Dictionary<string, string> dic, string sign)

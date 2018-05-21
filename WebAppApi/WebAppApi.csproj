@@ -192,6 +192,7 @@
     <Compile Include="Models\Cart\OperateParams.cs" />
     <Compile Include="Models\Coupon\GetListParams.cs" />
     <Compile Include="Models\Global\DataSetModel.cs" />
+    <Compile Include="Models\Order\PayResultNotifyParams.cs" />
     <Compile Include="Models\Resource\BannerModel.cs" />
     <Compile Include="Models\Resource\DetailsViewModelByBanner.cs" />
     <Compile Include="Models\BaseViewModel.cs" />

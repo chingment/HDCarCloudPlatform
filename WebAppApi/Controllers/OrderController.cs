@@ -1084,9 +1084,12 @@ namespace WebAppApi.Controllers
         }
 
         [HttpPost]
-        public APIResponse PayResultNotify(OrderPayResultNotifyByAppLog model)
+        public APIResponse PayResultNotify(PayResultNotifyParams pms)
         {
-            IResult result = BizFactory.Pay.ResultNotify(model.UserId, Enumeration.PayResultNotifyType.AppNotify, model);
+            var orderPayResultNotifyLog = new OrderPayResultNotifyLog();
+
+
+            IResult result = BizFactory.Pay.ResultNotify(pms.UserId, pms.OrderSn, pms.IsPaySuccess, Enumeration.PayResultNotifyType.AppNotify, "App");
 
             return new APIResponse(result);
         }

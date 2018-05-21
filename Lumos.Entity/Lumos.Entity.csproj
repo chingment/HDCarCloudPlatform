@@ -107,9 +107,6 @@
     <Compile Include="Biz\MerchantEstimateCompany.cs" />
     <Compile Include="Biz\MerchantPosMachineChangeHistory.cs" />
     <Compile Include="Biz\OrderChildDetails.cs" />
-    <Compile Include="Biz\OrderPayResultNotifyByAppLog.cs" />
-    <Compile Include="Biz\OrderPayResultNotifyByStaffLog.cs" />
-    <Compile Include="Biz\OrderPayResultNotifyByPartnerPayOrgLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
     <Compile Include="Biz\OrderPayTrans.cs" />
     <Compile Include="Biz\OrderChildProductSkuDetails.cs" />

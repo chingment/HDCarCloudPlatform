@@ -73,18 +73,9 @@ namespace Lumos.DAL
 
         public IDbSet<SalesmanApplyPosRecord> SalesmanApplyPosRecord { get; set; }
 
-
-        public IDbSet<OrderPayResultNotifyByPartnerPayOrgLog> OrderPayResultNotifyByPartnerPayOrgLog { get; set; }
-
-        public IDbSet<OrderPayResultNotifyByAppLog> OrderPayResultNotifyByAppLog { get; set; }
-
         public IDbSet<CarInsuranceExpireDate> CarInsuranceExpireDate { get; set; }
 
-
         public IDbSet<CarInsuranceExpireDateSearchHis> CarInsuranceExpireDateSearchHis { get; set; }
-
-        public IDbSet<OrderPayResultNotifyByStaffLog> OrderPayResultNotifyByStaffLog { get; set; }
-
 
         public IDbSet<SysItemCacheUpdateTime> SysItemCacheUpdateTime { get; set; }
 

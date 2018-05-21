@@ -131,188 +131,50 @@ namespace Lumos.BLL
         public CustomJsonResult ConfirmPayByStaff(int operater, int orderId)
         {
             CustomJsonResult result = new CustomJsonResult();
+            var order = CurrentDb.Order.Where(m => m.Id == orderId).FirstOrDefault();
 
-            OrderPayResultNotifyByStaffLog notifyLog = new OrderPayResultNotifyByStaffLog();
-            notifyLog.OrderId = orderId;
-            result = ResultNotify(operater, Enumeration.PayResultNotifyType.Staff, notifyLog);
+
+            result = ResultNotify(operater, order.Sn, true, Enumeration.PayResultNotifyType.Staff, "后台人员确定支付");
             return result;
         }
 
-        public CustomJsonResult ResultNotify(int operater, Enumeration.PayResultNotifyType notifyType, object model)
+        public CustomJsonResult ResultNotify(int operater, string orderSn, bool isPaySuccess, Enumeration.PayResultNotifyType notifyType, string notifyFromName, string notifyFromResult = null)
         {
             CustomJsonResult result = new CustomJsonResult();
+            var orderPayResultNotifyLog = new OrderPayResultNotifyLog();
             try
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    switch (notifyType)
-                    {
-                        case Enumeration.PayResultNotifyType.AppNotify:
-                            result = App_ResultNotify(operater, (OrderPayResultNotifyByAppLog)model);
-                            break;
-                        case Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi:
-                            result = PartnerPayOrg_ResultNotify(operater, (OrderPayResultNotifyByPartnerPayOrgLog)model);
-                            break;
-                        //case Enumeration.PayResultNotifyParty.MinShunOrderQueryApi:
-                        //    result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
-                        //    break;
-                        case Enumeration.PayResultNotifyType.Staff:
-                            result = Staff_ResultNotify(operater, (OrderPayResultNotifyByStaffLog)model);
-                            break;
-                    }
-
-                    CurrentDb.SaveChanges();
-                    ts.Complete();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorFormat("{0}订单号结果反馈发生异常,原因：{1}", notifyType.GetCnName(), ex.StackTrace);
-
-                result = new CustomJsonResult(ResultType.Exception, "支付失败");
-            }
-
-            return result;
-
-        }
-
-        private CustomJsonResult App_ResultNotify(int operater, OrderPayResultNotifyByAppLog receiveNotifyLog)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-
-            try
-            {
-                using (TransactionScope ts = new TransactionScope())
-                {
-                    var order = CurrentDb.Order.Where(m => m.Sn == receiveNotifyLog.OrderSn).FirstOrDefault();
-
-                    if (order == null)
-                    {
-                        if (!string.IsNullOrEmpty(receiveNotifyLog.Order))
-                        {
-                            receiveNotifyLog.Creator = 0;
-                            receiveNotifyLog.CreateTime = DateTime.Now;
-                            CurrentDb.OrderPayResultNotifyByAppLog.Add(receiveNotifyLog);
-                            CurrentDb.SaveChanges();
-                        }
-                        ts.Complete();
-
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应的订单号");
-                    }
-
-                    receiveNotifyLog.MerchantId = order.MerchantId;
-                    receiveNotifyLog.PosMachineId = order.PosMachineId;
-                    receiveNotifyLog.UserId = order.UserId;
-                    receiveNotifyLog.Creator = 0;
-                    receiveNotifyLog.CreateTime = DateTime.Now;
-                    switch (order.Type)
-                    {
-                        case Enumeration.OrderType.PosMachineServiceFee:
-                            result = PayServiceFeeCompleted(operater, order.Sn);
-                            break;
-                        case Enumeration.OrderType.LllegalQueryRecharge:
-                            result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
-                            break;
-                        case Enumeration.OrderType.LllegalDealt:
-                            result = PayLllegalDealtCompleted(operater, order.Sn);
-                            break;
-                    }
+                    var order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
 
 
-                    CurrentDb.OrderPayResultNotifyByAppLog.Add(receiveNotifyLog);
-                    CurrentDb.SaveChanges();
-
-                    ts.Complete();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorFormat("订单号({0})结果反馈发生异常，原因：{1}", receiveNotifyLog.OrderSn, ex.StackTrace);
-
-                result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付通知失败");
-            }
-
-            return result;
-        }
-
-        private CustomJsonResult PartnerPayOrg_ResultNotify(int operater, OrderPayResultNotifyByPartnerPayOrgLog receiveNotifyLog)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-
-            try
-            {
-                using (TransactionScope ts = new TransactionScope())
-                {
-
-                    string orderId = receiveNotifyLog.OrderId.Substring(0, receiveNotifyLog.OrderId.Length - 1);
-
-                    var order = CurrentDb.Order.Where(m => m.Sn == orderId).FirstOrDefault();
-
-                    if (order == null)
-                    {
-                        CurrentDb.OrderPayResultNotifyByPartnerPayOrgLog.Add(receiveNotifyLog);
-                        CurrentDb.SaveChanges();
-                        ts.Complete();
-                        return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应的订单号");
-                    }
-
-                    if (receiveNotifyLog.ResultCode == "00" || receiveNotifyLog.ResultCode == "T5")
-                    {
-                        switch (order.Type)
-                        {
-                            case Enumeration.OrderType.PosMachineServiceFee:
-                                result = PayServiceFeeCompleted(operater, order.Sn);
-                                break;
-                            case Enumeration.OrderType.LllegalQueryRecharge:
-                                result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
-                                break;
-                            case Enumeration.OrderType.LllegalDealt:
-                                result = PayLllegalDealtCompleted(operater, order.Sn);
-                                break;
-                        }
-                    }
-
-                    CurrentDb.OrderPayResultNotifyByPartnerPayOrgLog.Add(receiveNotifyLog);
-                    CurrentDb.SaveChanges();
-
-                    ts.Complete();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorFormat("订单号({0})结果反馈发生异常，原因：{1}", receiveNotifyLog.OrderId, ex.StackTrace);
-
-                result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付失败");
-            }
-
-            return result;
-        }
-
-        private CustomJsonResult Staff_ResultNotify(int operater, OrderPayResultNotifyByStaffLog notifyLog)
-        {
-            CustomJsonResult result = new CustomJsonResult();
-
-            try
-            {
-                using (TransactionScope ts = new TransactionScope())
-                {
-                    var order = CurrentDb.Order.Where(m => m.Id == notifyLog.OrderId).FirstOrDefault();
+                    orderPayResultNotifyLog.OrderSn = orderSn;
+                    orderPayResultNotifyLog.NotifyType = notifyType;
+                    orderPayResultNotifyLog.NotifyFromName = notifyFromName;
+                    orderPayResultNotifyLog.NotifyFromResult = notifyFromResult;
+                    orderPayResultNotifyLog.IsPaySuccess = isPaySuccess;
+                    orderPayResultNotifyLog.OperatorId = operater;
+                    orderPayResultNotifyLog.CreateTime = this.DateTime;
+                    orderPayResultNotifyLog.Creator = operater;
 
                     if (order == null)
                     {
                         Log.Warn("订单找不到");
-                        return new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "订单找不到");
+                        CurrentDb.OrderPayResultNotifyLog.Add(orderPayResultNotifyLog);
+                        CurrentDb.SaveChanges();
+                        ts.Complete();
+                        return new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "找不到对应的订单号");
                     }
 
-                    if (order != null)
-                    {
-                        notifyLog.Amount = order.Price;
-                        notifyLog.MerchantId = order.MerchantId;
-                        notifyLog.UserId = order.UserId;
-                        notifyLog.OrderSn = order.Sn;
-                        notifyLog.CreateTime = this.DateTime;
-                        notifyLog.Creator = operater;
+                    orderPayResultNotifyLog.UserId = order.UserId;
+                    orderPayResultNotifyLog.MerchantId = order.MerchantId;
+                    orderPayResultNotifyLog.PosMachineId = order.PosMachineId;
+                    orderPayResultNotifyLog.OrderId = order.Id;
 
+
+                    if (isPaySuccess)
+                    {
                         switch (order.Type)
                         {
                             case Enumeration.OrderType.PosMachineServiceFee:
@@ -330,14 +192,17 @@ namespace Lumos.BLL
                         }
 
 
+
                         if (result.Result == Lumos.Mvc.ResultType.Success)
                         {
-                            result.Data = notifyLog;
+                            result.Data = orderPayResultNotifyLog;
                         }
-
                     }
 
-                    CurrentDb.OrderPayResultNotifyByStaffLog.Add(notifyLog);
+
+
+
+                    CurrentDb.OrderPayResultNotifyLog.Add(orderPayResultNotifyLog);
                     CurrentDb.SaveChanges();
 
                     ts.Complete();
@@ -345,12 +210,13 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.ErrorFormat("后台订单支付确认订单号({0})结果反馈发生异常，原因：{1}", notifyLog.OrderSn, ex.InnerException);
+                Log.ErrorFormat("支付确认订单ID({0})结果反馈发生异常，原因：{1}", orderPayResultNotifyLog.OrderId, ex.InnerException);
 
                 result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付失败");
             }
 
             return result;
+
         }
 
         private CustomJsonResult PayServiceFeeCompleted(int operater, string orderSn)

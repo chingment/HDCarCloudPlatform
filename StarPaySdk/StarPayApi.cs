@@ -29,6 +29,17 @@ namespace StarPaySdk
             return serverurl + "/" + apiname;
         }
 
+        public string _result = "";
+
+
+        public string Result
+        {
+            get
+            {
+                return _result;
+            }
+        }
+
         public T DoPost<T>(IStarPayPostRequest<T> request) where T : StarPayBaseResult
         {
 
@@ -38,6 +49,9 @@ namespace StarPaySdk
             string postData = Newtonsoft.Json.JsonConvert.SerializeObject(request.PostData);
 
             string body = webUtils.DoPost(realServerUrl, null, postData, null);
+
+            _result = body;
+
             T rsp = JsonConvert.DeserializeObject<T>(body);
 
             if (rsp != null)

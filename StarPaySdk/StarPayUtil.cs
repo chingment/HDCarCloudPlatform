@@ -74,7 +74,7 @@ namespace StarPaySdk
             return result;
         }
 
-        public static SdkQryBarcodePayResult PayQuery(StarPayOrderInfo order)
+        public static SdkQryBarcodePayResult PayQuery(StarPayOrderInfo order, out string apiResult)
         {
             StarPayApi api = new StarPayApi(serverUrl, signkey);
             SortedDictionary<string, string> sParams = new SortedDictionary<string, string>();
@@ -94,6 +94,8 @@ namespace StarPaySdk
             SdkQryBarcodePayRequest rquest = new SdkQryBarcodePayRequest(sParams);
 
             var result = api.DoPost(rquest);
+
+            apiResult = api.Result;
 
             return result;
         }

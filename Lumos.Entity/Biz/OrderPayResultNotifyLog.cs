@@ -13,56 +13,17 @@ namespace Lumos.Entity
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        public int SysOrderId { get; set; }
-
-        [MaxLength(128)]
-        public string SysOrderSn { get; set; }
-
-        public string OrderNo { get; set; }
-
-        [MaxLength(128)]
-        public string MerchantId { get; set; }
-
-        [MaxLength(128)]
-        public string Amount { get; set; }
-
-        [MaxLength(128)]
-        public string TerminalId { get; set; }
-
-        [MaxLength(128)]
-        public string MerchantNo { get; set; }
-
-        [MaxLength(128)]
-        public string BatchNo { get; set; }
-
-        [MaxLength(128)]
-        public string MerchantName { get; set; }
-
-        [MaxLength(128)]
-        public string Issue { get; set; }
-
-        [MaxLength(128)]
-        public string TraceNo { get; set; }
-
-        [MaxLength(1024)]
-        public string FailureReason { get; set; }
-
-        [MaxLength(128)]
-        public string ReferenceNo { get; set; }
-
-        [MaxLength(128)]
-        public string Type { get; set; }
-
-        [MaxLength(128)]
-        public string Result { get; set; }
-
-        [MaxLength(128)]
-        public string CardNo { get; set; }
-
+        public int MerchantId { get; set; }
+        public int PosMachineId { get; set; }
+        public int UserId { get; set; }
+        public int OrderId { get; set; }
+        public string OrderSn { get; set; }
+        public bool IsPaySuccess { get; set; }
+        public Enumeration.PayResultNotifyType NotifyType { get; set; }
+        public string NotifyFromName { get; set; }
+        public string NotifyFromResult { get; set; }
+        public int OperatorId { get; set; }
         public int Creator { get; set; }
-
         public DateTime CreateTime { get; set; }
-
     }
 }

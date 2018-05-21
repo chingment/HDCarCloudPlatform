@@ -17,10 +17,12 @@ namespace Lumos.BLL
             CustomJsonResult result = new CustomJsonResult();
 
             var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).FirstOrDefault();
+
             if (order == null)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
             }
+
             if (order.Status == Enumeration.OrderStatus.Completed)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经支付成功");
@@ -31,36 +33,36 @@ namespace Lumos.BLL
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "不支持该支付方式");
             }
 
-            StarPayOrderInfo orderInfo = new StarPayOrderInfo();
+            StarPayOrderInfo starPayOrderInfo = new StarPayOrderInfo();
 
             order.PayWay = pms.PayWay;
             order.TermId = pms.TermId;
             order.SpbillIp = pms.SpbillIp;
-            order.Remarks = "";
+
 
             if (BizFactory.AppSettings.IsTest)
             {
-                orderInfo.Amount = "1";
+                starPayOrderInfo.Amount = "1";
             }
             else
             {
-                orderInfo.Amount = Convert.ToInt32((order.Price * 100)).ToString();
+                starPayOrderInfo.Amount = Convert.ToInt32((order.Price * 100)).ToString();
             }
 
-            orderInfo.TransTime = order.SubmitTime;
-            orderInfo.TermId = order.TermId;
-            orderInfo.OrderId = order.Sn;
+            starPayOrderInfo.TransTime = order.SubmitTime;
+            starPayOrderInfo.TermId = order.TermId;
+            starPayOrderInfo.OrderId = order.Sn;
 
             if (order.PayWay == Enumeration.OrderPayWay.Wechat)
             {
-                orderInfo.PayWay = "WXPAY";
+                starPayOrderInfo.PayWay = "WXPAY";
             }
             else if (order.PayWay == Enumeration.OrderPayWay.Alipay)
             {
-                orderInfo.PayWay = "ALIPAY";
+                starPayOrderInfo.PayWay = "ALIPAY";
             }
 
-            var codeDownload_result = StarPayUtil.CodeDownload(orderInfo);
+            var codeDownload_result = StarPayUtil.CodeDownload(starPayOrderInfo);
 
             if (string.IsNullOrEmpty(codeDownload_result.payCode))
             {
@@ -94,7 +96,6 @@ namespace Lumos.BLL
             var resultlog = new OrderPayResultNotifyByPartnerPayOrgLog();
             resultlog.OrderId = payQuery_result.orderNo;
             resultlog.Mercid = payQuery_result.mercId;
-            resultlog.Termid = starPayOrderInfo.TermId;
             resultlog.Amount = payQuery_result.amount;
             resultlog.TotalAmount = payQuery_result.total_amount;
             resultlog.ResultCode = payQuery_result.result;

@@ -15,7 +15,6 @@ namespace Lumos.Entity
         public int Id { get; set; }
         public string OrderId { get; set; }
         public string Mercid { get; set; }
-        public string Termid { get; set; }
         public string Amount { get; set; }
         public string TotalAmount { get; set; }
         public string PayType { get; set; }

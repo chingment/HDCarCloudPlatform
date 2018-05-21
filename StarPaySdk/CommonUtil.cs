@@ -20,6 +20,7 @@ namespace StarPaySdk
             }
             buff += key;
 
+
             System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
             System.Security.Cryptography.MD5 md5;
             byte[] bytesSrc;

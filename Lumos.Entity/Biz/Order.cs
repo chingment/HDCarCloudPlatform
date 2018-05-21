@@ -62,8 +62,6 @@ namespace Lumos.Entity
         public int? Mender { get; set; }
 
         public DateTime? LastUpdateTime { get; set; }
-
-
         [MaxLength(128)]
         public string Recipient { get; set; }
 
@@ -76,13 +74,8 @@ namespace Lumos.Entity
         [MaxLength(1024)]
         public string ClientRequire { get; set; }
 
-
         [MaxLength(128)]
         public string PriceVersion { get; set; }
-
-        public string TermId { get; set; }
-
-        public string SpbillIp { get; set; }
 
         public int? SalesmanId { get; set; }
 

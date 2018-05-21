@@ -18,8 +18,5 @@ namespace Lumos.Entity.AppApi
 
         public Enumeration.OrderPayWay PayWay { get; set; }
 
-        public string TermId { get; set; }
-
-        public string SpbillIp { get; set; }
     }
 }

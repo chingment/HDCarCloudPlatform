@@ -176,7 +176,7 @@ namespace WebAppApi.Controllers
             //int merchantId = 258;
             //int posMachineId = 153;
 
-            CarIns(userId, merchantId, posMachineId);
+            //CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
@@ -202,7 +202,7 @@ namespace WebAppApi.Controllers
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             // model.Add("登录接口", Login(userName, passWord, deviceId));
 
-            //model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Wechat));
+            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "18050313200000001517", Enumeration.OrderPayWay.Wechat));
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
             // model.Add("获取支付结果查询", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
@@ -1469,9 +1469,7 @@ namespace WebAppApi.Controllers
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;
             model1.OrderSn = ordersn;
-            model1.TermId = "90117998";
             model1.PayWay = payway;
-            model1.SpbillIp = "127.0.0.1";
 
             string a1 = JsonConvert.SerializeObject(model1);
 

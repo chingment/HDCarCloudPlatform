@@ -9,20 +9,23 @@ namespace StarPaySdk
 
     public class StarPayOrderInfo
     {
-        public string OrderId { get; set; }
+        public string OrderSn { get; set; }
         public string PayWay { get; set; }
         public string Amount { get; set; }
         public DateTime TransTime { get; set; }
-        public string TermId { get; set; }
     }
 
     public class StarPayUtil
     {
-        //public readonly static string mercid = "800290000000441";
-        //public readonly static string trmNo = "95006888";
-        //public readonly static string signkey = "Pz5meIuUxRKcF7rlvPglliyfwvC9vhjGcBy61WHM00Qfwz0E6yTTLwgxJsFYE9IQ";
+        //public readonly static string mercid = "800290000007906";
+        //public readonly static string trmNo = "XB006439";
+        //public readonly static string orgNo = "11658";
+        //public readonly static string signkey = "B1823ECCC7D7E4A2A1B06F57199C4276";
+        //public readonly static string serverUrl = "http://139.196.77.69:8280";
+
         public readonly static string mercid = "800581000010155";
         public readonly static string trmNo = "95234555";
+        public readonly static string orgNo = "719";
         public readonly static string signkey = "0319B673D3D851EFF2B35BE564AB7DC4";
         public readonly static string serverUrl = "http://gateway.starpos.com.cn";
 
@@ -33,19 +36,18 @@ namespace StarPaySdk
             SortedDictionary<string, string> sParams = new SortedDictionary<string, string>();
             sParams.Add("opSys", "3");
             sParams.Add("characterSet", "00");
-            sParams.Add("orgNo", "489");
+            sParams.Add("orgNo", orgNo);
             sParams.Add("mercId", mercid);
-            sParams.Add("trmNo", "95006888");
-            sParams.Add("tradeNo", "20170804103115431251");
-            sParams.Add("txnTime", "20170804103115");
+            sParams.Add("trmNo", trmNo);
+            sParams.Add("tradeNo", order.OrderSn);
+            sParams.Add("txnTime", order.TransTime.ToString("yyyyMMddHHmmss"));
             sParams.Add("signType", "MD5");
             sParams.Add("version", "V1.0.0");
 
 
-            sParams.Add("amount", "1");
-            sParams.Add("authCode", "130219205322723729");
-            sParams.Add("payChannel", "WXPAY");
-            sParams.Add("total_amount", "1");
+            sParams.Add("amount", order.Amount);
+            sParams.Add("payChannel", order.PayWay);
+            sParams.Add("total_amount", order.Amount);
 
 
             string sign = CommonUtil.MakeMd5Sign(sParams, signkey);
@@ -80,17 +82,19 @@ namespace StarPaySdk
             SortedDictionary<string, string> sParams = new SortedDictionary<string, string>();
             sParams.Add("opSys", "3");
             sParams.Add("characterSet", "00");
-            sParams.Add("orgNo", "489");
+            sParams.Add("orgNo", orgNo);
             sParams.Add("mercId", mercid);
-            sParams.Add("trmNo", "95006888");
-            sParams.Add("tradeNo", "20170804103115431251");
-            sParams.Add("txnTime", "20170804103115");
+            sParams.Add("trmNo", trmNo);
+            sParams.Add("tradeNo", order.OrderSn);
+            sParams.Add("txnTime", order.TransTime.ToString("yyyyMMddHHmmss"));
             sParams.Add("signType", "MD5");
             sParams.Add("version", "V1.0.0");
 
-            sParams.Add("qryNo ", "");
+            sParams.Add("qryNo ", order.OrderSn);
+
             string sign = CommonUtil.MakeMd5Sign(sParams, signkey);
             sParams.Add("signValue", sign);
+
             SdkQryBarcodePayRequest rquest = new SdkQryBarcodePayRequest(sParams);
 
             var result = api.DoPost(rquest);

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace Lumos.BLL
 {
+
+    //{"total_amount":"1","amount":"1","message":"%E4%BA%A4%E6%98%93%E6%88%90%E5%8A%9F","sysTime":"20180521174712","result":"S","returnCode":"000000","orderNo":"000000045449433","payCode":"weixin://wxpay/bizpayurl?pr=GTUPgPT","logNo":"201805210364066601","tradeNo":"18050313180000001511","mercId":"800581000010155","signValue":"66637916cd7d71de453510db7c25dabf"}
     public class StarPayProvider : BaseProvider
     {
         public CustomJsonResult QrCodeDownload(int operater, QrCodeDownloadParams pms)
@@ -36,8 +38,6 @@ namespace Lumos.BLL
             StarPayOrderInfo starPayOrderInfo = new StarPayOrderInfo();
 
             order.PayWay = pms.PayWay;
-            order.TermId = pms.TermId;
-            order.SpbillIp = pms.SpbillIp;
 
 
             if (BizFactory.AppSettings.IsTest)
@@ -50,8 +50,7 @@ namespace Lumos.BLL
             }
 
             starPayOrderInfo.TransTime = order.SubmitTime;
-            starPayOrderInfo.TermId = order.TermId;
-            starPayOrderInfo.OrderId = order.Sn;
+            starPayOrderInfo.OrderSn = order.Sn;
 
             if (order.PayWay == Enumeration.OrderPayWay.Wechat)
             {
@@ -85,6 +84,10 @@ namespace Lumos.BLL
         public void PayQuery(int operater, Order order)
         {
             var starPayOrderInfo = new StarPayOrderInfo();
+
+
+            starPayOrderInfo.OrderSn = order.Sn;
+            starPayOrderInfo.TransTime = order.SubmitTime;
 
             string notifyFromResult = null;
 

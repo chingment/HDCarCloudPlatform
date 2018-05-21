@@ -28,8 +28,6 @@ namespace Lumos.BLL
 
 
             order.PayWay = pms.PayWay;
-            order.TermId = pms.TermId;
-            order.SpbillIp = pms.SpbillIp;
             order.Remarks = "测试商品";
 
             MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
@@ -44,8 +42,7 @@ namespace Lumos.BLL
             }
 
             orderInfo.SubmitTime = order.SubmitTime;
-            orderInfo.TermId = order.TermId;
-            orderInfo.SpbillIp = order.SpbillIp;
+    
 
             if (order.PayWay == Enumeration.OrderPayWay.Wechat)
             {

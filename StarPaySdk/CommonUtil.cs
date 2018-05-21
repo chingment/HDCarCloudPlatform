@@ -19,7 +19,6 @@ namespace StarPaySdk
                 buff += pair.Value;
             }
             buff += key;
-            string str = string.Concat(buff.OrderBy(c => c));
 
             System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
             System.Security.Cryptography.MD5 md5;

@@ -627,14 +627,14 @@ namespace Lumos.Entity
             实习生派遣 = 14
         }
 
-        public enum PayResultNotifyParty
+        public enum PayResultNotifyType
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("民顺主动通知")]
-            MinShunNotifyUrl = 1,
-            [Remark("定时任务查询民顺接口")]
-            MinShunOrderQueryApi = 2,
+            [Remark("合作方支付接口主动通知")]
+            PartnerPayOrgNotifyUrl = 1,
+            [Remark("定时任务查询合作方支付接口")]
+            PartnerPayOrgOrderQueryApi = 2,
             [Remark("后台确认")]
             Staff = 3,
             [Remark("App主动通知")]

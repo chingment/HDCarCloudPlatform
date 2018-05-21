@@ -16,16 +16,16 @@ namespace Lumos.Entity
         public string OrderId { get; set; }
         public string Mercid { get; set; }
         public string Termid { get; set; }
-        public string Txnamt { get; set; }
+        public string Amount { get; set; }
+        public string TotalAmount { get; set; }
+        public string PayType { get; set; }
         public string ResultCode { get; set; }
         public string ResultCodeName { get; set; }
         public string ResultMsg { get; set; }
-        public string Sign { get; set; }
-        public string MwebUrl { get; set; }
+        public Enumeration.PayResultNotifyType NotifyType { get; set; }
+        public string PartnerPayOrgName { get; set; }
+        public string PartnerPayOrgResult { get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }
-        public Enumeration.PayResultNotifyParty NotifyParty { get; set; }
-        public string NotifyPartyName { get; set; }
-        public string ResultText{ get; set; }
-}
+    }
 }

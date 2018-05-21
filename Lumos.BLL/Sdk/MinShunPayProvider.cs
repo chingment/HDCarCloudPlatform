@@ -113,20 +113,20 @@ namespace Lumos.BLL
             }
             else
             {
-                receiveNotifyLog = new OrderPayResultNotifyByPartnerPayOrgLog();
-                receiveNotifyLog.OrderId = payQuery_result.ORDERID;
-                receiveNotifyLog.Mercid = payQuery_result.MERCID;
-                receiveNotifyLog.Termid = payQuery_result.TERMID;
-                receiveNotifyLog.Txnamt = payQuery_result.TXNAMT;
-                receiveNotifyLog.ResultCode = payQuery_result.RESULT_CODE;
-                receiveNotifyLog.ResultCodeName = GetResultCodeName(payQuery_result.RESULT_CODE);
-                receiveNotifyLog.ResultMsg = payQuery_result.RESULT_MSG;
-                receiveNotifyLog.Sign = payQuery_result.SIGN;
-                receiveNotifyLog.MwebUrl = payQuery_result.MWEB_URL;
-                receiveNotifyLog.NotifyParty = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi;
-                receiveNotifyLog.NotifyPartyName = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi.GetCnName();
-                receiveNotifyLog.Creator = 0;
-                receiveNotifyLog.CreateTime = DateTime.Now;
+                //receiveNotifyLog = new OrderPayResultNotifyByPartnerPayOrgLog();
+                //receiveNotifyLog.OrderId = payQuery_result.ORDERID;
+                //receiveNotifyLog.Mercid = payQuery_result.MERCID;
+                //receiveNotifyLog.Termid = payQuery_result.TERMID;
+                //receiveNotifyLog.Txnamt = payQuery_result.TXNAMT;
+                //receiveNotifyLog.ResultCode = payQuery_result.RESULT_CODE;
+                //receiveNotifyLog.ResultCodeName = GetResultCodeName(payQuery_result.RESULT_CODE);
+                //receiveNotifyLog.ResultMsg = payQuery_result.RESULT_MSG;
+                //receiveNotifyLog.Sign = payQuery_result.SIGN;
+                //receiveNotifyLog.MwebUrl = payQuery_result.MWEB_URL;
+                ////receiveNotifyLog.NotifyParty = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi;
+                ////receiveNotifyLog.NotifyPartyName = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi.GetCnName();
+                //receiveNotifyLog.Creator = 0;
+                //receiveNotifyLog.CreateTime = DateTime.Now;
             }
 
 

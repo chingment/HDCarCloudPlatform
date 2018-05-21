@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonUtil.cs" />
+    <Compile Include="Post\SdkQryBarcodePayRequest.cs" />
+    <Compile Include="Post\SdkQryBarcodePayResult.cs" />
     <Compile Include="StarPayUtil.cs" />
     <Compile Include="StarPayBaseParams.cs" />
     <Compile Include="StarPayBaseResult.cs" />

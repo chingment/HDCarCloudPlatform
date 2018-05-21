@@ -1086,7 +1086,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse PayResultNotify(OrderPayResultNotifyByAppLog model)
         {
-            IResult result = BizFactory.Pay.ResultNotify(model.UserId, Enumeration.PayResultNotifyParty.AppNotify, model);
+            IResult result = BizFactory.Pay.ResultNotify(model.UserId, Enumeration.PayResultNotifyType.AppNotify, model);
 
             return new APIResponse(result);
         }

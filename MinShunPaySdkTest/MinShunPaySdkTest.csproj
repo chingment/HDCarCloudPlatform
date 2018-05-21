@@ -55,6 +55,10 @@
       <Project>{241bdf50-401f-44bf-81cd-acc2ffc3a952}</Project>
       <Name>Lumos.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MinShunPaySdk\MinShunPaySdk.csproj">
+      <Project>{d778290c-5be8-44cb-bd84-f76d270a5152}</Project>
+      <Name>MinShunPaySdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

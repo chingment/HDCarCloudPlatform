@@ -134,29 +134,29 @@ namespace Lumos.BLL
 
             OrderPayResultNotifyByStaffLog notifyLog = new OrderPayResultNotifyByStaffLog();
             notifyLog.OrderId = orderId;
-            result = ResultNotify(operater, Enumeration.PayResultNotifyParty.Staff, notifyLog);
+            result = ResultNotify(operater, Enumeration.PayResultNotifyType.Staff, notifyLog);
             return result;
         }
 
-        public CustomJsonResult ResultNotify(int operater, Enumeration.PayResultNotifyParty notifyParty, object model)
+        public CustomJsonResult ResultNotify(int operater, Enumeration.PayResultNotifyType notifyType, object model)
         {
             CustomJsonResult result = new CustomJsonResult();
             try
             {
                 using (TransactionScope ts = new TransactionScope())
                 {
-                    switch (notifyParty)
+                    switch (notifyType)
                     {
-                        case Enumeration.PayResultNotifyParty.AppNotify:
+                        case Enumeration.PayResultNotifyType.AppNotify:
                             result = App_ResultNotify(operater, (OrderPayResultNotifyByAppLog)model);
                             break;
-                        //case Enumeration.PayResultNotifyParty.MinShunNotifyUrl:
-                        //    result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
-                        //    break;
+                        case Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi:
+                            result = PartnerPayOrg_ResultNotify(operater, (OrderPayResultNotifyByPartnerPayOrgLog)model);
+                            break;
                         //case Enumeration.PayResultNotifyParty.MinShunOrderQueryApi:
                         //    result = MinShun_ResultNotify(operater, (OrderPayResultNotifyByMinShunLog)model);
                         //    break;
-                        case Enumeration.PayResultNotifyParty.Staff:
+                        case Enumeration.PayResultNotifyType.Staff:
                             result = Staff_ResultNotify(operater, (OrderPayResultNotifyByStaffLog)model);
                             break;
                     }
@@ -167,7 +167,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.ErrorFormat("{0}订单号结果反馈发生异常,原因：{1}", notifyParty.GetCnName(), ex.StackTrace);
+                Log.ErrorFormat("{0}订单号结果反馈发生异常,原因：{1}", notifyType.GetCnName(), ex.StackTrace);
 
                 result = new CustomJsonResult(ResultType.Exception, "支付失败");
             }
@@ -235,8 +235,7 @@ namespace Lumos.BLL
             return result;
         }
 
-
-        private CustomJsonResult MinShun_ResultNotify(int operater, OrderPayResultNotifyByPartnerPayOrgLog receiveNotifyLog)
+        private CustomJsonResult PartnerPayOrg_ResultNotify(int operater, OrderPayResultNotifyByPartnerPayOrgLog receiveNotifyLog)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -264,6 +263,12 @@ namespace Lumos.BLL
                             case Enumeration.OrderType.PosMachineServiceFee:
                                 result = PayServiceFeeCompleted(operater, order.Sn);
                                 break;
+                            case Enumeration.OrderType.LllegalQueryRecharge:
+                                result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
+                                break;
+                            case Enumeration.OrderType.LllegalDealt:
+                                result = PayLllegalDealtCompleted(operater, order.Sn);
+                                break;
                         }
                     }
 
@@ -282,7 +287,6 @@ namespace Lumos.BLL
 
             return result;
         }
-
 
         private CustomJsonResult Staff_ResultNotify(int operater, OrderPayResultNotifyByStaffLog notifyLog)
         {

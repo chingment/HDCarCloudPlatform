@@ -1,6 +1,7 @@
 ﻿using Lumos.Entity;
 using Lumos.Entity.AppApi;
 using Lumos.Mvc;
+using StarPaySdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,104 +26,116 @@ namespace Lumos.BLL
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经支付成功");
             }
 
+            if (pms.PayWay != Enumeration.OrderPayWay.Wechat || pms.PayWay == Enumeration.OrderPayWay.Alipay)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "不支持该支付方式");
+            }
 
-            //order.PayWay = pms.PayWay;
-            //order.TermId = pms.TermId;
-            //order.SpbillIp = pms.SpbillIp;
-            //order.Remarks = "测试商品";
+            StarPayOrderInfo orderInfo = new StarPayOrderInfo();
 
-            //MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
+            order.PayWay = pms.PayWay;
+            order.TermId = pms.TermId;
+            order.SpbillIp = pms.SpbillIp;
+            order.Remarks = "";
 
-            //orderInfo.Price = 0.01m;
-            //orderInfo.Remark = "测试商品";
-            //orderInfo.SubmitTime = order.SubmitTime;
-            //orderInfo.TermId = order.TermId;
-            //orderInfo.SpbillIp = order.SpbillIp;
+            if (BizFactory.AppSettings.IsTest)
+            {
+                orderInfo.Amount = "1";
+            }
+            else
+            {
+                orderInfo.Amount = Convert.ToInt32((order.Price * 100)).ToString();
+            }
 
-            //if (order.PayWay == Enumeration.OrderPayWay.Wechat)
-            //{
-            //    orderInfo.TranType = "180000";
-            //    orderInfo.OrderId = order.TradeSnByWechat;
-            //}
-            //else if (order.PayWay == Enumeration.OrderPayWay.Alipay)
-            //{
-            //    orderInfo.TranType = "280000";
-            //    orderInfo.OrderId = order.TradeSnByAlipay;
-            //}
-            //else
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "不支持该支付方式");
-            //}
+            orderInfo.TransTime = order.SubmitTime;
+            orderInfo.TermId = order.TermId;
+            orderInfo.OrderId = order.Sn;
 
-            //var codeDownload_result = MinShunPayUtil.CodeDownload(orderInfo);
-            //if (string.IsNullOrEmpty(codeDownload_result.MWEB_URL))
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成支付二维码失败");
-            //}
+            if (order.PayWay == Enumeration.OrderPayWay.Wechat)
+            {
+                orderInfo.PayWay = "WXPAY";
+            }
+            else if (order.PayWay == Enumeration.OrderPayWay.Alipay)
+            {
+                orderInfo.PayWay = "ALIPAY";
+            }
 
+            var codeDownload_result = StarPayUtil.CodeDownload(orderInfo);
 
-            //QrCodeDownloadResult resultData = new QrCodeDownloadResult();
-            //resultData.OrderSn = order.Sn;
-            //resultData.MwebUrl = codeDownload_result.MWEB_URL;
-            //resultData.PayWay = order.PayWay;
+            if (string.IsNullOrEmpty(codeDownload_result.payCode))
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成支付二维码失败");
+            }
 
-            //CurrentDb.SaveChanges();
+            CurrentDb.SaveChanges();
 
-            //result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
+            QrCodeDownloadResult resultData = new QrCodeDownloadResult();
+            resultData.OrderSn = order.Sn;
+            resultData.MwebUrl = codeDownload_result.payCode;
+            resultData.PayWay = order.PayWay;
+
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
 
             return null;
         }
 
 
-        public OrderPayResultNotifyByPartnerPayOrgLog PayQuery(int operater, Order pms)
+        public void PayQuery(int operater, Order pms)
         {
+            var starPayOrderInfo = new StarPayOrderInfo();
 
-            //MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
+            var payQuery_result = StarPayUtil.PayQuery(starPayOrderInfo);
 
-            //orderInfo.Price = 0.01m;
-            //orderInfo.Remark = pms.Remarks;
-            //orderInfo.SubmitTime = pms.SubmitTime;
-            //orderInfo.TermId = pms.TermId;
-            //orderInfo.SpbillIp = pms.SpbillIp;
+            if (payQuery_result == null)
+            {
+                return;
+            }
 
-            //if (pms.PayWay == Enumeration.OrderPayWay.Wechat)
-            //{
-            //    orderInfo.TranType = "180020";
-            //    orderInfo.OrderId = pms.TradeSnByWechat;
-            //}
-            //else if (pms.PayWay == Enumeration.OrderPayWay.Alipay)
-            //{
-            //    orderInfo.TranType = "280020";
-            //    orderInfo.OrderId = pms.TradeSnByAlipay;
-            //}
+            var resultlog = new OrderPayResultNotifyByPartnerPayOrgLog();
+            resultlog.OrderId = payQuery_result.orderNo;
+            resultlog.Mercid = payQuery_result.mercId;
+            resultlog.Termid = starPayOrderInfo.TermId;
+            resultlog.Amount = payQuery_result.amount;
+            resultlog.TotalAmount = payQuery_result.total_amount;
+            resultlog.ResultCode = payQuery_result.result;
+            resultlog.ResultCodeName = GetResultCodeName(payQuery_result.result);
+            resultlog.ResultMsg = payQuery_result.message;
+            resultlog.NotifyType = Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi;
+            resultlog.PartnerPayOrgName = "星大陆";
+            resultlog.PartnerPayOrgResult = "";
+            resultlog.Creator = 0;
+            resultlog.CreateTime = DateTime.Now;
+            CurrentDb.OrderPayResultNotifyByPartnerPayOrgLog.Add(resultlog);
+            CurrentDb.SaveChanges();
 
-            //OrderPayResultNotifyByMinShunLog receiveNotifyLog = null;
+            if (payQuery_result.result == "S")
+            {
+                BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, resultlog);
+            }
+        }
 
-            //var payQuery_result = MinShunPayUtil.PayQuery(orderInfo);
-            //if (payQuery_result == null)
-            //{
-
-            //}
-            //else
-            //{
-            //    receiveNotifyLog = new OrderPayResultNotifyByMinShunLog();
-            //    receiveNotifyLog.OrderId = payQuery_result.ORDERID;
-            //    receiveNotifyLog.Mercid = payQuery_result.MERCID;
-            //    receiveNotifyLog.Termid = payQuery_result.TERMID;
-            //    receiveNotifyLog.Txnamt = payQuery_result.TXNAMT;
-            //    receiveNotifyLog.ResultCode = payQuery_result.RESULT_CODE;
-            //    receiveNotifyLog.ResultCodeName = GetResultCodeName(payQuery_result.RESULT_CODE);
-            //    receiveNotifyLog.ResultMsg = payQuery_result.RESULT_MSG;
-            //    receiveNotifyLog.Sign = payQuery_result.SIGN;
-            //    receiveNotifyLog.MwebUrl = payQuery_result.MWEB_URL;
-            //    receiveNotifyLog.NotifyParty = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi;
-            //    receiveNotifyLog.NotifyPartyName = Enumeration.PayResultNotifyParty.MinShunOrderQueryApi.GetCnName();
-            //    receiveNotifyLog.Creator = 0;
-            //    receiveNotifyLog.CreateTime = DateTime.Now;
-            //}
-
-
-            return null;
+        public string GetResultCodeName(string resultcode)
+        {
+            string name = "未知状态";
+            switch (resultcode)
+            {
+                case "S":
+                    name = "交易成功";
+                    break;
+                case "F":
+                    name = "交易失败";
+                    break;
+                case "A":
+                    name = "等待授权";
+                    break;
+                case "Z":
+                    name = "交易未知";
+                    break;
+                case "D":
+                    name = "订单已撤销 ";
+                    break;
+            }
+            return name;
         }
     }
 }

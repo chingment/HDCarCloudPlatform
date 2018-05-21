@@ -46,20 +46,7 @@ namespace Lumos.BLL.Biz.Task
 
                         break;
                     case Enumeration.OrderType.PosMachineServiceFee:
-
-                        var receiveNotifyLog = SdkFactory.StarPay.PayQuery(0, order);
-
-                        if (receiveNotifyLog == null)
-                        {
-                            Log.WarnFormat("订单编号:{0}，查询不到支付记录", order.Sn);
-                        }
-                        else
-                        {
-                            BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunOrderQueryApi, receiveNotifyLog);
-                        }
-
-
-
+                        SdkFactory.StarPay.PayQuery(0, order);
                         break;
                 }
 

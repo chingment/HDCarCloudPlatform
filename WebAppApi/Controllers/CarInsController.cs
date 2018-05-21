@@ -145,7 +145,7 @@ namespace WebAppApi.Controllers
                 carInfo.ChgownerType = insCarInfo.ChgownerType;
 
 
-                carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "1", Name = insCarInfo.CarowneName, Mobile = insCarInfo.CarowneMobile, Address = insCarInfo.CarowneAddress, CertNo = insCarInfo.CarowneCertNo, IdentityBackPicKey = insCarInfo.CarowneIdentityBackPicKey, IdentityFacePicKey = insCarInfo.CarowneIdentityFacePicKey, OrgPicKey = insCarInfo.CarowneOrgPicKey });
+                carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "1", Name = insCarInfo.CarownerName, Mobile = insCarInfo.CarownerMobile, Address = insCarInfo.CarownerAddress, CertNo = insCarInfo.CarownerCertNo, IdentityBackPicKey = insCarInfo.CarownerIdentityBackPicKey, IdentityFacePicKey = insCarInfo.CarownerIdentityFacePicKey, OrgPicKey = insCarInfo.CarownerOrgPicKey });
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "2", Name = insCarInfo.PolicyholderName, Mobile = insCarInfo.PolicyholderMobile, Address = insCarInfo.PolicyholderAddress, CertNo = insCarInfo.PolicyholderCertNo, IdentityBackPicKey = insCarInfo.PolicyholderIdentityBackPicKey, IdentityFacePicKey = insCarInfo.PolicyholderIdentityFacePicKey, OrgPicKey = insCarInfo.PolicyholderOrgPicKey });
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = insCarInfo.InsuredName, Mobile = insCarInfo.InsuredMobile, Address = insCarInfo.InsuredAddress, CertNo = insCarInfo.InsuredCertNo, IdentityBackPicKey = insCarInfo.InsuredIdentityBackPicKey, IdentityFacePicKey = insCarInfo.InsuredIdentityFacePicKey, OrgPicKey = insCarInfo.InsuredOrgPicKey });
             }
@@ -359,11 +359,9 @@ namespace WebAppApi.Controllers
             #endregion
 
 
-            BizFactory.InsCar.UpdateCarInfo(0, pms.Car, pms.Customers);
-
+            //BizFactory.InsCar.UpdateCarInfo(0, pms.Car, pms.Customers);
 
             IResult<string> result = YdtUtils.EditBaseInfo(baseInfoModel);
-
 
             if (result.Result == ResultType.Success)
             {
@@ -371,8 +369,8 @@ namespace WebAppApi.Controllers
                 editBaseInfoResult.OrderSeq = result.Data.ToString();
                 editBaseInfoResult.Car = pms.Car;
                 editBaseInfoResult.Customers = pms.Customers;
+                editBaseInfoResult.CarInfoOrderId = BizFactory.InsCar.UpdateCarInfoOrder(pms.UserId, pms.UserId, editBaseInfoResult.OrderSeq, editBaseInfoResult.Car, editBaseInfoResult.Customers);
 
-                BizFactory.InsCar.UpdateOrder(pms.UserId, pms.UserId, pms.MerchantId, pms.PosMachineId, editBaseInfoResult.OrderSeq, editBaseInfoResult.Car, editBaseInfoResult.Customers);
 
                 return ResponseResult(ResultType.Success, ResultCode.Success, result.Message, editBaseInfoResult);
             }
@@ -501,6 +499,7 @@ namespace WebAppApi.Controllers
             updateOrderOfferPms.UserId = pms.UserId;
             updateOrderOfferPms.MerchantId = pms.MerchantId;
             updateOrderOfferPms.PosMachineId = pms.PosMachineId;
+            updateOrderOfferPms.CarInfoOrderId = pms.CarInfoOrderId;
             updateOrderOfferPms.PartnerOrderId = pms.OrderSeq;
             updateOrderOfferPms.PartnerChannelId = pms.ChannelId;
             updateOrderOfferPms.PartnerCompanyId = pms.CompanyCode;

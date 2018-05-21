@@ -65,39 +65,37 @@ namespace Lumos.BLL
         {
             CustomJsonResult result = new CustomJsonResult();
 
+            var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).FirstOrDefault();
+
+            if (order == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
+            }
+
+            PayQueryResult resultData = new PayQueryResult();
+
+            resultData.OrderSn = order.Sn;
+            resultData.OrderType = order.Type;
+            resultData.Status = (int)order.Status;
+            resultData.Remarks = order.Status.GetCnName();
 
 
-            //var order = CurrentDb.Order.Where(m => m.UserId == pms.UserId && m.Sn == pms.OrderSn).FirstOrDefault();
+            PrintDataModel printData = new PrintDataModel();
 
-            //if (order == null)
-            //{
-            //    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
-            //}
+            printData.MerchantName = "好易联";
+            printData.MerchantCode = "354422";
+            printData.OrderType = order.TypeName;
+            printData.TradeType = "消费";
+            printData.TradeNo = order.Sn;
+            printData.TradePayMethod = order.PayWay.GetCnName();
+            printData.TradeAmount = order.Price.ToF2Price();
+            printData.TradeDateTime = order.PayTime.ToUnifiedFormatDateTime();
+            printData.ServiceHotline = "4400000000";
 
-            //PayQueryResult resultData = new PayQueryResult();
-
-            //resultData.OrderSn = order.Sn;
-            //resultData.ProductType = order.ProductType;
-            //resultData.Status = (int)order.Status;
-            //resultData.Remarks = order.Status.GetCnName();
-
-
-            //PrintDataModel printData = new PrintDataModel();
-
-            //printData.MerchantName = "好易联";
-            //printData.MerchantCode = "354422";
-            //printData.ProductName = order.ProductName;
-            //printData.TradeType = "消费";
-            //printData.TradeNo = order.Sn;
-            //printData.TradePayMethod = order.PayWay.GetCnName();
-            //printData.TradeAmount = order.Price.ToF2Price();
-            //printData.TradeDateTime = order.PayTime.ToUnifiedFormatDateTime();
-            //printData.ServiceHotline = "4400000000";
-
-            //resultData.PrintData = printData;
+            resultData.PrintData = printData;
 
 
-            //result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
+            result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
 
             return result;
         }
@@ -238,7 +236,7 @@ namespace Lumos.BLL
         }
 
 
-        private CustomJsonResult MinShun_ResultNotify(int operater, OrderPayResultNotifyByMinShunLog receiveNotifyLog)
+        private CustomJsonResult MinShun_ResultNotify(int operater, OrderPayResultNotifyByPartnerPayOrgLog receiveNotifyLog)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -253,7 +251,7 @@ namespace Lumos.BLL
 
                     if (order == null)
                     {
-                        CurrentDb.OrderPayResultNotifyByMinShunLog.Add(receiveNotifyLog);
+                        CurrentDb.OrderPayResultNotifyByPartnerPayOrgLog.Add(receiveNotifyLog);
                         CurrentDb.SaveChanges();
                         ts.Complete();
                         return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到对应的订单号");
@@ -269,7 +267,7 @@ namespace Lumos.BLL
                         }
                     }
 
-                    CurrentDb.OrderPayResultNotifyByMinShunLog.Add(receiveNotifyLog);
+                    CurrentDb.OrderPayResultNotifyByPartnerPayOrgLog.Add(receiveNotifyLog);
                     CurrentDb.SaveChanges();
 
                     ts.Complete();
@@ -460,7 +458,7 @@ namespace Lumos.BLL
 
                     posMachine.IsUse = true;
 
-                    if (merchant.Id != 258 && merchant.Id != 265 && merchant.Id!=266)
+                    if (merchant.Id != 258 && merchant.Id != 265 && merchant.Id != 266)
                     {
                         BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, orderToServiceFee.UserId, orderToServiceFee.MerchantId, orderToServiceFee.MerchantId, Enumeration.MerchantAuditStatus.WaitPrimaryAudit);
                     }

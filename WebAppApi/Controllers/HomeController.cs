@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
+        private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        private string host = "http://120.79.233.231";
+        // private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -1835,7 +1835,8 @@ namespace WebAppApi.Controllers
 
             if (s3.Result == ResultType.Success)
             {
-                model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, "ac9d0a28-2c55-49a3-bb0e-81029eddb23a"));
+                //"ac9d0a28-2c55-49a3-bb0e-81029eddb23a"
+                model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.CarInfoOrderId, s3.Data.OrderSeq));
 
             }
         }
@@ -1974,13 +1975,14 @@ namespace WebAppApi.Controllers
         }
 
 
-        public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, string orderSeq)
+        public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, int carInfoOrderId, string orderSeq)
         {
             CarInsInquiryPms model = new CarInsInquiryPms();
-            model.Auto = 0;
+            model.Auto = 1;
             model.UserId = userId;
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
+            model.CarInfoOrderId = carInfoOrderId;
             model.OrderSeq = orderSeq;
             model.BiStartDate = "2018-05-20";
             model.CiStartDate = "2018-05-20";

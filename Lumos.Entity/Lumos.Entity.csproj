@@ -98,6 +98,7 @@
     <Compile Include="Biz\ExtendedAppAccessLog.cs" />
     <Compile Include="Biz\Fund.cs" />
     <Compile Include="Biz\InsCarInfo.cs" />
+    <Compile Include="Biz\InsCarInfoOrder.cs" />
     <Compile Include="Biz\Inventory.cs" />
     <Compile Include="Biz\InventoryOperateHis.cs" />
     <Compile Include="Biz\LllegalQueryLog.cs" />
@@ -107,8 +108,8 @@
     <Compile Include="Biz\MerchantPosMachineChangeHistory.cs" />
     <Compile Include="Biz\OrderChildDetails.cs" />
     <Compile Include="Biz\OrderPayResultNotifyByAppLog.cs" />
-    <Compile Include="Biz\OrderPayResultNotifyByMinShunLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyByStaffLog.cs" />
+    <Compile Include="Biz\OrderPayResultNotifyByPartnerPayOrgLog.cs" />
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
     <Compile Include="Biz\OrderPayTrans.cs" />
     <Compile Include="Biz\OrderChildProductSkuDetails.cs" />

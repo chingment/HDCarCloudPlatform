@@ -12,6 +12,7 @@ namespace Lumos.Entity
     [Table("OrderToCarInsure")]
     public class OrderToCarInsure : Order
     {
+        public int CarInfoOrderId { get; set; }
         public string CarBelong { get; set; }
         [MaxLength(128)]
         public string CarType { get; set; }

@@ -47,7 +47,7 @@ namespace Lumos.BLL.Biz.Task
                         break;
                     case Enumeration.OrderType.PosMachineServiceFee:
 
-                        var receiveNotifyLog = SdkFactory.MinShunPay.PayQuery(0, order);
+                        var receiveNotifyLog = SdkFactory.StarPay.PayQuery(0, order);
 
                         if (receiveNotifyLog == null)
                         {

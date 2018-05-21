@@ -34,8 +34,15 @@ namespace Lumos.BLL
 
             MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
 
-            orderInfo.Price = 0.01m;
-            orderInfo.Remark = "测试商品";
+            if (BizFactory.AppSettings.IsTest)
+            {
+                orderInfo.Price = 0.01m;
+            }
+            else
+            {
+                orderInfo.Price = order.Price;
+            }
+
             orderInfo.SubmitTime = order.SubmitTime;
             orderInfo.TermId = order.TermId;
             orderInfo.SpbillIp = order.SpbillIp;
@@ -75,7 +82,7 @@ namespace Lumos.BLL
         }
 
 
-        public OrderPayResultNotifyByMinShunLog PayQuery(int operater, Order pms)
+        public OrderPayResultNotifyByPartnerPayOrgLog PayQuery(int operater, Order pms)
         {
 
             MinShunPayOrderInfo orderInfo = new MinShunPayOrderInfo();
@@ -97,7 +104,7 @@ namespace Lumos.BLL
                 orderInfo.OrderId = pms.TradeSnByAlipay;
             }
 
-            OrderPayResultNotifyByMinShunLog receiveNotifyLog = null;
+            OrderPayResultNotifyByPartnerPayOrgLog receiveNotifyLog = null;
 
             var payQuery_result = MinShunPayUtil.PayQuery(orderInfo);
             if (payQuery_result == null)
@@ -106,7 +113,7 @@ namespace Lumos.BLL
             }
             else
             {
-                receiveNotifyLog = new OrderPayResultNotifyByMinShunLog();
+                receiveNotifyLog = new OrderPayResultNotifyByPartnerPayOrgLog();
                 receiveNotifyLog.OrderId = payQuery_result.ORDERID;
                 receiveNotifyLog.Mercid = payQuery_result.MERCID;
                 receiveNotifyLog.Termid = payQuery_result.TERMID;

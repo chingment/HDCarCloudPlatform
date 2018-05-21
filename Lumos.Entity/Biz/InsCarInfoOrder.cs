@@ -7,14 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 
+
 namespace Lumos.Entity
 {
-    [Table("InsCarInfo")]
-    public class InsCarInfo
+    [Table("InsCarInfoOrder")]
+    public class InsCarInfoOrder
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public int UserId { get; set; }
         [MaxLength(128)]
+        public string PartnerOrderId { get; set; }
         public string Belong { get; set; }
         [MaxLength(128)]
         public string CarType { get; set; }
@@ -104,6 +107,7 @@ namespace Lumos.Entity
         public DateTime CreateTime { get; set; }
         public int? Mender { get; set; }
         public DateTime? LastUpdateTime { get; set; }
+
 
     }
 }

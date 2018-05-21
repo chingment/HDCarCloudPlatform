@@ -109,6 +109,7 @@
     <Compile Include="Sdk\HeLianProvider.cs" />
     <Compile Include="Sdk\MinShunPayProvider.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
+    <Compile Include="Sdk\StarPayProvider.cs" />
     <Compile Include="Service\CartService.cs" />
     <Compile Include="Service\CouponService.cs" />
     <Compile Include="Service\IndexService.cs" />

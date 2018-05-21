@@ -1079,7 +1079,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse QrCodeDownload(QrCodeDownloadParams pms)
         {
-            IResult result = SdkFactory.MinShunPay.QrCodeDownload(pms.UserId, pms);
+            IResult result = SdkFactory.StarPay.QrCodeDownload(pms.UserId, pms);
             return new APIResponse(result);
         }
 
@@ -1092,25 +1092,25 @@ namespace WebAppApi.Controllers
         }
 
 
-        [HttpPost]
-        public APIResponse GetPayTranSn(GetPayTranSnParams pms)
-        {
-            var orderPayTrans = new OrderPayTrans();
+        //[HttpPost]
+        //public APIResponse GetPayTranSn(GetPayTranSnParams pms)
+        //{
+        //    var orderPayTrans = new OrderPayTrans();
 
-            orderPayTrans.UserId = pms.UserId;
-            orderPayTrans.MerchantId = pms.MerchantId;
-            orderPayTrans.PosMachineId = pms.PosMachineId;
-            orderPayTrans.OrderId = pms.OrderId;
-            orderPayTrans.OrderSn = pms.OrderSn;
-            orderPayTrans.TransType = pms.TransType;
-            orderPayTrans.CreateTime = DateTime.Now;
-            orderPayTrans.Creator = pms.UserId;
+        //    orderPayTrans.UserId = pms.UserId;
+        //    orderPayTrans.MerchantId = pms.MerchantId;
+        //    orderPayTrans.PosMachineId = pms.PosMachineId;
+        //    orderPayTrans.OrderId = pms.OrderId;
+        //    orderPayTrans.OrderSn = pms.OrderSn;
+        //    orderPayTrans.TransType = pms.TransType;
+        //    orderPayTrans.CreateTime = DateTime.Now;
+        //    orderPayTrans.Creator = pms.UserId;
 
-            IResult result = BizFactory.Order.GetPayTranSn(pms.UserId, orderPayTrans);
+        //    IResult result = BizFactory.Order.GetPayTranSn(pms.UserId, orderPayTrans);
 
-            return new APIResponse(result);
+        //    return new APIResponse(result);
 
-        }
+        //}
 
         public APIResponse Confirm(OrderConfirmModel pms)
         {

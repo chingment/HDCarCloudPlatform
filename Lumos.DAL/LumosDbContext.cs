@@ -74,7 +74,7 @@ namespace Lumos.DAL
         public IDbSet<SalesmanApplyPosRecord> SalesmanApplyPosRecord { get; set; }
 
 
-        public IDbSet<OrderPayResultNotifyByMinShunLog> OrderPayResultNotifyByMinShunLog { get; set; }
+        public IDbSet<OrderPayResultNotifyByPartnerPayOrgLog> OrderPayResultNotifyByPartnerPayOrgLog { get; set; }
 
         public IDbSet<OrderPayResultNotifyByAppLog> OrderPayResultNotifyByAppLog { get; set; }
 
@@ -86,7 +86,7 @@ namespace Lumos.DAL
         public IDbSet<OrderPayResultNotifyByStaffLog> OrderPayResultNotifyByStaffLog { get; set; }
 
 
-        public IDbSet<SysItemCacheUpdateTime>  SysItemCacheUpdateTime { get; set; }
+        public IDbSet<SysItemCacheUpdateTime> SysItemCacheUpdateTime { get; set; }
 
         public IDbSet<LllegalQueryScore> LllegalQueryScore { get; set; }
         public IDbSet<LllegalQueryScoreTrans> LllegalQueryScoreTrans { get; set; }
@@ -126,6 +126,7 @@ namespace Lumos.DAL
 
         public IDbSet<OrderToCarInsureOfferCompanyKind> OrderToCarInsureOfferCompanyKind { get; set; }
 
+        public IDbSet<InsCarInfoOrder> InsCarInfoOrder { get; set; }
 
         //public FxDbContext()
         //    : base("DefaultConnection")
@@ -225,7 +226,7 @@ namespace Lumos.DAL
             context.SysMenuPermission.Add(new SysMenuPermission() { MenuId = 4, PermissionId = PermissionCode.角色管理 });
             context.SysMenuPermission.Add(new SysMenuPermission() { MenuId = 5, PermissionId = PermissionCode.后台用户管理 });
             context.SysMenuPermission.Add(new SysMenuPermission() { MenuId = 6, PermissionId = PermissionCode.所有用户管理 });
- 
+
 
 
             //context.Student.Add(new Student() { Name = "邱庆文", UserId = 1, Sex = Enumeration.Sex.Male, AdmissionDate = DateTime.Now, GraduateDate = DateTime.Now, IsGraduate = Enumeration.YesOrNo.Yes, CreateTime = DateTime.Now, Creator = 0 });

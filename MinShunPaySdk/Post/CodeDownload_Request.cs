@@ -55,6 +55,5 @@ namespace MinShunPaySdk
                 return "posm/mspay_scanPay.tran2";
             }
         }
-
     }
 }

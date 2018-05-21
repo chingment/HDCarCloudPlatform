@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CB92E78D-6488-430F-B9D2-06617942BC5A}</ProjectGuid>
+    <ProjectGuid>{81D40307-5E23-431C-9859-6055B35CB59D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MinShunPaySdkTest</RootNamespace>
-    <AssemblyName>MinShunPaySdkTest</AssemblyName>
+    <RootNamespace>StarPaySdkTest</RootNamespace>
+    <AssemblyName>StarPaySdkTest</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -51,9 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lumos.Common\Lumos.Common.csproj">
-      <Project>{241bdf50-401f-44bf-81cd-acc2ffc3a952}</Project>
-      <Name>Lumos.Common</Name>
+    <ProjectReference Include="..\StarPaySdk\StarPaySdk.csproj">
+      <Project>{461bbb36-a0b6-4a84-81ba-111d822988d5}</Project>
+      <Name>StarPaySdk</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

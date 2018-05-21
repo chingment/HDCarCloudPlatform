@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CB92E78D-6488-430F-B9D2-06617942BC5A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{461BBB36-A0B6-4A84-81BA-111D822988D5}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MinShunPaySdkTest</RootNamespace>
-    <AssemblyName>MinShunPaySdkTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>StarPaySdk</RootNamespace>
+    <AssemblyName>StarPaySdk</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,8 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net465\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,17 +49,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonUtil.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="StarPayUtil.cs" />
+    <Compile Include="StarPayBaseParams.cs" />
+    <Compile Include="StarPayBaseResult.cs" />
+    <Compile Include="Post\IStarPayPostRequest.cs" />
+    <Compile Include="StarPayApi.cs" />
+    <Compile Include="Post\SdkBarcodePosPayParams.cs" />
+    <Compile Include="Post\SdkBarcodePosPayRequest.cs" />
+    <Compile Include="Post\SdkBarcodePosPayResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Lumos.Common\Lumos.Common.csproj">
-      <Project>{241bdf50-401f-44bf-81cd-acc2ffc3a952}</Project>
-      <Name>Lumos.Common</Name>
-    </ProjectReference>
+    <Compile Include="TdsPayUtil.cs" />
+    <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Utils\FileItem.cs" />
+    <Compile Include="Utils\WebUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

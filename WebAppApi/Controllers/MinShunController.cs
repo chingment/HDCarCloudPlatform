@@ -37,66 +37,67 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse ReceiveNotify(ReceiveNotifyModel model)
         {
-            Stream stream = HttpContext.Current.Request.InputStream;
-            stream.Seek(0, SeekOrigin.Begin);
-            string postData = new StreamReader(stream).ReadToEnd();
+            return null;
+            //Stream stream = HttpContext.Current.Request.InputStream;
+            //stream.Seek(0, SeekOrigin.Begin);
+            //string postData = new StreamReader(stream).ReadToEnd();
 
-            Log.Info("ReceiveNotify：" + postData);
-
-
-
-
-            OrderPayResultNotifyByMinShunLog receiveNotifyLog = new OrderPayResultNotifyByMinShunLog();
-
-            receiveNotifyLog.OrderId = model.orderId;
-            receiveNotifyLog.Mercid = model.mercid;
-            receiveNotifyLog.Termid = model.termid;
-            receiveNotifyLog.Txnamt = model.txnamt;
-            receiveNotifyLog.ResultCode = model.result_code;
-            receiveNotifyLog.ResultCodeName = SdkFactory.MinShunPay.GetResultCodeName(model.result_code);
-            receiveNotifyLog.ResultMsg = model.result_msg;
-            receiveNotifyLog.Sign = model.sign;
-            receiveNotifyLog.MwebUrl = null;
-            receiveNotifyLog.NotifyParty = Enumeration.PayResultNotifyParty.MinShunNotifyUrl;
-            receiveNotifyLog.NotifyPartyName = Enumeration.PayResultNotifyParty.MinShunNotifyUrl.GetCnName();
-            receiveNotifyLog.Creator = 0;
-            receiveNotifyLog.CreateTime = DateTime.Now;
-
-            IResult result = null;
+            //Log.Info("ReceiveNotify：" + postData);
 
 
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("orderId", model.orderId);
-            dic.Add("mercid", model.mercid);
-            dic.Add("termid", model.termid);
-            dic.Add("txnamt", model.txnamt);
-            dic.Add("result_code", model.result_code);
-            dic.Add("result_msg", model.result_msg);
 
-            if (SdkFactory.MinShunPay.CheckSign(dic, model.sign))
-            {
-                result = BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunNotifyUrl, receiveNotifyLog);
 
-                if (result.Result == ResultType.Success)
-                {
-                    Log.Info("ReceiveNotify->success,通知成功");
+            //OrderPayResultNotifyByMinShunLog receiveNotifyLog = new OrderPayResultNotifyByMinShunLog();
 
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
-                }
-                else
-                {
-                    Log.Warn("ReceiveNotify->fail, 通知失败");
+            //receiveNotifyLog.OrderId = model.orderId;
+            //receiveNotifyLog.Mercid = model.mercid;
+            //receiveNotifyLog.Termid = model.termid;
+            //receiveNotifyLog.Txnamt = model.txnamt;
+            //receiveNotifyLog.ResultCode = model.result_code;
+            //receiveNotifyLog.ResultCodeName = SdkFactory.MinShunPay.GetResultCodeName(model.result_code);
+            //receiveNotifyLog.ResultMsg = model.result_msg;
+            //receiveNotifyLog.Sign = model.sign;
+            //receiveNotifyLog.MwebUrl = null;
+            //receiveNotifyLog.NotifyParty = Enumeration.PayResultNotifyParty.MinShunNotifyUrl;
+            //receiveNotifyLog.NotifyPartyName = Enumeration.PayResultNotifyParty.MinShunNotifyUrl.GetCnName();
+            //receiveNotifyLog.Creator = 0;
+            //receiveNotifyLog.CreateTime = DateTime.Now;
 
-                    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "fail,通知失败");
-                }
-            }
-            else
-            {
-                Log.Error("ReceiveNotify->fail,验证签名失败");
-                result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, " fail,验证签名失败");
-            }
+            //IResult result = null;
 
-            return new APIResponse(result);
+
+            //Dictionary<string, string> dic = new Dictionary<string, string>();
+            //dic.Add("orderId", model.orderId);
+            //dic.Add("mercid", model.mercid);
+            //dic.Add("termid", model.termid);
+            //dic.Add("txnamt", model.txnamt);
+            //dic.Add("result_code", model.result_code);
+            //dic.Add("result_msg", model.result_msg);
+
+            //if (SdkFactory.MinShunPay.CheckSign(dic, model.sign))
+            //{
+            //    result = BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunNotifyUrl, receiveNotifyLog);
+
+            //    if (result.Result == ResultType.Success)
+            //    {
+            //        Log.Info("ReceiveNotify->success,通知成功");
+
+            //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
+            //    }
+            //    else
+            //    {
+            //        Log.Warn("ReceiveNotify->fail, 通知失败");
+
+            //        result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "fail,通知失败");
+            //    }
+            //}
+            //else
+            //{
+            //    Log.Error("ReceiveNotify->fail,验证签名失败");
+            //    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, " fail,验证签名失败");
+            //}
+
+            //return new APIResponse(result);
         }
 
 

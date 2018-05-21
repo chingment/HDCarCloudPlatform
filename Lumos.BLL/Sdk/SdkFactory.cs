@@ -16,19 +16,27 @@ namespace Lumos.BLL
             }
         }
 
-        public static MinShunPayProvider MinShunPay
-        {
-            get
-            {
-                return new MinShunPayProvider();
-            }
-        }
+        //public static MinShunPayProvider MinShunPay
+        //{
+        //    get
+        //    {
+        //        return new MinShunPayProvider();
+        //    }
+        //}
 
         public static HeLianProvider HeLian
         {
             get
             {
                 return new HeLianProvider();
+            }
+        }
+
+        public static StarPayProvider StarPay
+        {
+            get
+            {
+                return new StarPayProvider();
             }
         }
     }

@@ -5,10 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace Lumos.Entity
 {
-    [Table("OrderPayResultNotifyByMinShunLog")]
-    public class OrderPayResultNotifyByMinShunLog
+    [Table("OrderPayResultNotifyByPartnerPayOrgLog")]
+    public class OrderPayResultNotifyByPartnerPayOrgLog
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -23,9 +24,8 @@ namespace Lumos.Entity
         public string MwebUrl { get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }
-
         public Enumeration.PayResultNotifyParty NotifyParty { get; set; }
-
         public string NotifyPartyName { get; set; }
-    }
+        public string ResultText{ get; set; }
+}
 }

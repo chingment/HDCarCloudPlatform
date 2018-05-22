@@ -84,6 +84,8 @@ namespace Lumos.Entity
         public int BizProcessesAuditId { get; set; }
 
         public bool IsManVerifyPay { get; set; }
+        [MaxLength(128)]
+        public string TransSn { get; set; }
 
         //public bool IsPayQuery { get; set; }
     }

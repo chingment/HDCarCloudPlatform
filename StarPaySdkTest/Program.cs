@@ -1,4 +1,6 @@
 ﻿using log4net;
+using Lumos.BLL;
+using Lumos.Entity.AppApi;
 using StarPaySdk;
 using System;
 using System.Collections.Generic;
@@ -15,14 +17,24 @@ namespace StarPaySdkTest
 
         static void Main(string[] args)
         {
-            var starPayOrderInfo = new StarPayOrderInfo();
-            starPayOrderInfo.Amount = "2";
-            starPayOrderInfo.TransSn = "180522090100000026012";
-            starPayOrderInfo.OrderSn = "180522090100000026010";
-            starPayOrderInfo.PayWay = "WXPAY";
-            starPayOrderInfo.TransTime = DateTime.Parse("2018-05-22 09:01:07.637");
+            UnifiedOrderParams pms = new UnifiedOrderParams();
+            pms.UserId = 1215;
+            pms.MerchantId = 241;
+            pms.PosMachineId = 148;
+            pms.OrderSn = "18052209560000002603";
+            pms.PayWay = Lumos.Entity.Enumeration.OrderPayWay.Wechat;
+            var result = SdkFactory.StarPay.UnifiedOrder(pms.UserId, pms);
 
-            StarPayUtil.CodeDownload(starPayOrderInfo);
+            
+
+            //var starPayOrderInfo = new StarPayOrderInfo();
+            //starPayOrderInfo.Amount = "2";
+            //starPayOrderInfo.TransSn = "18052210080000000007";
+            //starPayOrderInfo.OrderSn = pms.OrderSn;
+            //starPayOrderInfo.PayWay = "WXPAY";
+            //starPayOrderInfo.TransTime = DateTime.Parse("2018-05-22 10:08:33.783");
+
+            ////StarPayUtil.CodeDownload(starPayOrderInfo);
 
 
             //string s = "";

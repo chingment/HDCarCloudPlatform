@@ -109,6 +109,7 @@
     <Compile Include="Biz\OrderChildDetails.cs" />
     <Compile Include="Biz\OrderPayResultNotifyLog.cs" />
     <Compile Include="Biz\OrderChildProductSkuDetails.cs" />
+    <Compile Include="Biz\OrderPayTrans.cs" />
     <Compile Include="Biz\OrderToApplyLossAssess .cs" />
     <Compile Include="Biz\OrderToCarInsure.cs" />
     <Compile Include="Biz\OrderToCarInsureOfferCompanyKind.cs" />

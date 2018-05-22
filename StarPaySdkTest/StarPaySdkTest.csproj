@@ -55,6 +55,18 @@
     <None Include="log4net.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Lumos.BLL\Lumos.BLL.csproj">
+      <Project>{640a898e-2b63-4a12-ac93-2c61d718cc6c}</Project>
+      <Name>Lumos.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lumos.Entity\Lumos.Entity.csproj">
+      <Project>{c19704c7-7d89-42e8-9f15-d8c1a1a0c525}</Project>
+      <Name>Lumos.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lumos.MVC\Lumos.Mvc.csproj">
+      <Project>{ed113ad7-1b20-4b05-8961-9b701e51734c}</Project>
+      <Name>Lumos.Mvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StarPaySdk\StarPaySdk.csproj">
       <Project>{461bbb36-a0b6-4a84-81ba-111d822988d5}</Project>
       <Name>StarPaySdk</Name>

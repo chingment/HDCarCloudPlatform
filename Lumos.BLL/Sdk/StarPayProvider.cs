@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Lumos.BLL
 {
 
-  
+
     public class StarPayProvider : BaseProvider
     {
         public CustomJsonResult UnifiedOrder(int operater, UnifiedOrderParams pms)
@@ -61,20 +61,46 @@ namespace Lumos.BLL
                 starPayOrderInfo.PayWay = "ALIPAY";
             }
 
+            var orderPayTrans = new OrderPayTrans();
+            orderPayTrans.UserId = order.UserId;
+            orderPayTrans.MerchantId = order.MerchantId;
+            orderPayTrans.PosMachineId = order.PosMachineId;
+            orderPayTrans.OrderId = order.Id;
+            orderPayTrans.OrderSn = order.Sn;
+            orderPayTrans.CreateTime = this.DateTime;
+            orderPayTrans.Creator = operater;
+            orderPayTrans.PayWay = pms.PayWay;
+            orderPayTrans.Amount = starPayOrderInfo.Amount;
+            orderPayTrans.TransTime = this.DateTime;
+            CurrentDb.OrderPayTrans.Add(orderPayTrans);
+            CurrentDb.SaveChanges();
+
+            SnModel snModel = Sn.Build(SnType.OrderPayTrans, orderPayTrans.Id);
+
+            orderPayTrans.Sn = snModel.Sn;
 
 
-
-
+            starPayOrderInfo.TransSn = snModel.Sn;
+            order.TransSn = snModel.Sn;
             var codeDownload_result = StarPayUtil.CodeDownload(starPayOrderInfo);
+
+            if (codeDownload_result == null)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成支付二维码失败");
+            }
 
             if (string.IsNullOrEmpty(codeDownload_result.payCode))
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "生成支付二维码失败");
             }
 
+
+            orderPayTrans.PartnerLogNo = codeDownload_result.logNo;
+            orderPayTrans.PartnerOrderNo = codeDownload_result.orderNo;
             CurrentDb.SaveChanges();
 
             UnifiedOrderResult resultData = new UnifiedOrderResult();
+            resultData.TransSn = order.TransSn;
             resultData.OrderSn = order.Sn;
             resultData.MwebUrl = codeDownload_result.payCode;
             resultData.PayWay = order.PayWay;
@@ -90,26 +116,35 @@ namespace Lumos.BLL
             var starPayOrderInfo = new StarPayOrderInfo();
 
 
-            starPayOrderInfo.OrderSn = order.Sn;
-            starPayOrderInfo.TransTime = order.SubmitTime;
+            var orderPayTrans = CurrentDb.OrderPayTrans.Where(m => m.OrderId == order.Id).ToList();
 
-            string notifyFromResult = null;
-
-            var payQuery_result = StarPayUtil.PayQuery(starPayOrderInfo, out notifyFromResult);
-
-            bool isPaySuccess = false;
-            if (payQuery_result != null)
+            foreach (var item in orderPayTrans)
             {
-                if (!string.IsNullOrEmpty(payQuery_result.result))
+                if (!string.IsNullOrEmpty(item.Sn))
                 {
-                    if (payQuery_result.result == "S")
+                    starPayOrderInfo.OrderSn = item.OrderSn;
+                    starPayOrderInfo.TransSn = item.Sn;
+                    starPayOrderInfo.TransTime = item.TransTime;
+
+                    string notifyFromResult = null;
+
+                    var payQuery_result = StarPayUtil.PayQuery(starPayOrderInfo, out notifyFromResult);
+
+                    bool isPaySuccess = false;
+                    if (payQuery_result != null)
                     {
-                        isPaySuccess = true;
+                        if (!string.IsNullOrEmpty(payQuery_result.result))
+                        {
+                            if (payQuery_result.result == "S")
+                            {
+                                isPaySuccess = true;
+                            }
+                        }
                     }
+
+                    BizFactory.Pay.ResultNotify(operater, order.Sn, isPaySuccess, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "星大陆", notifyFromResult);
                 }
             }
-
-            BizFactory.Pay.ResultNotify(operater, order.Sn, isPaySuccess, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "星大陆", notifyFromResult);
         }
 
         public string GetResultCodeName(string resultcode)

@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +17,7 @@ namespace StarPaySdk
 
     public class StarPayApi : IStarPayApi
     {
+        ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public string _serverUrl = "";
         public string _signkey = "";
 
@@ -62,6 +65,9 @@ namespace StarPaySdk
                 if (!string.IsNullOrEmpty(rsp.message))
                 {
                     rsp.message = System.Web.HttpUtility.UrlDecode(rsp.message);
+
+                    log.InfoFormat("StarPay->message:{0}", rsp.message);
+
                 }
             }
 

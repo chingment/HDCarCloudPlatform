@@ -117,6 +117,8 @@ namespace Lumos.DAL
 
         public IDbSet<InsCarInfoOrder> InsCarInfoOrder { get; set; }
 
+        public IDbSet<OrderPayTrans> OrderPayTrans { get; set; }
+
         //public FxDbContext()
         //    : base("DefaultConnection")
         //{

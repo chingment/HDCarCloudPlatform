@@ -8,6 +8,7 @@ namespace Lumos.Entity.AppApi
 {
     public class UnifiedOrderResult
     {
+        public string TransSn { get; set; }
         public string OrderSn { get; set; }
 
         public string MwebUrl { get; set; }

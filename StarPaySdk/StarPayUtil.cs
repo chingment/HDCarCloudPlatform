@@ -87,12 +87,12 @@ namespace StarPaySdk
             sParams.Add("orgNo", orgNo);
             sParams.Add("mercId", mercid);
             sParams.Add("trmNo", trmNo);
-            sParams.Add("tradeNo", order.OrderSn);
+            sParams.Add("tradeNo", order.TransSn);
             sParams.Add("txnTime", order.TransTime.ToString("yyyyMMddHHmmss"));
             sParams.Add("signType", "MD5");
             sParams.Add("version", "V1.0.0");
 
-            sParams.Add("qryNo", order.OrderSn);
+            sParams.Add("qryNo", order.TransSn);
 
             string sign = CommonUtil.MakeMd5Sign(sParams, signkey);
             sParams.Add("signValue", sign);

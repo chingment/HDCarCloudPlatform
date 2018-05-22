@@ -23,10 +23,7 @@ namespace Lumos.BLL.Biz.Task
 
             foreach (var order in orders)
             {
-                if (order.Sn == "18050313180000001511")
-                {
-                    SdkFactory.StarPay.PayQuery(0, order);
-                }
+                SdkFactory.StarPay.PayQuery(0, order);
 
                 switch (order.Type)
                 {

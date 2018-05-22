@@ -30,7 +30,7 @@ namespace Lumos.BLL
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经支付成功");
             }
 
-            if (pms.PayWay != Enumeration.OrderPayWay.Wechat || pms.PayWay == Enumeration.OrderPayWay.Alipay)
+            if (pms.PayWay != Enumeration.OrderPayWay.Wechat && pms.PayWay != Enumeration.OrderPayWay.Alipay)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "不支持该支付方式");
             }

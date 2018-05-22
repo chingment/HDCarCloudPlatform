@@ -202,11 +202,11 @@ namespace WebAppApi.Controllers
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             // model.Add("登录接口", Login(userName, passWord, deviceId));
 
-            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "18052209560000002606", Enumeration.OrderPayWay.Alipay));
+            //model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "18052209560000002606", Enumeration.OrderPayWay.Alipay));
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
             // model.Add("获取支付结果查询", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
-            // model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
+            ///model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
             //  model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             // model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 1600));
@@ -227,7 +227,7 @@ namespace WebAppApi.Controllers
             // model.Add("注册账号", GetCreateAccountCode("15989287032"));
             //model.Add("支付结果确认", PayConfirm());
             //model.Add("支付结果", PayResultNotify());
-            //model.Add("易办事销账", YBSReceiveNotify());
+            model.Add("易办事销账", ReceiveNotifyByStar());
 
 
 
@@ -301,7 +301,7 @@ namespace WebAppApi.Controllers
             return str;
         }
 
-        public string YBSReceiveNotify()
+        public string ReceiveNotifyByStar()
         {
             //CrossoffAccountRequest model = new CrossoffAccountRequest();
 
@@ -317,9 +317,9 @@ namespace WebAppApi.Controllers
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("key", YBS_key);
             headers.Add("timestamp", timespan.ToString());
-            headers.Add("sign", signStr);
+           // headers.Add("sign", signStr);
             HttpUtil http = new HttpUtil();
-            string result = http.HttpPostJson("" + host + "/api/YBS/ReceiveNotify", a1, headers);
+            string result = http.HttpPostJson("" + host + "/api/Pay/ReceiveNotifyByStar", a1, headers);
 
             return result;
 

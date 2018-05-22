@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Lumos.BLL
 {
 
-    //{"total_amount":"1","amount":"1","message":"%E4%BA%A4%E6%98%93%E6%88%90%E5%8A%9F","sysTime":"20180521174712","result":"S","returnCode":"000000","orderNo":"000000045449433","payCode":"weixin://wxpay/bizpayurl?pr=GTUPgPT","logNo":"201805210364066601","tradeNo":"18050313180000001511","mercId":"800581000010155","signValue":"66637916cd7d71de453510db7c25dabf"}
+  
     public class StarPayProvider : BaseProvider
     {
         public CustomJsonResult UnifiedOrder(int operater, UnifiedOrderParams pms)
@@ -60,6 +60,10 @@ namespace Lumos.BLL
             {
                 starPayOrderInfo.PayWay = "ALIPAY";
             }
+
+
+
+
 
             var codeDownload_result = StarPayUtil.CodeDownload(starPayOrderInfo);
 

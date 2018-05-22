@@ -9,6 +9,7 @@ namespace StarPaySdk
 
     public class StarPayOrderInfo
     {
+        public string TransSn { get; set; }
         public string OrderSn { get; set; }
         public string PayWay { get; set; }
         public string Amount { get; set; }
@@ -39,7 +40,7 @@ namespace StarPaySdk
             sParams.Add("orgNo", orgNo);
             sParams.Add("mercId", mercid);
             sParams.Add("trmNo", trmNo);
-            sParams.Add("tradeNo", order.OrderSn);
+            sParams.Add("tradeNo", order.TransSn);
             sParams.Add("txnTime", order.TransTime.ToString("yyyyMMddHHmmss"));
             sParams.Add("signType", "MD5");
             sParams.Add("version", "V1.0.0");
@@ -48,6 +49,7 @@ namespace StarPaySdk
             sParams.Add("amount", order.Amount);
             sParams.Add("payChannel", order.PayWay);
             sParams.Add("total_amount", order.Amount);
+            sParams.Add("selOrderNo", order.OrderSn);
 
 
             string sign = CommonUtil.MakeMd5Sign(sParams, signkey);
@@ -90,7 +92,7 @@ namespace StarPaySdk
             sParams.Add("signType", "MD5");
             sParams.Add("version", "V1.0.0");
 
-            sParams.Add("qryNo", "18050313200000001523");
+            sParams.Add("qryNo", order.OrderSn);
 
             string sign = CommonUtil.MakeMd5Sign(sParams, signkey);
             sParams.Add("signValue", sign);

@@ -135,6 +135,7 @@
     <Folder Include="Views\Coupon\" />
     <Folder Include="Views\Global\" />
     <Folder Include="Views\Lllegal\" />
+    <Folder Include="Views\Pay\" />
     <Folder Include="Views\Product\" />
     <Folder Include="Views\ShippingAddress\" />
   </ItemGroup>
@@ -174,6 +175,7 @@
     <Compile Include="Controllers\HttpRequestClient .cs" />
     <Compile Include="Controllers\LllegalController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\ShippingAddressController.cs" />

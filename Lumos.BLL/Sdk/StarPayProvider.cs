@@ -14,7 +14,7 @@ namespace Lumos.BLL
 
     public class StarPayProvider : BaseProvider
     {
-        public CustomJsonResult UnifiedOrder(int operater, UnifiedOrderParams pms)
+        public CustomJsonResult UnifiedOrder(int operater, PayUnifiedOrderParams pms)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -99,7 +99,7 @@ namespace Lumos.BLL
             orderPayTrans.PartnerOrderNo = codeDownload_result.orderNo;
             CurrentDb.SaveChanges();
 
-            UnifiedOrderResult resultData = new UnifiedOrderResult();
+            PayUnifiedOrderResult resultData = new PayUnifiedOrderResult();
             resultData.TransSn = order.TransSn;
             resultData.OrderSn = order.Sn;
             resultData.MwebUrl = codeDownload_result.payCode;

@@ -954,32 +954,6 @@ namespace WebAppApi.Controllers
         }
 
         [HttpPost]
-        public APIResponse PayConfirm(PayConfirmModel model)
-        {
-            if (IsSaleman(model.UserId))
-            {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
-            }
-
-            IResult result = BizFactory.Pay.Confirm(model.UserId, model);
-
-            return new APIResponse(result);
-        }
-
-        [HttpGet]
-        public APIResponse PayResultQuery(int userId, int merchantId, int posMachineId, string orderSn)
-        {
-            PayQueryParams pms = new PayQueryParams();
-            pms.UserId = userId;
-            pms.MerchantId = merchantId;
-            pms.PosMachineId = posMachineId;
-            pms.OrderSn = orderSn;
-
-            IResult result = BizFactory.Pay.ResultQuery(pms.UserId, pms);
-            return new APIResponse(result);
-        }
-
-        [HttpPost]
         public APIResponse SubmitTalentDemand(SubmitTalentDemandModel model)
         {
             if (IsSaleman(model.UserId))
@@ -1077,7 +1051,33 @@ namespace WebAppApi.Controllers
         }
 
         [HttpPost]
-        public APIResponse UnifiedOrder(UnifiedOrderParams pms)
+        public APIResponse PayConfirm(PayConfirmModel model)
+        {
+            if (IsSaleman(model.UserId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
+            }
+
+            IResult result = BizFactory.Pay.Confirm(model.UserId, model);
+
+            return new APIResponse(result);
+        }
+
+        [HttpGet]
+        public APIResponse PayResultQuery(int userId, int merchantId, int posMachineId, string orderSn)
+        {
+            PayResultQueryParams pms = new PayResultQueryParams();
+            pms.UserId = userId;
+            pms.MerchantId = merchantId;
+            pms.PosMachineId = posMachineId;
+            pms.OrderSn = orderSn;
+
+            IResult result = BizFactory.Pay.ResultQuery(pms.UserId, pms);
+            return new APIResponse(result);
+        }
+
+        [HttpPost]
+        public APIResponse PayUnifiedOrder(PayUnifiedOrderParams pms)
         {
             IResult result = SdkFactory.StarPay.UnifiedOrder(pms.UserId, pms);
             return new APIResponse(result);
@@ -1086,9 +1086,6 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse PayResultNotify(PayResultNotifyParams pms)
         {
-            var orderPayResultNotifyLog = new OrderPayResultNotifyLog();
-
-
             IResult result = BizFactory.Pay.ResultNotify(pms.UserId, pms.OrderSn, pms.IsPaySuccess, Enumeration.PayResultNotifyType.AppNotify, "App");
 
             return new APIResponse(result);

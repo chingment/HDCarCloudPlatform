@@ -74,13 +74,12 @@
     <Compile Include="AppApi\CodeDownloadResult.cs" />
     <Compile Include="AppApi\OrderField.cs" />
     <Compile Include="AppApi\OrderModel.cs" />
-    <Compile Include="AppApi\PayQueryParams.cs" />
-    <Compile Include="AppApi\PayQueryParams2.cs" />
-    <Compile Include="AppApi\PayQueryResult.cs" />
+    <Compile Include="AppApi\PayResultQueryParams.cs" />
+    <Compile Include="AppApi\PayResultQueryResult.cs" />
     <Compile Include="AppApi\PrintDataModel.cs" />
     <Compile Include="AppApi\ProductModel.cs" />
-    <Compile Include="AppApi\UnifiedOrderParams.cs" />
-    <Compile Include="AppApi\UnifiedOrderResult.cs" />
+    <Compile Include="AppApi\PayUnifiedOrderParams.cs" />
+    <Compile Include="AppApi\PayUnifiedOrderResult.cs" />
     <Compile Include="BizEnumeration.cs" />
     <Compile Include="Biz\Bank.cs" />
     <Compile Include="Biz\BankCard.cs" />

@@ -1464,7 +1464,7 @@ namespace WebAppApi.Controllers
         public string QrCodeDownload(int userId, int merchantId, int posMachineId, string ordersn, Enumeration.OrderPayWay payway)
         {
 
-            UnifiedOrderParams model1 = new UnifiedOrderParams();
+            PayUnifiedOrderParams model1 = new PayUnifiedOrderParams();
             model1.UserId = userId;
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;

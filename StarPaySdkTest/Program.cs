@@ -17,7 +17,7 @@ namespace StarPaySdkTest
 
         static void Main(string[] args)
         {
-            UnifiedOrderParams pms = new UnifiedOrderParams();
+            PayUnifiedOrderParams pms = new PayUnifiedOrderParams();
             pms.UserId = 1215;
             pms.MerchantId = 241;
             pms.PosMachineId = 148;

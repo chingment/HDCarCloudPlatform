@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lumos.Entity.AppApi
 {
-    public class PayQueryParams
+    public class PayResultQueryParams
     {
         public int UserId { get; set; }
 

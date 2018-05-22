@@ -61,7 +61,7 @@ namespace Lumos.BLL
             return Math.Round(d, 2);
         }
 
-        public CustomJsonResult ResultQuery(int operater, PayQueryParams pms)
+        public CustomJsonResult ResultQuery(int operater, PayResultQueryParams pms)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -72,7 +72,7 @@ namespace Lumos.BLL
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
             }
 
-            PayQueryResult resultData = new PayQueryResult();
+            PayResultQueryResult resultData = new PayResultQueryResult();
 
             resultData.OrderSn = order.Sn;
             resultData.OrderType = order.Type;

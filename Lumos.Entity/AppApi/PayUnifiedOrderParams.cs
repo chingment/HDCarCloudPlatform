@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lumos.Entity.AppApi
 {
-    public class UnifiedOrderParams
+    public class PayUnifiedOrderParams
     {
         public int UserId { get; set; }
 

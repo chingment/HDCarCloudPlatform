@@ -347,6 +347,10 @@
       <Project>{8479fcaf-4aef-40d4-b76d-246282522fb7}</Project>
       <Name>MySDK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\StarPaySdk\StarPaySdk.csproj">
+      <Project>{461bbb36-a0b6-4a84-81ba-111d822988d5}</Project>
+      <Name>StarPaySdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YdtSdk\YdtSdk.csproj">
       <Project>{539b0cc5-1802-4a6c-b081-c7e35071d21c}</Project>
       <Name>YdtSdk</Name>

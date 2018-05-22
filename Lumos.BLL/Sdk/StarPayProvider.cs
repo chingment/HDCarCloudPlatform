@@ -107,7 +107,7 @@ namespace Lumos.BLL
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);
 
-            return null;
+            return result;
         }
 
 

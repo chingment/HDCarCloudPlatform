@@ -34,7 +34,7 @@ namespace WebAppApi.Controllers
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        // private string host = "http://120.79.233.231";
+        //private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -202,7 +202,7 @@ namespace WebAppApi.Controllers
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             // model.Add("登录接口", Login(userName, passWord, deviceId));
 
-            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "18050313200000001529", Enumeration.OrderPayWay.Wechat));
+            model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "18052209560000002606", Enumeration.OrderPayWay.Wechat));
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
             // model.Add("获取支付结果查询", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
@@ -1482,7 +1482,7 @@ namespace WebAppApi.Controllers
 
             // string a1 = "a1=das&a2=323";
             HttpUtil http = new HttpUtil();
-            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/UnifiedOrder", a1, headers1);
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Order/PayUnifiedOrder", a1, headers1);
 
             return respon_data4;
 

@@ -18,17 +18,17 @@ namespace StarPaySdk
 
     public class StarPayUtil
     {
-        public readonly static string mercid = "800290000007906";
-        public readonly static string trmNo = "XB006439";
-        public readonly static string orgNo = "11658";
-        public readonly static string signkey = "B1823ECCC7D7E4A2A1B06F57199C4276";
-        public readonly static string serverUrl = "http://139.196.77.69:8280";
+        //public readonly static string mercid = "800290000007906";
+        //public readonly static string trmNo = "XB006439";
+        //public readonly static string orgNo = "11658";
+        //public readonly static string signkey = "B1823ECCC7D7E4A2A1B06F57199C4276";
+        //public readonly static string serverUrl = "http://139.196.77.69:8280";
 
-        //public readonly static string mercid = "800581000010155";
-        //public readonly static string trmNo = "95234555";
-        //public readonly static string orgNo = "719";
-        //public readonly static string signkey = "0319B673D3D851EFF2B35BE564AB7DC4";
-        //public readonly static string serverUrl = "http://gateway.starpos.com.cn";
+        public readonly static string mercid = "800581000010155";
+        public readonly static string trmNo = "95234555";
+        public readonly static string orgNo = "719";
+        public readonly static string signkey = "0319B673D3D851EFF2B35BE564AB7DC4";
+        public readonly static string serverUrl = "http://gateway.starpos.com.cn";
 
         public static SdkBarcodePosPayResult CodeDownload(StarPayOrderInfo order)
         {

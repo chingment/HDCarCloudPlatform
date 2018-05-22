@@ -47,12 +47,10 @@ namespace Lumos.BLL
             if (order.PayWay == Enumeration.OrderPayWay.Wechat)
             {
                 orderInfo.TranType = "180000";
-                orderInfo.OrderId = order.TradeSnByWechat;
             }
             else if (order.PayWay == Enumeration.OrderPayWay.Alipay)
             {
                 orderInfo.TranType = "280000";
-                orderInfo.OrderId = order.TradeSnByAlipay;
             }
             else
             {

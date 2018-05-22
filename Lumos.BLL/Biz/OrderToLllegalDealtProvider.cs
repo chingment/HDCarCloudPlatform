@@ -41,8 +41,6 @@ namespace Lumos.BLL
                 SnModel snModel = Sn.Build(SnType.OrderToLllegalQueryRecharge, orderToLllegalDealt.Id);
 
                 orderToLllegalDealt.Sn = snModel.Sn;
-                orderToLllegalDealt.TradeSnByWechat = snModel.TradeSnByWechat;
-                orderToLllegalDealt.TradeSnByAlipay = snModel.TradeSnByAlipay;
                 CurrentDb.SaveChanges();
 
 

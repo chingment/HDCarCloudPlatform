@@ -64,8 +64,7 @@ namespace Lumos.BLL
                 SnModel snModel = Sn.Build(SnType.OrderToCarInsure, order.Id);
 
                 order.Sn = snModel.Sn;
-                order.TradeSnByWechat = snModel.TradeSnByWechat;
-                order.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
 
 
                 if (orderToCarInsureOfferCompany != null)
@@ -326,8 +325,7 @@ namespace Lumos.BLL
                 SnModel snModel = Sn.Build(SnType.OrderToCarClaim, orderToCarClaim.Id);
 
                 orderToCarClaim.Sn = snModel.Sn;
-                orderToCarClaim.TradeSnByWechat = snModel.TradeSnByWechat;
-                orderToCarClaim.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
 
 
                 //状态改为待核实
@@ -496,10 +494,6 @@ namespace Lumos.BLL
                         SnModel snModel = Sn.Build(SnType.OrderToCarClaim, estimateOrderToCarClaim.Id);
 
                         estimateOrderToCarClaim.Sn = snModel.Sn;
-                        estimateOrderToCarClaim.TradeSnByWechat = snModel.TradeSnByWechat;
-                        estimateOrderToCarClaim.TradeSnByAlipay = snModel.TradeSnByAlipay;
-
-
 
                         l_orderToCarClaim.HandOrderId = estimateOrderToCarClaim.Id;
 
@@ -702,10 +696,7 @@ namespace Lumos.BLL
 
 
                 SnModel snModel = Sn.Build(SnType.OrderToLllegalQueryRecharge, orderToLllegalQueryRecharge.Id);
-
                 orderToLllegalQueryRecharge.Sn = snModel.Sn;
-                orderToLllegalQueryRecharge.TradeSnByWechat = snModel.TradeSnByWechat;
-                orderToLllegalQueryRecharge.TradeSnByAlipay = snModel.TradeSnByAlipay;
                 CurrentDb.SaveChanges();
 
 

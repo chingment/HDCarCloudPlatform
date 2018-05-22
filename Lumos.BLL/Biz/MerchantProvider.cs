@@ -139,8 +139,7 @@ namespace Lumos.BLL
 
                 SnModel snModel = Sn.Build(SnType.OrderToServiceFee, orderToServiceFee.Id);
                 orderToServiceFee.Sn = snModel.Sn;
-                orderToServiceFee.TradeSnByWechat = snModel.TradeSnByWechat;
-                orderToServiceFee.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
 
 
 

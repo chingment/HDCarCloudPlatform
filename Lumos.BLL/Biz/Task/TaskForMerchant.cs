@@ -49,8 +49,7 @@ namespace Lumos.BLL.Biz.Task
 
                     SnModel snModel = Sn.Build(SnType.OrderToServiceFee, orderToServiceFee.Id);
                     orderToServiceFee.Sn = snModel.Sn;
-                    orderToServiceFee.TradeSnByWechat = snModel.TradeSnByWechat;
-                    orderToServiceFee.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
 
                     Log.InfoFormat("生成待支付订单号：{0}", orderToServiceFee.Sn);
                 }

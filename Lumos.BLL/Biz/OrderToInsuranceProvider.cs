@@ -45,8 +45,7 @@ namespace Lumos.BLL
                 SnModel snModel = Sn.Build(SnType.OrderToCredit, orderToInsurance.Id);
 
                 orderToInsurance.Sn = snModel.Sn;
-                orderToInsurance.TradeSnByWechat = snModel.TradeSnByWechat;
-                orderToInsurance.TradeSnByAlipay = snModel.TradeSnByAlipay;
+
 
                 var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToInsurance, orderToInsurance.UserId, orderToInsurance.MerchantId, orderToInsurance.Id, Enumeration.AuditFlowV1Status.Submit);
                 BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.Submit, operater, null, "提交订单，等待取单");

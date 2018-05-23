@@ -26,7 +26,7 @@ namespace StarPaySdk
 
         public readonly static string mercid = "800581000010155";
         public readonly static string trmNo = "95234555";
-        public readonly static string orgNo = "719";
+        public readonly static string orgNo = "15250";
         public readonly static string signkey = "0319B673D3D851EFF2B35BE564AB7DC4";
         public readonly static string serverUrl = "http://gateway.starpos.com.cn";
 

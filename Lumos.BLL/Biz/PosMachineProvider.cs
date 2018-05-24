@@ -70,6 +70,7 @@ namespace Lumos.BLL
                 oldPosMachine.Mender = operater;
 
 
+
                 newPosMachine.IsUse = true;
                 newPosMachine.LastUpdateTime = this.DateTime;
                 newPosMachine.Mender = operater;

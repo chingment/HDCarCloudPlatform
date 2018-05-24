@@ -19,7 +19,7 @@ namespace WebAppApi.Controllers
     [BaseAuthorizeAttribute]
     public class AccountController : OwnBaseApiController
     {
-
+        [HttpPost]
         public APIResponse Create(CreateModel model)
         {
             IResult result = BizFactory.Merchant.CreateAccount(0, model.Token, model.ValidCode, model.UserName, model.Password, model.DeviceId);
@@ -70,6 +70,7 @@ namespace WebAppApi.Controllers
 
         }
 
+        [HttpPost]
         private APIResponse ClientLogin(LoginModel model)
         {
             string testAccount = "15989287032";
@@ -421,6 +422,7 @@ namespace WebAppApi.Controllers
             return new APIResponse(result);
         }
 
+        [HttpGet]
         public APIResponse BaseInfo(int userId, int merchantId, int posMachineId)
         {
             BaseInfoResultModel model = new BaseInfoResultModel();

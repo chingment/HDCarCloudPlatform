@@ -220,7 +220,7 @@ namespace WebAppApi.Controllers
             // model.Add("注册账号", GetCreateAccountCode("15989287032"));
             //model.Add("支付结果确认", PayConfirm());
             //model.Add("支付结果", PayResultNotify());
-            //model.Add("易办事销账", YBSReceiveNotify());
+            model.Add("易办事销账", YBSReceiveNotify());
 
 
 

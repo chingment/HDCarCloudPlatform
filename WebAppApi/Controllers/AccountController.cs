@@ -109,6 +109,13 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备与用户不匹配");
             }
 
+            if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Unbind)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.FailureSignIn, "登录失败，设备已经解绑");
+            }
+
+
+
             if (merchantPosMachine.PosMachineId != posMachine.Id)
             {
                 //内测账号，不验证设备ID

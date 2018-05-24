@@ -184,6 +184,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\BaseInfoResultModel.cs" />
     <Compile Include="Models\Account\ChangePasswordModel.cs" />
     <Compile Include="Models\Account\CreateModel.cs" />
     <Compile Include="Models\Account\HomeModel.cs" />

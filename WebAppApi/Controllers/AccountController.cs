@@ -414,5 +414,21 @@ namespace WebAppApi.Controllers
             return new APIResponse(result);
         }
 
+        public APIResponse BaseInfo(int userId, int merchantId, int posMachineId)
+        {
+            BaseInfoResultModel model = new BaseInfoResultModel();
+
+            #region 查询违章积分
+            var lllegalQueryScore = CurrentDb.LllegalQueryScore.Where(m => m.UserId == userId).FirstOrDefault();
+            if (lllegalQueryScore != null)
+            {
+                model.LllegalQueryScore = lllegalQueryScore.Score;
+            }
+            #endregion
+
+            APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
+            return new APIResponse(result);
+        }
+
     }
 }

@@ -710,7 +710,7 @@ namespace Lumos.BLL
                 yOrder.orderType = orderToLllegalQueryRecharge.Type;
                 yOrder.orderTypeName = orderToLllegalQueryRecharge.TypeName;
 
-                // yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalQueryRecharge.Sn.NullToEmpty()));
+                yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalQueryRecharge.Sn.NullToEmpty()));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("积分", string.Format("{0}", orderToLllegalQueryRecharge.Score)));
                 yOrder.confirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalQueryRecharge.Price.NullToEmpty())));
 

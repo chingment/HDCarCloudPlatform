@@ -24,13 +24,13 @@ namespace WebAppApi.Controllers
         public string TxnTime { get; set; }
         public string TxnAmt { get; set; }
         public string TxnStatus { get; set; }
-        public string BankType { get; set; }
+        //public string BankType { get; set; }
         public string OfficeId { get; set; }
         public string ChannelId { get; set; }
-        public string UserId { get; set; }
+       // public string UserId { get; set; }
         public string logNo { get; set; }
-        public string attach { get; set; }
-        public string CrdFlg { get; set; }
+        //public string attach { get; set; }
+        //public string CrdFlg { get; set; }
     }
 
     public class PayController : OwnBaseApiController

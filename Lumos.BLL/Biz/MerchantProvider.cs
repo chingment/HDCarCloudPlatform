@@ -90,7 +90,7 @@ namespace Lumos.BLL
                         return new CustomJsonResult(ResultType.Failure, "POS机未出库，请联系客服");
                     }
 
-                    posMachine.IsUse = false;
+ 
                     posMachine.Mender = operater;
                     posMachine.LastUpdateTime = this.DateTime;
                     CurrentDb.SaveChanges();
@@ -574,5 +574,47 @@ namespace Lumos.BLL
             return yOrder;
         }
 
+
+        public CustomJsonResult UnbindPosMachine(int operater, int merchantId, int posMachineId)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+
+                var merchantPosMachine = CurrentDb.MerchantPosMachine.Where(m => m.MerchantId == merchantId && m.PosMachineId == posMachineId).FirstOrDefault();
+
+                if (merchantPosMachine == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, "解绑失败，商户找不到对应POS机");
+                }
+
+                var posMachine = CurrentDb.PosMachine.Where(m => m.Id == posMachineId).FirstOrDefault();
+                if (posMachine == null)
+                {
+                    return new CustomJsonResult(ResultType.Failure, "解绑失败，POS机库找不到对应POS机");
+                }
+
+                if (merchantPosMachine.Status == Enumeration.MerchantPosMachineStatus.Unbind)
+                {
+                    return new CustomJsonResult(ResultType.Failure, "已经解绑");
+                }
+
+                merchantPosMachine.Status = Enumeration.MerchantPosMachineStatus.Unbind;
+                merchantPosMachine.LastUpdateTime = this.DateTime;
+                merchantPosMachine.Mender = operater;
+
+                posMachine.IsUse = false;
+
+                CurrentDb.SaveChanges();
+
+                ts.Complete();
+
+                result = new CustomJsonResult(ResultType.Success, "解绑成功");
+            }
+
+
+            return result;
+        }
     }
 }

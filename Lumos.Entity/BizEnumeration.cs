@@ -21,7 +21,9 @@ namespace Lumos.Entity
             [Remark("未激活")]
             NoActive = 2,
             [Remark("到期")]
-            Expiry = 3
+            Expiry = 3,
+            [Remark("已解绑")]
+            Unbind = 4
         }
 
         public enum ExtendedAppType

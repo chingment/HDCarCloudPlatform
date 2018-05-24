@@ -1319,7 +1319,7 @@
     <Content Include="Views\Biz\Product\AddByInsurance.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\OfferImg.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\DealtByOffer.cshtml" />
-    <Content Include="Views\Shared\AuditStatusFlowTrace.cshtml" />
+    <Content Include="Views\Biz\Merchant\PosMachineListByUnbind.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

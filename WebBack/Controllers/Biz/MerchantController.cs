@@ -68,6 +68,11 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
+        public ViewResult PosMachineListByUnbind()
+        {
+            return View();
+        }
+
         public ViewResult Details(int id)
         {
             DetailsViewModel model = new DetailsViewModel(id);
@@ -97,21 +102,49 @@ namespace WebBack.Controllers.Biz
             string merchantName = condition.MerchantName.ToSearchString();
             string posMerchantNumber = condition.PosMerchantNumber.ToSearchString();
             string deviceId = condition.DeviceId.ToSearchString();
-            var list = (from p in CurrentDb.MerchantPosMachine
-                        join u in CurrentDb.Merchant on p.MerchantId equals u.Id
-                        join c in CurrentDb.PosMachine on p.PosMachineId equals c.Id
-                        join e in CurrentDb.SysClientUser on p.UserId equals e.Id
-                        where (merchantName.Length == 0 || u.YYZZ_Name.Contains(merchantName)) &&
-                        (clientCode.Length == 0 || u.ClientCode.Contains(clientCode)) &&
-                                (posMerchantNumber.Length == 0 || p.PosMerchantNumber.Contains(posMerchantNumber)) &&
-                                   (deviceId.Length == 0 || c.DeviceId.Contains(deviceId))
-                        select new { u.Id, PosMachineId = c.Id, MerchantName = u.YYZZ_Name, u.ClientCode, p.PosMerchantNumber, c.DeviceId, u.CreateTime, u.ContactName, u.ContactPhoneNumber, e.UserName });
+            var query = (from p in CurrentDb.Merchant
+                         join u in CurrentDb.MerchantPosMachine on p.Id equals u.MerchantId
+                         join c in CurrentDb.PosMachine on u.PosMachineId equals c.Id
+                         join e in CurrentDb.SysClientUser on p.UserId equals e.Id
+                         where
 
-            int total = list.Count();
+                         (merchantName.Length == 0 || p.YYZZ_Name.Contains(merchantName)) &&
+                         (clientCode.Length == 0 || p.ClientCode.Contains(clientCode)) &&
+                                 (posMerchantNumber.Length == 0 || u.PosMerchantNumber.Contains(posMerchantNumber)) &&
+                                    (deviceId.Length == 0 || c.DeviceId.Contains(deviceId))
+                         select new { p.Id, PosMachineId = c.Id, MerchantName = p.YYZZ_Name, p.ClientCode, u.PosMerchantNumber, c.DeviceId, u.CreateTime, u.Status, p.ContactName, p.ContactPhoneNumber, e.UserName });
+
+            int total = query.Count();
 
             int pageIndex = condition.PageIndex;
             int pageSize = 10;
-            list = list.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+            query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
+
+
+
+            List<object> list = new List<object>();
+
+            foreach (var item in query)
+            {
+
+                list.Add(new
+                {
+                    item.Id,
+                    item.PosMachineId,
+                    item.MerchantName,
+                    item.ClientCode,
+                    item.PosMerchantNumber,
+                    item.DeviceId,
+                    item.CreateTime,
+                    item.ContactName,
+                    item.ContactPhoneNumber,
+                    item.UserName,
+                    item.Status,
+                    StatusName = item.Status.GetCnName()
+                });
+
+
+            }
 
 
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = list };
@@ -435,6 +468,13 @@ namespace WebBack.Controllers.Biz
             PageEntity pageEntity = new PageEntity { PageSize = pageSize, TotalRecord = total, Rows = rList };
 
             return Json(ResultType.Success, pageEntity, "");
+        }
+
+
+        [HttpPost]
+        public CustomJsonResult UnbindPosMachine(int merchantId, int posMachineId)
+        {
+            return BizFactory.Merchant.UnbindPosMachine(this.CurrentUserId, merchantId, posMachineId);
         }
 
     }

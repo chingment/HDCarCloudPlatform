@@ -140,81 +140,87 @@ namespace Lumos.BLL
             return result;
         }
 
+        private static readonly object lockResultNotify = new object();
+
         public CustomJsonResult ResultNotify(int operater, string orderSn, bool isPaySuccess, Enumeration.PayResultNotifyType notifyType, string notifyFromName, string notifyFromResult = null)
         {
             CustomJsonResult result = new CustomJsonResult();
             var orderPayResultNotifyLog = new OrderPayResultNotifyLog();
-            try
+
+            lock (lockResultNotify)
             {
-                using (TransactionScope ts = new TransactionScope())
+                try
                 {
-                    var order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
-
-
-                    orderPayResultNotifyLog.OrderSn = orderSn;
-                    orderPayResultNotifyLog.NotifyType = notifyType;
-                    orderPayResultNotifyLog.NotifyFromName = notifyFromName;
-                    orderPayResultNotifyLog.NotifyFromResult = notifyFromResult;
-                    orderPayResultNotifyLog.IsPaySuccess = isPaySuccess;
-                    orderPayResultNotifyLog.OperatorId = operater;
-                    orderPayResultNotifyLog.CreateTime = this.DateTime;
-                    orderPayResultNotifyLog.Creator = operater;
-
-                    if (order == null)
+                    using (TransactionScope ts = new TransactionScope())
                     {
-                        Log.Warn("订单找不到");
+                        var order = CurrentDb.Order.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+
+                        orderPayResultNotifyLog.OrderSn = orderSn;
+                        orderPayResultNotifyLog.NotifyType = notifyType;
+                        orderPayResultNotifyLog.NotifyFromName = notifyFromName;
+                        orderPayResultNotifyLog.NotifyFromResult = notifyFromResult;
+                        orderPayResultNotifyLog.IsPaySuccess = isPaySuccess;
+                        orderPayResultNotifyLog.OperatorId = operater;
+                        orderPayResultNotifyLog.CreateTime = this.DateTime;
+                        orderPayResultNotifyLog.Creator = operater;
+
+                        if (order == null)
+                        {
+                            Log.Warn("订单找不到");
+                            CurrentDb.OrderPayResultNotifyLog.Add(orderPayResultNotifyLog);
+                            CurrentDb.SaveChanges();
+                            ts.Complete();
+                            return new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "找不到对应的订单号");
+                        }
+
+                        orderPayResultNotifyLog.UserId = order.UserId;
+                        orderPayResultNotifyLog.MerchantId = order.MerchantId;
+                        orderPayResultNotifyLog.PosMachineId = order.PosMachineId;
+                        orderPayResultNotifyLog.OrderId = order.Id;
+
+
+                        if (isPaySuccess)
+                        {
+                            switch (order.Type)
+                            {
+                                case Enumeration.OrderType.PosMachineServiceFee:
+                                    result = PayServiceFeeCompleted(operater, order.Sn);
+                                    break;
+                                case Enumeration.OrderType.InsureForCarForInsure:
+                                    result = PayCarInsureCompleted(operater, order.Sn);
+                                    break;
+                                case Enumeration.OrderType.LllegalQueryRecharge:
+                                    result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
+                                    break;
+                                case Enumeration.OrderType.LllegalDealt:
+                                    result = PayLllegalDealtCompleted(operater, order.Sn);
+                                    break;
+                            }
+
+
+
+                            if (result.Result == Lumos.Mvc.ResultType.Success)
+                            {
+                                result.Data = orderPayResultNotifyLog;
+                            }
+                        }
+
+
+
+
                         CurrentDb.OrderPayResultNotifyLog.Add(orderPayResultNotifyLog);
                         CurrentDb.SaveChanges();
+
                         ts.Complete();
-                        return new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "找不到对应的订单号");
                     }
-
-                    orderPayResultNotifyLog.UserId = order.UserId;
-                    orderPayResultNotifyLog.MerchantId = order.MerchantId;
-                    orderPayResultNotifyLog.PosMachineId = order.PosMachineId;
-                    orderPayResultNotifyLog.OrderId = order.Id;
-
-
-                    if (isPaySuccess)
-                    {
-                        switch (order.Type)
-                        {
-                            case Enumeration.OrderType.PosMachineServiceFee:
-                                result = PayServiceFeeCompleted(operater, order.Sn);
-                                break;
-                            case Enumeration.OrderType.InsureForCarForInsure:
-                                result = PayCarInsureCompleted(operater, order.Sn);
-                                break;
-                            case Enumeration.OrderType.LllegalQueryRecharge:
-                                result = PayLllegalQueryRechargeCompleted(operater, order.Sn);
-                                break;
-                            case Enumeration.OrderType.LllegalDealt:
-                                result = PayLllegalDealtCompleted(operater, order.Sn);
-                                break;
-                        }
-
-
-
-                        if (result.Result == Lumos.Mvc.ResultType.Success)
-                        {
-                            result.Data = orderPayResultNotifyLog;
-                        }
-                    }
-
-
-
-
-                    CurrentDb.OrderPayResultNotifyLog.Add(orderPayResultNotifyLog);
-                    CurrentDb.SaveChanges();
-
-                    ts.Complete();
                 }
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorFormat("支付确认订单ID({0})结果反馈发生异常，原因：{1}", orderPayResultNotifyLog.OrderId, ex.InnerException);
+                catch (Exception ex)
+                {
+                    Log.ErrorFormat("支付确认订单ID({0})结果反馈发生异常，原因：{1}", orderPayResultNotifyLog.OrderId, ex.InnerException);
 
-                result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付失败");
+                    result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付失败");
+                }
             }
 
             return result;
@@ -330,10 +336,7 @@ namespace Lumos.BLL
 
                     posMachine.IsUse = true;
 
-                    if (merchant.Id != 258 && merchant.Id != 265 && merchant.Id != 266)
-                    {
-                        BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, orderToServiceFee.UserId, orderToServiceFee.MerchantId, orderToServiceFee.MerchantId, Enumeration.MerchantAuditStatus.WaitPrimaryAudit);
-                    }
+                    BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.MerchantAudit, orderToServiceFee.UserId, orderToServiceFee.MerchantId, orderToServiceFee.MerchantId, Enumeration.MerchantAuditStatus.WaitPrimaryAudit);
 
                     CurrentDb.SaveChanges();
                 }

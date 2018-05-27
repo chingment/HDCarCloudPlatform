@@ -81,20 +81,7 @@ namespace Lumos.BLL
 
             if (order.Status == Enumeration.OrderStatus.Completed)
             {
-                PrintDataModel printData = new PrintDataModel();
-
-                printData.MerchantName = "好易联";
-                printData.MerchantCode = "354422";
-                printData.OrderType = order.TypeName;
-                printData.TradeType = "消费";
-                printData.TradeNo = order.Sn;
-                printData.TradePayMethod = order.PayWay.GetCnName();
-                printData.TradeAmount = order.Price.ToF2Price();
-                printData.TradeDateTime = order.PayTime.ToUnifiedFormatDateTime();
-                printData.ServiceHotline = "4400000000";
-
-                resultData.PrintData = printData;
-
+                resultData.PrintData = PrintUntil.GetPrintData(order.TypeName, "消费", order.TransSn, order.PayWay.GetCnName(), order.PayTime.Value, order.Sn, order.Price);
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);

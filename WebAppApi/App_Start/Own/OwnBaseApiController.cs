@@ -8,12 +8,15 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using WebAppApi.Models;
+using Lumos.Entity.AppApi;
+using Lumos.Entity;
 
 namespace WebAppApi
 {
 
     public class OwnBaseApiController : BaseApiController
     {
+
         private APIResult _result = new APIResult();
         private LumosDbContext _currentDb;
 
@@ -170,5 +173,8 @@ namespace WebAppApi
                 return false;
             }
         }
+
+
+    
     }
 }

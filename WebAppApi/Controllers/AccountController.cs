@@ -234,7 +234,7 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "没有最新的数据");
             }
 
-            model.ServiceTelphone = "服务热线：020-36824118 （9：00~18：00）";
+            model.ServiceTelphone = "服务热线：" + BizFactory.AppSettings.ServiceHotline + " （9：00~18：00）";
             model.LastUpdateTime = lastUpdateTime.Value;
 
             #region 获取bannder

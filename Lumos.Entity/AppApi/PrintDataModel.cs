@@ -9,7 +9,9 @@ namespace Lumos.Entity.AppApi
     {
         public string MerchantName { get; set; }
         public string MerchantCode { get; set; }
+        public string ProductName { get; set; }
         public string OrderType { get; set; }
+        public string OrderSn { get; set; }
         public string TradeType { get; set; }
         public string TradeNo { get; set; }
         public string TradeDateTime { get; set; }

@@ -90,6 +90,7 @@
     <Compile Include="Biz\OrderToInsuranceProvider.cs" />
     <Compile Include="Biz\PayProvider.cs" />
     <Compile Include="Biz\PosMachineProvider.cs" />
+    <Compile Include="Biz\PrintUntil.cs" />
     <Compile Include="Biz\ProductCategoryProvider.cs" />
     <Compile Include="Biz\ProductKindProvider.cs" />
     <Compile Include="Biz\ProductProvider.cs" />

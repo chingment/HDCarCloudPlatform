@@ -14,7 +14,5 @@ namespace WebAppApi.Models.Order
 
         public string ExpiryTime { get; set; }
 
-        public PrintDataModel PrintData { get; set; }
-
     }
 }

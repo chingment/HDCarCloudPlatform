@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Lumos.Entity.AppApi;
 
 namespace WebAppApi.Models.Order
 {
@@ -28,5 +29,7 @@ namespace WebAppApi.Models.Order
         public string Price { get; set; }
 
         public string Remarks { get; set; }
+
+        public PrintDataModel PrintData { get; set; }
     }
 }

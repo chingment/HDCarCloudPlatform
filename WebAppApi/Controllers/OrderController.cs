@@ -735,20 +735,10 @@ namespace WebAppApi.Controllers
 
                         orderServiceFeeDetailsModel.MobileTrafficFee = orderToServiceFee.MobileTrafficFee.ToF2Price();
                         orderServiceFeeDetailsModel.ExpiryTime = orderToServiceFee.ExpiryTime.ToUnifiedFormatDate();
-
-                        PrintDataModel printData = new PrintDataModel();
-
-                        //printData.MerchantName = "好易联";
-                        //printData.MerchantCode = "354422";
-                        //printData.ProductName = orderToServiceFee.ProductName;
-                        //printData.TradeType = "消费";
-                        //printData.TradeNo = orderToServiceFee.Sn;
-                        //printData.TradePayMethod = orderToServiceFee.PayWay.GetCnName();
-                        //printData.TradeAmount = orderToServiceFee.Price.ToF2Price();
-                        //printData.TradeDateTime = orderToServiceFee.PayTime.ToUnifiedFormatDateTime();
-                        //printData.ServiceHotline = "4400000000";
-
-                        orderServiceFeeDetailsModel.PrintData = printData;
+                        if (orderToServiceFee.Status == Enumeration.OrderStatus.Completed)
+                        {
+                            orderServiceFeeDetailsModel.PrintData = PrintUntil.GetPrintData(orderToServiceFee.TypeName, "消费", orderToServiceFee.TransSn, orderToServiceFee.PayWay.GetCnName(), orderToServiceFee.PayTime.Value, orderToServiceFee.Sn, orderToServiceFee.Price);
+                        }
                     }
 
 
@@ -823,6 +813,11 @@ namespace WebAppApi.Controllers
                         orderLllegalQueryRechargeDetailsModel.Remarks = orderToLllegalQueryRecharge.Remarks.NullToEmpty();
 
                         orderLllegalQueryRechargeDetailsModel.Score = orderToLllegalQueryRecharge.Score;
+
+                        if (orderLllegalQueryRechargeDetailsModel.Status == Enumeration.OrderStatus.Completed)
+                        {
+                            orderLllegalQueryRechargeDetailsModel.PrintData = PrintUntil.GetPrintData(orderToLllegalQueryRecharge.TypeName, "消费", orderToLllegalQueryRecharge.TransSn, orderToLllegalQueryRecharge.PayWay.GetCnName(), orderToLllegalQueryRecharge.PayTime.Value, orderToLllegalQueryRecharge.Sn, orderToLllegalQueryRecharge.Price);
+                        }
                     }
 
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderLllegalQueryRechargeDetailsModel };

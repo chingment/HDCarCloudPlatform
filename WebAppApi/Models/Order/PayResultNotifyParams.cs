@@ -5,6 +5,7 @@ using System.Web;
 
 namespace WebAppApi.Models.Order
 {
+
     public class PayResultNotifyParams
     {
         public int UserId { get; set; }
@@ -13,4 +14,5 @@ namespace WebAppApi.Models.Order
         public string OrderSn { get; set; }
         public bool IsPaySuccess { get; set; }
     }
+
 }

@@ -196,11 +196,9 @@
     <Compile Include="Models\Coupon\GetListParams.cs" />
     <Compile Include="Models\Global\DataSetModel.cs" />
     <Compile Include="Models\Order\PayResultNotifyParams.cs" />
-    <Compile Include="Models\Order\PayResultNotifyParams.cs" />
     <Compile Include="Models\Resource\BannerModel.cs" />
     <Compile Include="Models\Resource\DetailsViewModelByBanner.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
-    <Compile Include="Models\CarService\CarInsKindModel.cs" />
     <Compile Include="Models\IdRecogModel.cs" />
     <Compile Include="Models\CarService\CarInsPlanKindParentModel.cs" />
     <Compile Include="Models\CarService\ReInsureOfferModel.cs" />

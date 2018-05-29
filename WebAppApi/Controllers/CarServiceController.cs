@@ -41,8 +41,8 @@ namespace WebAppApi.Controllers
                 var key_CZ_CL_XSZ_Img = "CZ_CL_XSZ_Img";
                 if (model.ImgData.ContainsKey(key_CZ_CL_XSZ_Img))
                 {
-                    //orderToCarInsure.CZ_CL_XSZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_CL_XSZ_Img], "CarInsure");
-                    orderToCarInsure.CZ_CL_XSZ_ImgUrl = "http://file.gzhaoyilian.com/Upload/demo_jsz.jpg";
+                    orderToCarInsure.CZ_CL_XSZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_CL_XSZ_Img], "CarInsure");
+                    //orderToCarInsure.CZ_CL_XSZ_ImgUrl = "http://file.gzhaoyilian.com/Upload/demo_jsz.jpg";
                     var drivingLicenceInfo = BizFactory.CarInsureOffer.GetDrivingLicenceInfoFromImgUrl(orderToCarInsure.CZ_CL_XSZ_ImgUrl);
                     if (drivingLicenceInfo != null)
                     {
@@ -70,8 +70,8 @@ namespace WebAppApi.Controllers
                 var key_CZ_SFZ_Img = "CZ_SFZ_Img";
                 if (model.ImgData.ContainsKey(key_CZ_SFZ_Img))
                 {
-                    orderToCarInsure.CZ_SFZ_ImgUrl = "http://file.gzhaoyilian.com/Upload/demo_sfz.jpg";
-                    //orderToCarInsure.CZ_SFZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_SFZ_Img], "CarInsure");
+                    //orderToCarInsure.CZ_SFZ_ImgUrl = "http://file.gzhaoyilian.com/Upload/demo_sfz.jpg";
+                    orderToCarInsure.CZ_SFZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_SFZ_Img], "CarInsure");
                     var identityCardInfo = BizFactory.CarInsureOffer.GetIdentityCardInfoFromImgUrl(orderToCarInsure.CZ_SFZ_ImgUrl);
                     if (identityCardInfo != null)
                     {

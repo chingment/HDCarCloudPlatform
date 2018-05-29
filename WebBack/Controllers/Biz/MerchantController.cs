@@ -111,7 +111,8 @@ namespace WebBack.Controllers.Biz
                          (merchantName.Length == 0 || p.YYZZ_Name.Contains(merchantName)) &&
                          (clientCode.Length == 0 || p.ClientCode.Contains(clientCode)) &&
                                  (posMerchantNumber.Length == 0 || u.PosMerchantNumber.Contains(posMerchantNumber)) &&
-                                    (deviceId.Length == 0 || c.DeviceId.Contains(deviceId))
+                                    (deviceId.Length == 0 || c.DeviceId.Contains(deviceId)) &&
+                                    u.Status != Enumeration.MerchantPosMachineStatus.Unbind
                          select new { p.Id, PosMachineId = c.Id, MerchantName = p.YYZZ_Name, p.ClientCode, u.PosMerchantNumber, c.DeviceId, u.CreateTime, u.Status, p.ContactName, p.ContactPhoneNumber, e.UserName });
 
             int total = query.Count();

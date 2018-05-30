@@ -19,12 +19,15 @@
         {
             foreach (var auditDetail in Model)
             {
-                <li style="line-height:18px;">
-                    <div>[@(auditDetail.CreateTime.ToUnifiedFormatDateTime())] (@auditDetail.AuditStep.ToEnumCnName(auditDetail.AuditStepEnumName))-@auditDetail.Description</div>
-                    <div style="padding-left:125px">
-                        @auditDetail.AuditComments
-                    </div>
-                </li>
+                if (!string.IsNullOrEmpty(auditDetail.AuditStepEnumName))
+                {
+                    <li style="line-height:18px;">
+                        <div>[@(auditDetail.CreateTime.ToUnifiedFormatDateTime())] (@auditDetail.AuditStep.ToEnumCnName(auditDetail.AuditStepEnumName))-@auditDetail.Description</div>
+                        <div style="padding-left:125px">
+                            @auditDetail.AuditComments
+                        </div>
+                    </li>
+                }
             }
         }
         else

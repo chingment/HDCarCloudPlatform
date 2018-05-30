@@ -56,7 +56,7 @@
             <h5>险种信息</h5>
         </div>
         <div class="pull-right f-tb1-item-pull-right">
-            <h6>@Lumos.BLL.BizFactory.CarInsurePlan.GetPlanName(Model.OrderToCarInsure.InsurePlanId)</h6>
+            <h6>@Lumos.BLL.BizFactory.CarInsurePlan.GetPlanName(Model.OrderToCarInsure.InsPlanId)</h6>
         </div>
     </div>
     <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
@@ -81,15 +81,15 @@
         </thead>
         <tbody>
 
-            @for (var i = 0; i < Model.OrderToCarInsureOfferKind.Count; i++)
+            @for (var i = 0; i < Model.OrderToCarInsureOfferCompanyKind.Count; i++)
             {
 
             <tr>
                 <td class="no">@(i + 1)</td>
-                <td class="overflow tipitem">@Model.OrderToCarInsureOfferKind[i].KindName</td>
-                <td class="overflow tipitem">@(Model.OrderToCarInsureOfferKind[i].KindValue + Model.OrderToCarInsureOfferKind[i].KindUnit)</td>
-                <td class="overflow">@(Model.OrderToCarInsureOfferKind[i].IsWaiverDeductible == true ? "不计入免赔额" : "")</td>
-                <td class="overflow">@Model.OrderToCarInsureOfferKind[i].KindDetails</td>
+                <td class="overflow tipitem">@Model.OrderToCarInsureOfferCompanyKind[i].KindName</td>
+                <td class="overflow tipitem">@(Model.OrderToCarInsureOfferCompanyKind[i].KindValue + Model.OrderToCarInsureOfferCompanyKind[i].KindUnit)</td>
+                <td class="overflow">@(Model.OrderToCarInsureOfferCompanyKind[i].IsWaiverDeductible == true ? "不计入免赔额" : "")</td>
+                <td class="overflow">@Model.OrderToCarInsureOfferCompanyKind[i].KindDetails</td>
             </tr>
             }
 
@@ -245,17 +245,17 @@
         <tr>
             <td class="t">车主姓名：</td>
             <td class="c">
-                <span>@Model.OrderToCarInsure.CarOwner</span>
+                <span>@Model.OrderToCarInsure.CarownerName</span>
             </td>
             <td class="t">车主身份证号码：</td>
             <td class="c">
-                <span>@Model.OrderToCarInsure.CarOwnerIdNumber</span>
+                <span>@Model.OrderToCarInsure.CarownerCertNo</span>
             </td>
         </tr>
         <tr>
             <td class="t">车牌号码：</td>
             <td class="c">
-                <span>@Model.OrderToCarInsure.CarPlateNo</span>
+                <span>@Model.OrderToCarInsure.CarLicensePlateNo</span>
             </td>
             <td class="t">车辆使用性质：</td>
             <td class="c">
@@ -265,7 +265,7 @@
         <tr>
             <td class="t">品牌型号：</td>
             <td class="c">
-                <span>@Model.OrderToCarInsure.CarModel</span>
+                <span>@Model.OrderToCarInsure.CarModelName</span>
             </td>
             <td class="t">车辆识别代号：</td>
             <td class="c">
@@ -279,7 +279,7 @@
             </td>
             <td class="t">核定载人数：</td>
             <td class="c">
-                <span>@Model.OrderToCarInsure.CarSeat</span>
+                <span>@Model.OrderToCarInsure.CarRatedPassengerCapacity</span>
             </td>
         </tr>
         <tr>
@@ -288,7 +288,7 @@
             <td class="c">@Model.OrderToCarInsure.CarVechicheType.GetCnName()</td>
             <td class="t">车辆注册日期：</td>
             <td class="c">
-                <span>@Model.OrderToCarInsure.CarRegisterDate</span>
+                <span>@Model.OrderToCarInsure.CarFirstRegisterDate</span>
             </td>
         </tr>
     </table>
@@ -382,27 +382,27 @@
             <tr>
                 <td class="no"></td>
                 <td class="overflow tipitem">
-                    <span class="insurancecompanyname">@Model.OrderToCarInsure.InsuranceCompanyName</span>
+                    <span class="insurancecompanyname">@Model.OrderToCarInsure.InsCompanyName</span>
                 </td>
                 <td>
                     <span class="uploadimgbox" upload="false">
                         <span class="uploadimg">
-                            <img src="@Model.OrderToCarInsure.InsureImgUrl" />
+                            <img src="@Model.OrderToCarInsure.InsImgUrl" />
                         </span>
                         <span class="uploadimg-view" style="">预览</span>
                     </span>
                 </td>
                 <td class="overflow">
-                    @Model.OrderToCarInsure.InsuranceOrderId
+                    @Model.OrderToCarInsure.InsOrderId
                 </td>
                 <td class="overflow">
-                    @Model.OrderToCarInsure.CompulsoryPrice.ToPrice()
+                    @Model.OrderToCarInsure.InsCompulsoryPrice.ToPrice()
                 </td>
                 <td class="overflow">
-                    @Model.OrderToCarInsure.TravelTaxPrice.ToPrice()
+                    @Model.OrderToCarInsure.InsTravelTaxPrice.ToPrice()
                 </td>
                 <td class="overflow">
-                    @Model.OrderToCarInsure.CommercialPrice.ToPrice()
+                    @Model.OrderToCarInsure.InsCommercialPrice.ToPrice()
                 </td>
                 <td class="overflow">
                     @Model.OrderToCarInsure.Price.ToPrice()
@@ -423,15 +423,7 @@
         </tbody>
     </table>
 
-
-
-
     @Html.Partial("AuditFlowTrace", Model.BizProcessesAuditDetails)
-
-
-
-
-
 
 </form>
 

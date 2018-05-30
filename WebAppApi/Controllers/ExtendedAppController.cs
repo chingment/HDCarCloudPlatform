@@ -22,7 +22,7 @@ namespace WebAppApi.Controllers
                 case 2:
                     url = string.Format("{0}{1}?userId={2}&merchantId={3}&posMachineId={4}", server, "/ExtendedApp/PosCredit", userId, merchantId, posMachineId);
                     break;
-                case 4:
+                case 6:
                     url = "http://www.omlife.com.cn/xinbox/toApplyCredit_inst?operCode=00059%E5%A5%BD%E6%98%93%E8%81%94_APP&orgno=00059&platform=%E5%A5%BD%E6%98%93%E8%81%94_APP&sign=F13EECFEF9DDCD63B7ECB49FD32A7DF0";
                     //url = string.Format("{0}{1}?userId={2}&merchantId={3}&posMachineId={4}", server, "/ExtendedApp/PosCredit", userId, merchantId, posMachineId);
                     break;

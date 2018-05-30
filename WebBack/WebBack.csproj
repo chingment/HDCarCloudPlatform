@@ -1282,7 +1282,6 @@
     <Content Include="Views\Sys\SmsSend\Log.cshtml" />
     <Content Include="Views\Biz\CarInsuranceCompany\Edit.cshtml" />
     <Content Include="Views\Biz\Order\PayTransList.cshtml" />
-    <Content Include="Views\Biz\CarInsureOffer\Dealt2.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\Edit.cshtml" />
     <Content Include="Views\Biz\TalentDemand\Dealt.cshtml" />
     <Content Include="Views\Biz\TalentDemand\ListByDealt.cshtml" />
@@ -1425,7 +1424,6 @@
     <Content Include="Views\Biz\Merchant\PrimaryAuditList.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\List.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\DealtList.cshtml" />
-    <Content Include="Views\Biz\CarInsureOffer\Dealt.cshtml" />
     <Content Include="Views\Biz\ExtendedApp\List.cshtml" />
     <Content Include="Views\Biz\ExtendedApp\Add.cshtml" />
     <Content Include="Views\Biz\ExtendedApp\Details.cshtml" />

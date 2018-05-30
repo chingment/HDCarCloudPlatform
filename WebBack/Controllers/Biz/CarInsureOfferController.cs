@@ -37,21 +37,6 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
-
-        [OwnAuthorize(PermissionCode.车险订单报价)]
-        public ViewResult Dealt(int id)
-        {
-            DealtViewModel model = new DealtViewModel(id);
-            return View(model);
-        }
-
-        [OwnAuthorize(PermissionCode.车险订单报价)]
-        public ViewResult Dealt2(int id)
-        {
-            DealtViewModel model = new DealtViewModel(id);
-            return View(model);
-        }
-
         [OwnAuthorize(PermissionCode.车险订单报价)]
         public ViewResult DealtByOffer(int id)
         {

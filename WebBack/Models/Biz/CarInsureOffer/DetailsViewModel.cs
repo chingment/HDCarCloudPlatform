@@ -55,7 +55,8 @@ namespace WebBack.Models.Biz.CarInsureOffer
 
                 }
 
-                var orderToCarInsureOfferCompanyKind = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
+                int insuranceCompanyId1 = orderToCarInsureOfferCompany[0].InsuranceCompanyId;
+                var orderToCarInsureOfferCompanyKind = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == orderToCarInsure.Id && m.InsuranceCompanyId == insuranceCompanyId1).ToList();
                 var carKinds = CurrentDb.CarKind.ToList();
                 if (orderToCarInsureOfferCompanyKind != null)
                 {

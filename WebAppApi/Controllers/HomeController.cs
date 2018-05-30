@@ -116,6 +116,8 @@ namespace WebAppApi.Controllers
 
         public ActionResult Index()
         {
+            decimal s2 = 4.5m;
+            int s = (int)s2;
 
             LllegalQueryParams pms = new LllegalQueryParams();
             pms.MerchantId = 1;
@@ -168,13 +170,13 @@ namespace WebAppApi.Controllers
             //int merchantId = 242;
             //int posMachineId = 149;
             //http://localhost:16665/ExtendedApp/poscredit?userId=1215&merchantId=241&posMachineId=148
-            int userId = 1215;
-            int merchantId = 241;
-            int posMachineId = 148;
+            //int userId = 1215;
+            //int merchantId = 241;
+            //int posMachineId = 148;
 
-            //int userId = 1234;
-            //int merchantId = 258;
-            //int posMachineId = 153;
+            int userId = 1234;
+            int merchantId = 258;
+            int posMachineId = 153;
 
             //CarIns(userId, merchantId, posMachineId);
 
@@ -185,7 +187,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
-            // model.Add("违章查询", SubmittLllegalQuery(1215, 241, 148));
+             //model.Add("违章查询", SubmittLllegalQuery(1215, 241, 148));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
@@ -202,13 +204,13 @@ namespace WebAppApi.Controllers
             //model.Add("添加账户", AddAccount(userName, passWord, "bf1b3357-1276-44b5-8b19-0ceba67e23e3", "959790", deviceId));
             // model.Add("登录接口", Login(userName, passWord, deviceId));
 
-             model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "18052209560000002606", Enumeration.OrderPayWay.Wechat));
+            // model.Add("获取支付二维码", QrCodeDownload(userId, merchantId, posMachineId, "18052209560000002606", Enumeration.OrderPayWay.Wechat));
             // model.Add("获取支付二维码2", QrCodeDownload(userId, merchantId, posMachineId, "D180205111300000007", Enumeration.OrderPayWay.Alipay));
             // model.Add("获取支付结果查询", PayResultQuery(userId, merchantId, posMachineId, "D180225100100001255"));
 
             ///model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-            //  model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             // model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 1600));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
@@ -317,7 +319,7 @@ namespace WebAppApi.Controllers
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("key", YBS_key);
             headers.Add("timestamp", timespan.ToString());
-           // headers.Add("sign", signStr);
+            // headers.Add("sign", signStr);
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/Pay/ReceiveNotifyByStar", a1, headers);
 
@@ -1572,6 +1574,7 @@ namespace WebAppApi.Controllers
 
             string a1 = JsonConvert.SerializeObject(pms);
 
+            a1 = "{\"merchantId\":258,\"carType\":\"02\",\"userId\":1234,\"carNo\":\"粤A7CR57\",\"isCompany\":\"false\",\"isOfferPrice\":\"true\",\"enginNo\":\"104595\",\"rackNo\":\"034618\",\"posMachineId\":153}";
             string signStr = Signature.Compute(key, secret, timespan, a1);
 
             Dictionary<string, string> headers1 = new Dictionary<string, string>();

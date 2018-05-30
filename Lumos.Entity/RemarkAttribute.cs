@@ -77,12 +77,26 @@ namespace System
 
         public static string ToEnumCnName(this int v, string typname)
         {
-            Type ot = Type.GetType(typname);
+            try
+            {
+                if (string.IsNullOrEmpty(typname))
+                    return "";
 
-            object a = Enum.ToObject(ot, v);
-            string b = ((Enum)a).GetCnName();
+                Type ot = Type.GetType(typname);
+                if (ot == null)
+                    return "";
 
-            return b;
+                object a = Enum.ToObject(ot, v);
+                if (a == null)
+                    return "";
+                string b = ((Enum)a).GetCnName();
+
+                return b;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
         }
 
     }

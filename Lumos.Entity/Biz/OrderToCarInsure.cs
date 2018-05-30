@@ -122,6 +122,10 @@ namespace Lumos.Entity
         public decimal? InsCompulsoryPrice { get; set; }
         public decimal? InsTotalPrice { get; set; }
 
+        public string InsOrderId { get; set; }
+
+        public string InsImgUrl { get; set; }
+
         public int InsPlanId { get; set; }
 
         [MaxLength(1024)]

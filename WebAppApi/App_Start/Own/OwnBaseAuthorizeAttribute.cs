@@ -90,7 +90,14 @@ namespace WebAppApi
 
                 string app_key = request.Headers["key"];
                 string app_sign = request.Headers["sign"];
+                string app_version = request.Headers["version"];
                 string app_timestamp_s = request.Headers["timestamp"];
+
+                if (app_version != null)
+                {
+                    Log.Info("app_version:" + app_version);
+                }
+
                 string app_data = null;
                 if (requestMethod == "POST")
                 {

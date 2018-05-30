@@ -187,7 +187,7 @@ namespace WebAppApi.Controllers
             // model.Add("获取支付流水号", GetGetPayTranSn(1216, 1, 2, 1428, "18032722300000001428"));
 
 
-             //model.Add("违章查询", SubmittLllegalQuery(1215, 241, 148));
+            //model.Add("违章查询", SubmittLllegalQuery(1215, 241, 148));
             // model.Add("违章查询记录", GetLllegalQueryLog(1001, 1, 2));
             //model.Add("提交充值单", SubmitLllegalQueryScoreRecharge(userId, merchantId, posMachineId));
             //model.Add("提交核实支付违章处理", SubmitLllegalDealt(userId, merchantId, posMachineId, false));
@@ -210,7 +210,7 @@ namespace WebAppApi.Controllers
 
             ///model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-             //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+            model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             // model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 1600));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
@@ -910,6 +910,8 @@ namespace WebAppApi.Controllers
             headers.Add("key", key);
             headers.Add("timestamp", timespan.ToString());
             headers.Add("sign", signStr);
+            headers.Add("version", "1.0.0.5");
+
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/CarService/SubmitInsure", a1, headers);
 

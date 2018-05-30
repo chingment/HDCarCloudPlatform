@@ -13,6 +13,7 @@ using Lumos.Entity.AppApi;
 using WebAppApi.Models;
 using Lumos.BLL.Service;
 using Lumos.BLL.Service.Model;
+using System.Web;
 
 namespace WebAppApi.Controllers
 {
@@ -1074,6 +1075,13 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse PayUnifiedOrder(PayUnifiedOrderParams pms)
         {
+            string app_version = HttpContext.Current.Request.Headers["version"];
+
+            if (app_version != "1.3.0.5")
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "请升级到最新版本");
+            }
+
             IResult result = SdkFactory.StarPay.UnifiedOrder(pms.UserId, pms);
             return new APIResponse(result);
         }

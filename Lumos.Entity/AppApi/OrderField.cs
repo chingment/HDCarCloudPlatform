@@ -18,4 +18,11 @@ namespace Lumos.Entity.AppApi
 
         public string value { get; set; }
     }
+
+    public class ItemField
+    {
+        public string field { get; set; }
+
+        public string value { get; set; }
+    }
 }

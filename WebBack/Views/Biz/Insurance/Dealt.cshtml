@@ -3,18 +3,7 @@
     ViewBag.Title = "Dealt";
     Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
 }
-@section styles{
-    <style type="text/css">
-        .f-tb1-detail .t {
-            width: 120px;
-        }
 
-        .f-tb1-detail .c {
-            width: 280px;
-        }
-    </style>
-
-}
 @section scripts{
 
     <script type="text/javascript">
@@ -135,7 +124,7 @@
             <td class="c">
                 <span>@Model.Merchant.Area</span>
             </td>
-            <td class="t">联系地址</td>
+            <td class="t">联系地址：</td>
             <td class="c">
                 <span>@Model.Merchant.ContactAddress</span>
             </td>
@@ -153,21 +142,22 @@
         <tr>
             <td class="t" style="width:80px">保险公司：</td>
             <td class="c">
-                <span>@Model.OrderToInsurance.InsuranceCompanyName</span>
+                <span>@Model.OrderToInsurance.InsCompanyName</span>
             </td>
-            <td class="t"></td>
-            <td class="c"></td>
         </tr>
         <tr>
-            <td class="t">产品名称：</td>
-            <td class="c">
-                <span>@Model.OrderToInsurance.ProductSkuName</span>
-            </td>
-            <td class="t">产品类型：</td>
-            <td class="c">
-                <span>@Model.OrderToInsurance.ProductType.GetCnName()</span>
-            </td>
+            <td class="t">保险方案：</td>
+            <td class="c">@Model.OrderToInsurance.InsPlanName</td>
         </tr>
+        @foreach (var item in Model.InsPlanDetailsItems)
+        {
+            <tr>
+                <td class="t" style="width:80px">@item.field ：</td>
+                <td class="c">
+                    <span>@item.value</span>
+                </td>
+            </tr>
+        }
     </table>
     @Html.Partial("AuditFlowTrace", Model.BizProcessesAudit.HistoricalDetails)
     <div class="gbr-row-title clearfix">

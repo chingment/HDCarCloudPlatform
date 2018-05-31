@@ -180,7 +180,7 @@ namespace WebAppApi.Controllers
 
             //CarIns(userId, merchantId, posMachineId);
 
-            // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
+            model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
             // model.Add("获取产品", GetProductList(userId, merchantId, posMachineId, 0));
 
@@ -1770,7 +1770,17 @@ namespace WebAppApi.Controllers
             model1.UserId = userId;
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;
-            model1.ProductSkuId = 1;
+            model1.InsCompanyId = 0;
+            model1.InsCompanyName = "泰康保险";
+            model1.InsPlanId = 1;
+            model1.InsPlanName = "泰康“呵护一生";
+            model1.IsTeam = false;
+
+            model1.InsPlanDetailsItems.Add(new ItemField { field = "被保险人年龄", value = "0-65岁" });
+            model1.InsPlanDetailsItems.Add(new ItemField { field = "意外身故", value = "10W" });
+            model1.InsPlanDetailsItems.Add(new ItemField { field = "意外医疗", value = "1万" });
+            model1.InsPlanDetailsItems.Add(new ItemField { field = "保费", value = "60元" });
+
 
             string a1 = JsonConvert.SerializeObject(model1);
 

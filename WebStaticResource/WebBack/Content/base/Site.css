@@ -2324,12 +2324,10 @@ height:50px;
 .f-tb-t {
 	white-space: nowrap;
 	text-align: right;
-	/*width: 10%;*/
+	width: 100px;
 	FONT-SIZE: 9pt;
 	background-color: #F5F6FA;
 	height: 30px;
-	PADDING-LEFT: 15px;
-	PADDING-RIGHT: 5px;
 	vertical-align: top;
 	line-height: 30px;
 	padding-top: 8px;
@@ -3486,14 +3484,14 @@ ul.ztree.zTreeDragUL {
 
 .f-tb1-detail {
 	width: 100%;
- table-layout: fixed;
+	table-layout: fixed;
 }
 
 
 .f-tb1-detail .t {
 	text-align: right;
 	padding: 0px 5px;
-	width: 120px;
+	width: 100px;
 	color: #5f6468;
 	white-space: nowrap;
 }

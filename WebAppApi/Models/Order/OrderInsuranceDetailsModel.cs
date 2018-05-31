@@ -7,10 +7,8 @@ namespace WebAppApi.Models.Order
 {
     public class OrderInsuranceDetailsModel : OrderBaseDetailsViewModel
     {
-        public string InsuranceCompanyName { get; set; }
+        public string InsCompanyName { get; set; }
 
-        public string ProductSkuName { get; set; }
-
-        public string ProductTypeName { get; set; }
+        public string InsPlanName { get; set; }
     }
 }

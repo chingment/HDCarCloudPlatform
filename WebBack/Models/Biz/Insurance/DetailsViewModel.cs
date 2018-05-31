@@ -1,5 +1,6 @@
 ﻿using Lumos.BLL;
 using Lumos.Entity;
+using Lumos.Entity.AppApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace WebBack.Models.Biz.Insurance
         private Lumos.Entity.OrderToInsurance _orderToInsurance = new Lumos.Entity.OrderToInsurance();
 
         private List<BizProcessesAuditDetails> _bizProcessesAuditDetails = new List<BizProcessesAuditDetails>();
-
+        private List<ItemField> _insPlanDetailsItems = new List<ItemField>();
         public DetailsViewModel()
         {
 
@@ -33,6 +34,10 @@ namespace WebBack.Models.Biz.Insurance
                     _merchant = merchant;
                 }
 
+                if (!string.IsNullOrEmpty(_orderToInsurance.InsPlanDetailsItems))
+                {
+                    _insPlanDetailsItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemField>>(_orderToInsurance.InsPlanDetailsItems);
+                }
 
                 _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.OrderToCredit, id);
 
@@ -72,6 +77,18 @@ namespace WebBack.Models.Biz.Insurance
             set
             {
                 _bizProcessesAuditDetails = value;
+            }
+        }
+
+        public List<ItemField> InsPlanDetailsItems
+        {
+            get
+            {
+                return _insPlanDetailsItems;
+            }
+            set
+            {
+                _insPlanDetailsItems = value;
             }
         }
     }

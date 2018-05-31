@@ -7,27 +7,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 
+
+
 namespace Lumos.Entity
 {
     [Table("OrderToInsurance")]
     public class OrderToInsurance : Order
     {
-        public int ProductId { get; set; }
-
-        public Enumeration.ProductType ProductType { get; set; }
-
-        [MaxLength(256)]
-        public string ProductName { get; set; }
-
-        public int ProductSkuId { get; set; }
-
-        public string ProductSkuName { get; set; }
-        public int InsuranceCompanyId { get; set; }
+        public int InsCompanyId { get; set; }
         [MaxLength(128)]
-        public string InsuranceCompanyName { get; set; }
-
-
-        //public int PeopleNumber { get; set; }
-
+        public string InsCompanyName { get; set; }
+        public int InsPlanId { get; set; }
+        [MaxLength(128)]
+        public string InsPlanName { get; set; }
+        public string InsPlanDetailsItems { get; set; }
+        public bool IsTeam { get; set; }
     }
 }

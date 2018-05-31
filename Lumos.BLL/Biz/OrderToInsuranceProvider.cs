@@ -20,32 +20,19 @@ namespace Lumos.BLL
             {
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToInsurance.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
-                var productSku = CurrentDb.ProductSku.Where(m => m.Id == orderToInsurance.ProductSkuId).FirstOrDefault();
-                var product = CurrentDb.Product.Where(m => m.Id == productSku.ProductId).FirstOrDefault();
 
                 orderToInsurance.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToInsurance.AgentId = merchant.AgentId ?? 0;
                 orderToInsurance.Type = Enumeration.OrderType.Insure;
                 orderToInsurance.TypeName = Enumeration.OrderType.Insure.GetCnName();
-                orderToInsurance.ProductId = product.Id;
-                orderToInsurance.ProductType = product.Type;
-                orderToInsurance.ProductName = product.Name;
-                orderToInsurance.ProductSkuId = productSku.Id;
-                orderToInsurance.ProductSkuName = productSku.Name;
-                orderToInsurance.InsuranceCompanyId = product.SupplierId;
-                orderToInsurance.InsuranceCompanyName = product.Supplier;
                 orderToInsurance.Status = Enumeration.OrderStatus.Submitted;
                 orderToInsurance.SubmitTime = this.DateTime;
                 orderToInsurance.CreateTime = this.DateTime;
                 orderToInsurance.Creator = operater;
                 CurrentDb.OrderToInsurance.Add(orderToInsurance);
                 CurrentDb.SaveChanges();
-
-
-                SnModel snModel = Sn.Build(SnType.OrderToCredit, orderToInsurance.Id);
-
+                SnModel snModel = Sn.Build(SnType.OrderToInsurance, orderToInsurance.Id);
                 orderToInsurance.Sn = snModel.Sn;
-
 
                 var bizProcessesAudit = BizFactory.BizProcessesAudit.Add(operater, Enumeration.BizProcessesAuditType.OrderToInsurance, orderToInsurance.UserId, orderToInsurance.MerchantId, orderToInsurance.Id, Enumeration.AuditFlowV1Status.Submit);
                 BizFactory.BizProcessesAudit.ChangeStatusByAuditFlowV1(bizProcessesAudit.Id, Enumeration.AuditFlowV1Status.Submit, operater, null, "提交订单，等待取单");

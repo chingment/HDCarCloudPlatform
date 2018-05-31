@@ -148,8 +148,8 @@ namespace WebAppApi.Controllers
                             case Enumeration.OrderType.Insure:
 
                                 var orderToInsurance = CurrentDb.OrderToInsurance.Where(c => c.Id == m.Id).FirstOrDefault();
-                                orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsuranceCompanyName));
-                                orderModel.OrderField.Add(new OrderField("产品名称", orderToInsurance.ProductSkuName));
+                                orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsCompanyName));
+                                orderModel.OrderField.Add(new OrderField("产品名称", orderToInsurance.InsPlanName));
                                 orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
 
                                 break;
@@ -370,8 +370,8 @@ namespace WebAppApi.Controllers
                             case Enumeration.OrderType.Insure:
 
                                 var orderToInsurance = CurrentDb.OrderToInsurance.Where(c => c.Id == m.Id).FirstOrDefault();
-                                orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsuranceCompanyName));
-                                orderModel.OrderField.Add(new OrderField("产品名称", orderToInsurance.ProductSkuName));
+                                orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsCompanyName));
+                                orderModel.OrderField.Add(new OrderField("保险方案", orderToInsurance.InsPlanName));
 
                                 break;
                         }
@@ -439,8 +439,8 @@ namespace WebAppApi.Controllers
                             case Enumeration.OrderType.Insure:
 
                                 var orderToInsurance = CurrentDb.OrderToInsurance.Where(c => c.Id == m.Id).FirstOrDefault();
-                                orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsuranceCompanyName));
-                                orderModel.OrderField.Add(new OrderField("产品名称", orderToInsurance.ProductSkuName));
+                                orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsCompanyName));
+                                orderModel.OrderField.Add(new OrderField("保险方案", orderToInsurance.InsPlanName));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
                         }
@@ -927,9 +927,8 @@ namespace WebAppApi.Controllers
                         orderInsuranceDetailsModel.StatusName = orderToInsurance.Status.GetCnName();
                         orderInsuranceDetailsModel.FollowStatus = orderToInsurance.FollowStatus;
                         orderInsuranceDetailsModel.Remarks = orderToInsurance.Remarks.NullToEmpty();
-                        orderInsuranceDetailsModel.InsuranceCompanyName = orderToInsurance.InsuranceCompanyName;
-                        orderInsuranceDetailsModel.ProductSkuName = orderToInsurance.ProductSkuName;
-                        orderInsuranceDetailsModel.ProductTypeName = orderToInsurance.ProductType.GetCnName();
+                        orderInsuranceDetailsModel.InsCompanyName = orderToInsurance.InsCompanyName;
+                        orderInsuranceDetailsModel.InsPlanName = orderToInsurance.InsPlanName;
                     }
 
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderInsuranceDetailsModel };
@@ -984,6 +983,7 @@ namespace WebAppApi.Controllers
             orderToApplyLossAssess.PosMachineId = model.PosMachineId;
             orderToApplyLossAssess.InsuranceCompanyId = model.InsuranceCompanyId;
             orderToApplyLossAssess.IsAgreeService = model.IsAgreeService;
+
             IResult result = BizFactory.OrderToApplyLossAssess.Submit(model.UserId, orderToApplyLossAssess);
             return new APIResponse(result);
 
@@ -1040,7 +1040,17 @@ namespace WebAppApi.Controllers
             orderToInsurance.UserId = model.UserId;
             orderToInsurance.MerchantId = model.MerchantId;
             orderToInsurance.PosMachineId = model.PosMachineId;
-            orderToInsurance.ProductSkuId = model.ProductSkuId;
+            orderToInsurance.InsPlanId = model.InsPlanId;
+            orderToInsurance.InsPlanName = model.InsPlanName;
+            orderToInsurance.InsCompanyId = model.InsCompanyId;
+            orderToInsurance.InsCompanyName = model.InsCompanyName;
+            orderToInsurance.IsTeam = model.IsTeam;
+
+            if (model.InsPlanDetailsItems.Count > 0)
+            {
+                orderToInsurance.InsPlanDetailsItems = Newtonsoft.Json.JsonConvert.SerializeObject(model.InsPlanDetailsItems);
+            }
+
             IResult result = BizFactory.OrderToInsurance.Submit(model.UserId, orderToInsurance);
             return new APIResponse(result);
 

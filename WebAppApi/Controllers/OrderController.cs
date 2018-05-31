@@ -812,7 +812,7 @@ namespace WebAppApi.Controllers
                         orderLllegalQueryRechargeDetailsModel.StatusName = orderToLllegalQueryRecharge.Status.GetCnName();
                         orderLllegalQueryRechargeDetailsModel.FollowStatus = orderToLllegalQueryRecharge.FollowStatus;
                         orderLllegalQueryRechargeDetailsModel.Remarks = orderToLllegalQueryRecharge.Remarks.NullToEmpty();
-
+                        orderLllegalQueryRechargeDetailsModel.Price = orderToLllegalQueryRecharge.Price.ToF2Price();
                         orderLllegalQueryRechargeDetailsModel.Score = orderToLllegalQueryRecharge.Score;
 
                         if (orderLllegalQueryRechargeDetailsModel.Status == Enumeration.OrderStatus.Completed)

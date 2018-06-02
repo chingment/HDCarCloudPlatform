@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -13,6 +14,42 @@ namespace Lumos.Common
 {
     public class HttpUtil
     {
+
+        public static string UpLoadFile(string filePath, string url, Dictionary<string, string> headers = null)
+        {
+            string responseData = String.Empty;
+            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
+            FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            byte[] buffur = new byte[fileStream.Length];
+            fileStream.Read(buffur, 0, (int)fileStream.Length);
+
+            if (headers != null)
+            {
+                foreach (var m in headers)
+                {
+                    req.Headers.Add(m.Key, m.Value);
+                }
+            }
+
+            req.Method = "POST";
+            req.ContentType = "application/x-www-form-urlencoded";
+            req.ContentLength = fileStream.Length;
+
+            Stream reqStream = req.GetRequestStream();
+            reqStream.Write(buffur, 0, buffur.Length);
+            reqStream.Close();
+
+            using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
+            {
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    responseData = reader.ReadToEnd().ToString();
+                }
+                return responseData;
+            }
+        }
+
+
         public string HttpPost(string urlString, string body = "", string safeAccount = "", string safeAccountPwd = "")
         {
             string result = "";

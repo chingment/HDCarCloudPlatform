@@ -134,6 +134,7 @@
     <Folder Include="Views\Car\" />
     <Folder Include="Views\Coupon\" />
     <Folder Include="Views\Global\" />
+    <Folder Include="Views\InsPrd\" />
     <Folder Include="Views\Lllegal\" />
     <Folder Include="Views\Pay\" />
     <Folder Include="Views\Product\" />
@@ -173,6 +174,7 @@
     <Compile Include="Controllers\GlobalController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HttpRequestClient .cs" />
+    <Compile Include="Controllers\InsPrdController.cs" />
     <Compile Include="Controllers\LllegalController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PayController.cs" />
@@ -240,6 +242,7 @@
     <Compile Include="Models\Sms\GetCreateAccountCodeResultModel.cs" />
     <Compile Include="Models\Sms\GetForgetPwdCodeModel.cs" />
     <Compile Include="Models\Sms\GetForgetPwdCodeResultModel.cs" />
+    <Compile Include="Models\UploadLogTracePms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

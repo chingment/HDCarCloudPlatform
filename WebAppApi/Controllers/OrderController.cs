@@ -149,7 +149,7 @@ namespace WebAppApi.Controllers
 
                                 var orderToInsurance = CurrentDb.OrderToInsurance.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsCompanyName));
-                                orderModel.OrderField.Add(new OrderField("产品名称", orderToInsurance.InsPlanName));
+                                orderModel.OrderField.Add(new OrderField("产品名称", orderToInsurance.ProductSkuName));
                                 orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
 
                                 break;
@@ -371,7 +371,7 @@ namespace WebAppApi.Controllers
 
                                 var orderToInsurance = CurrentDb.OrderToInsurance.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsCompanyName));
-                                orderModel.OrderField.Add(new OrderField("保险方案", orderToInsurance.InsPlanName));
+                                orderModel.OrderField.Add(new OrderField("保险方案", orderToInsurance.ProductSkuName));
 
                                 break;
                         }
@@ -440,7 +440,7 @@ namespace WebAppApi.Controllers
 
                                 var orderToInsurance = CurrentDb.OrderToInsurance.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("保险公司", orderToInsurance.InsCompanyName));
-                                orderModel.OrderField.Add(new OrderField("保险方案", orderToInsurance.InsPlanName));
+                                orderModel.OrderField.Add(new OrderField("保险方案", orderToInsurance.ProductSkuName));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
                         }
@@ -928,7 +928,27 @@ namespace WebAppApi.Controllers
                         orderInsuranceDetailsModel.FollowStatus = orderToInsurance.FollowStatus;
                         orderInsuranceDetailsModel.Remarks = orderToInsurance.Remarks.NullToEmpty();
                         orderInsuranceDetailsModel.InsCompanyName = orderToInsurance.InsCompanyName;
-                        orderInsuranceDetailsModel.InsPlanName = orderToInsurance.InsPlanName;
+                        orderInsuranceDetailsModel.ProductSkuName = orderToInsurance.ProductSkuName;
+
+                        if (!string.IsNullOrEmpty(orderToInsurance.ProductSkuAttrItems))
+                        {
+                            orderInsuranceDetailsModel.ProductSkuAttrItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemField>>(orderToInsurance.ProductSkuAttrItems);
+                        }
+
+                        if (!string.IsNullOrEmpty(orderToInsurance.CredentialsImgs))
+                        {
+                            var credentialsImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ImgSet>>(orderToInsurance.CredentialsImgs);
+
+                            if (credentialsImgs != null)
+                            {
+                                foreach (var item in credentialsImgs)
+                                {
+                                    orderInsuranceDetailsModel.CredentialsImgs.Add(new ZjModel(item.Name, item.ImgUrl));
+                                }
+                            }
+                        }
+
+
                     }
 
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderInsuranceDetailsModel };
@@ -1040,16 +1060,21 @@ namespace WebAppApi.Controllers
             orderToInsurance.UserId = model.UserId;
             orderToInsurance.MerchantId = model.MerchantId;
             orderToInsurance.PosMachineId = model.PosMachineId;
-            orderToInsurance.InsPlanId = model.InsPlanId;
-            orderToInsurance.InsPlanName = model.InsPlanName;
-            orderToInsurance.InsCompanyId = model.InsCompanyId;
-            orderToInsurance.InsCompanyName = model.InsCompanyName;
-            orderToInsurance.IsTeam = model.IsTeam;
+            orderToInsurance.ProductSkuId = model.ProductSkuId;
 
-            if (model.InsPlanDetailsItems.Count > 0)
+            List<Lumos.Entity.ImgSet> imgSet = new List<ImgSet>();
+            if (model.ImgData != null)
             {
-                orderToInsurance.InsPlanDetailsItems = Newtonsoft.Json.JsonConvert.SerializeObject(model.InsPlanDetailsItems);
+                foreach (var item in model.ImgData)
+                {
+                    string url = GetUploadImageUrl(item.Value, "CarInsure");
+
+                    imgSet.Add(new ImgSet { ImgUrl = url, IsMain = false, Name = item.Key, Priority = 0 });
+
+                }
             }
+
+            orderToInsurance.CredentialsImgs = Newtonsoft.Json.JsonConvert.SerializeObject(imgSet);
 
             IResult result = BizFactory.OrderToInsurance.Submit(model.UserId, orderToInsurance);
             return new APIResponse(result);
@@ -1087,7 +1112,7 @@ namespace WebAppApi.Controllers
         {
             string app_version = HttpContext.Current.Request.Headers["version"];
 
-            if (app_version != "1.3.0.5")
+            if (app_version != "1.3.0.6")
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "请升级到最新版本");
             }

@@ -101,6 +101,8 @@ namespace WebAppApi
                 string app_data = null;
                 if (requestMethod == "POST")
                 {
+                    var contentTpye = request.ContentType;
+
                     //var s = HttpContext.Current.Request.Form["form-data"];
                     Stream stream = HttpContext.Current.Request.InputStream;
                     stream.Seek(0, SeekOrigin.Begin);

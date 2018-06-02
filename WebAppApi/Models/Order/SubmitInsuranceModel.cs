@@ -10,7 +10,7 @@ namespace WebAppApi.Models.Order
     {
         public SubmitInsuranceModel()
         {
-            this.InsPlanDetailsItems = new List<ItemField>();
+     
         }
 
         public int UserId { get; set; }
@@ -19,14 +19,9 @@ namespace WebAppApi.Models.Order
 
         public int PosMachineId { get; set; }
 
-        public int InsCompanyId { get; set; }
+        public int ProductSkuId { get; set; }
 
-        public string InsCompanyName { get; set; }
-        public int InsPlanId { get; set; }
-        public string InsPlanName { get; set; }
-        public string InsPlanDetails { get; set; }
-        public bool IsTeam { get; set; }
+        public Dictionary<string, ImageModel> ImgData { get; set; }
 
-        public List<ItemField> InsPlanDetailsItems { get; set; }
     }
 }

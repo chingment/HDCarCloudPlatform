@@ -17,10 +17,13 @@ namespace Lumos.Entity
         public int InsCompanyId { get; set; }
         [MaxLength(128)]
         public string InsCompanyName { get; set; }
-        public int InsPlanId { get; set; }
+        public int ProductId { get; set; }
         [MaxLength(128)]
-        public string InsPlanName { get; set; }
-        public string InsPlanDetailsItems { get; set; }
-        public bool IsTeam { get; set; }
+        public string ProductName { get; set; }
+        public int ProductSkuId { get; set; }
+        [MaxLength(128)]
+        public string ProductSkuName { get; set; }
+        public string ProductSkuAttrItems { get; set; }
+        public string CredentialsImgs { get; set; }
     }
 }

@@ -98,6 +98,7 @@
     <Compile Include="Biz\SupplierProvider.cs" />
     <Compile Include="Biz\Task\TaskForCarInsQueryInquiry.cs" />
     <Compile Include="Biz\Task\TaskForMerchant.cs" />
+    <Compile Include="InsPlanUntil.cs" />
     <Compile Include="Sdk\FangWeiProvider.cs" />
     <Compile Include="Biz\SmsProvider.cs" />
     <Compile Include="Biz\Task\BaseProgram.cs" />

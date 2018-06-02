@@ -64,9 +64,9 @@
         </tr>
         <tr>
             <td class="t">保险方案：</td>
-            <td class="c">@Model.OrderToInsurance.InsPlanName</td>
+            <td class="c">@Model.OrderToInsurance.ProductSkuName</td>
         </tr>
-        @foreach (var item in Model.InsPlanDetailsItems)
+        @foreach (var item in Model.ProductSkuAttrItems)
         {
             <tr>
                 <td class="t" style="width:80px">@item.field ：</td>
@@ -75,6 +75,30 @@
                 </td>
             </tr>
         }
+        <tr>
+            <td class="t" style="vertical-align:top">
+                身份证：
+            </td>
+            <td class="f-tb-c">
+                <table class="f-tb1-detail" id="list_GoodsPic" style="text-align:center;width:auto">
+                    <tr style="vertical-align:top">
+                        @for (var i = 0; i < Model.CredentialsImgs.Count; i++)
+            {
+                            <td>
+                                <div>
+                                    <span class="uploadimgbox" upload="true">
+                                        <span class="uploadimg" inputname="Model.DispalyImgs[@i].ImgUrl" path="product">
+                                            <img src="@(string.IsNullOrEmpty(Model.CredentialsImgs[i].ImgUrl)==true?"/Static/default1.jpg":Model.CredentialsImgs[i].ImgUrl)" />
+                                        </span>
+                                        <span class="uploadimg-view" style="">预览</span>
+                                    </span>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                </table>
+            </td>
+        </tr>
     </table>
     @Html.Partial("AuditFlowTrace", Model.BizProcessesAuditDetails)
 </form>

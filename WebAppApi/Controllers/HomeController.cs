@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
+        //private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        //private string host = "http://120.79.233.231";
+        private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -116,6 +116,7 @@ namespace WebAppApi.Controllers
 
         public ActionResult Index()
         {
+
             decimal s2 = 4.5m;
             int s = (int)s2;
 
@@ -127,6 +128,19 @@ namespace WebAppApi.Controllers
             pms.EnginNo = "713477";
             pms.RackNo = "004711";
             pms.IsCompany = "false";
+
+
+
+            string signStr = Signature.Compute(key, secret, timespan, null);
+
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+
+            //HttpUtil.UpLoadFile(@"d:\a.txt", "http://localhost:16665/api/Global/UploadFile", headers);
+            //HttpUtil.UpLoadFile2(@"d:\a.txt", "http://localhost:16665/api/Global/UploadFile", headers);
 
             // var res = SdkFactory.HeLian.Query(0, pms);
 
@@ -178,6 +192,11 @@ namespace WebAppApi.Controllers
             int merchantId = 258;
             int posMachineId = 153;
 
+            //model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
+
+
+            // model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
+
             //CarIns(userId, merchantId, posMachineId);
 
             model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
@@ -210,7 +229,7 @@ namespace WebAppApi.Controllers
 
             ///model.Add("获取支付结果通知", PayResultNotify(userId, merchantId, posMachineId, "18040514310000001462", "118040514310000001462"));
 
-            model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
+            //model.Add("提交投保单", SubmitInsure(userId, merchantId, posMachineId));
             // model.Add("提交跟进的投保单", SubmitFollowInsure(userId, 1600));
             //model.Add("提交理赔定损单1", SubmitEstimateList(userId, 24));
             //model.Add("提交理赔定损单2", SubmitEstimateList(userId, 25));
@@ -1241,6 +1260,22 @@ namespace WebAppApi.Controllers
             return result;
         }
 
+        public string InsPrdGetPlan(int userId, int merchantId, int posMachineId, int productId)
+        {
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("userId", userId.ToString());
+            parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
+            parames.Add("productId", productId.ToString());
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/InsPrd/GetPlan?userId=" + userId.ToString() + "&merchantId=" + merchantId.ToString() + "&posMachineId=" + posMachineId + "&productId=" + productId, headers);
+            return result;
+        }
 
 
         public string SubmitClaim(int userId, string handPerson, Enumeration.RepairsType estimateRepair)
@@ -1766,32 +1801,51 @@ namespace WebAppApi.Controllers
         public string SubmitInsurance(int userId, int merchantId, int posMachineId)
         {
 
-            SubmitInsuranceModel model1 = new SubmitInsuranceModel();
-            model1.UserId = userId;
-            model1.MerchantId = merchantId;
-            model1.PosMachineId = posMachineId;
-            model1.InsCompanyId = 0;
-            model1.InsCompanyName = "泰康保险";
-            model1.InsPlanId = 1;
-            model1.InsPlanName = "泰康“呵护一生";
-            model1.IsTeam = false;
-
-            model1.InsPlanDetailsItems.Add(new ItemField { field = "被保险人年龄", value = "0-65岁" });
-            model1.InsPlanDetailsItems.Add(new ItemField { field = "意外身故", value = "10W" });
-            model1.InsPlanDetailsItems.Add(new ItemField { field = "意外医疗", value = "1万" });
-            model1.InsPlanDetailsItems.Add(new ItemField { field = "保费", value = "60元" });
+            SubmitInsuranceModel model = new SubmitInsuranceModel();
+            model.UserId = userId;
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
+            model.ProductSkuId = 1;
 
 
-            string a1 = JsonConvert.SerializeObject(model1);
+            string base64string1 = GetImagesBase64String(@"d:\a.png");
+            //  string base64string2 = GetImagesBase64String(@"d:\b.jpg");
+            //   string base64string3 = GetImagesBase64String(@"d:\c.jpg");
+            //   string base64string4 = GetImagesBase64String(@"d:\d.jpg");
+
+
+            string a1 = JsonConvert.SerializeObject(model);
+
+            if (a1.IndexOf("ImgData") > -1)
+            {
+                int x = a1.IndexOf("ImgData");
+                a1 = a1.Substring(0, x - 2);
+                a1 += "}";
+            }
 
             string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            ImageModel CZ_CL_XSZ_Img = new ImageModel() { Type = ".jpg", Data = base64string1 };
+            //ImageModel CZ_SFZ_Img = new ImageModel() { Type = ".jpg", Data = base64string2 };
+            //ImageModel CCSJM_WSZM_Img = new ImageModel() { Type = ".jpg", Data = base64string3 };
+            //ImageModel YCZ_CLDJZ_Img = new ImageModel() { Type = ".jpg", Data = base64string4 };
+
+            model.ImgData = new Dictionary<string, ImageModel>();
+
+            model.ImgData.Add("ZJ1", CZ_CL_XSZ_Img);
+            //model.ImgData.Add("ZJ2", CZ_SFZ_Img);
+            //model.ImgData.Add("ZJ3", CCSJM_WSZM_Img);
+            //model.ImgData.Add("ZJ4", YCZ_CLDJZ_Img);
+
+            a1 = JsonConvert.SerializeObject(model);
+
 
             Dictionary<string, string> headers1 = new Dictionary<string, string>();
             headers1.Add("key", key);
             headers1.Add("timestamp", (timespan.ToString()).ToString());
             headers1.Add("sign", signStr);
 
-            // string a1 = "a1=das&a2=323";
+
             HttpUtil http = new HttpUtil();
             string respon_data4 = http.HttpPostJson("" + host + "/api/Order/SubmitInsurance", a1, headers1);
 
@@ -2111,6 +2165,31 @@ namespace WebAppApi.Controllers
             headers.Add("sign", signStr);
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/CarIns/OfferNotify", a1, headers);
+
+            return result;
+
+        }
+
+        public string UploadLogTrace(int userId, int merchantId, int posMachineId)
+        {
+            UploadLogTracePms model = new UploadLogTracePms();
+
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
+            model.UserId = userId;
+            model.Trace = "错误";
+
+            string a1 = JsonConvert.SerializeObject(model);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/Global/UploadLogTrace", a1, headers);
 
             return result;
 

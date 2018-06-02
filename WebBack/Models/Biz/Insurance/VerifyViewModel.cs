@@ -16,8 +16,9 @@ namespace WebBack.Models.Biz.Insurance
 
         private Lumos.Entity.BizProcessesAudit _bizProcessesAudit = new Lumos.Entity.BizProcessesAudit();
 
-        private List<ItemField> _insPlanDetailsItems = new List<ItemField>();
+        private List<ItemField> _productSkuAttrItems = new List<ItemField>();
 
+        private List<ImgSet> _credentialsImgs = new List<ImgSet>();
 
         public VerifyViewModel()
         {
@@ -49,9 +50,15 @@ namespace WebBack.Models.Biz.Insurance
                         _merchant = merchant;
                     }
 
-                    if (!string.IsNullOrEmpty(_orderToInsurance.InsPlanDetailsItems))
+                    if (!string.IsNullOrEmpty(_orderToInsurance.ProductSkuAttrItems))
                     {
-                        _insPlanDetailsItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemField>>(_orderToInsurance.InsPlanDetailsItems);
+                        _productSkuAttrItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemField>>(_orderToInsurance.ProductSkuAttrItems);
+                    }
+
+
+                    if (!string.IsNullOrEmpty(_orderToInsurance.CredentialsImgs))
+                    {
+                        _credentialsImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ImgSet>>(_orderToInsurance.CredentialsImgs);
                     }
                 }
 
@@ -94,15 +101,27 @@ namespace WebBack.Models.Biz.Insurance
             }
         }
 
-        public List<ItemField> InsPlanDetailsItems
+        public List<ItemField> ProductSkuAttrItems
         {
             get
             {
-                return _insPlanDetailsItems;
+                return _productSkuAttrItems;
             }
             set
             {
-                _insPlanDetailsItems = value;
+                _productSkuAttrItems = value;
+            }
+        }
+
+        public List<ImgSet> CredentialsImgs
+        {
+            get
+            {
+                return _credentialsImgs;
+            }
+            set
+            {
+                _credentialsImgs = value;
             }
         }
     }

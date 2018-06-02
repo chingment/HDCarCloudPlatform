@@ -71,6 +71,8 @@
     <Compile Include="AppApi\CarIns\CarModelInfoPms.cs" />
     <Compile Include="AppApi\CarIns\CarModelInfoResult.cs" />
     <Compile Include="AppApi\CarIns\CarInsInsureKindModel.cs" />
+    <Compile Include="AppApi\InsPlanModel.cs" />
+    <Compile Include="AppApi\InsPlanProductSkuModel.cs" />
     <Compile Include="AppApi\OrderField.cs" />
     <Compile Include="AppApi\OrderModel.cs" />
     <Compile Include="AppApi\PayResultQueryParams.cs" />

@@ -15,7 +15,8 @@ namespace WebBack.Models.Biz.Insurance
         private Lumos.Entity.OrderToInsurance _orderToInsurance = new Lumos.Entity.OrderToInsurance();
 
         private List<BizProcessesAuditDetails> _bizProcessesAuditDetails = new List<BizProcessesAuditDetails>();
-        private List<ItemField> _insPlanDetailsItems = new List<ItemField>();
+        private List<ItemField> _productSkuAttrItems = new List<ItemField>();
+        private List<ImgSet> _credentialsImgs = new List<ImgSet>();
         public DetailsViewModel()
         {
 
@@ -34,9 +35,13 @@ namespace WebBack.Models.Biz.Insurance
                     _merchant = merchant;
                 }
 
-                if (!string.IsNullOrEmpty(_orderToInsurance.InsPlanDetailsItems))
+                if (!string.IsNullOrEmpty(_orderToInsurance.ProductSkuAttrItems))
                 {
-                    _insPlanDetailsItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemField>>(_orderToInsurance.InsPlanDetailsItems);
+                    _productSkuAttrItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ItemField>>(_orderToInsurance.ProductSkuAttrItems);
+                }
+                if (!string.IsNullOrEmpty(_orderToInsurance.CredentialsImgs))
+                {
+                    _credentialsImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ImgSet>>(_orderToInsurance.CredentialsImgs);
                 }
 
                 _bizProcessesAuditDetails = BizFactory.BizProcessesAudit.GetDetails(Enumeration.BizProcessesAuditType.OrderToCredit, id);
@@ -80,15 +85,27 @@ namespace WebBack.Models.Biz.Insurance
             }
         }
 
-        public List<ItemField> InsPlanDetailsItems
+        public List<ItemField> ProductSkuAttrItems
         {
             get
             {
-                return _insPlanDetailsItems;
+                return _productSkuAttrItems;
             }
             set
             {
-                _insPlanDetailsItems = value;
+                _productSkuAttrItems = value;
+            }
+        }
+
+        public List<ImgSet> CredentialsImgs
+        {
+            get
+            {
+                return _credentialsImgs;
+            }
+            set
+            {
+                _credentialsImgs = value;
             }
         }
     }

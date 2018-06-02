@@ -33,5 +33,29 @@ namespace WebAppApi.Controllers
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
             return new APIResponse(result);
         }
+
+        [HttpPost]
+        public APIResponse UploadLogTrace(UploadLogTracePms pms)
+        {
+            Log.Info("UploadLogTrace");
+            if (!string.IsNullOrEmpty(pms.Trace))
+            {
+                Log.Error(pms.Trace);
+            }
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "上传成功");
+        }
+
+        [HttpPost]
+        public APIResponse UploadLogFile()
+        {
+            Log.Info("UploadLogFile");
+            //if (!string.IsNullOrEmpty(pms.Trace))
+            //{
+            //    Log.Error(pms.Trace);
+            //}
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "上传成功");
+        }
     }
 }

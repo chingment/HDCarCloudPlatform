@@ -20,7 +20,16 @@ namespace Lumos.BLL
             {
                 var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToInsurance.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
+                var prodcutSku = CurrentDb.ProductSku.Where(m => m.Id == orderToInsurance.ProductSkuId).FirstOrDefault();
+                var prodcut = CurrentDb.Product.Where(m => m.Id == prodcutSku.ProductId).FirstOrDefault();
 
+                orderToInsurance.ProductId = prodcut.Id;
+                orderToInsurance.ProductName = prodcut.Name;
+                orderToInsurance.InsCompanyId = prodcut.SupplierId;
+                orderToInsurance.InsCompanyName = prodcut.Supplier;
+                orderToInsurance.ProductSkuId = prodcutSku.Id;
+                orderToInsurance.ProductSkuName = prodcutSku.Name;
+                orderToInsurance.ProductSkuAttrItems = prodcutSku.AttrItems;
                 orderToInsurance.SalesmanId = merchant.SalesmanId ?? 0;
                 orderToInsurance.AgentId = merchant.AgentId ?? 0;
                 orderToInsurance.Type = Enumeration.OrderType.Insure;

@@ -34,6 +34,13 @@ namespace Lumos.Entity
             CarInsService = 3
         }
 
+        public enum ExtendedAppLinkType
+        {
+            Unknow = 0,
+            Url = 1,
+            Windows = 2
+        }
+
         public enum ExtendedAppStatus
         {
             [Remark("未知")]

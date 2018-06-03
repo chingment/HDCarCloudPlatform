@@ -20,6 +20,8 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string Name { get; set; }
 
+        public Enumeration.ExtendedAppLinkType LinkType { get; set; }
+
         [MaxLength(1024)]
         public string LinkUrl { get; set; }
 
@@ -48,5 +50,7 @@ namespace Lumos.Entity
         public int? Mender { get; set; }
 
         public DateTime? LastUpdateTime { get; set; }
+
+        public int ReferenceId { get; set; }
     }
 }

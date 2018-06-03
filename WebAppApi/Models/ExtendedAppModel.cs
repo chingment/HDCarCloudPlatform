@@ -21,5 +21,9 @@ namespace WebAppApi.Models
         public string AppSecret { get; set; }
 
         public Enumeration.ExtendedAppType Type { get; set; }
+
+        public Enumeration.ExtendedAppLinkType LinkType { get; set; }
+
+        public int ReferenceId { get; set; }
     }
 }

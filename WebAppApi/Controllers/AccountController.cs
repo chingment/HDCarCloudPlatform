@@ -404,6 +404,8 @@ namespace WebAppApi.Controllers
                 appModel.AppKey = m.AppKey;
                 appModel.AppSecret = m.AppSecret;
                 appModel.Type = m.Type;
+                appModel.LinkType = m.LinkType;
+                appModel.ReferenceId = m.ReferenceId;
                 extendedAppModel.Add(appModel);
             }
 

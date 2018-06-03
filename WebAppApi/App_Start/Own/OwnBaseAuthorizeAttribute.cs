@@ -108,7 +108,7 @@ namespace WebAppApi
                     stream.Seek(0, SeekOrigin.Begin);
                     app_data = new StreamReader(stream).ReadToEnd();
 
-                    Log.Info("app_data:" + app_data);
+
 
                     #region 过滤图片
                     if (app_data.LastIndexOf(",\"ImgData\":{") > -1)
@@ -128,6 +128,8 @@ namespace WebAppApi
                         app_data += "}";
                         //Log.Info("去掉图片之后的数据：" + app_data);
                     }
+
+                    Log.Info("app_data:" + app_data);
 
                     #endregion
                 }

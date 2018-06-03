@@ -66,8 +66,12 @@ namespace YdtSdk
             try
             {
                 log.Info("Ydt->result:" + body);
+                YdtResult ydtResult = new YdtResult();
 
-                YdtResult ydtResult = JsonConvert.DeserializeObject<YdtResult>(body);
+                if (body.IndexOf("\"code\":") > -1 && body.IndexOf(",\"msg\":") > -1)
+                {
+                    ydtResult = JsonConvert.DeserializeObject<YdtResult>(body);
+                }
 
                 if (ydtResult.code == 0)
                 {

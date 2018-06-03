@@ -71,6 +71,25 @@ namespace Lumos.BLL
 
             #endregion
 
+
+
+            var insPlan4 = new InsPlan();
+            insPlan4.PlanId = 3;
+            insPlan4.PlanName = "诚泰团体意外保险方案一";
+            insPlan4.CompanyId = 0;
+            insPlan4.CompanyName = "诚泰保险";
+            insPlan4.IsTeam = false;
+            insPlan4.Price = 60;
+            insPlan4.DetailsItems.Add(new ItemField { field = "被保险人年龄", value = "16-65周岁" });
+            insPlan4.DetailsItems.Add(new ItemField { field = "意外身故/伤残", value = "30万" });
+            insPlan4.DetailsItems.Add(new ItemField { field = "意外医疗", value = "3W" });
+            insPlan4.DetailsItems.Add(new ItemField { field = "意外住院津贴", value = "3W" });
+            insPlan4.DetailsItems.Add(new ItemField { field = "意外住院津贴", value = "3W" });
+            insPlan4.DetailsItems.Add(new ItemField { field = "住院医疗保险", value = "180元" });
+            insPlans.Add(insPlan4);
+
+
+
             return insPlans;
         }
 

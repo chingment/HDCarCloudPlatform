@@ -171,7 +171,7 @@ namespace WebAppApi.Controllers
 
             //BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunNotifyUrl, receiveNotifyLog);
 
-            ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+            ILog log= log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 
 

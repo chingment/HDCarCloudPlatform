@@ -37,10 +37,12 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse UploadLogTrace(UploadLogTracePms pms)
         {
-            Log.Info("UploadLogTrace");
+            log4net.ILog log = log4net.LogManager.GetLogger("AppErrorLogFileAppender");
+
+            log.Info("UploadLogFile");
             if (!string.IsNullOrEmpty(pms.Trace))
             {
-                Log.Error(pms.Trace);
+                log.Error(pms.Trace);
             }
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "上传成功");
@@ -49,7 +51,9 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse UploadLogFile()
         {
-            Log.Info("UploadLogFile");
+            log4net.ILog log = log4net.LogManager.GetLogger("AppErrorLogFileAppender");
+
+            log.Info("UploadLogFile");
             //if (!string.IsNullOrEmpty(pms.Trace))
             //{
             //    Log.Error(pms.Trace);

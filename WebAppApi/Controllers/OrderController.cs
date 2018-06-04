@@ -1112,7 +1112,7 @@ namespace WebAppApi.Controllers
         {
             string app_version = HttpContext.Current.Request.Headers["version"];
 
-            if (app_version != "1.3.0.6")
+            if (GetAppVersion() >= 10)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "请升级到最新版本");
             }

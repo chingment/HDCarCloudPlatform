@@ -392,6 +392,14 @@ namespace WebAppApi.Controllers
             #region 第三方服务
             var extendedApps = CurrentDb.ExtendedApp.Where(m => m.IsDisplay == true).ToList();
 
+
+            Log.Info("AppVersion:" + GetAppVersion());
+
+            if (GetAppVersion() < 11)
+            {
+                extendedApps = extendedApps.Where(m => m.Id != 9 && m.Id != 10).ToList();
+            }
+
             List<ExtendedAppModel> extendedAppModel = new List<ExtendedAppModel>();
 
             foreach (var m in extendedApps)

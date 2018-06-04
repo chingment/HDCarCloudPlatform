@@ -206,9 +206,9 @@ m.AduitType == Enumeration.BizProcessesAuditType.OrderToInsurance
             }
             else if (condition.AuditStatus == 2)
             {
-                query = query.Where(m => (
+                query = query.Where(m =>
                (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarClaim && (m.Status == 2)) ||
-               ((m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand ||
+               (((m.AduitType == Enumeration.BizProcessesAuditType.OrderToTalentDemand ||
                m.AduitType == Enumeration.BizProcessesAuditType.OrderToApplyLossAssess ||
                m.AduitType == Enumeration.BizProcessesAuditType.OrderToLllegalDealt ||
                m.AduitType == Enumeration.BizProcessesAuditType.OrderToCredit ||

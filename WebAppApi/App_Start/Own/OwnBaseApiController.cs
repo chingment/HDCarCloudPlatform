@@ -174,7 +174,33 @@ namespace WebAppApi
             }
         }
 
+        public int GetAppVersion()
+        {
+            int version = 0;
 
-    
+            try
+            {
+                string app_version = HttpContext.Current.Request.Headers["version"];
+                if (app_version != null)
+                {
+                    string[] s = app_version.Split('.');
+
+                    foreach (var item in s)
+                    {
+                        version = version + int.Parse(item);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return version;
+        }
+
+
+
     }
 }

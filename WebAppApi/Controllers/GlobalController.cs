@@ -37,6 +37,8 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse UploadLogTrace(UploadLogTracePms pms)
         {
+            Log.Info("AppVersion:" + GetAppVersion());
+
             log4net.ILog log = log4net.LogManager.GetLogger("AppErrorLogFileAppender");
 
             log.Info("UploadLogFile");

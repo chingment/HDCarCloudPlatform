@@ -192,12 +192,12 @@ namespace WebAppApi.Controllers
             int merchantId = 258;
             int posMachineId = 153;
 
-            //model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
+            model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
 
 
             // model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
 
-            CarIns(userId, merchantId, posMachineId);
+            //CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
@@ -2188,6 +2188,7 @@ namespace WebAppApi.Controllers
             headers.Add("key", key);
             headers.Add("timestamp", timespan.ToString());
             headers.Add("sign", signStr);
+            headers.Add("version", "1.3.0.7");
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/Global/UploadLogTrace", a1, headers);
 

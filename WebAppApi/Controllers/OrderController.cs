@@ -1115,7 +1115,7 @@ namespace WebAppApi.Controllers
 
             Log.Info("AppVersion:" + GetAppVersion());
 
-            if (GetAppVersion() >= 10)
+            if (GetAppVersion() < 10)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "请升级到最新版本");
             }

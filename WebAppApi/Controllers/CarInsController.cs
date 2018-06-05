@@ -603,6 +603,28 @@ namespace WebAppApi.Controllers
 
 
         [HttpPost]
+        public APIResponse InsInquiry(CarInsInsurePms pms)
+        {
+            CarInsInquiryResult result = new CarInsInquiryResult();
+
+            YdtInscarInsurePms ydtInscarInsurePms = new YdtInscarInsurePms();
+
+            ydtInscarInsurePms.inquirySeq = pms.InquirySeq;
+            ydtInscarInsurePms.notifyUrl = "";
+            ydtInscarInsurePms.orderSeq = pms.OrderSeq;
+
+            var result_Insure = YdtUtils.Insure(ydtInscarInsurePms);
+
+            if (result_Insure.Result == ResultType.Success)
+            {
+
+            }
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "自动报价成功", result);
+
+        }
+
+        [HttpPost]
         [AllowAnonymous]
         public APIResponse OfferNotify(ReceiveNotifyModel model)
         {

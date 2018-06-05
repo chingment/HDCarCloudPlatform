@@ -105,8 +105,6 @@ namespace YdtSdk
                 postData = JsonConvert.SerializeObject(request.PostData);
             }
 
-            log.Info("Ydt-request-url>>>>" + realServerUrl);
-
             string body = webUtils.DoPost(realServerUrl, request.GetUrlParameters(), postData, null);
 
             if (!string.IsNullOrEmpty(body))

@@ -171,7 +171,7 @@ namespace WebAppApi.Controllers
 
             //BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunNotifyUrl, receiveNotifyLog);
 
-            ILog log= log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+            ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 
 
@@ -192,12 +192,12 @@ namespace WebAppApi.Controllers
             int merchantId = 258;
             int posMachineId = 153;
 
-            model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
+            //model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
 
 
             // model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
 
-            //CarIns(userId, merchantId, posMachineId);
+            CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
@@ -1882,8 +1882,8 @@ namespace WebAppApi.Controllers
             //model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId));
 
-            model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
-            //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
+            //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+            model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
             // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId));
 
 
@@ -1896,16 +1896,16 @@ namespace WebAppApi.Controllers
 
             //CustomJsonResult<CarModelInfoResult> s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarModelInfoResult>>(s_CarIns_GetCarModelInfo);
             //CarIn_Notify(1, 2, 3, "5", "4");
-            //string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
+            string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
 
-            //CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
+            CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
 
-            //if (s3.Result == ResultType.Success)
-            //{
-            //    //"ac9d0a28-2c55-49a3-bb0e-81029eddb23a"
-            //    model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.CarInfoOrderId, s3.Data.OrderSeq));
+            if (s3.Result == ResultType.Success)
+            {
+                //"ac9d0a28-2c55-49a3-bb0e-81029eddb23a"
+                model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.CarInfoOrderId, s3.Data.OrderSeq));
 
-            //}
+            }
         }
 
 
@@ -1985,16 +1985,16 @@ namespace WebAppApi.Controllers
             model.PosMachineId = posMachineId;
             model.Auto = "1";
             model.Car.Belong = "1";
-            model.Car.LicensePlateNo = "粤A9RS97";
-            model.Car.Vin = "LFV3A23C6E3095934";
-            model.Car.EngineNo = "242956";
-            model.Car.FirstRegisterDate = "2015-08-11";
-            model.Car.ModelCode = "FV7207FCDWG";
-            model.Car.ModelName = "FV7207FCDWG";
-            model.Car.Displacement = "2000";
+            model.Car.LicensePlateNo = "粤FRS179";
+            model.Car.Vin = "LFMAP86C5G0225666";
+            model.Car.EngineNo = "G575777";
+            model.Car.FirstRegisterDate = "2016-06-12";
+            model.Car.ModelCode = "KLD1112TJF";
+            model.Car.ModelName = "KLD1112TJF";
+            model.Car.Displacement = "1600";
             model.Car.MarketYear = "2012";
             model.Car.RatedPassengerCapacity = 5;
-            model.Car.ReplacementValue = 266300;
+            model.Car.ReplacementValue = 111800;
             model.Car.ChgownerType = "0";
             model.Car.ChgownerDate = "";
             model.Car.Tonnage = "";
@@ -2003,7 +2003,7 @@ namespace WebAppApi.Controllers
             model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱元刚", CertNo = "440182198804141553", Mobile = "15989287032", Address = "广东省花都区" });
 
             string a1 = JsonConvert.SerializeObject(model);
-             a1= "{\"orderSeq\":\"\",\"customers\":[{\"insuredFlag\":\"1\",\"name\":\"黄大爷\",\"certNo\":\"440182198804141553\",\"mobile\":\"15989287032\",\"address\":\"广东省花都区\"},{\"insuredFlag\":\"2\",\"name\":\"黄大爷\",\"certNo\":\"440182198804141553\",\"mobile\":\"15989287032\",\"address\":\"广东省花都区\"},{\"insuredFlag\":\"3\",\"name\":\"黄大爷\",\"certNo\":\"440182198804141553\",\"mobile\":\"15989287032\",\"address\":\"广东省花都区\"}],\"car\":{\"belong\":\"1\",\"carType\":\"1\",\"licensePlateNo\":\"粤AT810P\",\"vin\":\"LFMAPE2C8B0906269\",\"engineNo\":\"E764059\",\"modelCode\":\"丰田TV7163GL轿车\",\"modelName\":\"丰田TV7163GL轿车\",\"firstRegisterDate\":\"2011-03-15\",\"ratedPassengerCapacity\":\"0.0\",\"replacementValue\":\"0.0\",\"chgownerType\":\"0\",\"chgownerDate\":\"\"},\"auto\":\"1\"}";
+            //  a1= "{\"orderSeq\":\"\",\"customers\":[{\"insuredFlag\":\"1\",\"name\":\"黄大爷\",\"certNo\":\"440182198804141553\",\"mobile\":\"15989287032\",\"address\":\"广东省花都区\"},{\"insuredFlag\":\"2\",\"name\":\"黄大爷\",\"certNo\":\"440182198804141553\",\"mobile\":\"15989287032\",\"address\":\"广东省花都区\"},{\"insuredFlag\":\"3\",\"name\":\"黄大爷\",\"certNo\":\"440182198804141553\",\"mobile\":\"15989287032\",\"address\":\"广东省花都区\"}],\"car\":{\"belong\":\"1\",\"carType\":\"1\",\"licensePlateNo\":\"粤AT810P\",\"vin\":\"LFMAPE2C8B0906269\",\"engineNo\":\"E764059\",\"modelCode\":\"丰田TV7163GL轿车\",\"modelName\":\"丰田TV7163GL轿车\",\"firstRegisterDate\":\"2011-03-15\",\"ratedPassengerCapacity\":\"0.0\",\"replacementValue\":\"0.0\",\"chgownerType\":\"0\",\"chgownerDate\":\"\"},\"auto\":\"1\"}";
             string signStr = Signature.Compute(key, secret, timespan, a1);
 
             Dictionary<string, string> headers1 = new Dictionary<string, string>();
@@ -2051,8 +2051,8 @@ namespace WebAppApi.Controllers
             model.PosMachineId = posMachineId;
             model.CarInfoOrderId = carInfoOrderId;
             model.OrderSeq = orderSeq;
-            model.BiStartDate = "2018-05-20";
-            model.CiStartDate = "2018-05-20";
+            model.BiStartDate = "2018-06-20";
+            model.CiStartDate = "2018-06-20";
             model.ChannelId = 1;
             model.CompanyCode = "006000";
 
@@ -2112,7 +2112,7 @@ namespace WebAppApi.Controllers
 
 
 
-            //a1 = "{\"car\":{\"replacementValue\":\"52900\",\"firstRegisterDate\":\"2011-03-15\"},\"auto\":1,\"channelId\":19,\"orderSeq\":\"5b2e835c-15cd-4a53-b8c6-fedd9a26693d\",\"companyCode\":\"002000\",\"risk\":3,\"biStartDate\":\"2018-05-05\",\"ciStartDate\":\"2018-05-05\",\"coverages\":[{\"code\":\"001\",\"compensation\":1,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"002\",\"compensation\":1,\"amount\":200000.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"003\",\"compensation\":1,\"amount\":300000.0,\"unitAmount\":300000.0,\"quantity\":1,\"glassType\":0},{\"code\":\"004\",\"compensation\":1,\"amount\":-400000.0,\"unitAmount\":400000.0,\"quantity\":-1,\"glassType\":0},{\"code\":\"005\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"006\",\"compensation\":0,\"amount\":0.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":1},{\"code\":\"007\",\"compensation\":0,\"amount\":1000.0,\"unitAmount\":1000.0,\"quantity\":1,\"glassType\":0},{\"code\":\"011\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"009\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"008\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0},{\"code\":\"010\",\"compensation\":0,\"amount\":43900.0,\"unitAmount\":0.0,\"quantity\":0,\"glassType\":0}]}";
+             a1 = "{\"ciStartDate\":\"2018-05-16\",\"channelId\":1,\"insureKind\":[{\"id\":1,\"isWaiverDeductible\":false},{\"id\":2,\"isWaiverDeductible\":false},{\"id\":18,\"isWaiverDeductible\":false},{\"id\":3,\"value\":\"1000\",\"isWaiverDeductible\":true},{\"id\":4,\"value\":\"100w\",\"isWaiverDeductible\":true},{\"id\":5,\"value\":\"1w\",\"isWaiverDeductible\":true},{\"id\":6,\"value\":\"1w\",\"isWaiverDeductible\":true},{\"id\":7,\"value\":\"1000\",\"isWaiverDeductible\":true},{\"id\":19,\"isWaiverDeductible\":false},{\"id\":8,\"value\":\"国产\",\"isWaiverDeductible\":false},{\"id\":9,\"value\":\"2000\",\"isWaiverDeductible\":true}],\"biStartDate\":\"2018-05-16\",\"car\":{\"belong\":\"1\",\"carType\":\"1\",\"licensePlateNo\":\"粤A9RS97\",\"vin\":\"LFV3A23C6E3095934\",\"engineNo\":\"242956\",\"modelCode\":\"MTD1060YQD\",\"modelName\":\"FV7207FCDWG轿车\",\"firstRegisterDate\":\"2015-08-11\",\"displacement\":\"2000\",\"ratedPassengerCapacity\":\"266300.00\",\"replacementValue\":\"266300.00\",\"chgownerType\":\"0\",\"chgownerDate\":\"\"},\"companyCode\":\"006000\",\"auto\":\"1\",\"orderSeq\":\"60c255ba-85ee-4ef7-8582-945a207a10dc\"}";
 
 
             string signStr = Signature.Compute(key, secret, timespan, a1);

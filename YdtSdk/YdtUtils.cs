@@ -37,8 +37,6 @@ namespace YdtSdk
             }
         }
 
-
-
         public static TokenAu GetToken()
         {
             var redisClient = new RedisClient<TokenAu>();
@@ -65,7 +63,6 @@ namespace YdtSdk
             return au;
 
         }
-
 
         public static CustomJsonResult GetCarInsOffer(OrderToCarInsure order, List<OrderToCarInsureOfferCompany> offerCompany, List<OrderToCarInsureOfferCompanyKind> kinds)
         {
@@ -270,7 +267,7 @@ namespace YdtSdk
 
             if (insCarInquiryModel.risk == 1 || insCarInquiryModel.risk == 3)
             {
-               // insCarInquiryModel.biStartDate = order.PeriodStart.Value.ToString("yyyy-MM-dd");
+                // insCarInquiryModel.biStartDate = order.PeriodStart.Value.ToString("yyyy-MM-dd");
             }
 
 
@@ -496,7 +493,6 @@ namespace YdtSdk
             return licenseInfo;
         }
 
-
         public static YdtInsCarApiSearchResultData GetInsCarInfo(string licensePlateNo)
         {
             var au = YdtUtils.GetToken();
@@ -518,7 +514,6 @@ namespace YdtSdk
             return ydtInscarCarResult.data;
         }
 
-
         public static YdtInscarGetInquiryInfoResultData GetInquiryInfo(string orderSeq, int areaId)
         {
             var au = YdtUtils.GetToken();
@@ -531,7 +526,6 @@ namespace YdtSdk
 
             return ydtInscarGetInquiryInfoResult.data;
         }
-
 
         public static CustomJsonResult<string> EditBaseInfo(InscarEditbaseModel model)
         {
@@ -613,7 +607,6 @@ namespace YdtSdk
             return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInscarInquiryResult.msg, ydtInscarInquiryResult.data);
         }
 
-
         public static CustomJsonResult<decimal> GetAdviceValue(string startDate, string registDate, decimal replacementValue)
         {
             var au = YdtUtils.GetToken();
@@ -653,6 +646,24 @@ namespace YdtSdk
 
             return new CustomJsonResult<YdtInsCarQueryInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInsCarQueryInquiryResult.msg, ydtInsCarQueryInquiryResult.data);
 
+        }
+
+
+        public static CustomJsonResult<YdtInscarInsureResultData> Insure(YdtInscarInsurePms model)
+        {
+            var result = new CustomJsonResult<YdtInscarInsureResultData>();
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            var ydtInscarInsure = new YdtInscarInsure(au.token, au.session, YdtPostDataType.Json, model);
+            var ydtInscarInsureResult = ydtApi.DoPost(ydtInscarInsure);
+
+            if (ydtInscarInsureResult.code != 0)
+            {
+                return new CustomJsonResult<YdtInscarInsureResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInsureResult.msg + "(" + ydtInscarInsureResult.extmsg + ")", null);
+            }
+
+            return new CustomJsonResult<YdtInscarInsureResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
         }
     }
 }

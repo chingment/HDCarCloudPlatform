@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -98,9 +99,18 @@ namespace YdtSdk
         public string DoPost(string url, IDictionary<string, string> urlParams, string postdata, IDictionary<string, string> headerParams)
         {
 
+            ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
             if (urlParams != null && urlParams.Count > 0)
             {
                 url = BuildRequestUrl(url, urlParams);
+            }
+
+
+            log.Info("Ydt-request-url>>>>" + url);
+            if (postdata != null)
+            {
+                log.Info("Ydt-request-postData>>>>" + postdata);
             }
 
             HttpWebRequest req = GetWebRequest(url, "POST", headerParams);

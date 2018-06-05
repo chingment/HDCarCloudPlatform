@@ -65,6 +65,7 @@
     <Compile Include="AppApi\CarIns\CarInsEditBaseInfoResult.cs" />
     <Compile Include="AppApi\CarIns\CarInsInquiryPms.cs" />
     <Compile Include="AppApi\CarIns\CarInsInquiryResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsInsurePms.cs" />
     <Compile Include="AppApi\CarIns\CarInsKindModel.cs" />
     <Compile Include="AppApi\CarIns\CarInsureBaseInfo.cs" />
     <Compile Include="AppApi\CarIns\CarModelInfoModel.cs" />

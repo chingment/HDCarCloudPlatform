@@ -603,17 +603,87 @@ namespace WebAppApi.Controllers
 
 
         [HttpPost]
-        public APIResponse InsInquiry(CarInsInsurePms pms)
+        public APIResponse Insure(CarInsInsurePms pms)
         {
             CarInsInquiryResult result = new CarInsInquiryResult();
 
+
+            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == pms.OfferId).FirstOrDefault();
+
+            if (orderToCarInsureOfferCompany == null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到报价结果");
+            }
+
+
+            if (string.IsNullOrEmpty(orderToCarInsureOfferCompany.PartnerOrderId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "基本信息未添加");
+            }
+
+            if (string.IsNullOrEmpty(orderToCarInsureOfferCompany.PartnerInquiryId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "报价未完成");
+            }
+
+
             YdtInscarInsurePms ydtInscarInsurePms = new YdtInscarInsurePms();
 
-            ydtInscarInsurePms.inquirySeq = pms.InquirySeq;
+            ydtInscarInsurePms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
             ydtInscarInsurePms.notifyUrl = "";
-            ydtInscarInsurePms.orderSeq = pms.OrderSeq;
+            ydtInscarInsurePms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
+            ydtInscarInsurePms.address.consignee = "朱长荣";
+            ydtInscarInsurePms.address.address = "广州市花都区";
 
             var result_Insure = YdtUtils.Insure(ydtInscarInsurePms);
+
+            if (result_Insure.Result == ResultType.Success)
+            {
+                orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
+                CurrentDb.SaveChanges();
+            }
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "自动报价成功", result);
+
+        }
+
+        [HttpPost]
+        public APIResponse Pay(CarInsPayPms pms)
+        {
+            CarInsInquiryResult result = new CarInsInquiryResult();
+
+
+            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == pms.OfferId).FirstOrDefault();
+
+            if (orderToCarInsureOfferCompany == null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到报价结果");
+            }
+
+
+            if (string.IsNullOrEmpty(orderToCarInsureOfferCompany.PartnerOrderId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "基本信息未添加");
+            }
+
+            if (string.IsNullOrEmpty(orderToCarInsureOfferCompany.PartnerInquiryId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "报价未完成");
+            }
+
+            if (string.IsNullOrEmpty(orderToCarInsureOfferCompany.PartnerInsureId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "核保未完成");
+            }
+
+
+            YdtInscarPayPms ydtInscarPayPms = new YdtInscarPayPms();
+            ydtInscarPayPms.insureSeq = orderToCarInsureOfferCompany.PartnerInsureId;
+            ydtInscarPayPms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
+            ydtInscarPayPms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
+            ydtInscarPayPms.notifyUrl = "";
+
+            var result_Insure = YdtUtils.Pay(ydtInscarPayPms);
 
             if (result_Insure.Result == ResultType.Success)
             {

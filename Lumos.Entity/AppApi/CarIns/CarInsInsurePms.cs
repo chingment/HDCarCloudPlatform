@@ -14,11 +14,8 @@ namespace Lumos.Entity
 
         public int PosMachineId { get; set; }
 
-        public int CarInfoOrderId { get; set; }
+        public int OfferId { get; set; }
 
-        public string InquirySeq { get; set; }
-
-        public string OrderSeq { get; set; }
 
     }
 }

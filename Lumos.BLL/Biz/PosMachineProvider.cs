@@ -15,10 +15,11 @@ namespace Lumos.BLL
         {
             CustomJsonResult result = new CustomJsonResult();
 
+            posMachine.DeviceId = posMachine.DeviceId.Trim();
+
             var l_posMachine = CurrentDb.PosMachine.Where(m => m.DeviceId == posMachine.DeviceId).FirstOrDefault();
             if (l_posMachine != null)
                 return new CustomJsonResult(ResultType.Failure, "该POS机设备ID已经登记");
-
 
             posMachine.CreateTime = this.DateTime;
             posMachine.Creator = operater;

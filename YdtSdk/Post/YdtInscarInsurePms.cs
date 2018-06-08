@@ -6,10 +6,24 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
+    public class YdtInscarInsureAddress
+    {
+        public string consignee { get; set; }
+        public string address { get; set; }
+        public string mobile { get; set; }
+        public string email { get; set; }
+    }
+
     public class YdtInscarInsurePms
     {
+        public YdtInscarInsurePms()
+        {
+            this.address = new YdtInscarInsureAddress();
+        }
         public string inquirySeq { get; set; }
         public string orderSeq { get; set; }
         public string notifyUrl { get; set; }
+
+        public YdtInscarInsureAddress address { get; set; }
     }
 }

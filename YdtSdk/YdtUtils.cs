@@ -548,7 +548,7 @@ namespace YdtSdk
 
                 if (ydtInscarCarResult.code != 0)
                 {
-                    return new CustomJsonResult<string>(ResultType.Failure, ResultCode.Failure, ydtInscarCarResult.msg, null);
+                    return new CustomJsonResult<string>(ResultType.Failure, ResultCode.Failure, string.Format("{0}({1})", ydtInscarCarResult.msg, ydtInscarCarResult.extmsg), null);
                 }
 
                 result.Result = ResultType.Success;
@@ -664,6 +664,23 @@ namespace YdtSdk
             }
 
             return new CustomJsonResult<YdtInscarInsureResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
+        }
+
+        public static CustomJsonResult<YdtInscarPayResultData> Pay(YdtInscarPayPms model)
+        {
+            var result = new CustomJsonResult<YdtInscarInsureResultData>();
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            var ydtInscarInsure = new YdtInscarPay(au.token, au.session, YdtPostDataType.Json, model);
+            var ydtInscarInsureResult = ydtApi.DoPost(ydtInscarInsure);
+
+            if (ydtInscarInsureResult.code != 0)
+            {
+                return new CustomJsonResult<YdtInscarPayResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInsureResult.msg + "(" + ydtInscarInsureResult.extmsg + ")", null);
+            }
+
+            return new CustomJsonResult<YdtInscarPayResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
         }
     }
 }

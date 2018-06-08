@@ -82,6 +82,9 @@
     <Compile Include="Post\YdtInscarInsure.cs" />
     <Compile Include="Post\YdtInscarInsurePms.cs" />
     <Compile Include="Post\YdtInscarInsureResultData.cs" />
+    <Compile Include="Post\YdtInscarPay.cs" />
+    <Compile Include="Post\YdtInscarPayPms.cs" />
+    <Compile Include="Post\YdtInscarPayResultData.cs" />
     <Compile Include="Post\YdtInscarUpatebase.cs" />
     <Compile Include="Post\YdtInscarAdvicevalue.cs" />
     <Compile Include="Post\YdtInscarAdvicevalueResultData.cs" />

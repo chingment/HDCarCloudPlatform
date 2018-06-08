@@ -1879,13 +1879,21 @@ namespace WebAppApi.Controllers
         {
 
 
-            //model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
-            //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId));
+            ///model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+            //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
 
-            //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
-            model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
-            // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId));
+            // model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+            //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
 
+
+
+            //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 17, "d2b0c171-3884-46d2-b63e-46c7a3f075ad", 1, "006000"));
+
+             model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 829));
+
+             model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 829));
+
+            
 
             //string s_CarIns_GetCarInfo = CarIns_GetCarInfo(userId, merchantId, posMachineId);
 
@@ -1896,16 +1904,16 @@ namespace WebAppApi.Controllers
 
             //CustomJsonResult<CarModelInfoResult> s2 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarModelInfoResult>>(s_CarIns_GetCarModelInfo);
             //CarIn_Notify(1, 2, 3, "5", "4");
-            string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
+            //string s_CarIns_EditBaseInfo = CarIns_EditBaseInfo(userId, merchantId, posMachineId);
 
-            CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
+            //CustomJsonResult<CarInsEditBaseInfoResult> s3 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInsEditBaseInfoResult>>(s_CarIns_EditBaseInfo);
 
-            if (s3.Result == ResultType.Success)
-            {
-                //"ac9d0a28-2c55-49a3-bb0e-81029eddb23a"
-                model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.CarInfoOrderId, s3.Data.OrderSeq));
+            //if (s3.Result == ResultType.Success)
+            //{
+            //    //"ac9d0a28-2c55-49a3-bb0e-81029eddb23a"
+            //    model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, s3.Data.CarInfoOrderId, s3.Data.OrderSeq));
 
-            }
+            //}
         }
 
 
@@ -1951,12 +1959,12 @@ namespace WebAppApi.Controllers
             return respon_data4;
         }
 
-        public string CarIns_GetCarModelInfo(int userId, int merchantId, int posMachineId)
+        public string CarIns_GetCarModelInfo(int userId, int merchantId, int posMachineId, string keywor1d, string date)
         {
 
-            string keyword = "LFV3A23C6E3095934";
-            string vin = "LFV3A23C6E3095934";
-            string firstRegisterDate = "2016-06-12";
+            string keyword = keywor1d;
+            string vin = keywor1d;
+            string firstRegisterDate = date;
             Dictionary<string, string> parames = new Dictionary<string, string>();
             parames.Add("keyword", keyword);
             parames.Add("vin", vin);
@@ -1977,44 +1985,36 @@ namespace WebAppApi.Controllers
 
         public string CarIns_EditBaseInfo(int userId, int merchantId, int posMachineId)
         {
-
             CarInsEditBaseInfoPms model = new CarInsEditBaseInfoPms();
-            // model.OrderSeq = "46379";
             model.UserId = userId;
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
+            model.OrderSeq = "d2b0c171-3884-46d2-b63e-46c7a3f075ad";
             model.Auto = "1";
             model.Car.Belong = "1";
-            model.Car.LicensePlateNo = "粤FRS179";
-            model.Car.Vin = "LFMAP86C5G0225666";
-            model.Car.EngineNo = "G575777";
-            model.Car.FirstRegisterDate = "2016-06-12";
-            model.Car.ModelCode = "KLD1112TJF";
-            model.Car.ModelName = "KLD1112TJF";
+            model.Car.LicensePlateNo = "粤E76R95";
+            model.Car.Vin = "LGBH52E01FY333559";
+            model.Car.EngineNo = "721145X";
+            model.Car.FirstRegisterDate = "2015-07-07";
+            model.Car.ModelCode = "XYD1075DFQ";
+            model.Car.ModelName = "东风日产牌DFL7168VAL2";
             model.Car.Displacement = "1600";
-            model.Car.MarketYear = "2012";
+            model.Car.MarketYear = "2014";
             model.Car.RatedPassengerCapacity = 5;
-            model.Car.ReplacementValue = 111800;
+            model.Car.ReplacementValue = 113800;
             model.Car.ChgownerType = "0";
             model.Car.ChgownerDate = "";
             model.Car.Tonnage = "";
             model.Car.WholeWeight = "";
-
-            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱元刚", CertNo = "440182198804141553", Mobile = "15989287032", Address = "广东省花都区" });
-
+            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "15989287032", Address = "广东省花都区" });
             string a1 = JsonConvert.SerializeObject(model);
-            //  a1= "{\"orderSeq\":\"\",\"customers\":[{\"insuredFlag\":\"1\",\"name\":\"黄大爷\",\"certNo\":\"440182198804141553\",\"mobile\":\"15989287032\",\"address\":\"广东省花都区\"},{\"insuredFlag\":\"2\",\"name\":\"黄大爷\",\"certNo\":\"440182198804141553\",\"mobile\":\"15989287032\",\"address\":\"广东省花都区\"},{\"insuredFlag\":\"3\",\"name\":\"黄大爷\",\"certNo\":\"440182198804141553\",\"mobile\":\"15989287032\",\"address\":\"广东省花都区\"}],\"car\":{\"belong\":\"1\",\"carType\":\"1\",\"licensePlateNo\":\"粤AT810P\",\"vin\":\"LFMAPE2C8B0906269\",\"engineNo\":\"E764059\",\"modelCode\":\"丰田TV7163GL轿车\",\"modelName\":\"丰田TV7163GL轿车\",\"firstRegisterDate\":\"2011-03-15\",\"ratedPassengerCapacity\":\"0.0\",\"replacementValue\":\"0.0\",\"chgownerType\":\"0\",\"chgownerDate\":\"\"},\"auto\":\"1\"}";
             string signStr = Signature.Compute(key, secret, timespan, a1);
-
             Dictionary<string, string> headers1 = new Dictionary<string, string>();
             headers1.Add("key", key);
             headers1.Add("timestamp", (timespan.ToString()).ToString());
             headers1.Add("sign", signStr);
-
-            // string a1 = "a1=das&a2=323";
             HttpUtil http = new HttpUtil();
             string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/EditBaseInfo", a1, headers1);
-
             return respon_data4;
         }
 
@@ -2034,7 +2034,6 @@ namespace WebAppApi.Controllers
             headers1.Add("timestamp", (timespan.ToString()).ToString());
             headers1.Add("sign", signStr);
 
-            // string a1 = "a1=das&a2=323";
             HttpUtil http = new HttpUtil();
             string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/InsComanyInfo", a1, headers1);
 
@@ -2042,7 +2041,7 @@ namespace WebAppApi.Controllers
         }
 
 
-        public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, int carInfoOrderId, string orderSeq)
+        public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, int carInfoOrderId, string orderSeq, int channelId, string companyCode)
         {
             CarInsInquiryPms model = new CarInsInquiryPms();
             model.Auto = 1;
@@ -2053,37 +2052,25 @@ namespace WebAppApi.Controllers
             model.OrderSeq = orderSeq;
             model.BiStartDate = "2018-06-20";
             model.CiStartDate = "2018-06-20";
-            model.ChannelId = 1;
-            model.CompanyCode = "006000";
+            model.ChannelId = channelId;
+            model.CompanyCode = companyCode;
 
             model.Car.Belong = "1";
-            model.Car.LicensePlateNo = "粤L29K83";
-            model.Car.Vin = "LS4ASM2E2GF021746";
-            model.Car.EngineNo = "GA8U020728";
-            model.Car.FirstRegisterDate = "2011-03-15";
-            model.Car.ModelCode = "CAD2586CQC";
-            model.Car.ModelName = "长安SC6458A5多用途乘用车";
-            model.Car.Displacement = "1500";
-            model.Car.MarketYear = "2015";
+            model.Car.LicensePlateNo = "粤A9RS97";
+            model.Car.Vin = "LFV3A23C6E3095934";
+            model.Car.EngineNo = "242956";
+            model.Car.FirstRegisterDate = "2015-08-11";
+            model.Car.ModelCode = "MTD1060YQD";
+            model.Car.ModelName = "FV7207FCDWG轿车";
+            model.Car.Displacement = "2000";
+            model.Car.MarketYear = "2012";
             model.Car.RatedPassengerCapacity = 5;
-            model.Car.ReplacementValue = 52900;
+            model.Car.ReplacementValue = 266300;
             model.Car.ChgownerType = "0";
             model.Car.ChgownerDate = "";
             model.Car.Tonnage = "";
             model.Car.WholeWeight = "";
 
-
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 3, Code = "001", Name = "车损险" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 4, Code = "002", Name = "三者险" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 5, Code = "003", Name = "司机险" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 6, Code = "004", Name = "乘客险" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 7, Code = "005", Name = "盗抢险" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 8, Code = "006", Name = "玻璃险" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 9, Code = "007", Name = "划痕险" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 12, Code = "008", Name = "自燃险" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 11, Code = "009", Name = "涉水险" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 17, Code = "010", Name = "指定维修厂" });
-            //list.Add(new YdtInsCoverageModel { UpLinkCode = 10, Code = "011", Name = "无法找到第三方险" });
 
             List<CarInsInsureKindModel> insureKindModel = new List<CarInsInsureKindModel>();
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 1, Value = "", Details = "", IsWaiverDeductible = false });
@@ -2098,10 +2085,6 @@ namespace WebAppApi.Controllers
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 10, Value = "", Details = "" });
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 11, Value = "", Details = "", IsWaiverDeductible = true });
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 12, Value = "", Details = "", IsWaiverDeductible = true });
-            //insureKindModel.Add(new InsureKindModel() { Id = 13, Value = "5000", Details = "购买机动" });
-            //insureKindModel.Add(new InsureKindModel() { Id = 14, Value = "100/天", Details = "" });
-            //insureKindModel.Add(new InsureKindModel() { Id = 15, Value = "6000", Details = "" });
-            //insureKindModel.Add(new InsureKindModel() { Id = 16, Value = "7000", Details = "" });
             insureKindModel.Add(new CarInsInsureKindModel() { Id = 17, Value = "", Details = "" });
 
 
@@ -2110,10 +2093,30 @@ namespace WebAppApi.Controllers
 
             string a1 = JsonConvert.SerializeObject(model);
 
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/InsInquiry", a1, headers1);
+
+            return respon_data4;
+        }
 
 
-             a1 = "{\"ciStartDate\":\"2018-05-16\",\"channelId\":1,\"insureKind\":[{\"id\":1,\"isWaiverDeductible\":false},{\"id\":2,\"isWaiverDeductible\":false},{\"id\":18,\"isWaiverDeductible\":false},{\"id\":3,\"value\":\"1000\",\"isWaiverDeductible\":true},{\"id\":4,\"value\":\"100w\",\"isWaiverDeductible\":true},{\"id\":5,\"value\":\"1w\",\"isWaiverDeductible\":true},{\"id\":6,\"value\":\"1w\",\"isWaiverDeductible\":true},{\"id\":7,\"value\":\"1000\",\"isWaiverDeductible\":true},{\"id\":19,\"isWaiverDeductible\":false},{\"id\":8,\"value\":\"国产\",\"isWaiverDeductible\":false},{\"id\":9,\"value\":\"2000\",\"isWaiverDeductible\":true}],\"biStartDate\":\"2018-05-16\",\"car\":{\"belong\":\"1\",\"carType\":\"1\",\"licensePlateNo\":\"粤A9RS97\",\"vin\":\"LFV3A23C6E3095934\",\"engineNo\":\"242956\",\"modelCode\":\"MTD1060YQD\",\"modelName\":\"FV7207FCDWG轿车\",\"firstRegisterDate\":\"2015-08-11\",\"displacement\":\"2000\",\"ratedPassengerCapacity\":\"266300.00\",\"replacementValue\":\"266300.00\",\"chgownerType\":\"0\",\"chgownerDate\":\"\"},\"companyCode\":\"006000\",\"auto\":\"1\",\"orderSeq\":\"60c255ba-85ee-4ef7-8582-945a207a10dc\"}";
+        public string CarIns_Insure(int userId, int merchantId, int posMachineId, int offerId)
+        {
+            CarInsInsurePms model = new CarInsInsurePms();
 
+            model.UserId = userId;
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
+            model.OfferId = offerId;
+
+            string a1 = JsonConvert.SerializeObject(model);
 
             string signStr = Signature.Compute(key, secret, timespan, a1);
 
@@ -2122,9 +2125,33 @@ namespace WebAppApi.Controllers
             headers1.Add("timestamp", (timespan.ToString()).ToString());
             headers1.Add("sign", signStr);
 
-            // string a1 = "a1=das&a2=323";
             HttpUtil http = new HttpUtil();
-            string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/InsInquiry", a1, headers1);
+            string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/Insure", a1, headers1);
+
+            return respon_data4;
+        }
+
+
+        public string CarIns_Pay(int userId, int merchantId, int posMachineId, int offerId)
+        {
+            CarInsPayPms model = new CarInsPayPms();
+
+            model.UserId = userId;
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
+            model.OfferId = offerId;
+
+            string a1 = JsonConvert.SerializeObject(model);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/CarIns/Pay", a1, headers1);
 
             return respon_data4;
         }

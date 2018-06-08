@@ -59,7 +59,8 @@ namespace Lumos.Entity
         public string PartnerChannelId { get; set; }
         [MaxLength(128)]
         public string PartnerCompanyId { get; set; }
-
+        [MaxLength(128)]
+        public string PartnerInsureId { get; set; }
         public string PartnerRisk { get; set; }
 
         public bool IsAuto { get; set; }

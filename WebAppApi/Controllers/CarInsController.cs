@@ -272,9 +272,9 @@ namespace WebAppApi.Controllers
             //        }
             //    }
             //}
-            #endregion 
+            #endregion
 
-            InscarEditbaseModel baseInfoModel = new InscarEditbaseModel();
+            YdtInscarEditbasePms baseInfoModel = new YdtInscarEditbasePms();
 
             baseInfoModel.auto = int.Parse(pms.Auto);
             baseInfoModel.belong = int.Parse(pms.Car.Belong);
@@ -299,7 +299,7 @@ namespace WebAppApi.Controllers
             #endregion 
 
             #region 被保人，投保人，车主
-            List<InsCustomers> customers = new List<InsCustomers>();
+            List<YdtInscarCustomerModel> customers = new List<YdtInscarCustomerModel>();
 
 
             if (pms.Customers != null)
@@ -307,7 +307,7 @@ namespace WebAppApi.Controllers
                 var carOwnerInfo = pms.Customers.Where(m => m.InsuredFlag == "3").FirstOrDefault();
                 if (carOwnerInfo != null)
                 {
-                    InsCustomers insureds = new InsCustomers();
+                    YdtInscarCustomerModel insureds = new YdtInscarCustomerModel();
                     insureds.insuredFlag = "1";//被保人
                     insureds.name = carOwnerInfo.Name;
                     insureds.certNo = carOwnerInfo.CertNo;
@@ -316,7 +316,7 @@ namespace WebAppApi.Controllers
                     insureds.identityFacePic = "";
                     insureds.identityBackPic = "";
 
-                    InsCustomers holder = new InsCustomers();
+                    YdtInscarCustomerModel holder = new YdtInscarCustomerModel();
                     holder.insuredFlag = "2";//投保人
                     holder.name = insureds.name;
                     holder.certNo = insureds.certNo;
@@ -325,7 +325,7 @@ namespace WebAppApi.Controllers
                     holder.identityFacePic = insureds.identityFacePic;
                     holder.identityBackPic = insureds.identityBackPic;
 
-                    InsCustomers carOwner = new InsCustomers();
+                    YdtInscarCustomerModel carOwner = new YdtInscarCustomerModel();
                     carOwner.insuredFlag = "3";//车主
                     carOwner.name = insureds.name;
                     carOwner.certNo = insureds.certNo;
@@ -348,7 +348,7 @@ namespace WebAppApi.Controllers
             #endregion
 
             #region  图片
-            InsPicModel insPic = new InsPicModel();
+            YdtInscarPicModel insPic = new YdtInscarPicModel();
 
             insPic.licensePic = pms.Car.LicensePicKey;
             insPic.licenseOtherPic = pms.Car.LicenseOtherPicKey;
@@ -441,7 +441,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse InsInquiry(CarInsInquiryPms pms)
         {
-            InsCarInquiryModel model = new InsCarInquiryModel();
+            YdtInscarInquiryPms model = new YdtInscarInquiryPms();
 
             model.auto = pms.Auto;
             model.orderSeq = pms.OrderSeq;

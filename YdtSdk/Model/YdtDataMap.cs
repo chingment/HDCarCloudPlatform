@@ -9,52 +9,52 @@ namespace YdtSdk
 {
     public class YdtDataMap
     {
-        public static List<YdtInsComanyModel> YdtInsComanyList()
+        public static List<YdtInscarComanyModel> YdtInsComanyList()
         {
-            List<YdtInsComanyModel> list = new List<YdtInsComanyModel>();
-            list.Add(new YdtInsComanyModel { UpLinkCode = 1, YdtCode = "002000", Name = "平安保险", PrintName = "平安保险有限公司", ChannelId = 19 });
-            list.Add(new YdtInsComanyModel { UpLinkCode = 2, YdtCode = "008000", Name = "太平洋保险", PrintName = "太平洋保险有限公司" });
-            list.Add(new YdtInsComanyModel { UpLinkCode = 3, YdtCode = "003000", Name = "阳光保险", PrintName = "阳光保险有限公司", ChannelId = 12 });
-            list.Add(new YdtInsComanyModel { UpLinkCode = 4, YdtCode = "", Name = "亚太保险", PrintName = "亚太保险有限公司" });
-            list.Add(new YdtInsComanyModel { UpLinkCode = 5, YdtCode = "005000", Name = "人民保险", PrintName = "人民保险有限公司" });
-            list.Add(new YdtInsComanyModel { UpLinkCode = 6, YdtCode = "", Name = "中华保险", PrintName = "中华保险有限公司", ChannelId = 16 });
+            List<YdtInscarComanyModel> list = new List<YdtInscarComanyModel>();
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 1, YdtCode = "002000", Name = "平安保险", PrintName = "平安保险有限公司", ChannelId = 19 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 2, YdtCode = "008000", Name = "太平洋保险", PrintName = "太平洋保险有限公司" });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 3, YdtCode = "003000", Name = "阳光保险", PrintName = "阳光保险有限公司", ChannelId = 12 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 4, YdtCode = "", Name = "亚太保险", PrintName = "亚太保险有限公司" });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 5, YdtCode = "005000", Name = "人民保险", PrintName = "人民保险有限公司" });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 6, YdtCode = "", Name = "中华保险", PrintName = "中华保险有限公司", ChannelId = 16 });
             //list.Add(new YdtInsComanyModel { UpLinkCode = 7, YdtCode = "005000", Name = "人民保险(佛山)", PrintName = "人民保险有限公司" });
-            list.Add(new YdtInsComanyModel { UpLinkCode = 8, YdtCode = "007000", Name = "大地保险", PrintName = "大地保险有限公司", ChannelId = 6 });
-            list.Add(new YdtInsComanyModel { UpLinkCode = 9, YdtCode = "006000", Name = "太平保险", PrintName = "太平保险有限公司", ChannelId = 1 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 8, YdtCode = "007000", Name = "大地保险", PrintName = "大地保险有限公司", ChannelId = 6 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 9, YdtCode = "006000", Name = "太平保险", PrintName = "太平保险有限公司", ChannelId = 1 });
 
             return list;
         }
 
-        public static List<YdtInsCoverageModel> YdtInsCoverageList()
+        public static List<YdtInscarCoveragesModel> YdtInsCoverageList()
         {
 
-            List<YdtInsCoverageModel> list = new List<YdtInsCoverageModel>();
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 3, Code = "001", Name = "车损险", IsCompensation = false, Priority = 1 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 4, Code = "002", Name = "三者险", IsCompensation = false, Priority = 2 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 5, Code = "003", Name = "司机险", IsCompensation = false, Priority = 3 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 6, Code = "004", Name = "乘客险", IsCompensation = false, Priority = 4 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 7, Code = "005", Name = "盗抢险", IsCompensation = false, Priority = 5 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 8, Code = "006", Name = "玻璃险", IsCompensation = false, Priority = 6 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 9, Code = "007", Name = "划痕险", IsCompensation = false, Priority = 7 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 12, Code = "008", Name = "自燃险", IsCompensation = false, Priority = 8 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 11, Code = "009", Name = "涉水险", IsCompensation = false, Priority = 9 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 17, Code = "010", Name = "指定维修厂", IsCompensation = false, Priority = 10 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 10, Code = "011", Name = "无法找到第三方险", IsCompensation = false, Priority = 11 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 20, Code = "101", Name = "车损险不计免赔", IsCompensation = true, Priority = 12 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 21, Code = "102", Name = "三者险不计免赔", IsCompensation = true, Priority = 13 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 22, Code = "112", Name = "车上人员不计免赔", IsCompensation = true, Priority = 14 });
-            list.Add(new YdtInsCoverageModel { UpLinkCode = 23, Code = "110", Name = "附加险不计免赔", IsCompensation = true, Priority = 15 });
+            List<YdtInscarCoveragesModel> list = new List<YdtInscarCoveragesModel>();
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 3, Code = "001", Name = "车损险", IsCompensation = false, Priority = 1 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 4, Code = "002", Name = "三者险", IsCompensation = false, Priority = 2 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 5, Code = "003", Name = "司机险", IsCompensation = false, Priority = 3 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 6, Code = "004", Name = "乘客险", IsCompensation = false, Priority = 4 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 7, Code = "005", Name = "盗抢险", IsCompensation = false, Priority = 5 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 8, Code = "006", Name = "玻璃险", IsCompensation = false, Priority = 6 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 9, Code = "007", Name = "划痕险", IsCompensation = false, Priority = 7 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 12, Code = "008", Name = "自燃险", IsCompensation = false, Priority = 8 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 11, Code = "009", Name = "涉水险", IsCompensation = false, Priority = 9 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 17, Code = "010", Name = "指定维修厂", IsCompensation = false, Priority = 10 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 10, Code = "011", Name = "无法找到第三方险", IsCompensation = false, Priority = 11 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 20, Code = "101", Name = "车损险不计免赔", IsCompensation = true, Priority = 12 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 21, Code = "102", Name = "三者险不计免赔", IsCompensation = true, Priority = 13 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 22, Code = "112", Name = "车上人员不计免赔", IsCompensation = true, Priority = 14 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 23, Code = "110", Name = "附加险不计免赔", IsCompensation = true, Priority = 15 });
             return list;
         }
 
-        public static YdtInsComanyModel GetCompanyCode(int uplinkInsCarCompanyId)
+        public static YdtInscarComanyModel GetCompanyCode(int uplinkInsCarCompanyId)
         {
             var comany = YdtInsComanyList().Where(m => m.UpLinkCode == uplinkInsCarCompanyId).FirstOrDefault();
 
             return comany;
         }
 
-        public static YdtInsComanyModel GetCompanyByCode(string code)
+        public static YdtInscarComanyModel GetCompanyByCode(string code)
         {
             var comany = YdtInsComanyList().Where(m => m.YdtCode == code).FirstOrDefault();
 

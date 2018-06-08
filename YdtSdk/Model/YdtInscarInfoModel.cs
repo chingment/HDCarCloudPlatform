@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
-    public class InsCarInfoModel
+    public class YdtInscarInfoModel
     {
         public string licensePlateNo { get; set; }
         public string vin { get; set; }

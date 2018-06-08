@@ -6,19 +6,7 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
-
-    public class CoveragesModel
-    {
-        public string code { get; set; }
-        public int compensation { get; set; }
-        public decimal amount { get; set; }
-        public decimal unitAmount { get; set; }
-        public int quantity { get; set; }
-        public int glassType { get; set; }
-
-    }
-
-    public class InsCarInquiryModel
+    public class YdtInscarInquiryPms
     {
         public int auto { get; set; }
         public int channelId { get; set; }

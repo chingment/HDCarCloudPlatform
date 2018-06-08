@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
-    public class YdtInsComanyModel
+    public class YdtInscarComanyModel
     {
         public int UpLinkCode { get; set; }
 

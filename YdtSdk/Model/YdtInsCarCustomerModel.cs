@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
-    public class InsCustomers
+    public class YdtInscarCustomerModel
     {
         public string insuredFlag { get; set; }
         public string name { get; set; }

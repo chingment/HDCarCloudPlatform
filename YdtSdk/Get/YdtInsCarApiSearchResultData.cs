@@ -18,10 +18,10 @@ namespace YdtSdk
 
         public string CiStartDate { get; set; }
 
-        public InsCarInfoModel Car { get; set; }
+        public YdtInscarInfoModel Car { get; set; }
 
-        public List<InsCustomers> CustomerList { get; set; }
+        public List<YdtInscarCustomerModel> CustomerList { get; set; }
 
-        public List<YdtInsCoverageModel> CoverageList { get; set; }
+        public List<YdtInscarCoveragesModel> CoverageList { get; set; }
     }
 }

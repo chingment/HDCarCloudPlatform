@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
-    public class InsPicModel
+    public class YdtInscarPicModel
     {
         public string licensePic { get; set; }
         public string licenseOtherPic { get; set; }

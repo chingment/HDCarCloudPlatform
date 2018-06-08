@@ -78,7 +78,7 @@ namespace YdtSdk
             var au = YdtUtils.GetToken();
             YdtApi ydtApi = new YdtApi();
 
-            InscarAddbaseModel model = new InscarAddbaseModel();
+            YdtInscarAddbasePms model = new YdtInscarAddbasePms();
 
             model.auto = 1;
 
@@ -105,7 +105,7 @@ namespace YdtSdk
             }
 
             #region 车辆信息
-            InsCarInfoModel carInfo = new InsCarInfoModel();
+            YdtInscarInfoModel carInfo = new YdtInscarInfoModel();
             carInfo.licensePlateNo = order.CarLicensePlateNo;
             carInfo.vin = order.CarVin;
             carInfo.engineNo = order.CarEngineNo;
@@ -153,9 +153,9 @@ namespace YdtSdk
 
 
             #region 被保人，投保人，车主
-            List<InsCustomers> customers = new List<InsCustomers>();
+            List<YdtInscarCustomerModel> customers = new List<YdtInscarCustomerModel>();
 
-            InsCustomers insured = new InsCustomers();
+            YdtInscarCustomerModel insured = new YdtInscarCustomerModel();
             insured.insuredFlag = "1";
             insured.name = order.CarownerName;
             insured.certNo = order.CarownerCertNo;
@@ -180,7 +180,7 @@ namespace YdtSdk
                 insured.identityBackPic = order.CarownerIdentityFacePicKey;
             }
 
-            InsCustomers holder = new InsCustomers();
+            YdtInscarCustomerModel holder = new YdtInscarCustomerModel();
             holder.insuredFlag = "2";
             holder.name = insured.name;
             holder.certNo = insured.certNo;
@@ -189,7 +189,7 @@ namespace YdtSdk
             holder.identityFacePic = insured.identityFacePic;
             holder.identityBackPic = insured.identityBackPic;
 
-            InsCustomers carOwner = new InsCustomers();
+            YdtInscarCustomerModel carOwner = new YdtInscarCustomerModel();
             carOwner.insuredFlag = "3";
             carOwner.name = insured.name;
             carOwner.certNo = insured.certNo;
@@ -207,7 +207,7 @@ namespace YdtSdk
 
             model.customers = customers;
 
-            InsPicModel insPic = new InsPicModel();
+            YdtInscarPicModel insPic = new YdtInscarPicModel();
 
             //if (string.IsNullOrEmpty(order.CarIdentityCardFaceImgKey))
             //{
@@ -255,7 +255,7 @@ namespace YdtSdk
                 return new CustomJsonResult(ResultType.Failure, ydtInscarAdvicevalueResult.msg);
             }
 
-            InsCarInquiryModel insCarInquiryModel = new InsCarInquiryModel();
+            YdtInscarInquiryPms insCarInquiryModel = new YdtInscarInquiryPms();
             insCarInquiryModel.auto = 1;
             insCarInquiryModel.orderSeq = ydtInscarCarResult.data.orderSeq;
             insCarInquiryModel.risk = YdtDataMap.GetRisk(kinds);
@@ -527,7 +527,7 @@ namespace YdtSdk
             return ydtInscarGetInquiryInfoResult.data;
         }
 
-        public static CustomJsonResult<string> EditBaseInfo(InscarEditbaseModel model)
+        public static CustomJsonResult<string> EditBaseInfo(YdtInscarEditbasePms model)
         {
             CustomJsonResult<string> result = new CustomJsonResult<string>();
 
@@ -536,7 +536,7 @@ namespace YdtSdk
 
             if (string.IsNullOrEmpty(model.orderSeq))
             {
-                InscarAddbaseModel addModel = new InscarAddbaseModel();
+                YdtInscarAddbasePms addModel = new YdtInscarAddbasePms();
                 addModel.auto = model.auto;
                 addModel.belong = model.belong;
                 addModel.carType = model.carType;
@@ -573,7 +573,7 @@ namespace YdtSdk
             return result;
         }
 
-        public static CustomJsonResult<YdtInscarInquiryResultData> GetInsInquiryByAuto(InsCarInquiryModel model)
+        public static CustomJsonResult<YdtInscarInquiryResultData> GetInsInquiryByAuto(YdtInscarInquiryPms model)
         {
             var result = new CustomJsonResult<YdtInscarInquiryResultData>();
             var au = YdtUtils.GetToken();
@@ -590,7 +590,7 @@ namespace YdtSdk
             return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInscarInquiryResult.msg, ydtInscarInquiryResult.data);
         }
 
-        public static CustomJsonResult<YdtInscarInquiryResultData> GetInsInquiryByArtificial(InsCarInquiryModel model)
+        public static CustomJsonResult<YdtInscarInquiryResultData> GetInsInquiryByArtificial(YdtInscarInquiryPms model)
         {
             var result = new CustomJsonResult<YdtInscarInquiryResultData>();
             var au = YdtUtils.GetToken();

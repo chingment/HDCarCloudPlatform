@@ -16,9 +16,9 @@ namespace YdtSdk
 
         public string carOwner { get; set; }
 
-        public InsCarInquiryModel inquiry { get; set; }
+        public YdtInscarInquiryPms inquiry { get; set; }
 
-        public InsCarInfoModel car { get; set; }
+        public YdtInscarInfoModel car { get; set; }
 
         public channel channel { get; set; }
 

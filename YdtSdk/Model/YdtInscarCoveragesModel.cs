@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
-    public class YdtInsCoverageModel
+    public class YdtInscarCoveragesModel
     {
         public int UpLinkCode { get; set; }
 

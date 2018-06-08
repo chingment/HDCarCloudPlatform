@@ -7,7 +7,13 @@ namespace Lumos.Entity
 {
     public class CarInsComanyInfoPms
     {
-        public string OrderSeq { get; set; }
+        public int UserId { get; set; }
+
+        public int MerchantId { get; set; }
+
+        public int PosMachineId { get; set; }
+
+        public int CarInfoOrdeId { get; set; }
 
         public int AreaId { get; set; }
     }

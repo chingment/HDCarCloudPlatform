@@ -279,7 +279,19 @@ namespace WebAppApi.Controllers
             baseInfoModel.auto = int.Parse(pms.Auto);
             baseInfoModel.belong = int.Parse(pms.Car.Belong);
             baseInfoModel.carType = 1;
-            baseInfoModel.orderSeq = pms.OrderSeq;
+
+            if (pms.CarInfoOrderId > 0)
+            {
+                var insCarInfoOrder = CurrentDb.InsCarInfoOrder.Where(m => m.Id == pms.CarInfoOrderId).FirstOrDefault();
+                if (insCarInfoOrder != null)
+                {
+                    if (!string.IsNullOrEmpty(insCarInfoOrder.PartnerOrderId))
+                    {
+                        baseInfoModel.orderSeq = insCarInfoOrder.PartnerOrderId;
+                    }
+
+                }
+            }
 
             #region  车辆信息
             baseInfoModel.car.licensePlateNo = pms.Car.LicensePlateNo;
@@ -366,10 +378,9 @@ namespace WebAppApi.Controllers
             if (result.Result == ResultType.Success)
             {
                 editBaseInfoResult.Auto = "1";//默认自动报价
-                editBaseInfoResult.OrderSeq = result.Data.ToString();
                 editBaseInfoResult.Car = pms.Car;
                 editBaseInfoResult.Customers = pms.Customers;
-                editBaseInfoResult.CarInfoOrderId = BizFactory.InsCar.UpdateCarInfoOrder(pms.UserId, pms.UserId, editBaseInfoResult.OrderSeq, editBaseInfoResult.Car, editBaseInfoResult.Customers);
+                editBaseInfoResult.CarInfoOrderId = BizFactory.InsCar.UpdateCarInfoOrder(pms.UserId, pms.UserId, result.Data.ToString(), editBaseInfoResult.Car, editBaseInfoResult.Customers);
 
 
                 return ResponseResult(ResultType.Success, ResultCode.Success, result.Message, editBaseInfoResult);
@@ -386,7 +397,20 @@ namespace WebAppApi.Controllers
             var insComanyInfoResult = new CarInsComanyInfoResult();
 
             var carInsuranceCompanys = CurrentDb.CarInsuranceCompany.ToList();
-            var ydtCarModelQueryResultData = YdtUtils.GetInquiryInfo(pms.OrderSeq, pms.AreaId);
+
+            var insCarInfoOrder = CurrentDb.InsCarInfoOrder.Where(m => m.UserId == pms.UserId && m.Id == pms.CarInfoOrdeId).FirstOrDefault();
+
+            if (insCarInfoOrder == null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "找不到订单信息");
+            }
+
+            if (string.IsNullOrEmpty(insCarInfoOrder.PartnerOrderId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "基础信息未添加");
+            }
+
+            var ydtCarModelQueryResultData = YdtUtils.GetInquiryInfo(insCarInfoOrder.PartnerOrderId, pms.AreaId);
 
             if (ydtCarModelQueryResultData != null)
             {
@@ -600,7 +624,6 @@ namespace WebAppApi.Controllers
             #endregion
 
         }
-
 
         [HttpPost]
         public APIResponse Insure(CarInsInsurePms pms)

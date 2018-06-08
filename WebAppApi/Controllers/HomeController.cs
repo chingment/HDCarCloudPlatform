@@ -2018,11 +2018,14 @@ namespace WebAppApi.Controllers
             return respon_data4;
         }
 
-        public string CarIns_InsComanyInfo(int userId, int merchantId, int posMachineId)
+        public string CarIns_InsComanyInfo(int userId, int merchantId, int posMachineId,int carInfoOrderId)
         {
 
             CarInsComanyInfoPms model = new CarInsComanyInfoPms();
-            model.OrderSeq = "60c255ba-85ee-4ef7-8582-945a207a10dc";
+            model.UserId = userId;
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
+            model.CarInfoOrdeId = carInfoOrderId;
             model.AreaId = 440100;
 
             string a1 = JsonConvert.SerializeObject(model);

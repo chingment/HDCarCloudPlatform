@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
-    public class YdtUpload : IYdtApiPostRequest<YdtUpdateResultData>
+    public class YdtUpload : IYdtApiPostRequest<YdtUploadResultData>
     {
         private string token { get; set; }
 

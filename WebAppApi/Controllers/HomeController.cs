@@ -1878,22 +1878,25 @@ namespace WebAppApi.Controllers
         public void CarIns(int userId, int merchantId, int posMachineId)
         {
 
+            //model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
+           // model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
+            //model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
             ///model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
 
-            // model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+             model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
             //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
 
 
 
-            //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 17, "d2b0c171-3884-46d2-b63e-46c7a3f075ad", 1, "006000"));
+            model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 19, 1, "006000"));
 
-             model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 829));
+            model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 830));
 
-             model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 829));
+            model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 830));
 
-            
+
 
             //string s_CarIns_GetCarInfo = CarIns_GetCarInfo(userId, merchantId, posMachineId);
 
@@ -1989,8 +1992,9 @@ namespace WebAppApi.Controllers
             model.UserId = userId;
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
-            model.OrderSeq = "d2b0c171-3884-46d2-b63e-46c7a3f075ad";
+            model.CarInfoOrderId = 830;
             model.Auto = "1";
+            model.Car.CarType = "1";
             model.Car.Belong = "1";
             model.Car.LicensePlateNo = "粤E76R95";
             model.Car.Vin = "LGBH52E01FY333559";
@@ -2006,7 +2010,7 @@ namespace WebAppApi.Controllers
             model.Car.ChgownerDate = "";
             model.Car.Tonnage = "";
             model.Car.WholeWeight = "";
-            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "15989287032", Address = "广东省花都区" });
+            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "15989287032", Address = "广东省新丰县梅坑镇利坑村牛路坎组2-1号" });
             string a1 = JsonConvert.SerializeObject(model);
             string signStr = Signature.Compute(key, secret, timespan, a1);
             Dictionary<string, string> headers1 = new Dictionary<string, string>();
@@ -2018,7 +2022,7 @@ namespace WebAppApi.Controllers
             return respon_data4;
         }
 
-        public string CarIns_InsComanyInfo(int userId, int merchantId, int posMachineId,int carInfoOrderId)
+        public string CarIns_InsComanyInfo(int userId, int merchantId, int posMachineId, int carInfoOrderId)
         {
 
             CarInsComanyInfoPms model = new CarInsComanyInfoPms();
@@ -2044,7 +2048,7 @@ namespace WebAppApi.Controllers
         }
 
 
-        public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, int carInfoOrderId, string orderSeq, int channelId, string companyCode)
+        public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, int carInfoOrderId, int channelId, string companyCode)
         {
             CarInsInquiryPms model = new CarInsInquiryPms();
             model.Auto = 1;
@@ -2052,7 +2056,6 @@ namespace WebAppApi.Controllers
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
             model.CarInfoOrderId = carInfoOrderId;
-            model.OrderSeq = orderSeq;
             model.BiStartDate = "2018-06-20";
             model.CiStartDate = "2018-06-20";
             model.ChannelId = channelId;
@@ -2158,6 +2161,51 @@ namespace WebAppApi.Controllers
 
             return respon_data4;
         }
+
+        public string CarIns_ImgUplad(string tpye, string path)
+        {
+
+
+            string base64string1 = GetImagesBase64String(path);
+
+
+            CarInsUploadImgPms model = new CarInsUploadImgPms();
+            model.Type = tpye;
+
+            string a1 = JsonConvert.SerializeObject(model);
+
+
+            if (a1.IndexOf("ImgData") > -1)
+            {
+                int x = a1.IndexOf("ImgData");
+                a1 = a1.Substring(0, x - 2);
+                a1 += "}";
+            }
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+
+            ImageModel ZJ1_Img = new ImageModel() { Type = ".jpg", Data = base64string1 };
+
+
+            model.ImgData = ZJ1_Img;
+
+
+            a1 = JsonConvert.SerializeObject(model);
+
+
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/CarIns/UploadImg", a1, headers);
+
+            return result;
+
+        }
+
 
         public string CarIn_Notify(int userId, int merchantId, int posMachineId, string orderSn, string paysn)
         {

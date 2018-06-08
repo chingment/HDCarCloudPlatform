@@ -18,9 +18,6 @@ namespace Lumos.Entity
         public int OpType { get; set; }
         public int Remote { get; set; }
         public int Sort { get; set; }
-
-        public string ImgUrl { get; set; }
-
     }
 
     public class Area

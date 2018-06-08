@@ -13,7 +13,7 @@ namespace YdtSdk
         public int size { get; set; }
     }
 
-    public class YdtUpdateResultData
+    public class YdtUploadResultData
     {
         public string type { get; set; }
 
@@ -21,7 +21,7 @@ namespace YdtSdk
 
     }
 
-    
+
     public class YdtLicenseInfo
     {
         public string owner { get; set; }

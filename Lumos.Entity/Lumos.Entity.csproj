@@ -66,8 +66,11 @@
     <Compile Include="AppApi\CarIns\CarInsInquiryPms.cs" />
     <Compile Include="AppApi\CarIns\CarInsInquiryResult.cs" />
     <Compile Include="AppApi\CarIns\CarInsInsurePms.cs" />
+    <Compile Include="AppApi\CarIns\CarInsInsureResult.cs" />
     <Compile Include="AppApi\CarIns\CarInsKindModel.cs" />
     <Compile Include="AppApi\CarIns\CarInsPayPms.cs" />
+    <Compile Include="AppApi\CarIns\CarInsPayResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsUploadImgPms.cs" />
     <Compile Include="AppApi\CarIns\CarInsureBaseInfo.cs" />
     <Compile Include="AppApi\CarIns\CarModelInfoModel.cs" />
     <Compile Include="AppApi\CarIns\CarModelInfoPms.cs" />

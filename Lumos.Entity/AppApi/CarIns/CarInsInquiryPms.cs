@@ -23,8 +23,6 @@ namespace Lumos.Entity
 
         public int Auto { get; set; }
 
-        public string OrderSeq { get; set; }
-
         public int ChannelId { get; set; }
 
         public string CompanyCode { get; set; }

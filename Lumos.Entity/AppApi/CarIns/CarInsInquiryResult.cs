@@ -59,8 +59,7 @@ namespace Lumos.Entity
 
         public decimal SumPremium { get; set; }
 
-        public string OrderSeq { get; set; }
+        public int OfferId { get; set; }
 
-        public string InquirySeq { get; set; }
     }
 }

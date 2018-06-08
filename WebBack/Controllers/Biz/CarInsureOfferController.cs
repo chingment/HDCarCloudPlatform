@@ -267,7 +267,7 @@ namespace WebBack.Controllers.Biz
 
             //model.OrderToCarInsure.PeriodEnd = model.OrderToCarInsure.PeriodStart.Value.AddYears(1).AddDays(-1);
 
-            reuslt = YdtUtils.GetCarInsOffer(model.OrderToCarInsure, model.OrderToCarInsureOfferCompany, model.OrderToCarInsureOfferCompanyKind);
+            //reuslt = YdtUtils.GetCarInsOffer(model.OrderToCarInsure, model.OrderToCarInsureOfferCompany, model.OrderToCarInsureOfferCompanyKind);
 
             return reuslt;
         }

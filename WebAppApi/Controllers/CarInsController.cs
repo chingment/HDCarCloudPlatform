@@ -69,6 +69,7 @@ namespace WebAppApi.Controllers
             var carInfo = new CarInfoModel();
             var customers = new List<CarInsCustomerModel>();
             string licensePlateNo = "";
+            string imgurl = null;
             DrivingLicenceInfo drivingLicenceInfo = null; ;
             switch (pms.KeywordType)
             {
@@ -78,7 +79,7 @@ namespace WebAppApi.Controllers
                     ImageModel imgModel = new ImageModel();
                     imgModel.Data = arr_Keyword[0];
                     imgModel.Type = arr_Keyword[1];
-                    string imgurl = GetUploadImageUrl(imgModel, "CarInsure");
+                    imgurl = GetUploadImageUrl(imgModel, "CarInsure");
                     drivingLicenceInfo = BizFactory.CarInsureOffer.GetDrivingLicenceInfoFromImgUrl(imgurl);
                     if (drivingLicenceInfo == null)
                     {
@@ -107,7 +108,8 @@ namespace WebAppApi.Controllers
             }
 
             carInfo.LicensePlateNo = licensePlateNo;
-
+            carInfo.LicensePicKey = drivingLicenceInfo.fileKey;
+            carInfo.LicenseOtherPicUrl = imgurl;
 
             var insCarInfo = CurrentDb.InsCarInfo.Where(m => m.LicensePlateNo == licensePlateNo).FirstOrDefault();
             if (insCarInfo == null)
@@ -185,15 +187,7 @@ namespace WebAppApi.Controllers
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = insCarInfo.InsuredName, Mobile = insCarInfo.InsuredMobile, Address = insCarInfo.InsuredAddress, CertNo = insCarInfo.InsuredCertNo, IdentityBackPicKey = insCarInfo.InsuredIdentityBackPicKey, IdentityFacePicKey = insCarInfo.InsuredIdentityFacePicKey, OrgPicKey = insCarInfo.InsuredOrgPicKey });
             }
 
-
-
-
             carInfoResult.Car = carInfo;
-
-
-
-
-
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", carInfoResult);
         }
@@ -346,7 +340,7 @@ namespace WebAppApi.Controllers
             baseInfoModel.car.tonnage = pms.Car.Tonnage;
             baseInfoModel.car.wholeWeight = pms.Car.WholeWeight;
 
-            #endregion 
+            #endregion
 
             #region 被保人，投保人，车主
             List<YdtInscarCustomerModel> customers = new List<YdtInscarCustomerModel>();
@@ -402,10 +396,10 @@ namespace WebAppApi.Controllers
 
 
 
-            insPic.licensePic = "0a1e00f463d3f3a50163e0199eed0012.jpg";
-            insPic.licenseOtherPic = "0a1e00f463d3f3a50163e0199eed0012.jpg";
-            insPic.carCertPic = "0a1e00f463d3f3a50163e0199eed0012.jpg";
-            insPic.carInvoicePic = "0a1e00f463d3f3a50163e0199eed0012.jpg";
+            insPic.licensePic = pms.Car.LicenseOtherPicKey;
+            insPic.licenseOtherPic = "";
+            insPic.carCertPic = "";
+            insPic.carInvoicePic = "";
 
             //insPic.licensePic = pms.Car.LicensePicKey;
             //insPic.licenseOtherPic = pms.Car.LicenseOtherPicKey;

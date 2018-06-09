@@ -80,9 +80,13 @@ namespace Lumos.BLL
                     insCarInfoOrder.Tonnage = carInfo.Tonnage;
                     insCarInfoOrder.WholeWeight = carInfo.WholeWeight;
                     insCarInfoOrder.LicensePicKey = carInfo.LicensePicKey;
+                    insCarInfoOrder.LicensePicUrl = carInfo.LicensePicUrl;
                     insCarInfoOrder.LicenseOtherPicKey = carInfo.LicenseOtherPicKey;
+                    insCarInfoOrder.LicenseOtherPicUrl = carInfo.LicenseOtherPicUrl;
                     insCarInfoOrder.CarCertPicKey = carInfo.CarCertPicKey;
+                    insCarInfoOrder.CarCertPicUrl = carInfo.CarCertPicUrl;
                     insCarInfoOrder.CarInvoicePicKey = carInfo.CarInvoicePicKey;
+                    insCarInfoOrder.CarInvoicePicUrl = carInfo.CarInvoicePicUrl;
                     insCarInfoOrder.CreateTime = this.DateTime;
                     insCarInfoOrder.Creator = operater;
 
@@ -97,7 +101,9 @@ namespace Lumos.BLL
                             insCarInfoOrder.CarownerMobile = carowner.Mobile;
                             insCarInfoOrder.CarownerAddress = carowner.Address;
                             insCarInfoOrder.CarownerIdentityFacePicKey = carowner.IdentityFacePicKey;
+                            insCarInfoOrder.CarownerIdentityFacePicUrl = carowner.IdentityFacePicUrl;
                             insCarInfoOrder.CarownerIdentityBackPicKey = carowner.IdentityFacePicKey;
+                            insCarInfoOrder.CarownerIdentityBackPicUrl = carowner.IdentityBackPicUrl;
                             insCarInfoOrder.CarownerOrgPicKey = carowner.OrgPicKey;
                         }
 
@@ -110,7 +116,9 @@ namespace Lumos.BLL
                             insCarInfoOrder.PolicyholderMobile = policyholder.Mobile;
                             insCarInfoOrder.PolicyholderAddress = policyholder.Address;
                             insCarInfoOrder.PolicyholderIdentityFacePicKey = policyholder.IdentityFacePicKey;
-                            insCarInfoOrder.PolicyholderIdentityBackPicKey = policyholder.IdentityFacePicKey;
+                            insCarInfoOrder.PolicyholderIdentityFacePicUrl = policyholder.IdentityFacePicUrl;
+                            insCarInfoOrder.PolicyholderIdentityBackPicKey = policyholder.IdentityBackPicKey;
+                            insCarInfoOrder.PolicyholderIdentityBackPicUrl = policyholder.IdentityBackPicUrl;
                             insCarInfoOrder.PolicyholderOrgPicKey = policyholder.OrgPicKey;
                         }
 
@@ -124,7 +132,9 @@ namespace Lumos.BLL
                             insCarInfoOrder.InsuredMobile = insured.Mobile;
                             insCarInfoOrder.InsuredAddress = insured.Address;
                             insCarInfoOrder.InsuredIdentityFacePicKey = insured.IdentityFacePicKey;
+                            insCarInfoOrder.InsuredIdentityFacePicUrl = insured.IdentityFacePicUrl;
                             insCarInfoOrder.InsuredIdentityBackPicKey = insured.IdentityFacePicKey;
+                            insCarInfoOrder.InsuredIdentityBackPicUrl = insured.IdentityBackPicUrl;
                             insCarInfoOrder.InsuredOrgPicKey = insured.OrgPicKey;
 
                         }
@@ -189,7 +199,7 @@ namespace Lumos.BLL
                         return new CustomJsonResult(ResultType.Failure, "找不到本系统的订单");
                     }
 
-          
+
                     var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.CarInfoOrderId == pms.CarInfoOrderId && m.InsCompanyId == carInsuranceCompany.Id && m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId).FirstOrDefault();
 
                     if (orderToCarInsure == null)
@@ -237,6 +247,7 @@ namespace Lumos.BLL
                     orderToCarInsure.CarWholeWeight = insCarInfoOrder.WholeWeight;
                     orderToCarInsure.CarLicensePicKey = insCarInfoOrder.LicensePicKey;
                     orderToCarInsure.CarLicenseOtherPicKey = insCarInfoOrder.LicenseOtherPicKey;
+                    orderToCarInsure.CZ_CL_XSZ_ImgUrl = insCarInfoOrder.LicenseOtherPicUrl;
                     orderToCarInsure.CarCertPicKey = insCarInfoOrder.CarCertPicKey;
                     orderToCarInsure.CarInvoicePicKey = insCarInfoOrder.CarInvoicePicKey;
                     orderToCarInsure.CarownerInsuredFlag = insCarInfoOrder.CarownerInsuredFlag;
@@ -245,7 +256,9 @@ namespace Lumos.BLL
                     orderToCarInsure.CarownerMobile = insCarInfoOrder.CarownerMobile;
                     orderToCarInsure.CarownerAddress = insCarInfoOrder.CarownerAddress;
                     orderToCarInsure.CarownerIdentityFacePicKey = insCarInfoOrder.CarownerIdentityFacePicKey;
+                    orderToCarInsure.CZ_SFZ_ImgUrl = insCarInfoOrder.CarownerIdentityFacePicUrl;
                     orderToCarInsure.CarownerIdentityBackPicKey = insCarInfoOrder.CarownerIdentityBackPicKey;
+                    orderToCarInsure.CZ_SFZ_B_ImgUrl = insCarInfoOrder.CarownerIdentityBackPicUrl;
                     orderToCarInsure.CarownerOrgPicKey = insCarInfoOrder.CarownerOrgPicKey;
                     orderToCarInsure.PolicyholderInsuredFlag = insCarInfoOrder.PolicyholderInsuredFlag;
                     orderToCarInsure.PolicyholderName = insCarInfoOrder.PolicyholderName;

@@ -24,8 +24,12 @@ namespace Lumos.Entity
         public string Tonnage { get; set; }
         public string WholeWeight { get; set; }
         public string LicensePicKey { get; set; }
+        public string LicensePicUrl { get; set; }
         public string LicenseOtherPicKey { get; set; }
+        public string LicenseOtherPicUrl { get; set; }
         public string CarCertPicKey { get; set; }
+        public string CarCertPicUrl { get; set; }
         public string CarInvoicePicKey { get; set; }
+        public string CarInvoicePicUrl { get; set; }
     }
 }

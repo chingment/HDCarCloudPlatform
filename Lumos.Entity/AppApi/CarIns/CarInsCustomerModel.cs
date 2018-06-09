@@ -13,7 +13,13 @@ namespace Lumos.Entity
         public string Mobile { get; set; }
         public string Address { get; set; }
         public string IdentityFacePicKey { get; set; }
+
+        public string IdentityFacePicUrl{ get; set; }
         public string IdentityBackPicKey { get; set; }
+
+        public string IdentityBackPicUrl { get; set; }
         public string OrgPicKey { get; set; }
+
+        public string OrgPicUrl { get; set; }
     }
 }

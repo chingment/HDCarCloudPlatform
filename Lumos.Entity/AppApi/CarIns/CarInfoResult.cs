@@ -12,8 +12,6 @@ namespace Lumos.Entity
             this.Car = new CarInfoModel();
             this.Customers = new List<CarInsCustomerModel>();
         }
-
-        public string OrderSeq { get; set; }
         public string Auto { get; set; }
         public CarInfoModel Car { get; set; }
         public List<CarInsCustomerModel> Customers { get; set; }

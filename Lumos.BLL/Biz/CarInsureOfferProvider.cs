@@ -31,6 +31,7 @@ namespace Lumos.BLL
         public string vehicleType { get; set; }
 
         public string fileKey { get; set; }
+
     }
 
     [Serializable]

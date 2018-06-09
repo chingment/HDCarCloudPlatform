@@ -49,12 +49,20 @@ namespace Lumos.Entity
         public string WholeWeight { get; set; }
         [MaxLength(128)]
         public string LicensePicKey { get; set; }
+        [MaxLength(1024)]
+        public string LicensePicUrl { get; set; }
         [MaxLength(128)]
         public string LicenseOtherPicKey { get; set; }
+        [MaxLength(1024)]
+        public string LicenseOtherPicUrl { get; set; }
         [MaxLength(128)]
         public string CarCertPicKey { get; set; }
+        [MaxLength(1024)]
+        public string CarCertPicUrl { get; set; }
         [MaxLength(128)]
         public string CarInvoicePicKey { get; set; }
+        [MaxLength(1024)]
+        public string CarInvoicePicUrl { get; set; }
         [MaxLength(128)]
         public string CarownerInsuredFlag { get; set; }
         [MaxLength(128)]
@@ -67,10 +75,16 @@ namespace Lumos.Entity
         public string CarownerAddress { get; set; }
         [MaxLength(128)]
         public string CarownerIdentityFacePicKey { get; set; }
+        [MaxLength(1024)]
+        public string CarownerIdentityFacePicUrl { get; set; }
         [MaxLength(128)]
         public string CarownerIdentityBackPicKey { get; set; }
+        [MaxLength(1024)]
+        public string CarownerIdentityBackPicUrl { get; set; }
         [MaxLength(128)]
         public string CarownerOrgPicKey { get; set; }
+        [MaxLength(1024)]
+        public string CarownerOrgPicUrl { get; set; }
         [MaxLength(128)]
         public string PolicyholderInsuredFlag { get; set; }
         [MaxLength(128)]
@@ -83,10 +97,16 @@ namespace Lumos.Entity
         public string PolicyholderAddress { get; set; }
         [MaxLength(128)]
         public string PolicyholderIdentityFacePicKey { get; set; }
+        [MaxLength(1024)]
+        public string PolicyholderIdentityFacePicUrl { get; set; }
         [MaxLength(128)]
         public string PolicyholderIdentityBackPicKey { get; set; }
+        [MaxLength(1024)]
+        public string PolicyholderIdentityBackPicUrl { get; set; }
         [MaxLength(128)]
         public string PolicyholderOrgPicKey { get; set; }
+        [MaxLength(1024)]
+        public string PolicyholderOrgPicUrl { get; set; }
         [MaxLength(128)]
         public string InsuredInsuredFlag { get; set; }
         [MaxLength(128)]
@@ -99,10 +119,16 @@ namespace Lumos.Entity
         public string InsuredAddress { get; set; }
         [MaxLength(128)]
         public string InsuredIdentityFacePicKey { get; set; }
+        [MaxLength(1024)]
+        public string InsuredIdentityFacePicUrl { get; set; }
         [MaxLength(128)]
         public string InsuredIdentityBackPicKey { get; set; }
+        [MaxLength(1024)]
+        public string InsuredIdentityBackPicUrl { get; set; }
         [MaxLength(128)]
         public string InsuredOrgPicKey { get; set; }
+        [MaxLength(1024)]
+        public string InsuredOrgPicUrl { get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public int? Mender { get; set; }

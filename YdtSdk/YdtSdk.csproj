@@ -78,11 +78,17 @@
     <Compile Include="Model\YdtInscarComanyModel.cs" />
     <Compile Include="Model\YdtInscarCoveragesModel.cs" />
     <Compile Include="Post\YdtInscarInquiryByArtificial.cs" />
+    <Compile Include="Post\YdtInscarInquiryByArtificialPms.cs" />
     <Compile Include="Post\YdtInscarInquiryPms.cs" />
     <Compile Include="Post\YdtInscarInsure.cs" />
+    <Compile Include="Post\YdtInscarInsureByArtificialPms.cs" />
+    <Compile Include="Post\YdtInscarInsureByArtificialResultData.cs" />
     <Compile Include="Post\YdtInscarInsurePms.cs" />
     <Compile Include="Post\YdtInscarInsureResultData.cs" />
     <Compile Include="Post\YdtInscarPay.cs" />
+    <Compile Include="Post\YdtInscarPayByArtificialForward.cs" />
+    <Compile Include="Post\YdtInscarPayByArtificialForwardPms.cs" />
+    <Compile Include="Post\YdtInscarPayByArtificialForwardResult.cs" />
     <Compile Include="Post\YdtInscarPayPms.cs" />
     <Compile Include="Post\YdtInscarPayResultData.cs" />
     <Compile Include="Post\YdtInscarUpatebase.cs" />
@@ -96,6 +102,7 @@
     <Compile Include="Post\YdtInscarGetInquiryInfoResultData.cs" />
     <Compile Include="Post\YdtInscarInquiry.cs" />
     <Compile Include="Post\YdtInscarInquiryResultData.cs" />
+    <Compile Include="Post\YdtInscarInsureByArtificial.cs" />
     <Compile Include="Post\YdtUpload.cs" />
     <Compile Include="Post\YdtUploadByIdentity.cs" />
     <Compile Include="Post\YdtUploadByLicense.cs" />

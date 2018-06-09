@@ -34,7 +34,7 @@ namespace WebAppApi.Controllers
 
         [HttpPost]
         public APIResponse UploadImg(CarInsUploadImgPms pms)
-        { 
+        {
 
             string imgurl = "";
 
@@ -324,7 +324,7 @@ namespace WebAppApi.Controllers
                     {
                         baseInfoModel.orderSeq = insCarInfoOrder.PartnerOrderId;
 
-                       
+
                     }
 
                 }
@@ -602,7 +602,7 @@ namespace WebAppApi.Controllers
             //0 人工报价，1 自动报价
             if (pms.Auto == 0)
             {
-                model.notifyUrl = "http://120.79.233.231/Api/CarIns/OfferNotify";
+                model.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/InquiryNotify";
 
                 try
                 {
@@ -711,7 +711,7 @@ namespace WebAppApi.Controllers
             YdtInscarInsurePms ydtInscarInsurePms = new YdtInscarInsurePms();
 
             ydtInscarInsurePms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
-            ydtInscarInsurePms.notifyUrl = "";
+            ydtInscarInsurePms.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/InsureNotify";
             ydtInscarInsurePms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
             ydtInscarInsurePms.address.consignee = "朱长荣";
             ydtInscarInsurePms.address.email = "chingment@126.com";
@@ -769,7 +769,7 @@ namespace WebAppApi.Controllers
             ydtInscarPayPms.insureSeq = orderToCarInsureOfferCompany.PartnerInsureId;
             ydtInscarPayPms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
             ydtInscarPayPms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
-            ydtInscarPayPms.notifyUrl = "";
+            ydtInscarPayPms.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/PayNotify";
 
             var result_Insure = YdtUtils.Pay(ydtInscarPayPms);
 
@@ -789,17 +789,48 @@ namespace WebAppApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public APIResponse OfferNotify(ReceiveNotifyModel model)
+        public APIResponse InquiryNotify(YdtInscarInquiryResultData pms)
         {
             Stream stream = HttpContext.Current.Request.InputStream;
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
 
-            Log.Info("CarInsOfferNotify：" + postData);
+            Log.Info("InquiryNotify：" + postData);
 
             var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
             return new APIResponse(result);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public APIResponse InsureNotify(YdtInscarInsureResultData pms)
+        {
+            Stream stream = HttpContext.Current.Request.InputStream;
+            stream.Seek(0, SeekOrigin.Begin);
+            string postData = new StreamReader(stream).ReadToEnd();
+
+            Log.Info("InsureNotify：" + postData);
+
+            var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
+            return new APIResponse(result);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public APIResponse PayNotify(YdtInscarPayResultData pms)
+        {
+            Stream stream = HttpContext.Current.Request.InputStream;
+            stream.Seek(0, SeekOrigin.Begin);
+            string postData = new StreamReader(stream).ReadToEnd();
+
+            Log.Info("PayNotify：" + postData);
+
+            var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
+            return new APIResponse(result);
+        }
+
+
+
         private static int GetRisk(List<CarInsInsureKindModel> kinds)
         {
             if (kinds == null)

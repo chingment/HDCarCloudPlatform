@@ -592,25 +592,16 @@ namespace WebAppApi.Controllers
 
                         #region 证件
 
-                        if (orderToCarInsure.CZ_CL_XSZ_ImgUrl != null)
+                        if (orderToCarInsure.CarLicensePicUrl != null)
                         {
-                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("行驶证", orderToCarInsure.CZ_CL_XSZ_ImgUrl));
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("行驶证", orderToCarInsure.CarLicensePicUrl));
                         }
 
-                        if (orderToCarInsure.CZ_SFZ_ImgUrl != null)
+                        if (orderToCarInsure.CarownerIdentityFacePicUrl != null)
                         {
-                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("身份证", orderToCarInsure.CZ_SFZ_ImgUrl));
+                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("身份证", orderToCarInsure.CarownerIdentityFacePicUrl));
                         }
 
-                        if (orderToCarInsure.CCSJM_WSZM_ImgUrl != null)
-                        {
-                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("车船税减免/完税证明", orderToCarInsure.CCSJM_WSZM_ImgUrl));
-                        }
-
-                        if (orderToCarInsure.YCZ_CLDJZ_ImgUrl != null)
-                        {
-                            orderCarInsureDetailsModel.ZJ.Add(new ZjModel("验车照/车辆登记证", orderToCarInsure.YCZ_CLDJZ_ImgUrl));
-                        }
 
                         if (orderToCarInsure.ZJ1_ImgUrl != null)
                         {

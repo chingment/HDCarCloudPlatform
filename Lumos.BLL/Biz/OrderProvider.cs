@@ -48,10 +48,8 @@ namespace Lumos.BLL
                 order.CarFirstRegisterDate = orderToCarInsure.CarFirstRegisterDate;
                 order.CarIssueDate = orderToCarInsure.CarIssueDate;
                 order.InsPlanId = orderToCarInsure.InsPlanId;
-                order.CZ_CL_XSZ_ImgUrl = orderToCarInsure.CZ_CL_XSZ_ImgUrl;
-                order.CZ_SFZ_ImgUrl = orderToCarInsure.CZ_SFZ_ImgUrl;
-                order.YCZ_CLDJZ_ImgUrl = orderToCarInsure.YCZ_CLDJZ_ImgUrl;
-                order.CCSJM_WSZM_ImgUrl = orderToCarInsure.CCSJM_WSZM_ImgUrl;
+                order.CarLicensePicUrl = orderToCarInsure.CarLicensePicUrl;
+                order.CarownerIdentityFacePicUrl = orderToCarInsure.CarownerIdentityFacePicUrl;
                 order.Status = Enumeration.OrderStatus.Submitted;
                 order.StartOfferTime = this.DateTime;
                 order.SubmitTime = this.DateTime;

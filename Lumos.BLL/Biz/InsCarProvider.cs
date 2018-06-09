@@ -246,19 +246,22 @@ namespace Lumos.BLL
                     orderToCarInsure.CarTonnage = insCarInfoOrder.Tonnage;
                     orderToCarInsure.CarWholeWeight = insCarInfoOrder.WholeWeight;
                     orderToCarInsure.CarLicensePicKey = insCarInfoOrder.LicensePicKey;
+                    orderToCarInsure.CarLicensePicUrl = insCarInfoOrder.LicensePicUrl;
                     orderToCarInsure.CarLicenseOtherPicKey = insCarInfoOrder.LicenseOtherPicKey;
-                    orderToCarInsure.CZ_CL_XSZ_ImgUrl = insCarInfoOrder.LicenseOtherPicUrl;
+                    orderToCarInsure.CarLicenseOtherPicUrl = insCarInfoOrder.LicenseOtherPicUrl;
                     orderToCarInsure.CarCertPicKey = insCarInfoOrder.CarCertPicKey;
+                    orderToCarInsure.CarCertPicUrl = insCarInfoOrder.CarCertPicUrl;
                     orderToCarInsure.CarInvoicePicKey = insCarInfoOrder.CarInvoicePicKey;
+                    orderToCarInsure.CarInvoicePicUrl = insCarInfoOrder.CarInvoicePicUrl;
                     orderToCarInsure.CarownerInsuredFlag = insCarInfoOrder.CarownerInsuredFlag;
                     orderToCarInsure.CarownerName = insCarInfoOrder.CarownerName;
                     orderToCarInsure.CarownerCertNo = insCarInfoOrder.CarownerCertNo;
                     orderToCarInsure.CarownerMobile = insCarInfoOrder.CarownerMobile;
                     orderToCarInsure.CarownerAddress = insCarInfoOrder.CarownerAddress;
                     orderToCarInsure.CarownerIdentityFacePicKey = insCarInfoOrder.CarownerIdentityFacePicKey;
-                    orderToCarInsure.CZ_SFZ_ImgUrl = insCarInfoOrder.CarownerIdentityFacePicUrl;
+                    orderToCarInsure.CarownerIdentityFacePicUrl = insCarInfoOrder.CarownerIdentityFacePicUrl;
                     orderToCarInsure.CarownerIdentityBackPicKey = insCarInfoOrder.CarownerIdentityBackPicKey;
-                    orderToCarInsure.CZ_SFZ_B_ImgUrl = insCarInfoOrder.CarownerIdentityBackPicUrl;
+                    orderToCarInsure.CarownerIdentityBackPicUrl = insCarInfoOrder.CarownerIdentityBackPicUrl;
                     orderToCarInsure.CarownerOrgPicKey = insCarInfoOrder.CarownerOrgPicKey;
                     orderToCarInsure.PolicyholderInsuredFlag = insCarInfoOrder.PolicyholderInsuredFlag;
                     orderToCarInsure.PolicyholderName = insCarInfoOrder.PolicyholderName;
@@ -266,16 +269,22 @@ namespace Lumos.BLL
                     orderToCarInsure.PolicyholderMobile = insCarInfoOrder.PolicyholderMobile;
                     orderToCarInsure.PolicyholderAddress = insCarInfoOrder.PolicyholderAddress;
                     orderToCarInsure.PolicyholderIdentityFacePicKey = insCarInfoOrder.PolicyholderIdentityFacePicKey;
+                    orderToCarInsure.PolicyholderIdentityFacePicUrl = insCarInfoOrder.PolicyholderIdentityFacePicUrl;
                     orderToCarInsure.PolicyholderIdentityBackPicKey = insCarInfoOrder.PolicyholderIdentityBackPicKey;
+                    orderToCarInsure.PolicyholderIdentityBackPicUrl = insCarInfoOrder.PolicyholderIdentityBackPicUrl;
                     orderToCarInsure.PolicyholderOrgPicKey = insCarInfoOrder.PolicyholderOrgPicKey;
+                    orderToCarInsure.PolicyholderOrgPicUrl = insCarInfoOrder.PolicyholderOrgPicUrl;
                     orderToCarInsure.InsuredInsuredFlag = insCarInfoOrder.InsuredInsuredFlag;
                     orderToCarInsure.InsuredName = insCarInfoOrder.InsuredName;
                     orderToCarInsure.InsuredCertNo = insCarInfoOrder.InsuredCertNo;
                     orderToCarInsure.InsuredMobile = insCarInfoOrder.InsuredMobile;
                     orderToCarInsure.InsuredAddress = insCarInfoOrder.InsuredAddress;
                     orderToCarInsure.InsuredIdentityFacePicKey = insCarInfoOrder.InsuredIdentityFacePicKey;
+                    orderToCarInsure.InsuredIdentityBackPicUrl = insCarInfoOrder.InsuredIdentityBackPicUrl;
                     orderToCarInsure.InsuredIdentityBackPicKey = insCarInfoOrder.InsuredIdentityBackPicKey;
+                    orderToCarInsure.InsuredIdentityBackPicUrl = insCarInfoOrder.InsuredIdentityBackPicUrl;
                     orderToCarInsure.InsuredOrgPicKey = insCarInfoOrder.InsuredOrgPicKey;
+                    orderToCarInsure.InsuredOrgPicUrl = insCarInfoOrder.InsuredOrgPicUrl;
 
                     if (orderToCarInsure.Id == 0)
                     {

@@ -41,9 +41,9 @@ namespace WebAppApi.Controllers
                 var key_CZ_CL_XSZ_Img = "CZ_CL_XSZ_Img";
                 if (model.ImgData.ContainsKey(key_CZ_CL_XSZ_Img))
                 {
-                    orderToCarInsure.CZ_CL_XSZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_CL_XSZ_Img], "CarInsure");
+                    orderToCarInsure.CarLicensePicUrl = GetUploadImageUrl(model.ImgData[key_CZ_CL_XSZ_Img], "CarInsure");
                     //orderToCarInsure.CZ_CL_XSZ_ImgUrl = "http://file.gzhaoyilian.com/Upload/demo_jsz.jpg";
-                    var drivingLicenceInfo = BizFactory.CarInsureOffer.GetDrivingLicenceInfoFromImgUrl(orderToCarInsure.CZ_CL_XSZ_ImgUrl);
+                    var drivingLicenceInfo = BizFactory.CarInsureOffer.GetDrivingLicenceInfoFromImgUrl(orderToCarInsure.CarLicensePicUrl);
                     if (drivingLicenceInfo != null)
                     {
                         orderToCarInsure.CarownerName = drivingLicenceInfo.owner;
@@ -71,8 +71,8 @@ namespace WebAppApi.Controllers
                 if (model.ImgData.ContainsKey(key_CZ_SFZ_Img))
                 {
                     //orderToCarInsure.CZ_SFZ_ImgUrl = "http://file.gzhaoyilian.com/Upload/demo_sfz.jpg";
-                    orderToCarInsure.CZ_SFZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_CZ_SFZ_Img], "CarInsure");
-                    var identityCardInfo = BizFactory.CarInsureOffer.GetIdentityCardInfoFromImgUrl(orderToCarInsure.CZ_SFZ_ImgUrl);
+                    orderToCarInsure.CarownerIdentityFacePicUrl = GetUploadImageUrl(model.ImgData[key_CZ_SFZ_Img], "CarInsure");
+                    var identityCardInfo = BizFactory.CarInsureOffer.GetIdentityCardInfoFromImgUrl(orderToCarInsure.CarownerIdentityFacePicUrl);
                     if (identityCardInfo != null)
                     {
                         orderToCarInsure.CarownerCertNo = identityCardInfo.idNumber;
@@ -80,17 +80,6 @@ namespace WebAppApi.Controllers
                     }
                 }
 
-                var key_CCSJM_WSZM_Img = "CCSJM_WSZM_Img";
-                if (model.ImgData.ContainsKey(key_CCSJM_WSZM_Img))
-                {
-                    orderToCarInsure.CCSJM_WSZM_ImgUrl = GetUploadImageUrl(model.ImgData[key_CCSJM_WSZM_Img], "CarInsure");
-                }
-
-                var key_YCZ_CLDJZ_Img = "YCZ_CLDJZ_Img";
-                if (model.ImgData.ContainsKey(key_YCZ_CLDJZ_Img))
-                {
-                    orderToCarInsure.YCZ_CLDJZ_ImgUrl = GetUploadImageUrl(model.ImgData[key_YCZ_CLDJZ_Img], "CarInsure");
-                }
             }
 
             List<OrderToCarInsureOfferCompany> orderToCarInsureOfferCompanys = new List<OrderToCarInsureOfferCompany>();

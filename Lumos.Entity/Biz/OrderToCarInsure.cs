@@ -153,21 +153,6 @@ namespace Lumos.Entity
         public string InsImgUrl { get; set; }
 
         public int InsPlanId { get; set; }
-
-        [MaxLength(1024)]
-        public string CZ_CL_XSZ_ImgUrl { get; set; }
-
-        [MaxLength(1024)]
-        public string CZ_SFZ_ImgUrl { get; set; }
-        [MaxLength(1024)]
-        public string CZ_SFZ_B_ImgUrl { get; set; }
-
-        [MaxLength(1024)]
-        public string CCSJM_WSZM_ImgUrl { get; set; }
-
-        [MaxLength(1024)]
-        public string YCZ_CLDJZ_ImgUrl { get; set; }
-
         [MaxLength(1024)]
         public string ZJ1_ImgUrl { get; set; }
 

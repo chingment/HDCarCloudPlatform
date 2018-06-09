@@ -201,7 +201,7 @@ namespace YdtSdk
 
                 if (ydtInscarCarResult.code != 0)
                 {
-                    return new CustomJsonResult<string>(ResultType.Failure, ResultCode.Failure, string.Format("{0}({1})", ydtInscarCarResult.msg, ydtInscarCarResult.extmsg), null);
+                    return new CustomJsonResult<string>(ResultType.Failure, ResultCode.Failure, ydtInscarCarResult.extmsg, null);
                 }
 
                 result.Result = ResultType.Success;
@@ -215,7 +215,7 @@ namespace YdtSdk
 
                 if (ydtInscarCarResult.code != 0)
                 {
-                    return new CustomJsonResult<string>(ResultType.Failure, ResultCode.Failure, ydtInscarCarResult.msg, null);
+                    return new CustomJsonResult<string>(ResultType.Failure, ResultCode.Failure, ydtInscarCarResult.extmsg, null);
                 }
 
                 result.Result = ResultType.Success;
@@ -237,7 +237,7 @@ namespace YdtSdk
 
             if (ydtInscarInquiryResult.code != 0)
             {
-                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInquiryResult.msg + "(" + ydtInscarInquiryResult.extmsg + ")", null);
+                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInquiryResult.extmsg, null);
             }
 
             return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInscarInquiryResult.msg, ydtInscarInquiryResult.data);
@@ -254,7 +254,7 @@ namespace YdtSdk
 
             if (ydtInscarInquiryResult.code != 0)
             {
-                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInquiryResult.msg + "(" + ydtInscarInquiryResult.extmsg + ")", null);
+                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure,  ydtInscarInquiryResult.extmsg, null);
             }
 
             return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInscarInquiryResult.msg, ydtInscarInquiryResult.data);
@@ -311,7 +311,7 @@ namespace YdtSdk
 
             if (ydtInscarInsureResult.code != 0)
             {
-                return new CustomJsonResult<YdtInscarInsureResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInsureResult.msg + "(" + ydtInscarInsureResult.extmsg + ")", null);
+                return new CustomJsonResult<YdtInscarInsureResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInsureResult.extmsg, null);
             }
 
             return new CustomJsonResult<YdtInscarInsureResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
@@ -328,7 +328,7 @@ namespace YdtSdk
 
             if (ydtInscarInsureResult.code != 0)
             {
-                return new CustomJsonResult<YdtInscarPayResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInsureResult.msg + "(" + ydtInscarInsureResult.extmsg + ")", null);
+                return new CustomJsonResult<YdtInscarPayResultData>(ResultType.Failure, ResultCode.Failure,  ydtInscarInsureResult.extmsg, null);
             }
 
             return new CustomJsonResult<YdtInscarPayResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);

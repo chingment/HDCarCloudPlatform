@@ -47,11 +47,11 @@ namespace WebAppApi.Controllers
                     model = YdtUtils.UploadImg(imgurl);
                     break;
                 case "10":
-                    imgurl = "http://file.gzhaoyilian.com/Upload/c2.jpg";
+                    imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
                     model = YdtUtils.GetLicenseInfoByUrl(imgurl);
                     break;
                 case "11":
-                    imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
+                    imgurl = "http://file.gzhaoyilian.com/Upload/c2.jpg";
                     model = YdtUtils.GetIdentityInfoByUrl(imgurl);
                     break;
             }

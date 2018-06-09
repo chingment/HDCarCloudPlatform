@@ -1879,22 +1879,22 @@ namespace WebAppApi.Controllers
         {
 
             //model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
-           // model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
-            //model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
+            model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
+            model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
             ///model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
 
-             model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+             //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
             //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
 
 
 
-            model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 19, 1, "006000"));
+            //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 19, 1, "006000"));
 
-            model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 830));
+           // model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 830));
 
-            model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 830));
+            //model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 830));
 
 
 

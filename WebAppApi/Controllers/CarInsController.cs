@@ -108,7 +108,10 @@ namespace WebAppApi.Controllers
             }
 
             carInfo.LicensePlateNo = licensePlateNo;
-            carInfo.LicensePicKey = drivingLicenceInfo.fileKey;
+            if (drivingLicenceInfo != null)
+            {
+                carInfo.LicensePicKey = drivingLicenceInfo.fileKey;
+            }
             carInfo.LicenseOtherPicUrl = imgurl;
 
             var insCarInfo = CurrentDb.InsCarInfo.Where(m => m.LicensePlateNo == licensePlateNo).FirstOrDefault();
@@ -360,9 +363,12 @@ namespace WebAppApi.Controllers
                     {
                         insureds.identityFacePic = carOwnerInfo.IdentityFacePicKey;
                         insureds.identityBackPic = carOwnerInfo.IdentityBackPicKey;
+                        insureds.orgPic = null;
                     }
                     else
                     {
+                        insureds.identityFacePic = null;
+                        insureds.identityBackPic = null;
                         insureds.orgPic = carOwnerInfo.OrgPicKey;
                     }
 
@@ -399,10 +405,10 @@ namespace WebAppApi.Controllers
 
 
 
-            insPic.licensePic = pms.Car.LicenseOtherPicKey;
-            insPic.licenseOtherPic = "";
-            insPic.carCertPic = "";
-            insPic.carInvoicePic = "";
+            insPic.licensePic = pms.Car.LicensePicKey;
+            insPic.licenseOtherPic = null;
+            insPic.carCertPic = null;
+            insPic.carInvoicePic = null;
 
 
 

@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
+        //private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        // private string host = "http://120.79.233.231";
+        private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -1879,20 +1879,20 @@ namespace WebAppApi.Controllers
         {
 
             //model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
-            model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
-            model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
+            //model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
+            //model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
-            ///model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
-            //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
+            model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+            model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
 
-             //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
-            //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
+            model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+            // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
 
 
 
             //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 19, 1, "006000"));
 
-           // model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 830));
+            // model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 830));
 
             //model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 830));
 
@@ -2010,7 +2010,8 @@ namespace WebAppApi.Controllers
             model.Car.ChgownerDate = "";
             model.Car.Tonnage = "";
             model.Car.WholeWeight = "";
-            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "15989287032", Address = "广东省新丰县梅坑镇利坑村牛路坎组2-1号" });
+            model.Car.LicensePicKey = "0a1e00f463d3f3a50163e771c657001a.jpg";
+            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "15989287032", Address = "广东省新丰县梅坑镇利坑村牛路坎组2-1号", IdentityFacePicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg", IdentityBackPicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg" });
             string a1 = JsonConvert.SerializeObject(model);
             string signStr = Signature.Compute(key, secret, timespan, a1);
             Dictionary<string, string> headers1 = new Dictionary<string, string>();

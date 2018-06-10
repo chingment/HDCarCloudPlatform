@@ -38,6 +38,7 @@ namespace WebAppApi
                     break;
                 default:
                     log.Error("应用程序捕捉到异常", ex);
+                    log.Error(ex.StackTrace);
                     break;
             }
         }

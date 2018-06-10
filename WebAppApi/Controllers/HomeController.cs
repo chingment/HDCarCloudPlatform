@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
+        private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        private string host = "http://120.79.233.231";
+        //private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -1992,7 +1992,7 @@ namespace WebAppApi.Controllers
             model.UserId = userId;
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
-            model.CarInfoOrderId = 830;
+            //model.CarInfoOrderId = 830;
             model.Auto = "1";
             model.Car.CarType = "1";
             model.Car.Belong = "1";
@@ -2012,7 +2012,10 @@ namespace WebAppApi.Controllers
             model.Car.WholeWeight = "";
             model.Car.LicensePicKey = "0a1e00f463d3f3a50163e771c657001a.jpg";
             model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "15989287032", Address = "广东省新丰县梅坑镇利坑村牛路坎组2-1号", IdentityFacePicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg", IdentityBackPicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg" });
+
             string a1 = JsonConvert.SerializeObject(model);
+
+            a1 = "{\"UserId\":1234,\"MerchantId\":258,\"PosMachineId\":153,\"OrderSeq\":null,\"Auto\":\"1\",\"Car\":{\"Belong\":\"1\",\"CarType\":null,\"LicensePlateNo\":\"粤FRS179\",\"Vin\":\"LFMAP86C5G0225666\",\"EngineNo\":\"G575777\",\"FirstRegisterDate\":\"2016-06-12\",\"ModelCode\":\"KLD1112TJF\",\"ModelName\":\"KLD1112TJF\",\"Displacement\":\"1600\",\"MarketYear\":\"2012\",\"RatedPassengerCapacity\":5,\"ReplacementValue\":111800.0,\"ChgownerType\":\"0\",\"ChgownerDate\":\"\",\"Tonnage\":\"\",\"WholeWeight\":\"\",\"LicensePicKey\":null,\"LicenseOtherPicKey\":null,\"CarCertPicKey\":null,\"CarInvoicePicKey\":null},\"Customers\":[{\"InsuredFlag\":\"3\",\"Name\":\"朱元刚\",\"CertNo\":\"440182198804141553\",\"Mobile\":\"15989287032\",\"Address\":\"广东省花都区\",\"IdentityFacePicKey\":null,\"IdentityBackPicKey\":null,\"OrgPicKey\":null}]}";
             string signStr = Signature.Compute(key, secret, timespan, a1);
             Dictionary<string, string> headers1 = new Dictionary<string, string>();
             headers1.Add("key", key);

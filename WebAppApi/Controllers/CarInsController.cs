@@ -317,10 +317,7 @@ namespace WebAppApi.Controllers
                     if (!string.IsNullOrEmpty(insCarInfoOrder.PartnerOrderId))
                     {
                         baseInfoModel.orderSeq = insCarInfoOrder.PartnerOrderId;
-
-
                     }
-
                 }
             }
 
@@ -357,8 +354,17 @@ namespace WebAppApi.Controllers
                     insureds.certNo = carOwnerInfo.CertNo;
                     insureds.mobile = carOwnerInfo.Mobile;
                     insureds.address = carOwnerInfo.Address;
-                    insureds.identityFacePic = "0a1e00f463d3f3a50163e0199eed0012.jpg";
-                    insureds.identityBackPic = "0a1e00f463d3f3a50163e0199eed0012.jpg";
+
+                    //1是私人车，2为公司车
+                    if (pms.Car.Belong == "1")
+                    {
+                        insureds.identityFacePic = carOwnerInfo.IdentityFacePicKey;
+                        insureds.identityBackPic = carOwnerInfo.IdentityBackPicKey;
+                    }
+                    else
+                    {
+                        insureds.orgPic = carOwnerInfo.OrgPicKey;
+                    }
 
                     YdtInscarCustomerModel holder = new YdtInscarCustomerModel();
                     holder.insuredFlag = "2";//投保人
@@ -368,7 +374,7 @@ namespace WebAppApi.Controllers
                     holder.address = insureds.address;
                     holder.identityFacePic = insureds.identityFacePic;
                     holder.identityBackPic = insureds.identityBackPic;
-
+                    holder.orgPic = insureds.orgPic;
                     YdtInscarCustomerModel carOwner = new YdtInscarCustomerModel();
                     carOwner.insuredFlag = "3";//车主
                     carOwner.name = insureds.name;
@@ -377,10 +383,7 @@ namespace WebAppApi.Controllers
                     carOwner.address = insureds.address;
                     carOwner.identityFacePic = insureds.identityFacePic;
                     carOwner.identityBackPic = insureds.identityBackPic;
-                    if (pms.Car.Belong == "2")
-                    {
-                        carOwner.orgPic = null;
-                    }
+                    carOwner.orgPic = insureds.orgPic;
 
                     customers.Add(insureds);
                     customers.Add(holder);
@@ -401,10 +404,7 @@ namespace WebAppApi.Controllers
             insPic.carCertPic = "";
             insPic.carInvoicePic = "";
 
-            //insPic.licensePic = pms.Car.LicensePicKey;
-            //insPic.licenseOtherPic = pms.Car.LicenseOtherPicKey;
-            //insPic.carCertPic = pms.Car.CarCertPicKey;
-            //insPic.carInvoicePic = pms.Car.CarInvoicePicKey;
+
 
             baseInfoModel.pic = insPic;
             #endregion

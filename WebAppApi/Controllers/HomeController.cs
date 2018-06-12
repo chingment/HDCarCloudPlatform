@@ -1886,15 +1886,15 @@ namespace WebAppApi.Controllers
             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
 
             //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
-            // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
+            model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, 29));
 
 
 
-            //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 26, 1, "006000"));
+            model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 26, 1, "006000"));
 
             // model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 831));
 
-             model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 831));
+            // model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 831));
 
 
 
@@ -1992,7 +1992,7 @@ namespace WebAppApi.Controllers
             model.UserId = userId;
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
-            //model.CarInfoOrderId = 830;
+            // model.CarInfoOrderId = 28;
             model.Auto = "1";
             model.Car.CarType = "1";
             model.Car.Belong = "1";
@@ -2010,8 +2010,8 @@ namespace WebAppApi.Controllers
             model.Car.ChgownerDate = "";
             model.Car.Tonnage = "";
             model.Car.WholeWeight = "";
-            model.Car.LicensePicKey = "0a1e00f463d3f3a50163e771c657001a.jpg";
-            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "13800138000", Address = "广东省新丰县梅坑镇利坑村牛路坎组2-1号", IdentityFacePicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg", IdentityBackPicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg" });
+            model.Car.LicensePicKey = "";
+            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "13800138000", Address = "无", IdentityFacePicKey = "", IdentityBackPicKey = "" });
 
             string a1 = JsonConvert.SerializeObject(model);
 
@@ -2029,7 +2029,7 @@ namespace WebAppApi.Controllers
         public string CarIns_InsComanyInfo(int userId, int merchantId, int posMachineId, int carInfoOrderId)
         {
 
-            CarInsComanyInfoPms model = new CarInsComanyInfoPms();
+            CarInsCompanyInfoPms model = new CarInsCompanyInfoPms();
             model.UserId = userId;
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;

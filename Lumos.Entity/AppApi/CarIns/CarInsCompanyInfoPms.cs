@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Lumos.Entity
 {
-    public class CarInsComanyInfoPms
+    public class CarInsCompanyInfoPms
     {
         public int UserId { get; set; }
 

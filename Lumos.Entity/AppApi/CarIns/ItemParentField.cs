@@ -44,22 +44,4 @@ namespace Lumos.Entity
 
         public string Value { get; set; }
     }
-
-    public class CarInsInquiryResult
-    {
-        public CarInsInquiryResult()
-        {
-            this.InsureItem = new List<ItemParentField>();
-            this.Channel = new Channel();
-        }
-
-        public Channel Channel { get; set; }
-
-        public List<ItemParentField> InsureItem { get; set; }
-
-        public decimal SumPremium { get; set; }
-
-        public int OfferId { get; set; }
-
-    }
 }

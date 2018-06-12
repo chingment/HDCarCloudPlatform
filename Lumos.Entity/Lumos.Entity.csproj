@@ -55,8 +55,9 @@
     <Compile Include="AppApi\CarIns\CarInfoModel.cs" />
     <Compile Include="AppApi\CarIns\CarInfoPms.cs" />
     <Compile Include="AppApi\CarIns\CarInfoResult.cs" />
-    <Compile Include="AppApi\CarIns\CarInsComanyInfoPms.cs" />
-    <Compile Include="AppApi\CarIns\CarInsComanyInfoResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsCompanyInfoPms.cs" />
+    <Compile Include="AppApi\CarIns\CarInsCompanyInfoResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsCompanyInfoModel.cs" />
     <Compile Include="AppApi\CarIns\CarInsCommercialCoverageInfo.cs" />
     <Compile Include="AppApi\CarIns\CarInsCompulsoryInfo.cs" />
     <Compile Include="AppApi\CarIns\CarInsCoverageModel.cs" />
@@ -64,7 +65,7 @@
     <Compile Include="AppApi\CarIns\CarInsEditBaseInfoPms.cs" />
     <Compile Include="AppApi\CarIns\CarInsEditBaseInfoResult.cs" />
     <Compile Include="AppApi\CarIns\CarInsInquiryPms.cs" />
-    <Compile Include="AppApi\CarIns\CarInsInquiryResult.cs" />
+    <Compile Include="AppApi\CarIns\ItemParentField.cs" />
     <Compile Include="AppApi\CarIns\CarInsInsurePms.cs" />
     <Compile Include="AppApi\CarIns\CarInsInsureResult.cs" />
     <Compile Include="AppApi\CarIns\CarInsKindModel.cs" />

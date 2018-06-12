@@ -20,9 +20,9 @@ namespace YdtSdk
         public string inquiry { get; set; }
         public string message { get; set; }
         public string name { get; set; }
-        public int opType { get; set; }
-        public int remote { get; set; }
-        public int sort { get; set; }
+        public int? opType { get; set; }
+        public int? remote { get; set; }
+        public int? sort { get; set; }
 
     }
 

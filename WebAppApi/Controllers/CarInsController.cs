@@ -15,7 +15,6 @@ using System.Web;
 using System.Web.Http;
 using WebAppApi.Models;
 using WebAppApi.Models.Account;
-using WebAppApi.Models.CarService;
 using YdtSdk;
 
 namespace WebAppApi.Controllers
@@ -437,9 +436,9 @@ namespace WebAppApi.Controllers
         }
 
         [HttpPost]
-        public APIResponse InsComanyInfo(CarInsComanyInfoPms pms)
+        public APIResponse InsComanyInfo(CarInsCompanyInfoPms pms)
         {
-            var insComanyInfoResult = new CarInsComanyInfoResult();
+            var insComanyInfoResult = new CarInsCompanyInfoResult();
 
             var carInsuranceCompanys = CurrentDb.CarInsuranceCompany.ToList();
 
@@ -466,26 +465,21 @@ namespace WebAppApi.Controllers
                 {
                     foreach (var item in ydtCarModelQueryResultData.channelList)
                     {
-                        var channel = new Channel();
-
                         var insCompany = YdtDataMap.GetCompanyByCode(item.code);
                         if (insCompany != null)
                         {
                             var company = carInsuranceCompanys.Where(m => m.InsuranceCompanyId == insCompany.UpLinkCode).FirstOrDefault();
                             if (company != null)
                             {
-                                channel.ChannelId = item.channelId;
-                                channel.Code = item.code;
-                                channel.Descp = item.descp;
-                                channel.Inquiry = item.inquiry;
-                                channel.Message = item.message;
-                                channel.Name = item.name;
-                                channel.OpType = item.opType;
-                                channel.Remote = item.remote;
-                                channel.Sort = item.sort;
-                                channel.CompanyId = company.InsuranceCompanyId;
-                                channel.CompanyImg = company.InsuranceCompanyImgUrl;
-                                insComanyInfoResult.Channels.Add(channel);
+                                var carInsComanyModel = new CarInsComanyModel();
+
+                                carInsComanyModel.Id = company.InsuranceCompanyId;
+                                carInsComanyModel.ImgUrl = company.InsuranceCompanyImgUrl;
+                                carInsComanyModel.PartnerChannelId = item.channelId;
+                                carInsComanyModel.PartnerCode = item.code;
+                                carInsComanyModel.Descp = item.descp;
+                                carInsComanyModel.Name = item.name;
+                                insComanyInfoResult.Comanys.Add(carInsComanyModel);
                             }
                         }
                     }
@@ -655,28 +649,26 @@ namespace WebAppApi.Controllers
             }
             else
             {
-                CarInsInquiryResult result = new CarInsInquiryResult();
-                var channel = new Channel();
+                var carInsCompanyInfoModel = new CarInsComanyModel();
                 var insCompany = YdtDataMap.GetCompanyByCode(pms.CompanyCode);
                 if (insCompany != null)
                 {
                     var company = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == insCompany.UpLinkCode).FirstOrDefault();
                     if (company != null)
                     {
-                        channel.Name = company.InsuranceCompanyName;
-                        channel.ChannelId = pms.ChannelId;
-                        channel.Code = pms.CompanyCode;
-                        channel.CompanyId = company.InsuranceCompanyId;
-                        channel.CompanyImg = company.InsuranceCompanyImgUrl;
+                        carInsCompanyInfoModel.Id = company.InsuranceCompanyId;
+                        carInsCompanyInfoModel.ImgUrl = company.InsuranceCompanyImgUrl;
+                        carInsCompanyInfoModel.Name = company.InsuranceCompanyName;
+                        carInsCompanyInfoModel.PartnerChannelId = pms.ChannelId;
+                        carInsCompanyInfoModel.PartnerCode = pms.CompanyCode;
                     }
                 }
 
-                result.Channel = channel;
-                result.OfferId = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.Id;
-                result.InsureItem = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsure, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
-                result.SumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value;
+                carInsCompanyInfoModel.OfferId = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.Id;
+                carInsCompanyInfoModel.OfferInquirys = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsure, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
+                carInsCompanyInfoModel.OfferSumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value;
 
-                return ResponseResult(ResultType.Success, ResultCode.Success, "自动报价成功", result);
+                return ResponseResult(ResultType.Success, ResultCode.Success, "自动报价成功", carInsCompanyInfoModel);
             }
 
             #endregion

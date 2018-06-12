@@ -479,7 +479,7 @@ namespace WebAppApi.Controllers
                                 carInsComanyModel.PartnerCode = item.code;
                                 carInsComanyModel.Descp = item.descp;
                                 carInsComanyModel.Name = item.name;
-                                insComanyInfoResult.Comanys.Add(carInsComanyModel);
+                                insComanyInfoResult.Companys.Add(carInsComanyModel);
                             }
                         }
                     }

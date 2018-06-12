@@ -17,7 +17,7 @@ namespace Lumos.Entity
     {
         public CarInsCompanyInfoResult()
         {
-            this.Comanys = new List<CarInsComanyModel>();
+            this.Companys = new List<CarInsComanyModel>();
             this.Areas = new List<Area>();
         }
 
@@ -25,7 +25,7 @@ namespace Lumos.Entity
 
         public string LicensePicKey { get; set; }
 
-        public List<CarInsComanyModel> Comanys { get; set; }
+        public List<CarInsComanyModel> Companys { get; set; }
 
         public List<Area> Areas { get; set; }
     }

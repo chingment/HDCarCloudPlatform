@@ -827,6 +827,35 @@ namespace WebAppApi.Controllers
 
             Log.Info("PayNotify：" + postData);
 
+            if (pms != null)
+            {
+
+                string resultText = Newtonsoft.Json.JsonConvert.SerializeObject(pms);
+                bool isPaySuccess = false;
+
+
+                string orderSn = "";
+                if (pms.result == 1)
+                {
+                    isPaySuccess = true;
+                }
+
+                if (!string.IsNullOrEmpty(pms.paySeq))
+                {
+                    var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.PartnerPayId == pms.paySeq).FirstOrDefault();
+
+                    if (orderToCarInsure != null)
+                    {
+                        orderSn = orderToCarInsure.Sn;
+                    }
+                }
+
+                BizFactory.Pay.ResultNotify(0, orderSn, isPaySuccess, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "易点通", resultText);
+
+            }
+
+
+
             var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
             return new APIResponse(result);
         }

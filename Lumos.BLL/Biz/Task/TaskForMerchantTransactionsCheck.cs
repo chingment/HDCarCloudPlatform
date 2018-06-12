@@ -48,7 +48,19 @@ namespace Lumos.BLL.Biz.Task
 
                                 if (payQueryResult != null)
                                 {
-                                    BizFactory.Pay.ResultNotify(0, order.Sn, true, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "易点通", "");
+                                    if (payQueryResult.Data != null)
+                                    {
+                                        string resultText = Newtonsoft.Json.JsonConvert.SerializeObject(payQueryResult);
+                                        bool isPaySuccess = false;
+
+                                        if (payQueryResult.Data.result == 1)
+                                        {
+                                            isPaySuccess = true;
+                                        }
+
+
+                                        BizFactory.Pay.ResultNotify(0, order.Sn, isPaySuccess, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "易点通", resultText);
+                                    }
                                 }
                             }
                         }

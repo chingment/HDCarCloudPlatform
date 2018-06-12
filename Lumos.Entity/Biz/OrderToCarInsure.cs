@@ -129,6 +129,8 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string PartnerInquiryId { get; set; }
         [MaxLength(128)]
+        public string PartnerPayId { get; set; }
+        [MaxLength(128)]
         public string PartnerChannelId { get; set; }
         [MaxLength(128)]
         public string PartnerCompanyId { get; set; }

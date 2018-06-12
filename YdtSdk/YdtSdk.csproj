@@ -90,6 +90,9 @@
     <Compile Include="Post\YdtInscarPayByArtificialForwardPms.cs" />
     <Compile Include="Post\YdtInscarPayByArtificialForwardResult.cs" />
     <Compile Include="Post\YdtInscarPayPms.cs" />
+    <Compile Include="Get\YdtInscarPayQuery.cs" />
+    <Compile Include="Get\YdtInscarPayQueryPms.cs" />
+    <Compile Include="Get\YdtInscarPayQueryResultData.cs" />
     <Compile Include="Post\YdtInscarPayResultData.cs" />
     <Compile Include="Post\YdtInscarUpatebase.cs" />
     <Compile Include="Post\YdtInscarAdvicevalue.cs" />

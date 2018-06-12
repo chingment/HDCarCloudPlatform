@@ -254,7 +254,7 @@ namespace YdtSdk
 
             if (ydtInscarInquiryResult.code != 0)
             {
-                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure,  ydtInscarInquiryResult.extmsg, null);
+                return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInquiryResult.extmsg, null);
             }
 
             return new CustomJsonResult<YdtInscarInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInscarInquiryResult.msg, ydtInscarInquiryResult.data);
@@ -328,10 +328,28 @@ namespace YdtSdk
 
             if (ydtInscarInsureResult.code != 0)
             {
-                return new CustomJsonResult<YdtInscarPayResultData>(ResultType.Failure, ResultCode.Failure,  ydtInscarInsureResult.extmsg, null);
+                return new CustomJsonResult<YdtInscarPayResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInsureResult.extmsg, null);
             }
 
             return new CustomJsonResult<YdtInscarPayResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
+        }
+
+
+        public static CustomJsonResult<YdtInscarPayQueryResultData> PayQuery(YdtInscarPayQueryPms model)
+        {
+            var result = new CustomJsonResult<YdtInscarPayQueryResultData>();
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            var ydtInscarInsure = new YdtInscarPayQuery(au.token, au.session, model.orderSeq, model.inquirySeq, model.insureSeq, model.paySeq);
+            var ydtInscarInsureResult = ydtApi.DoGet(ydtInscarInsure);
+
+            if (ydtInscarInsureResult.code != 0)
+            {
+                return new CustomJsonResult<YdtInscarPayQueryResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInsureResult.extmsg, null);
+            }
+
+            return new CustomJsonResult<YdtInscarPayQueryResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
         }
     }
 }

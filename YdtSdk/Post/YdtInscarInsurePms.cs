@@ -12,6 +12,8 @@ namespace YdtSdk
         public string address { get; set; }
         public string mobile { get; set; }
         public string email { get; set; }
+
+        public string areaId { get; set; }
     }
 
     public class YdtInscarInsurePms

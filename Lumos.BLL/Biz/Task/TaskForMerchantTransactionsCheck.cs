@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using YdtSdk;
 
 namespace Lumos.BLL.Biz.Task
 {
@@ -29,25 +30,35 @@ namespace Lumos.BLL.Biz.Task
                 {
                     case Enumeration.OrderType.InsureForCarForInsure:
 
-                        //处理提交之后24内没有支付的车险订单,以报价完成时间
-                        // var orderToCarForInsure = CurrentDb.OrderToCarInsure.Where(m => m.Sn == order.Sn && SqlFunctions.DateDiff("hour", m.EndOfferTime, this.DateTime) >= m.AutoCancelByHour).FirstOrDefault();
-                        //if (orderToCarForInsure != null)
-                        //{
-                        //order.CancleTime = this.DateTime;
 
-                        //order.Status = Enumeration.OrderStatus.Cancled;
-                        //var l_bizProcessesAudit = CurrentDb.BizProcessesAudit.Where(c => c.AduitReferenceId == order.Id && c.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure).FirstOrDefault();
+                        var orderToCarInsureOfferCompanys = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == order.Id).ToList();
 
-                        ///BizFactory.BizProcessesAudit.ChangeAuditDetails(0, Enumeration.CarInsureOfferDealtStep.Cancle, l_bizProcessesAudit.Id, 0, null, "超过1天未支付，系统自动取消，请重新提交报价", this.DateTime);
+                        foreach (var item in orderToCarInsureOfferCompanys)
+                        {
+                            if (!string.IsNullOrEmpty(item.PartnerPayId))
+                            {
 
-                        //BizFactory.BizProcessesAudit.ChangeCarInsureOfferDealtStatus(0, l_bizProcessesAudit.Id, Enumeration.CarInsureOfferDealtStatus.StaffCancle);
+                                YdtInscarPayQueryPms ydtInscarPayQueryPms = new YdtInscarPayQueryPms();
 
-                        // Log.InfoFormat("订单编号:{0}，在24小时内没有支付车险订单，系统自动取消", order.Sn);
-                        //}
+                                ydtInscarPayQueryPms.orderSeq = item.PartnerOrderId;
+                                ydtInscarPayQueryPms.inquirySeq = item.PartnerInquiryId;
+                                ydtInscarPayQueryPms.insureSeq = item.PartnerInsureId;
+                                ydtInscarPayQueryPms.paySeq = item.PartnerPayId;
+                                var payQueryResult = YdtUtils.PayQuery(ydtInscarPayQueryPms);
 
+                                if (payQueryResult != null)
+                                {
+                                    BizFactory.Pay.ResultNotify(0, order.Sn, true, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "易点通", "");
+                                }
+                            }
+                        }
                         break;
                     case Enumeration.OrderType.PosMachineServiceFee:
-
+                    case Enumeration.OrderType.LllegalQueryRecharge:
+                    case Enumeration.OrderType.LllegalDealt:
+                        SdkFactory.StarPay.PayQuery(0, order);
+                        break;
+                    default:
                         break;
                 }
 

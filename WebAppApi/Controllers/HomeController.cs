@@ -1882,19 +1882,19 @@ namespace WebAppApi.Controllers
             //model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
             //model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
-            model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
-            model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
+            //model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+            //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
 
-            model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+            //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
             // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId));
 
 
 
-            //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 19, 1, "006000"));
+            //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 26, 1, "006000"));
 
-            // model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 830));
+            // model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 831));
 
-            //model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 830));
+             model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 831));
 
 
 
@@ -2011,11 +2011,11 @@ namespace WebAppApi.Controllers
             model.Car.Tonnage = "";
             model.Car.WholeWeight = "";
             model.Car.LicensePicKey = "0a1e00f463d3f3a50163e771c657001a.jpg";
-            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "15989287032", Address = "广东省新丰县梅坑镇利坑村牛路坎组2-1号", IdentityFacePicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg", IdentityBackPicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg" });
+            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "13800138000", Address = "广东省新丰县梅坑镇利坑村牛路坎组2-1号", IdentityFacePicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg", IdentityBackPicKey = "0a1e00f463d3f3a50163e771cd49001b.jpg" });
 
             string a1 = JsonConvert.SerializeObject(model);
 
-            a1 = "{\"UserId\":1234,\"MerchantId\":258,\"PosMachineId\":153,\"OrderSeq\":null,\"Auto\":\"1\",\"Car\":{\"Belong\":\"1\",\"CarType\":null,\"LicensePlateNo\":\"粤FRS179\",\"Vin\":\"LFMAP86C5G0225666\",\"EngineNo\":\"G575777\",\"FirstRegisterDate\":\"2016-06-12\",\"ModelCode\":\"KLD1112TJF\",\"ModelName\":\"KLD1112TJF\",\"Displacement\":\"1600\",\"MarketYear\":\"2012\",\"RatedPassengerCapacity\":5,\"ReplacementValue\":111800.0,\"ChgownerType\":\"0\",\"ChgownerDate\":\"\",\"Tonnage\":\"\",\"WholeWeight\":\"\",\"LicensePicKey\":null,\"LicenseOtherPicKey\":null,\"CarCertPicKey\":null,\"CarInvoicePicKey\":null},\"Customers\":[{\"InsuredFlag\":\"3\",\"Name\":\"朱元刚\",\"CertNo\":\"440182198804141553\",\"Mobile\":\"15989287032\",\"Address\":\"广东省花都区\",\"IdentityFacePicKey\":null,\"IdentityBackPicKey\":null,\"OrgPicKey\":null}]}";
+            //a1 = "{\"UserId\":1234,\"MerchantId\":258,\"PosMachineId\":153,\"OrderSeq\":null,\"Auto\":\"1\",\"Car\":{\"Belong\":\"1\",\"CarType\":null,\"LicensePlateNo\":\"粤FRS179\",\"Vin\":\"LFMAP86C5G0225666\",\"EngineNo\":\"G575777\",\"FirstRegisterDate\":\"2016-06-12\",\"ModelCode\":\"KLD1112TJF\",\"ModelName\":\"KLD1112TJF\",\"Displacement\":\"1600\",\"MarketYear\":\"2012\",\"RatedPassengerCapacity\":5,\"ReplacementValue\":111800.0,\"ChgownerType\":\"0\",\"ChgownerDate\":\"\",\"Tonnage\":\"\",\"WholeWeight\":\"\",\"LicensePicKey\":null,\"LicenseOtherPicKey\":null,\"CarCertPicKey\":null,\"CarInvoicePicKey\":null},\"Customers\":[{\"InsuredFlag\":\"3\",\"Name\":\"朱元刚\",\"CertNo\":\"440182198804141553\",\"Mobile\":\"15989287032\",\"Address\":\"广东省花都区\",\"IdentityFacePicKey\":null,\"IdentityBackPicKey\":null,\"OrgPicKey\":null}]}";
             string signStr = Signature.Compute(key, secret, timespan, a1);
             Dictionary<string, string> headers1 = new Dictionary<string, string>();
             headers1.Add("key", key);

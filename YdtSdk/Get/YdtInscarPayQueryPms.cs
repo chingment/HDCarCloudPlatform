@@ -6,17 +6,11 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
-    public class YdtInscarPayPms
+    public class YdtInscarPayQueryPms
     {
-        public YdtInscarPayPms()
-        {
-            this.address = new YdtInscarInsureAddress();
-        }
+        public string paySeq { get; set; }
         public string insureSeq { get; set; }
         public string inquirySeq { get; set; }
         public string orderSeq { get; set; }
-        public string notifyUrl { get; set; }
-
-        public YdtInscarInsureAddress address { get; set; }
     }
 }

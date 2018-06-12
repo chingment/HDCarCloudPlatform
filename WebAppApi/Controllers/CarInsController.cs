@@ -742,7 +742,7 @@ namespace WebAppApi.Controllers
 
 
             var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == pms.OfferId).FirstOrDefault();
-
+            var order = CurrentDb.Order.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
             if (orderToCarInsureOfferCompany == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到报价结果");
@@ -770,7 +770,11 @@ namespace WebAppApi.Controllers
             ydtInscarPayPms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
             ydtInscarPayPms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
             ydtInscarPayPms.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/PayNotify";
-
+            ydtInscarPayPms.address.consignee = "李先生";
+            ydtInscarPayPms.address.address = "广州市花都区";
+            ydtInscarPayPms.address.mobile = "13800138000";
+            ydtInscarPayPms.address.email = "chingment@126.com";
+            ydtInscarPayPms.address.areaId = "440100";
             var result_Insure = YdtUtils.Pay(ydtInscarPayPms);
 
             if (result_Insure.Result != ResultType.Success)
@@ -778,12 +782,18 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "生成支付失败", result);
             }
 
+            order.Status = Enumeration.OrderStatus.WaitPay;
+
             orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
             orderToCarInsureOfferCompany.PartnerPayId = result_Insure.Data.paySeq;
             orderToCarInsureOfferCompany.PayUrl = result_Insure.Data.payUrl;
             CurrentDb.SaveChanges();
 
-            return ResponseResult(ResultType.Success, ResultCode.Success, "生成支付失败", result);
+            result.OfferId = pms.OfferId;
+            result.payUrl = result_Insure.Data.payUrl;
+
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "生成支付成功", result);
 
         }
 
@@ -817,7 +827,7 @@ namespace WebAppApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public APIResponse PayNotify(YdtInscarPayResultData pms)
+        public APIResponse PayNotify(YdtInscarPayQueryResultData pms)
         {
             Stream stream = HttpContext.Current.Request.InputStream;
             stream.Seek(0, SeekOrigin.Begin);

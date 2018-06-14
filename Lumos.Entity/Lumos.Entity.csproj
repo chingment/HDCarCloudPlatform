@@ -55,11 +55,14 @@
     <Compile Include="AppApi\CarIns\CarInfoModel.cs" />
     <Compile Include="AppApi\CarIns\CarInfoPms.cs" />
     <Compile Include="AppApi\CarIns\CarInfoResult.cs" />
+    <Compile Include="AppApi\CarIns\CarInsAddressModel.cs" />
+    <Compile Include="AppApi\CarIns\CarInsBaseInfoModel.cs" />
     <Compile Include="AppApi\CarIns\CarInsCompanyInfoPms.cs" />
     <Compile Include="AppApi\CarIns\CarInsCompanyInfoResult.cs" />
     <Compile Include="AppApi\CarIns\CarInsCompanyInfoModel.cs" />
     <Compile Include="AppApi\CarIns\CarInsCommercialCoverageInfo.cs" />
     <Compile Include="AppApi\CarIns\CarInsCompulsoryInfo.cs" />
+    <Compile Include="AppApi\CarIns\CarInsConfirmPayInfoModel.cs" />
     <Compile Include="AppApi\CarIns\CarInsCoverageModel.cs" />
     <Compile Include="AppApi\CarIns\CarInsCustomerModel.cs" />
     <Compile Include="AppApi\CarIns\CarInsEditBaseInfoPms.cs" />

@@ -435,6 +435,53 @@ namespace WebAppApi.Controllers
             }
         }
 
+
+        [HttpPost]
+        public APIResponse GetBaseInfo(int orderId)
+        {
+
+            var order = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
+
+            if (order == null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到报价结果");
+            }
+
+            var carInsBaseInfoModel = new CarInsBaseInfoModel();
+
+            carInsBaseInfoModel.Car.CarType = order.CarType;
+            carInsBaseInfoModel.Car.Belong = order.CarBelong;
+            carInsBaseInfoModel.Car.LicensePlateNo = order.CarLicensePlateNo;
+            carInsBaseInfoModel.Car.Vin = order.CarVin;
+            carInsBaseInfoModel.Car.EngineNo = order.CarEngineNo;
+            carInsBaseInfoModel.Car.FirstRegisterDate = order.CarFirstRegisterDate;
+            carInsBaseInfoModel.Car.ModelCode = order.CarModelCode;
+            carInsBaseInfoModel.Car.ModelName = order.CarModelName;
+            carInsBaseInfoModel.Car.Displacement = order.CarDisplacement;
+            carInsBaseInfoModel.Car.MarketYear = order.CarMarketYear;
+            carInsBaseInfoModel.Car.RatedPassengerCapacity = order.CarRatedPassengerCapacity;
+            carInsBaseInfoModel.Car.ReplacementValue = order.CarReplacementValue == null ? 0 : order.CarReplacementValue.Value;
+            carInsBaseInfoModel.Car.ChgownerType = order.CarChgownerType;
+            carInsBaseInfoModel.Car.ChgownerDate = order.CarChgownerDate;
+            carInsBaseInfoModel.Car.Tonnage = order.CarTonnage;
+            carInsBaseInfoModel.Car.WholeWeight = order.CarWholeWeight;
+            carInsBaseInfoModel.Car.LicensePicKey = order.CarLicensePicKey;
+            carInsBaseInfoModel.Car.LicensePicUrl = order.InsuredOrgPicUrl;
+            carInsBaseInfoModel.Car.LicenseOtherPicKey = order.CarLicenseOtherPicKey;
+            carInsBaseInfoModel.Car.LicenseOtherPicUrl = order.CarLicenseOtherPicUrl;
+            carInsBaseInfoModel.Car.CarInvoicePicKey = order.CarInvoicePicKey;
+            carInsBaseInfoModel.Car.CarInvoicePicUrl = order.CarInvoicePicUrl;
+            carInsBaseInfoModel.Car.CarCertPicKey = order.CarCertPicKey;
+            carInsBaseInfoModel.Car.CarCertPicUrl = order.CarCertPicUrl;
+
+            carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel { InsuredFlag = "1", Name = order.CarownerName, Mobile = order.CarownerMobile, Address = order.CarownerAddress, CertNo = order.CarownerCertNo, IdentityBackPicKey = order.CarownerIdentityBackPicKey, IdentityFacePicKey = order.CarownerIdentityFacePicKey, OrgPicKey = order.CarownerOrgPicKey });
+            carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel { InsuredFlag = "2", Name = order.PolicyholderName, Mobile = order.PolicyholderMobile, Address = order.PolicyholderAddress, CertNo = order.PolicyholderCertNo, IdentityBackPicKey = order.PolicyholderIdentityBackPicKey, IdentityFacePicKey = order.PolicyholderIdentityFacePicKey, OrgPicKey = order.PolicyholderOrgPicKey });
+            carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = order.InsuredName, Mobile = order.InsuredMobile, Address = order.InsuredAddress, CertNo = order.InsuredCertNo, IdentityBackPicKey = order.InsuredIdentityBackPicKey, IdentityFacePicKey = order.InsuredIdentityFacePicKey, OrgPicKey = order.InsuredOrgPicKey });
+
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "", carInsBaseInfoModel);
+        }
+
         [HttpPost]
         public APIResponse InsComanyInfo(CarInsCompanyInfoPms pms)
         {
@@ -664,6 +711,7 @@ namespace WebAppApi.Controllers
                     }
                 }
 
+                carInsCompanyInfoModel.OrderId = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.OrderId;
                 carInsCompanyInfoModel.OfferId = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.Id;
                 carInsCompanyInfoModel.OfferInquirys = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsure, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
                 carInsCompanyInfoModel.OfferSumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value;
@@ -699,16 +747,123 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "报价未完成");
             }
 
+            YdtInscarEditbasePms ydtInscarEditbasePms = new YdtInscarEditbasePms();
+            ydtInscarEditbasePms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
+            ydtInscarEditbasePms.belong = int.Parse(pms.Car.Belong);
+            ydtInscarEditbasePms.carType = int.Parse(pms.Car.CarType);
+            #region  车辆信息
+            ydtInscarEditbasePms.car.licensePlateNo = pms.Car.LicensePlateNo;
+            ydtInscarEditbasePms.car.vin = pms.Car.Vin;
+            ydtInscarEditbasePms.car.engineNo = pms.Car.EngineNo;
+            ydtInscarEditbasePms.car.firstRegisterDate = pms.Car.FirstRegisterDate;
+            ydtInscarEditbasePms.car.modelCode = pms.Car.ModelCode;
+            ydtInscarEditbasePms.car.modelName = pms.Car.ModelName;
+            ydtInscarEditbasePms.car.displacement = pms.Car.Displacement;
+            ydtInscarEditbasePms.car.marketYear = pms.Car.MarketYear;
+            ydtInscarEditbasePms.car.ratedPassengerCapacity = pms.Car.RatedPassengerCapacity;
+            ydtInscarEditbasePms.car.replacementValue = pms.Car.ReplacementValue;
+            ydtInscarEditbasePms.car.chgownerType = pms.Car.ChgownerType;
+            ydtInscarEditbasePms.car.chgownerDate = pms.Car.ChgownerDate;
+            ydtInscarEditbasePms.car.tonnage = pms.Car.Tonnage;
+            ydtInscarEditbasePms.car.wholeWeight = pms.Car.WholeWeight;
+
+            #endregion
+
+            #region 被保人，投保人，车主
+            List<YdtInscarCustomerModel> customers = new List<YdtInscarCustomerModel>();
+
+
+            if (pms.Customers != null)
+            {
+                var carOwnerInfo = pms.Customers.Where(m => m.InsuredFlag == "3").FirstOrDefault();
+                if (carOwnerInfo != null)
+                {
+                    YdtInscarCustomerModel insureds = new YdtInscarCustomerModel();
+                    insureds.insuredFlag = "1";//被保人
+                    insureds.name = carOwnerInfo.Name;
+                    insureds.certNo = carOwnerInfo.CertNo;
+                    insureds.mobile = carOwnerInfo.Mobile;
+                    insureds.address = carOwnerInfo.Address;
+
+                    //1是私人车，2为公司车
+                    if (pms.Car.Belong == "1")
+                    {
+                        insureds.identityFacePic = carOwnerInfo.IdentityFacePicKey;
+                        insureds.identityBackPic = carOwnerInfo.IdentityBackPicKey;
+                        insureds.orgPic = null;
+                    }
+                    else
+                    {
+                        insureds.identityFacePic = null;
+                        insureds.identityBackPic = null;
+                        insureds.orgPic = carOwnerInfo.OrgPicKey;
+                    }
+
+                    YdtInscarCustomerModel holder = new YdtInscarCustomerModel();
+                    holder.insuredFlag = "2";//投保人
+                    holder.name = insureds.name;
+                    holder.certNo = insureds.certNo;
+                    holder.mobile = insureds.mobile;
+                    holder.address = insureds.address;
+                    holder.identityFacePic = insureds.identityFacePic;
+                    holder.identityBackPic = insureds.identityBackPic;
+                    holder.orgPic = insureds.orgPic;
+                    YdtInscarCustomerModel carOwner = new YdtInscarCustomerModel();
+                    carOwner.insuredFlag = "3";//车主
+                    carOwner.name = insureds.name;
+                    carOwner.certNo = insureds.certNo;
+                    carOwner.mobile = insureds.mobile;
+                    carOwner.address = insureds.address;
+                    carOwner.identityFacePic = insureds.identityFacePic;
+                    carOwner.identityBackPic = insureds.identityBackPic;
+                    carOwner.orgPic = insureds.orgPic;
+
+                    customers.Add(insureds);
+                    customers.Add(holder);
+                    customers.Add(carOwner);
+
+                    ydtInscarEditbasePms.customers = customers;
+                }
+            }
+            #endregion
+
+            #region  图片
+            YdtInscarPicModel insPic = new YdtInscarPicModel();
+
+
+            insPic.licensePic = pms.Car.LicensePicKey;
+            insPic.licenseOtherPic = pms.Car.LicenseOtherPicKey;
+            insPic.carCertPic = pms.Car.CarCertPicKey;
+            insPic.carInvoicePic = pms.Car.CarInvoicePicKey;
+
+
+            ydtInscarEditbasePms.pic = insPic;
+            #endregion
+
+
+            IResult<string> editBaseInfo_Result = YdtUtils.EditBaseInfo(ydtInscarEditbasePms);
+
+
+            if (editBaseInfo_Result.Result != ResultType.Success)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "保存资料到保险公司失败");
+            }
+
+            var updateOrder_Result = BizFactory.InsCar.UpdateOrder(pms.UserId, orderToCarInsureOfferCompany.OrderId, pms.Car, pms.Customers);
+
+
+            if (updateOrder_Result.Result != ResultType.Success)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "保存资料到本系统失败");
+            }
+
 
             YdtInscarInsurePms ydtInscarInsurePms = new YdtInscarInsurePms();
 
             ydtInscarInsurePms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
             ydtInscarInsurePms.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/InsureNotify";
             ydtInscarInsurePms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
-            ydtInscarInsurePms.address.consignee = "朱长荣";
-            ydtInscarInsurePms.address.email = "chingment@126.com";
-            ydtInscarInsurePms.address.mobile = "15989287032";
-            ydtInscarInsurePms.address.address = "广东省新丰县梅坑镇利坑村牛路坎组2-1号";
+
 
             var result_Insure = YdtUtils.Insure(ydtInscarInsurePms);
 
@@ -726,6 +881,48 @@ namespace WebAppApi.Controllers
             return ResponseResult(ResultType.Success, ResultCode.Success, "核保成功", result);
 
         }
+
+
+        [HttpPost]
+        public APIResponse GetConfirmPayInfo(CarInsPayPms pms)
+        {
+            CarInsConfirmPayInfoModel result = new CarInsConfirmPayInfoModel();
+
+
+            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == pms.OfferId).FirstOrDefault();
+            if (orderToCarInsureOfferCompany == null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "找不到订单信息");
+            }
+
+
+            var order = CurrentDb.Order.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
+
+            var merchant = CurrentDb.Merchant.Where(m => m.Id == order.MerchantId).FirstOrDefault();
+
+
+            result.receiptAddress.Address = merchant.ContactAddress;
+            result.receiptAddress.Consignee = merchant.ContactName;
+            result.receiptAddress.Mobile = merchant.ContactPhoneNumber;
+            result.receiptAddress.Email = "";
+            result.receiptAddress.AreaId = "";
+
+            var orderInfo = new ItemParentField("投保单信息", "");
+
+            orderInfo.Child.Add(new ItemChildField("交强险单号", orderToCarInsureOfferCompany.CiProposalNo));
+            orderInfo.Child.Add(new ItemChildField("商业险单号", orderToCarInsureOfferCompany.BiProposalNo));
+            orderInfo.Child.Add(new ItemChildField("投保单号", orderToCarInsureOfferCompany.PartnerInsureId));
+            orderInfo.Child.Add(new ItemChildField("商业险", orderToCarInsureOfferCompany.CommercialPrice.ToF2Price()));
+            orderInfo.Child.Add(new ItemChildField("交强险", orderToCarInsureOfferCompany.CompulsoryPrice.ToF2Price()));
+            orderInfo.Child.Add(new ItemChildField("车船税", orderToCarInsureOfferCompany.TravelTaxPrice.ToF2Price()));
+
+
+            result.InfoItems.Add(orderInfo);
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "", result);
+
+        }
+
 
         [HttpPost]
         public APIResponse Pay(CarInsPayPms pms)
@@ -762,11 +959,12 @@ namespace WebAppApi.Controllers
             ydtInscarPayPms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
             ydtInscarPayPms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
             ydtInscarPayPms.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/PayNotify";
-            ydtInscarPayPms.address.consignee = "李先生";
-            ydtInscarPayPms.address.address = "广州市花都区";
-            ydtInscarPayPms.address.mobile = "13800138000";
-            ydtInscarPayPms.address.email = "chingment@126.com";
-            ydtInscarPayPms.address.areaId = "440100";
+            ydtInscarPayPms.address.consignee = pms.ReceiptAddress.Consignee;
+            ydtInscarPayPms.address.address = pms.ReceiptAddress.Address;
+            ydtInscarPayPms.address.mobile = pms.ReceiptAddress.Mobile;
+            ydtInscarPayPms.address.email = pms.ReceiptAddress.Email;
+            ydtInscarPayPms.address.areaId = pms.ReceiptAddress.AreaId;
+
             var result_Insure = YdtUtils.Pay(ydtInscarPayPms);
 
             if (result_Insure.Result != ResultType.Success)
@@ -859,7 +1057,6 @@ namespace WebAppApi.Controllers
             var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
             return new APIResponse(result);
         }
-
 
 
         private static int GetRisk(List<CarInsInsureKindModel> kinds)

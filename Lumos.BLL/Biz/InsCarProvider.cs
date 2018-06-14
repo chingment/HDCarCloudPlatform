@@ -511,6 +511,106 @@ namespace Lumos.BLL
         }
 
 
+        public CustomJsonResult UpdateOrder(int operater, int orderId, CarInfoModel carInfo, List<CarInsCustomerModel> customers)
+        {
+            var result = new CustomJsonResult();
+            try
+            {
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToCarInsure == null)
+                    {
+                        return new CustomJsonResult(ResultType.Failure, "找不到本系统的订单");
+                    }
+
+
+                    orderToCarInsure.CarBelong = carInfo.Belong;
+                    orderToCarInsure.CarType = carInfo.CarType;
+                    orderToCarInsure.CarLicensePlateNo = carInfo.LicensePlateNo;
+                    orderToCarInsure.CarVin = carInfo.Vin;
+                    orderToCarInsure.CarEngineNo = carInfo.EngineNo;
+                    orderToCarInsure.CarFirstRegisterDate = carInfo.FirstRegisterDate;
+                    orderToCarInsure.CarModelCode = carInfo.ModelCode;
+                    orderToCarInsure.CarModelName = carInfo.ModelName;
+                    orderToCarInsure.CarDisplacement = carInfo.Displacement;
+                    orderToCarInsure.CarMarketYear = carInfo.MarketYear;
+                    orderToCarInsure.CarRatedPassengerCapacity = carInfo.RatedPassengerCapacity;
+                    orderToCarInsure.CarReplacementValue = carInfo.ReplacementValue;
+                    orderToCarInsure.CarChgownerType = carInfo.ChgownerType;
+                    orderToCarInsure.CarChgownerDate = carInfo.ChgownerDate;
+                    orderToCarInsure.CarTonnage = carInfo.Tonnage;
+                    orderToCarInsure.CarWholeWeight = carInfo.WholeWeight;
+                    orderToCarInsure.CarLicensePicKey = carInfo.LicensePicKey;
+                    orderToCarInsure.CarLicensePicUrl = carInfo.LicensePicUrl;
+                    orderToCarInsure.CarLicenseOtherPicKey = carInfo.LicenseOtherPicKey;
+                    orderToCarInsure.CarLicenseOtherPicUrl = carInfo.LicenseOtherPicUrl;
+                    orderToCarInsure.CarCertPicKey = carInfo.CarCertPicKey;
+                    orderToCarInsure.CarCertPicUrl = carInfo.CarCertPicUrl;
+                    orderToCarInsure.CarInvoicePicKey = carInfo.CarInvoicePicKey;
+                    orderToCarInsure.CarInvoicePicUrl = carInfo.CarInvoicePicUrl;
+
+                    var carowner = customers.Where(m => m.InsuredFlag == "3").FirstOrDefault();
+                    if (carowner != null)
+                    {
+                        orderToCarInsure.CarownerInsuredFlag = carowner.InsuredFlag;
+                        orderToCarInsure.CarownerName = carowner.Name;
+                        orderToCarInsure.CarownerCertNo = carowner.CertNo;
+                        orderToCarInsure.CarownerMobile = carowner.Mobile;
+                        orderToCarInsure.CarownerAddress = carowner.Address;
+                        orderToCarInsure.CarownerIdentityFacePicKey = carowner.IdentityFacePicKey;
+                        orderToCarInsure.CarownerIdentityFacePicUrl = carowner.IdentityFacePicUrl;
+                        orderToCarInsure.CarownerIdentityBackPicKey = carowner.IdentityBackPicKey;
+                        orderToCarInsure.CarownerIdentityBackPicUrl = carowner.IdentityBackPicUrl;
+                        orderToCarInsure.CarownerOrgPicKey = carowner.OrgPicKey;
+                    }
+
+                    var policyholder = customers.Where(m => m.InsuredFlag == "1").FirstOrDefault();
+                    if (policyholder != null)
+                    {
+                        orderToCarInsure.PolicyholderInsuredFlag = policyholder.InsuredFlag;
+                        orderToCarInsure.PolicyholderName = carowner.Name;
+                        orderToCarInsure.PolicyholderCertNo = carowner.CertNo;
+                        orderToCarInsure.PolicyholderMobile = carowner.Mobile;
+                        orderToCarInsure.PolicyholderAddress = carowner.Address;
+                        orderToCarInsure.PolicyholderIdentityFacePicKey = carowner.IdentityFacePicKey;
+                        orderToCarInsure.PolicyholderIdentityFacePicUrl = carowner.IdentityFacePicUrl;
+                        orderToCarInsure.PolicyholderIdentityBackPicKey = carowner.IdentityBackPicKey;
+                        orderToCarInsure.PolicyholderIdentityBackPicUrl = carowner.IdentityBackPicUrl;
+                        orderToCarInsure.PolicyholderOrgPicKey = carowner.OrgPicKey;
+                        orderToCarInsure.PolicyholderOrgPicUrl = carowner.OrgPicUrl;
+                    }
+
+                    var insured = customers.Where(m => m.InsuredFlag == "1").FirstOrDefault();
+                    if (insured != null)
+                    {
+                        orderToCarInsure.InsuredInsuredFlag = carowner.InsuredFlag;
+                        orderToCarInsure.InsuredName = carowner.Name;
+                        orderToCarInsure.InsuredCertNo = carowner.CertNo;
+                        orderToCarInsure.InsuredMobile = carowner.Mobile;
+                        orderToCarInsure.InsuredAddress = carowner.Address;
+                        orderToCarInsure.InsuredIdentityFacePicKey = carowner.IdentityFacePicKey;
+                        orderToCarInsure.InsuredIdentityBackPicUrl = carowner.IdentityBackPicUrl;
+                        orderToCarInsure.InsuredIdentityBackPicKey = carowner.IdentityBackPicKey;
+                        orderToCarInsure.InsuredIdentityBackPicUrl = carowner.IdentityBackPicUrl;
+                        orderToCarInsure.InsuredOrgPicKey = carowner.OrgPicKey;
+                        orderToCarInsure.InsuredOrgPicUrl = carowner.OrgPicUrl;
+                    }
+
+
+                    CurrentDb.SaveChanges();
+                    ts.Complete();
+
+                    return new CustomJsonResult(ResultType.Success, "提交成功");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("本系统基础数据保存失败1", ex);
+                return new CustomJsonResult(ResultType.Failure, "本系统基础数据保存失败1");
+            }
+        }
+
         public InsCarInfo UpdateCarInfo(int operater, CarInfoModel carInfo, List<CarInsCustomerModel> customers)
         {
             if (carInfo == null)

@@ -15,5 +15,7 @@ namespace Lumos.Entity
         public int PosMachineId { get; set; }
 
         public int OfferId { get; set; }
+
+        public CarInsAddressModel ReceiptAddress { get; set; }
     }
 }

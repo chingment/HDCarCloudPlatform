@@ -3,23 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace Lumos.Entity
 {
-    public class CarInsInsurePms
+    public class CarInsBaseInfoModel
     {
-        public int UserId { get; set; }
-
-        public int MerchantId { get; set; }
-
-        public int PosMachineId { get; set; }
-
-        public int OfferId { get; set; }
-
-        public int OrderId { get; set; }
+        public CarInsBaseInfoModel()
+        {
+            this.Car = new CarInfoModel();
+            this.Customers = new List<CarInsCustomerModel>();
+        }
 
         public CarInfoModel Car { get; set; }
         public List<CarInsCustomerModel> Customers { get; set; }
+
 
     }
 }

@@ -34,29 +34,35 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse UploadImg(CarInsUploadImgPms pms)
         {
-
+            CarInsUploadImgResult result = new CarInsUploadImgResult();
             string imgurl = "";
-
-            //string imgurl = GetUploadImageUrl(pms.ImgData, "CarInsure");
-            object model = null;
+            imgurl = GetUploadImageUrl(pms.ImgData, "CarInsure");
             switch (pms.Type)
             {
                 case "1":
-                    imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
-                    model = YdtUtils.UploadImg(imgurl);
+                    //imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
+                    YdtUploadResultData model1 = YdtUtils.UploadImg(imgurl);
+                    result.Url = imgurl;
+                    result.Key = model1.file.key;
                     break;
                 case "10":
-                    imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
-                    model = YdtUtils.GetLicenseInfoByUrl(imgurl);
+                    //imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
+                    YdtLicenseInfo model2 = YdtUtils.GetLicenseInfoByUrl(imgurl);
+                    result.Url = imgurl;
+                    result.Key = model2.fileKey;
+                    result.Info = model2;
                     break;
                 case "11":
-                    imgurl = "http://file.gzhaoyilian.com/Upload/c2.jpg";
-                    model = YdtUtils.GetIdentityInfoByUrl(imgurl);
+                    //imgurl = "http://file.gzhaoyilian.com/Upload/c2.jpg";
+                    YdtIdentityInfo model3 = YdtUtils.GetIdentityInfoByUrl(imgurl);
+                    result.Url = imgurl;
+                    result.Key = model3.fileKey;
+                    result.Info = model3;
                     break;
             }
 
 
-            return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", model);
+            return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", result);
         }
 
         [HttpPost]
@@ -111,7 +117,8 @@ namespace WebAppApi.Controllers
             {
                 carInfo.LicensePicKey = drivingLicenceInfo.fileKey;
             }
-            carInfo.LicenseOtherPicUrl = imgurl;
+
+            carInfo.LicensePicUrl = imgurl;
 
             var insCarInfo = CurrentDb.InsCarInfo.Where(m => m.LicensePlateNo == licensePlateNo).FirstOrDefault();
             if (insCarInfo == null)
@@ -435,16 +442,21 @@ namespace WebAppApi.Controllers
             }
         }
 
-
-        [HttpPost]
-        public APIResponse GetBaseInfo(int orderId)
+        [HttpGet]
+        public APIResponse GetBaseInfo(int userId, int merchantId, int posMachineId, int offerId)
         {
+            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == offerId).FirstOrDefault();
 
-            var order = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
+            if (orderToCarInsureOfferCompany == null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到报价结果");
+            }
+
+            var order = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
 
             if (order == null)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到报价结果");
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到订单信息");
             }
 
             var carInsBaseInfoModel = new CarInsBaseInfoModel();
@@ -711,7 +723,6 @@ namespace WebAppApi.Controllers
                     }
                 }
 
-                carInsCompanyInfoModel.OrderId = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.OrderId;
                 carInsCompanyInfoModel.OfferId = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.Id;
                 carInsCompanyInfoModel.OfferInquirys = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsure, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
                 carInsCompanyInfoModel.OfferSumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value;
@@ -883,13 +894,13 @@ namespace WebAppApi.Controllers
         }
 
 
-        [HttpPost]
-        public APIResponse GetConfirmPayInfo(CarInsPayPms pms)
+        [HttpGet]
+        public APIResponse GetConfirmPayInfo(int userId, int merchantId, int posMachineId, int offerId)
         {
             CarInsConfirmPayInfoModel result = new CarInsConfirmPayInfoModel();
 
 
-            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == pms.OfferId).FirstOrDefault();
+            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == offerId).FirstOrDefault();
             if (orderToCarInsureOfferCompany == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "找不到订单信息");
@@ -897,9 +908,17 @@ namespace WebAppApi.Controllers
 
 
             var order = CurrentDb.Order.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
+            if (order == null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到订单信息");
+            }
 
             var merchant = CurrentDb.Merchant.Where(m => m.Id == order.MerchantId).FirstOrDefault();
 
+            if (merchant == null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到商户信息");
+            }
 
             result.receiptAddress.Address = merchant.ContactAddress;
             result.receiptAddress.Consignee = merchant.ContactName;

@@ -1892,7 +1892,12 @@ namespace WebAppApi.Controllers
 
             model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 26, 1, "006000"));
 
+
+            model.Add("获取基本信息", GetBaseInfo(userId, merchantId, posMachineId, 831));
+
             // model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 831));
+
+            model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, 831));
 
             // model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 831));
 
@@ -2166,6 +2171,49 @@ namespace WebAppApi.Controllers
             return respon_data4;
         }
 
+        public string GetBaseInfo(int userId, int merchantId, int posMachineId, int offerId)
+        {
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("userId", userId.ToString());
+            parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
+            parames.Add("offerId", offerId.ToString());
+
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/CarIns/GetBaseInfo?userId=" + userId + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId + "&offerId=" + offerId, headers);
+
+            return result;
+
+        }
+
+
+        public string GetConfirmPayInfo(int userId, int merchantId, int posMachineId, int offerId)
+        {
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("userId", userId.ToString());
+            parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
+            parames.Add("offerId", offerId.ToString());
+
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/CarIns/GetConfirmPayInfo?userId=" + userId + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId + "&offerId=" + offerId, headers);
+
+            return result;
+
+        }
+
         public string CarIns_ImgUplad(string tpye, string path)
         {
 
@@ -2209,7 +2257,6 @@ namespace WebAppApi.Controllers
             return result;
 
         }
-
 
         public string CarIn_Notify(int userId, int merchantId, int posMachineId, string orderSn, string paysn)
         {

@@ -17,8 +17,6 @@ namespace Lumos.Entity
         public List<ItemParentField> OfferInquirys { get; set; }
         public int OfferResult { get; set; }
         public decimal OfferSumPremium { get; set; }
-
-        public int OrderId { get; set; }
         public int OfferId { get; set; }
         public string OfferMessage { get; set; }
     }

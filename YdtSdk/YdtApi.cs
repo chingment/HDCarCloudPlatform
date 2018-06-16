@@ -170,7 +170,12 @@ namespace YdtSdk
             string realServerUrl = GetServerUrl(this.serverUrl, request.ApiName);
             WebUtils webUtils = new WebUtils();
 
+            log.Info("Ydt-request-filename>>>>" + filename);
+
             string body = webUtils.DoPostFile(realServerUrl, request.GetUrlParameters(), filename, (Stream)request.PostData);
+
+            log.Info("Ydt-request-filename:result>>>>" + body);
+
             if (body.IndexOf("\"code\":") == -1)
             {
                 body = "{\"code\":0,\"msg\":\"成功\",\"data\":" + body + "}";

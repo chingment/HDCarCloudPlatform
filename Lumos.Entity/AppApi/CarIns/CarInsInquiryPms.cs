@@ -10,7 +10,6 @@ namespace Lumos.Entity
         public CarInsInquiryPms()
         {
             this.InsureKind = new List<CarInsInsureKindModel>();
-            this.Car = new CarInfoModel();
         }
 
         public int UserId { get; set; }
@@ -28,8 +27,6 @@ namespace Lumos.Entity
         public string CompanyCode { get; set; }
 
         public List<CarInsInsureKindModel> InsureKind { get; set; }
-
-        public CarInfoModel Car { get; set; }
 
         public string CiStartDate { get; set; }
 

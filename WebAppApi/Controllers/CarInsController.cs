@@ -23,7 +23,13 @@ namespace WebAppApi.Controllers
     public class CarInsUploadImgPms
     {
         public string Type { get; set; }
-        public ImageModel ImgData { get; set; }
+
+        public Dictionary<string, ImageModel> ImgData { get; set; }
+
+        public CarInsUploadImgPms()
+        {
+            this.ImgData = new Dictionary<string, ImageModel>();
+        }
     }
 
 
@@ -31,33 +37,84 @@ namespace WebAppApi.Controllers
     public class CarInsController : OwnBaseApiController
     {
 
+        private string nullName = "某某某";
+        private string nullAddress = "null";
+        private string nullCerno = "440182198804141552";
+        private string nullMobile = "13800138000";
+
         [HttpPost]
         public APIResponse UploadImg(CarInsUploadImgPms pms)
         {
             CarInsUploadImgResult result = new CarInsUploadImgResult();
             string imgurl = "";
-            imgurl = GetUploadImageUrl(pms.ImgData, "CarInsure");
+
+            if (pms.ImgData == null)
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "上传图片的内容为空");
+            }
+
+
+            if (!pms.ImgData.ContainsKey("certPic"))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "必须上传的键名为certPic的图片内容");
+            }
+
+            Log.Info("开始上传");
+            imgurl = GetUploadImageUrl(pms.ImgData["certPic"], "CarInsure");
+            Log.Info("上传结束");
+
+            if (string.IsNullOrEmpty(imgurl))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "上传图片失败");
+            }
+            Log.Info("imgurl:" + imgurl);
+            Log.Info("开始解释图片");
             switch (pms.Type)
             {
                 case "1":
                     //imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
                     YdtUploadResultData model1 = YdtUtils.UploadImg(imgurl);
-                    result.Url = imgurl;
-                    result.Key = model1.file.key;
+                    Log.Info("解释图片结束");
+                    if (model1 != null)
+                    {
+                        Log.Info("解释对象不为空");
+                        result.Url = imgurl;
+
+                        if (model1.file != null)
+                        {
+
+                            Log.Info("解释KEy不为空");
+                            result.Key = model1.file.key;
+                        }
+                    }
                     break;
                 case "10":
                     //imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
                     YdtLicenseInfo model2 = YdtUtils.GetLicenseInfoByUrl(imgurl);
-                    result.Url = imgurl;
-                    result.Key = model2.fileKey;
-                    result.Info = model2;
+                    if (model2 != null)
+                    {
+                        result.Url = imgurl;
+                        if (model2.fileKey != null)
+                        {
+                            result.Key = model2.fileKey;
+                        }
+
+                        result.Info = model2;
+                    }
                     break;
                 case "11":
                     //imgurl = "http://file.gzhaoyilian.com/Upload/c2.jpg";
                     YdtIdentityInfo model3 = YdtUtils.GetIdentityInfoByUrl(imgurl);
-                    result.Url = imgurl;
-                    result.Key = model3.fileKey;
-                    result.Info = model3;
+                    if (model3 != null)
+                    {
+                        result.Url = imgurl;
+                        if (model3.fileKey != null)
+                        {
+                            result.Key = model3.fileKey;
+                        }
+
+                        result.Info = model3;
+                    }
                     break;
             }
 
@@ -191,9 +248,10 @@ namespace WebAppApi.Controllers
                 carInfo.ChgownerType = insCarInfo.ChgownerType;
 
 
+                carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = insCarInfo.InsuredName, Mobile = insCarInfo.InsuredMobile, Address = insCarInfo.InsuredAddress, CertNo = insCarInfo.InsuredCertNo, IdentityBackPicKey = insCarInfo.InsuredIdentityBackPicKey, IdentityFacePicKey = insCarInfo.InsuredIdentityFacePicKey, OrgPicKey = insCarInfo.InsuredOrgPicKey });
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "1", Name = insCarInfo.CarownerName, Mobile = insCarInfo.CarownerMobile, Address = insCarInfo.CarownerAddress, CertNo = insCarInfo.CarownerCertNo, IdentityBackPicKey = insCarInfo.CarownerIdentityBackPicKey, IdentityFacePicKey = insCarInfo.CarownerIdentityFacePicKey, OrgPicKey = insCarInfo.CarownerOrgPicKey });
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "2", Name = insCarInfo.PolicyholderName, Mobile = insCarInfo.PolicyholderMobile, Address = insCarInfo.PolicyholderAddress, CertNo = insCarInfo.PolicyholderCertNo, IdentityBackPicKey = insCarInfo.PolicyholderIdentityBackPicKey, IdentityFacePicKey = insCarInfo.PolicyholderIdentityFacePicKey, OrgPicKey = insCarInfo.PolicyholderOrgPicKey });
-                carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = insCarInfo.InsuredName, Mobile = insCarInfo.InsuredMobile, Address = insCarInfo.InsuredAddress, CertNo = insCarInfo.InsuredCertNo, IdentityBackPicKey = insCarInfo.InsuredIdentityBackPicKey, IdentityFacePicKey = insCarInfo.InsuredIdentityFacePicKey, OrgPicKey = insCarInfo.InsuredOrgPicKey });
+
             }
 
             carInfoResult.Car = carInfo;
@@ -351,58 +409,76 @@ namespace WebAppApi.Controllers
             #region 被保人，投保人，车主
             List<YdtInscarCustomerModel> customers = new List<YdtInscarCustomerModel>();
 
-
             if (pms.Customers != null)
             {
-                var carOwnerInfo = pms.Customers.Where(m => m.InsuredFlag == "3").FirstOrDefault();
-                if (carOwnerInfo != null)
+                for (var i = 0; i < pms.Customers.Count; i++)
                 {
-                    YdtInscarCustomerModel insureds = new YdtInscarCustomerModel();
-                    insureds.insuredFlag = "1";//被保人
-                    insureds.name = carOwnerInfo.Name;
-                    insureds.certNo = carOwnerInfo.CertNo;
-                    insureds.mobile = carOwnerInfo.Mobile;
-                    insureds.address = carOwnerInfo.Address;
+
+
+                    pms.Customers[i].Name = string.IsNullOrEmpty(pms.Customers[i].Name) == true ? nullName : pms.Customers[i].Name;
+                    pms.Customers[i].CertNo = string.IsNullOrEmpty(pms.Customers[i].CertNo) == true ? nullCerno : pms.Customers[i].CertNo;
+                    pms.Customers[i].Mobile = string.IsNullOrEmpty(pms.Customers[i].Mobile) == true ? nullMobile : pms.Customers[i].Mobile;
+                    pms.Customers[i].Address = string.IsNullOrEmpty(pms.Customers[i].Address) == true ? nullAddress : pms.Customers[i].Address;
 
                     //1是私人车，2为公司车
                     if (pms.Car.Belong == "1")
                     {
-                        insureds.identityFacePic = carOwnerInfo.IdentityFacePicKey;
-                        insureds.identityBackPic = carOwnerInfo.IdentityBackPicKey;
-                        insureds.orgPic = null;
+                        pms.Customers[i].IdentityFacePicKey = pms.Customers[i].IdentityFacePicKey;
+                        pms.Customers[i].IdentityBackPicKey = pms.Customers[i].IdentityBackPicKey;
+                        pms.Customers[i].OrgPicKey = null;
                     }
                     else
                     {
-                        insureds.identityFacePic = null;
-                        insureds.identityBackPic = null;
-                        insureds.orgPic = carOwnerInfo.OrgPicKey;
+                        pms.Customers[i].IdentityFacePicKey = null;
+                        pms.Customers[i].IdentityBackPicKey = null;
+                        pms.Customers[i].OrgPicKey = pms.Customers[i].OrgPicKey;
                     }
+
+                }
+
+                var carOwnerInfo = pms.Customers.Where(m => m.InsuredFlag == "3").FirstOrDefault();
+                if (carOwnerInfo != null)
+                {
+
+                    YdtInscarCustomerModel carOwner = new YdtInscarCustomerModel();
+                    carOwner.insuredFlag = "3";//车主
+                    carOwner.name = carOwnerInfo.Name;
+                    carOwner.certNo = carOwnerInfo.CertNo;
+                    carOwner.mobile = carOwnerInfo.Mobile;
+                    carOwner.address = carOwnerInfo.Address;
+                    carOwner.identityFacePic = carOwnerInfo.IdentityFacePicKey;
+                    carOwner.identityBackPic = carOwnerInfo.IdentityBackPicKey;
+                    carOwner.orgPic = carOwnerInfo.OrgPicKey;
+
+                    YdtInscarCustomerModel insureds = new YdtInscarCustomerModel();
+                    insureds.insuredFlag = "1";//被保人
+                    insureds.name = carOwner.name;
+                    insureds.certNo = carOwner.certNo;
+                    insureds.mobile = carOwner.mobile;
+                    insureds.address = carOwner.address;
+                    insureds.identityFacePic = carOwner.identityFacePic;
+                    insureds.identityBackPic = carOwner.identityBackPic;
+                    insureds.orgPic = carOwner.orgPic;
+
 
                     YdtInscarCustomerModel holder = new YdtInscarCustomerModel();
                     holder.insuredFlag = "2";//投保人
-                    holder.name = insureds.name;
-                    holder.certNo = insureds.certNo;
-                    holder.mobile = insureds.mobile;
-                    holder.address = insureds.address;
-                    holder.identityFacePic = insureds.identityFacePic;
-                    holder.identityBackPic = insureds.identityBackPic;
-                    holder.orgPic = insureds.orgPic;
-                    YdtInscarCustomerModel carOwner = new YdtInscarCustomerModel();
-                    carOwner.insuredFlag = "3";//车主
-                    carOwner.name = insureds.name;
-                    carOwner.certNo = insureds.certNo;
-                    carOwner.mobile = insureds.mobile;
-                    carOwner.address = insureds.address;
-                    carOwner.identityFacePic = insureds.identityFacePic;
-                    carOwner.identityBackPic = insureds.identityBackPic;
-                    carOwner.orgPic = insureds.orgPic;
+                    holder.name = carOwner.name;
+                    holder.certNo = carOwner.certNo;
+                    holder.mobile = carOwner.mobile;
+                    holder.address = carOwner.address;
+                    holder.identityFacePic = carOwner.identityFacePic;
+                    holder.identityBackPic = carOwner.identityBackPic;
+                    holder.orgPic = carOwner.orgPic;
 
+                    customers.Add(carOwner);
                     customers.Add(insureds);
                     customers.Add(holder);
-                    customers.Add(carOwner);
 
                     baseInfoModel.customers = customers;
                 }
+
+
             }
             #endregion
 
@@ -412,17 +488,15 @@ namespace WebAppApi.Controllers
 
 
             insPic.licensePic = pms.Car.LicensePicKey;
-            insPic.licenseOtherPic = null;
-            insPic.carCertPic = null;
-            insPic.carInvoicePic = null;
+            insPic.licenseOtherPic = pms.Car.LicenseOtherPicKey;
+            insPic.carCertPic = pms.Car.CarCertPicKey;
+            insPic.carInvoicePic = pms.Car.CarInvoicePicKey;
 
 
 
             baseInfoModel.pic = insPic;
             #endregion
 
-
-            //BizFactory.InsCar.UpdateCarInfo(0, pms.Car, pms.Customers);
 
             IResult<string> result = YdtUtils.EditBaseInfo(baseInfoModel);
 
@@ -432,8 +506,6 @@ namespace WebAppApi.Controllers
                 editBaseInfoResult.Car = pms.Car;
                 editBaseInfoResult.Customers = pms.Customers;
                 editBaseInfoResult.CarInfoOrderId = BizFactory.InsCar.UpdateCarInfoOrder(pms.UserId, pms.UserId, result.Data.ToString(), editBaseInfoResult.Car, editBaseInfoResult.Customers);
-
-
                 return ResponseResult(ResultType.Success, ResultCode.Success, result.Message, editBaseInfoResult);
             }
             else
@@ -486,9 +558,43 @@ namespace WebAppApi.Controllers
             carInsBaseInfoModel.Car.CarCertPicKey = order.CarCertPicKey;
             carInsBaseInfoModel.Car.CarCertPicUrl = order.CarCertPicUrl;
 
-            carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel { InsuredFlag = "1", Name = order.CarownerName, Mobile = order.CarownerMobile, Address = order.CarownerAddress, CertNo = order.CarownerCertNo, IdentityBackPicKey = order.CarownerIdentityBackPicKey, IdentityFacePicKey = order.CarownerIdentityFacePicKey, OrgPicKey = order.CarownerOrgPicKey });
-            carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel { InsuredFlag = "2", Name = order.PolicyholderName, Mobile = order.PolicyholderMobile, Address = order.PolicyholderAddress, CertNo = order.PolicyholderCertNo, IdentityBackPicKey = order.PolicyholderIdentityBackPicKey, IdentityFacePicKey = order.PolicyholderIdentityFacePicKey, OrgPicKey = order.PolicyholderOrgPicKey });
-            carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = order.InsuredName, Mobile = order.InsuredMobile, Address = order.InsuredAddress, CertNo = order.InsuredCertNo, IdentityBackPicKey = order.InsuredIdentityBackPicKey, IdentityFacePicKey = order.InsuredIdentityFacePicKey, OrgPicKey = order.InsuredOrgPicKey });
+
+
+            carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel
+            {
+                InsuredFlag = "3",
+                Name = (order.CarownerName == nullName ? "" : order.CarownerName),
+                Mobile = (order.CarownerMobile == nullMobile ? "" : order.CarownerMobile),
+                Address = (order.CarownerAddress == nullAddress ? "" : order.CarownerAddress),
+                CertNo = (order.CarownerCertNo == nullCerno ? "" : order.CarownerCertNo),
+                IdentityBackPicKey = order.CarownerIdentityBackPicKey,
+                IdentityFacePicKey = order.CarownerIdentityFacePicKey,
+                OrgPicKey = order.CarownerOrgPicKey
+            });
+            carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel
+            {
+                InsuredFlag = "1",
+                Name = (order.PolicyholderName == nullName ? "" : order.PolicyholderName),
+                Mobile = (order.PolicyholderMobile == nullMobile ? "" : order.PolicyholderMobile),
+                Address = (order.PolicyholderAddress == nullAddress ? "" : order.PolicyholderAddress),
+                CertNo = (order.PolicyholderCertNo == nullCerno ? "" : order.PolicyholderCertNo),
+                IdentityBackPicKey = order.PolicyholderIdentityBackPicKey,
+                IdentityFacePicKey = order.PolicyholderIdentityFacePicKey,
+                OrgPicKey = order.PolicyholderOrgPicKey
+            });
+
+
+            carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel
+            {
+                InsuredFlag = "2",
+                Name = (order.InsuredName == nullName ? "" : order.InsuredName),
+                Mobile = (order.InsuredMobile == nullMobile ? "" : order.InsuredMobile),
+                Address = (order.InsuredAddress == nullAddress ? "" : order.InsuredAddress),
+                CertNo = (order.InsuredCertNo == nullCerno ? "" : order.InsuredCertNo),
+                IdentityBackPicKey = order.InsuredIdentityBackPicKey,
+                IdentityFacePicKey = order.InsuredIdentityFacePicKey,
+                OrgPicKey = order.InsuredOrgPicKey
+            });
 
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "", carInsBaseInfoModel);
@@ -612,8 +718,8 @@ namespace WebAppApi.Controllers
 
             var insCarAdvicevalueModel = new InsCarAdvicevalueModel();
             insCarAdvicevalueModel.startDate = startDate;
-            insCarAdvicevalueModel.registDate = pms.Car.FirstRegisterDate;
-            insCarAdvicevalueModel.replacementValue = pms.Car.ReplacementValue;
+            insCarAdvicevalueModel.registDate = insCarInfoOrder.FirstRegisterDate;
+            insCarAdvicevalueModel.replacementValue = insCarInfoOrder.ReplacementValue;
 
             var ydtGetAdviceValue = YdtUtils.GetAdviceValue(insCarAdvicevalueModel.startDate, insCarAdvicevalueModel.registDate, insCarAdvicevalueModel.replacementValue);
             if (ydtGetAdviceValue.Result != ResultType.Success)
@@ -626,7 +732,7 @@ namespace WebAppApi.Controllers
 
             decimal actualPrice = ydtGetAdviceValue.Data;
 
-            model.coverages = GetCoverages(pms.InsureKind, actualPrice, pms.Car.RatedPassengerCapacity);
+            model.coverages = GetCoverages(pms.InsureKind, actualPrice, insCarInfoOrder.RatedPassengerCapacity);
             model.orderSeq = insCarInfoOrder.PartnerOrderId;
 
             var updateOrderOfferPms = new UpdateOrderOfferPms();
@@ -760,8 +866,10 @@ namespace WebAppApi.Controllers
 
             YdtInscarEditbasePms ydtInscarEditbasePms = new YdtInscarEditbasePms();
             ydtInscarEditbasePms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
+
             ydtInscarEditbasePms.belong = int.Parse(pms.Car.Belong);
             ydtInscarEditbasePms.carType = int.Parse(pms.Car.CarType);
+
             #region  车辆信息
             ydtInscarEditbasePms.car.licensePlateNo = pms.Car.LicensePlateNo;
             ydtInscarEditbasePms.car.vin = pms.Car.Vin;

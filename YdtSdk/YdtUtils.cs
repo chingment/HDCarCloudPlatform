@@ -143,6 +143,11 @@ namespace YdtSdk
                 return null;
             }
 
+            if (ydtUploadReuslt == null)
+            {
+                return null;
+            }
+
             return ydtUploadReuslt.data;
         }
 

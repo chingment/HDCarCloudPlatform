@@ -1878,7 +1878,7 @@ namespace WebAppApi.Controllers
         public void CarIns(int userId, int merchantId, int posMachineId)
         {
 
-            //model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
+            // model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
             //model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
             //model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
@@ -1886,18 +1886,18 @@ namespace WebAppApi.Controllers
             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
 
             //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
-            model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, 29));
+            //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, 58));
 
 
 
-            model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 26, 1, "006000"));
+            // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 58, 1, "006000"));
 
 
-            model.Add("获取基本信息", GetBaseInfo(userId, merchantId, posMachineId, 831));
+             model.Add("获取基本信息", GetBaseInfo(userId, merchantId, posMachineId, 834));
 
-            // model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 831));
+             model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 834));
 
-            model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, 831));
+            // model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, 831));
 
             // model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, 831));
 
@@ -2001,22 +2001,22 @@ namespace WebAppApi.Controllers
             model.Auto = "1";
             model.Car.CarType = "1";
             model.Car.Belong = "1";
-            model.Car.LicensePlateNo = "粤E76R95";
-            model.Car.Vin = "LGBH52E01FY333559";
-            model.Car.EngineNo = "721145X";
-            model.Car.FirstRegisterDate = "2015-07-07";
-            model.Car.ModelCode = "XYD1075DFQ";
-            model.Car.ModelName = "东风日产牌DFL7168VAL2";
-            model.Car.Displacement = "1600";
+            model.Car.LicensePlateNo = "粤A9RS97";
+            model.Car.Vin = "LFV3A23C6E3095934";
+            model.Car.EngineNo = "242956";
+            model.Car.FirstRegisterDate = "2015-08-11";
+            model.Car.ModelCode = "MTD1060YQD";
+            model.Car.ModelName = "FV7207FCDWG轿车";
+            model.Car.Displacement = "2000";
             model.Car.MarketYear = "2014";
             model.Car.RatedPassengerCapacity = 5;
-            model.Car.ReplacementValue = 113800;
+            model.Car.ReplacementValue = 266300;
             model.Car.ChgownerType = "0";
             model.Car.ChgownerDate = "";
             model.Car.Tonnage = "";
             model.Car.WholeWeight = "";
             model.Car.LicensePicKey = "";
-            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "朱长荣", CertNo = "440233197608274053", Mobile = "13800138000", Address = "无", IdentityFacePicKey = "", IdentityBackPicKey = "" });
+            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "", CertNo = "", Mobile = "", Address = "", IdentityFacePicKey = "", IdentityFacePicUrl = "", IdentityBackPicKey = "", IdentityBackPicUrl = "" });
 
             string a1 = JsonConvert.SerializeObject(model);
 
@@ -2070,21 +2070,7 @@ namespace WebAppApi.Controllers
             model.ChannelId = channelId;
             model.CompanyCode = companyCode;
 
-            model.Car.Belong = "1";
-            model.Car.LicensePlateNo = "粤A9RS97";
-            model.Car.Vin = "LFV3A23C6E3095934";
-            model.Car.EngineNo = "242956";
-            model.Car.FirstRegisterDate = "2015-08-11";
-            model.Car.ModelCode = "MTD1060YQD";
-            model.Car.ModelName = "FV7207FCDWG轿车";
-            model.Car.Displacement = "2000";
-            model.Car.MarketYear = "2012";
-            model.Car.RatedPassengerCapacity = 5;
-            model.Car.ReplacementValue = 266300;
-            model.Car.ChgownerType = "0";
-            model.Car.ChgownerDate = "";
-            model.Car.Tonnage = "";
-            model.Car.WholeWeight = "";
+
 
 
             List<CarInsInsureKindModel> insureKindModel = new List<CarInsInsureKindModel>();
@@ -2240,7 +2226,7 @@ namespace WebAppApi.Controllers
             ImageModel ZJ1_Img = new ImageModel() { Type = ".jpg", Data = base64string1 };
 
 
-            model.ImgData = ZJ1_Img;
+            model.ImgData.Add("certPic", ZJ1_Img);
 
 
             a1 = JsonConvert.SerializeObject(model);

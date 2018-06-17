@@ -118,6 +118,16 @@ namespace WebAppApi.Controllers
                     break;
             }
 
+            if (string.IsNullOrEmpty(result.Url))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "图片上传失败，请重新选择", result);
+            }
+
+            if (string.IsNullOrEmpty(result.Key))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "图片解释失败，相片类型错误或模糊，请重新选择或者拍照", result);
+            }
+
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", result);
         }

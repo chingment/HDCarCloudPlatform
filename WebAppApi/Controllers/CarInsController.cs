@@ -123,9 +123,12 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "图片上传失败，请重新选择", result);
             }
 
-            if (string.IsNullOrEmpty(result.Key))
+            if (!BizFactory.AppSettings.IsTest)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "图片解释失败，相片类型错误或模糊，请重新选择或者拍照", result);
+                if (string.IsNullOrEmpty(result.Key))
+                {
+                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "图片解释失败，相片类型错误或模糊，请重新选择或者拍照", result);
+                }
             }
 
 
@@ -984,21 +987,21 @@ namespace WebAppApi.Controllers
             #endregion
 
 
-            IResult<string> editBaseInfo_Result = YdtUtils.EditBaseInfo(ydtInscarEditbasePms);
+            //IResult<string> editBaseInfo_Result = YdtUtils.EditBaseInfo(ydtInscarEditbasePms);
 
 
-            if (editBaseInfo_Result.Result != ResultType.Success)
-            {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "保存资料到保险公司失败");
-            }
+            //if (editBaseInfo_Result.Result != ResultType.Success)
+            //{
+            //    return ResponseResult(ResultType.Failure, ResultCode.Failure, "保存资料到保险公司失败");
+            //}
 
-            var updateOrder_Result = BizFactory.InsCar.UpdateOrder(pms.UserId, orderToCarInsureOfferCompany.OrderId, pms.Car, pms.Customers);
+            //var updateOrder_Result = BizFactory.InsCar.UpdateOrder(pms.UserId, orderToCarInsureOfferCompany.OrderId, pms.Car, pms.Customers);
 
 
-            if (updateOrder_Result.Result != ResultType.Success)
-            {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "保存资料到本系统失败");
-            }
+            //if (updateOrder_Result.Result != ResultType.Success)
+            //{
+            //    return ResponseResult(ResultType.Failure, ResultCode.Failure, "保存资料到本系统失败");
+            //}
 
 
             YdtInscarInsurePms ydtInscarInsurePms = new YdtInscarInsurePms();
@@ -1015,9 +1018,20 @@ namespace WebAppApi.Controllers
                 //return ResponseResult(ResultType.Failure, ResultCode.Failure, result_Insure.Message, result);
             }
 
-            orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
-            orderToCarInsureOfferCompany.BiProposalNo = result_Insure.Data.biProposalNo;
-            orderToCarInsureOfferCompany.CiProposalNo = result_Insure.Data.ciProposalNo;
+            if (BizFactory.AppSettings.IsTest)
+            {
+                orderToCarInsureOfferCompany.PartnerInsureId = Guid.NewGuid().ToString();
+                orderToCarInsureOfferCompany.BiProposalNo = "A10000001";
+                orderToCarInsureOfferCompany.CiProposalNo = "A10000002";
+
+            }
+            else
+            {
+                orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
+                orderToCarInsureOfferCompany.BiProposalNo = result_Insure.Data.biProposalNo;
+                orderToCarInsureOfferCompany.CiProposalNo = result_Insure.Data.ciProposalNo;
+            }
+
             CurrentDb.SaveChanges();
 
 
@@ -1060,12 +1074,24 @@ namespace WebAppApi.Controllers
 
             var orderInfo = new ItemParentField("投保单信息", "");
 
-            orderInfo.Child.Add(new ItemChildField("交强险单号", orderToCarInsureOfferCompany.CiProposalNo));
-            orderInfo.Child.Add(new ItemChildField("商业险单号", orderToCarInsureOfferCompany.BiProposalNo));
-            orderInfo.Child.Add(new ItemChildField("投保单号", orderToCarInsureOfferCompany.PartnerInsureId));
-            orderInfo.Child.Add(new ItemChildField("商业险", orderToCarInsureOfferCompany.CommercialPrice.ToF2Price()));
-            orderInfo.Child.Add(new ItemChildField("交强险", orderToCarInsureOfferCompany.CompulsoryPrice.ToF2Price()));
-            orderInfo.Child.Add(new ItemChildField("车船税", orderToCarInsureOfferCompany.TravelTaxPrice.ToF2Price()));
+            if (BizFactory.AppSettings.IsTest)
+            {
+                orderInfo.Child.Add(new ItemChildField("交强险单号", "测试"));
+                orderInfo.Child.Add(new ItemChildField("商业险单号", "测试"));
+                orderInfo.Child.Add(new ItemChildField("投保单号", "测试"));
+                orderInfo.Child.Add(new ItemChildField("商业险", "1"));
+                orderInfo.Child.Add(new ItemChildField("交强险", "2"));
+                orderInfo.Child.Add(new ItemChildField("车船税", "3"));
+            }
+            else
+            {
+                orderInfo.Child.Add(new ItemChildField("交强险单号", orderToCarInsureOfferCompany.CiProposalNo));
+                orderInfo.Child.Add(new ItemChildField("商业险单号", orderToCarInsureOfferCompany.BiProposalNo));
+                orderInfo.Child.Add(new ItemChildField("投保单号", orderToCarInsureOfferCompany.PartnerInsureId));
+                orderInfo.Child.Add(new ItemChildField("商业险", orderToCarInsureOfferCompany.CommercialPrice.ToF2Price()));
+                orderInfo.Child.Add(new ItemChildField("交强险", orderToCarInsureOfferCompany.CompulsoryPrice.ToF2Price()));
+                orderInfo.Child.Add(new ItemChildField("车船税", orderToCarInsureOfferCompany.TravelTaxPrice.ToF2Price()));
+            }
 
 
             result.InfoItems.Add(orderInfo);
@@ -1125,13 +1151,24 @@ namespace WebAppApi.Controllers
 
             order.Status = Enumeration.OrderStatus.WaitPay;
 
-            orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
-            orderToCarInsureOfferCompany.PartnerPayId = result_Insure.Data.paySeq;
-            orderToCarInsureOfferCompany.PayUrl = result_Insure.Data.payUrl;
+            if (BizFactory.AppSettings.IsTest)
+            {
+
+                orderToCarInsureOfferCompany.PartnerInsureId = Guid.NewGuid().ToString();
+                orderToCarInsureOfferCompany.PartnerPayId = Guid.NewGuid().ToString();
+                orderToCarInsureOfferCompany.PayUrl = "http://www.baidu.com";
+            }
+            else
+            {
+                orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
+                orderToCarInsureOfferCompany.PartnerPayId = result_Insure.Data.paySeq;
+                orderToCarInsureOfferCompany.PayUrl = result_Insure.Data.payUrl;
+            }
             CurrentDb.SaveChanges();
 
+            result.OrderSn = order.Sn;
             result.OfferId = pms.OfferId;
-            result.payUrl = result_Insure.Data.payUrl;
+            result.payUrl = orderToCarInsureOfferCompany.PayUrl;
 
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "生成支付成功", result);

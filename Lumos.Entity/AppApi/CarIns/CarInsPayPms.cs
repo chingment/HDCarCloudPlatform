@@ -17,5 +17,12 @@ namespace Lumos.Entity
         public int OfferId { get; set; }
 
         public CarInsAddressModel ReceiptAddress { get; set; }
+
+        public CarInsPayPms()
+        {
+            this.ReceiptAddress = new CarInsAddressModel();
+        }
+
     }
 }
+

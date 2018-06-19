@@ -1878,24 +1878,27 @@ namespace WebAppApi.Controllers
         public void CarIns(int userId, int merchantId, int posMachineId)
         {
 
-            // model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
+            //model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
             //model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
-            //model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
+           // model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
             //model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LGBH52E01FY333559", "2015-07-07"));
 
-            //model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
-            //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, 58));
+            // model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+
+            int CarInfoOrderId = 67;
+            int OfferId = 836;
+            // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, CarInfoOrderId));
 
 
 
-            // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, 58, 1, "006000"));
+           // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
 
 
-             model.Add("获取基本信息", GetBaseInfo(userId, merchantId, posMachineId, 834));
+            //model.Add("获取基本信息", GetBaseInfo(userId, merchantId, posMachineId, OfferId));
 
-             model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, 834));
+              model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, OfferId));
 
             // model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, 831));
 
@@ -1998,25 +2001,48 @@ namespace WebAppApi.Controllers
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
             // model.CarInfoOrderId = 28;
+            //model.Auto = "1";
+            //model.Car.CarType = "1";
+            //model.Car.Belong = "1";
+            //model.Car.LicensePlateNo = "粤A9RS97";
+            //model.Car.Vin = "LFV3A23C6E3095934";
+            //model.Car.EngineNo = "242956";
+            //model.Car.FirstRegisterDate = "2015-08-11";
+            //model.Car.ModelCode = "MTD1060YQD";
+            //model.Car.ModelName = "FV7207FCDWG轿车";
+            //model.Car.Displacement = "2000";
+            //model.Car.MarketYear = "2014";
+            //model.Car.RatedPassengerCapacity = 5;
+            //model.Car.ReplacementValue = 266300;
+            //model.Car.ChgownerType = "0";
+            //model.Car.ChgownerDate = "";
+            //model.Car.Tonnage = "";
+            //model.Car.WholeWeight = "";
+            //model.Car.LicensePicKey = "";
+
+
+
             model.Auto = "1";
             model.Car.CarType = "1";
             model.Car.Belong = "1";
-            model.Car.LicensePlateNo = "粤A9RS97";
-            model.Car.Vin = "LFV3A23C6E3095934";
-            model.Car.EngineNo = "242956";
-            model.Car.FirstRegisterDate = "2015-08-11";
-            model.Car.ModelCode = "MTD1060YQD";
-            model.Car.ModelName = "FV7207FCDWG轿车";
-            model.Car.Displacement = "2000";
+            model.Car.LicensePlateNo = "粤H83K28";
+            model.Car.Vin = "LGBH52E01GY047454";
+            model.Car.EngineNo = "435087Y";
+            model.Car.FirstRegisterDate = "2016-08-26";
+            model.Car.ModelCode = "DFL7168VBL2";
+            model.Car.ModelName = "东风日产DFL7168VBL2轿车";
+            model.Car.Displacement = "1598";
             model.Car.MarketYear = "2014";
             model.Car.RatedPassengerCapacity = 5;
-            model.Car.ReplacementValue = 266300;
+            model.Car.ReplacementValue = 119000;
             model.Car.ChgownerType = "0";
             model.Car.ChgownerDate = "";
             model.Car.Tonnage = "";
             model.Car.WholeWeight = "";
-            model.Car.LicensePicKey = "";
-            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "", CertNo = "", Mobile = "", Address = "", IdentityFacePicKey = "", IdentityFacePicUrl = "", IdentityBackPicKey = "", IdentityBackPicUrl = "" });
+            model.Car.LicensePicKey = "0a1e00f46402725401641591d84d0059.jpg";
+            model.Car.LicensePicUrl = "http://file.gzhaoyilian.com/Upload/d1.jpg";
+
+            model.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = "张国威", CertNo = "441421197908214016", Mobile = "13800138000", Address = "广东省梅县丙村镇溪联村", IdentityFacePicKey = "0a1e00f46402725401641591c2ee0058.jpg", IdentityFacePicUrl = "http://file.gzhaoyilian.com/Upload/d2.jpg", IdentityBackPicKey = "0a1e00f46402725401641591b4f10057.jpg", IdentityBackPicUrl = "http://file.gzhaoyilian.com/Upload/d1.jpg" });
 
             string a1 = JsonConvert.SerializeObject(model);
 

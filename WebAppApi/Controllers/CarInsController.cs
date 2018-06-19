@@ -72,7 +72,7 @@ namespace WebAppApi.Controllers
             switch (pms.Type)
             {
                 case "1":
-                    //imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
+                    imgurl = "http://file.gzhaoyilian.com/Upload/d1.jpg";
                     YdtUploadResultData model1 = YdtUtils.UploadImg(imgurl);
                     Log.Info("解释图片结束");
                     if (model1 != null)
@@ -89,7 +89,7 @@ namespace WebAppApi.Controllers
                     }
                     break;
                 case "10":
-                    //imgurl = "http://file.gzhaoyilian.com/Upload/c1.jpg";
+                    imgurl = "http://file.gzhaoyilian.com/Upload/d2.jpg";
                     YdtLicenseInfo model2 = YdtUtils.GetLicenseInfoByUrl(imgurl);
                     if (model2 != null)
                     {
@@ -103,7 +103,7 @@ namespace WebAppApi.Controllers
                     }
                     break;
                 case "11":
-                    //imgurl = "http://file.gzhaoyilian.com/Upload/c2.jpg";
+                    imgurl = "http://file.gzhaoyilian.com/Upload/d1.jpg";
                     YdtIdentityInfo model3 = YdtUtils.GetIdentityInfoByUrl(imgurl);
                     if (model3 != null)
                     {
@@ -118,7 +118,7 @@ namespace WebAppApi.Controllers
                     break;
             }
 
-            if (string.IsNullOrEmpty(result.Url))
+            if (string.IsNullOrEmpty(imgurl))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "图片上传失败，请重新选择", result);
             }
@@ -874,6 +874,7 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "报价未完成");
             }
 
+
             YdtInscarEditbasePms ydtInscarEditbasePms = new YdtInscarEditbasePms();
             ydtInscarEditbasePms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
 
@@ -898,6 +899,7 @@ namespace WebAppApi.Controllers
 
             #endregion
 
+
             #region 被保人，投保人，车主
             List<YdtInscarCustomerModel> customers = new List<YdtInscarCustomerModel>();
 
@@ -907,45 +909,48 @@ namespace WebAppApi.Controllers
                 var carOwnerInfo = pms.Customers.Where(m => m.InsuredFlag == "3").FirstOrDefault();
                 if (carOwnerInfo != null)
                 {
-                    YdtInscarCustomerModel insureds = new YdtInscarCustomerModel();
-                    insureds.insuredFlag = "1";//被保人
-                    insureds.name = carOwnerInfo.Name;
-                    insureds.certNo = carOwnerInfo.CertNo;
-                    insureds.mobile = carOwnerInfo.Mobile;
-                    insureds.address = carOwnerInfo.Address;
 
-                    //1是私人车，2为公司车
+
+                    YdtInscarCustomerModel carOwner = new YdtInscarCustomerModel();
+                    carOwner.insuredFlag = "3";//车主
+                    carOwner.name = carOwnerInfo.Name;
+                    carOwner.certNo = string.IsNullOrEmpty(carOwnerInfo.CertNo) == true ? nullCerno : carOwnerInfo.CertNo;
+                    carOwner.mobile = string.IsNullOrEmpty(carOwnerInfo.Mobile) == true ? nullMobile : carOwnerInfo.Mobile;
+                    carOwner.address = string.IsNullOrEmpty(carOwnerInfo.Address) == true ? nullAddress : carOwnerInfo.Address;
                     if (pms.Car.Belong == "1")
                     {
-                        insureds.identityFacePic = carOwnerInfo.IdentityFacePicKey;
-                        insureds.identityBackPic = carOwnerInfo.IdentityBackPicKey;
-                        insureds.orgPic = null;
+                        carOwner.identityFacePic = carOwnerInfo.IdentityFacePicKey;
+                        carOwner.identityBackPic = carOwnerInfo.IdentityBackPicKey;
+                        carOwner.orgPic = null;
                     }
                     else
                     {
-                        insureds.identityFacePic = null;
-                        insureds.identityBackPic = null;
-                        insureds.orgPic = carOwnerInfo.OrgPicKey;
+                        carOwner.identityFacePic = null;
+                        carOwner.identityBackPic = null;
+                        carOwner.orgPic = carOwnerInfo.OrgPicKey;
                     }
+
+
+                    YdtInscarCustomerModel insureds = new YdtInscarCustomerModel();
+                    insureds.insuredFlag = "1";//被保人
+                    insureds.name = carOwner.name;
+                    insureds.certNo = carOwner.certNo;
+                    insureds.mobile = carOwner.mobile;
+                    insureds.address = carOwner.address;
+                    insureds.identityFacePic = carOwner.identityFacePic;
+                    insureds.identityBackPic = carOwner.identityBackPic;
+                    insureds.orgPic = carOwner.orgPic;
+
 
                     YdtInscarCustomerModel holder = new YdtInscarCustomerModel();
                     holder.insuredFlag = "2";//投保人
-                    holder.name = insureds.name;
-                    holder.certNo = insureds.certNo;
-                    holder.mobile = insureds.mobile;
-                    holder.address = insureds.address;
-                    holder.identityFacePic = insureds.identityFacePic;
-                    holder.identityBackPic = insureds.identityBackPic;
-                    holder.orgPic = insureds.orgPic;
-                    YdtInscarCustomerModel carOwner = new YdtInscarCustomerModel();
-                    carOwner.insuredFlag = "3";//车主
-                    carOwner.name = insureds.name;
-                    carOwner.certNo = insureds.certNo;
-                    carOwner.mobile = insureds.mobile;
-                    carOwner.address = insureds.address;
-                    carOwner.identityFacePic = insureds.identityFacePic;
-                    carOwner.identityBackPic = insureds.identityBackPic;
-                    carOwner.orgPic = insureds.orgPic;
+                    holder.name = carOwner.name;
+                    holder.certNo = carOwner.certNo;
+                    holder.mobile = carOwner.mobile;
+                    holder.address = carOwner.address;
+                    holder.identityFacePic = carOwner.identityFacePic;
+                    holder.identityBackPic = carOwner.identityBackPic;
+                    holder.orgPic = carOwner.orgPic;
 
                     customers.Add(insureds);
                     customers.Add(holder);
@@ -998,7 +1003,7 @@ namespace WebAppApi.Controllers
 
             if (result_Insure.Result != ResultType.Success)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "核保失败", result);
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, result_Insure.Message, result);
             }
 
             orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
@@ -1042,7 +1047,7 @@ namespace WebAppApi.Controllers
             result.receiptAddress.Consignee = merchant.ContactName;
             result.receiptAddress.Mobile = merchant.ContactPhoneNumber;
             result.receiptAddress.Email = "";
-            result.receiptAddress.AreaId = "";
+            result.receiptAddress.AreaId = "4401";
 
             var orderInfo = new ItemParentField("投保单信息", "");
 

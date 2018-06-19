@@ -121,6 +121,19 @@ namespace Lumos.BLL
                             insCarInfoOrder.PolicyholderIdentityBackPicUrl = policyholder.IdentityBackPicUrl;
                             insCarInfoOrder.PolicyholderOrgPicKey = policyholder.OrgPicKey;
                         }
+                        else
+                        {
+                            insCarInfoOrder.PolicyholderInsuredFlag = "1";
+                            insCarInfoOrder.PolicyholderName = carowner.Name;
+                            insCarInfoOrder.PolicyholderCertNo = carowner.CertNo;
+                            insCarInfoOrder.PolicyholderMobile = carowner.Mobile;
+                            insCarInfoOrder.PolicyholderAddress = carowner.Address;
+                            insCarInfoOrder.PolicyholderIdentityFacePicKey = carowner.IdentityFacePicKey;
+                            insCarInfoOrder.PolicyholderIdentityFacePicUrl = carowner.IdentityFacePicUrl;
+                            insCarInfoOrder.PolicyholderIdentityBackPicKey = carowner.IdentityBackPicKey;
+                            insCarInfoOrder.PolicyholderIdentityBackPicUrl = carowner.IdentityBackPicUrl;
+                            insCarInfoOrder.PolicyholderOrgPicKey = carowner.OrgPicKey;
+                        }
 
 
                         var insured = customers.Where(m => m.InsuredFlag == "2").FirstOrDefault();
@@ -138,6 +151,20 @@ namespace Lumos.BLL
                             insCarInfoOrder.InsuredOrgPicKey = insured.OrgPicKey;
 
                         }
+                        else
+                        {
+                            insCarInfoOrder.InsuredInsuredFlag = "2";
+                            insCarInfoOrder.InsuredName = carowner.Name;
+                            insCarInfoOrder.InsuredCertNo = carowner.CertNo;
+                            insCarInfoOrder.InsuredMobile = carowner.Mobile;
+                            insCarInfoOrder.InsuredAddress = carowner.Address;
+                            insCarInfoOrder.InsuredIdentityFacePicKey = carowner.IdentityFacePicKey;
+                            insCarInfoOrder.InsuredIdentityFacePicUrl = carowner.IdentityFacePicUrl;
+                            insCarInfoOrder.InsuredIdentityBackPicKey = carowner.IdentityFacePicKey;
+                            insCarInfoOrder.InsuredIdentityBackPicUrl = carowner.IdentityBackPicUrl;
+                            insCarInfoOrder.InsuredOrgPicKey = carowner.OrgPicKey;
+                        }
+
                     }
 
                     if (insCarInfoOrder.Id == 0)
@@ -649,9 +676,13 @@ namespace Lumos.BLL
             insCarInfo.Tonnage = carInfo.Tonnage;
             insCarInfo.WholeWeight = carInfo.WholeWeight;
             insCarInfo.LicensePicKey = carInfo.LicensePicKey;
+            insCarInfo.LicensePicUrl = carInfo.LicensePicUrl;
             insCarInfo.LicenseOtherPicKey = carInfo.LicenseOtherPicKey;
+            insCarInfo.LicenseOtherPicUrl = carInfo.LicenseOtherPicUrl;
             insCarInfo.CarCertPicKey = carInfo.CarCertPicKey;
+            insCarInfo.CarCertPicUrl = carInfo.CarCertPicUrl;
             insCarInfo.CarInvoicePicKey = carInfo.CarInvoicePicKey;
+            insCarInfo.CarInvoicePicUrl = carInfo.CarInvoicePicUrl;
 
             if (customers != null)
             {
@@ -664,8 +695,11 @@ namespace Lumos.BLL
                     insCarInfo.CarownerMobile = carowner.Mobile;
                     insCarInfo.CarownerAddress = carowner.Address;
                     insCarInfo.CarownerIdentityFacePicKey = carowner.IdentityFacePicKey;
-                    insCarInfo.CarownerIdentityBackPicKey = carowner.IdentityFacePicKey;
+                    insCarInfo.CarownerIdentityFacePicUrl = carowner.IdentityFacePicUrl;
+                    insCarInfo.CarownerIdentityBackPicKey = carowner.IdentityBackPicKey;
+                    insCarInfo.CarownerIdentityBackPicUrl = carowner.IdentityBackPicUrl;
                     insCarInfo.CarownerOrgPicKey = carowner.OrgPicKey;
+                    insCarInfo.CarownerOrgPicUrl = carowner.OrgPicUrl;
                 }
 
                 var policyholder = customers.Where(m => m.InsuredFlag == "1").FirstOrDefault();
@@ -677,8 +711,25 @@ namespace Lumos.BLL
                     insCarInfo.PolicyholderMobile = policyholder.Mobile;
                     insCarInfo.PolicyholderAddress = policyholder.Address;
                     insCarInfo.PolicyholderIdentityFacePicKey = policyholder.IdentityFacePicKey;
+                    insCarInfo.PolicyholderIdentityFacePicUrl = policyholder.IdentityFacePicUrl;
                     insCarInfo.PolicyholderIdentityBackPicKey = policyholder.IdentityFacePicKey;
+                    insCarInfo.PolicyholderIdentityBackPicUrl = policyholder.IdentityFacePicUrl;
                     insCarInfo.PolicyholderOrgPicKey = policyholder.OrgPicKey;
+                    insCarInfo.PolicyholderOrgPicUrl = policyholder.OrgPicUrl;
+                }
+                else
+                {
+                    insCarInfo.PolicyholderInsuredFlag = "1";
+                    insCarInfo.PolicyholderName = carowner.Name;
+                    insCarInfo.PolicyholderCertNo = carowner.CertNo;
+                    insCarInfo.PolicyholderMobile = carowner.Mobile;
+                    insCarInfo.PolicyholderAddress = carowner.Address;
+                    insCarInfo.PolicyholderIdentityFacePicKey = carowner.IdentityFacePicKey;
+                    insCarInfo.PolicyholderIdentityFacePicUrl = carowner.IdentityFacePicUrl;
+                    insCarInfo.PolicyholderIdentityBackPicKey = carowner.IdentityFacePicKey;
+                    insCarInfo.PolicyholderIdentityBackPicUrl = carowner.IdentityFacePicUrl;
+                    insCarInfo.PolicyholderOrgPicKey = carowner.OrgPicKey;
+                    insCarInfo.PolicyholderOrgPicUrl = carowner.OrgPicUrl;
                 }
 
 
@@ -691,9 +742,26 @@ namespace Lumos.BLL
                     insCarInfo.InsuredMobile = insured.Mobile;
                     insCarInfo.InsuredAddress = insured.Address;
                     insCarInfo.InsuredIdentityFacePicKey = insured.IdentityFacePicKey;
+                    insCarInfo.InsuredIdentityFacePicUrl = insured.IdentityFacePicUrl;
                     insCarInfo.InsuredIdentityBackPicKey = insured.IdentityFacePicKey;
+                    insCarInfo.InsuredIdentityBackPicUrl = insured.IdentityFacePicUrl;
                     insCarInfo.InsuredOrgPicKey = insured.OrgPicKey;
+                    insCarInfo.InsuredOrgPicUrl = insured.OrgPicUrl;
 
+                }
+                else
+                {
+                    insCarInfo.InsuredInsuredFlag = "2";
+                    insCarInfo.InsuredName = carowner.Name;
+                    insCarInfo.InsuredCertNo = carowner.CertNo;
+                    insCarInfo.InsuredMobile = carowner.Mobile;
+                    insCarInfo.InsuredAddress = carowner.Address;
+                    insCarInfo.InsuredIdentityFacePicKey = carowner.IdentityFacePicKey;
+                    insCarInfo.InsuredIdentityFacePicUrl = carowner.IdentityFacePicUrl;
+                    insCarInfo.InsuredIdentityBackPicKey = carowner.IdentityFacePicKey;
+                    insCarInfo.InsuredIdentityBackPicUrl = carowner.IdentityFacePicUrl;
+                    insCarInfo.InsuredOrgPicKey = carowner.OrgPicKey;
+                    insCarInfo.InsuredOrgPicUrl = carowner.OrgPicUrl;
                 }
             }
 

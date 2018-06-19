@@ -274,7 +274,7 @@ namespace WebAppApi.Controllers
             var carModelInfoResult = new CarModelInfoResult();
 
 
-            var ydtCarModelQueryResultData = YdtUtils.CarModelQuery(keyword, vin, firstRegisterDate);
+            var ydtCarModelQueryResultData = YdtUtils.CarModelQuery("", vin, firstRegisterDate);
 
             if (ydtCarModelQueryResultData != null)
             {
@@ -560,7 +560,7 @@ namespace WebAppApi.Controllers
             carInsBaseInfoModel.Car.Tonnage = order.CarTonnage;
             carInsBaseInfoModel.Car.WholeWeight = order.CarWholeWeight;
             carInsBaseInfoModel.Car.LicensePicKey = order.CarLicensePicKey;
-            carInsBaseInfoModel.Car.LicensePicUrl = order.InsuredOrgPicUrl;
+            carInsBaseInfoModel.Car.LicensePicUrl = order.CarLicensePicUrl;
             carInsBaseInfoModel.Car.LicenseOtherPicKey = order.CarLicenseOtherPicKey;
             carInsBaseInfoModel.Car.LicenseOtherPicUrl = order.CarLicenseOtherPicUrl;
             carInsBaseInfoModel.Car.CarInvoicePicKey = order.CarInvoicePicKey;
@@ -577,9 +577,12 @@ namespace WebAppApi.Controllers
                 Mobile = (order.CarownerMobile == nullMobile ? "" : order.CarownerMobile),
                 Address = (order.CarownerAddress == nullAddress ? "" : order.CarownerAddress),
                 CertNo = (order.CarownerCertNo == nullCerno ? "" : order.CarownerCertNo),
-                IdentityBackPicKey = order.CarownerIdentityBackPicKey,
+                IdentityFacePicUrl = order.CarownerIdentityFacePicUrl,
                 IdentityFacePicKey = order.CarownerIdentityFacePicKey,
-                OrgPicKey = order.CarownerOrgPicKey
+                IdentityBackPicKey = order.CarownerIdentityBackPicKey,
+                IdentityBackPicUrl = order.CarownerIdentityBackPicUrl,
+                OrgPicKey = order.CarownerOrgPicKey,
+                OrgPicUrl = order.CarownerOrgPicUrl
             });
             carInsBaseInfoModel.Customers.Add(new CarInsCustomerModel
             {
@@ -588,9 +591,12 @@ namespace WebAppApi.Controllers
                 Mobile = (order.PolicyholderMobile == nullMobile ? "" : order.PolicyholderMobile),
                 Address = (order.PolicyholderAddress == nullAddress ? "" : order.PolicyholderAddress),
                 CertNo = (order.PolicyholderCertNo == nullCerno ? "" : order.PolicyholderCertNo),
-                IdentityBackPicKey = order.PolicyholderIdentityBackPicKey,
+                IdentityFacePicUrl = order.PolicyholderIdentityFacePicUrl,
                 IdentityFacePicKey = order.PolicyholderIdentityFacePicKey,
-                OrgPicKey = order.PolicyholderOrgPicKey
+                IdentityBackPicKey = order.PolicyholderIdentityFacePicKey,
+                IdentityBackPicUrl = order.PolicyholderIdentityFacePicUrl,
+                OrgPicKey = order.PolicyholderOrgPicKey,
+                OrgPicUrl = order.PolicyholderOrgPicUrl
             });
 
 
@@ -601,9 +607,12 @@ namespace WebAppApi.Controllers
                 Mobile = (order.InsuredMobile == nullMobile ? "" : order.InsuredMobile),
                 Address = (order.InsuredAddress == nullAddress ? "" : order.InsuredAddress),
                 CertNo = (order.InsuredCertNo == nullCerno ? "" : order.InsuredCertNo),
-                IdentityBackPicKey = order.InsuredIdentityBackPicKey,
                 IdentityFacePicKey = order.InsuredIdentityFacePicKey,
-                OrgPicKey = order.InsuredOrgPicKey
+                IdentityFacePicUrl = order.InsuredIdentityFacePicUrl,
+                IdentityBackPicKey = order.InsuredIdentityBackPicKey,
+                IdentityBackPicUrl = order.InsuredIdentityBackPicUrl,
+                OrgPicKey = order.InsuredOrgPicKey,
+                OrgPicUrl = order.InsuredOrgPicUrl
             });
 
 
@@ -1003,7 +1012,7 @@ namespace WebAppApi.Controllers
 
             if (result_Insure.Result != ResultType.Success)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, result_Insure.Message, result);
+                //return ResponseResult(ResultType.Failure, ResultCode.Failure, result_Insure.Message, result);
             }
 
             orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
@@ -1111,7 +1120,7 @@ namespace WebAppApi.Controllers
 
             if (result_Insure.Result != ResultType.Success)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "生成支付失败", result);
+                //return ResponseResult(ResultType.Failure, ResultCode.Failure, "生成支付失败", result);
             }
 
             order.Status = Enumeration.OrderStatus.WaitPay;

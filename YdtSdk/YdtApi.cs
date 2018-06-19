@@ -40,7 +40,7 @@ namespace YdtSdk
     {
         ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public string serverUrl = "http://test.hybao.cc:6200";
+        public string serverUrl = "http://test.hybao.cc:6100";
 
 
         public YdtApi()
@@ -59,6 +59,8 @@ namespace YdtSdk
 
             string realServerUrl = GetServerUrl(this.serverUrl, request.ApiName);
             WebUtils webUtils = new WebUtils();
+
+
             string body = webUtils.DoGet(realServerUrl, request.GetUrlParameters(), null);
 
             var rsp = new YdtApiBaseResult<T>();

@@ -16,10 +16,14 @@ namespace Lumos.Entity
 
         public int OfferId { get; set; }
 
-        public int OrderId { get; set; }
-
         public CarInfoModel Car { get; set; }
         public List<CarInsCustomerModel> Customers { get; set; }
+
+        public CarInsInsurePms()
+        {
+            this.Car = new CarInfoModel();
+            this.Customers = new List<CarInsCustomerModel>();
+        }
 
     }
 }

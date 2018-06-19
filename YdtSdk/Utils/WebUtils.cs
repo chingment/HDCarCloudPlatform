@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -228,10 +229,14 @@ namespace YdtSdk
         /// <returns>HTTP响应</returns>
         public string DoGet(string url, IDictionary<string, string> textParams, IDictionary<string, string> headerParams)
         {
+            ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
             if (textParams != null && textParams.Count > 0)
             {
                 url = BuildRequestUrl(url, textParams);
             }
+
+            log.Info("Ydt->url:" + url);
 
             HttpWebRequest req = GetWebRequest(url, "GET", headerParams);
             req.ContentType = "application/x-www-form-urlencoded;charset=utf-8";

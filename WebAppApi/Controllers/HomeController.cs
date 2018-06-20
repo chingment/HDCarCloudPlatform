@@ -1882,14 +1882,14 @@ namespace WebAppApi.Controllers
             //model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
             // model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
-            //model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
-            //  model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LVXCCDBA3CL000043", "2012-06-2"));
+           // model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+             model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LVXCCDBA3CL000043", "2012-06-2"));
 
             //  model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
 
-            int CarInfoOrderId = 69;
-            int OfferId = 838;
-           // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, CarInfoOrderId));
+            // int CarInfoOrderId = 69;
+            //   int OfferId = 838;
+            // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, CarInfoOrderId));
 
 
 
@@ -1902,7 +1902,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, OfferId));
 
-            model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, OfferId));
+            //   model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, OfferId));
 
 
 

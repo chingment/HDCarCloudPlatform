@@ -277,7 +277,7 @@ namespace WebAppApi.Controllers
             var carModelInfoResult = new CarModelInfoResult();
 
 
-            var ydtCarModelQueryResultData = YdtUtils.CarModelQuery("", vin, firstRegisterDate);
+            var ydtCarModelQueryResultData = YdtUtils.CarModelQuery(vin, vin, firstRegisterDate);
 
             if (ydtCarModelQueryResultData != null)
             {
@@ -1156,7 +1156,7 @@ namespace WebAppApi.Controllers
 
                 orderToCarInsureOfferCompany.PartnerInsureId = Guid.NewGuid().ToString();
                 orderToCarInsureOfferCompany.PartnerPayId = Guid.NewGuid().ToString();
-                orderToCarInsureOfferCompany.PayUrl = "http://www.baidu.com";
+                orderToCarInsureOfferCompany.PayUrl = "http://www.qq.com";
             }
             else
             {

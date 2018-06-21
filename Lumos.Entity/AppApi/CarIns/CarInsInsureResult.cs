@@ -8,6 +8,14 @@ namespace Lumos.Entity
 {
     public class CarInsInsureResult
     {
+        public CarInsInsureResult()
+        {
+            this.InfoItems = new List<ItemParentField>();
+            this.receiptAddress = new CarInsAddressModel();
+        }
 
+        public List<ItemParentField> InfoItems { get; set; }
+
+        public CarInsAddressModel receiptAddress { get; set; }
     }
 }

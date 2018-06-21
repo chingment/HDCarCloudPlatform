@@ -1882,27 +1882,27 @@ namespace WebAppApi.Controllers
             //model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
             // model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
-           // model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
-             model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LVXCCDBA3CL000043", "2012-06-2"));
+            // model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LVXCCDBA3CL000043", "2012-06-2"));
 
-            //  model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+           // model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+           
+            //int CarInfoOrderId = 71;
+            int OfferId = 840;
+             //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, CarInfoOrderId));
 
-            // int CarInfoOrderId = 69;
-            //   int OfferId = 838;
-            // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, CarInfoOrderId));
 
 
-
-            //model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
+           // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
 
 
             //model.Add("获取基本信息", GetBaseInfo(userId, merchantId, posMachineId, OfferId));
 
-            //model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, OfferId));
+            model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, OfferId));
 
             //model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, OfferId));
 
-            //   model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, OfferId));
+          //  model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, OfferId));
 
 
 
@@ -2091,8 +2091,8 @@ namespace WebAppApi.Controllers
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
             model.CarInfoOrderId = carInfoOrderId;
-            model.BiStartDate = "2018-06-20";
-            model.CiStartDate = "2018-06-20";
+            model.BiStartDate = "2018-06-30";
+            model.CiStartDate = "2018-06-30";
             model.ChannelId = channelId;
             model.CompanyCode = companyCode;
 
@@ -2191,7 +2191,10 @@ namespace WebAppApi.Controllers
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;
             model.OfferId = offerId;
-
+            model.ReceiptAddress.Address = "广州市花都区";
+            model.ReceiptAddress.AreaId = "4401";
+            model.ReceiptAddress.Mobile = "15989287032";
+            model.ReceiptAddress.Consignee = "邱庆文";
             string a1 = JsonConvert.SerializeObject(model);
 
             string signStr = Signature.Compute(key, secret, timespan, a1);

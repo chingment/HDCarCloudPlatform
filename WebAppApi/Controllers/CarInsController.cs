@@ -1035,31 +1035,7 @@ namespace WebAppApi.Controllers
             CurrentDb.SaveChanges();
 
 
-            return ResponseResult(ResultType.Success, ResultCode.Success, "核保成功", result);
-
-        }
-
-
-        [HttpGet]
-        public APIResponse GetConfirmPayInfo(int userId, int merchantId, int posMachineId, int offerId)
-        {
-            CarInsConfirmPayInfoModel result = new CarInsConfirmPayInfoModel();
-
-
-            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == offerId).FirstOrDefault();
-            if (orderToCarInsureOfferCompany == null)
-            {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "找不到订单信息");
-            }
-
-
-            var order = CurrentDb.Order.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
-            if (order == null)
-            {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到订单信息");
-            }
-
-            var merchant = CurrentDb.Merchant.Where(m => m.Id == order.MerchantId).FirstOrDefault();
+            var merchant = CurrentDb.Merchant.Where(m => m.Id == pms.MerchantId).FirstOrDefault();
 
             if (merchant == null)
             {
@@ -1096,9 +1072,71 @@ namespace WebAppApi.Controllers
 
             result.InfoItems.Add(orderInfo);
 
-            return ResponseResult(ResultType.Success, ResultCode.Success, "", result);
+    
+            return ResponseResult(ResultType.Success, ResultCode.Success, "核保成功", result);
 
         }
+
+
+        //[HttpGet]
+        //public APIResponse GetConfirmPayInfo(int userId, int merchantId, int posMachineId, int offerId)
+        //{
+        //    CarInsConfirmPayInfoModel result = new CarInsConfirmPayInfoModel();
+
+
+        //    var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == offerId).FirstOrDefault();
+        //    if (orderToCarInsureOfferCompany == null)
+        //    {
+        //        return ResponseResult(ResultType.Failure, ResultCode.Failure, "找不到订单信息");
+        //    }
+
+
+        //    var order = CurrentDb.Order.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
+        //    if (order == null)
+        //    {
+        //        return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到订单信息");
+        //    }
+
+        //    var merchant = CurrentDb.Merchant.Where(m => m.Id == order.MerchantId).FirstOrDefault();
+
+        //    if (merchant == null)
+        //    {
+        //        return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到商户信息");
+        //    }
+
+        //    result.receiptAddress.Address = merchant.ContactAddress;
+        //    result.receiptAddress.Consignee = merchant.ContactName;
+        //    result.receiptAddress.Mobile = merchant.ContactPhoneNumber;
+        //    result.receiptAddress.Email = "";
+        //    result.receiptAddress.AreaId = "4401";
+
+        //    var orderInfo = new ItemParentField("投保单信息", "");
+
+        //    if (BizFactory.AppSettings.IsTest)
+        //    {
+        //        orderInfo.Child.Add(new ItemChildField("交强险单号", "测试"));
+        //        orderInfo.Child.Add(new ItemChildField("商业险单号", "测试"));
+        //        orderInfo.Child.Add(new ItemChildField("投保单号", "测试"));
+        //        orderInfo.Child.Add(new ItemChildField("商业险", "1"));
+        //        orderInfo.Child.Add(new ItemChildField("交强险", "2"));
+        //        orderInfo.Child.Add(new ItemChildField("车船税", "3"));
+        //    }
+        //    else
+        //    {
+        //        orderInfo.Child.Add(new ItemChildField("交强险单号", orderToCarInsureOfferCompany.CiProposalNo));
+        //        orderInfo.Child.Add(new ItemChildField("商业险单号", orderToCarInsureOfferCompany.BiProposalNo));
+        //        orderInfo.Child.Add(new ItemChildField("投保单号", orderToCarInsureOfferCompany.PartnerInsureId));
+        //        orderInfo.Child.Add(new ItemChildField("商业险", orderToCarInsureOfferCompany.CommercialPrice.ToF2Price()));
+        //        orderInfo.Child.Add(new ItemChildField("交强险", orderToCarInsureOfferCompany.CompulsoryPrice.ToF2Price()));
+        //        orderInfo.Child.Add(new ItemChildField("车船税", orderToCarInsureOfferCompany.TravelTaxPrice.ToF2Price()));
+        //    }
+
+
+        //    result.InfoItems.Add(orderInfo);
+
+        //    return ResponseResult(ResultType.Success, ResultCode.Success, "", result);
+
+        //}
 
 
         [HttpPost]

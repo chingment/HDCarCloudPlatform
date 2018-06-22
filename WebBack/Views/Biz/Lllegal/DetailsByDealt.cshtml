@@ -61,6 +61,28 @@
             <td class="c">
                 <span>@Model.OrderToLllegalDealt.CarNo</span>
             </td>
+            <td class="t" style="width:80px">车辆类型：</td>
+            <td class="c">
+                <span>@Lumos.BLL.SdkFactory.HeLian.GetCarType(Model.OrderToLllegalDealt.CarType)</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t" style="width:80px">车架号后6位：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.RackNo</span>
+            </td>
+            <td class="t" style="width:80px">发动机号后：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.EnginNo</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="t" style="width:80px">车辆营业性质：</td>
+            <td class="c">
+                <span>@(Model.OrderToLllegalDealt.IsCompany == "true" ? "公司车" : "私人车")</span>
+            </td>
             <td class="t" style="width:80px">违章：</td>
             <td class="c">
                 <span>@Model.OrderToLllegalDealt.SumCount</span>

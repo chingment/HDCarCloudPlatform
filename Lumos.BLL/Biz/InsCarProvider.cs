@@ -519,12 +519,28 @@ namespace Lumos.BLL
                     }
 
 
+
+                    if (pms.OfferResult == Enumeration.OfferResult.WaitArtificialOffer)
+                    {
+                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer;
+                    }
+                    else if (pms.OfferResult == Enumeration.OfferResult.ArtificialOfferSuccess)
+                    {
+                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.ArtificialOfferSuccess;
+                    }
+                    else if (pms.OfferResult == Enumeration.OfferResult.AutoOfferSuccess)
+                    {
+                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.AutoOfferSuccess;
+                    }
+
                     CurrentDb.SaveChanges();
                     ts.Complete();
 
                     resultData.CarInsure = l_orderToCarInsure;
                     resultData.CarInsureOfferCompany = orderToCarInsureOfferCompany;
                     resultData.CarInsureOfferCompanyKinds = out_carInsureOfferCompanyKinds;
+
+
                     return new CustomJsonResult<UpdateOfferByAfterResult>(ResultType.Success, ResultCode.Success, "", resultData);
                 }
 

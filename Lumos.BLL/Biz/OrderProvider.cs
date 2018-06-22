@@ -115,7 +115,7 @@ namespace Lumos.BLL
                     l_orderToCarInsure.ZJ2_ImgUrl = orderToCarInsure.ZJ2_ImgUrl;
                     l_orderToCarInsure.ZJ3_ImgUrl = orderToCarInsure.ZJ3_ImgUrl;
                     l_orderToCarInsure.ZJ4_ImgUrl = orderToCarInsure.ZJ4_ImgUrl;
-                    l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.Submitted;
+                    l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.SubmitteQuotesheeSuccess;
                     l_orderToCarInsure.LastUpdateTime = this.DateTime;
                     l_orderToCarInsure.Mender = operater;
 
@@ -247,7 +247,7 @@ namespace Lumos.BLL
                     case Enumeration.OperateType.Reject:
 
                         l_orderToCarInsure.Status = Enumeration.OrderStatus.Follow;
-                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitSubmit;
+                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitSubmitQuotesheet;
 
 
                         BizFactory.BizProcessesAudit.ChangeCarInsureStatus(l_orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.ClientFllow, operater, bizProcessesAudit.TempAuditComments, "后台人员转给商户跟进");

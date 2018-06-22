@@ -15,51 +15,71 @@ namespace Lumos.BLL.Biz.Task
         {
             CustomJsonResult result = new CustomJsonResult();
 
+            var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitAutoApplyPay).ToList();
 
-            var orderToCarInsureOfferCompanys = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OfferResult == Entity.Enumeration.OfferResult.WaitArtificialOffer).ToList();
-
-
-            foreach (var item in orderToCarInsureOfferCompanys)
+            foreach (var item in orderToCarInsures)
             {
-                var result_QueryInquiry = YdtUtils.QueryInquiry(item.PartnerOrderId, item.PartnerInquiryId);
-                if (result_QueryInquiry.Result == ResultType.Success)
+                var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == item.Id).FirstOrDefault();
+
+                switch (item.FollowStatus)
                 {
-                    var result_QueryInquiryData = result_QueryInquiry.Data;
+                    case (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer:
+                        #region  获取人工报价结果
 
-                    var updateOrderOfferPms = new UpdateOrderOfferPms();
-                    updateOrderOfferPms.Auto = 0;
-                    updateOrderOfferPms.PartnerOrderId = item.PartnerOrderId;
-                    updateOrderOfferPms.PartnerInquirySeq = item.PartnerInquiryId;
-                    updateOrderOfferPms.PartnerChannelId = result_QueryInquiryData.channel.channelId;
-                    updateOrderOfferPms.PartnerCompanyId = result_QueryInquiryData.channel.code;
-                    updateOrderOfferPms.BiStartDate = result_QueryInquiryData.inquiry.biStartDate;
-                    updateOrderOfferPms.CiStartDate = result_QueryInquiryData.inquiry.ciStartDate;
-                    updateOrderOfferPms.Coverages = result_QueryInquiryData.inquiry.coverages;
-                    updateOrderOfferPms.OfferResult = Enumeration.OfferResult.ArtificialOfferSuccess;
-                    updateOrderOfferPms.Inquirys = result_QueryInquiryData.inquiry.inquirys;
+                        var result_QueryInquiry = YdtUtils.QueryInquiry(item.PartnerOrderId, item.PartnerInquiryId);
 
-                    BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
+                        if (result_QueryInquiry.Result == ResultType.Success)
+                        {
+                            var result_QueryInquiryData = result_QueryInquiry.Data;
+
+                            var updateOrderOfferPms = new UpdateOrderOfferPms();
+                            updateOrderOfferPms.Auto = 0;
+                            updateOrderOfferPms.PartnerOrderId = item.PartnerOrderId;
+                            updateOrderOfferPms.PartnerInquirySeq = item.PartnerInquiryId;
+                            updateOrderOfferPms.PartnerChannelId = result_QueryInquiryData.channel.channelId;
+                            updateOrderOfferPms.PartnerCompanyId = result_QueryInquiryData.channel.code;
+                            updateOrderOfferPms.BiStartDate = result_QueryInquiryData.inquiry.biStartDate;
+                            updateOrderOfferPms.CiStartDate = result_QueryInquiryData.inquiry.ciStartDate;
+                            updateOrderOfferPms.Coverages = result_QueryInquiryData.inquiry.coverages;
+                            updateOrderOfferPms.OfferResult = Enumeration.OfferResult.ArtificialOfferSuccess;
+                            updateOrderOfferPms.Inquirys = result_QueryInquiryData.inquiry.inquirys;
+
+                            BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
+                        }
+                        else
+                        {
+                            orderToCarInsureOfferCompany.TryGetApiOfferResultCount += 1;
+
+                            if (orderToCarInsureOfferCompany.TryGetApiOfferResultCount >= 5)
+                            {
+                                orderToCarInsureOfferCompany.OfferResult = Enumeration.OfferResult.WaitStaffOffer;
+                                item.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitStaffOffer;
+                                BizFactory.BizProcessesAudit.ChangeCarInsureStatus(item.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.Sumbit, 0, null, "由于接口报价失败，重试了5次，需人工报价");
+                            }
+
+                        }
+                        #endregion
+                        break;
+                    case (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure:
+                        #region 获取人工核保结果
+
+                        //var result_QueryInquiry = YdtUtils.QueryInquiry(item.PartnerOrderId, item.PartnerInquiryId);
+
+                        #endregion
+                        break;
+                    case (int)Enumeration.OrderToCarInsureFollowStatus.WaitAutoApplyPay:
+
+                        #region 获取人工申请支付结果
+
+                        #endregion
+                        break;
                 }
-                else
-                {
-                    item.TryGetApiOfferResultCount += 1;
 
-                    if (item.TryGetApiOfferResultCount >= 5)
-                    {
-                        item.OfferResult = Enumeration.OfferResult.WaitStaffOffer;
-
-                        var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == item.OrderId).FirstOrDefault();
-
-                        BizFactory.BizProcessesAudit.ChangeCarInsureStatus(orderToCarInsure.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.Sumbit, 0, null, "由于接口报价失败，重试了5次，需人工报价");
-                    }
-
-                }
-
-                CurrentDb.SaveChanges();
             }
 
+            CurrentDb.SaveChanges();
             return result;
-
         }
     }
+
 }

@@ -392,10 +392,58 @@ namespace Lumos.Entity
         {
             [Remark("未知")]
             Unknow = 0,
-            [Remark("待提交")]
-            WaitSubmit = 1,
-            [Remark("已提交")]
-            Submitted = 2
+            [Remark("待提交报价资料")]
+            WaitSubmitQuotesheet = 1,
+            [Remark("已提交报价资料")]
+            SubmitteQuotesheeSuccess = 2,
+            [Remark("等待自动报价")]
+            WaitAutoOffer = 3,
+            [Remark("自动报价成功")]
+            AutoOfferSuccess = 4,
+            [Remark("自动报价失败")]
+            AutoOfferFailure = 5,
+            [Remark("等待人工报价")]
+            WaitArtificialOffer = 6,
+            [Remark("人工报价成功")]
+            ArtificialOfferSuccess = 7,
+            [Remark("人工报价失败")]
+            ArtificialOfferFailure = 8,
+            [Remark("等待核保")]
+            WaitAutoInsure = 9,
+            [Remark("核保成功")]
+            AutoInsureSuccess = 10,
+            [Remark("核保失败")]
+            AutoInsureFailure = 11,
+            [Remark("等待核保")]
+            WaitArtificialInsure = 11,
+            [Remark("核保成功")]
+            ArtificialInsureSuccess = 12,
+            [Remark("核保失败")]
+            ArtificialInsureFailure = 13,
+            [Remark("等待申请支付")]
+            WaitAutoApplyPay = 14,
+            [Remark("申请支付成功")]
+            AutoApplyPaySuccess = 15,
+            [Remark("申请支付失败")]
+            AutoApplyPayFailure = 16,
+            [Remark("等待申请支付")]
+            WaitArtificiaApplyPay = 17,
+            [Remark("申请支付成功")]
+            ArtificiaApplyPaySuccess = 18,
+            [Remark("申请支付失败")]
+            ArtificiaApplyPayFailure = 19,
+            [Remark("等待查询支付结果")]
+            WaitPayQuery = 20,
+            [Remark("支付成功")]
+            PaySuccess = 21,
+            [Remark("支付失败")]
+            yPayFailure = 22,
+            [Remark("等待后台报价")]
+            WaitStaffOffer = 23,
+            [Remark("后台报价成功")]
+            StaffOfferSuccess = 24,
+            [Remark("后台报价失败")]
+            StaffOfferFailure = 25
         }
 
         public enum OrderToCarClaimFollowStatus

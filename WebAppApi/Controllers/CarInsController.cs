@@ -794,6 +794,7 @@ namespace WebAppApi.Controllers
 
                 }
 
+              
                 updateOrderOfferPms.OfferResult = Enumeration.OfferResult.WaitArtificialOffer;
 
             }

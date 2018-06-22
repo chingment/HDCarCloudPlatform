@@ -75,6 +75,7 @@ namespace WebAppApi.Controllers
                 orderModel.type = m.Type;
                 orderModel.Status = m.Status;
                 orderModel.Price = m.Price;
+                orderModel.FollowStatus = m.FollowStatus;
                 switch (m.Status)
                 {
                     case Enumeration.OrderStatus.Submitted:

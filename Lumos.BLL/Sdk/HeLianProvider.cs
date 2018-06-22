@@ -142,15 +142,15 @@ namespace Lumos.BLL
                     addfee = 300;
                     feeModel.ServiceFee = origServiceFee + addfee;
                     break;
-                case "5":
+                case "5"://公司单
 
-                    if (point > 0)
+                    if (point == 0)
                     {
-                        addfee = point * 5;
+                        addfee = 10;
                     }
                     else
                     {
-                        addfee = 3;
+                        addfee = point * 5;
                     }
 
                     feeModel.ServiceFee = origServiceFee + addfee;//非扣分单

@@ -6,84 +6,84 @@
 
 @section scripts{
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    var listTable;
+        var listTable;
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        var win = art.dialog.open.origin;
-        var auditStatus = $.lumos.getUrlParamValue("auditStatus");
-        if (auditStatus == "@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitDealt)") {
-            if (typeof win.listTable != "undefined") {
-                win.listTable.loadData();
+            var win = art.dialog.open.origin;
+            var auditStatus = $.lumos.getUrlParamValue("auditStatus");
+            if (auditStatus == "@((int)Lumos.Entity.Enumeration.AuditFlowV1Status.WaitDealt)") {
+                if (typeof win.listTable != "undefined") {
+                    win.listTable.loadData();
+                }
+
+                if (typeof win.listTableTaskByVerify != "undefined") {
+                    win.listTableTaskByDealt.loadData();
+                }
             }
 
-            if (typeof win.listTableTaskByVerify != "undefined") {
-                win.listTableTaskByDealt.loadData();
-            }
-        }
-
-        @if (Model.IsHasOperater)    {
+            @if (Model.IsHasOperater)    {
                 @Html.Raw("setTimeout(function () {art.dialog({ title: '提示', content: '用户【" + Model.OperaterName + "】正在审核', cancelVal:'退出',cancel: function () {art.dialog.close();}, lock: true, drag: false, dblclickClose: false }); }, 100);");
             }
 
 
-        $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
+            $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
 
-        $("#Model_BizProcessesAudit_TempAuditComments").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
-
-
-    });
+            $("#Model_BizProcessesAudit_TempAuditComments").formValidator({ onShow: "", onFocus: "", onCorrect: "", onEmpty: "" }).inputValidator({ min: 1, max: 500, onError: "告知商户备注不超过500个字符" });
 
 
+        });
 
-    function submit(operate, fun) {
-        var form = $("#form1");
-        var msg = "";
-        var model_OrderToCarClaim_Remarks = $("#Model_BizProcessesAudit_TempAuditComments").val();
 
-        if (operate == operateType.save) {
-            msg = "确定要保存？";
-            $(form).find('*').setInputRequired(false);
-        }
-        if (operate == operateType.submit) {
-            msg = "确定处理完成？";
-            $(form).find('*').setInputRequired(true);
-        }
-        else if (operate == operateType.cancle) {
-            msg = "确定处理失败？";
-            $(form).find('*').setInputRequired(false);
 
-            if (model_OrderToCarClaim_Remarks == "") {
-                $.lumos.tips('请输入告知商户备注');
-                return;
+        function submit(operate, fun) {
+            var form = $("#form1");
+            var msg = "";
+            var model_OrderToCarClaim_Remarks = $("#Model_BizProcessesAudit_TempAuditComments").val();
+
+            if (operate == operateType.save) {
+                msg = "确定要保存？";
+                $(form).find('*').setInputRequired(false);
             }
-        }
+            if (operate == operateType.submit) {
+                msg = "确定处理完成？";
+                $(form).find('*').setInputRequired(true);
+            }
+            else if (operate == operateType.cancle) {
+                msg = "确定处理失败？";
+                $(form).find('*').setInputRequired(false);
 
-        var isValid = $.formValidator.pageIsValid();
-        if (isValid) {
+                if (model_OrderToCarClaim_Remarks == "") {
+                    $.lumos.tips('请输入告知商户备注');
+                    return;
+                }
+            }
 
-            art.dialog.confirm(msg, function () {
-                var l_Data = $("#form1").serializeArray();
-                l_Data.push({ name: "Model.Operate", value: operate });
+            var isValid = $.formValidator.pageIsValid();
+            if (isValid) {
 
-                $.lumos.postJson({
-                    isUseHandling: true,
-                    url: "/Biz/Lllegal/Dealt",
-                    data: l_Data,
-                    success: function (data) {
-                        fun(data);
+                art.dialog.confirm(msg, function () {
+                    var l_Data = $("#form1").serializeArray();
+                    l_Data.push({ name: "Model.Operate", value: operate });
 
-                    }
+                    $.lumos.postJson({
+                        isUseHandling: true,
+                        url: "/Biz/Lllegal/Dealt",
+                        data: l_Data,
+                        success: function (data) {
+                            fun(data);
+
+                        }
+                    });
                 });
-            });
+            }
+            return false;
+
         }
-        return false;
 
-    }
-
-</script>
+    </script>
 }
 
 <form id="form1" name="form1">
@@ -195,15 +195,19 @@
             </td>
         </tr>
         <tr>
+            <td class="t">加急费：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumUrgentFee</span>
+            </td>
             <td class="t">总额：</td>
-            <td class="c" colspan="3">
+            <td class="c">
                 <span>@Model.OrderToLllegalDealt.Price</span>
             </td>
         </tr>
         <tr>
             <td class="t">状态：</td>
             <td class="c">
-                <span>@(Model.OrderToLllegalDealt.PayTime==null?"未支付":"已支付")</span>
+                <span>@(Model.OrderToLllegalDealt.PayTime == null ? "未支付" : "已支付")</span>
             </td>
             <td class="t">付款：</td>
             <td class="c">
@@ -237,6 +241,9 @@
                     滞纳金
                 </th>
                 <th style="width:10%">
+                    加急费
+                </th>
+                <th style="width:10%">
                     服务费
                 </th>
                 <th style="width:10%">
@@ -248,17 +255,18 @@
 
             @foreach (var m in Model.OrderToLllegalDealtDetails)
             {
-            <tr>
-                <td>@m.BookNo</td>
-                <td>@m.LllegalCity</td>
-                <td>@m.Address</td>
-                <td>@m.LllegalTime</td>
-                <td>@m.Point</td>
-                <td>@m.Fine</td>
-                <td>@m.Late_fees</td>
-                <td>@m.ServiceFee</td>
-                <td>@m.Content</td>
-            </tr>
+                <tr>
+                    <td>@m.BookNo</td>
+                    <td>@m.LllegalCity</td>
+                    <td>@m.Address</td>
+                    <td>@m.LllegalTime</td>
+                    <td>@m.Point</td>
+                    <td>@m.Fine</td>
+                    <td>@m.Late_fees</td>
+                    <td>@(m.NeedUrgent == true ? m.UrgentFee : 0)</td>
+                    <td>@m.ServiceFee</td>
+                    <td>@m.Content</td>
+                </tr>
             }
 
 

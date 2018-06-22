@@ -109,8 +109,12 @@
             </td>
         </tr>
         <tr>
+            <td class="t">加急费：</td>
+            <td class="c">
+                <span>@Model.OrderToLllegalDealt.SumUrgentFee</span>
+            </td>
             <td class="t">总额：</td>
-            <td class="c" colspan="3">
+            <td class="c">
                 <span>@Model.OrderToLllegalDealt.Price</span>
             </td>
         </tr>
@@ -141,6 +145,9 @@
                     滞纳金
                 </th>
                 <th style="width:10%">
+                    加急费
+                </th>
+                <th style="width:10%">
                     服务费
                 </th>
                 <th style="width:10%">
@@ -160,6 +167,7 @@
                     <td>@m.Point</td>
                     <td>@m.Fine</td>
                     <td>@m.Late_fees</td>
+                    <td>@(m.NeedUrgent == true ? m.UrgentFee : 0)</td>
                     <td>@m.ServiceFee</td>
                     <td>@m.Content</td>
                 </tr>

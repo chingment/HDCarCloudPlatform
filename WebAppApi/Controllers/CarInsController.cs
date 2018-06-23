@@ -868,6 +868,36 @@ namespace WebAppApi.Controllers
         }
 
         [HttpPost]
+        public APIResponse GetInsInquiryResult(int userId, int merchantId, int posMachineId, int orderId)
+        {
+
+            var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
+            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == orderToCarInsure.Id).FirstOrDefault();
+            var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
+
+            var carInsCompanyInfoModel = new CarInsComanyModel();
+            var insCompany = YdtDataMap.GetCompanyByCode(orderToCarInsureOfferCompany.PartnerCompanyId);
+            if (insCompany != null)
+            {
+                var company = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == insCompany.UpLinkCode).FirstOrDefault();
+                if (company != null)
+                {
+                    carInsCompanyInfoModel.Id = company.InsuranceCompanyId;
+                    carInsCompanyInfoModel.ImgUrl = company.InsuranceCompanyImgUrl;
+                    carInsCompanyInfoModel.Name = company.InsuranceCompanyName;
+                    carInsCompanyInfoModel.PartnerChannelId = int.Parse(orderToCarInsureOfferCompany.PartnerChannelId);
+                    carInsCompanyInfoModel.PartnerCode = orderToCarInsureOfferCompany.PartnerCompanyId;
+                }
+            }
+
+            carInsCompanyInfoModel.OfferId = orderToCarInsureOfferCompany.Id;
+            carInsCompanyInfoModel.OfferInquirys = GetInsureItem(orderToCarInsure, orderToCarInsureOfferCompany, orderToCarInsureOfferCompanyKinds);
+            carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice.Value;
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "自动报价成功", carInsCompanyInfoModel);
+        }
+
+        [HttpPost]
         public APIResponse Insure(CarInsInsurePms pms)
         {
             CarInsInsureResult result = new CarInsInsureResult();

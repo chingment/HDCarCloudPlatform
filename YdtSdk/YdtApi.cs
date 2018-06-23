@@ -134,6 +134,7 @@ namespace YdtSdk
             log.Info("Ydt-request-result>>>>" + body);
 
 
+            body = body.Replace("\"code\"", "\"codeno\"");
 
             var rsp1 = JsonConvert.DeserializeObject<YdtApiBaseResult<object>>(body);
 

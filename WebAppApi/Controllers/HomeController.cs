@@ -1896,7 +1896,9 @@ namespace WebAppApi.Controllers
             // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
 
 
-            model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 12, "003000"));
+           // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 12, "003000"));
+
+            model.Add("获取报价信息", GetInsInquiryResult(userId, merchantId, posMachineId, 2799));
 
             //model.Add("获取基本信息", GetBaseInfo(userId, merchantId, posMachineId, OfferId));
 
@@ -1907,7 +1909,7 @@ namespace WebAppApi.Controllers
             //  model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, OfferId));
 
 
-
+            
             //string s_CarIns_GetCarInfo = CarIns_GetCarInfo(userId, merchantId, posMachineId);
 
             //CustomJsonResult<CarInfoResult> s1 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInfoResult>>(s_CarIns_GetCarInfo);
@@ -2254,6 +2256,29 @@ namespace WebAppApi.Controllers
             return result;
 
         }
+
+
+        public string GetInsInquiryResult(int userId, int merchantId, int posMachineId, int orderId)
+        {
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("userId", userId.ToString());
+            parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
+            parames.Add("orderId", orderId.ToString());
+
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/CarIns/GetInsInquiryResult?userId=" + userId + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId + "&orderId=" + orderId, headers);
+
+            return result;
+
+        }
+
 
         public string CarIns_ImgUplad(string tpye, string path)
         {

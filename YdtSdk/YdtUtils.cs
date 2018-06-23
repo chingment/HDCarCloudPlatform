@@ -322,6 +322,23 @@ namespace YdtSdk
             return new CustomJsonResult<YdtInscarInsureResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
         }
 
+        public static CustomJsonResult<YdtInscarInsureByArtificialResultData> InsureByArtificial(YdtInscarInsureByArtificialPms model)
+        {
+            var result = new CustomJsonResult<YdtInscarInsureByArtificialResultData>();
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            var ydtInscarInsure = new YdtInscarInsureByArtificial(au.token, au.session, YdtPostDataType.Json, model);
+            var ydtInscarInsureResult = ydtApi.DoPost(ydtInscarInsure);
+
+            if (ydtInscarInsureResult.code != 0)
+            {
+                return new CustomJsonResult<YdtInscarInsureByArtificialResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInsureResult.extmsg, null);
+            }
+
+            return new CustomJsonResult<YdtInscarInsureByArtificialResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
+        }
+
         public static CustomJsonResult<YdtInsCarQueryInquiryResultData> QueryInsure(string orderSeq, string inquirySeq)
         {
             var result = new CustomJsonResult();

@@ -519,18 +519,21 @@ namespace Lumos.BLL
                     }
 
 
-
-                    if (pms.OfferResult == Enumeration.OfferResult.WaitArtificialOffer)
+                    if (pms.OfferResult == Enumeration.OfferResult.SumbitArtificialOfferSuccess)
                     {
-                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer;
+                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer;//提交人工报价成功，等待人工报价
                     }
                     else if (pms.OfferResult == Enumeration.OfferResult.ArtificialOfferSuccess)
                     {
-                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.ArtificialOfferSuccess;
+                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitAutoInsure;//人工报价成功，等待自动核保
+                    }
+                    else if (pms.OfferResult == Enumeration.OfferResult.ArtificialOfferFailure)
+                    {
+                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitSubmitQuotesheet;//人工报价失败，等待提交报价详细资料;
                     }
                     else if (pms.OfferResult == Enumeration.OfferResult.AutoOfferSuccess)
                     {
-                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.AutoOfferSuccess;
+                        l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitAutoInsure;//自动报价成功，等待自动核保;
                     }
 
                     CurrentDb.SaveChanges();

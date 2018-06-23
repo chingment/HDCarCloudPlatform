@@ -868,18 +868,22 @@ namespace Lumos.Entity
             AutoOfferSuccess = 2,
             [Remark("自动报价失败")]
             AutoOfferFailure = 3,
+            [Remark("提交人工报价成功")]
+            SumbitArtificialOfferSuccess = 4,
+            [Remark("提交人工报价失败")]
+            SumbitArtificialOfferFailure = 5,
             [Remark("等待人工报价")]
-            WaitArtificialOffer = 4,
+            WaitArtificialOffer = 6,
             [Remark("人工报价成功")]
-            ArtificialOfferSuccess = 5,
+            ArtificialOfferSuccess = 7,
             [Remark("人工报价失败")]
-            ArtificialOfferFailure = 6,
+            ArtificialOfferFailure = 8,
             [Remark("等待人工报价")]
-            WaitStaffOffer = 7,
+            WaitStaffOffer = 9,
             [Remark("人工报价成功")]
-            StaffOfferSuccess = 8,
+            StaffOfferSuccess = 10,
             [Remark("人工报价失败")]
-            StaffOfferFailure = 9
+            StaffOfferFailure = 11
         }
     }
 }

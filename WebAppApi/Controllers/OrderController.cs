@@ -76,6 +76,8 @@ namespace WebAppApi.Controllers
                 orderModel.Status = m.Status;
                 orderModel.Price = m.Price;
                 orderModel.FollowStatus = m.FollowStatus;
+
+              
                 switch (m.Status)
                 {
                     case Enumeration.OrderStatus.Submitted:
@@ -87,12 +89,14 @@ namespace WebAppApi.Controllers
                         switch (m.Type)
                         {
                             case Enumeration.OrderType.InsureForCarForInsure:
+
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
+                           
                                 orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarownerName.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("证件号码", orderToCarInsure.CarownerCertNo.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("状态", "请稍侯，报价中"));
-
+                           
                                 break;
                             case Enumeration.OrderType.InsureForCarForClaim:
 

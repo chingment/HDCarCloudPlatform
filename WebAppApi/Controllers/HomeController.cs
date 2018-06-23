@@ -1883,26 +1883,28 @@ namespace WebAppApi.Controllers
             // model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
             // model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
-             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LVXCCDBA3CL000043", "2012-06-2"));
+            //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LVXCCDBA3CL000043", "2012-06-2"));
 
-           // model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
-           
-            //int CarInfoOrderId = 71;
+            // model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
+
+            int CarInfoOrderId = 71;
             int OfferId = 840;
-             //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, CarInfoOrderId));
+            //model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, CarInfoOrderId));
+
+            //list.Add(new YdtInscarComanyModel { UpLinkCode = 3, YdtCode = "003000", Name = "阳光保险", PrintName = "阳光保险有限公司", ChannelId = 12 });
+
+            // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
 
 
-
-           // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
-
+            model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 12, "003000"));
 
             //model.Add("获取基本信息", GetBaseInfo(userId, merchantId, posMachineId, OfferId));
 
-            model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, OfferId));
+            //  model.Add("核保信息", CarIns_Insure(userId, merchantId, posMachineId, OfferId));
 
             //model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, OfferId));
 
-          //  model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, OfferId));
+            //  model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, OfferId));
 
 
 
@@ -2086,7 +2088,7 @@ namespace WebAppApi.Controllers
         public string CarIns_InsInquiry(int userId, int merchantId, int posMachineId, int carInfoOrderId, int channelId, string companyCode)
         {
             CarInsInquiryPms model = new CarInsInquiryPms();
-            model.Auto = 1;
+            model.Auto = 0;
             model.UserId = userId;
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;

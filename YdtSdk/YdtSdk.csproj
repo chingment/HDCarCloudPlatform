@@ -63,6 +63,8 @@
     <Compile Include="Get\YdtInscarCarResult.cs" />
     <Compile Include="Get\YdtInsCarQueryInquiry.cs" />
     <Compile Include="Get\YdtInsCarQueryInquiryResultData.cs" />
+    <Compile Include="Get\YdtInsCarQueryInsure.cs" />
+    <Compile Include="Get\YdtInsCarQueryInsureResultData.cs" />
     <Compile Include="Get\YdtToken.cs" />
     <Compile Include="Get\YdtTokenResult.cs" />
     <Compile Include="Post\YdtInscarAdvicevaluePms.cs" />

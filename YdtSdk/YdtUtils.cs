@@ -305,7 +305,7 @@ namespace YdtSdk
 
         }
 
-        public static CustomJsonResult<YdtInscarInsureResultData> Insure(YdtInscarInsurePms model)
+        public static CustomJsonResult<YdtInscarInsureResultData> InsureByAuto(YdtInscarInsurePms model)
         {
             var result = new CustomJsonResult<YdtInscarInsureResultData>();
             var au = YdtUtils.GetToken();

@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 using WebAppApi.Models;
@@ -794,8 +795,8 @@ namespace WebAppApi.Controllers
 
                 }
 
-              
-                updateOrderOfferPms.OfferResult = Enumeration.OfferResult.WaitArtificialOffer;
+
+                updateOrderOfferPms.OfferResult = Enumeration.OfferResult.SumbitArtificialOfferSuccess;
 
             }
             else
@@ -824,7 +825,10 @@ namespace WebAppApi.Controllers
                 {
                     updateOrderOfferPms.PartnerInquirySeq = offerResultData.inquirySeq;
                     updateOrderOfferPms.Inquirys = offerResultData.inquirys;
-                    updateOrderOfferPms.Coverages = offerResultData.coverages;
+                    if (offerResultData.coverages != null)
+                    {
+                        updateOrderOfferPms.Coverages = offerResultData.coverages;
+                    }
                 }
             }
 
@@ -1012,7 +1016,7 @@ namespace WebAppApi.Controllers
             ydtInscarInsurePms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
 
 
-            var result_Insure = YdtUtils.Insure(ydtInscarInsurePms);
+            var result_Insure = YdtUtils.InsureByAuto(ydtInscarInsurePms);
 
             if (result_Insure.Result != ResultType.Success)
             {
@@ -1154,7 +1158,7 @@ namespace WebAppApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public APIResponse InquiryNotify(YdtInscarInquiryResultData pms)
+        public HttpResponseMessage InquiryNotify(YdtInscarInquiryResultData pms)
         {
             Stream stream = HttpContext.Current.Request.InputStream;
             stream.Seek(0, SeekOrigin.Begin);
@@ -1162,8 +1166,36 @@ namespace WebAppApi.Controllers
 
             Log.Info("InquiryNotify：" + postData);
 
-            var result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
-            return new APIResponse(result);
+            string reuslt = "failure";
+            if (pms.coverages != null)
+            {
+                var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).FirstOrDefault();
+                var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == orderToCarInsure.Id).FirstOrDefault();
+                if (orderToCarInsure != null && orderToCarInsureOfferCompany != null)
+                {
+                    var updateOrderOfferPms = new UpdateOrderOfferPms();
+                    updateOrderOfferPms.Auto = 0;
+                    updateOrderOfferPms.UserId = orderToCarInsure.UserId;
+                    updateOrderOfferPms.MerchantId = orderToCarInsure.MerchantId;
+                    updateOrderOfferPms.PosMachineId = orderToCarInsure.PosMachineId;
+                    updateOrderOfferPms.CarInfoOrderId = orderToCarInsure.CarInfoOrderId;
+                    updateOrderOfferPms.PartnerOrderId = orderToCarInsure.PartnerOrderId;
+                    updateOrderOfferPms.PartnerChannelId = int.Parse(orderToCarInsureOfferCompany.PartnerChannelId);
+                    updateOrderOfferPms.PartnerCompanyId = orderToCarInsureOfferCompany.PartnerCompanyId;
+                    updateOrderOfferPms.PartnerRisk = int.Parse(orderToCarInsure.PartnerRisk);
+                    updateOrderOfferPms.BiStartDate = orderToCarInsureOfferCompany.BiStartDate;
+                    updateOrderOfferPms.CiStartDate = orderToCarInsureOfferCompany.CiStartDate;
+                    updateOrderOfferPms.Coverages = pms.coverages;
+                    updateOrderOfferPms.OfferResult = Enumeration.OfferResult.ArtificialOfferSuccess;
+
+                    BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
+
+                    reuslt = "success";
+                }
+            }
+
+            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(reuslt, Encoding.GetEncoding("UTF-8"), "text/plain") };
+            return result;
         }
 
         [HttpPost]

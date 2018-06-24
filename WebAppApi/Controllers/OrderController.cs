@@ -77,7 +77,7 @@ namespace WebAppApi.Controllers
                 orderModel.Price = m.Price;
                 orderModel.FollowStatus = m.FollowStatus;
 
-              
+
                 switch (m.Status)
                 {
                     case Enumeration.OrderStatus.Submitted:
@@ -91,12 +91,36 @@ namespace WebAppApi.Controllers
                             case Enumeration.OrderType.InsureForCarForInsure:
 
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
-                           
+
                                 orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarownerName.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("证件号码", orderToCarInsure.CarownerCertNo.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
-                                orderModel.OrderField.Add(new OrderField("状态", "请稍侯，报价中"));
-                           
+
+                                switch (m.FollowStatus)
+                                {
+                                    case 6:
+                                        orderModel.OrderField.Add(new OrderField("状态", "等待人工报价"));
+                                        break;
+                                    case 7:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价成功"));
+                                        break;
+                                    case 8:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价失败"));
+                                        break;
+                                    case 11:
+                                        orderModel.OrderField.Add(new OrderField("状态", "等待人工核保"));
+                                        break;
+                                    case 12:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保成功"));
+                                        break;
+                                    case 13:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保失败"));
+                                        break;
+                                    default:
+                                        orderModel.OrderField.Add(new OrderField("状态", "请稍侯，报价中"));
+                                        break;
+                                }
+
                                 break;
                             case Enumeration.OrderType.InsureForCarForClaim:
 
@@ -184,6 +208,29 @@ namespace WebAppApi.Controllers
                                 {
                                     orderModel.OrderField.Add(new OrderField(c.InsuranceCompanyName, string.Format("{0}元", c.InsureTotalPrice.ToF2Price())));
                                 }
+
+                                switch (m.FollowStatus)
+                                {
+                                    case 6:
+                                        orderModel.OrderField.Add(new OrderField("状态", "等待人工报价"));
+                                        break;
+                                    case 7:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价成功"));
+                                        break;
+                                    case 8:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价失败"));
+                                        break;
+                                    case 11:
+                                        orderModel.OrderField.Add(new OrderField("状态", "等待人工核保"));
+                                        break;
+                                    case 12:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保成功"));
+                                        break;
+                                    case 13:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保失败"));
+                                        break;
+                                }
+
 
                                 break;
                             case Enumeration.OrderType.InsureForCarForClaim:

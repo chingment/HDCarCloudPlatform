@@ -126,6 +126,9 @@ namespace YdtSdk
             HttpWebResponse rsp = (HttpWebResponse)req.GetResponse();
             Encoding encoding = GetResponseEncoding(rsp);
             string result = GetResponseAsString(rsp, encoding);
+
+            log.Info("Ydt-request-result>>>>" + result);
+
             return result;
         }
 

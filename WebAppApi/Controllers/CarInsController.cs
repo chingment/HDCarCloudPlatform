@@ -908,7 +908,7 @@ namespace WebAppApi.Controllers
 
             var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == pms.OfferId).FirstOrDefault();
 
-            var order = CurrentDb.Order.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
+            var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
 
             if (orderToCarInsureOfferCompany == null)
             {
@@ -1070,6 +1070,11 @@ namespace WebAppApi.Controllers
                 orderToCarInsureOfferCompany.BiProposalNo = result_Insure.Data.biProposalNo;
                 orderToCarInsureOfferCompany.CiProposalNo = result_Insure.Data.ciProposalNo;
 
+
+                orderToCarInsure.PartnerInsureId = result_Insure.Data.insureSeq;
+                orderToCarInsure.BiProposalNo = result_Insure.Data.biProposalNo;
+                orderToCarInsure.CiProposalNo = result_Insure.Data.ciProposalNo;
+
                 CurrentDb.SaveChanges();
 
 
@@ -1119,7 +1124,7 @@ namespace WebAppApi.Controllers
                     return ResponseResult(ResultType.Failure, ResultCode.Failure, "人工核保提交失败，请联系客服", result);
                 }
 
-                order.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure;
+                orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure;
 
                 CurrentDb.SaveChanges();
 
@@ -1313,6 +1318,7 @@ namespace WebAppApi.Controllers
 
 
             var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.PartnerOrderId == pms.orderSeq && m.PartnerInquiryId == pms.inquirySeq).FirstOrDefault();
+            var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
 
             if (orderToCarInsureOfferCompany != null)
             {
@@ -1320,9 +1326,19 @@ namespace WebAppApi.Controllers
                 orderToCarInsureOfferCompany.BiProposalNo = pms.biProposalNo;
                 orderToCarInsureOfferCompany.CiProposalNo = pms.ciProposalNo;
 
-                CurrentDb.SaveChanges();
                 reuslt = "success";
             }
+
+            if (orderToCarInsure != null)
+            {
+                orderToCarInsure.PartnerInsureId = pms.inquirySeq;
+                orderToCarInsure.BiProposalNo = pms.biProposalNo;
+                orderToCarInsure.CiProposalNo = pms.ciProposalNo;
+
+                reuslt = "success";
+            }
+
+            CurrentDb.SaveChanges();
 
             HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(reuslt, Encoding.GetEncoding("UTF-8"), "text/plain") };
             return result;

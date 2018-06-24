@@ -131,10 +131,11 @@ namespace YdtSdk
                 }
 
             }
-            log.Info("Ydt-request-result>>>>" + body);
 
-
-            body = body.Replace("\"code\"", "\"codeno\"");
+            if (realServerUrl.ToLower().IndexOf("ins_car/get_inquiry_info") < 0)
+            {
+                body = body.Replace("\"code\"", "\"codeno\"");
+            }
 
             var rsp1 = JsonConvert.DeserializeObject<YdtApiBaseResult<object>>(body);
 

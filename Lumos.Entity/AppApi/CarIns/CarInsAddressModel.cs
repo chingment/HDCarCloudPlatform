@@ -14,5 +14,7 @@ namespace Lumos.Entity
         public string Email { get; set; }
 
         public string AreaId { get; set; }
+
+        public string AreaName { get; set; }
     }
 }

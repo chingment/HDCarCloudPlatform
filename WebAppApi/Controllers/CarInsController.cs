@@ -73,7 +73,7 @@ namespace WebAppApi.Controllers
             switch (pms.Type)
             {
                 case "1":
-                    imgurl = "http://file.gzhaoyilian.com/Upload/d1.jpg";
+                    //imgurl = "http://file.gzhaoyilian.com/Upload/d1.jpg";
                     YdtUploadResultData model1 = YdtUtils.UploadImg(imgurl);
                     Log.Info("解释图片结束");
                     if (model1 != null)
@@ -90,7 +90,7 @@ namespace WebAppApi.Controllers
                     }
                     break;
                 case "10":
-                    imgurl = "http://file.gzhaoyilian.com/Upload/d2.jpg";
+                    //imgurl = "http://file.gzhaoyilian.com/Upload/d2.jpg";
                     YdtLicenseInfo model2 = YdtUtils.GetLicenseInfoByUrl(imgurl);
                     if (model2 != null)
                     {
@@ -104,7 +104,7 @@ namespace WebAppApi.Controllers
                     }
                     break;
                 case "11":
-                    imgurl = "http://file.gzhaoyilian.com/Upload/d1.jpg";
+                    //imgurl = "http://file.gzhaoyilian.com/Upload/d1.jpg";
                     YdtIdentityInfo model3 = YdtUtils.GetIdentityInfoByUrl(imgurl);
                     if (model3 != null)
                     {
@@ -156,6 +156,9 @@ namespace WebAppApi.Controllers
                     imgModel.Data = arr_Keyword[0];
                     imgModel.Type = arr_Keyword[1];
                     imgurl = GetUploadImageUrl(imgModel, "CarInsure");
+
+                    Log.Info("IMGURL:" + imgurl);
+
                     drivingLicenceInfo = BizFactory.CarInsureOffer.GetDrivingLicenceInfoFromImgUrl(imgurl);
                     if (drivingLicenceInfo == null)
                     {
@@ -190,6 +193,9 @@ namespace WebAppApi.Controllers
             }
 
             carInfo.LicensePicUrl = imgurl;
+
+
+
 
             var insCarInfo = CurrentDb.InsCarInfo.Where(m => m.LicensePlateNo == licensePlateNo).FirstOrDefault();
             if (insCarInfo == null)
@@ -236,6 +242,7 @@ namespace WebAppApi.Controllers
                 carInfo.Belong = ydtInsCarApiSearchResultData.Belong ?? "1";//车辆归属     1：私人，2：公司
                 carInfo.ChgownerType = carInfo.ChgownerType ?? "0";//是否过户              0：否，1：是
 
+
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "1" });
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "2" });
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3" });
@@ -260,7 +267,6 @@ namespace WebAppApi.Controllers
                 carInfo.FirstRegisterDate = insCarInfo.FirstRegisterDate;
                 carInfo.ModelName = insCarInfo.ModelName;
                 carInfo.ChgownerType = insCarInfo.ChgownerType;
-
 
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "3", Name = insCarInfo.InsuredName, Mobile = insCarInfo.InsuredMobile, Address = insCarInfo.InsuredAddress, CertNo = insCarInfo.InsuredCertNo, IdentityBackPicKey = insCarInfo.InsuredIdentityBackPicKey, IdentityFacePicKey = insCarInfo.InsuredIdentityFacePicKey, OrgPicKey = insCarInfo.InsuredOrgPicKey });
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "1", Name = insCarInfo.CarownerName, Mobile = insCarInfo.CarownerMobile, Address = insCarInfo.CarownerAddress, CertNo = insCarInfo.CarownerCertNo, IdentityBackPicKey = insCarInfo.CarownerIdentityBackPicKey, IdentityFacePicKey = insCarInfo.CarownerIdentityFacePicKey, OrgPicKey = insCarInfo.CarownerOrgPicKey });
@@ -1054,8 +1060,6 @@ namespace WebAppApi.Controllers
 
             if (pms.Auto == 1)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "自动核保失败", result);
-
 
                 #region 自动核保
 
@@ -1084,7 +1088,7 @@ namespace WebAppApi.Controllers
                 result.receiptAddress.Consignee = merchant.ContactName;
                 result.receiptAddress.Mobile = merchant.ContactPhoneNumber;
                 result.receiptAddress.Email = "";
-                result.receiptAddress.AreaId = "4401";
+                result.receiptAddress.AreaId = merchant.AreaCode;
 
                 var orderInfo = new ItemParentField("投保单信息", "");
 
@@ -1224,10 +1228,18 @@ namespace WebAppApi.Controllers
             ydtInscarPayPms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
             ydtInscarPayPms.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/PayNotify";
             ydtInscarPayPms.address.consignee = pms.ReceiptAddress.Consignee;
-            ydtInscarPayPms.address.address = pms.ReceiptAddress.Address;
+            ydtInscarPayPms.address.address = pms.ReceiptAddress.AreaName + pms.ReceiptAddress.Address;
             ydtInscarPayPms.address.mobile = pms.ReceiptAddress.Mobile;
             ydtInscarPayPms.address.email = pms.ReceiptAddress.Email;
-            ydtInscarPayPms.address.areaId = pms.ReceiptAddress.AreaId;
+
+            string areaId = pms.ReceiptAddress.AreaId;
+
+            if (areaId.Length > 4)
+            {
+                areaId = areaId.Substring(0, 4);
+            }
+
+            ydtInscarPayPms.address.areaId = areaId;
 
             var result_Insure = YdtUtils.Pay(ydtInscarPayPms);
 
@@ -1387,6 +1399,27 @@ namespace WebAppApi.Controllers
             return new APIResponse(result);
         }
 
+
+        [HttpGet]
+        public APIResponse GetFollowStatus(int userId, int merchantId, int posMachineId, int orderId)
+        {
+            CarInsOrderFollowStatus info = new CarInsOrderFollowStatus();
+
+            var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
+
+            info.FollowStatus = orderToCarInsure.FollowStatus;
+
+            switch (orderToCarInsure.FollowStatus)
+            {
+                case 6:
+                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "等待人工报价,请稍后");
+                case 11:
+                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "等待人工核保,请稍后");
+            }
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", info);
+
+        }
 
         private static int GetRisk(List<CarInsInsureKindModel> kinds)
         {

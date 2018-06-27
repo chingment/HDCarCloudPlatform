@@ -69,6 +69,7 @@
     <Compile Include="AppApi\CarIns\CarInsEditBaseInfoResult.cs" />
     <Compile Include="AppApi\CarIns\CarInsInquiryPms.cs" />
     <Compile Include="AppApi\CarIns\CarInsInsureInfo.cs" />
+    <Compile Include="AppApi\CarIns\CarInsOrderFollowStatus.cs" />
     <Compile Include="AppApi\CarIns\CarInsUploadImgResult.cs" />
     <Compile Include="AppApi\CarIns\ItemParentField.cs" />
     <Compile Include="AppApi\CarIns\CarInsInsurePms.cs" />

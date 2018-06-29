@@ -9,5 +9,7 @@ namespace Lumos.Entity
     public class CarInsOrderFollowStatus
     {
         public int FollowStatus { get; set; }
+
+        public string PartnerOrderId { get; set; }
     }
 }

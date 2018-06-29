@@ -519,6 +519,9 @@ namespace Lumos.BLL
                     }
 
 
+                    Log.InfoFormat("(pms.OfferResult:" + (int)pms.OfferResult);
+
+
                     if (pms.OfferResult == Enumeration.OfferResult.SumbitArtificialOfferSuccess)
                     {
                         l_orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer;//提交人工报价成功，等待人工报价

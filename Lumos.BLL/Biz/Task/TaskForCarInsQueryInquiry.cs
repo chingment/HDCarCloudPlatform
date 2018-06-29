@@ -77,18 +77,7 @@ namespace Lumos.BLL.Biz.Task
                                 else
                                 {
                                     Log.InfoFormat("处理订单号:{0}，查询人工报价结果失败,返回报价为空", item.Sn);
-
                                     orderToCarInsureOfferCompany.TryGetApiOfferResultCount += 1;
-
-                                    Log.InfoFormat("处理订单号:{0}，尝试读取人工报价失败次数：{1}", item.Sn, orderToCarInsureOfferCompany.TryGetApiOfferResultCount);
-
-                                    if (orderToCarInsureOfferCompany.TryGetApiOfferResultCount >= 5)
-                                    {
-                                        orderToCarInsureOfferCompany.OfferResult = Enumeration.OfferResult.ArtificialOfferFailure;//连续5次人工报价失败
-                                        BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
-                                        BizFactory.BizProcessesAudit.ChangeCarInsureStatus(item.BizProcessesAuditId, Enumeration.CarInsureAuditStatus.Sumbit, 0, null, "由于接口报价失败，重试了5次，需人工报价");
-                                    }
-
                                 }
                             }
 
@@ -98,7 +87,7 @@ namespace Lumos.BLL.Biz.Task
                         case (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure:
                             #region 获取人工核保结果
 
-                            //var result_QueryInquiry = YdtUtils.QueryInquiry(item.PartnerOrderId, item.PartnerInquiryId);
+                            var result_QueryInsurey = YdtUtils.QueryInsure(item.PartnerOrderId, item.PartnerInquiryId);
 
                             #endregion
                             break;

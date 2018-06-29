@@ -140,14 +140,15 @@ namespace YdtSdk
                 //    body = body.Replace("\"code\"", "\"codeno\"");
                 //}
 
-                var rsp1 = JsonConvert.DeserializeObject<YdtApiBaseResult<object>>(body);
+                //var rsp1 = JsonConvert.DeserializeObject<YdtApiBaseResult<object>>(body);
 
 
-                if (rsp1.code == 0)
+                if (body.IndexOf("msg") < 0 && body.IndexOf("extmsg") < 0)
                 {
                     body = "{\"code\":0,\"msg\":\"成功\",\"data\":" + body + "}";
-
                 }
+
+
 
                 var rsp = JsonConvert.DeserializeObject<YdtApiBaseResult<T>>(body);
 

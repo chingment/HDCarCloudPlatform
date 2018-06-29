@@ -38,10 +38,10 @@ namespace WebAppApi.Controllers
     public class CarInsController : OwnBaseApiController
     {
 
-        private string nullName = "某某某";
-        private string nullAddress = "null";
-        private string nullCerno = "440182198804141552";
-        private string nullMobile = "13800138000";
+        public static string nullName = "某某某";
+        public static string nullAddress = "null";
+        public static string nullCerno = "440182198804141552";
+        public static string nullMobile = "13800138000";
 
         [HttpPost]
         public APIResponse UploadImg(CarInsUploadImgPms pms)
@@ -1408,6 +1408,7 @@ namespace WebAppApi.Controllers
             var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
 
             info.FollowStatus = orderToCarInsure.FollowStatus;
+            info.PartnerOrderId = orderToCarInsure.PartnerOrderId;
 
             switch (orderToCarInsure.FollowStatus)
             {

@@ -90,7 +90,6 @@
     <Compile Include="AppApi\PayResultQueryParams.cs" />
     <Compile Include="AppApi\PayResultQueryResult.cs" />
     <Compile Include="AppApi\PrintDataModel.cs" />
-    <Compile Include="AppApi\ProductModel.cs" />
     <Compile Include="AppApi\PayUnifiedOrderParams.cs" />
     <Compile Include="AppApi\PayUnifiedOrderResult.cs" />
     <Compile Include="BizEnumeration.cs" />

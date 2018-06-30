@@ -10,7 +10,7 @@ namespace WebAppApi.Models.Global
     {
         public IndexModel Index{ get; set; }
 
-        public ProductKindModel ProductKind { get; set; }
+        public ProductKindPageModel ProductKind { get; set; }
 
         public CartModel Cart { get; set; }
 

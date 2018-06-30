@@ -93,7 +93,7 @@
     <Compile Include="Biz\PrintUntil.cs" />
     <Compile Include="Biz\ProductCategoryProvider.cs" />
     <Compile Include="Biz\ProductKindProvider.cs" />
-    <Compile Include="Biz\ProductProvider.cs" />
+    <Compile Include="Biz\ProductSkuProvider.cs" />
     <Compile Include="Biz\OrderToTalentDemandProvider.cs" />
     <Compile Include="Biz\SupplierProvider.cs" />
     <Compile Include="Biz\Task\TaskForCarInsQueryInquiry.cs" />
@@ -127,9 +127,8 @@
     <Compile Include="Service\Model\OrderConfirmSkuModel.cs" />
     <Compile Include="Service\Model\ProductChildKindModel.cs" />
     <Compile Include="Service\Model\ProductDetailsModel.cs" />
+    <Compile Include="Service\Model\ProductKindPageModel.cs" />
     <Compile Include="Service\Model\ProductKindModel.cs" />
-    <Compile Include="Service\Model\ProductParentKindModel.cs" />
-    <Compile Include="Service\Model\ProductSkuDetailsModel.cs" />
     <Compile Include="Service\Model\ProductSkuModel.cs" />
     <Compile Include="Service\Model\PersonalModel.cs" />
     <Compile Include="Service\Model\ShippingAddressModel.cs" />

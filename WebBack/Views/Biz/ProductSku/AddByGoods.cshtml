@@ -22,15 +22,11 @@
 
             $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
             $("#Model_Product_Name").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 60, onError: "商品名称不能为空,且不超过60个字符" });
-            $("#Model_Product_ProductCategoryId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择商品分类" });
-            $("#Model_Product_SupplierId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择供应商" });
             $("#Model_Product_ProductKindIds").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择分类模块" });
             $("#Model_DispalyImgs_ImgUrl_0").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传商品封面图片" });
             $("#Model_Product_Price").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.01, max: 10000, onError: "价格范围在0.01~10000.00之间" });
             $("#Model_Product_Price").decimalInput(2);
             $("#Model_Product_Quantity").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).regexValidator({ regExp: regexEnum.intege1, onError: "库存请输入正整数" });;
-            $("#Model_Product_ProductCategoryId").chosen({ search_contains: true, onlytext: true });
-            $("#Model_Product_SupplierId").chosen({ search_contains: true, onlytext: true });
             $("#ddl_ProductKindIds").chosen({ search_contains: true, onlytext: true });
             $("#ddl_ProductKindIds").live("change", function () {
 
@@ -164,7 +160,7 @@
                 function () {
                     var l_Data = $(form).serializeArray();
                     $.lumos.postJson({
-                        url: "/Biz/Product/Add",
+                        url: "/Biz/ProductSku/AddByGoods",
                         data: l_Data,
                         success: function (d) {
                             fun(d);
@@ -380,7 +376,7 @@
                     <input id="Model_Product_Name" name="Model.Product.Name" type="text" class="input-control" value="" style="width:300px;" />
                 </td>
             </tr>
-            <tr>
+            @*<tr>
                 <td class="f-tb-t">
                     商品分类：
                 </td>
@@ -398,7 +394,7 @@
                     <input id="Model_Product_Supplier" name="Model.Product.Supplier" type="hidden" value="" />
                     @Html.initSupplier("Model.Product.SupplierId", Model.Supplier)
                 </td>
-            </tr>
+            </tr>*@
             <tr>
                 <td class="f-tb-t">
                     分类模块：
@@ -460,52 +456,7 @@
                 </td>
             </tr>
 
-            <tr>
-                <td class="f-tb-t" style="width:50px">
-                    是否多规格：
-                </td>
-                <td class="f-tb-c">
-                    <input id="Model_Product_IsMultiSpec" name="Model.Product.IsMultiSpec" type="checkbox" /><label></label>
-                </td>
-            </tr>
 
-            <tr class="tr_isIsMultiSpec_true" style="display:none">
-                <td class="f-tb-t" style="width:50px"></td>
-                <td class="f-tb-c">
-                    <div style="line-height:40px;height:40px;">
-                        <input type="button" class="btn btn-select" id="btn_selectspec" value="选择规格" />
-                    </div>
-                    <div>
-                        <table id="spec_select_list" style="table-layout: fixed; width: 100%; margin-bottom:5px;" class='list-tb' cellpadding='0' cellspacing='0'>
-                            <thead>
-                                <tr>
-                                    <th style="width:80px">
-                                        规格名称
-                                    </th>
-                                    <th style="width:100%">
-                                        规格值
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-            <tr class="tr_isIsMultiSpec_true" style="display:none">
-                <td class="f-tb-t" style="width:50px">
-                    商品规格：
-                </td>
-                <td class="f-tb-c">
-                    <div id="specValComGrid">
-                    </div>
-                </td>
-            </tr>
             <tr class="tr_isIsMultiSpec_false">
                 <td class="f-tb-t" style="width:50px">
                     商品价格：

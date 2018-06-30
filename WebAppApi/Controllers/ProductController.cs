@@ -1,5 +1,6 @@
 ﻿using Lumos.BLL;
 using Lumos.BLL.Service;
+using Lumos.BLL.Service.Model;
 using Lumos.DAL;
 using Lumos.DAL.AuthorizeRelay;
 using Lumos.Entity;
@@ -23,12 +24,12 @@ namespace WebAppApi.Controllers
     {
 
         [HttpGet]
-        public APIResponse GetList(int userId, int merchantId, int posMachineId, int pageIndex, Enumeration.ProductType type, int categoryId, int kindId, string name)
+        public APIResponse GetSkuList(int userId, int merchantId, int posMachineId, int pageIndex, Enumeration.ProductType type, int categoryId, int kindId, string name)
         {
             var query = (from o in CurrentDb.Product
                          where
                          o.Status == Enumeration.ProductStatus.OnLine
-                         select new { o.Id, o.BriefIntro, o.Name, o.IsHot, o.IsMultiSpec, o.ProductCategoryId, o.ProductKindIds, o.DispalyImgs, o.CreateTime }
+                         select new { o.Id, o.BriefIntro, o.Type, o.Name, o.IsHot, o.IsMultiSpec, o.ProductCategoryId, o.ProductKindIds, o.DispalyImgs, o.Details, o.CreateTime }
                          );
 
             if (name != null && name.Length > 0)
@@ -38,7 +39,7 @@ namespace WebAppApi.Controllers
 
             if (type != Enumeration.ProductType.Unknow)
             {
-                //query = query.Where(p => p.ProductCategoryId.ToString().StartsWith(categoryId.ToString()));
+                query = query.Where(p => p.Type == type);
             }
 
             if (categoryId != 0)
@@ -48,8 +49,7 @@ namespace WebAppApi.Controllers
 
             if (kindId != 0)
             {
-
-                string strkindId = BizFactory.Product.BuildProductKindIdForSearch(kindId.ToString());
+                string strkindId = BizFactory.ProductSku.BuildProductKindIdForSearch(kindId.ToString());
 
                 query = query.Where(p => SqlFunctions.CharIndex(strkindId, p.ProductKindIds) > 0);
             }
@@ -59,25 +59,24 @@ namespace WebAppApi.Controllers
             query = query.OrderByDescending(r => r.CreateTime).Skip(pageSize * (pageIndex)).Take(pageSize);
 
             var list = query.ToList();
-            List<ProductModel> model = new List<ProductModel>();
 
+            List<ProductSkuModel> model = new List<ProductSkuModel>();
 
             foreach (var m in list)
             {
                 var productSku = CurrentDb.ProductSku.Where(q => q.ProductId == m.Id).FirstOrDefault();
                 if (productSku != null)
                 {
-                    ProductModel productModel = new ProductModel();
-                    productModel.Id = m.Id;
+                    ProductSkuModel productModel = new ProductSkuModel();
                     productModel.SkuId = productSku.Id;
                     productModel.Name = m.Name;
                     productModel.BriefIntro = m.BriefIntro;
                     productModel.IsHot = m.IsHot;
-                    productModel.Price = productSku.Price;
-                    productModel.ShowPrice = productSku.ShowPrice.ToF2Price();
-                    productModel.DispalyImgs = BizFactory.Product.GetDispalyImgs(m.DispalyImgs);
-                    productModel.MainImg = BizFactory.Product.GetMainImg(m.DispalyImgs);
-                    productModel.DetailsUrl = BizFactory.Product.GetDetailsUrl(m.Id);
+                    productModel.UnitPrice = productSku.Price;
+                    productModel.ShowPrice = productSku.ShowPrice;
+                    productModel.DispalyImgs = BizFactory.ProductSku.GetDispalyImgs(m.DispalyImgs);
+                    productModel.MainImg = BizFactory.ProductSku.GetMainImg(m.DispalyImgs);
+                    productModel.DetailsDesc = m.Details;
                     model.Add(productModel);
                 }
             }
@@ -87,14 +86,23 @@ namespace WebAppApi.Controllers
             return new APIResponse(result);
         }
 
+        //[HttpGet]
+        //public APIResponse GetSkuDetails(int userId, int merchantId, int productSkuId)
+        //{
+        //    var model = ServiceFactory.Product.GetSkuModel(productSkuId);
+
+        //    APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
+
+        //    return new APIResponse(result);
+        //}
 
         [HttpGet]
-        public APIResponse GetSkuDetails(int userId, int productSkuId)
+        public APIResponse GetKinds(int userId, int merchantId, int posMachineId)
         {
 
-            var model = ServiceFactory.Product.GetSkuDetals(productSkuId);
+            var model = ServiceFactory.Product.GetKinds();
 
-            APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "", Data = model };
+            APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
 
             return new APIResponse(result);
         }

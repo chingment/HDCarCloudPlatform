@@ -29,7 +29,7 @@ namespace Lumos.BLL.Service
                 {
                     var cartProcudtSkuModel = new CartProcudtSkuListModel();
                     cartProcudtSkuModel.CartId = item.Id;
-                    cartProcudtSkuModel.SkuId = skuModel.Id;
+                    cartProcudtSkuModel.SkuId = skuModel.SkuId;
                     cartProcudtSkuModel.SkuName = skuModel.Name;
                     cartProcudtSkuModel.SkuMainImg = skuModel.MainImg;
                     cartProcudtSkuModel.UnitPrice = skuModel.UnitPrice;
@@ -116,8 +116,7 @@ namespace Lumos.BLL.Service
                                 {
                                     mod_Cart = new Cart();
                                     mod_Cart.UserId = userId;
-                                    mod_Cart.ProductId = skuModel.ProductId;
-                                    mod_Cart.ProductSkuId = skuModel.Id;
+                                    mod_Cart.ProductSkuId = skuModel.SkuId;
                                     mod_Cart.ProductSkuName = skuModel.Name;
                                     mod_Cart.ProductSkuMainImg = skuModel.MainImg;
                                     mod_Cart.CreateTime = this.DateTime;

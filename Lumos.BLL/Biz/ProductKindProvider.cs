@@ -84,7 +84,7 @@ namespace Lumos.BLL
 
                         string str_id = id.ToString();
 
-                        string search_id = BizFactory.Product.BuildProductKindIdForSearch(str_id);
+                        string search_id = BizFactory.ProductSku.BuildProductKindIdForSearch(str_id);
 
                         var products = CurrentDb.Product.Where(m => SqlFunctions.CharIndex(search_id, m.ProductKindIds) > 0).ToList();
 
@@ -180,7 +180,7 @@ namespace Lumos.BLL
             string str = string.Join(",", ar.ToArray());
 
 
-            str = BizFactory.Product.BuildProductKindIds(str);
+            str = BizFactory.ProductSku.BuildProductKindIds(str);
 
             return str;
         }

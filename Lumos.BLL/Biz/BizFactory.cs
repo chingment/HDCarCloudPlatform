@@ -65,11 +65,11 @@ namespace Lumos.BLL
             }
         }
 
-        public static ProductProvider Product
+        public static ProductSkuProvider ProductSku
         {
             get
             {
-                return new ProductProvider();
+                return new ProductSkuProvider();
             }
         }
 

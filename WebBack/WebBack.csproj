@@ -167,7 +167,7 @@
     <Compile Include="Controllers\Biz\OrderController.cs" />
     <Compile Include="Controllers\Biz\PosMachineController.cs" />
     <Compile Include="Controllers\Biz\ProductCategoryController.cs" />
-    <Compile Include="Controllers\Biz\ProductController.cs" />
+    <Compile Include="Controllers\Biz\ProductSkuController.cs" />
     <Compile Include="Controllers\Biz\ProductKindController.cs" />
     <Compile Include="Controllers\Biz\ReportController.cs" />
     <Compile Include="Controllers\Biz\ServiceFeeController.cs" />
@@ -1301,10 +1301,10 @@
     <Content Include="Views\Biz\Insurance\Verify.cshtml" />
     <Content Include="Views\Biz\Lllegal\ListByVerify.cshtml" />
     <Content Include="Views\Biz\Lllegal\Verify.cshtml" />
-    <Content Include="Views\Biz\Product\Add.cshtml" />
-    <Content Include="Views\Biz\Product\Edit.cshtml" />
-    <Content Include="Views\Biz\Product\List.cshtml" />
-    <Content Include="Views\Biz\Product\SelectSpec.cshtml" />
+    <Content Include="Views\Biz\ProductSku\AddByGoods.cshtml" />
+    <Content Include="Views\Biz\ProductSku\EditByGoods.cshtml" />
+    <Content Include="Views\Biz\ProductSku\ListByGoods.cshtml" />
+    <Content Include="Views\Biz\ProductSku\SelectSpec.cshtml" />
     <Content Include="Views\Biz\ProductCategory\Add.cshtml" />
     <Content Include="Views\Biz\ProductCategory\List.cshtml" />
     <Content Include="Views\Biz\ProductCategory\Sort.cshtml" />
@@ -1314,8 +1314,8 @@
     <Content Include="Views\Biz\Supplier\Add.cshtml" />
     <Content Include="Views\Biz\Supplier\Edit.cshtml" />
     <Content Include="Views\Biz\Supplier\List.cshtml" />
-    <Content Include="Views\Biz\Product\ListByInsurance.cshtml" />
-    <Content Include="Views\Biz\Product\AddByInsurance.cshtml" />
+    <Content Include="Views\Biz\ProductSku\ListByInsurance.cshtml" />
+    <Content Include="Views\Biz\ProductSku\AddByInsurance.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\OfferImg.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\DealtByOffer.cshtml" />
     <Content Include="Views\Biz\Merchant\PosMachineListByUnbind.cshtml" />

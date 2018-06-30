@@ -12,7 +12,7 @@ namespace WebBack.Models.Biz.Product
         private List<Lumos.Entity.ProductCategory> _category = new List<Lumos.Entity.ProductCategory>();
         private List<Lumos.Entity.ProductKind> _kind = new List<Lumos.Entity.ProductKind>();
         private Lumos.Entity.Product _product = new Lumos.Entity.Product();
-        private List<Lumos.Entity.ProductSku> _productSku = new List<Lumos.Entity.ProductSku>();
+        private Lumos.Entity.ProductSku _productSku = new Lumos.Entity.ProductSku();
         private List<Lumos.Entity.ImgSet> _dispalyImgs = new List<Lumos.Entity.ImgSet>();
 
 
@@ -64,7 +64,7 @@ namespace WebBack.Models.Biz.Product
             }
         }
 
-        public List<Lumos.Entity.ProductSku> ProductSku
+        public Lumos.Entity.ProductSku ProductSku
         {
             get
             {
@@ -111,27 +111,28 @@ namespace WebBack.Models.Biz.Product
                 _kind = kind;
             }
 
-            var product = CurrentDb.Product.Where(m => m.Id == id).FirstOrDefault();
-            if (product != null)
+            var productSku = CurrentDb.ProductSku.Where(m => m.Id == id).FirstOrDefault();
+            if (productSku != null)
             {
-                _product = product;
+                _productSku = productSku;
 
-                if (!string.IsNullOrEmpty(_product.DispalyImgs))
+
+
+                var product = CurrentDb.Product.Where(m => m.Id == productSku.ProductId).FirstOrDefault();
+                if (product != null)
                 {
-                    var dispalyImgs= Newtonsoft.Json.JsonConvert.DeserializeObject<List<ImgSet>>(_product.DispalyImgs);
+                    _product = product;
 
-                    if(dispalyImgs!=null)
+                    if (!string.IsNullOrEmpty(_product.DispalyImgs))
                     {
-                        _dispalyImgs = dispalyImgs;
+                        var dispalyImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ImgSet>>(_product.DispalyImgs);
+
+                        if (dispalyImgs != null)
+                        {
+                            _dispalyImgs = dispalyImgs;
+                        }
+
                     }
-
-                }
-
-                var productSku = CurrentDb.ProductSku.Where(m => m.ProductId == id).ToList();
-                if (productSku != null)
-                {
-                    _productSku = productSku;
-
                 }
             }
         }

@@ -2,20 +2,6 @@
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_LayoutHomeDialog.cshtml";
-
-    var multi = false;
-
-    if (Model.ProductSku.Count > 1)
-    {
-        multi = true;
-    }
-    else
-    {
-        if (!string.IsNullOrEmpty(Model.ProductSku[0].Spec2))
-        {
-            multi = true;
-        }
-    }
 }
 
 @section styles{
@@ -35,14 +21,10 @@
         $(document).ready(function () {
             $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
             $("#Model_Product_Name").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 60, onError: "商品名称不能为空,且不超过60个字符！" });
-            $("#Model_Product_ProductCategoryId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择商品分类" });
-            $("#Model_Product_SupplierId").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择供应商" });
             $("#Model_Product_ProductKindIds").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, onError: "请选择分类模块" });
             $("#Model_DispalyImgs_ImgUrl_0").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传商品封面图片" });
             $("#Model_Product_Price").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ type: "number", min: 0.01, max: 10000, onError: "金额范围在0.01~10000.00之间" });
             $("#Model_Product_Price").decimalInput(2);
-            $("#Model_Product_ProductCategoryId").chosen({ search_contains: true, onlytext: true });
-            $("#Model_Product_SupplierId").chosen({ search_contains: true, onlytext: true });
             $("#ddl_ProductKindIds").chosen({ search_contains: true, onlytext: true });
             $("#ddl_ProductKindIds").live("change", function () {
 
@@ -87,7 +69,7 @@
                 function () {
                     var l_Data = $(form).serializeArray();
                     $.lumos.postJson({
-                        url: "/Biz/Product/Edit",
+                        url: "/Biz/ProductSku/EditByGoods",
                         data: l_Data,
                         success: function (d) {
                             fun(d);
@@ -117,30 +99,12 @@
             </tr>
             <tr>
                 <td class="f-tb-t">
-                    商品分类：
-                </td>
-                <td class="f-tb-c">
-                    <input id="Model_Product_ProductCategory" name="Model.Product.ProductCategory" type="hidden" value="@Model.Product.ProductCategory" />
-                    @Html.initProductCategory("Model.Product.ProductCategoryId", Model.Category, Model.Product.ProductCategoryId)
-                </td>
-            </tr>
-            <tr>
-                <td class="f-tb-t">
-                    供应商：
-                </td>
-                <td class="f-tb-c">
-                    <input id="Model_Product_Supplier" name="Model.Product.Supplier" type="hidden" value="@Model.Product.Supplier" />
-                    @Html.initSupplier("Model.Product.SupplierId", Model.Supplier, Model.Product.SupplierId)
-                </td>
-            </tr>
-            <tr>
-                <td class="f-tb-t">
                     分类模块：
                 </td>
                 <td class="f-tb-c">
-                    <input id="Model_Product_ProductKindNames" name="Model.Product.ProductKindNames" type="hidden" value="@Model.Product.ProductKindNames"" />
+                    <input id="Model_Product_ProductKindNames" name="Model.Product.ProductKindNames" type="hidden" value="@Model.Product.ProductKindNames" " />
                     <input id="Model_Product_ProductKindIds" name="Model.Product.ProductKindIds" type="hidden" value="@Model.Product.ProductKindIds" />
-                    @Html.initProductKind("ddl.ProductKindIds", Model.Kind,Model.Product.ProductKindIds)
+                    @Html.initProductKind("ddl.ProductKindIds", Model.Kind, Model.Product.ProductKindIds)
                 </td>
             </tr>
             <tr>
@@ -166,24 +130,24 @@
                             <tr style="vertical-align:top">
                                 @for (var i = 0; i < Model.DispalyImgs.Count; i++)
                                 {
-                                    <td>
-                                        <div>
-                                            <span class="uploadimgbox" upload="true">
-                                                <span class="uploadimg" inputname="Model.DispalyImgs[@i].ImgUrl" path="product">
-                                                    <img src="@(string.IsNullOrEmpty(Model.DispalyImgs[i].ImgUrl)==true?"/Static/default1.jpg":Model.DispalyImgs[i].ImgUrl)" />
-                                                    <span class="uploadimg-click" style="">上传</span>
-                                                    <input id="Model_DispalyImgs_ImgUrl_@i" value="@Model.DispalyImgs[i].ImgUrl" name="Model.DispalyImgs[@i].ImgUrl" type="hidden" />
-                                                    <input id="Model_DispalyImgs_Priority_@i" value="@Model.DispalyImgs[i].Priority" name="Model.DispalyImgs[@i].Priority" type="hidden" />
-                                                    <input id="Model_DispalyImgs_Name_@i" value="@Model.DispalyImgs[i].Name" name="Model.DispalyImgs[@i].Name" type="hidden" />
-                                                    <input id="Model_DispalyImgs_IsMain_@i" value="@(Model.DispalyImgs[i].IsMain==true?"true":"false")" name="Model.DispalyImgs[@i].IsMain" type="hidden" />
-                                                </span>
-                                                <span class="uploadimg-view" style="">预览</span>
+                                <td>
+                                    <div>
+                                        <span class="uploadimgbox" upload="true">
+                                            <span class="uploadimg" inputname="Model.DispalyImgs[@i].ImgUrl" path="product">
+                                                <img src="@(string.IsNullOrEmpty(Model.DispalyImgs[i].ImgUrl)==true?"/Static/default1.jpg":Model.DispalyImgs[i].ImgUrl)" />
+                                                <span class="uploadimg-click" style="">上传</span>
+                                                <input id="Model_DispalyImgs_ImgUrl_@i" value="@Model.DispalyImgs[i].ImgUrl" name="Model.DispalyImgs[@i].ImgUrl" type="hidden" />
+                                                <input id="Model_DispalyImgs_Priority_@i" value="@Model.DispalyImgs[i].Priority" name="Model.DispalyImgs[@i].Priority" type="hidden" />
+                                                <input id="Model_DispalyImgs_Name_@i" value="@Model.DispalyImgs[i].Name" name="Model.DispalyImgs[@i].Name" type="hidden" />
+                                                <input id="Model_DispalyImgs_IsMain_@i" value="@(Model.DispalyImgs[i].IsMain==true?"true":"false")" name="Model.DispalyImgs[@i].IsMain" type="hidden" />
                                             </span>
-                                        </div>
-                                        <div>
-                                            <span>@Model.DispalyImgs[i].Name</span>
-                                        </div>
-                                    </td>
+                                            <span class="uploadimg-view" style="">预览</span>
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span>@Model.DispalyImgs[i].Name</span>
+                                    </div>
+                                </td>
                                 }
                             </tr>
                         </table>
@@ -192,60 +156,17 @@
             </tr>
 
 
-            @if (multi)
-            {
-                <tr class="tr_isIsMultiSpec_true">
-                    <td class="f-tb-t" style="width:50px">
-                        商品规格：
-                    </td>
-                    <td class="f-tb-c">
 
-                        <table id="list_table" class="list-tb" cellpadding="0" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th style="width:5%" class="no">
-                                        规格
-                                    </th>
-                                    <th style="width:20%">
-                                        价格
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.ProductSku != null)
-                                {
-                                    for (int i = 0; i < Model.ProductSku.Count; i++)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <input name="Model.ProductSku[@i].Id" value="@Model.ProductSku[i].Id" type="hidden" />
-                                                @Model.ProductSku[i].Spec3
+            <tr class="tr_isIsMultiSpec_false">
+                <td class="f-tb-t" style="width:50px">
+                    商品价格：
+                </td>
+                <td class="f-tb-c">
+                    <input name="Model.ProductSku.Id" type="hidden" value="@Model.ProductSku.Id" />
+                    <input id="Model_Product_Price" name="Model.ProductSku.Price" type="text" class="input-control" value="@Model.ProductSku.Price" style="width:80px;" />
+                </td>
+            </tr>
 
-                                            </td>
-                                            <td>
-                                                <input id="Model_Product_Price_@i" name="Model.ProductSku[@i].Price" type="text" class="input-control" value="@Model.ProductSku[i].Price" style="width:80px;" />
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-            }
-            else
-            {
-                <tr class="tr_isIsMultiSpec_false">
-                    <td class="f-tb-t" style="width:50px">
-                        商品价格：
-                    </td>
-                    <td class="f-tb-c">
-                        <input  name="Model.ProductSku[0].Id" type="hidden" value="@Model.ProductSku[0].Id"  />
-                        <input id="Model_Product_Price" name="Model.ProductSku[0].Price" type="text" class="input-control" value="@Model.ProductSku[0].Price" style="width:80px;" />
-                    </td>
-                </tr>
-            }
 
             <tr>
                 <td class="f-tb-t" style="width:50px">

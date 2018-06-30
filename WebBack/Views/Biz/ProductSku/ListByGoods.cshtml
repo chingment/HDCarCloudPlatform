@@ -11,7 +11,7 @@
     $(document).ready(function () {
 
         listTable = $("#list_table").loadDataTable({
-            url: "/Biz/Product/GetList",
+            url: "/Biz/ProductSku/GetListByGoods",
             pageIndex: 0,
             searchParams: $("#form1").serializeArray(),
             searchButtonId: "btn_Search",
@@ -22,30 +22,14 @@
                 l_StrRows += "<td class=\"no\" style=\"width:5%\" >" + (p_index + 1) + "</td>";
                 l_StrRows += "<td class=\"overflow\" style=\"width:20%\"><div> <img src=\"" + p_row.mainImg + "\" style=\"width:50px;height:50px\"><div></td>";
                 l_StrRows += "<td class=\"overflow\" style=\"width:30%\" title=\"" + p_row.name + "\">" + p_row.name + "</td>";
-                l_StrRows += "<td class=\"overflow\" style=\"width:15%\" title=\"" + p_row.productCategory + "\">" + p_row.productCategory + "</td>";
-                l_StrRows += "<td class=\"overflow\" style=\"width:20%\" title=\"" + p_row.supplier + "\">" + p_row.supplier + "</td>";
+                l_StrRows += "<td class=\"overflow\" style=\"width:15%\" title=\"" + p_row.productKindNames + "\">" + p_row.productKindNames + "</td>";
+                l_StrRows += "<td class=\"overflow\" style=\"width:20%\" title=\"" + p_row.price + "\">" + p_row.price + "</td>";
                 l_StrRows += "<td class=\"operation\" style=\"width:10%\" >";
 
 
                 l_StrRows += "<a href=\"javascript:void(0)\" operate=\"edit\"   class=\"a-btn a-btn-edit keyval\"  >修改</a>";
 
-
                 l_StrRows += "</td></tr>";
-
-                $.each(p_row.skus, function (index, p_row) {
-                    l_StrRows += "<tr>";
-                    l_StrRows += "<td></td>";
-                    l_StrRows += "<td></td>";
-                    l_StrRows += "<td>" + (p_row.spec3 == null ? "单规格" : p_row.spec3) + "</td>";
-                    l_StrRows += "<td>" + p_row.price + " 元 </td>";
-                    l_StrRows += "<td></td>";
-                    l_StrRows += "<td></td>";
-                    l_StrRows += "</tr>"
-                    //alert(obj[key]);
-                });
-
-
-                l_StrRows += "</table></td></tr>";
                 return l_StrRows;
             },
             operate: {
@@ -62,7 +46,7 @@
 
                 },
                 "edit": function (obj) {
-                    var url = '/Biz/Product/Edit?id=' + obj.id;
+                    var url = '/Biz/ProductSku/EditByGoods?id=' + obj.id;
 
                     var title = '修改';
                     var dialog = art.dialog.open(url, {
@@ -83,7 +67,7 @@
 
 
         $("#btn_Add").click(function () {
-            var url = '/Biz/Product/Add';
+            var url = '/Biz/ProductSku/AddByGoods';
             var title = '新建';
             var dialog = art.dialog.open(url, {
                 id: "openDialog", title: title, width: '750px', height: '750px', lock: true, drag: false, cancelVal: '关闭', cancel: true,
@@ -141,10 +125,10 @@
                         名称
                     </th>
                     <th style="width:15%">
-                        分类
+                        模块分类
                     </th>
                     <th style="width:20%">
-                        供应商
+                        价格
                     </th>
                     <th style="width:10%" class="operation">
                         操作

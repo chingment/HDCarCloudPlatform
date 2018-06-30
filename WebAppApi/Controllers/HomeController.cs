@@ -192,12 +192,16 @@ namespace WebAppApi.Controllers
             int merchantId = 258;
             int posMachineId = 153;
 
+
+            model.Add("获取产品列表", GetProductList(userId, merchantId, posMachineId, 0));
+            model.Add("获取产品分类", GetProductKinds(userId, merchantId, posMachineId));
+
             //model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
 
 
             // model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
 
-            CarIns(userId, merchantId, posMachineId);
+            // CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
@@ -1793,7 +1797,29 @@ namespace WebAppApi.Controllers
             headers.Add("timestamp", timespan.ToString());
             headers.Add("sign", signStr);
             HttpUtil http = new HttpUtil();
-            string result = http.HttpGet("" + host + "/api/Product/GetList?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId + "&pageIndex=" + pageIndex + "&type=" + type + "&categoryId=" + categoryId + "&kindId=" + kindId + "&name=" + name, headers);
+            string result = http.HttpGet("" + host + "/api/Product/GetSkuList?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId + "&pageIndex=" + pageIndex + "&type=" + type + "&categoryId=" + categoryId + "&kindId=" + kindId + "&name=" + name, headers);
+
+            return result;
+        }
+
+
+        public string GetProductKinds(int userId, int merchantId, int posMachineId)
+        {
+
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("userId", userId.ToString());
+            parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
+
+
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/Product/GetKinds?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId, headers);
 
             return result;
         }
@@ -1896,7 +1922,7 @@ namespace WebAppApi.Controllers
             // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
 
 
-           // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 12, "003000"));
+            // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 12, "003000"));
 
             model.Add("获取报价信息", GetInsInquiryResult(userId, merchantId, posMachineId, 2799));
 
@@ -1909,7 +1935,7 @@ namespace WebAppApi.Controllers
             //  model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, OfferId));
 
 
-            
+
             //string s_CarIns_GetCarInfo = CarIns_GetCarInfo(userId, merchantId, posMachineId);
 
             //CustomJsonResult<CarInfoResult> s1 = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult<CarInfoResult>>(s_CarIns_GetCarInfo);

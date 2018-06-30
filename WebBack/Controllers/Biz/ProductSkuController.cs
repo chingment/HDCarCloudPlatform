@@ -13,10 +13,10 @@ using WebBack.Models.Biz.Product;
 
 namespace WebBack.Controllers.Biz
 {
-    public class ProductController : OwnBaseController
+    public class ProductSkuController : OwnBaseController
     {
         // GET: Product
-        public ActionResult List()
+        public ActionResult ListByGoods()
         {
             return View();
         }
@@ -26,7 +26,7 @@ namespace WebBack.Controllers.Biz
             return View();
         }
 
-        public ViewResult Edit(int id)
+        public ViewResult EditByGoods(int id)
         {
             EditViewModel model = new EditViewModel();
             model.LoadData(id);
@@ -34,7 +34,7 @@ namespace WebBack.Controllers.Biz
             return View(model);
         }
 
-        public ViewResult Add()
+        public ViewResult AddByGoods()
         {
             AddViewModel model = new AddViewModel();
             model.LoadData();
@@ -50,26 +50,18 @@ namespace WebBack.Controllers.Biz
             return View(model);
         }
 
-        public ViewResult SelectSpec()
-        {
-            return View();
-        }
-
-
-
-        public CustomJsonResult GetSelectSpec()
-        {
-            SelectSpecViewModel model = new SelectSpecViewModel();
-
-            return Json(ResultType.Success, model, "");
-        }
-
         [HttpPost]
-        public CustomJsonResult GetList(WebBack.Models.Biz.Product.SearchCondition condition)
+        public CustomJsonResult GetListByGoods(WebBack.Models.Biz.Product.SearchCondition condition)
         {
-            var query = (from u in CurrentDb.Product
-                         where (condition.Name == null || u.Name.Contains(condition.Name)) 
-                         select new { u.Id, u.Name, u.MainImg, u.CreateTime, u.Supplier, u.ProductCategory });
+            var query = (from u in CurrentDb.ProductSku
+
+                         join p in CurrentDb.Product on u.ProductId equals p.Id
+
+                         where (condition.Name == null || u.Name.Contains(condition.Name)) &&
+
+                           p.Type == Enumeration.ProductType.Goods
+
+                         select new { u.Id, u.Name, p.MainImg, p.CreateTime, p.Supplier, p.ProductCategory, u.Price, p.ProductKindNames });
 
             int total = query.Count();
 
@@ -83,8 +75,6 @@ namespace WebBack.Controllers.Biz
 
             foreach (var item in list1)
             {
-                var skus = CurrentDb.ProductSku.Where(m => m.ProductId == item.Id).ToList();
-
                 list.Add(new
                 {
                     Id = item.Id,
@@ -93,7 +83,8 @@ namespace WebBack.Controllers.Biz
                     Supplier = item.Supplier,
                     ProductCategory = item.ProductCategory,
                     CreateTime = item.CreateTime,
-                    skus = skus
+                    Price = item.Price,
+                    ProductKindNames = item.ProductKindNames
                 });
             }
 
@@ -145,13 +136,13 @@ namespace WebBack.Controllers.Biz
         }
 
         [HttpPost]
-        public CustomJsonResult Add(AddViewModel model)
+        public CustomJsonResult AddByGoods(AddViewModel model)
         {
             var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
 
             model.Product.DispalyImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
 
-            return BizFactory.Product.Add(this.CurrentUserId, model.Product, model.ProductSku);
+            return BizFactory.ProductSku.AddByGoods(this.CurrentUserId, model.Product, model.ProductSku);
         }
 
         [HttpPost]
@@ -161,17 +152,17 @@ namespace WebBack.Controllers.Biz
 
             model.Product.DispalyImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
 
-            return BizFactory.Product.AddByInsurance(this.CurrentUserId, model.Product, model.ProductSku);
+            return BizFactory.ProductSku.AddByInsurance(this.CurrentUserId, model.Product, model.ProductSku);
         }
 
         [HttpPost]
-        public CustomJsonResult Edit(EditViewModel model)
+        public CustomJsonResult EditByGoods(EditViewModel model)
         {
             var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
 
             model.Product.DispalyImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
 
-            return BizFactory.Product.Edit(this.CurrentUserId, model.Product, model.ProductSku);
+            return BizFactory.ProductSku.EditByGoods(this.CurrentUserId, model.Product, model.ProductSku);
         }
     }
 }

@@ -79,7 +79,7 @@ namespace WebBack.Controllers.Biz
         public CustomJsonResult GetProductList(ProductSearchCondition condition)
         {
             string name = condition.Name.ToSearchString();
-            string kindId = BizFactory.Product.BuildProductKindIdForSearch(condition.KindId);
+            string kindId = BizFactory.ProductSku.BuildProductKindIdForSearch(condition.KindId);
             var list = (from p in CurrentDb.Product
                         where SqlFunctions.CharIndex(kindId, p.ProductKindIds) > 0 &&
                                  (name.Length == 0 || p.Name.Contains(name))

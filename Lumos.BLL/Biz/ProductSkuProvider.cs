@@ -49,7 +49,7 @@ namespace Lumos.BLL
     }
 
 
-    public class ProductProvider : BaseProvider
+    public class ProductSkuProvider : BaseProvider
     {
         public string GetDetailsUrl(int id)
         {
@@ -176,16 +176,17 @@ namespace Lumos.BLL
             return kindIds;
         }
 
-        public CustomJsonResult Add(int operater, Product product, List<ProductSku> productSkus)
+        public CustomJsonResult AddByGoods(int operater, Product product, List<ProductSku> productSkus)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                product.ProductCategory = product.ProductCategory.Trim();
-                product.Supplier = product.Supplier.Trim();
+                // product.ProductCategory = product.ProductCategory.Trim();
+                //  product.Supplier = product.Supplier.Trim();
+                product.Type = Enumeration.ProductType.Goods;
                 product.ProductKindIds = BuildProductKindIds(product.ProductKindIds);
-                product.MainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
+                product.MainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
                 product.Status = Enumeration.ProductStatus.OnLine;
                 product.Creator = operater;
                 product.CreateTime = this.DateTime;
@@ -197,19 +198,9 @@ namespace Lumos.BLL
                 foreach (var prdSku in productSkus)
                 {
                     prdSku.ProductId = product.Id;
-                
-                    prdSku.Spec2 = GetSpec2(prdSku.Spec);
-                    prdSku.Spec3 = GetSpec3(prdSku.Spec);
-                    prdSku.Status = product.Status;
-                    if (string.IsNullOrEmpty(prdSku.Spec3))
-                    {
-                        prdSku.Name = product.Name;
-                    }
-                    else
-                    {
-                        prdSku.Name = string.Format("{0}({1})", product.Name, prdSku.Spec3);
-                    }
 
+                    prdSku.Status = product.Status;
+                    prdSku.Name = product.Name;
                     prdSku.Creator = operater;
                     prdSku.CreateTime = this.DateTime;
 
@@ -255,7 +246,7 @@ namespace Lumos.BLL
             return result;
         }
 
-        public CustomJsonResult Edit(int operater, Product product, List<ProductSku> productSkus)
+        public CustomJsonResult EditByGoods(int operater, Product product, ProductSku productSku)
         {
             CustomJsonResult result = new CustomJsonResult();
 
@@ -266,13 +257,13 @@ namespace Lumos.BLL
                 {
                     l_product.Name = product.Name;
                     l_product.BriefIntro = product.BriefIntro;
-                    l_product.ProductCategoryId = product.ProductCategoryId;
-                    l_product.ProductCategory = product.ProductCategory.Trim();
-                    l_product.SupplierId = product.SupplierId;
-                    l_product.Supplier = product.Supplier.Trim();
+                    //l_product.ProductCategoryId = product.ProductCategoryId;
+                    //l_product.ProductCategory = product.ProductCategory.Trim();
+                    //l_product.SupplierId = product.SupplierId;
+                    //l_product.Supplier = product.Supplier.Trim();
                     l_product.ProductKindIds = BuildProductKindIds(product.ProductKindIds);
                     l_product.ProductKindNames = product.ProductKindNames;
-                    l_product.MainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
+                    l_product.MainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
                     l_product.DispalyImgs = product.DispalyImgs;
                     l_product.ServiceDesc = product.ServiceDesc;
                     l_product.Details = product.Details;
@@ -282,24 +273,22 @@ namespace Lumos.BLL
                     CurrentDb.SaveChanges();
 
 
-                    foreach (var prdSku in productSkus)
-                    {
-                        var productSku = CurrentDb.ProductSku.Where(m => m.Id == prdSku.Id).FirstOrDefault();
-                        if (productSku != null)
-                        {
-                            productSku.Name = l_product.Name;
-                            productSku.Price = prdSku.Price;
-                            productSku.Mender = operater;
-                            productSku.LastUpdateTime = this.DateTime;
-                            CurrentDb.SaveChanges();
-                        }
 
-                    }
+                    var l_productSku = CurrentDb.ProductSku.Where(m => m.Id == productSku.Id).FirstOrDefault();
+
+                    l_productSku.Name = product.Name;
+                    l_productSku.Price = productSku.Price;
+                    l_productSku.Mender = operater;
+                    l_productSku.LastUpdateTime = this.DateTime;
+                    CurrentDb.SaveChanges();
                 }
+
 
                 ts.Complete();
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "保存成功");
             }
+
+
 
             return result;
         }
@@ -319,7 +308,7 @@ namespace Lumos.BLL
                 product.ProductKindNames = "意外险";
 
                 product.Supplier = product.Supplier.NullToEmpty();
-                product.MainImg = BizFactory.Product.GetMainImg(product.DispalyImgs);
+                product.MainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
                 product.Creator = operater;
                 product.CreateTime = this.DateTime;
                 product.Status = Enumeration.ProductStatus.OnLine;
@@ -330,18 +319,7 @@ namespace Lumos.BLL
                 foreach (var prdSku in productSkus)
                 {
                     prdSku.ProductId = product.Id;
-                    prdSku.Spec2 = GetSpec2(prdSku.Spec);
-                    prdSku.Spec3 = GetSpec3(prdSku.Spec);
-
-                    if (string.IsNullOrEmpty(prdSku.Spec3))
-                    {
-                        prdSku.Name = product.Name;
-                    }
-                    else
-                    {
-                        prdSku.Name = string.Format("{0}({1})", product.Name, prdSku.Spec3);
-                    }
-
+                    prdSku.Name = product.Name;
                     prdSku.Creator = operater;
                     prdSku.CreateTime = this.DateTime;
 
@@ -399,7 +377,7 @@ namespace Lumos.BLL
         {
             string str_id = kindId.ToString();
 
-            string search_id = BizFactory.Product.BuildProductKindIdForSearch(str_id);
+            string search_id = BizFactory.ProductSku.BuildProductKindIdForSearch(str_id);
 
             var products = CurrentDb.Product.Where(m => SqlFunctions.CharIndex(search_id, m.ProductKindIds) > 0).ToList();
             List<ProductSku> productSkus = new List<ProductSku>();

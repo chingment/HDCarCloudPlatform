@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lumos.BLL.Service.Model
 {
-    public class CartProcudtSkuListModel
+    public class CartProcudtSkuModel
     {
         public int CartId { get; set; }
         public int SkuId { get; set; }

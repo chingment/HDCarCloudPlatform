@@ -26,10 +26,10 @@ namespace WebAppApi.Controllers
 
             var model = new DataSetModel();
 
-            model.Index = ServiceFactory.Index.GetData(userId);
+            model.Index = ServiceFactory.Index.GetPageData(userId);
             model.ProductKind = ServiceFactory.Product.GetKindPageData();
-            model.Cart = ServiceFactory.Cart.GetData(userId);
-            model.Personal = ServiceFactory.Personal.GetData(userId);
+            model.Cart = ServiceFactory.Cart.GetPageData(userId);
+            model.Personal = ServiceFactory.Personal.GetPageData(userId);
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
             return new APIResponse(result);
         }

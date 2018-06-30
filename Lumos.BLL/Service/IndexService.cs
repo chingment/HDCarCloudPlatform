@@ -10,7 +10,7 @@ namespace Lumos.BLL.Service
 {
     public class IndexService : BaseProvider
     {
-        public IndexModel GetData(int userId)
+        public IndexModel GetPageData(int userId)
         {
             var model = new IndexModel();
 

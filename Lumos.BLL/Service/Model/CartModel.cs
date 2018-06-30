@@ -12,7 +12,7 @@ namespace Lumos.BLL.Service.Model
 
         public string TagName { get; set; }
 
-        public List<CartProcudtSkuListModel> Skus { get; set; }
+        public List<CartProcudtSkuModel> Skus { get; set; }
 
         public int ChannelId { get; set; }
 

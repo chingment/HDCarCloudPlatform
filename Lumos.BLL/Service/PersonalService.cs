@@ -9,7 +9,7 @@ namespace Lumos.BLL.Service
 {
     public class PersonalService : BaseProvider
     {
-        public PersonalModel GetData(int userId)
+        public PersonalModel GetPageData(int userId)
         {
             var model = new PersonalModel();
 

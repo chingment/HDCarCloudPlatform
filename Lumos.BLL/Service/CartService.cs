@@ -12,7 +12,7 @@ namespace Lumos.BLL.Service
 {
     public class CartService : BaseProvider
     {
-        public CartModel GetData(int userId)
+        public CartModel GetPageData(int userId)
         {
             var cartModel = new CartModel();
 
@@ -20,14 +20,14 @@ namespace Lumos.BLL.Service
             var carts = CurrentDb.Cart.Where(m => m.UserId == userId && m.Status == Enumeration.CartStatus.WaitSettle).ToList();
 
 
-            var skus = new List<CartProcudtSkuListModel>();
+            var skus = new List<CartProcudtSkuModel>();
 
             foreach (var item in carts)
             {
                 var skuModel = ServiceFactory.Product.GetSkuModel(item.ProductSkuId);
                 if (skuModel != null)
                 {
-                    var cartProcudtSkuModel = new CartProcudtSkuListModel();
+                    var cartProcudtSkuModel = new CartProcudtSkuModel();
                     cartProcudtSkuModel.CartId = item.Id;
                     cartProcudtSkuModel.SkuId = skuModel.SkuId;
                     cartProcudtSkuModel.SkuName = skuModel.Name;
@@ -78,7 +78,7 @@ namespace Lumos.BLL.Service
         }
 
         private static readonly object operatelock = new object();
-        public CustomJsonResult Operate(int operater, Enumeration.CartOperateType operate, int userId, List<CartProcudtSkuListByOperateModel> procudtSkus)
+        public CustomJsonResult Operate(int operater, Enumeration.CartOperateType operate, int userId, List<CartProcudtSkuByOperateModel> procudtSkus)
         {
             var result = new CustomJsonResult();
 
@@ -145,7 +145,7 @@ namespace Lumos.BLL.Service
 
                     CurrentDb.SaveChanges();
 
-                    var cartModel = GetData(userId);
+                    var cartModel = GetPageData(userId);
 
                     ts.Complete();
 

@@ -9,8 +9,13 @@ namespace WebAppApi.Models.Cart
     public class OperateParams
     {
         public int UserId { get; set; }
+
+        public int MerchantId { get; set; }
+
+        public int PosMachineId { get; set; }
+
         public Lumos.Entity.Enumeration.CartOperateType Operate { get; set; }
 
-        public List<CartProcudtSkuListByOperateModel> List { get; set; }
+        public List<CartProcudtSkuByOperateModel> List { get; set; }
     }
 }

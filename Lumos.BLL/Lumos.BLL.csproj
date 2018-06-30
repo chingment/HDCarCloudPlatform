@@ -116,8 +116,8 @@
     <Compile Include="Service\CouponService.cs" />
     <Compile Include="Service\IndexService.cs" />
     <Compile Include="Service\Model\BannerModel.cs" />
-    <Compile Include="Service\Model\CartProcudtSkuListByOperateModel.cs" />
-    <Compile Include="Service\Model\CartProcudtSkuListModel.cs" />
+    <Compile Include="Service\Model\CartProcudtSkuByOperateModel.cs" />
+    <Compile Include="Service\Model\CartProcudtSkuModel.cs" />
     <Compile Include="Service\Model\CartModel.cs" />
     <Compile Include="Service\Model\CouponModel.cs" />
     <Compile Include="Service\Model\OrderConfirmCouponModel.cs" />

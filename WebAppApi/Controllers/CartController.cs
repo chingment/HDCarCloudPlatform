@@ -12,9 +12,18 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse Operate(OperateParams model)
         {
-            IResult result = ServiceFactory.Cart.Operate(model.UserId, model.Operate, model.UserId,model.List);
+            IResult result = ServiceFactory.Cart.Operate(model.UserId, model.Operate, model.UserId, model.MerchantId, model.PosMachineId, model.List);
 
             return new APIResponse(result);
+
+        }
+
+        [HttpGet]
+        public APIResponse GetPageData(int userId, int merchantId, int posMachineId)
+        {
+            var model = ServiceFactory.Cart.GetPageData(userId, merchantId, posMachineId);
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", model);
 
         }
     }

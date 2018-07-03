@@ -12,7 +12,7 @@ namespace WebAppApi.Models.Global
 
         public ProductKindPageModel ProductKind { get; set; }
 
-        public CartModel Cart { get; set; }
+        public CartPageDataModel Cart { get; set; }
 
         public PersonalModel Personal { get; set; }
     }

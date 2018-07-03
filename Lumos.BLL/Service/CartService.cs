@@ -12,10 +12,21 @@ namespace Lumos.BLL.Service
 {
     public class CartService : BaseProvider
     {
-        public CartModel GetPageData(int userId)
+        public CartPageDataModel GetPageData(int userId, int merchantId, int posMachineId)
         {
-            var cartModel = new CartModel();
 
+            var cartPageDataModel = new CartPageDataModel();
+
+
+            cartPageDataModel.ShoppingData = GetShoppingData(userId, merchantId, posMachineId);
+
+            return cartPageDataModel;
+        }
+
+
+        public CartShoppingDataModel GetShoppingData(int userId, int merchantId, int posMachineId)
+        {
+            var cartShoppingDataModel = new CartShoppingDataModel();
 
             var carts = CurrentDb.Cart.Where(m => m.UserId == userId && m.Status == Enumeration.CartStatus.WaitSettle).ToList();
 
@@ -36,49 +47,27 @@ namespace Lumos.BLL.Service
                     cartProcudtSkuModel.Quantity = item.Quantity;
                     cartProcudtSkuModel.SumPrice = item.Quantity * skuModel.UnitPrice;
                     cartProcudtSkuModel.Selected = item.Selected;
-                    cartProcudtSkuModel.ChannelId = item.ChannelId;
-                    cartProcudtSkuModel.ChannelType = item.ChannelType;
                     skus.Add(cartProcudtSkuModel);
                 }
             }
 
+            cartShoppingDataModel.Skus = skus;
 
-            var channels = (from c in carts select new { c.ChannelId, c.ChannelType }).Distinct();
-
-
-            foreach (var item in channels)
-            {
-
-                var carBlock = new CartBlock();
-                carBlock.ChannelId = item.ChannelId;
-                carBlock.ChannelType = item.ChannelType;
-                carBlock.Skus = skus.Where(m => m.ChannelId == item.ChannelId && m.ChannelType == item.ChannelType).ToList();
-
-                switch (item.ChannelType)
-                {
-                    case Enumeration.ChannelType.SelfPick:
-                        carBlock.TagName = "自提商品";
-                        break;
-                    case Enumeration.ChannelType.Express:
-                        carBlock.TagName = "快递商品";
-                        break;
-                }
-
-                cartModel.Block.Add(carBlock);
-            }
+            cartShoppingDataModel.Count = skus.Sum(m => m.Quantity);
+            cartShoppingDataModel.SumPrice = skus.Sum(m => m.SumPrice);
+            cartShoppingDataModel.SumPriceBySelected = skus.Where(m => m.Selected == true).Sum(m => m.SumPrice);
+            cartShoppingDataModel.CountBySelected = skus.Where(m => m.Selected == true).Count();
 
 
 
-            cartModel.Count = skus.Sum(m => m.Quantity);
-            cartModel.SumPrice = skus.Sum(m => m.SumPrice);
-            cartModel.SumPriceBySelected = skus.Where(m => m.Selected == true).Sum(m => m.SumPrice);
-            cartModel.CountBySelected = skus.Where(m => m.Selected == true).Count();
-
-            return cartModel;
+            return cartShoppingDataModel;
         }
 
+
+
+
         private static readonly object operatelock = new object();
-        public CustomJsonResult Operate(int operater, Enumeration.CartOperateType operate, int userId, List<CartProcudtSkuByOperateModel> procudtSkus)
+        public CustomJsonResult Operate(int operater, Enumeration.CartOperateType operate, int userId, int merchantId, int posMachineId, List<CartProcudtSkuByOperateModel> procudtSkus)
         {
             var result = new CustomJsonResult();
 
@@ -90,7 +79,7 @@ namespace Lumos.BLL.Service
 
                     foreach (var item in procudtSkus)
                     {
-                        var mod_Cart = CurrentDb.Cart.Where(m => m.UserId == userId && m.ProductSkuId == item.SkuId && m.ChannelId == item.ChannelId && m.ChannelType == item.ChannelType && m.Status == Enumeration.CartStatus.WaitSettle).FirstOrDefault();
+                        var mod_Cart = CurrentDb.Cart.Where(m => m.UserId == userId && m.ProductSkuId == item.SkuId && m.Status == Enumeration.CartStatus.WaitSettle).FirstOrDefault();
 
                         Log.Info("购物车操作：" + operate);
                         switch (operate)
@@ -122,8 +111,6 @@ namespace Lumos.BLL.Service
                                     mod_Cart.CreateTime = this.DateTime;
                                     mod_Cart.Creator = operater;
                                     mod_Cart.Quantity = 1;
-                                    mod_Cart.ChannelId = item.ChannelId;
-                                    mod_Cart.ChannelType = item.ChannelType;
                                     mod_Cart.Status = Enumeration.CartStatus.WaitSettle;
                                     CurrentDb.Cart.Add(mod_Cart);
                                 }
@@ -145,11 +132,11 @@ namespace Lumos.BLL.Service
 
                     CurrentDb.SaveChanges();
 
-                    var cartModel = GetPageData(userId);
+                    var cartShoppingDataModel = GetShoppingData(userId, merchantId, posMachineId);
 
                     ts.Complete();
 
-                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", cartModel);
+                    result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", cartShoppingDataModel);
                 }
             }
 

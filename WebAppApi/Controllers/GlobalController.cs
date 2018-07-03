@@ -28,7 +28,7 @@ namespace WebAppApi.Controllers
 
             model.Index = ServiceFactory.Index.GetPageData(userId);
             model.ProductKind = ServiceFactory.Product.GetKindPageData();
-            model.Cart = ServiceFactory.Cart.GetPageData(userId);
+            model.Cart = ServiceFactory.Cart.GetPageData(userId, merchantId, posMachineId);
             model.Personal = ServiceFactory.Personal.GetPageData(userId);
             APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
             return new APIResponse(result);

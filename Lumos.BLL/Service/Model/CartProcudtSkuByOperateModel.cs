@@ -11,7 +11,5 @@ namespace Lumos.BLL.Service.Model
         public int SkuId { get; set; }
         public int Quantity { get; set; }
         public bool Selected { get; set; }
-        public int ChannelId { get; set; }
-        public Entity.Enumeration.ChannelType ChannelType { get; set; }
     }
 }

@@ -86,11 +86,8 @@ namespace Lumos.BLL.Service
             {
                 if (!string.IsNullOrEmpty(product.DispalyImgs))
                 {
-                    var dispalyImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Lumos.Entity.ImgSet>>(product.DispalyImgs);
-
-                    dispalyImgs = dispalyImgs.Where(m => m.ImgUrl != null && m.ImgUrl.Length > 0).ToList();
-                    productSkuModel.DispalyImgs = dispalyImgs;
-
+                    productSkuModel.DispalyImgs = BizFactory.ProductSku.GetDispalyImgs(product.DispalyImgs);
+                    productSkuModel.MainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
                 }
 
                 if (!string.IsNullOrEmpty(product.SpecsJson))

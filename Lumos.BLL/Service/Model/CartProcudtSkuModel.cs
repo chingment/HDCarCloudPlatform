@@ -18,7 +18,5 @@ namespace Lumos.BLL.Service.Model
         public decimal UnitPrice { get; set; }
         public decimal ShowPrice { get; set; }
         public decimal SumPrice { get; set; }
-        public int ChannelId { get; set; }
-        public Enumeration.ChannelType ChannelType { get; set; }
     }
 }

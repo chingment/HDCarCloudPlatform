@@ -12,7 +12,7 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse Operate(OperateParams model)
         {
-            IResult result = ServiceFactory.Cart.Operate(model.UserId, model.Operate, model.UserId, model.MerchantId, model.PosMachineId, model.List);
+            IResult result = ServiceFactory.Cart.Operate(model.UserId, model.Operate, model.UserId, model.MerchantId, model.PosMachineId, model.Skus);
 
             return new APIResponse(result);
 

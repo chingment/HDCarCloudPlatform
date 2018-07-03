@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
+        private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        private string host = "http://120.79.233.231";
+        //private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -193,8 +193,10 @@ namespace WebAppApi.Controllers
             int posMachineId = 153;
 
 
-            model.Add("获取产品列表", GetProductList(userId, merchantId, posMachineId, 0));
-            model.Add("获取产品分类", GetProductKinds(userId, merchantId, posMachineId));
+            model.Add("购物车操作", CartOperate(userId, merchantId, posMachineId));
+            model.Add("获取购物车数据", GetCartPageData(userId, merchantId, posMachineId));
+            //  model.Add("获取产品列表", GetProductList(userId, merchantId, posMachineId, 0));
+            //  model.Add("获取产品分类", GetProductKinds(userId, merchantId, posMachineId));
 
             //model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
 
@@ -1823,6 +1825,56 @@ namespace WebAppApi.Controllers
 
             return result;
         }
+
+        public string GetCartPageData(int userId, int merchantId, int posMachineId)
+        {
+
+            Dictionary<string, string> parames = new Dictionary<string, string>();
+            parames.Add("userId", userId.ToString());
+            parames.Add("merchantId", merchantId.ToString());
+            parames.Add("posMachineId", posMachineId.ToString());
+
+
+            string signStr = Signature.Compute(key, secret, timespan, Signature.GetQueryData(parames));
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpGet("" + host + "/api/Cart/GetPageData?userId=" + userId.ToString() + "&merchantId=" + merchantId + "&posMachineId=" + posMachineId, headers);
+
+            return result;
+        }
+
+
+        public string CartOperate(int userId, int merchantId, int posMachineId)
+        {
+
+            WebAppApi.Models.Cart.OperateParams model1 = new WebAppApi.Models.Cart.OperateParams();
+            model1.UserId = userId;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+            model1.Operate = Enumeration.CartOperateType.Increase;
+            model1.Skus.Add(new Lumos.BLL.Service.Model.CartProcudtSkuByOperateModel() { SkuId = 4, Quantity = 1, Selected = true });
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Cart/Operate", a1, headers1);
+
+            return respon_data4;
+
+        }
+
 
         public string SubmitInsurance(int userId, int merchantId, int posMachineId)
         {

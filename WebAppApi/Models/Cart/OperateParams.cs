@@ -16,6 +16,11 @@ namespace WebAppApi.Models.Cart
 
         public Lumos.Entity.Enumeration.CartOperateType Operate { get; set; }
 
-        public List<CartProcudtSkuByOperateModel> List { get; set; }
+        public List<CartProcudtSkuByOperateModel> Skus { get; set; }
+
+        public OperateParams()
+        {
+            this.Skus = new List<CartProcudtSkuByOperateModel>();
+        }
     }
 }

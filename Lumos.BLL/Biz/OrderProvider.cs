@@ -698,9 +698,7 @@ namespace Lumos.BLL
                 CurrentDb.SaveChanges();
 
 
-
                 OrderConfirmInfo yOrder = new OrderConfirmInfo();
-
 
                 yOrder.OrderId = orderToLllegalQueryRecharge.Id;
                 yOrder.OrderSn = orderToLllegalQueryRecharge.Sn;

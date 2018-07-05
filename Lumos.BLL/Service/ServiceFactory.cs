@@ -8,14 +8,6 @@ namespace Lumos.BLL.Service
 {
     public class ServiceFactory : BaseFactory
     {
-        public static IndexService Index
-        {
-            get
-            {
-                return new IndexService();
-            }
-        }
-
         public static ProductService Product
         {
             get
@@ -32,36 +24,6 @@ namespace Lumos.BLL.Service
             }
         }
 
-        public static PersonalService Personal
-        {
-            get
-            {
-                return new PersonalService();
-            }
-        }
 
-        public static ShippingAddressService ShippingAddress
-        {
-            get
-            {
-                return new ShippingAddressService();
-            }
-        }
-
-        public static OrderService Order
-        {
-            get
-            {
-                return new OrderService();
-            }
-        }
-
-        public static CouponService Coupon
-        {
-            get
-            {
-                return new CouponService();
-            }
-        }
     }
 }

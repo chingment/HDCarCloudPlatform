@@ -20,19 +20,6 @@ namespace WebAppApi.Controllers
     [BaseAuthorizeAttribute]
     public class GlobalController : OwnBaseApiController
     {
-        [HttpGet]
-        public APIResponse DataSet(int userId, int merchantId, int posMachineId, DateTime? datetime)
-        {
-
-            var model = new DataSetModel();
-
-            model.Index = ServiceFactory.Index.GetPageData(userId);
-            model.ProductKind = ServiceFactory.Product.GetKindPageData();
-            model.Cart = ServiceFactory.Cart.GetPageData(userId, merchantId, posMachineId);
-            model.Personal = ServiceFactory.Personal.GetPageData(userId);
-            APIResult result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = model };
-            return new APIResponse(result);
-        }
 
         [HttpPost]
         public APIResponse UploadLogTrace(UploadLogTracePms pms)

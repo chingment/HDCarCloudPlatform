@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebAppApi.Models.Order
+namespace Lumos.BLL.Service.Model
 {
-    public class SubmitShoppingModel
+    public class SubmitShoppingPms
     {
         public int UserId { get; set; }
 
@@ -16,8 +16,8 @@ namespace WebAppApi.Models.Order
 
         public int OrderId { get; set; }
 
-        public ShippingAddressModel ShippingAddress { get; set; }
+        public RecipientAddressModel RecipientAddress { get; set; }
 
-        List<CartProcudtSkuByOperateModel> Skus { get; set; }
+        public List<CartProcudtSkuByOperateModel> Skus { get; set; }
     }
 }

@@ -114,8 +114,6 @@
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Sdk\StarPayProvider.cs" />
     <Compile Include="Service\CartService.cs" />
-    <Compile Include="Service\CouponService.cs" />
-    <Compile Include="Service\IndexService.cs" />
     <Compile Include="Service\Model\BannerModel.cs" />
     <Compile Include="Service\Model\CartProcudtSkuByOperateModel.cs" />
     <Compile Include="Service\Model\CartProcudtSkuModel.cs" />
@@ -134,16 +132,14 @@
     <Compile Include="Service\Model\ProductKindModel.cs" />
     <Compile Include="Service\Model\ProductSkuModel.cs" />
     <Compile Include="Service\Model\PersonalModel.cs" />
-    <Compile Include="Service\Model\ShippingAddressModel.cs" />
+    <Compile Include="Service\Model\RecipientAddressModel.cs" />
     <Compile Include="Service\Model\SpecModel.cs" />
     <Compile Include="Service\Model\SpecValueModel.cs" />
     <Compile Include="Service\Model\OrderConfirmSubtotalItemModel.cs" />
+    <Compile Include="Service\Model\SubmitShoppingPms.cs" />
     <Compile Include="Service\Model\UserInfoModel.cs" />
-    <Compile Include="Service\OrderService.cs" />
-    <Compile Include="Service\PersonalService.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\ServiceFactory.cs" />
-    <Compile Include="Service\ShippingAddressService.cs" />
     <Compile Include="Sys\AuthorizeRelayProvider.cs" />
     <Compile Include="Sys\SysAppKeySecretProvider.cs" />
     <Compile Include="Sys\SysBannerProvider.cs" />

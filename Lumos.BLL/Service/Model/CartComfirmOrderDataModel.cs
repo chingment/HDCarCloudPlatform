@@ -11,13 +11,13 @@ namespace Lumos.BLL.Service.Model
         public CartComfirmOrderDataModel()
         {
             this.Skus = new List<CartProcudtSkuModel>();
-            this.ShippingAddress = new ShippingAddressModel();
+            this.RecipientAddress = new RecipientAddressModel();
         }
 
         public List<CartProcudtSkuModel> Skus { get; set; }
 
         public string ActualAmount { get; set; }
 
-        public ShippingAddressModel ShippingAddress { get; set; }
+        public RecipientAddressModel RecipientAddress { get; set; }
     }
 }

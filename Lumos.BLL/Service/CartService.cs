@@ -186,11 +186,11 @@ namespace Lumos.BLL.Service
 
             if (merchant != null)
             {
-                model.ShippingAddress.Address = merchant.ContactAddress;
-                model.ShippingAddress.Receiver = merchant.ContactName;
-                model.ShippingAddress.PhoneNumber = merchant.ContactPhoneNumber;
-                model.ShippingAddress.Area = merchant.Area;
-                model.ShippingAddress.AreaCode = merchant.AreaCode;
+                model.RecipientAddress.Recipient = merchant.ContactName;
+                model.RecipientAddress.Address = merchant.ContactAddress;
+                model.RecipientAddress.PhoneNumber = merchant.ContactPhoneNumber;
+                model.RecipientAddress.AreaName = merchant.Area;
+                model.RecipientAddress.AreaCode = merchant.AreaCode;
             }
 
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", model);

@@ -58,7 +58,10 @@ namespace Lumos.Entity
         public DateTime? LastUpdateTime { get; set; }
         [MaxLength(128)]
         public string Recipient { get; set; }
-
+        [MaxLength(128)]
+        public string RecipientAreaName { get; set; }
+        [MaxLength(128)]
+        public string RecipientAreaCode { get; set; }
         [MaxLength(512)]
         public string RecipientAddress { get; set; }
 

@@ -1194,22 +1194,14 @@ namespace WebAppApi.Controllers
         }
 
         [HttpPost]
-        public APIResponse SubmitShopping(SubmitShoppingModel model)
+        public APIResponse SubmitShopping(SubmitShoppingPms pms)
         {
-            if (IsSaleman(model.UserId))
+            if (IsSaleman(pms.UserId))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
             }
 
-            OrderToShopping orderToShopping = new OrderToShopping();
-            orderToShopping.UserId = model.UserId;
-            orderToShopping.MerchantId = model.MerchantId;
-            orderToShopping.PosMachineId = model.PosMachineId;
-
-
-            OrderToShoppingGoodsDetails orderToShoppingGoodsDetails = new OrderToShoppingGoodsDetails();
-
-            IResult result = BizFactory.OrderToShopping.Submit(model.UserId, orderToShopping, orderToShoppingGoodsDetails);
+            IResult result = BizFactory.OrderToShopping.Submit(pms.UserId, pms);
 
             return new APIResponse(result);
 
@@ -1262,13 +1254,6 @@ namespace WebAppApi.Controllers
         public APIResponse PayResultNotify(PayResultNotifyParams pms)
         {
             IResult result = BizFactory.Pay.ResultNotify(pms.UserId, pms.OrderSn, pms.IsPaySuccess, Enumeration.PayResultNotifyType.AppNotify, "App");
-
-            return new APIResponse(result);
-        }
-
-        public APIResponse Confirm(OrderConfirmModel pms)
-        {
-            IResult result = ServiceFactory.Order.Confrim(pms.UserId, pms);
 
             return new APIResponse(result);
         }

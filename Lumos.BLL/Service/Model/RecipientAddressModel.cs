@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace Lumos.BLL.Service.Model
 {
-    public class ShippingAddressModel
+    public class RecipientAddressModel
     {
-        public int Id { get; set; }
-        public string Receiver { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Area { get; set; }
+        public string Recipient { get; set; }
+        public string AreaName { get; set; }
         public string AreaCode { get; set; }
         public string Address { get; set; }
-        public bool CanSelectElse { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

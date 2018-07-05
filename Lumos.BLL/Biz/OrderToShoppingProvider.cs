@@ -1,4 +1,6 @@
-﻿using Lumos.Entity;
+﻿using Lumos.BLL.Service;
+using Lumos.BLL.Service.Model;
+using Lumos.Entity;
 using Lumos.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,46 +13,66 @@ namespace Lumos.BLL
 {
     public class OrderToShoppingProvider : BaseProvider
     {
-        public CustomJsonResult Submit(int operater, OrderToShopping orderToShopping, OrderToShoppingGoodsDetails orderToShoppingGoodsDetails)
+        public CustomJsonResult Submit(int operater, SubmitShoppingPms pms)
         {
             CustomJsonResult result = new CustomJsonResult();
 
             using (TransactionScope ts = new TransactionScope())
             {
-                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == orderToShopping.UserId).FirstOrDefault();
+                var clientUser = CurrentDb.SysClientUser.Where(m => m.Id == pms.UserId).FirstOrDefault();
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
 
-
-
-                var l_OrderToShopping = CurrentDb.OrderToShopping.Where(m => m.Id == orderToShopping.Id).FirstOrDefault();
+                var l_OrderToShopping = CurrentDb.OrderToShopping.Where(m => m.Id == pms.OrderId).FirstOrDefault();
                 if (l_OrderToShopping == null)
                 {
                     l_OrderToShopping = new OrderToShopping();
-
                     l_OrderToShopping.SalesmanId = merchant.SalesmanId ?? 0;
                     l_OrderToShopping.AgentId = merchant.AgentId ?? 0;
                     l_OrderToShopping.Type = Enumeration.OrderType.Goods;
                     l_OrderToShopping.TypeName = Enumeration.OrderType.Goods.GetCnName();
                     l_OrderToShopping.Status = Enumeration.OrderStatus.WaitPay;
+                    l_OrderToShopping.Recipient = pms.RecipientAddress.Recipient;
+                    l_OrderToShopping.RecipientPhoneNumber = pms.RecipientAddress.PhoneNumber;
+                    l_OrderToShopping.RecipientAreaCode = pms.RecipientAddress.AreaCode;
+                    l_OrderToShopping.RecipientAreaName = pms.RecipientAddress.AreaName;
+                    l_OrderToShopping.RecipientAddress = pms.RecipientAddress.Address;
                     l_OrderToShopping.SubmitTime = this.DateTime;
                     l_OrderToShopping.CreateTime = this.DateTime;
                     l_OrderToShopping.Creator = operater;
-
                     CurrentDb.OrderToShopping.Add(l_OrderToShopping);
-
                     SnModel snModel = Sn.Build(SnType.OrderToGoods, l_OrderToShopping.Id);
                     l_OrderToShopping.Sn = snModel.Sn;
                     CurrentDb.SaveChanges();
+
+                    decimal sumPrice = 0;
+                    foreach (var item in pms.Skus)
+                    {
+                        var skuModel = ServiceFactory.Product.GetSkuModel(item.SkuId);
+                        if (skuModel != null)
+                        {
+                            OrderToShoppingGoodsDetails l_OrderToShoppingGoodsDetails = new OrderToShoppingGoodsDetails();
+                            l_OrderToShoppingGoodsDetails.OrderId = l_OrderToShopping.Id;
+                            l_OrderToShoppingGoodsDetails.ProductSkuId = skuModel.SkuId;
+                            l_OrderToShoppingGoodsDetails.ProductSkuImgUrl = skuModel.MainImg;
+                            l_OrderToShoppingGoodsDetails.ProductSkuName = skuModel.Name;
+                            l_OrderToShoppingGoodsDetails.Quantity = item.Quantity;
+                            l_OrderToShoppingGoodsDetails.UnitPrice = skuModel.UnitPrice;
+                            l_OrderToShoppingGoodsDetails.SumPrice = item.Quantity * skuModel.UnitPrice;
+                            l_OrderToShoppingGoodsDetails.CreateTime = this.DateTime;
+                            l_OrderToShoppingGoodsDetails.Creator = operater;
+                            CurrentDb.OrderToShoppingGoodsDetails.Add(l_OrderToShoppingGoodsDetails);
+                            CurrentDb.SaveChanges();
+
+                            sumPrice += l_OrderToShoppingGoodsDetails.SumPrice;
+                        }
+                    }
+
+                    l_OrderToShopping.Price = sumPrice;
                 }
-                else
-                {
-                    l_OrderToShopping.LastUpdateTime = this.DateTime;
-                    l_OrderToShopping.Mender = operater;
-                }
+
 
 
                 OrderConfirmInfo yOrder = new OrderConfirmInfo();
-
 
                 yOrder.OrderId = l_OrderToShopping.Id;
                 yOrder.OrderSn = l_OrderToShopping.Sn;

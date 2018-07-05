@@ -33,7 +33,7 @@ namespace Lumos.Entity
         public string MainImg { get; set; }
 
         [MaxLength(2048)]
-        public string DispalyImgs { get; set; }
+        public string DisplayImgs { get; set; }
 
         [MaxLength(512)]
         public string BriefIntro { get; set; }

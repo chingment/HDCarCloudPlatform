@@ -35,7 +35,7 @@ namespace Lumos.BLL.Service
                 {
                     var productSku = CurrentDb.ProductSku.Where(m => m.Id == item.SkuId).FirstOrDefault();
                     var product = CurrentDb.Product.Where(m => m.Id == productSku.ProductId).FirstOrDefault();
-                    item.SkuMainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
+                    item.SkuMainImg = BizFactory.ProductSku.GetMainImg(product.DisplayImgs);
                     item.SkuName = productSku.Name;
                     item.Price = productSku.Price.ToF2Price();
                     item.PriceByVip = (productSku.Price * 0.9m).ToF2Price();

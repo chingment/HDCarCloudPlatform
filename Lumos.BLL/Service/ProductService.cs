@@ -84,10 +84,10 @@ namespace Lumos.BLL.Service
 
             try
             {
-                if (!string.IsNullOrEmpty(product.DispalyImgs))
+                if (!string.IsNullOrEmpty(product.DisplayImgs))
                 {
-                    productSkuModel.DispalyImgs = BizFactory.ProductSku.GetDispalyImgs(product.DispalyImgs);
-                    productSkuModel.MainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
+                    productSkuModel.DisplayImgs = BizFactory.ProductSku.GetDispalyImgs(product.DisplayImgs);
+                    productSkuModel.MainImg = BizFactory.ProductSku.GetMainImg(product.DisplayImgs);
                 }
 
                 if (!string.IsNullOrEmpty(product.SpecsJson))

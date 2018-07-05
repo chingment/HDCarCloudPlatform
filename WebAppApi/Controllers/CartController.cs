@@ -26,5 +26,14 @@ namespace WebAppApi.Controllers
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", model);
 
         }
+
+        [HttpGet]
+        public APIResponse GetShoppingData(int userId, int merchantId, int posMachineId)
+        {
+            var model = ServiceFactory.Cart.GetShoppingData(userId, merchantId, posMachineId);
+
+            return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", model);
+
+        }
     }
 }

@@ -11,8 +11,8 @@ namespace Lumos.BLL.Service.Model
     {
         public int CartId { get; set; }
         public int SkuId { get; set; }
-        public string SkuName { get; set; }
-        public string SkuMainImg { get; set; }
+        public string Name { get; set; }
+        public string MainImg { get; set; }
         public int Quantity { get; set; }
         public bool Selected { get; set; }
         public decimal UnitPrice { get; set; }

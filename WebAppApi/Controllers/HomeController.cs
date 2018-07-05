@@ -193,8 +193,9 @@ namespace WebAppApi.Controllers
             int posMachineId = 153;
 
 
-            model.Add("购物车操作", CartOperate(userId, merchantId, posMachineId));
-            model.Add("获取购物车数据", GetCartPageData(userId, merchantId, posMachineId));
+            //model.Add("购物车操作", CartOperate(userId, merchantId, posMachineId));
+            // model.Add("获取购物车数据", GetCartPageData(userId, merchantId, posMachineId));
+            model.Add("确认购物车数据", CarGetComfirmOrderData(userId, merchantId, posMachineId));
             //  model.Add("获取产品列表", GetProductList(userId, merchantId, posMachineId, 0));
             //  model.Add("获取产品分类", GetProductKinds(userId, merchantId, posMachineId));
 
@@ -1851,12 +1852,12 @@ namespace WebAppApi.Controllers
         public string CartOperate(int userId, int merchantId, int posMachineId)
         {
 
-            WebAppApi.Models.Cart.OperateParams model1 = new WebAppApi.Models.Cart.OperateParams();
+            WebAppApi.Models.Cart.OperatePms model1 = new WebAppApi.Models.Cart.OperatePms();
             model1.UserId = userId;
             model1.MerchantId = merchantId;
             model1.PosMachineId = posMachineId;
             model1.Operate = Enumeration.CartOperateType.Increase;
-            model1.Skus.Add(new Lumos.BLL.Service.Model.CartProcudtSkuByOperateModel() { SkuId = 4, Quantity = 1, Selected = true });
+            model1.Skus.Add(new Lumos.BLL.Service.Model.CartProcudtSkuByOperateModel() { SkuId = 4, Quantity = 1 });
 
             string a1 = JsonConvert.SerializeObject(model1);
 
@@ -1870,6 +1871,33 @@ namespace WebAppApi.Controllers
 
             HttpUtil http = new HttpUtil();
             string respon_data4 = http.HttpPostJson("" + host + "/api/Cart/Operate", a1, headers1);
+
+            return respon_data4;
+
+        }
+
+
+        public string CarGetComfirmOrderData(int userId, int merchantId, int posMachineId)
+        {
+
+            WebAppApi.Models.Cart.GetComfirmOrderDataPms model1 = new WebAppApi.Models.Cart.GetComfirmOrderDataPms();
+            model1.UserId = userId;
+            model1.MerchantId = merchantId;
+            model1.PosMachineId = posMachineId;
+            model1.Skus.Add(new Lumos.BLL.Service.Model.CartProcudtSkuByOperateModel() { SkuId = 4, Quantity = 1 });
+
+            string a1 = JsonConvert.SerializeObject(model1);
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+            Dictionary<string, string> headers1 = new Dictionary<string, string>();
+            headers1.Add("key", key);
+            headers1.Add("timestamp", (timespan.ToString()).ToString());
+            headers1.Add("sign", signStr);
+
+
+            HttpUtil http = new HttpUtil();
+            string respon_data4 = http.HttpPostJson("" + host + "/api/Cart/GetComfirmOrderData", a1, headers1);
 
             return respon_data4;
 

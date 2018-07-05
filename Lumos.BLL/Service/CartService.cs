@@ -58,8 +58,6 @@ namespace Lumos.BLL.Service
             cartShoppingDataModel.SumPriceBySelected = skus.Where(m => m.Selected == true).Sum(m => m.SumPrice);
             cartShoppingDataModel.CountBySelected = skus.Where(m => m.Selected == true).Count();
 
-
-
             return cartShoppingDataModel;
         }
 
@@ -86,7 +84,16 @@ namespace Lumos.BLL.Service
                         {
                             case Enumeration.CartOperateType.Selected:
                                 Log.Info("购物车操作：选择");
-                                mod_Cart.Selected = item.Selected;
+
+                                if (mod_Cart.Selected)
+                                {
+                                    mod_Cart.Selected = false;
+                                }
+                                else
+                                {
+                                    mod_Cart.Selected = true;
+                                }
+
                                 break;
                             case Enumeration.CartOperateType.Decrease:
                                 Log.Info("购物车操作：减少");
@@ -142,6 +149,51 @@ namespace Lumos.BLL.Service
 
 
             return result;
+        }
+
+
+        public CustomJsonResult GetComfirmOrderData(int operater, int userId, int merchantId, int posMachineId, List<CartProcudtSkuByOperateModel> procudtSkus)
+        {
+            CartComfirmOrderDataModel model = new CartComfirmOrderDataModel();
+
+
+
+
+            var skus = new List<CartProcudtSkuModel>();
+
+            foreach (var item in procudtSkus)
+            {
+                var skuModel = ServiceFactory.Product.GetSkuModel(item.SkuId);
+                if (skuModel != null)
+                {
+                    var cartProcudtSkuModel = new CartProcudtSkuModel();
+                    cartProcudtSkuModel.CartId = item.CartId;
+                    cartProcudtSkuModel.SkuId = skuModel.SkuId;
+                    cartProcudtSkuModel.Name = skuModel.Name;
+                    cartProcudtSkuModel.MainImg = skuModel.MainImg;
+                    cartProcudtSkuModel.UnitPrice = skuModel.UnitPrice;
+                    cartProcudtSkuModel.Quantity = item.Quantity;
+                    cartProcudtSkuModel.SumPrice = item.Quantity * skuModel.UnitPrice;
+                    skus.Add(cartProcudtSkuModel);
+                }
+            }
+
+            model.Skus = skus;
+
+            model.ActualAmount = skus.Sum(m => m.SumPrice).ToF2Price();
+
+            var merchant = CurrentDb.Merchant.Where(m => m.Id == merchantId).FirstOrDefault();
+
+            if (merchant != null)
+            {
+                model.ShippingAddress.Address = merchant.ContactAddress;
+                model.ShippingAddress.Receiver = merchant.ContactName;
+                model.ShippingAddress.PhoneNumber = merchant.ContactPhoneNumber;
+                model.ShippingAddress.Area = merchant.Area;
+                model.ShippingAddress.AreaCode = merchant.AreaCode;
+            }
+
+            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", model);
         }
     }
 }

@@ -120,6 +120,7 @@
     <Compile Include="Service\Model\CartProcudtSkuModel.cs" />
     <Compile Include="Service\Model\CartPageDataModel.cs" />
     <Compile Include="Service\Model\CartShoppingDataModel.cs" />
+    <Compile Include="Service\Model\CartComfirmOrderDataModel.cs" />
     <Compile Include="Service\Model\CouponModel.cs" />
     <Compile Include="Service\Model\OrderConfirmCouponModel.cs" />
     <Compile Include="Service\Model\IndexModel.cs" />

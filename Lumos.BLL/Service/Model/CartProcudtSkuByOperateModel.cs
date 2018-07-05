@@ -8,8 +8,8 @@ namespace Lumos.BLL.Service.Model
 {
     public class CartProcudtSkuByOperateModel
     {
+        public int CartId { get; set; }
         public int SkuId { get; set; }
         public int Quantity { get; set; }
-        public bool Selected { get; set; }
     }
 }

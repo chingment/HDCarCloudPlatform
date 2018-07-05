@@ -194,7 +194,8 @@
     <Compile Include="Models\Account\LoginResultModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\TalentDemandWorkJobModel.cs" />
-    <Compile Include="Models\Cart\OperateParams.cs" />
+    <Compile Include="Models\Cart\GetComfirmOrderDataPms.cs" />
+    <Compile Include="Models\Cart\OperatePms.cs" />
     <Compile Include="Models\Coupon\GetListParams.cs" />
     <Compile Include="Models\Global\DataSetModel.cs" />
     <Compile Include="Models\Order\PayResultNotifyParams.cs" />

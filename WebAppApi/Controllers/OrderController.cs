@@ -326,11 +326,11 @@ namespace WebAppApi.Controllers
 
                                 foreach (var item in orderToShoppingGoodsDetails)
                                 {
-                                    orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0} {1}", item.Quantity, item.SumPrice.ToF2Price())));
+                                    orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0}     {1}", item.Quantity, item.SumPrice.ToF2Price())));
                                 }
 
 
-                                orderModel.OrderField.Add(new OrderField("合计", m.Price.ToString()));
+                                orderModel.OrderField.Add(new OrderField("合计", m.Price.ToF2Price()));
 
                                 break;
                         }
@@ -446,11 +446,11 @@ namespace WebAppApi.Controllers
 
                                 foreach (var item in orderToShoppingGoodsDetails)
                                 {
-                                    orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0} {1}", item.Quantity, item.SumPrice.ToF2Price())));
+                                    orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0}     {1}", item.Quantity, item.SumPrice.ToF2Price())));
                                 }
 
 
-                                orderModel.OrderField.Add(new OrderField("合计", m.Price.ToString()));
+                                orderModel.OrderField.Add(new OrderField("合计", m.Price.ToF2Price()));
 
                                 break;
                         }
@@ -529,10 +529,10 @@ namespace WebAppApi.Controllers
 
                                 foreach (var item in orderToShoppingGoodsDetails)
                                 {
-                                    orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0} {1}", item.Quantity, item.SumPrice.ToF2Price())));
+                                    orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0}     {1}", item.Quantity, item.SumPrice.ToF2Price())));
                                 }
 
-                                orderModel.OrderField.Add(new OrderField("合计", m.Price.ToString()));
+                                orderModel.OrderField.Add(new OrderField("合计", m.Price.ToF2Price()));
 
                                 break;
                         }

@@ -26,6 +26,9 @@ namespace Lumos.BLL
                 if (l_OrderToShopping == null)
                 {
                     l_OrderToShopping = new OrderToShopping();
+                    l_OrderToShopping.UserId = pms.UserId;
+                    l_OrderToShopping.MerchantId = pms.MerchantId;
+                    l_OrderToShopping.PosMachineId = pms.PosMachineId;
                     l_OrderToShopping.SalesmanId = merchant.SalesmanId ?? 0;
                     l_OrderToShopping.AgentId = merchant.AgentId ?? 0;
                     l_OrderToShopping.Type = Enumeration.OrderType.Goods;
@@ -40,6 +43,7 @@ namespace Lumos.BLL
                     l_OrderToShopping.CreateTime = this.DateTime;
                     l_OrderToShopping.Creator = operater;
                     CurrentDb.OrderToShopping.Add(l_OrderToShopping);
+                    CurrentDb.SaveChanges();
                     SnModel snModel = Sn.Build(SnType.OrderToGoods, l_OrderToShopping.Id);
                     l_OrderToShopping.Sn = snModel.Sn;
                     CurrentDb.SaveChanges();
@@ -65,6 +69,17 @@ namespace Lumos.BLL
 
                             sumPrice += l_OrderToShoppingGoodsDetails.SumPrice;
                         }
+
+                        var cart = CurrentDb.Cart.Where(m => m.Id == item.CartId).FirstOrDefault();
+                        if (cart != null)
+                        {
+                            cart.Status = Enumeration.CartStatus.Settling;
+                            cart.LastUpdateTime = this.DateTime;
+                            cart.Mender = operater;
+                            CurrentDb.SaveChanges();
+                        }
+
+
                     }
 
                     l_OrderToShopping.Price = sumPrice;
@@ -87,7 +102,7 @@ namespace Lumos.BLL
                 CurrentDb.SaveChanges();
                 ts.Complete();
 
-                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功", null);
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "提交成功", yOrder);
             }
 
 

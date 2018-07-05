@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lumos.Entity
 {
-    [Table("OrderToShoppingDetails")]
+    [Table("OrderToShopping")]
     public class OrderToShopping : Order
     {
     }

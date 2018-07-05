@@ -329,7 +329,7 @@ namespace WebAppApi.Controllers
                                     orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0} {1}", item.Quantity, item.SumPrice.ToF2Price())));
                                 }
 
-                       
+
                                 orderModel.OrderField.Add(new OrderField("合计", m.Price.ToString()));
 
                                 break;
@@ -1189,6 +1189,28 @@ namespace WebAppApi.Controllers
             orderToInsurance.CredentialsImgs = Newtonsoft.Json.JsonConvert.SerializeObject(imgSet);
 
             IResult result = BizFactory.OrderToInsurance.Submit(model.UserId, orderToInsurance);
+            return new APIResponse(result);
+
+        }
+
+        [HttpPost]
+        public APIResponse SubmitShopping(SubmitShoppingModel model)
+        {
+            if (IsSaleman(model.UserId))
+            {
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "该用户为业务员，不能提交订单");
+            }
+
+            OrderToShopping orderToShopping = new OrderToShopping();
+            orderToShopping.UserId = model.UserId;
+            orderToShopping.MerchantId = model.MerchantId;
+            orderToShopping.PosMachineId = model.PosMachineId;
+
+
+            OrderToShoppingGoodsDetails orderToShoppingGoodsDetails = new OrderToShoppingGoodsDetails();
+
+            IResult result = BizFactory.OrderToShopping.Submit(model.UserId, orderToShopping, orderToShoppingGoodsDetails);
+
             return new APIResponse(result);
 
         }

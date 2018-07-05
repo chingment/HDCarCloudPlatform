@@ -545,19 +545,19 @@ namespace Lumos.BLL
 
             yOrder.OrderId = orderToServiceFee.Id;
             yOrder.OrderSn = orderToServiceFee.Sn;
-            yOrder.remarks = orderToServiceFee.Remarks;
-            yOrder.orderType = orderToServiceFee.Type;
-            yOrder.orderTypeName = orderToServiceFee.Type.GetCnName();
+            yOrder.Remarks = orderToServiceFee.Remarks;
+            yOrder.OrderType = orderToServiceFee.Type;
+            yOrder.OrderTypeName = orderToServiceFee.Type.GetCnName();
 
             //yOrder.confirmField.Add(new OrderField("订单编号", orderToServiceFee.Sn.NullToEmpty()));
 
             if (orderToServiceFee.Deposit > 0)
             {
-                yOrder.confirmField.Add(new OrderField("押金", string.Format("{0}元", orderToServiceFee.Deposit.ToF2Price())));
+                yOrder.ConfirmField.Add(new OrderField("押金", string.Format("{0}元", orderToServiceFee.Deposit.ToF2Price())));
             }
-            yOrder.confirmField.Add(new OrderField("流量费", string.Format("{0}元", orderToServiceFee.MobileTrafficFee.ToF2Price())));
-            yOrder.confirmField.Add(new OrderField("到期时间", orderToServiceFee.ExpiryTime.ToUnifiedFormatDate()));
-            yOrder.confirmField.Add(new OrderField("支付金额", string.Format("{0}元", orderToServiceFee.Price.NullToEmpty())));
+            yOrder.ConfirmField.Add(new OrderField("流量费", string.Format("{0}元", orderToServiceFee.MobileTrafficFee.ToF2Price())));
+            yOrder.ConfirmField.Add(new OrderField("到期时间", orderToServiceFee.ExpiryTime.ToUnifiedFormatDate()));
+            yOrder.ConfirmField.Add(new OrderField("支付金额", string.Format("{0}元", orderToServiceFee.Price.NullToEmpty())));
 
 
             #region 支持的支付方式
@@ -567,7 +567,7 @@ namespace Lumos.BLL
             {
                 var payWay = new PayWay();
                 payWay.id = payWayId;
-                yOrder.payMethod.Add(payWay);
+                yOrder.PayMethod.Add(payWay);
             }
             #endregion
 

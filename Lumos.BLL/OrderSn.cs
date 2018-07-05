@@ -17,9 +17,10 @@ namespace Lumos.BLL
         LllegalQueryScoreTrans = 8,
         OrderToLllegalQueryRecharge = 9,
         OrderToLllegalDealt = 10,
-        OrderPayTrans=11,
-        OrderToCredit=12,
-        OrderToInsurance = 13
+        OrderPayTrans = 11,
+        OrderToCredit = 12,
+        OrderToInsurance = 13,
+        OrderToGoods = 14
 
     }
 

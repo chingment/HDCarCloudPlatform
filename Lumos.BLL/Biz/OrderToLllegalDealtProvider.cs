@@ -66,25 +66,25 @@ namespace Lumos.BLL
 
                     yOrder.OrderId = orderToLllegalDealt.Id;
                     yOrder.OrderSn = orderToLllegalDealt.Sn;
-                    yOrder.remarks = orderToLllegalDealt.Remarks;
-                    yOrder.orderType = orderToLllegalDealt.Type;
-                    yOrder.orderTypeName = orderToLllegalDealt.TypeName;
+                    yOrder.Remarks = orderToLllegalDealt.Remarks;
+                    yOrder.OrderType = orderToLllegalDealt.Type;
+                    yOrder.OrderTypeName = orderToLllegalDealt.TypeName;
 
 
 
                     //yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalDealt.Sn.NullToEmpty()));
-                    yOrder.confirmField.Add(new Entity.AppApi.OrderField("车牌号码", orderToLllegalDealt.CarNo.NullToEmpty()));
-                    yOrder.confirmField.Add(new Entity.AppApi.OrderField("违章", string.Format("{0}次", orderToLllegalDealt.SumCount)));
-                    yOrder.confirmField.Add(new Entity.AppApi.OrderField("扣分", orderToLllegalDealt.SumPoint.NullToEmpty()));
+                    yOrder.ConfirmField.Add(new Entity.AppApi.OrderField("车牌号码", orderToLllegalDealt.CarNo.NullToEmpty()));
+                    yOrder.ConfirmField.Add(new Entity.AppApi.OrderField("违章", string.Format("{0}次", orderToLllegalDealt.SumCount)));
+                    yOrder.ConfirmField.Add(new Entity.AppApi.OrderField("扣分", orderToLllegalDealt.SumPoint.NullToEmpty()));
                     if (orderToLllegalDealt.SumUrgentFee > 0)
                     {
-                        yOrder.confirmField.Add(new Entity.AppApi.OrderField("加急费", orderToLllegalDealt.SumUrgentFee.NullToEmpty()));
+                        yOrder.ConfirmField.Add(new Entity.AppApi.OrderField("加急费", orderToLllegalDealt.SumUrgentFee.NullToEmpty()));
                     }
-                    yOrder.confirmField.Add(new Entity.AppApi.OrderField("罚款", orderToLllegalDealt.SumFine.NullToEmpty()));
+                    yOrder.ConfirmField.Add(new Entity.AppApi.OrderField("罚款", orderToLllegalDealt.SumFine.NullToEmpty()));
 
 
 
-                    yOrder.confirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalDealt.Price.NullToEmpty())));
+                    yOrder.ConfirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalDealt.Price.NullToEmpty())));
 
 
                     #region 支持的支付方式
@@ -94,7 +94,7 @@ namespace Lumos.BLL
                     {
                         var payWay = new PayWay();
                         payWay.id = payWayId;
-                        yOrder.payMethod.Add(payWay);
+                        yOrder.PayMethod.Add(payWay);
                     }
                     #endregion
 

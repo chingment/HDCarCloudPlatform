@@ -704,13 +704,13 @@ namespace Lumos.BLL
 
                 yOrder.OrderId = orderToLllegalQueryRecharge.Id;
                 yOrder.OrderSn = orderToLllegalQueryRecharge.Sn;
-                yOrder.remarks = orderToLllegalQueryRecharge.Remarks;
-                yOrder.orderType = orderToLllegalQueryRecharge.Type;
-                yOrder.orderTypeName = orderToLllegalQueryRecharge.TypeName;
+                yOrder.Remarks = orderToLllegalQueryRecharge.Remarks;
+                yOrder.OrderType = orderToLllegalQueryRecharge.Type;
+                yOrder.OrderTypeName = orderToLllegalQueryRecharge.TypeName;
 
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalQueryRecharge.Sn.NullToEmpty()));
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("积分", string.Format("{0}", orderToLllegalQueryRecharge.Score)));
-                yOrder.confirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalQueryRecharge.Price.NullToEmpty())));
+                yOrder.ConfirmField.Add(new Entity.AppApi.OrderField("订单编号", orderToLllegalQueryRecharge.Sn.NullToEmpty()));
+                yOrder.ConfirmField.Add(new Entity.AppApi.OrderField("积分", string.Format("{0}", orderToLllegalQueryRecharge.Score)));
+                yOrder.ConfirmField.Add(new Entity.AppApi.OrderField("支付金额", string.Format("{0}元", orderToLllegalQueryRecharge.Price.NullToEmpty())));
 
 
                 #region 支持的支付方式
@@ -720,7 +720,7 @@ namespace Lumos.BLL
                 {
                     var payWay = new PayWay();
                     payWay.id = payWayId;
-                    yOrder.payMethod.Add(payWay);
+                    yOrder.PayMethod.Add(payWay);
                 }
                 #endregion
 

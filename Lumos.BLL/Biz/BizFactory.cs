@@ -186,5 +186,13 @@ namespace Lumos.BLL
             }
         }
 
+        public static OrderToShoppingProvider OrderToShopping
+        {
+            get
+            {
+                return new OrderToShoppingProvider();
+            }
+        }
+
     }
 }

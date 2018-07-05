@@ -14,28 +14,28 @@ namespace Lumos.BLL
     {
         public OrderConfirmInfo()
         {
-            this.confirmField = new List<OrderField>();
-            this.payMethod = new List<PayWay>();
+            this.ConfirmField = new List<OrderField>();
+            this.PayMethod = new List<PayWay>();
         }
 
         public int OrderId { get; set; }
 
         public string OrderSn { get; set; }
 
-        public Enumeration.OrderType orderType { get; set; }
+        public Enumeration.OrderType OrderType { get; set; }
 
-        public string orderTypeName { get; set; }
+        public string OrderTypeName { get; set; }
 
-        public string remarks { get; set; }
+        public string Remarks { get; set; }
 
 
-        public List<OrderField> confirmField
+        public List<OrderField> ConfirmField
         {
             get;
             set;
         }
 
-        public List<PayWay> payMethod
+        public List<PayWay> PayMethod
         {
             get;
             set;

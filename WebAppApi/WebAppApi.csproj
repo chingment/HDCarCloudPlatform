@@ -201,6 +201,7 @@
     <Compile Include="Models\Order\OrderShoppingDetailsModel.cs" />
     <Compile Include="Models\Order\OrderShoppingGoodsDetailsModel.cs" />
     <Compile Include="Models\Order\PayResultNotifyParams.cs" />
+    <Compile Include="Models\Order\SubmitShoppingModel.cs" />
     <Compile Include="Models\Resource\BannerModel.cs" />
     <Compile Include="Models\Resource\DetailsViewModelByBanner.cs" />
     <Compile Include="Models\BaseViewModel.cs" />

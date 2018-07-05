@@ -68,6 +68,7 @@ namespace Lumos.BLL.Biz.Task
                     case Enumeration.OrderType.PosMachineServiceFee:
                     case Enumeration.OrderType.LllegalQueryRecharge:
                     case Enumeration.OrderType.LllegalDealt:
+                    case Enumeration.OrderType.Goods:
                         SdkFactory.StarPay.PayQuery(0, order);
                         break;
                     default:

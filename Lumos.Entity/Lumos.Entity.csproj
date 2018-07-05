@@ -136,6 +136,8 @@
     <Compile Include="Biz\Order.cs" />
     <Compile Include="Biz\OrderToCarClaim.cs" />
     <Compile Include="Biz\OrderToCarInsureOfferCompany.cs" />
+    <Compile Include="Biz\OrderToShopping.cs" />
+    <Compile Include="Biz\OrderToShoppingGoodsDetails.cs" />
     <Compile Include="Biz\ProductCategory.cs" />
     <Compile Include="Biz\ProductKind.cs" />
     <Compile Include="Biz\ProductSku.cs" />

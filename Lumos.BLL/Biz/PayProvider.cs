@@ -101,13 +101,10 @@ namespace Lumos.BLL
                 switch (model.OrderType)
                 {
                     case Enumeration.OrderType.PosMachineServiceFee:
-                        #region 服务费
                         var orderToServiceFee = CurrentDb.OrderToServiceFee.Where(m => m.Sn == model.OrderSn).FirstOrDefault();
-                        //yOrder = BizFactory.Merchant.GetOrderConfirmInfoByServiceFee(orderToServiceFee);
-
                         result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "确认成功", yOrder);
-                        #endregion
                         break;
+
                 }
 
                 CurrentDb.SaveChanges();
@@ -183,17 +180,16 @@ namespace Lumos.BLL
                                 case Enumeration.OrderType.LllegalDealt:
                                     result = PayLllegalDealtCompleted(operater, order.Sn);
                                     break;
+                                case Enumeration.OrderType.Goods:
+                                    result = PayShoppingCompleted(operater, order.Sn);
+                                    break;
                             }
-
-
 
                             if (result.Result == Lumos.Mvc.ResultType.Success)
                             {
                                 result.Data = orderPayResultNotifyLog;
                             }
                         }
-
-
 
 
                         CurrentDb.OrderPayResultNotifyLog.Add(orderPayResultNotifyLog);
@@ -602,6 +598,69 @@ namespace Lumos.BLL
                 ts.Complete();
 
                 result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功");
+            }
+
+            return result;
+        }
+
+        private CustomJsonResult PayShoppingCompleted(int operater, string orderSn)
+        {
+            CustomJsonResult result = new CustomJsonResult();
+
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var orderToShopping = CurrentDb.OrderToShopping.Where(m => m.Sn == orderSn).FirstOrDefault();
+
+                if (orderToShopping == null)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "找不到订单号");
+                }
+
+                if (orderToShopping.Status == Enumeration.OrderStatus.Completed)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单已经支付完成");
+                }
+
+
+                if (orderToShopping.Status != Enumeration.OrderStatus.WaitPay)
+                {
+                    ts.Complete();
+                    return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "该订单未在就绪支付状态");
+                }
+
+                orderToShopping.Status = Enumeration.OrderStatus.Completed;
+                orderToShopping.PayTime = this.DateTime;
+                orderToShopping.CompleteTime = this.DateTime;
+                orderToShopping.LastUpdateTime = this.DateTime;
+                orderToShopping.Mender = operater;
+
+
+
+                var haoYiLianFund = CurrentDb.Fund.Where(m => m.UserId == (int)Enumeration.UserAccount.HaoYiLian).FirstOrDefault();
+                haoYiLianFund.Balance += orderToShopping.Price;
+                haoYiLianFund.Mender = operater;
+                haoYiLianFund.LastUpdateTime = this.DateTime;
+
+                var haoYiLianFundTrans = new FundTrans();
+                haoYiLianFundTrans.UserId = haoYiLianFund.UserId;
+                haoYiLianFundTrans.ChangeAmount = orderToShopping.Price;
+                haoYiLianFundTrans.Balance = haoYiLianFund.Balance;
+                haoYiLianFundTrans.Type = Enumeration.TransactionsType.Shopping;
+                haoYiLianFundTrans.Description = string.Format("订单号:{0},商城购物:{1}元", orderSn, orderToShopping.Price.ToF2Price());
+                haoYiLianFundTrans.Creator = operater;
+                haoYiLianFundTrans.CreateTime = this.DateTime;
+                CurrentDb.FundTrans.Add(haoYiLianFundTrans);
+                CurrentDb.SaveChanges();
+                haoYiLianFundTrans.Sn = Sn.Build(SnType.FundTrans, haoYiLianFundTrans.Id).Sn;
+                CurrentDb.SaveChanges();
+
+                ts.Complete();
+
+
+
+                result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "该订单支付结果反馈成功", null);
             }
 
             return result;

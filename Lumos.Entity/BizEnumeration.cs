@@ -567,7 +567,9 @@ namespace Lumos.Entity
             [Remark("违章积分充值")]
             LllegalQueryRecharg = 2,
             [Remark("违章处理")]
-            LllegalDealt = 3
+            LllegalDealt = 3,
+            [Remark("购物")]
+            Shopping = 4
         }
 
         public enum LllegalQueryScoreTransType

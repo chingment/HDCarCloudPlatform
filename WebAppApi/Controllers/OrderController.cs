@@ -182,7 +182,6 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("状态", "核实需求中,请留意电话"));
 
                                 break;
-
                         }
                         #endregion
 
@@ -320,6 +319,20 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("积分", orderToLllegalQueryRecharge.Score.ToString()));
 
                                 break;
+                            case Enumeration.OrderType.Goods:
+
+
+                                var orderToShoppingGoodsDetails = CurrentDb.OrderToShoppingGoodsDetails.Where(c => c.OrderId == m.Id).ToList();
+
+                                foreach (var item in orderToShoppingGoodsDetails)
+                                {
+                                    orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0} {1}", item.Quantity, item.SumPrice.ToF2Price())));
+                                }
+
+                       
+                                orderModel.OrderField.Add(new OrderField("合计", m.Price.ToString()));
+
+                                break;
                         }
                         orderModel.StatusName = "待支付";
 
@@ -426,6 +439,20 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("保险方案", orderToInsurance.ProductSkuName));
 
                                 break;
+                            case Enumeration.OrderType.Goods:
+
+
+                                var orderToShoppingGoodsDetails = CurrentDb.OrderToShoppingGoodsDetails.Where(c => c.OrderId == m.Id).ToList();
+
+                                foreach (var item in orderToShoppingGoodsDetails)
+                                {
+                                    orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0} {1}", item.Quantity, item.SumPrice.ToF2Price())));
+                                }
+
+
+                                orderModel.OrderField.Add(new OrderField("合计", m.Price.ToString()));
+
+                                break;
                         }
                         #endregion
 
@@ -495,6 +522,19 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("保险方案", orderToInsurance.ProductSkuName));
                                 orderModel.OrderField.Add(new OrderField("取消原因", GetRemarks(m.Remarks, 20)));
                                 break;
+                            case Enumeration.OrderType.Goods:
+
+
+                                var orderToShoppingGoodsDetails = CurrentDb.OrderToShoppingGoodsDetails.Where(c => c.OrderId == m.Id).ToList();
+
+                                foreach (var item in orderToShoppingGoodsDetails)
+                                {
+                                    orderModel.OrderField.Add(new OrderField(item.ProductSkuName, string.Format("x{0} {1}", item.Quantity, item.SumPrice.ToF2Price())));
+                                }
+
+                                orderModel.OrderField.Add(new OrderField("合计", m.Price.ToString()));
+
+                                break;
                         }
 
                         #endregion
@@ -520,7 +560,7 @@ namespace WebAppApi.Controllers
             switch (type)
             {
                 case Enumeration.OrderType.InsureForCarForInsure:
-                    #region 投保
+                    #region InsureForCarForInsure
                     OrderCarInsureDetailsModel orderCarInsureDetailsModel = new OrderCarInsureDetailsModel();
                     var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderId).FirstOrDefault();
                     if (orderToCarInsure != null)
@@ -695,7 +735,7 @@ namespace WebAppApi.Controllers
                     return new APIResponse(result);
                 #endregion
                 case Enumeration.OrderType.InsureForCarForClaim:
-                    #region 理赔
+                    #region InsureForCarForClaim
                     OrderCarClaimDetailsModel orderCarClaimDetailsModel = new OrderCarClaimDetailsModel();
                     var orderToCarEstimate = CurrentDb.OrderToCarClaim.Where(m => m.Id == orderId).FirstOrDefault();
                     if (orderToCarEstimate != null)
@@ -956,7 +996,7 @@ namespace WebAppApi.Controllers
                     return new APIResponse(result);
                 #endregion
                 case Enumeration.OrderType.Insure:
-                    #region Credit
+                    #region Insure
                     OrderInsuranceDetailsModel orderInsuranceDetailsModel = new OrderInsuranceDetailsModel();
                     var orderToInsurance = CurrentDb.OrderToInsurance.Where(m => m.Id == orderId).FirstOrDefault();
                     if (orderToInsurance != null)
@@ -996,6 +1036,34 @@ namespace WebAppApi.Controllers
                     }
 
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderInsuranceDetailsModel };
+                    return new APIResponse(result);
+                #endregion
+                case Enumeration.OrderType.Goods:
+                    #region Goods
+                    OrderShoppingDetailsModel orderShoppingDetailsModel = new OrderShoppingDetailsModel();
+                    var orderToShopping = CurrentDb.OrderToShopping.Where(m => m.Id == orderId).FirstOrDefault();
+                    if (orderToShopping != null)
+                    {
+                        orderShoppingDetailsModel.Id = orderToShopping.Id;
+                        orderShoppingDetailsModel.Sn = orderToShopping.Sn;
+                        orderShoppingDetailsModel.SubmitTime = orderToShopping.SubmitTime.ToUnifiedFormatDateTime();
+                        orderShoppingDetailsModel.CompleteTime = orderToShopping.CompleteTime.ToUnifiedFormatDateTime();
+                        orderShoppingDetailsModel.PayTime = orderToShopping.PayTime.ToUnifiedFormatDateTime();
+                        orderShoppingDetailsModel.CancleTime = orderToShopping.CancleTime.ToUnifiedFormatDateTime();
+                        orderShoppingDetailsModel.Status = orderToShopping.Status;
+                        orderShoppingDetailsModel.StatusName = orderToShopping.Status.GetCnName();
+                        orderShoppingDetailsModel.FollowStatus = orderToShopping.FollowStatus;
+                        orderShoppingDetailsModel.Remarks = orderToShopping.Remarks.NullToEmpty();
+
+                        var orderToShoppingGoodsDetails = CurrentDb.OrderToShoppingGoodsDetails.Where(m => m.OrderId == orderId).ToList();
+
+                        foreach (var item in orderToShoppingGoodsDetails)
+                        {
+                            orderShoppingDetailsModel.Skus.Add(new OrderShoppingGoodsDetailsModel() { ProductSkuImgUrl = item.ProductSkuImgUrl, ProductSkuName = item.ProductSkuName, Quantity = item.Quantity, SumPrice = item.SumPrice, UnitPrice = item.UnitPrice });
+                        }
+                    }
+
+                    result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderShoppingDetailsModel };
                     return new APIResponse(result);
                 #endregion
                 default:

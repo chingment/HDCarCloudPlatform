@@ -63,6 +63,10 @@ namespace Lumos.DAL
 
         public IDbSet<OrderToLllegalQueryRecharge> OrderToLllegalQueryRecharge { get; set; }
 
+        public IDbSet<OrderToShopping> OrderToShopping { get; set; }
+
+        public IDbSet<OrderToShoppingGoodsDetails> OrderToShoppingGoodsDetails { get; set; }
+
         public IDbSet<BizProcessesAudit> BizProcessesAudit { get; set; }
 
         public IDbSet<BizProcessesAuditDetails> BizProcessesAuditDetails { get; set; }

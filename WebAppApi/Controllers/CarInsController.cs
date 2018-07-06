@@ -1278,30 +1278,55 @@ namespace WebAppApi.Controllers
             string reuslt = "failure";
             if (pms.coverages != null)
             {
-                var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).FirstOrDefault();
-                var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == orderToCarInsure.Id).FirstOrDefault();
-                if (orderToCarInsure != null && orderToCarInsureOfferCompany != null)
+                var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).ToList();
+
+                if (orderToCarInsures.Count == 0)
                 {
-                    var updateOrderOfferPms = new UpdateOrderOfferPms();
-                    updateOrderOfferPms.Auto = 0;
-                    updateOrderOfferPms.UserId = orderToCarInsure.UserId;
-                    updateOrderOfferPms.MerchantId = orderToCarInsure.MerchantId;
-                    updateOrderOfferPms.PosMachineId = orderToCarInsure.PosMachineId;
-                    updateOrderOfferPms.CarInfoOrderId = orderToCarInsure.CarInfoOrderId;
-                    updateOrderOfferPms.PartnerOrderId = orderToCarInsure.PartnerOrderId;
-                    updateOrderOfferPms.PartnerChannelId = int.Parse(orderToCarInsureOfferCompany.PartnerChannelId);
-                    updateOrderOfferPms.PartnerCompanyId = orderToCarInsureOfferCompany.PartnerCompanyId;
-                    updateOrderOfferPms.PartnerRisk = int.Parse(orderToCarInsure.PartnerRisk);
-                    updateOrderOfferPms.BiStartDate = orderToCarInsureOfferCompany.BiStartDate;
-                    updateOrderOfferPms.CiStartDate = orderToCarInsureOfferCompany.CiStartDate;
-                    updateOrderOfferPms.Coverages = pms.coverages;
-                    updateOrderOfferPms.OfferResult = Enumeration.OfferResult.ArtificialOfferSuccess;
+                    Log.Info("OrderToCarInsure找不到订单:" + pms.orderSeq);
+                }
+                else
+                {
 
-                    BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
+                    foreach (var item in orderToCarInsures)
+                    {
 
-                    reuslt = "success";
+                        var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == item.Id).FirstOrDefault();
+                        if (orderToCarInsureOfferCompany == null)
+                        {
+                            Log.Info("orderToCarInsureOfferCompany 为空");
+                        }
+                        else
+                        {
+
+                            var updateOrderOfferPms = new UpdateOrderOfferPms();
+                            updateOrderOfferPms.Auto = 0;
+                            updateOrderOfferPms.UserId = item.UserId;
+                            updateOrderOfferPms.MerchantId = item.MerchantId;
+                            updateOrderOfferPms.PosMachineId = item.PosMachineId;
+                            updateOrderOfferPms.CarInfoOrderId = item.CarInfoOrderId;
+                            updateOrderOfferPms.PartnerOrderId = item.PartnerOrderId;
+                            updateOrderOfferPms.PartnerChannelId = int.Parse(orderToCarInsureOfferCompany.PartnerChannelId);
+                            updateOrderOfferPms.PartnerCompanyId = orderToCarInsureOfferCompany.PartnerCompanyId;
+                            updateOrderOfferPms.PartnerRisk = int.Parse(item.PartnerRisk);
+                            updateOrderOfferPms.BiStartDate = orderToCarInsureOfferCompany.BiStartDate;
+                            updateOrderOfferPms.CiStartDate = orderToCarInsureOfferCompany.CiStartDate;
+                            updateOrderOfferPms.Coverages = pms.coverages;
+                            updateOrderOfferPms.OfferResult = Enumeration.OfferResult.ArtificialOfferSuccess;
+
+                            BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
+
+                            reuslt = "success";
+
+                        }
+                    }
                 }
             }
+            else
+            {
+                Log.Info("pms.coverages 为空");
+            }
+
+            Log.Info("InquiryNotify reuslt：" + reuslt);
 
             HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(reuslt, Encoding.GetEncoding("UTF-8"), "text/plain") };
             return result;

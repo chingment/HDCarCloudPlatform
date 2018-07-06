@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Lumos;
 using Lumos.BLL;
 using Lumos.Common;
+using System.Web.Http;
 
 namespace WebAppApi
 {
@@ -82,6 +83,14 @@ namespace WebAppApi
         {
             try
             {
+                if (actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Count > 0)
+                {
+                    return;
+                }
+
+
+
+
                 SetTrackID();
                 Log.Info("调用API接口");
                 DateTime requestTime = DateTime.Now;

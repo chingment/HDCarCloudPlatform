@@ -84,6 +84,14 @@ namespace Lumos.BLL
 
                     l_OrderToShopping.Price = sumPrice;
                 }
+                else
+                {
+                    l_OrderToShopping.Recipient = pms.RecipientAddress.Recipient;
+                    l_OrderToShopping.RecipientPhoneNumber = pms.RecipientAddress.PhoneNumber;
+                    l_OrderToShopping.RecipientAreaCode = pms.RecipientAddress.AreaCode;
+                    l_OrderToShopping.RecipientAreaName = pms.RecipientAddress.AreaName;
+                    l_OrderToShopping.RecipientAddress = pms.RecipientAddress.Address;
+                }
 
 
 

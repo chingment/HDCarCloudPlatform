@@ -1055,6 +1055,12 @@ namespace WebAppApi.Controllers
                         orderShoppingDetailsModel.FollowStatus = orderToShopping.FollowStatus;
                         orderShoppingDetailsModel.Remarks = orderToShopping.Remarks.NullToEmpty();
 
+
+                        orderShoppingDetailsModel.RecipientAddress.Recipient = orderToShopping.Recipient;
+                        orderShoppingDetailsModel.RecipientAddress.Address = orderToShopping.RecipientAddress;
+                        orderShoppingDetailsModel.RecipientAddress.AreaCode = orderToShopping.RecipientAreaCode;
+                        orderShoppingDetailsModel.RecipientAddress.AreaName = orderToShopping.RecipientAreaName;
+                        orderShoppingDetailsModel.RecipientAddress.PhoneNumber = orderToShopping.RecipientPhoneNumber;
                         var orderToShoppingGoodsDetails = CurrentDb.OrderToShoppingGoodsDetails.Where(m => m.OrderId == orderId).ToList();
 
                         foreach (var item in orderToShoppingGoodsDetails)

@@ -81,6 +81,19 @@ namespace Lumos.BLL
             }
         }
 
+        public string WebApiServerUrl
+        {
+            get
+            {
+                string url = ConfigurationManager.AppSettings["custom:WebApiServerUrl"];
+
+                if (url == null)
+                    return "";
+
+                return url;
+            }
+        }
+
 
         public Dictionary<string, string> LogPath
         {

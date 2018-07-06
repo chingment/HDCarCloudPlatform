@@ -790,8 +790,7 @@ namespace WebAppApi.Controllers
             //0 人工报价，1 自动报价
             if (pms.Auto == 0)
             {
-                model.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/InquiryNotify";
-
+                model.notifyUrl = string.Format("{0}/Api/CarIns/InquiryNotify", BizFactory.AppSettings.WebApiServerUrl);
                 try
                 {
                     offerResult = YdtUtils.GetInsInquiryByArtificial(model);
@@ -1053,7 +1052,7 @@ namespace WebAppApi.Controllers
             YdtInscarInsurePms ydtInscarInsurePms = new YdtInscarInsurePms();
 
             ydtInscarInsurePms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
-            ydtInscarInsurePms.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/InsureNotify";
+            ydtInscarInsurePms.notifyUrl = string.Format("{0}/Api/CarIns/InsureNotify", BizFactory.AppSettings.WebApiServerUrl);   //"http://api.gzhaoyilian.com/Api/CarIns/InsureNotify";
             ydtInscarInsurePms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
 
 
@@ -1226,7 +1225,7 @@ namespace WebAppApi.Controllers
             ydtInscarPayPms.insureSeq = orderToCarInsureOfferCompany.PartnerInsureId;
             ydtInscarPayPms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
             ydtInscarPayPms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
-            ydtInscarPayPms.notifyUrl = "http://api.gzhaoyilian.com/Api/CarIns/PayNotify";
+            ydtInscarPayPms.notifyUrl = string.Format("{0}/Api/CarIns/PayNotif", BizFactory.AppSettings.WebApiServerUrl);
             ydtInscarPayPms.address.consignee = pms.ReceiptAddress.Consignee;
             ydtInscarPayPms.address.address = pms.ReceiptAddress.AreaName + pms.ReceiptAddress.Address;
             ydtInscarPayPms.address.mobile = pms.ReceiptAddress.Mobile;
@@ -1250,19 +1249,11 @@ namespace WebAppApi.Controllers
 
             order.Status = Enumeration.OrderStatus.WaitPay;
 
-            if (BizFactory.AppSettings.IsTest)
-            {
 
-                orderToCarInsureOfferCompany.PartnerInsureId = Guid.NewGuid().ToString();
-                orderToCarInsureOfferCompany.PartnerPayId = Guid.NewGuid().ToString();
-                orderToCarInsureOfferCompany.PayUrl = "http://www.qq.com";
-            }
-            else
-            {
-                orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
-                orderToCarInsureOfferCompany.PartnerPayId = result_Insure.Data.paySeq;
-                orderToCarInsureOfferCompany.PayUrl = result_Insure.Data.payUrl;
-            }
+            orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
+            orderToCarInsureOfferCompany.PartnerPayId = result_Insure.Data.paySeq;
+            orderToCarInsureOfferCompany.PayUrl = result_Insure.Data.payUrl;
+
             CurrentDb.SaveChanges();
 
             result.OrderSn = order.Sn;

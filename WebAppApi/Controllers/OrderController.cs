@@ -1054,7 +1054,7 @@ namespace WebAppApi.Controllers
                         orderShoppingDetailsModel.StatusName = orderToShopping.Status.GetCnName();
                         orderShoppingDetailsModel.FollowStatus = orderToShopping.FollowStatus;
                         orderShoppingDetailsModel.Remarks = orderToShopping.Remarks.NullToEmpty();
-
+                        orderShoppingDetailsModel.Price = orderToShopping.Price.ToF2Price();
 
                         orderShoppingDetailsModel.RecipientAddress.Recipient = orderToShopping.Recipient;
                         orderShoppingDetailsModel.RecipientAddress.Address = orderToShopping.RecipientAddress;

@@ -13,9 +13,9 @@ namespace WebAppApi.Models.Order
         public OrderShoppingDetailsModel()
         {
             this.RecipientAddress = new RecipientAddressModel();
-            this.Skus = new List<OrderShoppingGoodsDetailsModel>();
+            this.Skus = new List<CartProcudtSkuModel>();
         }
 
-        public List<OrderShoppingGoodsDetailsModel> Skus { get; set; }
+        public List<CartProcudtSkuModel> Skus { get; set; }
     }
 }

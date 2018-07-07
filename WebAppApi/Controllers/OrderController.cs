@@ -1065,7 +1065,7 @@ namespace WebAppApi.Controllers
 
                         foreach (var item in orderToShoppingGoodsDetails)
                         {
-                            orderShoppingDetailsModel.Skus.Add(new OrderShoppingGoodsDetailsModel() { MainImg = item.ProductSkuImgUrl, SkuName = item.ProductSkuName, Quantity = item.Quantity, SumPrice = item.SumPrice, UnitPrice = item.UnitPrice });
+                            orderShoppingDetailsModel.Skus.Add(new CartProcudtSkuModel() { CartId = item.CartId, SkuId = item.ProductSkuId, MainImg = item.ProductSkuImgUrl, Name = item.ProductSkuName, Quantity = item.Quantity, SumPrice = item.SumPrice, UnitPrice = item.UnitPrice });
                         }
                     }
 

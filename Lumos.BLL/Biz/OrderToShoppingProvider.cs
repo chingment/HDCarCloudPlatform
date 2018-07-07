@@ -56,6 +56,7 @@ namespace Lumos.BLL
                         {
                             OrderToShoppingGoodsDetails l_OrderToShoppingGoodsDetails = new OrderToShoppingGoodsDetails();
                             l_OrderToShoppingGoodsDetails.OrderId = l_OrderToShopping.Id;
+                            l_OrderToShoppingGoodsDetails.CartId = item.CartId;
                             l_OrderToShoppingGoodsDetails.ProductSkuId = skuModel.SkuId;
                             l_OrderToShoppingGoodsDetails.ProductSkuImgUrl = skuModel.MainImg;
                             l_OrderToShoppingGoodsDetails.ProductSkuName = skuModel.Name;

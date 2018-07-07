@@ -15,6 +15,7 @@ namespace Lumos.Entity
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int OrderId { get; set; }
+        public int CartId { get; set; }
         public int ProductSkuId { get; set; }
         [MaxLength(128)]
         public string ProductSkuName { get; set; }

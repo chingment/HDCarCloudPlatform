@@ -58,7 +58,7 @@ namespace Lumos.BLL.Biz.Task
 
                                 updateOrderOfferPms.Auto = 0;
                                 updateOrderOfferPms.PartnerOrderId = item.PartnerOrderId;
-                                updateOrderOfferPms.PartnerInquirySeq = item.PartnerInquiryId;
+                                updateOrderOfferPms.PartnerInquiryId = item.PartnerInquiryId;
 
                                 if (result_QueryInquiry.Result == ResultType.Success)
                                 {

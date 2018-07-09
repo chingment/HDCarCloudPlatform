@@ -14,5 +14,7 @@ namespace YdtSdk
         public string licensePic { get; set; }
         public string loanFlag { get; set; }
         public string orderSeq { get; set; }
+        public string notifyUrl { get; set; }
+        public string openNotifyUrl { get; set; }
     }
 }

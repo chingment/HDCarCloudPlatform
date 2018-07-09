@@ -20,7 +20,7 @@ namespace Lumos.BLL
         public int CarInfoOrderId { get; set; }
         public int Auto { get; set; }
         public string PartnerOrderId { get; set; }
-        public string PartnerInquirySeq { get; set; }
+        public string PartnerInquiryId { get; set; }
         public int PartnerChannelId { get; set; }
         public string PartnerCompanyId { get; set; }
         public int PartnerRisk { get; set; }
@@ -312,7 +312,7 @@ namespace Lumos.BLL
                     orderToCarInsure.InsuredIdentityBackPicUrl = insCarInfoOrder.InsuredIdentityBackPicUrl;
                     orderToCarInsure.InsuredOrgPicKey = insCarInfoOrder.InsuredOrgPicKey;
                     orderToCarInsure.InsuredOrgPicUrl = insCarInfoOrder.InsuredOrgPicUrl;
-
+                    orderToCarInsure.PartnerRisk = pms.PartnerRisk.ToString();
                     if (orderToCarInsure.Id == 0)
                     {
                         CurrentDb.OrderToCarInsure.Add(orderToCarInsure);
@@ -344,7 +344,7 @@ namespace Lumos.BLL
                     orderToCarInsureOfferCompany.BiStartDate = pms.BiStartDate;
                     orderToCarInsureOfferCompany.CiStartDate = pms.CiStartDate;
                     orderToCarInsureOfferCompany.PartnerOrderId = orderToCarInsure.PartnerOrderId;
-                    orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquirySeq;
+                    orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquiryId;
                     orderToCarInsureOfferCompany.PartnerCompanyId = pms.PartnerCompanyId;
                     orderToCarInsureOfferCompany.PartnerChannelId = pms.PartnerChannelId.ToString();
                     orderToCarInsureOfferCompany.PartnerRisk = pms.PartnerRisk.ToString();
@@ -424,7 +424,7 @@ namespace Lumos.BLL
                     var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == l_orderToCarInsure.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).FirstOrDefault();
 
                     orderToCarInsureOfferCompany.OfferResult = pms.OfferResult;
-                    orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquirySeq;
+                    orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquiryId;
                     orderToCarInsureOfferCompany.LastUpdateTime = this.DateTime;
                     orderToCarInsureOfferCompany.Mender = operater;
 
@@ -519,7 +519,7 @@ namespace Lumos.BLL
                     }
 
 
-                    Log.InfoFormat("(pms.OfferResult:" + (int)pms.OfferResult);
+                    Log.InfoFormat("pms.OfferResult:" + (int)pms.OfferResult);
 
 
                     if (pms.OfferResult == Enumeration.OfferResult.SumbitArtificialOfferSuccess)

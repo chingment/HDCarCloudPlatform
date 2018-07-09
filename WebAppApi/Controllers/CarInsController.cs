@@ -829,7 +829,7 @@ namespace WebAppApi.Controllers
 
                 if (offerResultData != null)
                 {
-                    updateOrderOfferPms.PartnerInquirySeq = offerResultData.inquirySeq;
+                    updateOrderOfferPms.PartnerInquiryId = offerResultData.inquirySeq;
                     updateOrderOfferPms.Inquirys = offerResultData.inquirys;
                     if (offerResultData.coverages != null)
                     {
@@ -1053,7 +1053,8 @@ namespace WebAppApi.Controllers
             YdtInscarInsurePms ydtInscarInsurePms = new YdtInscarInsurePms();
 
             ydtInscarInsurePms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
-            ydtInscarInsurePms.notifyUrl = string.Format("{0}/Api/CarIns/InsureNotify", BizFactory.AppSettings.WebApiServerUrl);   //"http://api.gzhaoyilian.com/Api/CarIns/InsureNotify";
+            ydtInscarInsurePms.notifyUrl = string.Format("{0}/Api/CarIns/InsureNotify", BizFactory.AppSettings.WebApiServerUrl);
+            ydtInscarInsurePms.openNotifyUrl = string.Format("{0}/Api/CarIns/InsureNotify", BizFactory.AppSettings.WebApiServerUrl);
             ydtInscarInsurePms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
 
 
@@ -1119,7 +1120,8 @@ namespace WebAppApi.Controllers
                 ydtInscarInsureByArtificialPms.loanFlag = "false";
                 ydtInscarInsureByArtificialPms.licensePic = pms.Car.LicensePicKey;
                 ydtInscarInsureByArtificialPms.customers = ydtInscarEditbasePms.customers;
-
+                ydtInscarInsureByArtificialPms.notifyUrl = ydtInscarInsurePms.notifyUrl;
+                ydtInscarInsureByArtificialPms.openNotifyUrl = ydtInscarInsurePms.openNotifyUrl;
                 var result_Insure = YdtUtils.InsureByArtificial(ydtInscarInsureByArtificialPms);
 
                 if (result_Insure.Result != ResultType.Success)
@@ -1274,9 +1276,9 @@ namespace WebAppApi.Controllers
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
             Log.Info("GetIP：" + CommonUtils.GetIP());
-            Log.Info("InquiryNotify：" + postData);
+            Log.Info("报价结果异步通知InquiryNotify：" + postData);
 
-        
+
             YdtInscarInquiryResultData pms = null;
 
             try
@@ -1287,7 +1289,7 @@ namespace WebAppApi.Controllers
                 }
                 catch
                 {
-                    Log.Info("JSON数据解释不成功");
+                    Log.Error("JSON数据解释不成功");
                 }
 
                 if (pms.coverages != null)
@@ -1305,6 +1307,7 @@ namespace WebAppApi.Controllers
                         {
 
                             var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == item.Id).FirstOrDefault();
+
                             if (orderToCarInsureOfferCompany == null)
                             {
                                 Log.Info("orderToCarInsureOfferCompany 为空");
@@ -1319,18 +1322,32 @@ namespace WebAppApi.Controllers
                                 updateOrderOfferPms.PosMachineId = item.PosMachineId;
                                 updateOrderOfferPms.CarInfoOrderId = item.CarInfoOrderId;
                                 updateOrderOfferPms.PartnerOrderId = item.PartnerOrderId;
-                                updateOrderOfferPms.PartnerChannelId = int.Parse(orderToCarInsureOfferCompany.PartnerChannelId);
+                                updateOrderOfferPms.PartnerInquiryId = pms.inquirySeq;
+                                if (CommonUtils.IsInt(orderToCarInsureOfferCompany.PartnerChannelId))
+                                {
+                                    updateOrderOfferPms.PartnerChannelId = int.Parse(orderToCarInsureOfferCompany.PartnerChannelId);
+                                }
                                 updateOrderOfferPms.PartnerCompanyId = orderToCarInsureOfferCompany.PartnerCompanyId;
-                                updateOrderOfferPms.PartnerRisk = int.Parse(item.PartnerRisk);
-                                updateOrderOfferPms.BiStartDate = orderToCarInsureOfferCompany.BiStartDate;
-                                updateOrderOfferPms.CiStartDate = orderToCarInsureOfferCompany.CiStartDate;
+
+                                if (CommonUtils.IsInt(item.PartnerRisk))
+                                {
+                                    updateOrderOfferPms.PartnerRisk = int.Parse(item.PartnerRisk);
+                                }
+                                updateOrderOfferPms.BiStartDate = pms.biStartDate;
+                                updateOrderOfferPms.CiStartDate = pms.ciStartDate;
                                 updateOrderOfferPms.Coverages = pms.coverages;
                                 updateOrderOfferPms.OfferResult = Enumeration.OfferResult.ArtificialOfferSuccess;
+                                updateOrderOfferPms.Inquirys = pms.inquirys;
+
+
 
                                 BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
 
                             }
                         }
+
+
+                        Log.Info("人工报价成功");
                     }
                 }
                 else
@@ -1349,41 +1366,67 @@ namespace WebAppApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public HttpResponseMessage InsureNotify(YdtInscarInsureResultData pms)
+        public HttpResponseMessage InsureNotify()
         {
             Stream stream = HttpContext.Current.Request.InputStream;
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
 
-            Log.Info("InsureNotify：" + postData);
+            Log.Info("核保结果异步通知InsureNotify：" + postData);
 
-            string reuslt = "failure";
-
-
-            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.PartnerOrderId == pms.orderSeq && m.PartnerInquiryId == pms.inquirySeq).FirstOrDefault();
-            var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
-
-            if (orderToCarInsureOfferCompany != null)
+            YdtInscarInsureResultData pms = null;
+            try
             {
-                orderToCarInsureOfferCompany.PartnerInsureId = pms.inquirySeq;
-                orderToCarInsureOfferCompany.BiProposalNo = pms.biProposalNo;
-                orderToCarInsureOfferCompany.CiProposalNo = pms.ciProposalNo;
+                try
+                {
+                    pms = Newtonsoft.Json.JsonConvert.DeserializeObject<YdtInscarInsureResultData>(postData);
+                }
+                catch
+                {
+                    Log.Error("JSON数据解释不成功");
+                }
 
-                reuslt = "success";
+                var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).ToList();
+
+
+                foreach (var item in orderToCarInsures)
+                {
+
+                    var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == item.Id).FirstOrDefault();
+
+                    if (orderToCarInsureOfferCompany == null)
+                    {
+                        Log.Info("orderToCarInsureOfferCompany 为空");
+                    }
+                    else
+                    {
+
+                        orderToCarInsureOfferCompany.PartnerInsureId = pms.inquirySeq;
+                        orderToCarInsureOfferCompany.BiProposalNo = pms.biProposalNo;
+                        orderToCarInsureOfferCompany.CiProposalNo = pms.ciProposalNo;
+
+                    }
+
+                    item.PartnerInsureId = pms.inquirySeq;
+                    item.BiProposalNo = pms.biProposalNo;
+                    item.CiProposalNo = pms.ciProposalNo;
+
+
+                    item.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitAutoApplyPay;
+
+
+                    CurrentDb.SaveChanges();
+
+                    Log.Info("人工核保成功");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("数据解释不成功", ex);
             }
 
-            if (orderToCarInsure != null)
-            {
-                orderToCarInsure.PartnerInsureId = pms.inquirySeq;
-                orderToCarInsure.BiProposalNo = pms.biProposalNo;
-                orderToCarInsure.CiProposalNo = pms.ciProposalNo;
 
-                reuslt = "success";
-            }
-
-            CurrentDb.SaveChanges();
-
-            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(reuslt, Encoding.GetEncoding("UTF-8"), "text/plain") };
+            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent("success", Encoding.GetEncoding("UTF-8"), "text/plain") };
             return result;
         }
 

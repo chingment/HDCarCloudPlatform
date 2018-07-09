@@ -35,6 +35,9 @@ namespace YdtSdk
 
     public class YdtInscarInquiryResultData
     {
+
+        public string biStartDate { get; set; }
+        public string ciStartDate { get; set; }
         public string inquirySeq { get; set; }
         public string orderSeq { get; set; }
         public int result { get; set; }

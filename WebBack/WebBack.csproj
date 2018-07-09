@@ -171,6 +171,7 @@
     <Compile Include="Controllers\Biz\ProductKindController.cs" />
     <Compile Include="Controllers\Biz\ReportController.cs" />
     <Compile Include="Controllers\Biz\ServiceFeeController.cs" />
+    <Compile Include="Controllers\Biz\ShoppingController.cs" />
     <Compile Include="Controllers\Biz\TalentDemandController.cs" />
     <Compile Include="Controllers\Biz\TestController.cs" />
     <Compile Include="Controllers\Biz\TransactionsController.cs" />
@@ -277,6 +278,9 @@
     <Compile Include="Models\Biz\Report\ReportModel.cs" />
     <Compile Include="Models\Biz\Report\SalesmanPosViewModel.cs" />
     <Compile Include="Models\Biz\ServiceFee\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\Shopping\DealtWaitSendViewModel.cs" />
+    <Compile Include="Models\Biz\Shopping\DetailsViewModel.cs" />
+    <Compile Include="Models\Biz\Shopping\SearchCondition.cs" />
     <Compile Include="Models\Biz\TalentDemand\DealtViewModel.cs" />
     <Compile Include="Models\Biz\TalentDemand\SearchCondition.cs" />
     <Compile Include="Models\Biz\TalentDemand\DetailsViewModel.cs" />
@@ -1319,6 +1323,10 @@
     <Content Include="Views\Biz\CarInsureOffer\OfferImg.cshtml" />
     <Content Include="Views\Biz\CarInsureOffer\DealtByOffer.cshtml" />
     <Content Include="Views\Biz\Merchant\PosMachineListByUnbind.cshtml" />
+    <Content Include="Views\Biz\Shopping\ListByDealtWaitSend.cshtml" />
+    <Content Include="Views\Biz\Shopping\ListBySended.cshtml" />
+    <Content Include="Views\Biz\Shopping\DealtWaitSend.cshtml" />
+    <Content Include="Views\Biz\Shopping\Details.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -1341,6 +1349,7 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\toolbar\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\wysiwygarea\" />
+    <Folder Include="Views\Shopping\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

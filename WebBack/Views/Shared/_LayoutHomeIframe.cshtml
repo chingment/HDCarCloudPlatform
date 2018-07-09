@@ -65,7 +65,7 @@
 
             setInterval("reinitIframe()", 200);
 
-            //setInterval("getMessageTipCount()", 5000);
+            setInterval("getMessageTipCount()", 5000);
 
         });
 
@@ -93,12 +93,10 @@
             $.lumos.postJson({
                 url: "/Common/GetMessageTipCount",
                 success: function (d) {
-
+     
                     if (d.result == resultType.success) {
                         var data = d.data;
-                        $('#lbl_WaitCarClaimVerifyOrderCount').text(data.waitCarClaimVerifyOrder);
-                        $('#lbl_WaitCarClaimVerifyAmonuntCount').text(data.waitCarClaimVerifyAmonunt);
-                        $('#lbl_WaitCarInOfferCount').text(data.waitCarInOffer);
+                        $('#lbl_ListByDealtWaitSendCount').text(data.shoppingDealtWaitSendCount);
                     }
                 }
             });
@@ -119,7 +117,8 @@
             vertical-align: top;
             text-align: center;
         }
-             .tipnumcount2 {
+
+        .tipnumcount2 {
             font-size: 12px;
             color: #fff;
             background: #ff9900;
@@ -199,49 +198,36 @@
 
                         @if (OwnRequest.IsLogin())
                         {
-                                @*if (OwnRequest.IsInMenu("/Biz/CarClaim/VerifyOrderList"))
-                                {
-                                    <li>
-                                        <a href="/Biz/CarClaim/VerifyOrderList" target="iframeMain">
-                                            理赔需求核实
-                                            <span id="lbl_WaitCarClaimVerifyOrderCount" class="tipnumcount">
-                                                0
-                                            </span>
-                                        </a>
-                                    </li>
-                                }
-
-                                if (OwnRequest.IsInMenu("/Biz/CarClaim/VerifyAmountList"))
-                                {
-                                    <li>
-                                        <a href="/Biz/CarClaim/VerifyAmountList" target="iframeMain">
-                                            理赔金额核实
-                                            <span id="lbl_WaitCarClaimVerifyAmonuntCount" class="tipnumcount">
-                                                0
-                                            </span>
-                                        </a>
-                                    </li>
-                                }
-
-                                if (OwnRequest.IsInMenu("/Biz/CarInsureOffer/DealtList"))
-                                {
-                                    <li>
-                                        <a href="/Biz/CarInsureOffer/DealtList" target="iframeMain">
-                                            投保报价
-                                            <span id="lbl_WaitCarInOfferCount" class="tipnumcount">
-                                                0
-                                            </span>
-                                        </a>
-                                    </li>
-                                }*@
-
+                            if (OwnRequest.IsInMenu("/Biz/Shopping/ListByDealtWaitSend"))
+                            {
                                 <li>
-                                    <a href="/home/main" target="iframeMain">
-                                        <span class="title">
-                                            主界面
+                                    <a href="/Biz/Shopping/ListByDealtWaitSend" target="iframeMain">
+                                        待发货
+                                        <span id="lbl_ListByDealtWaitSendCount" class="tipnumcount">
+                                            0
                                         </span>
                                     </a>
                                 </li>
+                            }
+
+                            if (OwnRequest.IsInMenu("/Biz/Shopping/ListBySended"))
+                            {
+                                <li>
+                                    <a href="/Biz/Shopping/ListBySended" target="iframeMain">
+                                        <span class="title">
+                                            已发货
+                                        </span>
+                                    </a>
+                                </li>
+                            }
+
+                            <li>
+                                <a href="/home/main" target="iframeMain">
+                                    <span class="title">
+                                        主界面
+                                    </span>
+                                </a>
+                            </li>
                                 <li class="parent">
                                     <a href="javascript:void(0)" class="directory">
                                         <span class="title">

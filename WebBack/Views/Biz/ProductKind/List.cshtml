@@ -48,7 +48,7 @@
             $("#Model_ProductKind_Id").formValidator({ onShow: "&nbsp;", onFocus: "请在左边树形结构选中节点信息", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 20, empty: { leftEmpty: false, emptyError: "不能为空" }, onError: "不超过20个字符" });
             $("#Model_ProductKind_Name").formValidator({ onShow: "&nbsp;", onFocus: "不超过20个字符", onCorrect: "&nbsp;" }).inputValidator({ min: 1, max: 20, empty: { leftEmpty: false, emptyError: "不能为空" }, onError: "不超过20个字符" });
             $("#Model_ProductKind_MainImg").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传封面" });
-            $("#Model_ProductKind_IconImg").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传小图标" });
+            //$("#Model_ProductKind_IconImg").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传小图标" });
             $("#Model_ProductKind_Status").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择状态" });
             $("#Model_ProductKind_Description").formValidator({ onShow: "&nbsp;", onFocus: "不超过500个字符", onCorrect: "&nbsp;", empty: true, onEmpty: "&nbsp;" }).inputValidator({ min: 0, max: 500, onError: "不超过500个字符" });
 
@@ -248,11 +248,11 @@
                         $("#Model_ProductKind_Description").val(data.description);
                         $("#Model_ProductKind_Description").defaultPassed();
                         $("#Model_ProductKind_MainImg").val(data.mainImg);
-                        $("#Model_ProductKind_IconImg").val(data.iconImg);
+                       // $("#Model_ProductKind_IconImg").val(data.iconImg);
                         $("#Model_ProductKind_Status").find("option[value='" + data.status + "']").attr("selected", true);
 
                         $("#img_Model_ProductKind_MainImg").attr("src", data.mainImg);
-                        $("#img_Model_ProductKind_IconImg").attr("src", data.iconImg);
+                       // $("#img_Model_ProductKind_IconImg").attr("src", data.iconImg);
                     }
                 }
             });
@@ -382,7 +382,7 @@
                                                     <span><span class="required-symbol">*</span>封面</span>
                                                 </div>
                                             </td>
-                                            <td>
+                                            @*<td>
                                                 <div>
                                                     <span class="uploadimgbox" upload="true">
                                                         <span class="uploadimg" inputname="Model.ProductKind.IconImg" path="productkind">
@@ -396,7 +396,7 @@
                                                 <div>
                                                     <span><span class="required-symbol">*</span>小图标</span>
                                                 </div>
-                                            </td>
+                                            </td>*@
                                         </tr>
                                     </table>
                                 </td>

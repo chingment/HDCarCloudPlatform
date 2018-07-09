@@ -11,5 +11,9 @@ namespace Lumos.Entity
     [Table("OrderToShopping")]
     public class OrderToShopping : Order
     {
+        [MaxLength(128)]
+        public string ExpressCompany { get; set; }
+        [MaxLength(128)]
+        public string ExpressOrderNo { get; set; }
     }
 }

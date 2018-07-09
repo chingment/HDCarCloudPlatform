@@ -631,6 +631,7 @@ namespace Lumos.BLL
                 }
 
                 orderToShopping.Status = Enumeration.OrderStatus.Completed;
+                orderToShopping.FollowStatus = (int)Enumeration.ShoppingFollowStatus.WaitSend;
                 orderToShopping.PayTime = this.DateTime;
                 orderToShopping.CompleteTime = this.DateTime;
                 orderToShopping.LastUpdateTime = this.DateTime;

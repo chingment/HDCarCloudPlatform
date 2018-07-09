@@ -14,7 +14,7 @@
             $.formValidator.initConfig({ formID: "form1", onError: function (msg) { art.dialog.tips(msg); } });
             $("#Model_ProductKind_Name").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 20, empty: { leftEmpty: false, emptyError: "名称不能为空" }, onError: "名称不能为空,且不超过20个字符" });
             $("#Model_ProductKind_MainImg").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传封面" });
-            $("#Model_ProductKind_IconImg").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传小图标" });
+            //$("#Model_ProductKind_IconImg").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请上传小图标" });
             $("#Model_ProductKind_Status").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 1, max: 500, onError: "请选择状态" });
             $("#Model_ProductKind_Description").formValidator({ onShow: "", onFocus: "", onCorrect: "" }).inputValidator({ min: 0, max: 500, onError: "备注不超过500个字符" });
         });
@@ -85,7 +85,7 @@
                                 <span><span class="required-symbol">*</span>封面</span>
                             </div>
                         </td>
-                        <td>
+                        @*<td>
                             <div>
                                 <span class="uploadimgbox" upload="true">
                                     <span class="uploadimg" inputname="Model.ProductKind.IconImg" path="productkind">
@@ -99,7 +99,7 @@
                             <div>
                                 <span><span class="required-symbol">*</span>小图标</span>
                             </div>
-                        </td>
+                        </td>*@
                     </tr>
                 </table>
 

@@ -505,7 +505,7 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.BasicPremium = item.basicPremium;
                                 orderToCarInsureOfferCompanyKind.Premium = item.premium;
                                 orderToCarInsureOfferCompanyKind.UnitAmount = item.unitAmount;
-                                orderToCarInsureOfferCompanyKind.Discount = item.discount;
+                                orderToCarInsureOfferCompanyKind.Discount = item.discount ?? 0;
                                 orderToCarInsureOfferCompanyKind.IsCompensation = partnerKind.IsCompensation;
                                 orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
                                 orderToCarInsureOfferCompanyKind.Creator = operater;

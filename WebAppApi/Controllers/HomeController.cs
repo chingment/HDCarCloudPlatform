@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
+        private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        private string host = "http://120.79.233.231";
+        //private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -193,6 +193,8 @@ namespace WebAppApi.Controllers
             int posMachineId = 153;
 
 
+            model.Add("dsdadd", CarIn_InquiryNotify(userId, merchantId, posMachineId));
+
             //model.Add("购物车操作", CartOperate(userId, merchantId, posMachineId));
             // model.Add("获取购物车数据", GetCartPageData(userId, merchantId, posMachineId));
             //model.Add("确认购物车数据", CarGetComfirmOrderData(userId, merchantId, posMachineId));
@@ -204,7 +206,7 @@ namespace WebAppApi.Controllers
 
             // model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
 
-            CarIns(userId, merchantId, posMachineId);
+            //CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
@@ -1995,11 +1997,11 @@ namespace WebAppApi.Controllers
 
             int CarInfoOrderId = 299;
             int OfferId = 840;
-           // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, CarInfoOrderId));
+            // model.Add("询价信息", CarIns_InsComanyInfo(userId, merchantId, posMachineId, CarInfoOrderId));
 
             //list.Add(new YdtInscarComanyModel { UpLinkCode = 3, YdtCode = "003000", Name = "阳光保险", PrintName = "阳光保险有限公司", ChannelId = 12 });
-       
-             model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
+
+            model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
 
 
             // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 12, "003000"));
@@ -2492,6 +2494,48 @@ namespace WebAppApi.Controllers
             headers.Add("version", "1.3.0.7");
             HttpUtil http = new HttpUtil();
             string result = http.HttpPostJson("" + host + "/api/Global/UploadLogTrace", a1, headers);
+
+            return result;
+
+        }
+
+
+        public string CarIn_InquiryNotify(int userId, int merchantId, int posMachineId)
+        {
+            OrderPayResultNotifyLog model = new OrderPayResultNotifyLog();
+
+
+            model.MerchantId = merchantId;
+            model.PosMachineId = posMachineId;
+            model.UserId = userId;
+            //model.TransResult = "1";
+            //model.Amount = "1";
+            //model.CardNo = "1";
+            //model.BatchNo = "1";
+            //model.TraceNo = "1";
+            //model.RefNo = "1";
+            //model.AuthCode = "1";
+            //model.TransDate = "1";
+            //model.TransTime = "1";
+            //model.Order = paysn;
+            //model.OrderSn = orderSn;
+            model.CreateTime = DateTime.Now;
+            model.Creator = 0;
+            string a1 = JsonConvert.SerializeObject(model);
+
+
+
+            //string a1 = "{\"productType\":\"2013\",\"merchantId\":\"" + merchantId + "\",\"userId\":\"" + userId + "\",\"orderSn\":\"" + orderSn + "\",\"orderId\":\"" + orderId + "\",\"params\":{\"merchantId\":\"861440360120020\",\"amount\":\"000000414000\",\"terminalId\":\"9999999B\",\"batchNo\":\"000001\",\"merchantName\":\"银联测试商户\",\"issue\":\"null\",\"merchantNo\":\"null\",\"traceNo\":\"000017\",\"failureReason\":\"\",\"referenceNo\":\"022310580194\",\"type\":\"\",\"result\":\"1\",\"cardNo\":\"6212263602044931384\",\"merchantInfo\":{\"order_no\":\"" + orderSn + "\",\"insurance_company\":\"平安保险\",\"insurance_type\":\"\",\"customer_id_type\":\"01\",\"customer_id\":\"a\",\"customer_sex\":\"\",\"customer_name\":\"a\",\"customer_mobile_no\":\"\",\"customer_birthdate\":\"\",\"insurance_order_no\":\"aaa\",\"car_type\":\"a\",\"car_license\":\"a\",\"car_frame_no\":\"\",\"payer_id_type\":\"\",\"payer_id\":\"\",\"payer_name\":\"\",\"payer_mobile_no\":\"\",\"payer_address\":\"\",\"ybs_mer_code\":\"000567\",\"merchant_id\":\"861440360120020\",\"merchant_name\":\"\",\"phone_no\":\"\",\"cashier_id\":\"\",\"teller_id\":\"45567\"}}";
+
+            string signStr = Signature.Compute(key, secret, timespan, a1);
+
+
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("key", key);
+            headers.Add("timestamp", timespan.ToString());
+            headers.Add("sign", signStr);
+            HttpUtil http = new HttpUtil();
+            string result = http.HttpPostJson("" + host + "/api/CarIns/InquiryNotify", a1, headers);
 
             return result;
 

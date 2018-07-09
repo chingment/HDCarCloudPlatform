@@ -462,6 +462,18 @@ namespace Lumos.Entity
             PayedCommission = 7
         }
 
+        public enum ShoppingFollowStatus
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("待发货")]
+            WaitSend = 1,
+            [Remark("已发货")]
+            Sended = 2,
+            [Remark("已收货")]
+            Received = 3,
+        }
+
 
         public enum OrderPayWay
         {

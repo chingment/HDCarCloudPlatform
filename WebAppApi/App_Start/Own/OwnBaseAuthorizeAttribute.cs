@@ -85,6 +85,7 @@ namespace WebAppApi
             {
                 if (actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Count > 0)
                 {
+                    base.OnActionExecuting(actionContext);
                     return;
                 }
 

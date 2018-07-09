@@ -117,5 +117,33 @@ namespace Lumos.BLL
 
             return result;
         }
+
+
+        public CustomJsonResult DealtWaitSend(int operater, OrderToShopping orderToShopping)
+        {
+
+            CustomJsonResult result = new CustomJsonResult();
+
+
+            var l_orderToShopping = CurrentDb.OrderToShopping.Where(m => m.Id == orderToShopping.Id).FirstOrDefault();
+
+
+            if (l_orderToShopping == null)
+            {
+                return new CustomJsonResult(ResultType.Success, "找不到该订单");
+            }
+
+
+            l_orderToShopping.ExpressCompany = orderToShopping.ExpressCompany;
+            l_orderToShopping.ExpressOrderNo = orderToShopping.ExpressOrderNo;
+            l_orderToShopping.FollowStatus = (int)Enumeration.ShoppingFollowStatus.Sended;
+            l_orderToShopping.LastUpdateTime = this.DateTime;
+            l_orderToShopping.Mender = operater;
+
+            CurrentDb.SaveChanges();
+
+            result = new CustomJsonResult(ResultType.Success, "提交成功");
+            return result;
+        }
     }
 }

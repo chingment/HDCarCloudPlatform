@@ -791,6 +791,7 @@ namespace WebAppApi.Controllers
             if (pms.Auto == 0)
             {
                 model.notifyUrl = string.Format("{0}/Api/CarIns/InquiryNotify", BizFactory.AppSettings.WebApiServerUrl);
+                model.openNotifyUrl = string.Format("{0}/Api/CarIns/InquiryNotify", BizFactory.AppSettings.WebApiServerUrl);
                 try
                 {
                     offerResult = YdtUtils.GetInsInquiryByArtificial(model);
@@ -1267,68 +1268,82 @@ namespace WebAppApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public HttpResponseMessage InquiryNotify(YdtInscarInquiryResultData pms)
+        public HttpResponseMessage InquiryNotify()
         {
             Stream stream = HttpContext.Current.Request.InputStream;
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
-
+            Log.Info("GetIP：" + CommonUtils.GetIP());
             Log.Info("InquiryNotify：" + postData);
 
-            string reuslt = "failure";
-            if (pms.coverages != null)
+        
+            YdtInscarInquiryResultData pms = null;
+
+            try
             {
-                var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).ToList();
-
-                if (orderToCarInsures.Count == 0)
+                try
                 {
-                    Log.Info("OrderToCarInsure找不到订单:" + pms.orderSeq);
+                    pms = Newtonsoft.Json.JsonConvert.DeserializeObject<YdtInscarInquiryResultData>(postData);
                 }
-                else
+                catch
                 {
+                    Log.Info("JSON数据解释不成功");
+                }
 
-                    foreach (var item in orderToCarInsures)
+                if (pms.coverages != null)
+                {
+                    var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).ToList();
+
+                    if (orderToCarInsures.Count == 0)
+                    {
+                        Log.Info("OrderToCarInsure找不到订单:" + pms.orderSeq);
+                    }
+                    else
                     {
 
-                        var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == item.Id).FirstOrDefault();
-                        if (orderToCarInsureOfferCompany == null)
-                        {
-                            Log.Info("orderToCarInsureOfferCompany 为空");
-                        }
-                        else
+                        foreach (var item in orderToCarInsures)
                         {
 
-                            var updateOrderOfferPms = new UpdateOrderOfferPms();
-                            updateOrderOfferPms.Auto = 0;
-                            updateOrderOfferPms.UserId = item.UserId;
-                            updateOrderOfferPms.MerchantId = item.MerchantId;
-                            updateOrderOfferPms.PosMachineId = item.PosMachineId;
-                            updateOrderOfferPms.CarInfoOrderId = item.CarInfoOrderId;
-                            updateOrderOfferPms.PartnerOrderId = item.PartnerOrderId;
-                            updateOrderOfferPms.PartnerChannelId = int.Parse(orderToCarInsureOfferCompany.PartnerChannelId);
-                            updateOrderOfferPms.PartnerCompanyId = orderToCarInsureOfferCompany.PartnerCompanyId;
-                            updateOrderOfferPms.PartnerRisk = int.Parse(item.PartnerRisk);
-                            updateOrderOfferPms.BiStartDate = orderToCarInsureOfferCompany.BiStartDate;
-                            updateOrderOfferPms.CiStartDate = orderToCarInsureOfferCompany.CiStartDate;
-                            updateOrderOfferPms.Coverages = pms.coverages;
-                            updateOrderOfferPms.OfferResult = Enumeration.OfferResult.ArtificialOfferSuccess;
+                            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == item.Id).FirstOrDefault();
+                            if (orderToCarInsureOfferCompany == null)
+                            {
+                                Log.Info("orderToCarInsureOfferCompany 为空");
+                            }
+                            else
+                            {
 
-                            BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
+                                var updateOrderOfferPms = new UpdateOrderOfferPms();
+                                updateOrderOfferPms.Auto = 0;
+                                updateOrderOfferPms.UserId = item.UserId;
+                                updateOrderOfferPms.MerchantId = item.MerchantId;
+                                updateOrderOfferPms.PosMachineId = item.PosMachineId;
+                                updateOrderOfferPms.CarInfoOrderId = item.CarInfoOrderId;
+                                updateOrderOfferPms.PartnerOrderId = item.PartnerOrderId;
+                                updateOrderOfferPms.PartnerChannelId = int.Parse(orderToCarInsureOfferCompany.PartnerChannelId);
+                                updateOrderOfferPms.PartnerCompanyId = orderToCarInsureOfferCompany.PartnerCompanyId;
+                                updateOrderOfferPms.PartnerRisk = int.Parse(item.PartnerRisk);
+                                updateOrderOfferPms.BiStartDate = orderToCarInsureOfferCompany.BiStartDate;
+                                updateOrderOfferPms.CiStartDate = orderToCarInsureOfferCompany.CiStartDate;
+                                updateOrderOfferPms.Coverages = pms.coverages;
+                                updateOrderOfferPms.OfferResult = Enumeration.OfferResult.ArtificialOfferSuccess;
 
-                            reuslt = "success";
+                                BizFactory.InsCar.UpdateOfferByAfter(0, updateOrderOfferPms);
 
+                            }
                         }
                     }
                 }
+                else
+                {
+                    Log.Info("pms.coverages 为空");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Log.Info("pms.coverages 为空");
+                Log.Error("数据解释不成功", ex);
             }
 
-            Log.Info("InquiryNotify reuslt：" + reuslt);
-
-            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(reuslt, Encoding.GetEncoding("UTF-8"), "text/plain") };
+            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent("success", Encoding.GetEncoding("UTF-8"), "text/plain") };
             return result;
         }
 

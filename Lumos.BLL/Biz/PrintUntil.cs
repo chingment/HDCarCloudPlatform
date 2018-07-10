@@ -9,7 +9,7 @@ namespace Lumos.BLL
 {
     public class PrintUntil
     {
-        public static PrintDataModel GetPrintData(string typeName, string tradeType, string transSn, string payMethod, DateTime tradeDateTime, string orderSn, decimal price)
+        public static PrintDataModel GetPrintData(string typeName, string tradeType, string transSn, string payMethod, DateTime tradeDateTime, string orderSn, decimal price, List<ItemField> extField)
         {
             PrintDataModel printData = new PrintDataModel();
             printData.MerchantName = BizFactory.AppSettings.MerchantName;
@@ -22,7 +22,7 @@ namespace Lumos.BLL
             printData.TradeAmount = price.ToF2Price();
             printData.TradeDateTime = tradeDateTime.ToUnifiedFormatDateTime();
             printData.ServiceHotline = BizFactory.AppSettings.ServiceHotline;
-
+            printData.ExtField = extField;
             return printData;
         }
     }

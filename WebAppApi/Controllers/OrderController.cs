@@ -97,7 +97,7 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
 
 
- 
+
                                 switch (m.FollowStatus)
                                 {
                                     case 6:
@@ -567,6 +567,7 @@ namespace WebAppApi.Controllers
         [HttpGet]
         public APIResponse GetDetails(int userId, int merchantId, int posMachineId, int orderId, Enumeration.OrderType type)
         {
+            List<ItemField> extField = new List<ItemField>();
             APIResult result = null;
             switch (type)
             {
@@ -740,6 +741,11 @@ namespace WebAppApi.Controllers
                         orderCarInsureDetailsModel.RecipientAddressList.Add("地址1");
                         orderCarInsureDetailsModel.RecipientAddressList.Add("地址2");
 
+                        if (orderToCarInsure.Status == Enumeration.OrderStatus.Completed)
+                        {
+                            orderCarInsureDetailsModel.PrintData = PrintUntil.GetPrintData(orderToCarInsure.TypeName, "消费", orderToCarInsure.TransSn, orderToCarInsure.PayWay.GetCnName(), orderToCarInsure.PayTime.Value, orderToCarInsure.Sn, orderToCarInsure.Price, extField);
+                        }
+
                     }
 
                     result = new APIResult() { Result = ResultType.Success, Code = ResultCode.Success, Message = "获取成功", Data = orderCarInsureDetailsModel };
@@ -833,7 +839,7 @@ namespace WebAppApi.Controllers
                         orderServiceFeeDetailsModel.ExpiryTime = orderToServiceFee.ExpiryTime.ToUnifiedFormatDate();
                         if (orderToServiceFee.Status == Enumeration.OrderStatus.Completed)
                         {
-                            orderServiceFeeDetailsModel.PrintData = PrintUntil.GetPrintData(orderToServiceFee.TypeName, "消费", orderToServiceFee.TransSn, orderToServiceFee.PayWay.GetCnName(), orderToServiceFee.PayTime.Value, orderToServiceFee.Sn, orderToServiceFee.Price);
+                            orderServiceFeeDetailsModel.PrintData = PrintUntil.GetPrintData(orderToServiceFee.TypeName, "消费", orderToServiceFee.TransSn, orderToServiceFee.PayWay.GetCnName(), orderToServiceFee.PayTime.Value, orderToServiceFee.Sn, orderToServiceFee.Price, extField);
                         }
                     }
 
@@ -912,7 +918,7 @@ namespace WebAppApi.Controllers
 
                         if (orderLllegalQueryRechargeDetailsModel.Status == Enumeration.OrderStatus.Completed)
                         {
-                            orderLllegalQueryRechargeDetailsModel.PrintData = PrintUntil.GetPrintData(orderToLllegalQueryRecharge.TypeName, "消费", orderToLllegalQueryRecharge.TransSn, orderToLllegalQueryRecharge.PayWay.GetCnName(), orderToLllegalQueryRecharge.PayTime.Value, orderToLllegalQueryRecharge.Sn, orderToLllegalQueryRecharge.Price);
+                            orderLllegalQueryRechargeDetailsModel.PrintData = PrintUntil.GetPrintData(orderToLllegalQueryRecharge.TypeName, "消费", orderToLllegalQueryRecharge.TransSn, orderToLllegalQueryRecharge.PayWay.GetCnName(), orderToLllegalQueryRecharge.PayTime.Value, orderToLllegalQueryRecharge.Sn, orderToLllegalQueryRecharge.Price, extField);
                         }
                     }
 
@@ -1077,6 +1083,11 @@ namespace WebAppApi.Controllers
                         foreach (var item in orderToShoppingGoodsDetails)
                         {
                             orderShoppingDetailsModel.Skus.Add(new CartProcudtSkuModel() { CartId = item.CartId, SkuId = item.ProductSkuId, MainImg = item.ProductSkuImgUrl, Name = item.ProductSkuName, Quantity = item.Quantity, SumPrice = item.SumPrice, UnitPrice = item.UnitPrice });
+                        }
+
+                        if (orderShoppingDetailsModel.Status == Enumeration.OrderStatus.Completed)
+                        {
+                            orderShoppingDetailsModel.PrintData = PrintUntil.GetPrintData(orderToShopping.TypeName, "消费", orderToShopping.TransSn, orderToShopping.PayWay.GetCnName(), orderToShopping.PayTime.Value, orderToShopping.Sn, orderToShopping.Price, extField);
                         }
                     }
 

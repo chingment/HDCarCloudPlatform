@@ -18,5 +18,13 @@ namespace Lumos.Entity.AppApi
         public string TradePayMethod { get; set; }
         public string TradeAmount { get; set; }
         public string ServiceHotline { get; set; }
+
+        public List<ItemField> ExtField { get; set; }
+
+        public PrintDataModel()
+        {
+            this.ExtField = new List<ItemField>();
+        }
+
     }
 }

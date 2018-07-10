@@ -270,9 +270,9 @@ namespace Lumos.Entity
         public enum OrderType
         {
             Unknow = 0,
-            [Remark("商品")]
+            [Remark("普通商品")]
             Goods = 1,
-            [Remark("保险")]
+            [Remark("保险产品")]
             Insure = 2,
             [Remark("业务")]
             Biz = 3,

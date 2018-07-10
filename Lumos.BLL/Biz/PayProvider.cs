@@ -81,7 +81,14 @@ namespace Lumos.BLL
 
             if (order.Status == Enumeration.OrderStatus.Completed)
             {
-                resultData.PrintData = PrintUntil.GetPrintData(order.TypeName, "消费", order.TransSn, order.PayWay.GetCnName(), order.PayTime.Value, order.Sn, order.Price);
+                List<ItemField> extField = new List<ItemField>();
+                switch (order.Type)
+                {
+                    case Enumeration.OrderType.Insure:
+                        break;
+                }
+
+                resultData.PrintData = PrintUntil.GetPrintData(order.TypeName, "消费", order.TransSn, order.PayWay.GetCnName(), order.PayTime.Value, order.Sn, order.Price, extField);
             }
 
             result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "获取成功", resultData);

@@ -417,6 +417,9 @@ namespace Lumos.BLL
 
                     var l_orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.CarInfoOrderId == pms.CarInfoOrderId && m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId).FirstOrDefault();
 
+
+                    l_orderToCarInsure.PartnerInquiryId = pms.PartnerInquiryId;
+
                     var partnerCompany = YdtDataMap.YdtInsComanyList().Where(m => m.YdtCode == pms.PartnerCompanyId).FirstOrDefault();
 
                     var carInsuranceCompany = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == partnerCompany.UpLinkCode).FirstOrDefault();

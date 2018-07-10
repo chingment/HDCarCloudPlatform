@@ -96,6 +96,8 @@ namespace WebAppApi.Controllers
                                 orderModel.OrderField.Add(new OrderField("证件号码", orderToCarInsure.CarownerCertNo == CarInsController.nullCerno ? "" : orderToCarInsure.CarownerCertNo.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
 
+
+ 
                                 switch (m.FollowStatus)
                                 {
                                     case 6:

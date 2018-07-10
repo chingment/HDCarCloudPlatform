@@ -11,11 +11,12 @@ namespace Lumos.Entity
         public CarInsInsureResult()
         {
             this.InfoItems = new List<ItemParentField>();
-            this.receiptAddress = new CarInsAddressModel();
+            this.ReceiptAddress = new CarInsAddressModel();
         }
 
         public List<ItemParentField> InfoItems { get; set; }
 
-        public CarInsAddressModel receiptAddress { get; set; }
+        public CarInsAddressModel ReceiptAddress { get; set; }
+
     }
 }

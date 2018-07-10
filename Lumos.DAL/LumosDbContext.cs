@@ -123,6 +123,9 @@ namespace Lumos.DAL
 
         public IDbSet<OrderPayTrans> OrderPayTrans { get; set; }
 
+        public IDbSet<YdtNotifyLog> YdtNotifyLog { get; set; }
+
+
         //public FxDbContext()
         //    : base("DefaultConnection")
         //{

@@ -122,6 +122,9 @@ namespace WebAppApi.Controllers
                                     case 13:
                                         orderModel.OrderField.Add(new OrderField("状态", "人工核保失败"));
                                         break;
+                                    case 14:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保成功，请查看详情支付"));
+                                        break;
                                     default:
                                         orderModel.OrderField.Add(new OrderField("状态", "请稍侯，报价中"));
                                         break;

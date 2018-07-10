@@ -143,6 +143,7 @@
     <Compile Include="Biz\ProductSku.cs" />
     <Compile Include="Biz\ProductSpecDataSet.cs" />
     <Compile Include="Biz\ProductSpecDataSetValue.cs" />
+    <Compile Include="Biz\YdtNotifyLog.cs" />
     <Compile Include="ImgSet.cs" />
     <Compile Include="Model\PayConfirmModel.cs" />
     <Compile Include="Biz\PosMachine.cs" />

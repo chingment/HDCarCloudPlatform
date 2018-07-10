@@ -1085,11 +1085,11 @@ namespace WebAppApi.Controllers
 
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == pms.MerchantId).FirstOrDefault();
 
-                result.receiptAddress.Address = merchant.ContactAddress;
-                result.receiptAddress.Consignee = merchant.ContactName;
-                result.receiptAddress.Mobile = merchant.ContactPhoneNumber;
-                result.receiptAddress.Email = "";
-                result.receiptAddress.AreaId = merchant.AreaCode;
+                result.ReceiptAddress.Address = merchant.ContactAddress;
+                result.ReceiptAddress.Consignee = merchant.ContactName;
+                result.ReceiptAddress.Mobile = merchant.ContactPhoneNumber;
+                result.ReceiptAddress.Email = "";
+                result.ReceiptAddress.AreaId = merchant.AreaCode;
 
                 var orderInfo = new ItemParentField("投保单信息", "");
 
@@ -1167,11 +1167,12 @@ namespace WebAppApi.Controllers
 
             CarInsInsureResult insureInfo = new CarInsInsureResult();
 
-            insureInfo.receiptAddress.Address = merchant.ContactAddress;
-            insureInfo.receiptAddress.Consignee = merchant.ContactName;
-            insureInfo.receiptAddress.Mobile = merchant.ContactPhoneNumber;
-            insureInfo.receiptAddress.Email = "";
-            insureInfo.receiptAddress.AreaId = "4401";
+            insureInfo.ReceiptAddress.Address = merchant.ContactAddress;
+            insureInfo.ReceiptAddress.Consignee = merchant.ContactName;
+            insureInfo.ReceiptAddress.Mobile = merchant.ContactPhoneNumber;
+            insureInfo.ReceiptAddress.Email = "";
+            insureInfo.ReceiptAddress.AreaId = merchant.AreaCode;
+            insureInfo.ReceiptAddress.AreaName = merchant.Area;
 
             var orderInfo = new ItemParentField("投保单信息", "");
 
@@ -1189,6 +1190,18 @@ namespace WebAppApi.Controllers
 
             info.InsureInfo = insureInfo;
 
+            if (!string.IsNullOrEmpty(orderToCarInsureOfferCompany.PayUrl))
+            {
+                CarInsPayResult payInfo = new CarInsPayResult();
+
+                payInfo.OfferId = orderToCarInsureOfferCompany.Id;
+                payInfo.OrderSn = orderToCarInsure.Sn;
+                payInfo.payUrl = orderToCarInsureOfferCompany.PayUrl;
+
+                info.PayInfo = payInfo;
+
+            }
+
             return ResponseResult(ResultType.Success, ResultCode.Success, "核保成功", info);
 
         }
@@ -1201,7 +1214,7 @@ namespace WebAppApi.Controllers
 
 
             var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.Id == pms.OfferId).FirstOrDefault();
-            var order = CurrentDb.Order.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
+            var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
             if (orderToCarInsureOfferCompany == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到报价结果");
@@ -1228,9 +1241,10 @@ namespace WebAppApi.Controllers
             ydtInscarPayPms.insureSeq = orderToCarInsureOfferCompany.PartnerInsureId;
             ydtInscarPayPms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
             ydtInscarPayPms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
-            ydtInscarPayPms.notifyUrl = string.Format("{0}/Api/CarIns/PayNotif", BizFactory.AppSettings.WebApiServerUrl);
+            ydtInscarPayPms.notifyUrl = string.Format("{0}/Api/CarIns/PayResultNotify", BizFactory.AppSettings.WebApiServerUrl);
+            ydtInscarPayPms.openNotifyUrl = string.Format("{0}/Api/CarIns/PayResultNotify", BizFactory.AppSettings.WebApiServerUrl);
             ydtInscarPayPms.address.consignee = pms.ReceiptAddress.Consignee;
-            ydtInscarPayPms.address.address = pms.ReceiptAddress.AreaName + pms.ReceiptAddress.Address;
+            ydtInscarPayPms.address.address = pms.ReceiptAddress.Address;
             ydtInscarPayPms.address.mobile = pms.ReceiptAddress.Mobile;
             ydtInscarPayPms.address.email = pms.ReceiptAddress.Email;
 
@@ -1243,25 +1257,73 @@ namespace WebAppApi.Controllers
 
             ydtInscarPayPms.address.areaId = areaId;
 
-            var result_Insure = YdtUtils.Pay(ydtInscarPayPms);
-
-            if (result_Insure.Result != ResultType.Success)
+            if (pms.Auto == 1)
             {
-                return ResponseResult(ResultType.Failure, ResultCode.Failure, "生成支付失败", result);
+
+                var result_Pay = YdtUtils.PayByAuto(ydtInscarPayPms);
+
+                if (result_Pay.Result != ResultType.Success)
+                {
+                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "生成支付失败", result);
+                }
+
+
+
+                orderToCarInsure.Status = Enumeration.OrderStatus.WaitPay;
+                orderToCarInsure.PartnerPayId = result_Pay.Data.paySeq;
+
+
+                orderToCarInsureOfferCompany.PayUrl = result_Pay.Data.payUrl;
+                orderToCarInsureOfferCompany.PartnerPayId = result_Pay.Data.paySeq;
+
+
+                CurrentDb.SaveChanges();
+
+                result.OrderSn = orderToCarInsure.Sn;
+                result.OfferId = pms.OfferId;
+                result.payUrl = orderToCarInsureOfferCompany.PayUrl;
             }
+            else
+            {
 
-            order.Status = Enumeration.OrderStatus.WaitPay;
+                YdtInscarPayByArtificialPms ydtInscarPayByArtificialPms = new YdtInscarPayByArtificialPms();
+
+                ydtInscarPayByArtificialPms.insureSeq = orderToCarInsureOfferCompany.PartnerInsureId;
+                ydtInscarPayByArtificialPms.inquirySeq = orderToCarInsureOfferCompany.PartnerInquiryId;
+                ydtInscarPayByArtificialPms.orderSeq = orderToCarInsureOfferCompany.PartnerOrderId;
+                ydtInscarPayByArtificialPms.notifyUrl = string.Format("{0}/Api/CarIns/PayResultNotify", BizFactory.AppSettings.WebApiServerUrl);
+                ydtInscarPayByArtificialPms.openNotifyUrl = string.Format("{0}/Api/CarIns/PayResultNotify", BizFactory.AppSettings.WebApiServerUrl);
+                ydtInscarPayByArtificialPms.address.consignee = pms.ReceiptAddress.Consignee;
+                ydtInscarPayByArtificialPms.address.address = pms.ReceiptAddress.Address;
+                ydtInscarPayByArtificialPms.address.mobile = pms.ReceiptAddress.Mobile;
+                ydtInscarPayByArtificialPms.address.email = pms.ReceiptAddress.Email;
+                ydtInscarPayByArtificialPms.address.areaId = areaId;
+
+                var result_PayByArtificial = YdtUtils.PayByArtificial(ydtInscarPayByArtificialPms);
+
+                if (result_PayByArtificial.Result != ResultType.Success)
+                {
+
+                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "生成支付失败，请联系客服", result);
+                }
+                else
+                {
+                    orderToCarInsure.Status = Enumeration.OrderStatus.WaitPay;
+                    orderToCarInsure.PartnerPayId = result_PayByArtificial.Data.paySeq;
+
+                    orderToCarInsureOfferCompany.PayUrl = result_PayByArtificial.Data.payUrl;
+                    orderToCarInsureOfferCompany.PartnerPayId = result_PayByArtificial.Data.paySeq;
 
 
-            orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
-            orderToCarInsureOfferCompany.PartnerPayId = result_Insure.Data.paySeq;
-            orderToCarInsureOfferCompany.PayUrl = result_Insure.Data.payUrl;
+                    CurrentDb.SaveChanges();
 
-            CurrentDb.SaveChanges();
+                    result.OrderSn = orderToCarInsure.Sn;
+                    result.OfferId = pms.OfferId;
+                    result.payUrl = orderToCarInsureOfferCompany.PayUrl;
 
-            result.OrderSn = order.Sn;
-            result.OfferId = pms.OfferId;
-            result.payUrl = orderToCarInsureOfferCompany.PayUrl;
+                    return ResponseResult(ResultType.Success, ResultCode.Success, "申请支付成功", result);
+                }
+            }
 
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "生成支付成功", result);
@@ -1277,7 +1339,7 @@ namespace WebAppApi.Controllers
             string postData = new StreamReader(stream).ReadToEnd();
             Log.Info("GetIP：" + CommonUtils.GetIP());
             Log.Info("报价结果异步通知InquiryNotify：" + postData);
-
+            SdkFactory.Ydt.NotifyLog("报价", "", postData);
 
             YdtInscarInquiryResultData pms = null;
 
@@ -1371,8 +1433,8 @@ namespace WebAppApi.Controllers
             Stream stream = HttpContext.Current.Request.InputStream;
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
-
             Log.Info("核保结果异步通知InsureNotify：" + postData);
+            SdkFactory.Ydt.NotifyLog("核保", "", postData);
 
             YdtInscarInsureResultData pms = null;
             try
@@ -1401,13 +1463,13 @@ namespace WebAppApi.Controllers
                     else
                     {
 
-                        orderToCarInsureOfferCompany.PartnerInsureId = pms.inquirySeq;
+                        orderToCarInsureOfferCompany.PartnerInsureId = pms.insureSeq;
                         orderToCarInsureOfferCompany.BiProposalNo = pms.biProposalNo;
                         orderToCarInsureOfferCompany.CiProposalNo = pms.ciProposalNo;
 
                     }
 
-                    item.PartnerInsureId = pms.inquirySeq;
+                    item.PartnerInsureId = pms.insureSeq;
                     item.BiProposalNo = pms.biProposalNo;
                     item.CiProposalNo = pms.ciProposalNo;
 
@@ -1432,40 +1494,40 @@ namespace WebAppApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public APIResponse PayNotify(YdtInscarPayQueryResultData pms)
+        public APIResponse PayResultNotify()
         {
             Stream stream = HttpContext.Current.Request.InputStream;
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
 
             Log.Info("PayNotify：" + postData);
+            Log.Info("支付结果异步通知InsureNotify：" + postData);
+            //if (pms != null)
+            //{
 
-            if (pms != null)
-            {
-
-                string resultText = Newtonsoft.Json.JsonConvert.SerializeObject(pms);
-                bool isPaySuccess = false;
+            //    string resultText = Newtonsoft.Json.JsonConvert.SerializeObject(pms);
+            //    bool isPaySuccess = false;
 
 
-                string orderSn = "";
-                if (pms.result == 1)
-                {
-                    isPaySuccess = true;
-                }
+            //    string orderSn = "";
+            //    if (pms.result == 1)
+            //    {
+            //        isPaySuccess = true;
+            //    }
 
-                if (!string.IsNullOrEmpty(pms.paySeq))
-                {
-                    var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.PartnerPayId == pms.paySeq).FirstOrDefault();
+            //    if (!string.IsNullOrEmpty(pms.paySeq))
+            //    {
+            //        var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.PartnerPayId == pms.paySeq).FirstOrDefault();
 
-                    if (orderToCarInsure != null)
-                    {
-                        orderSn = orderToCarInsure.Sn;
-                    }
-                }
+            //        if (orderToCarInsure != null)
+            //        {
+            //            orderSn = orderToCarInsure.Sn;
+            //        }
+            //    }
 
-                BizFactory.Pay.ResultNotify(0, orderSn, isPaySuccess, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "易点通", resultText);
+            //    //BizFactory.Pay.ResultNotify(0, orderSn, isPaySuccess, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "易点通", resultText);
 
-            }
+            //}
 
 
 

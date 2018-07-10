@@ -113,6 +113,7 @@
     <Compile Include="Sdk\MinShunPayProvider.cs" />
     <Compile Include="Sdk\SdkFactory.cs" />
     <Compile Include="Sdk\StarPayProvider.cs" />
+    <Compile Include="Sdk\YdtProvider.cs" />
     <Compile Include="Service\CartService.cs" />
     <Compile Include="Service\Model\BannerModel.cs" />
     <Compile Include="Service\Model\CartProcudtSkuByOperateModel.cs" />

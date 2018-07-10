@@ -30,11 +30,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        private string host = "http://localhost:16665";
+        //private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        //private string host = "http://120.79.233.231";
+        private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -193,7 +193,7 @@ namespace WebAppApi.Controllers
             int posMachineId = 153;
 
 
-            model.Add("dsdadd", CarIn_InquiryNotify(userId, merchantId, posMachineId));
+            //model.Add("dsdadd", CarIn_InquiryNotify(userId, merchantId, posMachineId));
 
             //model.Add("购物车操作", CartOperate(userId, merchantId, posMachineId));
             // model.Add("获取购物车数据", GetCartPageData(userId, merchantId, posMachineId));
@@ -206,7 +206,7 @@ namespace WebAppApi.Controllers
 
             // model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
 
-            //CarIns(userId, merchantId, posMachineId);
+            CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
@@ -2001,7 +2001,7 @@ namespace WebAppApi.Controllers
 
             //list.Add(new YdtInscarComanyModel { UpLinkCode = 3, YdtCode = "003000", Name = "阳光保险", PrintName = "阳光保险有限公司", ChannelId = 12 });
 
-            model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
+            //  model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 1, "006000"));
 
 
             // model.Add("报价信息", CarIns_InsInquiry(userId, merchantId, posMachineId, CarInfoOrderId, 12, "003000"));
@@ -2014,7 +2014,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, OfferId));
 
-            //  model.Add("支付信息", CarIns_Pay(userId, merchantId, posMachineId, OfferId));
+            model.Add("支付信息申请", CarIns_Pay(1234, 258, 153, 1041));
 
 
 
@@ -2298,7 +2298,7 @@ namespace WebAppApi.Controllers
         public string CarIns_Pay(int userId, int merchantId, int posMachineId, int offerId)
         {
             CarInsPayPms model = new CarInsPayPms();
-
+            model.Auto = 1;
             model.UserId = userId;
             model.MerchantId = merchantId;
             model.PosMachineId = posMachineId;

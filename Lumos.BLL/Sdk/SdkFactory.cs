@@ -39,5 +39,13 @@ namespace Lumos.BLL
                 return new StarPayProvider();
             }
         }
+
+        public static YdtProvider Ydt
+        {
+            get
+            {
+                return new YdtProvider();
+            }
+        }
     }
 }

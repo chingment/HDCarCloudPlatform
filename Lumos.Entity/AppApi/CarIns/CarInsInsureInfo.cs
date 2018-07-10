@@ -15,5 +15,7 @@ namespace Lumos.Entity
         public CarInsInsureResult InsureInfo { get; set; }
 
         public CarInsComanyModel OfferInfo { get; set; }
+
+        public CarInsPayResult PayInfo { get; set; }
     }
 }

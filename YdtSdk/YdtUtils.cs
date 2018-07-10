@@ -358,7 +358,7 @@ namespace YdtSdk
 
         }
 
-        public static CustomJsonResult<YdtInscarPayResultData> Pay(YdtInscarPayPms model)
+        public static CustomJsonResult<YdtInscarPayResultData> PayByAuto(YdtInscarPayPms model)
         {
             var result = new CustomJsonResult<YdtInscarInsureResultData>();
             var au = YdtUtils.GetToken();
@@ -373,6 +373,23 @@ namespace YdtSdk
             }
 
             return new CustomJsonResult<YdtInscarPayResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
+        }
+
+        public static CustomJsonResult<YdtInscarPayByArtificialResultData> PayByArtificial(YdtInscarPayByArtificialPms model)
+        {
+            var result = new CustomJsonResult<YdtInscarPayByArtificialResultData>();
+            var au = YdtUtils.GetToken();
+            YdtApi ydtApi = new YdtApi();
+
+            var ydtInscarInsure = new YdtInscarPayByArtificial(au.token, au.session, YdtPostDataType.Json, model);
+            var ydtInscarInsureResult = ydtApi.DoPost(ydtInscarInsure);
+
+            if (ydtInscarInsureResult.code != 0)
+            {
+                return new CustomJsonResult<YdtInscarPayByArtificialResultData>(ResultType.Failure, ResultCode.Failure, ydtInscarInsureResult.extmsg, null);
+            }
+
+            return new CustomJsonResult<YdtInscarPayByArtificialResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
         }
 
 

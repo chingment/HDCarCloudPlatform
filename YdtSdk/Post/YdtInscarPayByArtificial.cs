@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace YdtSdk
 {
-   public class YdtInscarPayByArtificialForward : IYdtApiPostRequest<YdtInscarPayByArtificialForwardResult>
+   public class YdtInscarPayByArtificial : IYdtApiPostRequest<YdtInscarPayByArtificialResultData>
     {
         private string token { get; set; }
 
         private string session { get; set; }
 
-        public YdtInscarPayByArtificialForward(string token, string session, YdtPostDataType postdatatpye, object postdata)
+        public YdtInscarPayByArtificial(string token, string session, YdtPostDataType postdatatpye, object postdata)
         {
             this.token = token;
             this.session = session;
@@ -30,7 +30,7 @@ namespace YdtSdk
         {
             get
             {
-                return "ins_artificial/forward_pay";
+                return "ins_artificial/pay_record";
             }
         }
 

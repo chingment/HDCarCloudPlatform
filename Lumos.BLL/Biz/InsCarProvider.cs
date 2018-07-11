@@ -182,7 +182,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.Error("本系统基础数据保存失败1", ex);
+                LogUtil.Error("本系统基础数据保存失败1", ex);
 
             }
 
@@ -443,7 +443,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.Error("本系统基础数据保存失败1", ex);
+                LogUtil.Error("本系统基础数据保存失败1", ex);
                 return new CustomJsonResult(ResultType.Failure, "本系统基础数据保存失败1");
             }
         }
@@ -473,6 +473,15 @@ namespace Lumos.BLL
                     orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquiryId;
                     orderToCarInsureOfferCompany.LastUpdateTime = this.DateTime;
                     orderToCarInsureOfferCompany.Mender = operater;
+
+
+                    var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == l_orderToCarInsure.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).ToList();
+
+                    foreach (var item in orderToCarInsureOfferCompanyKinds)
+                    {
+                        CurrentDb.OrderToCarInsureOfferCompanyKind.Remove(item);
+                        CurrentDb.SaveChanges();
+                    }
 
                     decimal insureTotalPrice = 0;
 
@@ -559,15 +568,7 @@ namespace Lumos.BLL
                     orderToCarInsureOfferCompany.InsureTotalPrice = insureTotalPrice;
                     CurrentDb.SaveChanges();
 
-                    var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == l_orderToCarInsure.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).ToList();
 
-
-
-                    foreach (var item in orderToCarInsureOfferCompanyKinds)
-                    {
-                        CurrentDb.OrderToCarInsureOfferCompanyKind.Remove(item);
-                        CurrentDb.SaveChanges();
-                    }
 
                     var out_carInsureOfferCompanyKinds = new List<OrderToCarInsureOfferCompanyKind>();
                     if (pms.Coverages != null)
@@ -626,7 +627,7 @@ namespace Lumos.BLL
                     }
 
 
-                    Log.InfoFormat("pms.OfferResult:" + (int)pms.OfferResult);
+                    LogUtil.InfoFormat("pms.OfferResult:" + (int)pms.OfferResult);
 
 
                     if (pms.OfferResult == Enumeration.OfferResult.SumbitArtificialOfferSuccess)
@@ -661,7 +662,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.Error("本系统基础数据保存失败2", ex);
+                LogUtil.Error("本系统基础数据保存失败2", ex);
                 return new CustomJsonResult<UpdateOfferByAfterResult>(ResultType.Failure, ResultCode.Failure, "本系统基础数据保存失败2", null);
             }
         }
@@ -762,7 +763,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.Error("本系统基础数据保存失败1", ex);
+                LogUtil.Error("本系统基础数据保存失败1", ex);
                 return new CustomJsonResult(ResultType.Failure, "本系统基础数据保存失败1");
             }
         }

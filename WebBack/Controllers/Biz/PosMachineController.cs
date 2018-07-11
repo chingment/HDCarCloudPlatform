@@ -12,6 +12,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using System.Data;
 using System.Transactions;
+using Lumos;
 
 namespace WebBack.Controllers.Biz
 {
@@ -423,7 +424,7 @@ namespace WebBack.Controllers.Biz
             }
             catch (Exception ex)
             {
-                Log.Error("导入POS机信息", ex);
+                LogUtil.Error("导入POS机信息", ex);
                 return Json("text/html", ResultType.Exception, "上传失败，系统出现异常");
             }
         }

@@ -12,13 +12,6 @@ namespace Lumos.Common
     public sealed class Signature
     {
 
-        ILog Log
-        {
-            get
-            {
-                return LogManager.GetLogger(this.GetType());
-            }
-        }
 
         ///// <summary>
         ///// 服务器可以接受的调用方时间戳与服务器时间的时差，单位秒
@@ -78,11 +71,11 @@ namespace Lumos.Common
                 sb.Append(this.Data);
             }
 
-            //Log.Info("签名原始数据:" + sb.ToString());
+            //LogUtil.Info("签名原始数据:" + sb.ToString());
 
             //将字符串中字符按升序排序
             var sortStr = string.Concat(sb.ToString().OrderBy(c => c));
-            //Log.Info("签名排序后数据:" + sortStr);
+            //LogUtil.Info("签名排序后数据:" + sortStr);
             return sortStr;
         }
 
@@ -103,13 +96,13 @@ namespace Lumos.Common
 
             string str = sb.ToString();
 
-            //Log.Info("HASH数据后:" + str);
+            //LogUtil.Info("HASH数据后:" + str);
 
             var input2 = Encoding.UTF8.GetBytes(str);
 
             var output = Convert.ToBase64String(input2);
 
-            //Log.Info("BASE64数据后:" + output);
+            //LogUtil.Info("BASE64数据后:" + output);
 
             return output;
         }

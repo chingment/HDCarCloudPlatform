@@ -28,7 +28,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.Error(type + "通知日志" + content);
+                LogUtil.Error(type + "通知日志" + content);
             }
         }
     }

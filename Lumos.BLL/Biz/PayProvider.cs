@@ -158,7 +158,7 @@ namespace Lumos.BLL
 
                         if (order == null)
                         {
-                            Log.Warn("订单找不到");
+                            LogUtil.Warn("订单找不到");
                             CurrentDb.OrderPayResultNotifyLog.Add(orderPayResultNotifyLog);
                             CurrentDb.SaveChanges();
                             ts.Complete();
@@ -207,7 +207,7 @@ namespace Lumos.BLL
                 }
                 catch (Exception ex)
                 {
-                    Log.ErrorFormat("支付确认订单ID({0})结果反馈发生异常，原因：{1}", orderPayResultNotifyLog.OrderId, ex.InnerException);
+                    LogUtil.ErrorFormat("支付确认订单ID({0})结果反馈发生异常，原因：{1}", orderPayResultNotifyLog.OrderId, ex.InnerException);
 
                     result = new CustomJsonResult(ResultType.Exception, ResultCode.Exception, "支付失败");
                 }
@@ -249,7 +249,7 @@ namespace Lumos.BLL
 
                 if (haoYiLianFund == null)
                 {
-                    Log.Warn("找不到haoYiLianFund");
+                    LogUtil.Warn("找不到haoYiLianFund");
                 }
 
                 haoYiLianFund.Balance += orderToServiceFee.Price;
@@ -274,7 +274,7 @@ namespace Lumos.BLL
 
                 if (merchantPosMachine == null)
                 {
-                    Log.Warn("找不到merchantPosMachine");
+                    LogUtil.Warn("找不到merchantPosMachine");
                 }
 
                 merchantPosMachine.ExpiryTime = this.DateTime.AddYears(1);
@@ -300,14 +300,14 @@ namespace Lumos.BLL
 
                 if (merchant == null)
                 {
-                    Log.Warn("找不到merchant");
+                    LogUtil.Warn("找不到merchant");
                 }
 
                 var posMachine = CurrentDb.PosMachine.Where(m => m.Id == orderToServiceFee.PosMachineId).FirstOrDefault();
 
                 if (posMachine == null)
                 {
-                    Log.Warn("找不到posMachine");
+                    LogUtil.Warn("找不到posMachine");
                 }
 
                 if (orderToServiceFee.SalesmanId == null)

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebAgent.Models;
 using Lumos.Mvc;
+using Lumos;
 
 namespace WebAgent
 {
@@ -28,7 +29,6 @@ namespace WebAgent
                 }
             }
 
-            ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
             bool isAjaxRequest = filterContext.RequestContext.HttpContext.Request.IsAjaxRequest();
             string controller = (string)filterContext.RouteData.Values["controller"];
             string action = (string)filterContext.RouteData.Values["action"];
@@ -60,7 +60,7 @@ namespace WebAgent
 
             filterContext.ExceptionHandled = true;
 
-            log.Error("发生异常错误[编号:" + messageBox.No + "]", filterContext.Exception);
+            LogUtil.Error("发生异常错误[编号:" + messageBox.No + "]", filterContext.Exception);
 
         }
 

@@ -42,7 +42,7 @@ namespace WebAppApi.Controllers
             //stream.Seek(0, SeekOrigin.Begin);
             //string postData = new StreamReader(stream).ReadToEnd();
 
-            //Log.Info("ReceiveNotify：" + postData);
+            //LogUtil.Info("ReceiveNotify：" + postData);
 
 
 
@@ -80,20 +80,20 @@ namespace WebAppApi.Controllers
 
             //    if (result.Result == ResultType.Success)
             //    {
-            //        Log.Info("ReceiveNotify->success,通知成功");
+            //        LogUtil.Info("ReceiveNotify->success,通知成功");
 
             //        result = new CustomJsonResult(ResultType.Success, ResultCode.Success, "success");
             //    }
             //    else
             //    {
-            //        Log.Warn("ReceiveNotify->fail, 通知失败");
+            //        LogUtil.Warn("ReceiveNotify->fail, 通知失败");
 
             //        result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "fail,通知失败");
             //    }
             //}
             //else
             //{
-            //    Log.Error("ReceiveNotify->fail,验证签名失败");
+            //    LogUtil.Error("ReceiveNotify->fail,验证签名失败");
             //    result = new CustomJsonResult(ResultType.Failure, ResultCode.Failure, " fail,验证签名失败");
             //}
 

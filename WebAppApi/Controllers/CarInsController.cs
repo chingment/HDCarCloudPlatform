@@ -1,4 +1,5 @@
-﻿using Lumos.BLL;
+﻿using Lumos;
+using Lumos.BLL;
 using Lumos.BLL.Service;
 using Lumos.Common;
 using Lumos.DAL;
@@ -60,31 +61,31 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "必须上传的键名为certPic的图片内容");
             }
 
-            Log.Info("开始上传");
+            LogUtil.Info("开始上传");
             imgurl = GetUploadImageUrl(pms.ImgData["certPic"], "CarInsure");
-            Log.Info("上传结束");
+            LogUtil.Info("上传结束");
 
             if (string.IsNullOrEmpty(imgurl))
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "上传图片失败");
             }
-            Log.Info("imgurl:" + imgurl);
-            Log.Info("开始解释图片");
+            LogUtil.Info("imgurl:" + imgurl);
+            LogUtil.Info("开始解释图片");
             switch (pms.Type)
             {
                 case "1":
                     //imgurl = "http://file.gzhaoyilian.com/Upload/d1.jpg";
                     YdtUploadResultData model1 = YdtUtils.UploadImg(imgurl);
-                    Log.Info("解释图片结束");
+                    LogUtil.Info("解释图片结束");
                     if (model1 != null)
                     {
-                        Log.Info("解释对象不为空");
+                        LogUtil.Info("解释对象不为空");
                         result.Url = imgurl;
 
                         if (model1.file != null)
                         {
 
-                            Log.Info("解释KEy不为空");
+                            LogUtil.Info("解释KEy不为空");
                             result.Key = model1.file.key;
                         }
                     }
@@ -157,7 +158,7 @@ namespace WebAppApi.Controllers
                     imgModel.Type = arr_Keyword[1];
                     imgurl = GetUploadImageUrl(imgModel, "CarInsure");
 
-                    Log.Info("IMGURL:" + imgurl);
+                    LogUtil.Info("IMGURL:" + imgurl);
 
                     drivingLicenceInfo = BizFactory.CarInsureOffer.GetDrivingLicenceInfoFromImgUrl(imgurl);
                     if (drivingLicenceInfo == null)
@@ -1337,8 +1338,8 @@ namespace WebAppApi.Controllers
             Stream stream = HttpContext.Current.Request.InputStream;
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
-            Log.Info("GetIP：" + CommonUtils.GetIP());
-            Log.Info("报价结果异步通知InquiryNotify：" + postData);
+            LogUtil.Info("GetIP：" + CommonUtils.GetIP());
+            LogUtil.Info("报价结果异步通知InquiryNotify：" + postData);
             SdkFactory.Ydt.NotifyLog("报价", "", postData);
 
             YdtInscarInquiryResultData pms = null;
@@ -1351,7 +1352,7 @@ namespace WebAppApi.Controllers
                 }
                 catch
                 {
-                    Log.Error("JSON数据解释不成功");
+                    LogUtil.Error("JSON数据解释不成功");
                 }
 
                 if (pms.coverages != null)
@@ -1360,7 +1361,7 @@ namespace WebAppApi.Controllers
 
                     if (orderToCarInsures.Count == 0)
                     {
-                        Log.Info("OrderToCarInsure找不到订单:" + pms.orderSeq);
+                        LogUtil.Info("OrderToCarInsure找不到订单:" + pms.orderSeq);
                     }
                     else
                     {
@@ -1372,7 +1373,7 @@ namespace WebAppApi.Controllers
 
                             if (orderToCarInsureOfferCompany == null)
                             {
-                                Log.Info("orderToCarInsureOfferCompany 为空");
+                                LogUtil.Info("orderToCarInsureOfferCompany 为空");
                             }
                             else
                             {
@@ -1409,17 +1410,17 @@ namespace WebAppApi.Controllers
                         }
 
 
-                        Log.Info("人工报价成功");
+                        LogUtil.Info("人工报价成功");
                     }
                 }
                 else
                 {
-                    Log.Info("pms.coverages 为空");
+                    LogUtil.Info("pms.coverages 为空");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error("数据解释不成功", ex);
+                LogUtil.Error("数据解释不成功", ex);
             }
 
             HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent("success", Encoding.GetEncoding("UTF-8"), "text/plain") };
@@ -1433,7 +1434,7 @@ namespace WebAppApi.Controllers
             Stream stream = HttpContext.Current.Request.InputStream;
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
-            Log.Info("核保结果异步通知InsureNotify：" + postData);
+            LogUtil.Info("核保结果异步通知InsureNotify：" + postData);
             SdkFactory.Ydt.NotifyLog("核保", "", postData);
 
             YdtInscarInsureResultData pms = null;
@@ -1445,7 +1446,7 @@ namespace WebAppApi.Controllers
                 }
                 catch
                 {
-                    Log.Error("JSON数据解释不成功");
+                    LogUtil.Error("JSON数据解释不成功");
                 }
 
                 var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).ToList();
@@ -1458,7 +1459,7 @@ namespace WebAppApi.Controllers
 
                     if (orderToCarInsureOfferCompany == null)
                     {
-                        Log.Info("orderToCarInsureOfferCompany 为空");
+                        LogUtil.Info("orderToCarInsureOfferCompany 为空");
                     }
                     else
                     {
@@ -1479,12 +1480,12 @@ namespace WebAppApi.Controllers
 
                     CurrentDb.SaveChanges();
 
-                    Log.Info("人工核保成功");
+                    LogUtil.Info("人工核保成功");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error("数据解释不成功", ex);
+                LogUtil.Error("数据解释不成功", ex);
             }
 
 
@@ -1500,7 +1501,7 @@ namespace WebAppApi.Controllers
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
 
-            Log.Info("支付结果异步通知InsureNotify：" + postData);
+            LogUtil.Info("支付结果异步通知InsureNotify：" + postData);
             SdkFactory.Ydt.NotifyLog("支付结果通知", "", postData);
             //if (pms != null)
             //{

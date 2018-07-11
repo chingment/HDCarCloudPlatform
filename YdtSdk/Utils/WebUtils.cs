@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -100,18 +101,16 @@ namespace YdtSdk
         public string DoPost(string url, IDictionary<string, string> urlParams, string postdata, IDictionary<string, string> headerParams)
         {
 
-            ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
             if (urlParams != null && urlParams.Count > 0)
             {
                 url = BuildRequestUrl(url, urlParams);
             }
 
 
-            log.Info("Ydt-request-url>>>>" + url);
+            LogUtil.Info("Ydt-request-url>>>>" + url);
             if (postdata != null)
             {
-                log.Info("Ydt-request-postData>>>>" + postdata);
+                LogUtil.Info("Ydt-request-postData>>>>" + postdata);
             }
 
             HttpWebRequest req = GetWebRequest(url, "POST", headerParams);
@@ -127,7 +126,7 @@ namespace YdtSdk
             Encoding encoding = GetResponseEncoding(rsp);
             string result = GetResponseAsString(rsp, encoding);
 
-            log.Info("Ydt-request-result>>>>" + result);
+            LogUtil.Info("Ydt-request-result>>>>" + result);
 
             return result;
         }
@@ -232,14 +231,12 @@ namespace YdtSdk
         /// <returns>HTTP响应</returns>
         public string DoGet(string url, IDictionary<string, string> textParams, IDictionary<string, string> headerParams)
         {
-            ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
             if (textParams != null && textParams.Count > 0)
             {
                 url = BuildRequestUrl(url, textParams);
             }
 
-            log.Info("Ydt->url:" + url);
+            LogUtil.Info("Ydt->url:" + url);
 
             HttpWebRequest req = GetWebRequest(url, "GET", headerParams);
             req.ContentType = "application/x-www-form-urlencoded;charset=utf-8";

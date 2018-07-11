@@ -1,4 +1,5 @@
-﻿using Lumos.BLL;
+﻿using Lumos;
+using Lumos.BLL;
 using Lumos.BLL.Service;
 using Lumos.DAL;
 using Lumos.DAL.AuthorizeRelay;
@@ -24,14 +25,12 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse UploadLogTrace(UploadLogTracePms pms)
         {
-            Log.Info("AppVersion:" + GetAppVersion());
+            LogUtil.Info("AppVersion:" + GetAppVersion());
 
-            log4net.ILog log = log4net.LogManager.GetLogger("AppErrorLogFileAppender");
-
-            log.Info("UploadLogFile");
+            LogUtil.Info("UploadLogFile");
             if (!string.IsNullOrEmpty(pms.Trace))
             {
-                log.Error(pms.Trace);
+                LogUtil.Error(pms.Trace);
             }
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "上传成功");
@@ -40,12 +39,11 @@ namespace WebAppApi.Controllers
         [HttpPost]
         public APIResponse UploadLogFile()
         {
-            log4net.ILog log = log4net.LogManager.GetLogger("AppErrorLogFileAppender");
 
-            log.Info("UploadLogFile");
+            LogUtil.Info("UploadLogFile");
             //if (!string.IsNullOrEmpty(pms.Trace))
             //{
-            //    Log.Error(pms.Trace);
+            //    LogUtil.Error(pms.Trace);
             //}
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "上传成功");

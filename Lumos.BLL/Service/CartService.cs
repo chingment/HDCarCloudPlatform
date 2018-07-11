@@ -79,11 +79,11 @@ namespace Lumos.BLL.Service
                     {
                         var mod_Cart = CurrentDb.Cart.Where(m => m.UserId == userId && m.ProductSkuId == item.SkuId && m.Status == Enumeration.CartStatus.WaitSettle).FirstOrDefault();
 
-                        Log.Info("购物车操作：" + operate);
+                        LogUtil.Info("购物车操作：" + operate);
                         switch (operate)
                         {
                             case Enumeration.CartOperateType.Selected:
-                                Log.Info("购物车操作：选择");
+                                LogUtil.Info("购物车操作：选择");
 
                                 if (mod_Cart.Selected)
                                 {
@@ -96,7 +96,7 @@ namespace Lumos.BLL.Service
 
                                 break;
                             case Enumeration.CartOperateType.Decrease:
-                                Log.Info("购物车操作：减少");
+                                LogUtil.Info("购物车操作：减少");
                                 if (mod_Cart.Quantity >= 2)
                                 {
                                     mod_Cart.Quantity -= 1;
@@ -105,7 +105,7 @@ namespace Lumos.BLL.Service
                                 }
                                 break;
                             case Enumeration.CartOperateType.Increase:
-                                Log.Info("购物车操作：增加");
+                                LogUtil.Info("购物车操作：增加");
                                 var skuModel = ServiceFactory.Product.GetSkuModel(item.SkuId);
 
                                 if (mod_Cart == null)
@@ -129,7 +129,7 @@ namespace Lumos.BLL.Service
                                 }
                                 break;
                             case Enumeration.CartOperateType.Delete:
-                                Log.Info("购物车操作：删除");
+                                LogUtil.Info("购物车操作：删除");
                                 mod_Cart.Status = Enumeration.CartStatus.Deleted;
                                 mod_Cart.LastUpdateTime = this.DateTime;
                                 mod_Cart.Mender = operater;

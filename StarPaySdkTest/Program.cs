@@ -13,8 +13,6 @@ namespace StarPaySdkTest
 {
     class Program
     {
-        public static ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         static void Main(string[] args)
         {
             PayUnifiedOrderParams pms = new PayUnifiedOrderParams();

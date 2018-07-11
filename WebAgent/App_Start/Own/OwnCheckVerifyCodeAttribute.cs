@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Lumos;
 using Lumos.Common;
 using Lumos.Mvc;
 using System;
@@ -90,8 +91,7 @@ namespace WebAgent
             if (filterContext.Result != null)
             {
 
-                ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-                log.Info(filterContext.Result.ToString());
+                LogUtil.Info(filterContext.Result.ToString());
 
 
                 CustomJsonResult result = Newtonsoft.Json.JsonConvert.DeserializeObject<CustomJsonResult>(filterContext.Result.ToString());

@@ -1,4 +1,5 @@
-﻿using Lumos.BLL;
+﻿using Lumos;
+using Lumos.BLL;
 using Lumos.Common;
 using Lumos.Entity;
 using Lumos.Mvc;
@@ -43,7 +44,7 @@ namespace WebAppApi.Controllers
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
 
-            Log.Info("ReceiveNotify：" + postData);
+            LogUtil.Info("ReceiveNotify：" + postData);
 
             if (string.IsNullOrEmpty(postData))
             {
@@ -69,7 +70,7 @@ namespace WebAppApi.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error("解析支付结果发生异常", ex);
+                LogUtil.Error("解析支付结果发生异常", ex);
             }
 
             BizFactory.Pay.ResultNotify(0, orderSn, isSuccessPay, Enumeration.PayResultNotifyType.PartnerPayOrgNotifyUrl, "星大陆", notifyFromResult);

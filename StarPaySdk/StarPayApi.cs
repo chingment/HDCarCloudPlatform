@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Lumos;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,6 @@ namespace StarPaySdk
 
     public class StarPayApi : IStarPayApi
     {
-        ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public string _serverUrl = "";
         public string _signkey = "";
 
@@ -66,7 +66,7 @@ namespace StarPaySdk
                 {
                     rsp.message = System.Web.HttpUtility.UrlDecode(rsp.message);
 
-                    log.InfoFormat("StarPay->message:{0}", rsp.message);
+                    LogUtil.InfoFormat("StarPay->message:{0}", rsp.message);
 
                 }
             }

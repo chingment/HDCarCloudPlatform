@@ -17,7 +17,7 @@ namespace Lumos.BLL.Biz.Task
 
             var merchantPosMachines = CurrentDb.MerchantPosMachine.Where(m => m.ExpiryTime < DateTime.Now).ToList();
 
-            Log.InfoFormat("到期的机器数量有：{0}", merchantPosMachines.Count);
+            LogUtil.InfoFormat("到期的机器数量有：{0}", merchantPosMachines.Count);
 
             foreach (var merchantPosMachine in merchantPosMachines)
             {
@@ -51,7 +51,7 @@ namespace Lumos.BLL.Biz.Task
                     orderToServiceFee.Sn = snModel.Sn;
 
 
-                    Log.InfoFormat("生成待支付订单号：{0}", orderToServiceFee.Sn);
+                    LogUtil.InfoFormat("生成待支付订单号：{0}", orderToServiceFee.Sn);
                 }
 
                 SysFactory.SysItemCacheUpdateTime.UpdateUser(orderToServiceFee.UserId);

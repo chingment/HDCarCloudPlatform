@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +21,6 @@ namespace MinShunPaySdk
     public sealed class WebUtils
     {
 
-        ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private int _timeout = 20000;
         private int _readWriteTimeout = 60000;
         private bool _ignoreSSLCheck = true;
@@ -70,8 +70,8 @@ namespace MinShunPaySdk
                     url = BuildRequestUrl(url, urlParams);
                 }
 
-                log.InfoFormat("MinShunPay->url:{0}", url);
-                log.InfoFormat("MinShunPay->postdata:{0}", postdata);
+                LogUtil.InfoFormat("MinShunPay->url:{0}", url);
+                LogUtil.InfoFormat("MinShunPay->postdata:{0}", postdata);
                 HttpWebRequest req = GetWebRequest(url, "POST", headerParams);
                 req.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
 
@@ -88,13 +88,13 @@ namespace MinShunPaySdk
 
                 result = GetResponseAsString(rsp, encoding);
 
-                log.InfoFormat("MinShunPay->result:{0}", result);
+                LogUtil.InfoFormat("MinShunPay->result:{0}", result);
 
                 return result;
             }
             catch (Exception ex)
             {
-                log.Error("MinShunPay->Exception:" + ex.Message, ex);
+                LogUtil.Error("MinShunPay->Exception:" + ex.Message, ex);
 
                 return null;
             }

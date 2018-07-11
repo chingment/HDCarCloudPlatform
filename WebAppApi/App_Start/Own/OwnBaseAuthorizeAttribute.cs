@@ -26,13 +26,6 @@ namespace WebAppApi
         private readonly string key = "_MonitorApiLog_";
 
 
-        protected ILog Log
-        {
-            get
-            {
-                return LogManager.GetLogger(this.GetType());
-            }
-        }
 
         protected void SetTrackID()
         {
@@ -93,7 +86,7 @@ namespace WebAppApi
 
 
                 SetTrackID();
-                Log.Info("调用API接口");
+                LogUtil.Info("调用API接口");
                 DateTime requestTime = DateTime.Now;
                 var request = ((HttpContextWrapper)actionContext.Request.Properties["MS_HttpContext"]).Request;
                 var requestMethod = request.HttpMethod;
@@ -105,7 +98,7 @@ namespace WebAppApi
 
                 if (app_version != null)
                 {
-                    Log.Info("app_version:" + app_version);
+                    LogUtil.Info("app_version:" + app_version);
                 }
 
                 string app_data = null;
@@ -123,23 +116,24 @@ namespace WebAppApi
                     #region 过滤图片
                     if (app_data.LastIndexOf(",\"ImgData\":{") > -1)
                     {
-                        //Log.Info("去掉图片之前的数据：" + app_data);
+
+                        //LogUtil.Info("去掉图片之前的数据：" + app_data);
                         int x = app_data.LastIndexOf(",\"ImgData\":{");
                         app_data = app_data.Substring(0, x);
                         app_data += "}";
-                        //Log.Info("去掉图片之后的数据：" + app_data);
+                        //LogUtil.Info("去掉图片之后的数据：" + app_data);
 
                     }
                     else if (app_data.LastIndexOf(",\"imgData\":{") > -1)
                     {
-                        // Log.Info("去掉图片之前的数据：" + app_data);
+                        // LogUtil.Info("去掉图片之前的数据：" + app_data);
                         int x = app_data.LastIndexOf(",\"imgData\":{");
                         app_data = app_data.Substring(0, x);
                         app_data += "}";
-                        //Log.Info("去掉图片之后的数据：" + app_data);
+                        //LogUtil.Info("去掉图片之后的数据：" + app_data);
                     }
 
-                    Log.Info("app_data:" + app_data);
+                    LogUtil.Info("app_data:" + app_data);
 
                     #endregion
                 }
@@ -160,7 +154,7 @@ namespace WebAppApi
                 monitorApiLog.RequestTime = requestTime;
                 monitorApiLog.RequestUrl = request.RawUrl;
                 monitorApiLog.SignatureData = new SignatureData { Key = app_key, Sign = app_sign, TimeStamp = app_timestamp_s, Data = app_data };
-                Log.Info(string.Format("API请求:{0}", monitorApiLog.ToString()));
+                LogUtil.Info(string.Format("API请求:{0}", monitorApiLog.ToString()));
 
                 actionContext.ActionArguments[key] = monitorApiLog;
 
@@ -186,12 +180,12 @@ namespace WebAppApi
 
                 string signStr = Signature.Compute(app_key, app_secret, app_timestamp, app_data);
 
-                //Log.Info("app_key:" + app_key);
-                //Log.Info("app_secret:" + app_secret);
-                //Log.Info("app_timestamp:" + app_timestamp);
-                //Log.Info("app_data:" + app_data);
-                //Log.Info("signStr:" + signStr);
-                //Log.Info("app_sign:" + app_sign);
+                //LogUtil.Info("app_key:" + app_key);
+                //LogUtil.Info("app_secret:" + app_secret);
+                //LogUtil.Info("app_timestamp:" + app_timestamp);
+                //LogUtil.Info("app_data:" + app_data);
+                //LogUtil.Info("signStr:" + signStr);
+                //LogUtil.Info("app_sign:" + app_sign);
 
 
                 if (Signature.IsRequestTimeout(app_timestamp))
@@ -206,7 +200,7 @@ namespace WebAppApi
 
                 if (signStr != app_sign)
                 {
-                    Log.Warn("API签名错误");
+                    LogUtil.Warn("API签名错误");
                     APIResult result = new APIResult(ResultType.Failure, ResultCode.FailureSign, "签名错误");
                     actionContext.Response = new APIResponse(result);
                     return;
@@ -216,7 +210,7 @@ namespace WebAppApi
             }
             catch (Exception ex)
             {
-                Log.Error(string.Format("API错误:{0}", ex.Message), ex);
+                LogUtil.Error(string.Format("API错误:{0}", ex.Message), ex);
                 APIResult result = new APIResult(ResultType.Exception, ResultCode.Exception, "内部错误");
                 actionContext.Response = new APIResponse(result);
 
@@ -233,7 +227,7 @@ namespace WebAppApi
             MonitorApiLog monitorApiLog = actionContext.ActionContext.ActionArguments[key] as MonitorApiLog;
             monitorApiLog.ResponseTime = responseTime;
             monitorApiLog.ResponseData = content;//form表单提交的数据
-            Log.Info(string.Format("API响应:{0}", monitorApiLog.ToString()));
+            LogUtil.Info(string.Format("API响应:{0}", monitorApiLog.ToString()));
             return content;
         }
 

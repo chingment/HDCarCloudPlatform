@@ -14,6 +14,7 @@ using WebAppApi.Models;
 using Lumos.BLL.Service;
 using Lumos.BLL.Service.Model;
 using System.Web;
+using Lumos;
 
 namespace WebAppApi.Controllers
 {
@@ -1267,7 +1268,7 @@ namespace WebAppApi.Controllers
             string app_version = HttpContext.Current.Request.Headers["version"];
 
 
-            Log.Info("AppVersion:" + GetAppVersion());
+            LogUtil.Info("AppVersion:" + GetAppVersion());
 
             if (GetAppVersion() < 10)
             {

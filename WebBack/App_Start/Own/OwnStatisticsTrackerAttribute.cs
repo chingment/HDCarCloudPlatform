@@ -18,7 +18,6 @@ namespace WebBack
     public class OwnStatisticsTrackerAttribute : ActionFilterAttribute, IExceptionFilter
     {
         private readonly string Key = "_thisOnActionMonitorLog_";
-        ILog log = log4net.LogManager.GetLogger(CommonSetting.LoggerStatisticsTracker);
 
         public int GetUserId()
         {
@@ -50,7 +49,7 @@ namespace WebBack
             MonLog.FormCollections = filterContext.HttpContext.Request.Form;//form表单提交的数据
             MonLog.QueryCollections = filterContext.HttpContext.Request.QueryString;//Url 参数
             MonLog.UserId = GetUserId();
-            log.Info(MonLog.GetRequestInfo());
+            LogUtil.Info(MonLog.GetRequestInfo());
         }
         #endregion
 
@@ -64,7 +63,7 @@ namespace WebBack
         {
             MonitorLog MonLog = filterContext.Controller.ViewData[Key] as MonitorLog;
             MonLog.ResponseTime = DateTime.Now;
-            log.Info(MonLog.GetResponseInfo());
+            LogUtil.Info(MonLog.GetResponseInfo());
             filterContext.Controller.ViewData.Remove(Key);
         }
         #endregion
@@ -78,7 +77,7 @@ namespace WebBack
                 string ControllerName = string.Format("{0}Controller", filterContext.RouteData.Values["controller"] as string);
                 string ActionName = filterContext.RouteData.Values["action"] as string;
                 string ErrorMsg = string.Format("在执行 controller[{0}] 的 action[{1}] 时产生异常", ControllerName, ActionName);
-                log.Error(ErrorMsg, filterContext.Exception);
+                LogUtil.Error(ErrorMsg, filterContext.Exception);
             }
         }
         #endregion

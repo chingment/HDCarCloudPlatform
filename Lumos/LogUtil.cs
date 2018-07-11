@@ -70,6 +70,29 @@ namespace Lumos
             GetLog().Info(r_msg + msg);
         }
 
+        public static void InfoFormat(string format, params object[] args)
+        {
+            string r_msg = "\r\n";
+            //var trace = new System.Diagnostics.StackTrace();
+            //for (int i = 0; i < trace.FrameCount; i++)
+            //{
+            //    System.Reflection.MethodBase mb2 = trace.GetFrame(i).GetMethod();
+            //    if (mb2 != null)
+            //    {
+            //        if (mb2.DeclaringType != null)
+            //        {
+            //            if (mb2.DeclaringType.Assembly.FullName.ToLower().IndexOf("lumos") > -1 || mb2.DeclaringType.Assembly.FullName.ToLower().IndexOf("websso") > -1)
+            //            {
+            //                r_msg += string.Format("[CALL STACK][{0}]: {1}.{2}\r\n", i, mb2.DeclaringType.FullName, mb2.Name);
+            //            }
+            //        }
+            //    }
+            //}
+
+
+            GetLog().InfoFormat(format, args);
+        }
+
         public static void Warn(string msg)
         {
             GetLog().Warn(msg);
@@ -83,6 +106,11 @@ namespace Lumos
         public static void Error(string msg, Exception ex)
         {
             GetLog().Error(msg, ex);
+        }
+
+        public static void ErrorFormat(string format, params object[] args)
+        {
+            GetLog().ErrorFormat(format, args);
         }
     }
 }

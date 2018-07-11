@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Lumos;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,6 @@ namespace YdtSdk
 
     public class YdtApi : IYdtApi
     {
-        ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public string serverUrl = "http://test.hybao.cc:6100";
 
@@ -67,7 +67,7 @@ namespace YdtSdk
 
             try
             {
-                log.Info("Ydt->result:" + body);
+                LogUtil.Info("Ydt->result:" + body);
                 YdtResult ydtResult = new YdtResult();
 
                 if (body.IndexOf("\"code\":") > -1 && body.IndexOf(",\"msg\":") > -1)
@@ -84,7 +84,7 @@ namespace YdtSdk
             }
             catch (Exception ex)
             {
-                log.Error("解释 Ydt->result 错误:" + body);
+                LogUtil.Error("解释 Ydt->result 错误:" + body);
             }
             return rsp;
         }
@@ -94,8 +94,6 @@ namespace YdtSdk
         {
             try
             {
-                ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
                 string realServerUrl = GetServerUrl(this.serverUrl, request.ApiName);
                 WebUtils webUtils = new WebUtils();
 
@@ -150,7 +148,7 @@ namespace YdtSdk
             }
             catch (Exception ex)
             {
-                log.Error("解释异常", ex);
+                LogUtil.Error("解释异常", ex);
                 return null;
             }
         }
@@ -162,11 +160,11 @@ namespace YdtSdk
             string realServerUrl = GetServerUrl(this.serverUrl, request.ApiName);
             WebUtils webUtils = new WebUtils();
 
-            log.Info("Ydt-request-filename>>>>" + filename);
+            LogUtil.Info("Ydt-request-filename>>>>" + filename);
 
             string body = webUtils.DoPostFile(realServerUrl, request.GetUrlParameters(), filename, (Stream)request.PostData);
 
-            log.Info("Ydt-request-filename:result>>>>" + body);
+            LogUtil.Info("Ydt-request-filename:result>>>>" + body);
 
             if (body.IndexOf("\"code\":") == -1)
             {

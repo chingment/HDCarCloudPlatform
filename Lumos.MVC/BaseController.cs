@@ -185,34 +185,7 @@ namespace Lumos.Mvc
         #endregion 公共的方法
 
         #region Log
-        protected ILog Log
-        {
-            get
-            {
-                return LogManager.GetLogger(this.GetType());
-            }
-        }
 
-        protected static ILog GetLog(Type t)
-        {
-            return LogManager.GetLogger(t);
-        }
-
-        protected static ILog GetLog()
-        {
-            //return LogWebBack.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType); //有问题，子类调用，返回的还是父类的logger
-
-            var trace = new System.Diagnostics.StackTrace();
-            Type baseType = typeof(BaseController);
-            for (int i = 0; i < trace.FrameCount; i++)
-            {
-                var frame = trace.GetFrame(i);
-                var method = frame.GetMethod();
-                var type = method.DeclaringType;
-                if (type.IsSubclassOf(baseType)) return GetLog(type);
-            }
-            return LogManager.GetLogger(baseType);
-        }
 
         protected void SetTrackID()
         {
@@ -230,8 +203,7 @@ namespace Lumos.Mvc
 
             SetTrackID();
 
-            ILog log = LogManager.GetLogger(CommonSetting.LoggerAccessWeb);
-            log.Info(FormatUtils.AccessWeb(this.CurrentUserId, ""));
+            LogUtil.Info(FormatUtils.AccessWeb(this.CurrentUserId, ""));
 
         }
         }

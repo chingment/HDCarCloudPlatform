@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,8 +20,6 @@ namespace StarPaySdk
     /// </summary>
     public sealed class WebUtils
     {
-
-        ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private int _timeout = 20000;
         private int _readWriteTimeout = 60000;
         private bool _ignoreSSLCheck = true;
@@ -70,8 +69,8 @@ namespace StarPaySdk
                     url = BuildRequestUrl(url, urlParams);
                 }
 
-                log.InfoFormat("StarPay->url:{0}", url);
-                log.InfoFormat("StarPay->postdata:{0}", postdata);
+                LogUtil.InfoFormat("StarPay->url:{0}", url);
+                LogUtil.InfoFormat("StarPay->postdata:{0}", postdata);
                 HttpWebRequest req = GetWebRequest(url, "POST", headerParams);
                 req.ContentType = "application/json";
 
@@ -88,13 +87,13 @@ namespace StarPaySdk
 
                 result = GetResponseAsString(rsp, encoding);
 
-                log.InfoFormat("StarPay->result:{0}", result);
+                LogUtil.InfoFormat("StarPay->result:{0}", result);
 
                 return result;
             }
             catch (Exception ex)
             {
-                log.Error("StarPay->Exception:" + ex.Message, ex);
+                LogUtil.Error("StarPay->Exception:" + ex.Message, ex);
 
                 return null;
             }

@@ -131,7 +131,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.Error("出错" + orderToCarInsure.Id, ex);
+                LogUtil.Error("出错" + orderToCarInsure.Id, ex);
 
                 return result;
             }
@@ -384,7 +384,7 @@ namespace Lumos.BLL
             }
             catch (Exception ex)
             {
-                Log.Error("出错" + orderId, ex);
+                LogUtil.Error("出错" + orderId, ex);
 
                 return result;
             }

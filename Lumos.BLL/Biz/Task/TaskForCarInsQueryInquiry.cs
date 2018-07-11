@@ -18,19 +18,19 @@ namespace Lumos.BLL.Biz.Task
             var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitAutoApplyPay || m.PartnerPayId != null).ToList();
 
 
-            Log.Info("待处理的总数量：" + orderToCarInsures.Count);
+            LogUtil.Info("待处理的总数量：" + orderToCarInsures.Count);
 
             var waitArtificialOfferCount = orderToCarInsures.Where(m => m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer).Count();
             var waitArtificialInsureCount = orderToCarInsures.Where(m => m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure).Count();
             var waitAutoApplyPayCount = orderToCarInsures.Where(m => m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitAutoApplyPay).Count();
-            Log.Info("待处理的数量（等待人工报价）：" + waitArtificialOfferCount);
-            Log.Info("待处理的数量（等待人工核保）：" + waitArtificialInsureCount);
-            Log.Info("待处理的数量（等待人工申请支付）：" + waitAutoApplyPayCount);
+            LogUtil.Info("待处理的数量（等待人工报价）：" + waitArtificialOfferCount);
+            LogUtil.Info("待处理的数量（等待人工核保）：" + waitArtificialInsureCount);
+            LogUtil.Info("待处理的数量（等待人工申请支付）：" + waitAutoApplyPayCount);
             foreach (var item in orderToCarInsures)
             {
                 var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == item.Id).FirstOrDefault();
 
-                Log.InfoFormat("处理订单号:{0}，跟进状态：{1}", item.Sn, item.FollowStatus);
+                LogUtil.InfoFormat("处理订单号:{0}，跟进状态：{1}", item.Sn, item.FollowStatus);
 
                 if (string.IsNullOrEmpty(item.PartnerPayId))
                 {
@@ -38,16 +38,16 @@ namespace Lumos.BLL.Biz.Task
                     {
                         case (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer:
                             #region  获取人工报价结果
-                            Log.InfoFormat("处理订单号:{0}，查询人工报价结果", item.Sn);
+                            LogUtil.InfoFormat("处理订单号:{0}，查询人工报价结果", item.Sn);
 
                             if (string.IsNullOrEmpty(item.PartnerOrderId))
                             {
-                                Log.InfoFormat("处理订单号:{0}，易点通订单号为空", item.Sn);
+                                LogUtil.InfoFormat("处理订单号:{0}，易点通订单号为空", item.Sn);
                             }
 
                             if (string.IsNullOrEmpty(item.PartnerInquiryId))
                             {
-                                Log.InfoFormat("处理订单号:{0}，易点通询价号为空", item.Sn);
+                                LogUtil.InfoFormat("处理订单号:{0}，易点通询价号为空", item.Sn);
                             }
 
                             if (!string.IsNullOrEmpty(item.PartnerInquiryId) && !string.IsNullOrEmpty(item.PartnerOrderId))
@@ -62,7 +62,7 @@ namespace Lumos.BLL.Biz.Task
 
                                 if (result_QueryInquiry.Result == ResultType.Success)
                                 {
-                                    Log.InfoFormat("处理订单号:{0}，查询人工报价结果成功,返回报价数据", item.Sn);
+                                    LogUtil.InfoFormat("处理订单号:{0}，查询人工报价结果成功,返回报价数据", item.Sn);
                                     var result_QueryInquiryData = result_QueryInquiry.Data;
 
                                     updateOrderOfferPms.PartnerChannelId = result_QueryInquiryData.channel.channelId;
@@ -76,7 +76,7 @@ namespace Lumos.BLL.Biz.Task
                                 }
                                 else
                                 {
-                                    Log.InfoFormat("处理订单号:{0}，查询人工报价结果失败,返回报价为空", item.Sn);
+                                    LogUtil.InfoFormat("处理订单号:{0}，查询人工报价结果失败,返回报价为空", item.Sn);
                                     orderToCarInsureOfferCompany.TryGetApiOfferResultCount += 1;
                                 }
                             }

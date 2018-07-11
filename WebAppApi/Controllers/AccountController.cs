@@ -1,4 +1,5 @@
-﻿using Lumos.BLL;
+﻿using Lumos;
+using Lumos.BLL;
 using Lumos.BLL.Service;
 using Lumos.DAL;
 using Lumos.DAL.AuthorizeRelay;
@@ -393,7 +394,7 @@ namespace WebAppApi.Controllers
             var extendedApps = CurrentDb.ExtendedApp.Where(m => m.IsDisplay == true).ToList();
 
 
-            Log.Info("AppVersion:" + GetAppVersion());
+            LogUtil.Info("AppVersion:" + GetAppVersion());
 
             if (GetAppVersion() < 11)
             {

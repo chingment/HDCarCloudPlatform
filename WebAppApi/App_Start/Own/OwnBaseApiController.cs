@@ -10,6 +10,7 @@ using System.Web.Http;
 using WebAppApi.Models;
 using Lumos.Entity.AppApi;
 using Lumos.Entity;
+using Lumos;
 
 namespace WebAppApi
 {
@@ -38,19 +39,6 @@ namespace WebAppApi
             {
                 return _currentDb;
             }
-        }
-
-        protected ILog Log
-        {
-            get
-            {
-                return LogManager.GetLogger(this.GetType());
-            }
-        }
-
-        protected static ILog GetLog(Type t)
-        {
-            return LogManager.GetLogger(t);
         }
 
         protected void SetTrackID()
@@ -82,7 +70,6 @@ namespace WebAppApi
 
         public string GetUploadImageUrl(ImageModel imagemodel, string savepath)
         {
-            ILog log = LogManager.GetLogger(this.GetType());
 
             if (imagemodel == null)
             {
@@ -122,14 +109,14 @@ namespace WebAppApi
                 else
                 {
                     rm.Message = "上传图片发生异常";
-                    log.Error("调用API上传图片发生异常");
+                    LogUtil.Error("调用API上传图片发生异常");
                 }
 
 
             }
             catch (Exception ex)
             {
-                log.Error(ex);
+                LogUtil.Error("", ex);
 
             }
             return imageUrl;

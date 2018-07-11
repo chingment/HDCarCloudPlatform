@@ -171,9 +171,6 @@ namespace WebAppApi.Controllers
 
             //BizFactory.Pay.ResultNotify(0, Enumeration.PayResultNotifyParty.MinShunNotifyUrl, receiveNotifyLog);
 
-            ILog log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-
 
             string userName = "15989287031";
             string passWord = "123456";

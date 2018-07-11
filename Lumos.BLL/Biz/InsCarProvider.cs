@@ -539,8 +539,29 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.KindId = partnerKind.UpLinkCode;
                                 orderToCarInsureOfferCompanyKind.PartnerKindId = partnerKind.Code;
                                 orderToCarInsureOfferCompanyKind.KindName = partnerKind.Name;
+                                switch (orderToCarInsureOfferCompanyKind.KindId)
+                                {
+                                    case 6:
+                                        int quantity = item.quantity == null ? 0 : item.quantity.Value;
+                                        decimal unitAmount = item.unitAmount == null ? 0 : item.unitAmount.Value;
+                                        orderToCarInsureOfferCompanyKind.KindValue = string.Format("{0}座，每座：{1}元，合计：{2}元", quantity, unitAmount, item.amount);
+                                        break;
+                                    case 8:
+                                        orderToCarInsureOfferCompanyKind.GlassType = item.glassType;
+                                        if (item.glassType == 1)
+                                        {
+                                            orderToCarInsureOfferCompanyKind.KindValue = "国产";
+                                        }
+                                        else if (item.glassType == 2)
+                                        {
+                                            orderToCarInsureOfferCompanyKind.KindValue = "进口";
+                                        }
+                                        break;
+                                    default:
+                                        orderToCarInsureOfferCompanyKind.KindValue = item.amount.ToF2Price();
+                                        break;
+                                }
                                 orderToCarInsureOfferCompanyKind.Quantity = item.quantity;
-                                orderToCarInsureOfferCompanyKind.GlassType = item.glassType;
                                 orderToCarInsureOfferCompanyKind.Amount = item.amount;
                                 orderToCarInsureOfferCompanyKind.StandardPremium = item.standardPremium;
                                 orderToCarInsureOfferCompanyKind.BasicPremium = item.basicPremium;
@@ -551,7 +572,6 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
                                 orderToCarInsureOfferCompanyKind.Creator = operater;
                                 orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
-                                orderToCarInsureOfferCompanyKind.KindValue = item.amount.ToF2Price();
 
                                 CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
                                 CurrentDb.SaveChanges();

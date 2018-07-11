@@ -365,6 +365,48 @@ namespace Lumos.BLL
                         CurrentDb.SaveChanges();
                     }
 
+
+                    if (pms.PartnerRisk == 2 || pms.PartnerRisk == 3)
+                    {
+                        var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
+                        orderToCarInsureOfferCompanyKind.OrderId = orderToCarInsure.Id;
+                        orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                        orderToCarInsureOfferCompanyKind.KindId = 1;
+                        orderToCarInsureOfferCompanyKind.PartnerKindId = "0";
+                        orderToCarInsureOfferCompanyKind.KindName = "交强险";
+                        orderToCarInsureOfferCompanyKind.Quantity = 0;
+                        orderToCarInsureOfferCompanyKind.GlassType = 0;
+                        orderToCarInsureOfferCompanyKind.Amount = 0;
+                        orderToCarInsureOfferCompanyKind.StandardPremium = 0;//保费
+                        orderToCarInsureOfferCompanyKind.Priority = 0;
+                        orderToCarInsureOfferCompanyKind.Creator = operater;
+                        orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
+                        orderToCarInsureOfferCompanyKind.IsWaiverDeductible = false;
+                        orderToCarInsureOfferCompanyKind.KindValue = "";
+                        CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
+                        CurrentDb.SaveChanges();
+
+                        var orderToCarInsureOfferCompanyKind2 = new OrderToCarInsureOfferCompanyKind();
+                        orderToCarInsureOfferCompanyKind2.OrderId = orderToCarInsure.Id;
+                        orderToCarInsureOfferCompanyKind2.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                        orderToCarInsureOfferCompanyKind2.KindId = 2;
+                        orderToCarInsureOfferCompanyKind2.PartnerKindId = "0";
+                        orderToCarInsureOfferCompanyKind2.KindName = "车船税";
+                        orderToCarInsureOfferCompanyKind2.Quantity = 0;
+                        orderToCarInsureOfferCompanyKind2.GlassType = 0;
+                        orderToCarInsureOfferCompanyKind2.Amount = 0;
+                        orderToCarInsureOfferCompanyKind2.StandardPremium = 0;
+                        orderToCarInsureOfferCompanyKind2.Priority = 0;
+                        orderToCarInsureOfferCompanyKind2.Creator = operater;
+                        orderToCarInsureOfferCompanyKind2.CreateTime = this.DateTime;
+                        orderToCarInsureOfferCompanyKind2.IsWaiverDeductible = false;
+                        orderToCarInsureOfferCompanyKind2.KindValue = "";
+
+                        CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind2);
+                        CurrentDb.SaveChanges();
+                    }
+
+
                     if (pms.Coverages != null)
                     {
                         foreach (var item in pms.Coverages)
@@ -390,6 +432,8 @@ namespace Lumos.BLL
                             }
                         }
                     }
+
+
 
                     CurrentDb.SaveChanges();
                     ts.Complete();

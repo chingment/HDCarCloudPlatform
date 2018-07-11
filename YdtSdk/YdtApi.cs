@@ -112,61 +112,39 @@ namespace YdtSdk
                 string body = webUtils.DoPost(realServerUrl, request.GetUrlParameters(), postData, null);
 
 
-                if (!string.IsNullOrEmpty(body))
-                {
-                    if (realServerUrl.ToLower().IndexOf("ins_artificial/inquiry") > -1)
-                    {
-                        string start = body.Substring(0, 1);
-
-                        if (start == "\"")
-                        {
-                            body = body.Substring(1, body.Length - 1);
-                        }
-
-                        string end = body.Substring(body.Length - 1, 1);
-
-                        if (end == "\"")
-                        {
-                            body = body.Substring(0, body.Length - 1);
-                        }
-
-                        body = body.Replace("\\\"", "\"");
-                    }
-
-                }
-
-                //if (realServerUrl.ToLower().IndexOf("ins_car/get_inquiry_info") < 0|| realServerUrl.ToLower().IndexOf("ins_car/get_inquiry_info") < 0)
+                //if (!string.IsNullOrEmpty(body))
                 //{
-                //    body = body.Replace("\"code\"", "\"codeno\"");
+                //    if (realServerUrl.ToLower().IndexOf("ins_artificial/inquiry") > -1)
+                //    {
+                //        string start = body.Substring(0, 1);
+
+                //        if (start == "\"")
+                //        {
+                //            body = body.Substring(1, body.Length - 1);
+                //        }
+
+                //        string end = body.Substring(body.Length - 1, 1);
+
+                //        if (end == "\"")
+                //        {
+                //            body = body.Substring(0, body.Length - 1);
+                //        }
+
+                //        body = body.Replace("\\\"", "\"");
+                //    }
+
                 //}
 
-                //var rsp1 = JsonConvert.DeserializeObject<YdtApiBaseResult<object>>(body);
 
 
                 if (body.IndexOf("msg") < 0 && body.IndexOf("extmsg") < 0)
                 {
                     body = "{\"code\":0,\"msg\":\"成功\",\"data\":" + body + "}";
                 }
-
-
+                
+         
 
                 var rsp = JsonConvert.DeserializeObject<YdtApiBaseResult<T>>(body);
-
-                //if (body.IndexOf("\"code\":") == -1)
-                //{
-                //    if (body.IndexOf('{') == -1 && body.IndexOf('[') == -1)
-                //    {
-                //        body = "{\"code\":2,\"msg\":\"" + body + "\"}";
-                //    }
-                //    else
-                //    {
-                //        body = "{\"code\":0,\"msg\":\"成功\",\"data\":" + body + "}";
-                //    }
-                //}
-
-
-                //  var rsp = JsonConvert.DeserializeObject<YdtApiBaseResult<T>>(body);
-
 
                 return rsp;
             }

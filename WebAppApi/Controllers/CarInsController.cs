@@ -1500,8 +1500,8 @@ namespace WebAppApi.Controllers
             stream.Seek(0, SeekOrigin.Begin);
             string postData = new StreamReader(stream).ReadToEnd();
 
-            Log.Info("PayNotify：" + postData);
             Log.Info("支付结果异步通知InsureNotify：" + postData);
+            SdkFactory.Ydt.NotifyLog("支付结果通知", "", postData);
             //if (pms != null)
             //{
 
@@ -1755,13 +1755,13 @@ namespace WebAppApi.Controllers
                         parentsByCommercial.Field = "商业险";
                         parentsByCommercial.Value = carInsureOfferCompany.CommercialPrice.ToF2Price();
 
-                        var carInsureOfferCompanyKinds1 = carInsureOfferCompanyKinds.Where(m => m.IsCompensation == false).OrderBy(m => m.Priority).ToList();
+                        var carInsureOfferCompanyKinds1 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == false).OrderBy(m => m.Priority).ToList();
                         foreach (var kind in carInsureOfferCompanyKinds1)
                         {
                             parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, kind.StandardPremium.ToF2Price()));
                         }
 
-                        var carInsureOfferCompanyKinds2 = carInsureOfferCompanyKinds.Where(m => m.IsCompensation == true).OrderBy(m => m.Priority).ToList();
+                        var carInsureOfferCompanyKinds2 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == true).OrderBy(m => m.Priority).ToList();
 
                         if (carInsureOfferCompanyKinds2.Count > 0)
                         {

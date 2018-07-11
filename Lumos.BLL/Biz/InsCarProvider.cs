@@ -377,14 +377,13 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
                                 orderToCarInsureOfferCompanyKind.KindId = partnerKind.UpLinkCode;
                                 orderToCarInsureOfferCompanyKind.PartnerKindId = partnerKind.Code;
-                                orderToCarInsureOfferCompanyKind.Compensation = item.compensation;
                                 orderToCarInsureOfferCompanyKind.KindName = partnerKind.Name;
                                 orderToCarInsureOfferCompanyKind.Quantity = item.quantity;
                                 orderToCarInsureOfferCompanyKind.GlassType = item.glassType;
                                 orderToCarInsureOfferCompanyKind.Amount = item.amount;
                                 orderToCarInsureOfferCompanyKind.Creator = operater;
                                 orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
-                                orderToCarInsureOfferCompanyKind.IsCompensation = partnerKind.IsCompensation;
+                                orderToCarInsureOfferCompanyKind.IsWaiverDeductible = item.compensation == 0 ? false : true;
                                 orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
                                 CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
                                 CurrentDb.SaveChanges();
@@ -458,6 +457,25 @@ namespace Lumos.BLL
                                 {
                                     orderToCarInsureOfferCompany.CompulsoryPrice = compulsory.standardPremium;
                                     insureTotalPrice += compulsory.standardPremium.Value;
+
+                                    var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
+                                    orderToCarInsureOfferCompanyKind.OrderId = l_orderToCarInsure.Id;
+                                    orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                                    orderToCarInsureOfferCompanyKind.KindId = 1;
+                                    orderToCarInsureOfferCompanyKind.PartnerKindId = "0";
+                                    orderToCarInsureOfferCompanyKind.KindName = "交强险";
+                                    orderToCarInsureOfferCompanyKind.Quantity = 0;
+                                    orderToCarInsureOfferCompanyKind.GlassType = 0;
+                                    orderToCarInsureOfferCompanyKind.Amount = 0;
+                                    orderToCarInsureOfferCompanyKind.Premium = compulsory.standardPremium;
+                                    orderToCarInsureOfferCompanyKind.Priority = 0;
+                                    orderToCarInsureOfferCompanyKind.Creator = operater;
+                                    orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
+                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = false;
+                                    orderToCarInsureOfferCompanyKind.KindValue = "";
+                                    CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
+                                    CurrentDb.SaveChanges();
+
                                 }
                             }
 
@@ -467,6 +485,27 @@ namespace Lumos.BLL
                                 {
                                     orderToCarInsureOfferCompany.TravelTaxPrice = compulsory.sumPayTax;
                                     insureTotalPrice += compulsory.sumPayTax.Value;
+
+
+                                    var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
+                                    orderToCarInsureOfferCompanyKind.OrderId = l_orderToCarInsure.Id;
+                                    orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                                    orderToCarInsureOfferCompanyKind.KindId = 2;
+                                    orderToCarInsureOfferCompanyKind.PartnerKindId = "0";
+                                    orderToCarInsureOfferCompanyKind.KindName = "车船税";
+                                    orderToCarInsureOfferCompanyKind.Quantity = 0;
+                                    orderToCarInsureOfferCompanyKind.GlassType = 0;
+                                    orderToCarInsureOfferCompanyKind.Amount = 0;
+                                    orderToCarInsureOfferCompanyKind.Premium = compulsory.sumPayTax;
+                                    orderToCarInsureOfferCompanyKind.Priority = 0;
+                                    orderToCarInsureOfferCompanyKind.Creator = operater;
+                                    orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
+                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = false;
+                                    orderToCarInsureOfferCompanyKind.KindValue = "";
+
+                                    CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
+                                    CurrentDb.SaveChanges();
+
                                 }
                             }
 
@@ -499,7 +538,6 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
                                 orderToCarInsureOfferCompanyKind.KindId = partnerKind.UpLinkCode;
                                 orderToCarInsureOfferCompanyKind.PartnerKindId = partnerKind.Code;
-                                orderToCarInsureOfferCompanyKind.Compensation = item.compensation;
                                 orderToCarInsureOfferCompanyKind.KindName = partnerKind.Name;
                                 orderToCarInsureOfferCompanyKind.Quantity = item.quantity;
                                 orderToCarInsureOfferCompanyKind.GlassType = item.glassType;
@@ -509,10 +547,15 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.Premium = item.premium;
                                 orderToCarInsureOfferCompanyKind.UnitAmount = item.unitAmount;
                                 orderToCarInsureOfferCompanyKind.Discount = item.discount ?? 0;
-                                orderToCarInsureOfferCompanyKind.IsCompensation = partnerKind.IsCompensation;
+                                orderToCarInsureOfferCompanyKind.IsWaiverDeductible = item.compensation == 0 ? false : true;
                                 orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
                                 orderToCarInsureOfferCompanyKind.Creator = operater;
                                 orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
+
+
+                                orderToCarInsureOfferCompanyKind.IsWaiverDeductible = item.compensation == 0 ? false : true;
+                                orderToCarInsureOfferCompanyKind.KindValue = item.amount.ToF2Price();
+
                                 CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
                                 CurrentDb.SaveChanges();
 

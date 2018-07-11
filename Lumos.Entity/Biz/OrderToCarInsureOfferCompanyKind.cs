@@ -28,12 +28,11 @@ namespace Lumos.Entity
         public decimal StandardPremium { get; set; }
         public decimal Amount { get; set; }
         public decimal? Premium { get; set; }
-        public int Compensation { get; set; }
+        //public int Compensation { get; set; }
         public int Creator { get; set; }
         public DateTime CreateTime { get; set; }
         public int? Mender { get; set; }
         public DateTime? LastUpdateTime { get; set; }
-        public bool IsCompensation { get; set; }
         public int Priority { get; set; }
         public string KindValue { get; set; }
         [MaxLength(1024)]

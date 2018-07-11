@@ -76,7 +76,7 @@ namespace WebUploadImageServer.Controllers
 
         public HttpResponseMessage Post(UploadFileEntity entity)
         {
-            SetTrackID();
+            LogUtil.SetTrackId();
             LogUtil.Info("调用UploadImage");
             HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];//获取传统context
             HttpRequestBase request = context.Request;//定义传统request对象 

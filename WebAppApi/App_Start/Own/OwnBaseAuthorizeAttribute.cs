@@ -26,13 +26,6 @@ namespace WebAppApi
         private readonly string key = "_MonitorApiLog_";
 
 
-
-        protected void SetTrackID()
-        {
-            if (ThreadContext.Properties["trackid"] == null)
-                ThreadContext.Properties["trackid"] = DateTime.Now.TimeOfDay.TotalMilliseconds.ToString("00000000"); //Guid.NewGuid().ToString("N");
-        }
-
         private DateTime GetDateTimeTolerance(long timestamp)
         {
             DateTime dt = DateTime.Parse(DateTime.Now.ToString("1970-01-01 00:00:00")).AddSeconds(timestamp);
@@ -85,7 +78,7 @@ namespace WebAppApi
 
 
 
-                SetTrackID();
+                LogUtil.SetTrackId();
                 LogUtil.Info("调用API接口");
                 DateTime requestTime = DateTime.Now;
                 var request = ((HttpContextWrapper)actionContext.Request.Properties["MS_HttpContext"]).Request;

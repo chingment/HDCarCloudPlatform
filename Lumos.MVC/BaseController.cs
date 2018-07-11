@@ -184,15 +184,6 @@ namespace Lumos.Mvc
 
         #endregion 公共的方法
 
-        #region Log
-
-
-        protected void SetTrackID()
-        {
-            if (LogicalThreadContext.Properties["trackid"] == null)
-                LogicalThreadContext.Properties["trackid"] = this.Session.SessionID;
-        }
-        #endregion 
 
         public virtual int CurrentUserId { get; }
 
@@ -201,7 +192,7 @@ namespace Lumos.Mvc
         {
             base.OnActionExecuting(filterContext);
 
-            SetTrackID();
+            LogUtil.SetTrackId();
 
             LogUtil.Info(FormatUtils.AccessWeb(this.CurrentUserId, ""));
 

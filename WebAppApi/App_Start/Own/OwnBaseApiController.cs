@@ -41,15 +41,10 @@ namespace WebAppApi
             }
         }
 
-        protected void SetTrackID()
-        {
-            if (LogicalThreadContext.Properties["trackid"] == null)
-                LogicalThreadContext.Properties["trackid"] = Guid.NewGuid().ToString("N");
-        }
 
         public OwnBaseApiController()
         {
-            SetTrackID();
+            LogUtil.SetTrackId();
             _currentDb = new LumosDbContext();
             _result = new APIResult { Result = ResultType.Unknown, Code = ResultCode.Unknown, Message = "未知" };
         }

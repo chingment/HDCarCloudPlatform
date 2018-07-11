@@ -18,11 +18,6 @@ namespace WebUploadImageServer.Controllers
     public class BaseApiController : ApiController
     {
 
-        protected void SetTrackID()
-        {
-            if (ThreadContext.Properties["trackid"] == null)
-                ThreadContext.Properties["trackid"] = DateTime.Now.TimeOfDay.TotalMilliseconds.ToString("00000000"); //Guid.NewGuid().ToString("N");
-        }
 
         public BaseApiController()
         {

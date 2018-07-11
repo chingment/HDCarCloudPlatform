@@ -1,6 +1,8 @@
 ﻿using log4net;
+using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -30,41 +32,49 @@ namespace Lumos
 
         private static ILog GetLog()
         {
-
-            Type type = MethodBase.GetCurrentMethod().DeclaringType;
-
-            var trace = new System.Diagnostics.StackTrace();
-
-            string name = type.Name;
-            if (trace.FrameCount >= 3)
+            string loggerName;
+            Type declaringType;
+            int framesToSkip = 2;
+            do
             {
-                System.Reflection.MethodBase mb = trace.GetFrame(2).GetMethod();
-                type = mb.DeclaringType;
 
-                name = string.Format("{0}.{1}", mb.DeclaringType.FullName, mb.Name);
-            }
+                StackFrame frame = new StackFrame(framesToSkip, false);
+                var method = frame.GetMethod();
+                declaringType = method.DeclaringType;
+                if (declaringType == null)
+                {
+                    loggerName = method.Name;
+                    break;
+                }
+                framesToSkip++;
+                loggerName = declaringType.FullName;
 
-            return log4net.LogManager.GetLogger(name);
+            } while (declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase));
+            return log4net.LogManager.GetLogger(loggerName); ;
+
+            //Type type = MethodBase.GetCurrentMethod().DeclaringType;
+
+            //var trace = new System.Diagnostics.StackTrace();
+
+            //string name = type.Name;
+
+
+            //if (trace.FrameCount >= 3)
+            //{
+            //    System.Reflection.MethodBase mb = trace.GetFrame(2).GetMethod();
+            //    type = mb.DeclaringType;
+
+            //    name = string.Format("{0}.{1}", mb.DeclaringType.FullName, mb.Name);
+            //}
+
+            //return log4net.LogManager.GetLogger(name);
         }
+
 
         public static void Info(string msg)
         {
             string r_msg = "\r\n";
-            //var trace = new System.Diagnostics.StackTrace();
-            //for (int i = 0; i < trace.FrameCount; i++)
-            //{
-            //    System.Reflection.MethodBase mb2 = trace.GetFrame(i).GetMethod();
-            //    if (mb2 != null)
-            //    {
-            //        if (mb2.DeclaringType != null)
-            //        {
-            //            if (mb2.DeclaringType.Assembly.FullName.ToLower().IndexOf("lumos") > -1 || mb2.DeclaringType.Assembly.FullName.ToLower().IndexOf("websso") > -1)
-            //            {
-            //                r_msg += string.Format("[CALL STACK][{0}]: {1}.{2}\r\n", i, mb2.DeclaringType.FullName, mb2.Name);
-            //            }
-            //        }
-            //    }
-            //}
+
 
 
             GetLog().Info(r_msg + msg);

@@ -69,17 +69,15 @@ namespace WebAppApi
         {
             try
             {
+                LogUtil.SetTrackId();
+                LogUtil.Info(string.Format("Ip:{0},调用API接口:{1}", CommonUtils.GetIP(), actionContext.Request.RequestUri.AbsolutePath));
+
                 if (actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Count > 0)
                 {
                     base.OnActionExecuting(actionContext);
                     return;
                 }
 
-
-
-
-                LogUtil.SetTrackId();
-                LogUtil.Info("调用API接口");
                 DateTime requestTime = DateTime.Now;
                 var request = ((HttpContextWrapper)actionContext.Request.Properties["MS_HttpContext"]).Request;
                 var requestMethod = request.HttpMethod;

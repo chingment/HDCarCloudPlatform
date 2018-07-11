@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lumos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,6 +14,8 @@ namespace WebUploadImageServer
     {
         protected void Application_Start()
         {
+            log4net.Config.XmlConfigurator.Configure();
+            LogUtil.Info("应用程序开始");
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

@@ -1,5 +1,6 @@
 ﻿
 using log4net;
+using Lumos;
 using Lumos.BLL;
 using Lumos.Common;
 using Lumos.DAL;
@@ -30,11 +31,11 @@ namespace WebAppApi.Controllers
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
-        //private string host = "http://localhost:16665";
+        private string host = "http://localhost:16665";
         //private string host = "https://demo.gzhaoyilian.com";
         // private string host = "http://api.gzhaoyilian.com";
         // private string host = "https://www.ins-uplink.cn";
-        private string host = "http://120.79.233.231";
+        //private string host = "http://120.79.233.231";
         private string YBS_key = "ybs_test";
         private string YBS_secret = "6ZB87cdVz222O08EKZ6yri8YrHXFBowA";
 
@@ -139,6 +140,8 @@ namespace WebAppApi.Controllers
             headers.Add("timestamp", timespan.ToString());
             headers.Add("sign", signStr);
 
+            LogUtil.Info("Dssda");
+
             //HttpUtil.UpLoadFile(@"d:\a.txt", "http://localhost:16665/api/Global/UploadFile", headers);
             //HttpUtil.UpLoadFile2(@"d:\a.txt", "http://localhost:16665/api/Global/UploadFile", headers);
 
@@ -201,9 +204,9 @@ namespace WebAppApi.Controllers
             //model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
 
 
-            // model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
+             model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
 
-            CarIns(userId, merchantId, posMachineId);
+           // CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 

@@ -22,7 +22,8 @@ namespace WebAgent
     {
         protected void Application_Start()
         {
-            
+            log4net.Config.XmlConfigurator.Configure();
+            LogUtil.Info("应用程序开始");
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

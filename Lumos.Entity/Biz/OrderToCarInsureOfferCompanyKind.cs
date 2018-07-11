@@ -20,12 +20,19 @@ namespace Lumos.Entity
         public string PartnerKindId { get; set; }
         [MaxLength(128)]
         public string KindName { get; set; }
+        //座位数
         public int? Quantity { get; set; }
+        //玻璃类型
         public int? GlassType { get; set; }
+        //unitAmount
         public decimal? UnitAmount { get; set; }
+        //basicPremium
         public decimal BasicPremium { get; set; }
+        //discount
         public decimal Discount { get; set; }
+        //standardPremium
         public decimal StandardPremium { get; set; }
+        //总保额
         public decimal Amount { get; set; }
         public decimal? Premium { get; set; }
         //public int Compensation { get; set; }
@@ -37,6 +44,7 @@ namespace Lumos.Entity
         public string KindValue { get; set; }
         [MaxLength(1024)]
         public string KindDetails { get; set; }
+        //是否不计免赔
         public bool IsWaiverDeductible { get; set; }
         [MaxLength(128)]
         public string KindUnit { get; set; }

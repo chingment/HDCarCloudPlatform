@@ -467,7 +467,7 @@ namespace Lumos.BLL
                                     orderToCarInsureOfferCompanyKind.Quantity = 0;
                                     orderToCarInsureOfferCompanyKind.GlassType = 0;
                                     orderToCarInsureOfferCompanyKind.Amount = 0;
-                                    orderToCarInsureOfferCompanyKind.Premium = compulsory.standardPremium;
+                                    orderToCarInsureOfferCompanyKind.StandardPremium = compulsory.standardPremium.Value;//保费
                                     orderToCarInsureOfferCompanyKind.Priority = 0;
                                     orderToCarInsureOfferCompanyKind.Creator = operater;
                                     orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
@@ -496,7 +496,7 @@ namespace Lumos.BLL
                                     orderToCarInsureOfferCompanyKind.Quantity = 0;
                                     orderToCarInsureOfferCompanyKind.GlassType = 0;
                                     orderToCarInsureOfferCompanyKind.Amount = 0;
-                                    orderToCarInsureOfferCompanyKind.Premium = compulsory.sumPayTax;
+                                    orderToCarInsureOfferCompanyKind.StandardPremium = compulsory.sumPayTax.Value;
                                     orderToCarInsureOfferCompanyKind.Priority = 0;
                                     orderToCarInsureOfferCompanyKind.Creator = operater;
                                     orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
@@ -551,9 +551,6 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
                                 orderToCarInsureOfferCompanyKind.Creator = operater;
                                 orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
-
-
-                                orderToCarInsureOfferCompanyKind.IsWaiverDeductible = item.compensation == 0 ? false : true;
                                 orderToCarInsureOfferCompanyKind.KindValue = item.amount.ToF2Price();
 
                                 CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);

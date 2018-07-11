@@ -84,7 +84,27 @@ namespace Lumos.BLL
                 List<ItemField> extField = new List<ItemField>();
                 switch (order.Type)
                 {
-                    case Enumeration.OrderType.Insure:
+                    case Enumeration.OrderType.InsureForCarForInsure:
+                        var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == order.Id).FirstOrDefault();
+                        if (orderToCarInsure != null)
+                        {
+                            extField.Add(new ItemField() { field = "保险公司", value = orderToCarInsure.InsCompanyName });
+                            extField.Add(new ItemField() { field = "保费", value = orderToCarInsure.Price.ToF2Price() });
+                        }
+                        break;
+                    case Enumeration.OrderType.LllegalQueryRecharge:
+                        var orderToLllegalQueryRecharge = CurrentDb.OrderToLllegalQueryRecharge.Where(m => m.Id == order.Id).FirstOrDefault();
+                        if (orderToLllegalQueryRecharge != null)
+                        {
+                            extField.Add(new ItemField() { field = "积分", value = orderToLllegalQueryRecharge.Score.ToString() });
+                        }
+                        break;
+                    case Enumeration.OrderType.Goods:
+                        var OrderToShoppingGoodsDetails = CurrentDb.OrderToShoppingGoodsDetails.Where(m => m.OrderId == order.Id).ToList();
+                        foreach (var item in OrderToShoppingGoodsDetails)
+                        {
+                            extField.Add(new ItemField() { field = item.ProductSkuName, value = string.Format("x {0}  {1}  {2}", item.Quantity, item.UnitPrice.ToF2Price(), item.SumPrice.ToF2Price()) });
+                        }
                         break;
                 }
 

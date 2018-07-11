@@ -744,6 +744,8 @@ namespace WebAppApi.Controllers
 
                         if (orderToCarInsure.Status == Enumeration.OrderStatus.Completed)
                         {
+                            extField.Add(new ItemField() { field = "保险公司", value = orderToCarInsure.InsCompanyName });
+                            extField.Add(new ItemField() { field = "保费", value = orderToCarInsure.Price.ToF2Price() });
                             orderCarInsureDetailsModel.PrintData = PrintUntil.GetPrintData(orderToCarInsure.TypeName, "消费", orderToCarInsure.TransSn, orderToCarInsure.PayWay.GetCnName(), orderToCarInsure.PayTime.Value, orderToCarInsure.Sn, orderToCarInsure.Price, extField);
                         }
 
@@ -919,6 +921,8 @@ namespace WebAppApi.Controllers
 
                         if (orderLllegalQueryRechargeDetailsModel.Status == Enumeration.OrderStatus.Completed)
                         {
+                            extField.Add(new ItemField() { field = "积分", value = orderToLllegalQueryRecharge.Score.ToString() });
+
                             orderLllegalQueryRechargeDetailsModel.PrintData = PrintUntil.GetPrintData(orderToLllegalQueryRecharge.TypeName, "消费", orderToLllegalQueryRecharge.TransSn, orderToLllegalQueryRecharge.PayWay.GetCnName(), orderToLllegalQueryRecharge.PayTime.Value, orderToLllegalQueryRecharge.Sn, orderToLllegalQueryRecharge.Price, extField);
                         }
                     }
@@ -1084,6 +1088,8 @@ namespace WebAppApi.Controllers
                         foreach (var item in orderToShoppingGoodsDetails)
                         {
                             orderShoppingDetailsModel.Skus.Add(new CartProcudtSkuModel() { CartId = item.CartId, SkuId = item.ProductSkuId, MainImg = item.ProductSkuImgUrl, Name = item.ProductSkuName, Quantity = item.Quantity, SumPrice = item.SumPrice, UnitPrice = item.UnitPrice });
+
+                            extField.Add(new ItemField() { field = item.ProductSkuName, value = string.Format("x {0}  {1}  {2}", item.Quantity, item.UnitPrice.ToF2Price(), item.SumPrice.ToF2Price()) });
                         }
 
                         if (orderShoppingDetailsModel.Status == Enumeration.OrderStatus.Completed)

@@ -393,13 +393,14 @@ namespace YdtSdk
         }
 
 
-        public static CustomJsonResult<YdtInscarPayQueryResultData> PayQuery(YdtInscarPayQueryPms model)
+
+        public static CustomJsonResult<YdtInscarPayQueryResultData> PayQuery(string orderSeq,string inquirySeq,string insureSeq,string paySeq)
         {
             var result = new CustomJsonResult<YdtInscarPayQueryResultData>();
             var au = YdtUtils.GetToken();
             YdtApi ydtApi = new YdtApi();
 
-            var ydtInscarInsure = new YdtInscarPayQuery(au.token, au.session, model.orderSeq, model.inquirySeq, model.insureSeq, model.paySeq);
+            var ydtInscarInsure = new YdtInscarPayQuery(au.token, au.session, orderSeq, inquirySeq, insureSeq, paySeq);
             var ydtInscarInsureResult = ydtApi.DoGet(ydtInscarInsure);
 
             if (ydtInscarInsureResult.code != 0)

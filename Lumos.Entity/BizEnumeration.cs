@@ -420,20 +420,20 @@ namespace Lumos.Entity
             ArtificialInsureSuccess = 12,
             [Remark("核保失败")]
             ArtificialInsureFailure = 13,
-            [Remark("等待申请支付")]
-            WaitAutoApplyPay = 14,
-            [Remark("申请支付成功")]
-            AutoApplyPaySuccess = 15,
-            [Remark("申请支付失败")]
-            AutoApplyPayFailure = 16,
-            [Remark("等待申请支付")]
-            WaitArtificiaApplyPay = 17,
-            [Remark("申请支付成功")]
-            ArtificiaApplyPaySuccess = 18,
-            [Remark("申请支付失败")]
-            ArtificiaApplyPayFailure = 19,
-            [Remark("等待查询支付结果")]
-            WaitPayQuery = 20,
+            //[Remark("等待申请支付")]
+            //WaitAutoApplyPay = 14,
+            //[Remark("申请支付成功")]
+            //AutoApplyPaySuccess = 15,
+            //[Remark("申请支付失败")]
+            //AutoApplyPayFailure = 16,
+            //[Remark("等待申请支付")]
+            //WaitArtificiaApplyPay = 17,
+            //[Remark("申请支付成功")]
+            //ArtificiaApplyPaySuccess = 18,
+            //[Remark("申请支付失败")]
+            //ArtificiaApplyPayFailure = 19,
+            [Remark("等待支付")]
+            WaitPay = 20,
             [Remark("支付成功")]
             PaySuccess = 21,
             [Remark("支付失败")]

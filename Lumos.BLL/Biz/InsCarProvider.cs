@@ -586,10 +586,18 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.KindName = partnerKind.Name;
                                 switch (orderToCarInsureOfferCompanyKind.KindId)
                                 {
+                                    case 1:
+                                        orderToCarInsureOfferCompanyKind.KindUnit = "";
+                                        break;
+                                    case 2:
+                                        orderToCarInsureOfferCompanyKind.KindUnit = "";
+                                        break;
                                     case 6:
                                         int quantity = item.quantity == null ? 0 : item.quantity.Value;
                                         decimal unitAmount = item.unitAmount == null ? 0 : item.unitAmount.Value;
-                                        orderToCarInsureOfferCompanyKind.KindValue = string.Format("{0}座，每座：{1}元，合计：{2}元", quantity, unitAmount, item.amount);
+                                        orderToCarInsureOfferCompanyKind.KindDetails = string.Format("{0}座，每座：{1}元，合计：{2}元", quantity, unitAmount, item.amount);
+                                        orderToCarInsureOfferCompanyKind.KindValue = item.amount.ToF2Price();
+                                        orderToCarInsureOfferCompanyKind.KindUnit = "元";
                                         break;
                                     case 8:
                                         orderToCarInsureOfferCompanyKind.GlassType = item.glassType;
@@ -601,9 +609,13 @@ namespace Lumos.BLL
                                         {
                                             orderToCarInsureOfferCompanyKind.KindValue = "进口";
                                         }
+
+                                        orderToCarInsureOfferCompanyKind.KindUnit = "";
+
                                         break;
                                     default:
                                         orderToCarInsureOfferCompanyKind.KindValue = item.amount.ToF2Price();
+                                        orderToCarInsureOfferCompanyKind.KindUnit = "元";
                                         break;
                                 }
                                 orderToCarInsureOfferCompanyKind.Quantity = item.quantity;
@@ -613,10 +625,16 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.Premium = item.premium;
                                 orderToCarInsureOfferCompanyKind.UnitAmount = item.unitAmount;
                                 orderToCarInsureOfferCompanyKind.Discount = item.discount ?? 0;
+
+
                                 orderToCarInsureOfferCompanyKind.IsWaiverDeductible = item.compensation == 0 ? false : true;
+
+
                                 orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
                                 orderToCarInsureOfferCompanyKind.Creator = operater;
                                 orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
+
+
 
                                 CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
                                 CurrentDb.SaveChanges();

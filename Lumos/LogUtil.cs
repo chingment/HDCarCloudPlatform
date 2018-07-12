@@ -76,8 +76,9 @@ namespace Lumos
             string r_msg = "\r\n";
 
 
+            var log = GetLog();
 
-            GetLog().Info(r_msg + msg);
+            log.Info(r_msg + msg);
         }
 
         public static void InfoFormat(string format, params object[] args)

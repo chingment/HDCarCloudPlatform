@@ -40,9 +40,9 @@ namespace YdtSdk
         public string ciStartDate { get; set; }
         public string inquirySeq { get; set; }
         public string orderSeq { get; set; }
-        public int result { get; set; }
+        public int? result { get; set; }
         public string message { get; set; }
-        public float commission { get; set; }
+        public float? commission { get; set; }
         public List<InquiryModel> inquirys { get; set; }
         public List<CoverageModel> coverages { get; set; }
     }

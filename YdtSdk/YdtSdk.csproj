@@ -96,6 +96,7 @@
     <Compile Include="Get\YdtInscarPayQueryPms.cs" />
     <Compile Include="Get\YdtInscarPayQueryResultData.cs" />
     <Compile Include="Post\YdtInscarPayResultData.cs" />
+    <Compile Include="Post\YdtInscarPayResultNotifyData.cs" />
     <Compile Include="Post\YdtInscarUpatebase.cs" />
     <Compile Include="Post\YdtInscarAdvicevalue.cs" />
     <Compile Include="Post\YdtInscarAdvicevalueResultData.cs" />

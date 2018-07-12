@@ -120,7 +120,7 @@ namespace WebAppApi.Controllers
                                         orderModel.OrderField.Add(new OrderField("状态", "等待人工核保"));
                                         break;
                                     case 12:
-                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保成功"));
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保成功，请查看详情支付"));
                                         break;
                                     case 13:
                                         orderModel.OrderField.Add(new OrderField("状态", "人工核保失败"));
@@ -128,8 +128,11 @@ namespace WebAppApi.Controllers
                                     case 14:
                                         orderModel.OrderField.Add(new OrderField("状态", "人工核保成功，请查看详情支付"));
                                         break;
+                                    case 20:
+                                        orderModel.OrderField.Add(new OrderField("状态", "核保成功，请查看详情支付"));
+                                        break;
                                     default:
-                                        orderModel.OrderField.Add(new OrderField("状态", "请稍侯，报价中"));
+                                        orderModel.OrderField.Add(new OrderField("状态", "请稍侯，正在处理中"));
                                         break;
                                 }
 
@@ -293,7 +296,7 @@ namespace WebAppApi.Controllers
                                 var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(c => c.Id == m.Id).FirstOrDefault();
                                 orderModel.OrderField.Add(new OrderField("车主姓名", orderToCarInsure.CarownerName == CarInsController.nullName ? "" : orderToCarInsure.CarownerName.NullToEmpty()));
                                 orderModel.OrderField.Add(new OrderField("证件号码", orderToCarInsure.CarownerCertNo == CarInsController.nullCerno ? "" : orderToCarInsure.CarownerCertNo.NullToEmpty()));
-
+                                orderModel.OrderField.Add(new OrderField("车牌号码", orderToCarInsure.CarLicensePlateNo.NullToEmpty()));
                                 var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(c => c.OrderId == m.Id).ToList();
                                 foreach (var c in orderToCarInsureOfferCompany)
                                 {

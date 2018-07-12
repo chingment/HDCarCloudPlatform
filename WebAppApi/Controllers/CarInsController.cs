@@ -1087,11 +1087,7 @@ namespace WebAppApi.Controllers
 
                 orderToCarInsure.PartnerInsureId = result_Insure.Data.insureSeq;
 
-
                 CurrentDb.SaveChanges();
-
-
-
 
 
                 #endregion
@@ -1115,7 +1111,8 @@ namespace WebAppApi.Controllers
                 orderToCarInsure.PartnerInsureId = result_Insure.Data.insureSeq;
                 orderToCarInsure.BiProposalNo = result_Insure.Data.biProposalNo;
                 orderToCarInsure.CiProposalNo = result_Insure.Data.ciProposalNo;
-                orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.AutoInsureSuccess;
+                orderToCarInsure.Status = Enumeration.OrderStatus.WaitPay;
+                orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay;
                 CurrentDb.SaveChanges();
 
                 #endregion
@@ -1499,8 +1496,9 @@ namespace WebAppApi.Controllers
                         item.CiProposalNo = pms.ciProposalNo;
 
 
-                        item.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.ArtificialInsureSuccess;
+                        item.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay;
 
+                        item.Status = Enumeration.OrderStatus.WaitPay;
 
                         CurrentDb.SaveChanges();
 
@@ -1576,7 +1574,7 @@ namespace WebAppApi.Controllers
 
             info.FollowStatus = orderToCarInsure.FollowStatus;
 
-            if (orderToCarInsure.FollowStatus == 20 || orderToCarInsure.FollowStatus == 12)
+            if (orderToCarInsure.FollowStatus == 20 || orderToCarInsure.FollowStatus == 12 || orderToCarInsure.FollowStatus == 10)
             {
                 info.FollowStatus = 14;
             }

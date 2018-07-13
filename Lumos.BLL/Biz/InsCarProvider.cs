@@ -231,7 +231,9 @@ namespace Lumos.BLL
 
                     if (orderToCarInsure == null)
                     {
+
                         orderToCarInsure = new OrderToCarInsure();
+                        orderToCarInsure.OrderFrom = Enumeration.CarInsOrderFrom.Ydt;
                         orderToCarInsure.Type = Enumeration.OrderType.InsureForCarForInsure;
                         orderToCarInsure.TypeName = Enumeration.OrderType.InsureForCarForInsure.GetCnName();
                         orderToCarInsure.SalesmanId = merchant.SalesmanId ?? 0;

@@ -18,9 +18,6 @@ namespace Lumos.Entity
 
         public int InsuranceCompanyId { get; set; }
 
-        [MaxLength(128)]
-        public string InsuranceOrderId { get; set; }
-
         [MaxLength(1024)]
         public string InsureImgUrl { get; set; }
 
@@ -68,8 +65,6 @@ namespace Lumos.Entity
         public bool IsAuto { get; set; }
 
         public Enumeration.OfferResult OfferResult { get; set; }
-
-        public int TryGetApiOfferResultCount { get; set; }
         [MaxLength(128)]
         public string BiProposalNo { get; set; }
         [MaxLength(128)]

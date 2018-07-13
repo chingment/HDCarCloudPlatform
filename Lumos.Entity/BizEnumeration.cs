@@ -899,5 +899,15 @@ namespace Lumos.Entity
             [Remark("人工报价失败")]
             StaffOfferFailure = 11
         }
+
+        public enum CarInsOrderFrom
+        {
+            [Remark("未知")]
+            Unknow = 0,
+            [Remark("好易联")]
+            Hyl = 1,
+            [Remark("易点通")]
+            Ydt = 2,
+        }
     }
 }

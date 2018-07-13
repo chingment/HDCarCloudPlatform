@@ -26,7 +26,7 @@ namespace Lumos.BLL
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
 
 
-
+                order.OrderFrom = Enumeration.CarInsOrderFrom.Hyl;
                 order.MerchantId = merchant.Id;
                 order.PosMachineId = orderToCarInsure.PosMachineId;
                 order.UserId = merchant.UserId;
@@ -202,7 +202,6 @@ namespace Lumos.BLL
                     var l_orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(q => q.Id == m.Id).FirstOrDefault();
                     if (l_orderToCarInsureOfferCompany != null)
                     {
-                        l_orderToCarInsureOfferCompany.InsuranceOrderId = m.InsuranceOrderId;
                         l_orderToCarInsureOfferCompany.InsureImgUrl = m.InsureImgUrl;
                         l_orderToCarInsureOfferCompany.CommercialPrice = m.CommercialPrice;
                         l_orderToCarInsureOfferCompany.CompulsoryPrice = m.CompulsoryPrice;

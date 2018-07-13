@@ -15,7 +15,7 @@ namespace Lumos.BLL.Biz.Task
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay || m.PartnerPayId != null).ToList();
+            var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => (m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay) && m.OrderFrom == Enumeration.CarInsOrderFrom.Ydt).ToList();
 
 
             LogUtil.Info("待处理的总数量：" + orderToCarInsures.Count);
@@ -52,15 +52,16 @@ namespace Lumos.BLL.Biz.Task
                         {
                             var result_QueryInquiry = YdtUtils.QueryInquiry(item.PartnerOrderId, item.PartnerInquiryId);
 
-                            var updateOrderOfferPms = new UpdateOrderOfferPms();
-
-                            updateOrderOfferPms.Auto = 0;
-                            updateOrderOfferPms.PartnerOrderId = item.PartnerOrderId;
-                            updateOrderOfferPms.PartnerInquiryId = item.PartnerInquiryId;
-
                             if (result_QueryInquiry.Result == ResultType.Success)
                             {
-                                LogUtil.InfoFormat("处理订单号:{0}，查询人工报价结果成功,返回报价数据", item.Sn);
+                                LogUtil.InfoFormat("处理订单号:{0}，查询人工报价结果成功", item.Sn);
+
+                                var updateOrderOfferPms = new UpdateOrderOfferPms();
+
+                                updateOrderOfferPms.Auto = 0;
+                                updateOrderOfferPms.PartnerOrderId = item.PartnerOrderId;
+                                updateOrderOfferPms.PartnerInquiryId = item.PartnerInquiryId;
+
                                 var result_QueryInquiryData = result_QueryInquiry.Data;
 
                                 updateOrderOfferPms.PartnerChannelId = result_QueryInquiryData.channel.channelId;
@@ -74,8 +75,7 @@ namespace Lumos.BLL.Biz.Task
                             }
                             else
                             {
-                                LogUtil.InfoFormat("处理订单号:{0}，查询人工报价结果失败,返回报价为空", item.Sn);
-                                orderToCarInsureOfferCompany.TryGetApiOfferResultCount += 1;
+                                LogUtil.InfoFormat("处理订单号:{0}，查询人工报价结果失败", item.Sn);
                             }
                         }
 
@@ -85,28 +85,86 @@ namespace Lumos.BLL.Biz.Task
                     case (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure:
                         #region 获取人工核保结果
 
-                        var result_QueryInsurey = YdtUtils.QueryInsure(item.PartnerOrderId, item.PartnerInquiryId);
+                        if (string.IsNullOrEmpty(item.PartnerOrderId))
+                        {
+                            LogUtil.InfoFormat("处理订单号:{0}，易点通订单号为空", item.Sn);
+                        }
+
+                        if (string.IsNullOrEmpty(item.PartnerInquiryId))
+                        {
+                            LogUtil.InfoFormat("处理订单号:{0}，易点通询价号为空", item.Sn);
+                        }
+
+                        if (string.IsNullOrEmpty(item.PartnerInsureId))
+                        {
+                            LogUtil.InfoFormat("处理订单号:{0}，易点通核保号为空", item.Sn);
+                        }
+
+                        if (!string.IsNullOrEmpty(item.PartnerInquiryId) && !string.IsNullOrEmpty(item.PartnerOrderId) && !string.IsNullOrEmpty(item.PartnerInsureId))
+                        {
+                            var result_QueryInsurey = YdtUtils.QueryInsure(item.PartnerOrderId, item.PartnerInquiryId, item.PartnerInsureId);
+
+                            if (result_QueryInsurey.Result == ResultType.Success)
+                            {
+                                LogUtil.InfoFormat("处理订单号:{0}，查询人工核保成功", item.Sn);
+                            }
+                            else
+                            {
+                                LogUtil.InfoFormat("处理订单号:{0}，查询人工核保失败", item.Sn);
+                            }
+                        }
+
 
                         #endregion
                         break;
                     case (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay:
                         #region 获取支付结果
 
-                        var payQueryResult = YdtUtils.PayQuery(item.PartnerOrderId, item.PartnerInquiryId, item.PartnerInsureId, item.PartnerPayId);
-
-                        if (payQueryResult != null)
+                        if (string.IsNullOrEmpty(item.PartnerOrderId))
                         {
-                            if (payQueryResult.Data != null)
-                            {
-                                string resultText = Newtonsoft.Json.JsonConvert.SerializeObject(payQueryResult);
-                                bool isPaySuccess = false;
+                            LogUtil.InfoFormat("处理订单号:{0}，易点通订单号为空", item.Sn);
+                        }
 
-                                if (payQueryResult.Data.result == 1)
+                        if (string.IsNullOrEmpty(item.PartnerInquiryId))
+                        {
+                            LogUtil.InfoFormat("处理订单号:{0}，易点通询价号为空", item.Sn);
+                        }
+
+                        if (string.IsNullOrEmpty(item.PartnerInsureId))
+                        {
+                            LogUtil.InfoFormat("处理订单号:{0}，易点通核保号为空", item.Sn);
+                        }
+
+                        if (string.IsNullOrEmpty(item.PartnerPayId))
+                        {
+                            LogUtil.InfoFormat("处理订单号:{0}，易点通支付号为空", item.Sn);
+                        }
+
+                        if (!string.IsNullOrEmpty(item.PartnerInquiryId) && !string.IsNullOrEmpty(item.PartnerOrderId) && !string.IsNullOrEmpty(item.PartnerInsureId) && !string.IsNullOrEmpty(item.PartnerPayId))
+                        {
+                            var result_QueryPay = YdtUtils.PayQuery(item.PartnerOrderId, item.PartnerInquiryId, item.PartnerInsureId, item.PartnerPayId);
+                            if (result_QueryPay.Result == ResultType.Success)
+                            {
+                                LogUtil.InfoFormat("处理订单号:{0}，查询支付成功", item.Sn);
+
+
+                                if (result_QueryPay.Data != null)
                                 {
-                                    isPaySuccess = true;
+                                    string resultText = Newtonsoft.Json.JsonConvert.SerializeObject(result_QueryPay);
+                                    bool isPaySuccess = false;
+
+                                    if (result_QueryPay.Data.result == 1)
+                                    {
+                                        isPaySuccess = true;
+                                    }
+
+                                    BizFactory.Pay.ResultNotify(0, item.Sn, isPaySuccess, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "易点通", resultText);
                                 }
 
-                                BizFactory.Pay.ResultNotify(0, item.Sn, isPaySuccess, Enumeration.PayResultNotifyType.PartnerPayOrgOrderQueryApi, "易点通", resultText);
+                            }
+                            else
+                            {
+                                LogUtil.InfoFormat("处理订单号:{0}，查询支付失败", item.Sn);
                             }
                         }
 

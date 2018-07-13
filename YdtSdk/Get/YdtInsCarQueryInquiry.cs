@@ -26,7 +26,7 @@ namespace YdtSdk
             }
         }
 
-        public YdtInsCarQueryInquiry(string token, string session, string inquirySeq, string orderSeq)
+        public YdtInsCarQueryInquiry(string token, string session,string orderSeq, string inquirySeq)
         {
             this.token = token;
             this.session = session;

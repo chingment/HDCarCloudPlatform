@@ -293,7 +293,7 @@ namespace YdtSdk
             YdtApi ydtApi = new YdtApi();
 
 
-            var ydtInsCarQueryInquiry = new YdtInsCarQueryInquiry(au.token, au.session, inquirySeq, orderSeq);
+            var ydtInsCarQueryInquiry = new YdtInsCarQueryInquiry(au.token, au.session, orderSeq, inquirySeq);
             var ydtInsCarQueryInquiryResult = ydtApi.DoGet(ydtInsCarQueryInquiry);
 
             if (ydtInsCarQueryInquiryResult.code != 0)
@@ -339,22 +339,22 @@ namespace YdtSdk
             return new CustomJsonResult<YdtInscarInsureByArtificialResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
         }
 
-        public static CustomJsonResult<YdtInsCarQueryInquiryResultData> QueryInsure(string orderSeq, string inquirySeq)
+        public static CustomJsonResult<YdtInsCarQueryInsureResultData> QueryInsure(string orderSeq, string inquirySeq,string insureSeq)
         {
             var result = new CustomJsonResult();
             var au = YdtUtils.GetToken();
             YdtApi ydtApi = new YdtApi();
 
 
-            var ydtInsCarQueryInquiry = new YdtInsCarQueryInquiry(au.token, au.session, inquirySeq, orderSeq);
+            var ydtInsCarQueryInquiry = new YdtInsCarQueryInsure(au.token, au.session, inquirySeq, orderSeq, insureSeq);
             var ydtInsCarQueryInquiryResult = ydtApi.DoGet(ydtInsCarQueryInquiry);
 
             if (ydtInsCarQueryInquiryResult.code != 0)
             {
-                return new CustomJsonResult<YdtInsCarQueryInquiryResultData>(ResultType.Failure, ResultCode.Failure, ydtInsCarQueryInquiryResult.msg, null);
+                return new CustomJsonResult<YdtInsCarQueryInsureResultData>(ResultType.Failure, ResultCode.Failure, ydtInsCarQueryInquiryResult.msg, null);
             }
 
-            return new CustomJsonResult<YdtInsCarQueryInquiryResultData>(ResultType.Success, ResultCode.Success, ydtInsCarQueryInquiryResult.msg, ydtInsCarQueryInquiryResult.data);
+            return new CustomJsonResult<YdtInsCarQueryInsureResultData>(ResultType.Success, ResultCode.Success, ydtInsCarQueryInquiryResult.msg, ydtInsCarQueryInquiryResult.data);
 
         }
 

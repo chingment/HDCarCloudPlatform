@@ -12,6 +12,8 @@ namespace Lumos.Entity
     [Table("OrderToCarInsure")]
     public class OrderToCarInsure : Order
     {
+        public Enumeration.CarInsOrderFrom OrderFrom { get; set; }
+
         public int CarInfoOrderId { get; set; }
         public string CarBelong { get; set; }
         [MaxLength(128)]
@@ -155,8 +157,6 @@ namespace Lumos.Entity
         public decimal? InsTravelTaxPrice { get; set; }
         public decimal? InsCompulsoryPrice { get; set; }
         public decimal? InsTotalPrice { get; set; }
-
-        public string InsOrderId { get; set; }
 
         public string InsImgUrl { get; set; }
 

@@ -125,12 +125,10 @@ namespace WebAppApi.Controllers
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "图片上传失败，请重新选择", result);
             }
 
-            if (!BizFactory.AppSettings.IsTest)
+
+            if (string.IsNullOrEmpty(result.Key) || string.IsNullOrEmpty(result.Url))
             {
-                if (string.IsNullOrEmpty(result.Key))
-                {
-                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "图片解释失败，相片类型错误或模糊，请重新选择或者拍照", result);
-                }
+                return ResponseResult(ResultType.Failure, ResultCode.Failure, "图片解释失败，相片类型错误或模糊，请重新选择或者拍照", result);
             }
 
 

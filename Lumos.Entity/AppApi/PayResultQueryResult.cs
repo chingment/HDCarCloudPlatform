@@ -10,6 +10,10 @@ namespace Lumos.Entity.AppApi
     {
         public string OrderSn { get; set; }
 
+        public string Price { get; set; }
+
+        public string PayTime { get; set; }
+
         public int Status { get; set; }
 
         public string Remarks { get; set; }

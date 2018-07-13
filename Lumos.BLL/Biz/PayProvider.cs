@@ -78,6 +78,8 @@ namespace Lumos.BLL
             resultData.OrderType = order.Type;
             resultData.Status = (int)order.Status;
             resultData.Remarks = order.Status.GetCnName();
+            resultData.PayTime = order.PayTime.Value.ToUnifiedFormatDateTime();
+            resultData.Price = order.Price.ToF2Price();
 
             if (order.Status == Enumeration.OrderStatus.Completed)
             {

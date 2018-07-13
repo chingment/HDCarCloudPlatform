@@ -1574,11 +1574,6 @@ namespace WebAppApi.Controllers
 
             info.FollowStatus = orderToCarInsure.FollowStatus;
 
-            if (orderToCarInsure.FollowStatus == 20 || orderToCarInsure.FollowStatus == 12 || orderToCarInsure.FollowStatus == 10)
-            {
-                info.FollowStatus = 14;
-            }
-
             info.PartnerOrderId = orderToCarInsure.PartnerOrderId;
 
             var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == orderToCarInsure.Id).FirstOrDefault();
@@ -1603,6 +1598,7 @@ namespace WebAppApi.Controllers
             carInsCompanyInfoModel.OfferInquirys = GetInsureItem(orderToCarInsure, orderToCarInsureOfferCompany, orderToCarInsureOfferCompanyKinds);
             carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice == null ? 0 : orderToCarInsureOfferCompany.InsureTotalPrice.Value;
 
+            info.Remark = ((Enumeration.OrderToCarClaimFollowStatus)info.FollowStatus).GetCnName();
             info.OrderInfo = carInsCompanyInfoModel;
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", info);

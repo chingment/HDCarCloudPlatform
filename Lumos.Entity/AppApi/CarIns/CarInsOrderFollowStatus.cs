@@ -10,8 +10,10 @@ namespace Lumos.Entity
     {
         public int FollowStatus { get; set; }
 
+        public string Remark { get; set; }
+
         public string PartnerOrderId { get; set; }
 
-        public  CarInsComanyModel OrderInfo { get; set; }
+        public CarInsComanyModel OrderInfo { get; set; }
     }
 }

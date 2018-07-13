@@ -437,11 +437,11 @@ namespace Lumos.Entity
             [Remark("支付成功")]
             PaySuccess = 22,
             [Remark("支付失败")]
-            yPayFailure = 23,
+            PayFailure = 23,
             [Remark("等待后台报价")]
-            WaitStaffOffer = 23,
+            WaitStaffOffer = 24,
             [Remark("后台报价成功")]
-            StaffOfferSuccess = 24,
+            StaffOfferSuccess = 25,
             [Remark("后台报价失败")]
             StaffOfferFailure = 26
         }

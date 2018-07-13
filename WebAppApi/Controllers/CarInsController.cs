@@ -1581,13 +1581,29 @@ namespace WebAppApi.Controllers
 
             info.PartnerOrderId = orderToCarInsure.PartnerOrderId;
 
-            switch (orderToCarInsure.FollowStatus)
+            var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == orderToCarInsure.Id).FirstOrDefault();
+            var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == orderToCarInsure.Id).ToList();
+
+            var carInsCompanyInfoModel = new CarInsComanyModel();
+            var insCompany = YdtDataMap.GetCompanyByCode(orderToCarInsureOfferCompany.PartnerCompanyId);
+            if (insCompany != null)
             {
-                case 6:
-                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "等待人工报价,请稍后");
-                case 11:
-                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "等待人工核保,请稍后");
+                var company = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == insCompany.UpLinkCode).FirstOrDefault();
+                if (company != null)
+                {
+                    carInsCompanyInfoModel.Id = company.InsuranceCompanyId;
+                    carInsCompanyInfoModel.ImgUrl = company.InsuranceCompanyImgUrl;
+                    carInsCompanyInfoModel.Name = company.InsuranceCompanyName;
+                    carInsCompanyInfoModel.PartnerChannelId = int.Parse(orderToCarInsureOfferCompany.PartnerChannelId);
+                    carInsCompanyInfoModel.PartnerCode = orderToCarInsureOfferCompany.PartnerCompanyId;
+                }
             }
+
+            carInsCompanyInfoModel.OfferId = orderToCarInsureOfferCompany.Id;
+            carInsCompanyInfoModel.OfferInquirys = GetInsureItem(orderToCarInsure, orderToCarInsureOfferCompany, orderToCarInsureOfferCompanyKinds);
+            carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice == null ? 0 : orderToCarInsureOfferCompany.InsureTotalPrice.Value;
+
+            info.OrderInfo = carInsCompanyInfoModel;
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", info);
 

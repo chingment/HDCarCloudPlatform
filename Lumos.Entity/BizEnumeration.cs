@@ -415,35 +415,35 @@ namespace Lumos.Entity
             [Remark("核保失败")]
             AutoInsureFailure = 11,
             [Remark("等待核保")]
-            WaitArtificialInsure = 11,
+            WaitArtificialInsure = 12,
             [Remark("核保成功")]
-            ArtificialInsureSuccess = 12,
+            ArtificialInsureSuccess = 13,
             [Remark("核保失败")]
-            ArtificialInsureFailure = 13,
+            ArtificialInsureFailure = 14,
             //[Remark("等待申请支付")]
-            //WaitAutoApplyPay = 14,
+            //WaitAutoApplyPay = 15,
             //[Remark("申请支付成功")]
-            //AutoApplyPaySuccess = 15,
+            //AutoApplyPaySuccess = 16,
             //[Remark("申请支付失败")]
-            //AutoApplyPayFailure = 16,
+            //AutoApplyPayFailure = 17,
             //[Remark("等待申请支付")]
-            //WaitArtificiaApplyPay = 17,
+            //WaitArtificiaApplyPay = 18,
             //[Remark("申请支付成功")]
-            //ArtificiaApplyPaySuccess = 18,
+            //ArtificiaApplyPaySuccess = 19,
             //[Remark("申请支付失败")]
-            //ArtificiaApplyPayFailure = 19,
+            //ArtificiaApplyPayFailure = 20,
             [Remark("等待支付")]
-            WaitPay = 20,
+            WaitPay = 21,
             [Remark("支付成功")]
-            PaySuccess = 21,
+            PaySuccess = 22,
             [Remark("支付失败")]
-            yPayFailure = 22,
+            yPayFailure = 23,
             [Remark("等待后台报价")]
             WaitStaffOffer = 23,
             [Remark("后台报价成功")]
             StaffOfferSuccess = 24,
             [Remark("后台报价失败")]
-            StaffOfferFailure = 25
+            StaffOfferFailure = 26
         }
 
         public enum OrderToCarClaimFollowStatus

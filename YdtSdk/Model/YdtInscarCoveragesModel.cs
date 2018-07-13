@@ -14,7 +14,9 @@ namespace YdtSdk
 
         public string Name { get; set; }
 
-        public bool IsCompensation { get; set; }
+        public bool IsWaiverDeductibleKind { get; set; }
+
+        public string WaiverDeductibleKindCode { get; set; }
 
         public decimal Amount { get; set; }
 

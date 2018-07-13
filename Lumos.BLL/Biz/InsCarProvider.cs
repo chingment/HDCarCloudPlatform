@@ -384,7 +384,7 @@ namespace Lumos.BLL
                         compulsory_kind.Creator = operater;
                         compulsory_kind.CreateTime = this.DateTime;
                         compulsory_kind.IsWaiverDeductible = false;
-                        compulsory_kind.IsHasWaiverDeductible = false;
+                        compulsory_kind.IsWaiverDeductibleKind = false;
                         compulsory_kind.KindValue = "";
                         CurrentDb.OrderToCarInsureOfferCompanyKind.Add(compulsory_kind);
                         CurrentDb.SaveChanges();
@@ -403,7 +403,7 @@ namespace Lumos.BLL
                         travelTax_Kind.Creator = operater;
                         travelTax_Kind.CreateTime = this.DateTime;
                         travelTax_Kind.IsWaiverDeductible = false;
-                        travelTax_Kind.IsHasWaiverDeductible = false;
+                        travelTax_Kind.IsWaiverDeductibleKind = false;
                         travelTax_Kind.KindValue = "";
 
                         CurrentDb.OrderToCarInsureOfferCompanyKind.Add(travelTax_Kind);
@@ -413,38 +413,55 @@ namespace Lumos.BLL
 
                     if (pms.Coverages != null)
                     {
+                        var mapCoverages = YdtDataMap.YdtInsCoverageList();
                         foreach (var item in pms.Coverages)
                         {
-                            var partnerKind = YdtDataMap.YdtInsCoverageList().Where(m => m.Code == item.code).FirstOrDefault();
+                            var partnerKind = mapCoverages.Where(m => m.Code == item.code).FirstOrDefault();
                             if (partnerKind != null)
                             {
-                                var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
-                                orderToCarInsureOfferCompanyKind.OrderId = orderToCarInsure.Id;
-                                orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
-                                orderToCarInsureOfferCompanyKind.KindId = partnerKind.UpLinkCode;
-                                orderToCarInsureOfferCompanyKind.PartnerKindId = partnerKind.Code;
-                                orderToCarInsureOfferCompanyKind.KindName = partnerKind.Name;
-                                orderToCarInsureOfferCompanyKind.Quantity = item.quantity;
-                                orderToCarInsureOfferCompanyKind.GlassType = item.glassType;
-                                orderToCarInsureOfferCompanyKind.Amount = item.amount;
-                                orderToCarInsureOfferCompanyKind.Creator = operater;
-                                orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
+                                var kind = new OrderToCarInsureOfferCompanyKind();
+                                kind.OrderId = orderToCarInsure.Id;
+                                kind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                                kind.KindId = partnerKind.UpLinkCode;
+                                kind.PartnerKindId = partnerKind.Code;
+                                kind.KindName = partnerKind.Name;
+                                kind.Quantity = item.quantity;
+                                kind.GlassType = item.glassType;
+                                kind.Amount = item.amount;
+                                kind.Creator = operater;
+                                kind.CreateTime = this.DateTime;
+                                kind.IsWaiverDeductible = item.compensation == 0 ? false : true;//是否有不计免费险
+                                kind.IsWaiverDeductibleKind = partnerKind.IsWaiverDeductibleKind;
 
-
-                                if (partnerKind.UpLinkCode == 20 || partnerKind.UpLinkCode == 21 || (partnerKind.UpLinkCode == 22))
-                                {
-                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = true;
-                                }
-                                else
-                                {
-                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = false;
-                                }
-
-                                orderToCarInsureOfferCompanyKind.IsHasWaiverDeductible = item.compensation == 0 ? false : true;//是否有不计免费险
-
-                                orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
-                                CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
+                                kind.Priority = partnerKind.Priority;
+                                CurrentDb.OrderToCarInsureOfferCompanyKind.Add(kind);
                                 CurrentDb.SaveChanges();
+
+                                if (kind.IsWaiverDeductible)
+                                {
+                                    var parner_wd_kind = mapCoverages.Where(m => m.Code == partnerKind.WaiverDeductibleKindCode).FirstOrDefault();
+                                    var parner_wd_kindOffer = pms.Coverages.Where(m => m.code == partnerKind.WaiverDeductibleKindCode).FirstOrDefault();
+                                    if (parner_wd_kind != null && parner_wd_kindOffer != null)
+                                    {
+                                        var wd_kind = new OrderToCarInsureOfferCompanyKind();
+                                        wd_kind.OrderId = orderToCarInsure.Id;
+                                        wd_kind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                                        wd_kind.KindId = parner_wd_kind.UpLinkCode;
+                                        wd_kind.PartnerKindId = parner_wd_kind.Code;
+                                        wd_kind.KindName = parner_wd_kind.Name;
+                                        wd_kind.Quantity = parner_wd_kindOffer.quantity;
+                                        wd_kind.GlassType = parner_wd_kindOffer.glassType;
+                                        wd_kind.Amount = parner_wd_kindOffer.amount;
+                                        wd_kind.Creator = operater;
+                                        wd_kind.CreateTime = this.DateTime;
+                                        wd_kind.IsWaiverDeductible =false;
+                                        wd_kind.IsWaiverDeductibleKind = partnerKind.IsWaiverDeductibleKind;
+                                        wd_kind.Priority = parner_wd_kind.Priority;
+                                        CurrentDb.OrderToCarInsureOfferCompanyKind.Add(wd_kind);
+                                        CurrentDb.SaveChanges();
+                                    }
+
+                                }
                             }
                         }
                     }
@@ -648,11 +665,15 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.Premium = item.premium;
                                 orderToCarInsureOfferCompanyKind.UnitAmount = item.unitAmount;
                                 orderToCarInsureOfferCompanyKind.Discount = item.discount ?? 0;
-
-
-                                orderToCarInsureOfferCompanyKind.IsWaiverDeductible = item.compensation == 0 ? false : true;
-
-
+                                orderToCarInsureOfferCompanyKind.IsWaiverDeductibleKind = partnerKind.IsWaiverDeductibleKind;
+                                if (partnerKind.IsWaiverDeductibleKind)
+                                {
+                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = false;
+                                }
+                                else
+                                {
+                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = GetIsWaiverDeductible(pms.Coverages, item.code);
+                                }
                                 orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
                                 orderToCarInsureOfferCompanyKind.Creator = operater;
                                 orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
@@ -708,6 +729,50 @@ namespace Lumos.BLL
             }
         }
 
+        public bool GetIsWaiverDeductible(List<CoverageModel> coverages, string code)
+        {
+            //List<YdtInscarCoveragesModel> list = new List<YdtInscarCoveragesModel>();
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 3, Code = "001", Name = "车损险", IsWaiverDeductibleKind = false, Priority = 1 });
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 4, Code = "002", Name = "三者险", IsWaiverDeductibleKind = false, Priority = 2 });
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 5, Code = "003", Name = "司机险", IsWaiverDeductibleKind = false, Priority = 3 });
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 6, Code = "004", Name = "乘客险", IsWaiverDeductibleKind = false, Priority = 4 });
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 7, Code = "005", Name = "盗抢险", IsWaiverDeductibleKind = false, Priority = 5 });
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 9, Code = "007", Name = "划痕险", IsWaiverDeductibleKind = false, Priority = 7 });
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 12, Code = "008", Name = "自燃险", IsWaiverDeductibleKind = false, Priority = 8 });
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 11, Code = "009", Name = "涉水险", IsWaiverDeductibleKind = false, Priority = 9 });
+
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 20, Code = "101", Name = "车损险不计免赔", IsWaiverDeductibleKind = true, Priority = 12 });
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 21, Code = "102", Name = "三者险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
+            //list.Add(new YdtInscarCoveragesModel { UpLinkCode = 22, Code = "112", Name = "车上人员不计免赔", IsWaiverDeductibleKind = true, Priority = 14 });
+
+            int count = 0;
+            switch (code)
+            {
+                case "001":
+
+                    count = coverages.Where(m => m.code == "101").Count();
+
+                    break;
+                case "002":
+                    count = coverages.Where(m => m.code == "102").Count();
+                    break;
+                case "003":
+                    count = coverages.Where(m => m.code == "112").Count();
+                    break;
+                case "004":
+                    break;
+                case "005":
+                    break;
+                case "007":
+                    break;
+                case "008":
+                    break;
+                case "009":
+                    break;
+            }
+            //  List<CoverageModel> Coverages
+            return true;
+        }
 
         public CustomJsonResult UpdateOrder(int operater, int orderId, CarInfoModel carInfo, List<CarInsCustomerModel> customers)
         {

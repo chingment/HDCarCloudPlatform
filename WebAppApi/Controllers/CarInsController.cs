@@ -1262,10 +1262,10 @@ namespace WebAppApi.Controllers
 
             string areaId = pms.ReceiptAddress.AreaId;
 
-            if (areaId.Length > 4)
-            {
-                areaId = areaId.Substring(0, 4);
-            }
+            //if (areaId.Length > 4)
+            //{
+            //    areaId = areaId.Substring(0, 4);
+            //}
 
             ydtInscarPayPms.address.areaId = areaId;
 

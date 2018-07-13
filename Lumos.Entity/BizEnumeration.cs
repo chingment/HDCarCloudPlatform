@@ -398,26 +398,26 @@ namespace Lumos.Entity
             SubmitteQuotesheeSuccess = 2,
             [Remark("等待自动报价")]
             WaitAutoOffer = 3,
-            [Remark("自动报价成功")]
-            AutoOfferSuccess = 4,
+            //[Remark("自动报价成功")]
+            //AutoOfferSuccess = 4,
             [Remark("自动报价失败")]
             AutoOfferFailure = 5,
             [Remark("等待人工报价")]
             WaitArtificialOffer = 6,
-            [Remark("人工报价成功")]
-            ArtificialOfferSuccess = 7,
+            //[Remark("人工报价成功")]
+            //ArtificialOfferSuccess = 7,
             [Remark("人工报价失败")]
             ArtificialOfferFailure = 8,
             [Remark("等待核保")]
             WaitAutoInsure = 9,
-            [Remark("核保成功")]
-            AutoInsureSuccess = 10,
+            //[Remark("核保成功")]
+            //AutoInsureSuccess = 10,
             [Remark("核保失败")]
             AutoInsureFailure = 11,
             [Remark("等待核保")]
             WaitArtificialInsure = 12,
-            [Remark("核保成功")]
-            ArtificialInsureSuccess = 13,
+            //[Remark("核保成功")]
+            //ArtificialInsureSuccess = 13,
             [Remark("核保失败")]
             ArtificialInsureFailure = 14,
             //[Remark("等待申请支付")]

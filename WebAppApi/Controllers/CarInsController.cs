@@ -228,6 +228,11 @@ namespace WebAppApi.Controllers
                         carInfo.WholeWeight = ydtInsCarApiSearchResultData.Car.wholeWeight.NullStringToNullObject();
                     }
                 }
+                else
+                {
+                    carInfo.Belong = "1";//车辆归属     1：私人，2：公司
+                    carInfo.ChgownerType = "0";//是否过户              0：否，1：是
+                }
 
                 if (drivingLicenceInfo != null)
                 {
@@ -237,10 +242,6 @@ namespace WebAppApi.Controllers
                     carInfo.ModelName = carInfo.ModelName ?? drivingLicenceInfo.model.NullStringToNullObject();
                     carInfo.ChgownerType = carInfo.ChgownerType ?? "0";//是否过户，0：否，1：是
                 }
-
-                carInfo.Belong = ydtInsCarApiSearchResultData.Belong ?? "1";//车辆归属     1：私人，2：公司
-                carInfo.ChgownerType = carInfo.ChgownerType ?? "0";//是否过户              0：否，1：是
-
 
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "1" });
                 carInfoResult.Customers.Add(new CarInsCustomerModel { InsuredFlag = "2" });
@@ -1798,17 +1799,19 @@ namespace WebAppApi.Controllers
                     {
                         if (carInsureOfferCompany.CommercialPrice != null)
                         {
+                            var commercialKinds = carInsureOfferCompanyKinds.Where(m => m.KindId >= 3).ToList();
+
                             var parentsByCommercial = new ItemParentField();
                             parentsByCommercial.Field = "商业险";
                             parentsByCommercial.Value = carInsureOfferCompany.CommercialPrice.ToF2Price();
 
-                            var carInsureOfferCompanyKinds1 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == false).OrderBy(m => m.Priority).ToList();
+                            var carInsureOfferCompanyKinds1 = commercialKinds.Where(m => m.IsWaiverDeductibleKind == false).OrderBy(m => m.Priority).ToList();
                             foreach (var kind in carInsureOfferCompanyKinds1)
                             {
                                 parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, kind.StandardPremium.ToF2Price()));
                             }
 
-                            var carInsureOfferCompanyKinds2 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == true).OrderBy(m => m.Priority).ToList();
+                            var carInsureOfferCompanyKinds2 = commercialKinds.Where(m => m.IsWaiverDeductibleKind == true).OrderBy(m => m.Priority).ToList();
 
                             if (carInsureOfferCompanyKinds2.Count > 0)
                             {
@@ -1859,13 +1862,13 @@ namespace WebAppApi.Controllers
                         parentsByCommercial.Value = "";
 
 
-                        var carInsureOfferCompanyKinds1 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == false).OrderBy(m => m.Priority).ToList();
+                        var carInsureOfferCompanyKinds1 = commercialKinds.Where(m => m.IsWaiverDeductible == false).OrderBy(m => m.Priority).ToList();
                         foreach (var kind in carInsureOfferCompanyKinds1)
                         {
                             parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, "已投"));
                         }
 
-                        var carInsureOfferCompanyKinds2 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == true).OrderBy(m => m.Priority).ToList();
+                        var carInsureOfferCompanyKinds2 = commercialKinds.Where(m => m.IsWaiverDeductible == true).OrderBy(m => m.Priority).ToList();
 
                         if (carInsureOfferCompanyKinds2.Count > 0)
                         {

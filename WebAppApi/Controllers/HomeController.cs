@@ -204,9 +204,9 @@ namespace WebAppApi.Controllers
             //model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
 
 
-             model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
+           //  model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
 
-           // CarIns(userId, merchantId, posMachineId);
+            CarIns(userId, merchantId, posMachineId);
 
             // model.Add("提交保险产品", SubmitInsurance(userId, merchantId, posMachineId));
 
@@ -1990,7 +1990,7 @@ namespace WebAppApi.Controllers
             //model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
             // model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
-            // model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+             model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LVXCCDBA3CL000043", "2012-06-2"));
 
             // model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
@@ -2047,7 +2047,7 @@ namespace WebAppApi.Controllers
 
             CarInfoPms model1 = new CarInfoPms();
             model1.KeywordType = KeyWordType.LicensePlateNo;
-            model1.Keyword = "粤A9RS97";
+            model1.Keyword = "粤OYTFGUU";
             // model1.Keyword = "粤AT810P";
             //model1.KeywordType = KeyWordType.LicenseImg;
             // model1.Keyword = base64string1 + "@.jpg";

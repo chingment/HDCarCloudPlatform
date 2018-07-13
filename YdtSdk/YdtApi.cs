@@ -70,12 +70,12 @@ namespace YdtSdk
                 LogUtil.Info("Ydt->result:" + body);
                 YdtResult ydtResult = new YdtResult();
 
-                if (body.IndexOf("\"code\":") > -1 && body.IndexOf(",\"msg\":") > -1)
-                {
-                    ydtResult = JsonConvert.DeserializeObject<YdtResult>(body);
-                }
 
-                if (ydtResult.code == 0)
+                if (body.IndexOf("无效会话") > -1)
+                {
+
+                }
+                else if (body.IndexOf("msg") < 0 && body.IndexOf("extmsg") < 0)
                 {
                     body = "{\"code\":0,\"msg\":\"成功\",\"data\":" + body + "}";
                 }
@@ -110,37 +110,16 @@ namespace YdtSdk
                 string body = webUtils.DoPost(realServerUrl, request.GetUrlParameters(), postData, null);
 
 
-                //if (!string.IsNullOrEmpty(body))
-                //{
-                //    if (realServerUrl.ToLower().IndexOf("ins_artificial/inquiry") > -1)
-                //    {
-                //        string start = body.Substring(0, 1);
+                if (body.IndexOf("无效会话") > -1)
+                {
 
-                //        if (start == "\"")
-                //        {
-                //            body = body.Substring(1, body.Length - 1);
-                //        }
-
-                //        string end = body.Substring(body.Length - 1, 1);
-
-                //        if (end == "\"")
-                //        {
-                //            body = body.Substring(0, body.Length - 1);
-                //        }
-
-                //        body = body.Replace("\\\"", "\"");
-                //    }
-
-                //}
-
-
-
+                }
                 if (body.IndexOf("msg") < 0 && body.IndexOf("extmsg") < 0)
                 {
                     body = "{\"code\":0,\"msg\":\"成功\",\"data\":" + body + "}";
                 }
-                
-         
+
+
 
                 var rsp = JsonConvert.DeserializeObject<YdtApiBaseResult<T>>(body);
 

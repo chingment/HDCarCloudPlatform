@@ -101,11 +101,20 @@ namespace WebAppApi.Controllers
 
                                 switch (m.FollowStatus)
                                 {
+                                    case 3:
+                                        orderModel.OrderField.Add(new OrderField("状态", "等待自动报价"));
+                                        break;
+                                    case 4:
+                                        orderModel.OrderField.Add(new OrderField("状态", "自动报价成功"));
+                                        break;
+                                    case 5:
+                                        orderModel.OrderField.Add(new OrderField("状态", "自动报价失败"));
+                                        break;
                                     case 6:
                                         orderModel.OrderField.Add(new OrderField("状态", "等待人工报价"));
                                         break;
                                     case 7:
-                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价成功"));
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价成功，请查看详情核保"));
                                         break;
                                     case 8:
                                         orderModel.OrderField.Add(new OrderField("状态", "人工报价失败"));
@@ -114,21 +123,21 @@ namespace WebAppApi.Controllers
                                         orderModel.OrderField.Add(new OrderField("状态", "人工报价成功，请查看详情核保"));
                                         break;
                                     case 10:
-                                        orderModel.OrderField.Add(new OrderField("状态", "核保成功，请查看详情支付"));
+                                        orderModel.OrderField.Add(new OrderField("状态", "自动核保成功，请查看详情支付"));
                                         break;
                                     case 11:
-                                        orderModel.OrderField.Add(new OrderField("状态", "等待人工核保"));
+                                        orderModel.OrderField.Add(new OrderField("状态", "自动核保失败"));
                                         break;
                                     case 12:
-                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保成功，请查看详情支付"));
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价成功，请查看详情核保"));
                                         break;
                                     case 13:
-                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保失败"));
-                                        break;
-                                    case 14:
                                         orderModel.OrderField.Add(new OrderField("状态", "人工核保成功，请查看详情支付"));
                                         break;
-                                    case 20:
+                                    case 14:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保失败"));
+                                        break;
+                                    case 21:
                                         orderModel.OrderField.Add(new OrderField("状态", "核保成功，请查看详情支付"));
                                         break;
                                     default:
@@ -225,23 +234,47 @@ namespace WebAppApi.Controllers
 
                                 switch (m.FollowStatus)
                                 {
+                                    case 3:
+                                        orderModel.OrderField.Add(new OrderField("状态", "等待自动报价"));
+                                        break;
+                                    case 4:
+                                        orderModel.OrderField.Add(new OrderField("状态", "自动报价成功"));
+                                        break;
+                                    case 5:
+                                        orderModel.OrderField.Add(new OrderField("状态", "自动报价失败"));
+                                        break;
                                     case 6:
                                         orderModel.OrderField.Add(new OrderField("状态", "等待人工报价"));
                                         break;
                                     case 7:
-                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价成功"));
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价成功，请查看详情核保"));
                                         break;
                                     case 8:
                                         orderModel.OrderField.Add(new OrderField("状态", "人工报价失败"));
                                         break;
+                                    case 9:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价成功，请查看详情核保"));
+                                        break;
+                                    case 10:
+                                        orderModel.OrderField.Add(new OrderField("状态", "自动核保成功，请查看详情支付"));
+                                        break;
                                     case 11:
-                                        orderModel.OrderField.Add(new OrderField("状态", "等待人工核保"));
+                                        orderModel.OrderField.Add(new OrderField("状态", "自动核保失败"));
                                         break;
                                     case 12:
-                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保成功"));
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工报价成功，请查看详情核保"));
                                         break;
                                     case 13:
+                                        orderModel.OrderField.Add(new OrderField("状态", "人工核保成功，请查看详情支付"));
+                                        break;
+                                    case 14:
                                         orderModel.OrderField.Add(new OrderField("状态", "人工核保失败"));
+                                        break;
+                                    case 21:
+                                        orderModel.OrderField.Add(new OrderField("状态", "核保成功，请查看详情支付"));
+                                        break;
+                                    default:
+                                        orderModel.OrderField.Add(new OrderField("状态", "请稍侯，正在处理中"));
                                         break;
                                 }
 

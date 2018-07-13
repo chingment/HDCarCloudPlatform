@@ -861,7 +861,7 @@ namespace WebAppApi.Controllers
 
                 carInsCompanyInfoModel.OfferId = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.Id;
                 carInsCompanyInfoModel.OfferInquirys = GetInsureItem(result_UpdateOfferByAfter.Data.CarInsure, result_UpdateOfferByAfter.Data.CarInsureOfferCompany, result_UpdateOfferByAfter.Data.CarInsureOfferCompanyKinds);
-                carInsCompanyInfoModel.OfferSumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value;
+                carInsCompanyInfoModel.OfferSumPremium = result_UpdateOfferByAfter.Data.CarInsureOfferCompany.InsureTotalPrice.Value.ToF2Price();
 
                 return ResponseResult(ResultType.Success, ResultCode.Success, "自动报价成功", carInsCompanyInfoModel);
             }
@@ -898,7 +898,7 @@ namespace WebAppApi.Controllers
 
             carInsCompanyInfoModel.OfferId = orderToCarInsureOfferCompany.Id;
             carInsCompanyInfoModel.OfferInquirys = GetInsureItem(orderToCarInsure, orderToCarInsureOfferCompany, orderToCarInsureOfferCompanyKinds);
-            carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice == null ? 0 : orderToCarInsureOfferCompany.InsureTotalPrice.Value;
+            carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice == null ? "正在报价中" : orderToCarInsureOfferCompany.InsureTotalPrice.Value.ToF2Price();
 
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", carInsCompanyInfoModel);
         }
@@ -1171,7 +1171,7 @@ namespace WebAppApi.Controllers
 
             carInsCompanyInfoModel.OfferId = orderToCarInsureOfferCompany.Id;
             carInsCompanyInfoModel.OfferInquirys = GetInsureItem(orderToCarInsure, orderToCarInsureOfferCompany, orderToCarInsureOfferCompanyKinds);
-            carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice.Value;
+            carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice.Value.ToF2Price();
 
             info.OfferInfo = carInsCompanyInfoModel;
 
@@ -1594,7 +1594,7 @@ namespace WebAppApi.Controllers
 
             carInsCompanyInfoModel.OfferId = orderToCarInsureOfferCompany.Id;
             carInsCompanyInfoModel.OfferInquirys = GetInsureItem(orderToCarInsure, orderToCarInsureOfferCompany, orderToCarInsureOfferCompanyKinds);
-            carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice == null ? 0 : orderToCarInsureOfferCompany.InsureTotalPrice.Value;
+            carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice == null ? "正在报价中" : orderToCarInsureOfferCompany.InsureTotalPrice.Value.ToF2Price();
 
             info.Remark = ((Enumeration.OrderToCarClaimFollowStatus)info.FollowStatus).GetCnName();
             info.OrderInfo = carInsCompanyInfoModel;
@@ -1769,41 +1769,100 @@ namespace WebAppApi.Controllers
 
             if (carInsureOfferCompany != null)
             {
-
-                if (carInsureOfferCompany.CompulsoryPrice != null)
+                //大于等于8，说明已经报价成功
+                if (carInsure.FollowStatus >= 8)
                 {
-                    if (carInsureOfferCompany.CompulsoryPrice.Value > 0)
+                    if (carInsureOfferCompany.CompulsoryPrice != null)
+                    {
+                        if (carInsureOfferCompany.CompulsoryPrice.Value > 0)
+                        {
+                            var parentsByCompulsory = new ItemParentField();
+                            parentsByCompulsory.Field = "交强险";
+                            parentsByCompulsory.Value = carInsureOfferCompany.CompulsoryPrice.ToF2Price();
+                            parents.Add(parentsByCompulsory);
+                        }
+                    }
+                    if (carInsureOfferCompany.TravelTaxPrice != null)
+                    {
+                        if (carInsureOfferCompany.TravelTaxPrice.Value > 0)
+                        {
+                            var parentsByTravelTax = new ItemParentField();
+                            parentsByTravelTax.Field = "车船稅";
+                            parentsByTravelTax.Value = carInsureOfferCompany.TravelTaxPrice.ToF2Price();
+                            parents.Add(parentsByTravelTax);
+                        }
+                    }
+
+
+                    if (carInsureOfferCompany.CommercialPrice != null)
+                    {
+                        if (carInsureOfferCompany.CommercialPrice != null)
+                        {
+                            var parentsByCommercial = new ItemParentField();
+                            parentsByCommercial.Field = "商业险";
+                            parentsByCommercial.Value = carInsureOfferCompany.CommercialPrice.ToF2Price();
+
+                            var carInsureOfferCompanyKinds1 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == false).OrderBy(m => m.Priority).ToList();
+                            foreach (var kind in carInsureOfferCompanyKinds1)
+                            {
+                                parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, kind.StandardPremium.ToF2Price()));
+                            }
+
+                            var carInsureOfferCompanyKinds2 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == true).OrderBy(m => m.Priority).ToList();
+
+                            if (carInsureOfferCompanyKinds2.Count > 0)
+                            {
+                                decimal sumCompensation = 0;
+                                foreach (var kind in carInsureOfferCompanyKinds2)
+                                {
+                                    sumCompensation += kind.StandardPremium;
+                                    parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, "已投"));
+                                }
+
+                                parentsByCommercial.Child.Add(new ItemChildField("总计不免赔", sumCompensation.ToF2Price()));
+                            }
+
+                            parents.Add(parentsByCommercial);
+                        }
+                    }
+                }
+                else
+                {
+                    var compulsoryKind = carInsureOfferCompanyKinds.Where(m => m.KindId == 1).FirstOrDefault();
+
+                    if (compulsoryKind != null)
                     {
                         var parentsByCompulsory = new ItemParentField();
                         parentsByCompulsory.Field = "交强险";
-                        parentsByCompulsory.Value = carInsureOfferCompany.CompulsoryPrice.ToF2Price();
+                        parentsByCompulsory.Value = "已投";
                         parents.Add(parentsByCompulsory);
                     }
-                }
-                if (carInsureOfferCompany.TravelTaxPrice != null)
-                {
-                    if (carInsureOfferCompany.TravelTaxPrice != null)
+
+
+
+                    var travelTaxPrice = carInsureOfferCompanyKinds.Where(m => m.KindId == 2).FirstOrDefault();
+
+                    if (travelTaxPrice != null)
                     {
                         var parentsByTravelTax = new ItemParentField();
                         parentsByTravelTax.Field = "车船稅";
-                        parentsByTravelTax.Value = carInsureOfferCompany.TravelTaxPrice.ToF2Price();
+                        parentsByTravelTax.Value = "已投";
                         parents.Add(parentsByTravelTax);
                     }
-                }
 
+                    var commercialKinds = carInsureOfferCompanyKinds.Where(m => m.KindId >= 3).ToList();
 
-                if (carInsureOfferCompany.CommercialPrice != null)
-                {
-                    if (carInsureOfferCompany.CommercialPrice != null)
+                    if (commercialKinds.Count > 0)
                     {
                         var parentsByCommercial = new ItemParentField();
                         parentsByCommercial.Field = "商业险";
-                        parentsByCommercial.Value = carInsureOfferCompany.CommercialPrice.ToF2Price();
+                        parentsByCommercial.Value = "";
+
 
                         var carInsureOfferCompanyKinds1 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == false).OrderBy(m => m.Priority).ToList();
                         foreach (var kind in carInsureOfferCompanyKinds1)
                         {
-                            parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, kind.StandardPremium.ToF2Price()));
+                            parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, "已投"));
                         }
 
                         var carInsureOfferCompanyKinds2 = carInsureOfferCompanyKinds.Where(m => m.IsWaiverDeductible == true).OrderBy(m => m.Priority).ToList();
@@ -1816,13 +1875,12 @@ namespace WebAppApi.Controllers
                                 sumCompensation += kind.StandardPremium;
                                 parentsByCommercial.Child.Add(new ItemChildField(kind.KindName, "已投"));
                             }
-
-                            parentsByCommercial.Child.Add(new ItemChildField("总计不免赔", sumCompensation.ToF2Price()));
                         }
 
                         parents.Add(parentsByCommercial);
                     }
                 }
+
             }
 
 

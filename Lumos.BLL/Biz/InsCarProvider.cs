@@ -370,41 +370,43 @@ namespace Lumos.BLL
 
                     if (pms.PartnerRisk == 2 || pms.PartnerRisk == 3)
                     {
-                        var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
-                        orderToCarInsureOfferCompanyKind.OrderId = orderToCarInsure.Id;
-                        orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
-                        orderToCarInsureOfferCompanyKind.KindId = 1;
-                        orderToCarInsureOfferCompanyKind.PartnerKindId = "0";
-                        orderToCarInsureOfferCompanyKind.KindName = "交强险";
-                        orderToCarInsureOfferCompanyKind.Quantity = 0;
-                        orderToCarInsureOfferCompanyKind.GlassType = 0;
-                        orderToCarInsureOfferCompanyKind.Amount = 0;
-                        orderToCarInsureOfferCompanyKind.StandardPremium = 0;//保费
-                        orderToCarInsureOfferCompanyKind.Priority = 0;
-                        orderToCarInsureOfferCompanyKind.Creator = operater;
-                        orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
-                        orderToCarInsureOfferCompanyKind.IsWaiverDeductible = false;
-                        orderToCarInsureOfferCompanyKind.KindValue = "";
-                        CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
+                        var compulsory_kind = new OrderToCarInsureOfferCompanyKind();
+                        compulsory_kind.OrderId = orderToCarInsure.Id;
+                        compulsory_kind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                        compulsory_kind.KindId = 1;
+                        compulsory_kind.PartnerKindId = "0";
+                        compulsory_kind.KindName = "交强险";
+                        compulsory_kind.Quantity = 0;
+                        compulsory_kind.GlassType = 0;
+                        compulsory_kind.Amount = 0;
+                        compulsory_kind.StandardPremium = 0;//保费
+                        compulsory_kind.Priority = 0;
+                        compulsory_kind.Creator = operater;
+                        compulsory_kind.CreateTime = this.DateTime;
+                        compulsory_kind.IsWaiverDeductible = false;
+                        compulsory_kind.IsHasWaiverDeductible = false;
+                        compulsory_kind.KindValue = "";
+                        CurrentDb.OrderToCarInsureOfferCompanyKind.Add(compulsory_kind);
                         CurrentDb.SaveChanges();
 
-                        var orderToCarInsureOfferCompanyKind2 = new OrderToCarInsureOfferCompanyKind();
-                        orderToCarInsureOfferCompanyKind2.OrderId = orderToCarInsure.Id;
-                        orderToCarInsureOfferCompanyKind2.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
-                        orderToCarInsureOfferCompanyKind2.KindId = 2;
-                        orderToCarInsureOfferCompanyKind2.PartnerKindId = "0";
-                        orderToCarInsureOfferCompanyKind2.KindName = "车船税";
-                        orderToCarInsureOfferCompanyKind2.Quantity = 0;
-                        orderToCarInsureOfferCompanyKind2.GlassType = 0;
-                        orderToCarInsureOfferCompanyKind2.Amount = 0;
-                        orderToCarInsureOfferCompanyKind2.StandardPremium = 0;
-                        orderToCarInsureOfferCompanyKind2.Priority = 0;
-                        orderToCarInsureOfferCompanyKind2.Creator = operater;
-                        orderToCarInsureOfferCompanyKind2.CreateTime = this.DateTime;
-                        orderToCarInsureOfferCompanyKind2.IsWaiverDeductible = false;
-                        orderToCarInsureOfferCompanyKind2.KindValue = "";
+                        var travelTax_Kind = new OrderToCarInsureOfferCompanyKind();
+                        travelTax_Kind.OrderId = orderToCarInsure.Id;
+                        travelTax_Kind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                        travelTax_Kind.KindId = 2;
+                        travelTax_Kind.PartnerKindId = "0";
+                        travelTax_Kind.KindName = "车船税";
+                        travelTax_Kind.Quantity = 0;
+                        travelTax_Kind.GlassType = 0;
+                        travelTax_Kind.Amount = 0;
+                        travelTax_Kind.StandardPremium = 0;
+                        travelTax_Kind.Priority = 0;
+                        travelTax_Kind.Creator = operater;
+                        travelTax_Kind.CreateTime = this.DateTime;
+                        travelTax_Kind.IsWaiverDeductible = false;
+                        travelTax_Kind.IsHasWaiverDeductible = false;
+                        travelTax_Kind.KindValue = "";
 
-                        CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind2);
+                        CurrentDb.OrderToCarInsureOfferCompanyKind.Add(travelTax_Kind);
                         CurrentDb.SaveChanges();
                     }
 
@@ -427,7 +429,19 @@ namespace Lumos.BLL
                                 orderToCarInsureOfferCompanyKind.Amount = item.amount;
                                 orderToCarInsureOfferCompanyKind.Creator = operater;
                                 orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
-                                orderToCarInsureOfferCompanyKind.IsWaiverDeductible = item.compensation == 0 ? false : true;
+
+
+                                if (partnerKind.UpLinkCode == 20 || partnerKind.UpLinkCode == 21 || (partnerKind.UpLinkCode == 22))
+                                {
+                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = true;
+                                }
+                                else
+                                {
+                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = false;
+                                }
+
+                                orderToCarInsureOfferCompanyKind.IsHasWaiverDeductible = item.compensation == 0 ? false : true;//是否有不计免费险
+
                                 orderToCarInsureOfferCompanyKind.Priority = partnerKind.Priority;
                                 CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
                                 CurrentDb.SaveChanges();
@@ -504,32 +518,18 @@ namespace Lumos.BLL
 
                         var compulsory = pms.Inquirys.Where(m => m.risk == 2).FirstOrDefault();
 
+
+                        decimal? compulsoryPrice = 0;
+                        decimal? travelTaxPrice = 0;
                         if (compulsory != null)
                         {
                             if (compulsory.standardPremium != null)
                             {
                                 if (compulsory.standardPremium.Value > 0)
                                 {
+                                    compulsoryPrice = compulsory.standardPremium;
                                     orderToCarInsureOfferCompany.CompulsoryPrice = compulsory.standardPremium;
                                     insureTotalPrice += compulsory.standardPremium.Value;
-
-                                    var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
-                                    orderToCarInsureOfferCompanyKind.OrderId = l_orderToCarInsure.Id;
-                                    orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
-                                    orderToCarInsureOfferCompanyKind.KindId = 1;
-                                    orderToCarInsureOfferCompanyKind.PartnerKindId = "0";
-                                    orderToCarInsureOfferCompanyKind.KindName = "交强险";
-                                    orderToCarInsureOfferCompanyKind.Quantity = 0;
-                                    orderToCarInsureOfferCompanyKind.GlassType = 0;
-                                    orderToCarInsureOfferCompanyKind.Amount = 0;
-                                    orderToCarInsureOfferCompanyKind.StandardPremium = compulsory.standardPremium.Value;//保费
-                                    orderToCarInsureOfferCompanyKind.Priority = 0;
-                                    orderToCarInsureOfferCompanyKind.Creator = operater;
-                                    orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
-                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = false;
-                                    orderToCarInsureOfferCompanyKind.KindValue = "";
-                                    CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
-                                    CurrentDb.SaveChanges();
 
                                 }
                             }
@@ -538,39 +538,60 @@ namespace Lumos.BLL
                             {
                                 if (compulsory.sumPayTax.Value > 0)
                                 {
+                                    travelTaxPrice = compulsory.sumPayTax;
                                     orderToCarInsureOfferCompany.TravelTaxPrice = compulsory.sumPayTax;
                                     insureTotalPrice += compulsory.sumPayTax.Value;
-
-
-                                    var orderToCarInsureOfferCompanyKind = new OrderToCarInsureOfferCompanyKind();
-                                    orderToCarInsureOfferCompanyKind.OrderId = l_orderToCarInsure.Id;
-                                    orderToCarInsureOfferCompanyKind.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
-                                    orderToCarInsureOfferCompanyKind.KindId = 2;
-                                    orderToCarInsureOfferCompanyKind.PartnerKindId = "0";
-                                    orderToCarInsureOfferCompanyKind.KindName = "车船税";
-                                    orderToCarInsureOfferCompanyKind.Quantity = 0;
-                                    orderToCarInsureOfferCompanyKind.GlassType = 0;
-                                    orderToCarInsureOfferCompanyKind.Amount = 0;
-                                    orderToCarInsureOfferCompanyKind.StandardPremium = compulsory.sumPayTax.Value;
-                                    orderToCarInsureOfferCompanyKind.Priority = 0;
-                                    orderToCarInsureOfferCompanyKind.Creator = operater;
-                                    orderToCarInsureOfferCompanyKind.CreateTime = this.DateTime;
-                                    orderToCarInsureOfferCompanyKind.IsWaiverDeductible = false;
-                                    orderToCarInsureOfferCompanyKind.KindValue = "";
-
-                                    CurrentDb.OrderToCarInsureOfferCompanyKind.Add(orderToCarInsureOfferCompanyKind);
-                                    CurrentDb.SaveChanges();
-
                                 }
                             }
 
                         }
+
+
+
+                        orderToCarInsureOfferCompany.InsureTotalPrice = insureTotalPrice;
+                        CurrentDb.SaveChanges();
+
+                        if (pms.PartnerRisk == 2 || pms.PartnerRisk == 3)
+                        {
+                            var kind_Compulsory = new OrderToCarInsureOfferCompanyKind();
+                            kind_Compulsory.OrderId = l_orderToCarInsure.Id;
+                            kind_Compulsory.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                            kind_Compulsory.KindId = 1;
+                            kind_Compulsory.PartnerKindId = "0";
+                            kind_Compulsory.KindName = "交强险";
+                            kind_Compulsory.Quantity = 0;
+                            kind_Compulsory.GlassType = 0;
+                            kind_Compulsory.Amount = 0;
+                            kind_Compulsory.StandardPremium = (compulsoryPrice == null ? 0 : compulsoryPrice.Value);//保费
+                            kind_Compulsory.Priority = 0;
+                            kind_Compulsory.Creator = operater;
+                            kind_Compulsory.CreateTime = this.DateTime;
+                            kind_Compulsory.IsWaiverDeductible = false;
+                            kind_Compulsory.KindValue = "";
+                            CurrentDb.OrderToCarInsureOfferCompanyKind.Add(kind_Compulsory);
+                            CurrentDb.SaveChanges();
+
+
+
+                            var kind_Tax = new OrderToCarInsureOfferCompanyKind();
+                            kind_Tax.OrderId = l_orderToCarInsure.Id;
+                            kind_Tax.InsuranceCompanyId = carInsuranceCompany.InsuranceCompanyId;
+                            kind_Tax.KindId = 2;
+                            kind_Tax.PartnerKindId = "0";
+                            kind_Tax.KindName = "车船税";
+                            kind_Tax.Quantity = 0;
+                            kind_Tax.GlassType = 0;
+                            kind_Tax.Amount = 0;
+                            kind_Tax.StandardPremium = (travelTaxPrice == null ? 0 : travelTaxPrice.Value);//保费 
+                            kind_Tax.Priority = 0;
+                            kind_Tax.Creator = operater;
+                            kind_Tax.CreateTime = this.DateTime;
+                            kind_Tax.IsWaiverDeductible = false;
+                            kind_Tax.KindValue = "";
+                            CurrentDb.OrderToCarInsureOfferCompanyKind.Add(kind_Tax);
+                            CurrentDb.SaveChanges();
+                        }
                     }
-
-                    orderToCarInsureOfferCompany.InsureTotalPrice = insureTotalPrice;
-                    CurrentDb.SaveChanges();
-
-
 
                     var out_carInsureOfferCompanyKinds = new List<OrderToCarInsureOfferCompanyKind>();
                     if (pms.Coverages != null)

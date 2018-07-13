@@ -48,5 +48,7 @@ namespace Lumos.Entity
         public bool IsWaiverDeductible { get; set; }
         [MaxLength(128)]
         public string KindUnit { get; set; }
+        //是否有免赔附加险，建立对应关系
+        public bool IsHasWaiverDeductible { get; set; }
     }
 }

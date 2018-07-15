@@ -227,6 +227,7 @@ namespace WebAppApi.Controllers
                         carInfo.Tonnage = ydtInsCarApiSearchResultData.Car.tonnage.NullStringToNullObject();
                         carInfo.WholeWeight = ydtInsCarApiSearchResultData.Car.wholeWeight.NullStringToNullObject();
                     }
+
                 }
                 else
                 {
@@ -274,8 +275,11 @@ namespace WebAppApi.Controllers
 
             }
 
-            carInfoResult.Car = carInfo;
 
+            carInfoResult.Auto = "0";
+            carInfoResult.Car = carInfo;
+            carInfoResult.Car.Belong = carInfoResult.Car.Belong ?? "1";
+            carInfoResult.Car.ChgownerType = carInfoResult.Car.ChgownerType ?? "0";
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", carInfoResult);
         }
 
@@ -809,7 +813,7 @@ namespace WebAppApi.Controllers
 
                 if (offerResult.Result != ResultType.Success)
                 {
-                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "获取自动报价失败");
+                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "自动报价失败");
                 }
 
                 updateOrderOfferPms.OfferResult = Enumeration.OfferResult.AutoOfferSuccess;
@@ -1082,8 +1086,7 @@ namespace WebAppApi.Controllers
 
 
                 orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
-
-
+                orderToCarInsure.IsInvisiable = false;
                 orderToCarInsure.PartnerInsureId = result_Insure.Data.insureSeq;
 
                 CurrentDb.SaveChanges();

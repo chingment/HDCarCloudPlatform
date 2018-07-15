@@ -315,6 +315,7 @@ namespace Lumos.BLL
                     orderToCarInsure.InsuredOrgPicKey = insCarInfoOrder.InsuredOrgPicKey;
                     orderToCarInsure.InsuredOrgPicUrl = insCarInfoOrder.InsuredOrgPicUrl;
                     orderToCarInsure.PartnerRisk = pms.PartnerRisk.ToString();
+                    orderToCarInsure.IsInvisiable = true;
                     if (orderToCarInsure.Id == 0)
                     {
                         CurrentDb.OrderToCarInsure.Add(orderToCarInsure);
@@ -454,7 +455,7 @@ namespace Lumos.BLL
                                         wd_kind.Amount = parner_wd_kindOffer.amount;
                                         wd_kind.Creator = operater;
                                         wd_kind.CreateTime = this.DateTime;
-                                        wd_kind.IsWaiverDeductible =false;
+                                        wd_kind.IsWaiverDeductible = false;
                                         wd_kind.IsWaiverDeductibleKind = partnerKind.IsWaiverDeductibleKind;
                                         wd_kind.Priority = parner_wd_kind.Priority;
                                         CurrentDb.OrderToCarInsureOfferCompanyKind.Add(wd_kind);
@@ -495,6 +496,11 @@ namespace Lumos.BLL
 
 
                     l_orderToCarInsure.PartnerInquiryId = pms.PartnerInquiryId;
+
+                    if (pms.Auto == 0)
+                    {
+                        l_orderToCarInsure.IsInvisiable = false;
+                    }
 
                     var partnerCompany = YdtDataMap.YdtInsComanyList().Where(m => m.YdtCode == pms.PartnerCompanyId).FirstOrDefault();
 
@@ -725,6 +731,7 @@ namespace Lumos.BLL
             catch (Exception ex)
             {
                 LogUtil.Error("本系统基础数据保存失败2", ex);
+                LogUtil.Error(ex.StackTrace);
                 return new CustomJsonResult<UpdateOfferByAfterResult>(ResultType.Failure, ResultCode.Failure, "本系统基础数据保存失败2", null);
             }
         }

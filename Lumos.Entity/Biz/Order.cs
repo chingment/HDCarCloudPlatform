@@ -84,6 +84,8 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string TransSn { get; set; }
 
+        public bool IsInvisiable { get; set; }
+
         //public bool IsPayQuery { get; set; }
     }
 }

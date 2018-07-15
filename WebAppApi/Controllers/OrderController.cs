@@ -26,7 +26,7 @@ namespace WebAppApi.Controllers
         {
             var order = (from o in CurrentDb.Order
                          where o.MerchantId == merchantId
-
+                         && o.IsInvisiable == false
                          select new { o.Id, o.Sn, o.Type, o.Price, o.Status, o.Remarks, o.SubmitTime, o.CompleteTime, o.CancleTime, o.FollowStatus }
                          );
 

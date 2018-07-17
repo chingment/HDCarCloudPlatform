@@ -100,7 +100,6 @@
     <Compile Include="Biz\Task\TaskForCarInsQueryInquiry.cs" />
     <Compile Include="Biz\Task\TaskForMerchant.cs" />
     <Compile Include="InsPlanUntil.cs" />
-    <Compile Include="Sdk\FangWeiProvider.cs" />
     <Compile Include="Biz\SmsProvider.cs" />
     <Compile Include="Biz\Task\BaseProgram.cs" />
     <Compile Include="Biz\Task\ITask.cs" />
@@ -164,10 +163,6 @@
     <ProjectReference Include="..\Lumos.Entity\Lumos.Entity.csproj">
       <Project>{c19704c7-7d89-42e8-9f15-d8c1a1a0c525}</Project>
       <Name>Lumos.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FangWeiSdk\FangWeiSdk.csproj">
-      <Project>{bd3d6823-4fe7-4176-9aa2-0219e0144a9c}</Project>
-      <Name>FangWeiSdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lumos.DAL\Lumos.DAL.csproj">
       <Project>{0e039414-2a2e-48b4-8db7-c4346106fa68}</Project>

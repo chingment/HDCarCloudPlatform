@@ -8,13 +8,6 @@ namespace Lumos.BLL
 {
     public class SdkFactory
     {
-        public static FangWeiProvider FangWei
-        {
-            get
-            {
-                return new FangWeiProvider();
-            }
-        }
 
         //public static MinShunPayProvider MinShunPay
         //{

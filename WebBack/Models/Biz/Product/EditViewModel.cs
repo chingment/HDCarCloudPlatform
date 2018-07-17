@@ -123,9 +123,9 @@ namespace WebBack.Models.Biz.Product
                 {
                     _product = product;
 
-                    if (!string.IsNullOrEmpty(_product.DisplayImgs))
+                    if (!string.IsNullOrEmpty(_product.DispalyImgs))
                     {
-                        var dispalyImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ImgSet>>(_product.DisplayImgs);
+                        var dispalyImgs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ImgSet>>(_product.DispalyImgs);
 
                         if (dispalyImgs != null)
                         {

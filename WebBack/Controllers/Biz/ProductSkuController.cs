@@ -140,7 +140,7 @@ namespace WebBack.Controllers.Biz
         {
             var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
 
-            model.Product.DisplayImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
+            model.Product.DispalyImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
 
             return BizFactory.ProductSku.AddByGoods(this.CurrentUserId, model.Product, model.ProductSku);
         }
@@ -150,7 +150,7 @@ namespace WebBack.Controllers.Biz
         {
             var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
 
-            model.Product.DisplayImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
+            model.Product.DispalyImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
 
             return BizFactory.ProductSku.AddByInsurance(this.CurrentUserId, model.Product, model.ProductSku);
         }
@@ -160,7 +160,7 @@ namespace WebBack.Controllers.Biz
         {
             var settings = new JsonSerializerSettings() { ContractResolver = new NullToEmptyStringResolver() };
 
-            model.Product.DisplayImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
+            model.Product.DispalyImgs = Newtonsoft.Json.JsonConvert.SerializeObject(model.DispalyImgs, settings);
 
             return BizFactory.ProductSku.EditByGoods(this.CurrentUserId, model.Product, model.ProductSku);
         }

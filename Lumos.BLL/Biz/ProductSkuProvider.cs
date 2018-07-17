@@ -186,7 +186,7 @@ namespace Lumos.BLL
                 //  product.Supplier = product.Supplier.Trim();
                 product.Type = Enumeration.ProductType.Goods;
                 product.ProductKindIds = BuildProductKindIds(product.ProductKindIds);
-                product.MainImg = BizFactory.ProductSku.GetMainImg(product.DisplayImgs);
+                product.MainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
                 product.Status = Enumeration.ProductStatus.OnLine;
                 product.Creator = operater;
                 product.CreateTime = this.DateTime;
@@ -263,8 +263,8 @@ namespace Lumos.BLL
                     //l_product.Supplier = product.Supplier.Trim();
                     l_product.ProductKindIds = BuildProductKindIds(product.ProductKindIds);
                     l_product.ProductKindNames = product.ProductKindNames;
-                    l_product.MainImg = BizFactory.ProductSku.GetMainImg(product.DisplayImgs);
-                    l_product.DisplayImgs = product.DisplayImgs;
+                    l_product.MainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
+                    l_product.DispalyImgs = product.DispalyImgs;
                     l_product.ServiceDesc = product.ServiceDesc;
                     l_product.Details = product.Details;
                     l_product.Mender = operater;
@@ -308,7 +308,7 @@ namespace Lumos.BLL
                 product.ProductKindNames = "意外险";
 
                 product.Supplier = product.Supplier.NullToEmpty();
-                product.MainImg = BizFactory.ProductSku.GetMainImg(product.DisplayImgs);
+                product.MainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
                 product.Creator = operater;
                 product.CreateTime = this.DateTime;
                 product.Status = Enumeration.ProductStatus.OnLine;
@@ -405,7 +405,7 @@ namespace Lumos.BLL
             ProductDetailInfo productDetailInfo = new ProductDetailInfo();
             productDetailInfo.Id = product.Id;
             productDetailInfo.Name = product.Name;
-            productDetailInfo.DisplayImgs = product.DisplayImgs;
+            productDetailInfo.DisplayImgs = product.DispalyImgs;
             productDetailInfo.MainImg = product.MainImg;
             productDetailInfo.ProductKindIds = product.ProductKindIds;
             productDetailInfo.SpecsJson = product.SpecsJson;

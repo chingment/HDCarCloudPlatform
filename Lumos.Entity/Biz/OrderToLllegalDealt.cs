@@ -25,6 +25,16 @@ namespace Lumos.Entity
         [MaxLength(128)]
         public string CarNo { get; set; }
 
+        [MaxLength(128)]
+        public string CarType { get; set; }
 
+        [MaxLength(128)]
+        public string RackNo { get; set; }
+
+        [MaxLength(128)]
+        public string EnginNo { get; set; }
+
+        [MaxLength(128)]
+        public string IsCompany { get; set; }
     }
 }

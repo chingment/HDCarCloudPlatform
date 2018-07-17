@@ -142,6 +142,20 @@ namespace Lumos.BLL
                     addfee = 300;
                     feeModel.ServiceFee = origServiceFee + addfee;
                     break;
+                case "5"://公司单
+
+                    if (point == 0)
+                    {
+                        addfee = 10;
+                    }
+                    else
+                    {
+                        addfee = point * 5;
+                    }
+
+                    feeModel.ServiceFee = origServiceFee + addfee;//非扣分单
+
+                    break;
             }
 
             if (point == 0)
@@ -554,6 +568,108 @@ namespace Lumos.BLL
                     break;
                 case "6001B":
                     s = "非现场已处理未交款数据";
+                    break;
+            }
+            return s;
+        }
+
+        public string GetCarType(string carType)
+        {
+            string s = "";
+            switch (carType)
+            {
+                case "01A1":
+                    s = "A1 大型客车";
+                    break;
+                case "01A2":
+                    s = "A2 牵引货车";
+                    break;
+                case "01B1":
+                    s = "B1 中型客车";
+                    break;
+                case "01B2":
+                    s = "B2 大型货车";
+                    break;
+                case "02":
+                    s = "小型汽车";
+                    break;
+                case "03":
+                    s = "使馆汽车";
+                    break;
+                case "04":
+                    s = "领馆汽车";
+                    break;
+                case "05":
+                    s = "境外汽车";
+                    break;
+                case "06":
+                    s = "外籍汽车";
+                    break;
+                case "07":
+                    s = "两三轮摩托车";
+                    break;
+                case "08":
+                    s = "轻便摩托车";
+                    break;
+                case "09":
+                    s = "使馆摩托车";
+                    break;
+                case "10":
+                    s = "领馆摩托车";
+                    break;
+                case "11":
+                    s = "境外摩托车";
+                    break;
+                case "12":
+                    s = "外籍摩托车";
+                    break;
+                case "13":
+                    s = "农用运输车";
+                    break;
+                case "14":
+                    s = "拖拉机";
+                    break;
+                case "15":
+                    s = "挂车";
+                    break;
+                case "16":
+                    s = "教练汽车";
+                    break;
+                case "17":
+                    s = "教练摩托车";
+                    break;
+                case "18":
+                    s = "试验汽车";
+                    break;
+                case "19":
+                    s = "试验摩托车";
+                    break;
+                case "20":
+                    s = "临时入境汽车";
+                    break;
+                case "21":
+                    s = "临时入境摩托车";
+                    break;
+                case "22":
+                    s = "临时行驶车";
+                    break;
+                case "23":
+                    s = "警用汽车";
+                    break;
+                case "24":
+                    s = "警用摩托车";
+                    break;
+                case "26":
+                    s = "香港入境车";
+                    break;
+                case "27":
+                    s = "澳门入境车";
+                    break;
+                case "51":
+                    s = "大型新能源汽车";
+                    break;
+                case "52":
+                    s = "小型新能源汽车";
                     break;
             }
             return s;

@@ -25,6 +25,11 @@ namespace Lumos.BLL
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "找不到订单");
             }
 
+            if (order.Type == Enumeration.OrderType.LllegalDealt)
+            {
+                return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "暂时不支付线上支付，谢谢");
+            }
+
             if (order.Status == Enumeration.OrderStatus.Completed)
             {
                 return new CustomJsonResult(ResultType.Failure, ResultCode.Failure, "已经支付成功");

@@ -10,7 +10,7 @@ namespace Lumos.BLL
 
     public class CalculateServiceFee
     {
-        private decimal _deposit = 800;
+        private decimal _deposit = 300;
         private decimal _mobileTrafficFee = 200;
 
         private string _version = "2018.04.01";

@@ -44,6 +44,15 @@ namespace WebAppApi.Controllers
             orderToLllegalDealt.PosMachineId = model.PosMachineId;
             orderToLllegalDealt.CarNo = model.CarNo.ToUpper();
 
+
+            var lllegalQueryLog = CurrentDb.LllegalQueryLog.Where(m => m.CarNo == orderToLllegalDealt.CarNo).OrderByDescending(m => m.CreateTime).FirstOrDefault();
+
+
+            orderToLllegalDealt.CarType = lllegalQueryLog.CarType;
+            orderToLllegalDealt.RackNo = lllegalQueryLog.RackNo;
+            orderToLllegalDealt.EnginNo = lllegalQueryLog.EnginNo;
+            orderToLllegalDealt.IsCompany = lllegalQueryLog.IsCompany;
+
             if (model.LllegalRecord == null || model.LllegalRecord.Count == 0)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "请选择要处理的违章");

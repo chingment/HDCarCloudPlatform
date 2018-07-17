@@ -26,7 +26,7 @@ namespace Lumos.BLL
                 var merchant = CurrentDb.Merchant.Where(m => m.Id == clientUser.MerchantId).FirstOrDefault();
 
 
-                order.OrderFrom = Enumeration.CarInsOrderFrom.Hyl;
+                order.OrderFrom = Enumeration.OrderFrom.Hyl;
                 order.MerchantId = merchant.Id;
                 order.PosMachineId = orderToCarInsure.PosMachineId;
                 order.UserId = merchant.UserId;

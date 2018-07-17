@@ -12,8 +12,6 @@ namespace Lumos.Entity
     [Table("OrderToCarInsure")]
     public class OrderToCarInsure : Order
     {
-        public Enumeration.CarInsOrderFrom OrderFrom { get; set; }
-
         public int CarInfoOrderId { get; set; }
         public string CarBelong { get; set; }
         [MaxLength(128)]

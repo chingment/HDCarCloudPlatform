@@ -900,7 +900,7 @@ namespace Lumos.Entity
             StaffOfferFailure = 11
         }
 
-        public enum CarInsOrderFrom
+        public enum OrderFrom
         {
             [Remark("未知")]
             Unknow = 0,

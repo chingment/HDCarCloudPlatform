@@ -81,17 +81,18 @@ namespace WebBack.Controllers
             var query = (from b in CurrentDb.BizProcessesAudit
                          join m in CurrentDb.Merchant on b.MerchantId equals m.Id
                          join e in CurrentDb.Order on b.AduitReferenceId equals e.Id
-                         select new { b.Id, e.Sn, m.ClientCode, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, b.Status, b.AduitType, b.AduitReferenceId, b.AduitTypeEnumName, b.CreateTime, b.Auditor });
+
+                         select new { b.Id, e.Sn, m.ClientCode, m.YYZZ_Name, m.ContactName, m.ContactPhoneNumber, b.Status, b.AduitType, b.AduitReferenceId, e.OrderFrom, b.AduitTypeEnumName, b.CreateTime, b.Auditor });
 
             if (condition.AuditStatus == 1)
             {
-                query = query.Where(m => (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2)
+                query = query.Where(m => (m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 2 && m.OrderFrom == Enumeration.OrderFrom.Hyl)
 
                 );
             }
             else if (condition.AuditStatus == 2)
             {
-                query = query.Where(m => ((m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 3)
+                query = query.Where(m => ((m.AduitType == Enumeration.BizProcessesAuditType.OrderToCarInsure && m.Status == 3 && m.OrderFrom == Enumeration.OrderFrom.Hyl)
                 )
               && m.Auditor == this.CurrentUserId
 

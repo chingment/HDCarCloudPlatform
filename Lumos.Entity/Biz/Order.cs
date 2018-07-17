@@ -86,6 +86,7 @@ namespace Lumos.Entity
 
         public bool IsInvisiable { get; set; }
 
+        public Enumeration.OrderFrom OrderFrom { get; set; }
         //public bool IsPayQuery { get; set; }
     }
 }

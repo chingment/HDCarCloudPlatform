@@ -15,7 +15,7 @@ namespace Lumos.BLL.Biz.Task
         {
             CustomJsonResult result = new CustomJsonResult();
 
-            var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => (m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay) && m.OrderFrom == Enumeration.CarInsOrderFrom.Ydt).ToList();
+            var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => (m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialOffer || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure || m.FollowStatus == (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay) && m.OrderFrom == Enumeration.OrderFrom.Ydt).ToList();
 
 
             LogUtil.Info("待处理的总数量：" + orderToCarInsures.Count);

@@ -40,7 +40,7 @@ namespace YdtSdk
     public class YdtApi : IYdtApi
     {
 
-        public string serverUrl = "http://119.23.141.14:6100";
+        public string serverUrl = "https://open.hybao.cc:443";
 
 
         public YdtApi()

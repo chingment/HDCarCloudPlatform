@@ -25,6 +25,7 @@ namespace Lumos.BLL.Service.Model
         public string DetailsDesc { get; set; }
 
         public List<Lumos.Entity.ImgSet> DisplayImgs { get; set; }
+        public List<Lumos.Entity.ImgSet> DispalyImgs { get; set; }
 
         public string ServiceDesc { get; set; }
 

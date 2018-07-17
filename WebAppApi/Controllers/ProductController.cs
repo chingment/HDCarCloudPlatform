@@ -74,6 +74,7 @@ namespace WebAppApi.Controllers
                     productModel.IsHot = m.IsHot;
                     productModel.UnitPrice = productSku.Price;
                     productModel.ShowPrice = productSku.ShowPrice;
+                    productModel.DispalyImgs = BizFactory.ProductSku.GetDispalyImgs(m.DispalyImgs);
                     productModel.DisplayImgs = BizFactory.ProductSku.GetDispalyImgs(m.DispalyImgs);
                     productModel.MainImg = BizFactory.ProductSku.GetMainImg(m.DispalyImgs);
                     productModel.DetailsDesc = m.Details;

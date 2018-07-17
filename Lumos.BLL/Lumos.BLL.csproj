@@ -69,7 +69,6 @@
     <Compile Include="Biz\CarInsureOfferProvider.cs" />
     <Compile Include="Biz\CouponProvider.cs" />
     <Compile Include="Biz\InsCarProvider.cs" />
-    <Compile Include="Biz\Model\ProductDetailInfo.cs" />
     <Compile Include="Biz\Model\ProductKindSimple.cs" />
     <Compile Include="Biz\OrderToLllegalDealtProvider.cs" />
     <Compile Include="Biz\OrderToApplyLossAssessProvider..cs" />

@@ -87,6 +87,7 @@ namespace Lumos.BLL.Service
                 if (!string.IsNullOrEmpty(product.DispalyImgs))
                 {
                     productSkuModel.DisplayImgs = BizFactory.ProductSku.GetDispalyImgs(product.DispalyImgs);
+                    productSkuModel.DispalyImgs = BizFactory.ProductSku.GetDispalyImgs(product.DispalyImgs);
                     productSkuModel.MainImg = BizFactory.ProductSku.GetMainImg(product.DispalyImgs);
                 }
 

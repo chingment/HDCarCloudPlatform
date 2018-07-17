@@ -392,30 +392,5 @@ namespace Lumos.BLL
             return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", productSkus);
         }
 
-        public CustomJsonResult GetProductDetailById(int id)
-        {
-
-            var product = CurrentDb.Product.Where(p => p.Id == id).FirstOrDefault();
-            if (product == null)
-            {
-                return new CustomJsonResult(ResultType.Failure, "不存在的商品");
-            }
-
-            var productSku = CurrentDb.ProductSku.Where(p => p.ProductId == product.Id).FirstOrDefault();
-            ProductDetailInfo productDetailInfo = new ProductDetailInfo();
-            productDetailInfo.Id = product.Id;
-            productDetailInfo.Name = product.Name;
-            productDetailInfo.DisplayImgs = product.DispalyImgs;
-            productDetailInfo.MainImg = product.MainImg;
-            productDetailInfo.ProductKindIds = product.ProductKindIds;
-            productDetailInfo.SpecsJson = product.SpecsJson;
-            productDetailInfo.SalePrice = productSku.ShowPrice;
-            productDetailInfo.MarketPrice = productSku.Price;
-
-            return new CustomJsonResult(ResultType.Success, ResultCode.Success, "操作成功", productDetailInfo);
-        }
-
-
-
     }
 }

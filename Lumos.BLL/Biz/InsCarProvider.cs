@@ -731,7 +731,15 @@ namespace Lumos.BLL
             catch (Exception ex)
             {
                 LogUtil.Error("本系统基础数据保存失败2", ex);
-                LogUtil.Error(ex.StackTrace);
+
+                string err = string.Empty;
+                err += "错误日期:" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\r\n"; ;
+                err += "异常信息：" + ex.Message + "\r\n";
+                err += "Source:" + ex.Source + "\r\n";
+                err += "StackTrace:" + ex.StackTrace + "\r\n\r\n";
+                err += "-----------------------------------------------------------\r\n\r\n";
+
+                LogUtil.Error(err);
                 return new CustomJsonResult<UpdateOfferByAfterResult>(ResultType.Failure, ResultCode.Failure, "本系统基础数据保存失败2", null);
             }
         }

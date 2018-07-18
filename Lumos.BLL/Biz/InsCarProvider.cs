@@ -246,7 +246,7 @@ namespace Lumos.BLL
                         orderToCarInsure.PartnerOrderId = pms.PartnerOrderId;
                         orderToCarInsure.CarInfoOrderId = pms.CarInfoOrderId;
                         orderToCarInsure.SubmitTime = this.DateTime;
-                        orderToCarInsure.InsCompanyId = carInsuranceCompany.Id;
+                        orderToCarInsure.InsCompanyId = carInsuranceCompany.InsuranceCompanyId;
                         orderToCarInsure.InsCompanyName = carInsuranceCompany.InsuranceCompanyName;
                         orderToCarInsure.InsCompanyImgUrl = carInsuranceCompany.InsuranceCompanyImgUrl;
                         orderToCarInsure.CreateTime = this.DateTime;

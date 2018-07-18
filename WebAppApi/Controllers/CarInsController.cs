@@ -923,6 +923,9 @@ namespace WebAppApi.Controllers
 
             var orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.Id == orderToCarInsureOfferCompany.OrderId).FirstOrDefault();
 
+
+
+
             if (orderToCarInsureOfferCompany == null)
             {
                 return ResponseResult(ResultType.Failure, ResultCode.Failure, "未找到报价结果");

@@ -428,7 +428,7 @@ namespace Lumos.BLL
                                 kind.KindName = partnerKind.Name;
                                 kind.Quantity = item.quantity;
                                 kind.GlassType = item.glassType;
-                                kind.Amount = item.amount;
+                                kind.Amount = item.amount ?? 0;
                                 kind.Creator = operater;
                                 kind.CreateTime = this.DateTime;
                                 kind.IsWaiverDeductible = item.compensation == 0 ? false : true;//是否有不计免费险
@@ -452,7 +452,7 @@ namespace Lumos.BLL
                                         wd_kind.KindName = parner_wd_kind.Name;
                                         wd_kind.Quantity = parner_wd_kindOffer.quantity;
                                         wd_kind.GlassType = parner_wd_kindOffer.glassType;
-                                        wd_kind.Amount = parner_wd_kindOffer.amount;
+                                        wd_kind.Amount = parner_wd_kindOffer.amount ?? 0;
                                         wd_kind.Creator = operater;
                                         wd_kind.CreateTime = this.DateTime;
                                         wd_kind.IsWaiverDeductible = false;
@@ -492,8 +492,20 @@ namespace Lumos.BLL
                 {
                     var resultData = new UpdateOfferByAfterResult();
 
-                    var l_orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.CarInfoOrderId == pms.CarInfoOrderId && m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId).FirstOrDefault();
 
+                    var partnerCompany = YdtDataMap.YdtInsComanyList().Where(m => m.YdtCode == pms.PartnerCompanyId).FirstOrDefault();
+
+                    if (partnerCompany == null)
+                    {
+                        LogUtil.Info("partnerCompany 为空");
+                    }
+
+                    var l_orderToCarInsure = CurrentDb.OrderToCarInsure.Where(m => m.CarInfoOrderId == pms.CarInfoOrderId && m.PartnerOrderId == pms.PartnerOrderId && m.UserId == pms.UserId && m.InsCompanyId == partnerCompany.UpLinkCode).FirstOrDefault();
+
+                    if (l_orderToCarInsure == null)
+                    {
+                        LogUtil.Info("l_orderToCarInsure 为空");
+                    }
 
                     l_orderToCarInsure.PartnerInquiryId = pms.PartnerInquiryId;
 
@@ -502,11 +514,21 @@ namespace Lumos.BLL
                         l_orderToCarInsure.IsInvisiable = false;
                     }
 
-                    var partnerCompany = YdtDataMap.YdtInsComanyList().Where(m => m.YdtCode == pms.PartnerCompanyId).FirstOrDefault();
+
 
                     var carInsuranceCompany = CurrentDb.CarInsuranceCompany.Where(m => m.InsuranceCompanyId == partnerCompany.UpLinkCode).FirstOrDefault();
 
+                    if (carInsuranceCompany == null)
+                    {
+                        LogUtil.Info("carInsuranceCompany 为空");
+                    }
+
                     var orderToCarInsureOfferCompany = CurrentDb.OrderToCarInsureOfferCompany.Where(m => m.OrderId == l_orderToCarInsure.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).FirstOrDefault();
+
+                    if (orderToCarInsureOfferCompany == null)
+                    {
+                        LogUtil.Info("orderToCarInsureOfferCompany 为空，partnerCompany.UpLinkCode:" + partnerCompany.UpLinkCode + ",OrderId:" + l_orderToCarInsure.Id + ",InsuranceCompanyId:" + carInsuranceCompany.InsuranceCompanyId);
+                    }
 
                     orderToCarInsureOfferCompany.OfferResult = pms.OfferResult;
                     orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquiryId;
@@ -665,9 +687,9 @@ namespace Lumos.BLL
                                         break;
                                 }
                                 orderToCarInsureOfferCompanyKind.Quantity = item.quantity;
-                                orderToCarInsureOfferCompanyKind.Amount = item.amount;
-                                orderToCarInsureOfferCompanyKind.StandardPremium = item.standardPremium;
-                                orderToCarInsureOfferCompanyKind.BasicPremium = item.basicPremium;
+                                orderToCarInsureOfferCompanyKind.Amount = item.amount ?? 0;
+                                orderToCarInsureOfferCompanyKind.StandardPremium = item.standardPremium ?? 0;
+                                orderToCarInsureOfferCompanyKind.BasicPremium = item.basicPremium ?? 0;
                                 orderToCarInsureOfferCompanyKind.Premium = item.premium;
                                 orderToCarInsureOfferCompanyKind.UnitAmount = item.unitAmount;
                                 orderToCarInsureOfferCompanyKind.Discount = item.discount ?? 0;

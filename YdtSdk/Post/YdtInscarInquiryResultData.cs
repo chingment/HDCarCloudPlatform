@@ -11,14 +11,14 @@ namespace YdtSdk
     {
         public string code { get; set; }
         public string name { get; set; }
-        public int compensation { get; set; }
-        public decimal amount { get; set; }
+        public int? compensation { get; set; }
+        public decimal? amount { get; set; }
         public decimal? unitAmount { get; set; }
         public int? quantity { get; set; }
         public int? glassType { get; set; }
-        public decimal basicPremium { get; set; }
+        public decimal? basicPremium { get; set; }
         public decimal? discount { get; set; }
-        public decimal standardPremium { get; set; }
+        public decimal? standardPremium { get; set; }
 
         public decimal? premium { get; set; }
     }

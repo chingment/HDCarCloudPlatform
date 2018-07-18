@@ -1986,11 +1986,11 @@ namespace WebAppApi.Controllers
         public void CarIns(int userId, int merchantId, int posMachineId)
         {
 
-            //model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
+            model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
             //model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
             // model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 
-             model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
+            // model.Add("获取车辆信息", CarIns_GetCarInfo(userId, merchantId, posMachineId));
             //model.Add("车辆查询接口", CarIns_GetCarModelInfo(userId, merchantId, posMachineId, "LVXCCDBA3CL000043", "2012-06-2"));
 
             // model.Add("添加基础信息", CarIns_EditBaseInfo(userId, merchantId, posMachineId));
@@ -2014,7 +2014,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, OfferId));
 
-            model.Add("支付信息申请", CarIns_Pay(1234, 258, 153, 1041));
+          //  model.Add("支付信息申请", CarIns_Pay(1234, 258, 153, 1041));
 
 
 

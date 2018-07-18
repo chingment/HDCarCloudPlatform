@@ -1,7 +1,9 @@
-﻿using Lumos;
+﻿using log4net;
+using Lumos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -12,6 +14,8 @@ namespace WebUploadImageServer
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
+        private static ILog log2 = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         protected void Application_Start()
         {
             log4net.Config.XmlConfigurator.Configure();

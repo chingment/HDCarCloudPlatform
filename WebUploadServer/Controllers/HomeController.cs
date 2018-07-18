@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lumos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,7 @@ namespace WebUploadImageServer.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
-
+            LogUtil.Info("dsaddadd");
             return View();
         }
     }

@@ -134,79 +134,89 @@ namespace YdtSdk
         public string DoPostFile(string url, IDictionary<string, string> urlParams, string fileName, Stream postData)
         {
 
-            if (urlParams != null && urlParams.Count > 0)
+            try
             {
-                url = BuildRequestUrl(url, urlParams);
+                if (urlParams != null && urlParams.Count > 0)
+                {
+                    url = BuildRequestUrl(url, urlParams);
+                }
+
+
+                string boundary = DateTime.Now.Ticks.ToString("x");
+                HttpWebRequest uploadRequest = (HttpWebRequest)WebRequest.Create(url);//url为上传的地址
+                uploadRequest.ContentType = "multipart/form-data; boundary=" + boundary;
+                uploadRequest.Method = "POST";
+                uploadRequest.Accept = "*/*";
+                uploadRequest.KeepAlive = true;
+                uploadRequest.Headers.Add("Accept-Language", "zh-cn");
+                uploadRequest.Headers.Add("Accept-Encoding", "gzip, deflate");
+                uploadRequest.Credentials = System.Net.CredentialCache.DefaultCredentials;
+
+
+                WebResponse reponse;
+                //创建一个内存流
+                Stream memStream = new MemoryStream();
+
+                //确定上传的文件路径
+
+                boundary = "--" + boundary;
+
+                //添加上传文件参数格式边界
+                string paramFormat = boundary + "\r\nContent-Disposition: form-data; name=\"{0}\";\r\n\r\n{1}\r\n";
+
+
+                //添加上传文件数据格式边界
+                string dataFormat = boundary + "\r\nContent-Disposition: form-data; name=\"{0}\";filename=\"{1}\"\r\nContent-Type:application/octet-stream\r\n\r\n";
+                string header = string.Format(dataFormat, "Filedata", fileName);
+                byte[] headerbytes = System.Text.Encoding.UTF8.GetBytes(header);
+                memStream.Write(headerbytes, 0, headerbytes.Length);
+
+                byte[] buffer = new byte[1024];
+                int bytesRead = 0;
+
+                //将文件内容写进内存流
+                while ((bytesRead = postData.Read(buffer, 0, buffer.Length)) != 0)
+                {
+                    memStream.Write(buffer, 0, bytesRead);
+                }
+
+                //添加文件结束边界
+                byte[] boundarybytes = System.Text.Encoding.UTF8.GetBytes("\r\n\n" + boundary + "\r\nContent-Disposition: form-data; name=\"Upload\"\r\n\nSubmit Query\r\n" + boundary + "--");
+                memStream.Write(boundarybytes, 0, boundarybytes.Length);
+
+
+                //设置请求长度
+                uploadRequest.ContentLength = memStream.Length;
+
+                //获取请求写入流
+                Stream requestStream = uploadRequest.GetRequestStream();
+
+                //将内存流数据读取位置归零
+                memStream.Position = 0;
+                byte[] tempBuffer = new byte[memStream.Length];
+                memStream.Read(tempBuffer, 0, tempBuffer.Length);
+                memStream.Close();
+
+                //将内存流中的buffer写入到请求写入流
+                requestStream.Write(tempBuffer, 0, tempBuffer.Length);
+                requestStream.Close();
+
+
+                reponse = uploadRequest.GetResponse();
+                StreamReader reader = new StreamReader(reponse.GetResponseStream(), Encoding.UTF8);
+                string content = reader.ReadToEnd();
+
+
+
+
+                return content;
             }
-
-
-            string boundary = DateTime.Now.Ticks.ToString("x");
-            HttpWebRequest uploadRequest = (HttpWebRequest)WebRequest.Create(url);//url为上传的地址
-            uploadRequest.ContentType = "multipart/form-data; boundary=" + boundary;
-            uploadRequest.Method = "POST";
-            uploadRequest.Accept = "*/*";
-            uploadRequest.KeepAlive = true;
-            uploadRequest.Headers.Add("Accept-Language", "zh-cn");
-            uploadRequest.Headers.Add("Accept-Encoding", "gzip, deflate");
-            uploadRequest.Credentials = System.Net.CredentialCache.DefaultCredentials;
-
-
-            WebResponse reponse;
-            //创建一个内存流
-            Stream memStream = new MemoryStream();
-
-            //确定上传的文件路径
-
-            boundary = "--" + boundary;
-
-            //添加上传文件参数格式边界
-            string paramFormat = boundary + "\r\nContent-Disposition: form-data; name=\"{0}\";\r\n\r\n{1}\r\n";
-
-
-            //添加上传文件数据格式边界
-            string dataFormat = boundary + "\r\nContent-Disposition: form-data; name=\"{0}\";filename=\"{1}\"\r\nContent-Type:application/octet-stream\r\n\r\n";
-            string header = string.Format(dataFormat, "Filedata", fileName);
-            byte[] headerbytes = System.Text.Encoding.UTF8.GetBytes(header);
-            memStream.Write(headerbytes, 0, headerbytes.Length);
-
-            byte[] buffer = new byte[1024];
-            int bytesRead = 0;
-
-            //将文件内容写进内存流
-            while ((bytesRead = postData.Read(buffer, 0, buffer.Length)) != 0)
+            catch(Exception ex)
             {
-                memStream.Write(buffer, 0, bytesRead);
+                LogUtil.Error("DoPostFile Ex", ex);
+
+                return null; 
             }
-
-            //添加文件结束边界
-            byte[] boundarybytes = System.Text.Encoding.UTF8.GetBytes("\r\n\n" + boundary + "\r\nContent-Disposition: form-data; name=\"Upload\"\r\n\nSubmit Query\r\n" + boundary + "--");
-            memStream.Write(boundarybytes, 0, boundarybytes.Length);
-
-
-            //设置请求长度
-            uploadRequest.ContentLength = memStream.Length;
-
-            //获取请求写入流
-            Stream requestStream = uploadRequest.GetRequestStream();
-
-            //将内存流数据读取位置归零
-            memStream.Position = 0;
-            byte[] tempBuffer = new byte[memStream.Length];
-            memStream.Read(tempBuffer, 0, tempBuffer.Length);
-            memStream.Close();
-
-            //将内存流中的buffer写入到请求写入流
-            requestStream.Write(tempBuffer, 0, tempBuffer.Length);
-            requestStream.Close();
-
-
-            reponse = uploadRequest.GetResponse();
-            StreamReader reader = new StreamReader(reponse.GetResponseStream(), Encoding.UTF8);
-            string content = reader.ReadToEnd();
-
-
-
-            return content;
         }
 
 

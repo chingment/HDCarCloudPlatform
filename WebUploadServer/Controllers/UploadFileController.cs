@@ -20,26 +20,30 @@ namespace WebUploadImageServer.Controllers
         {
             LogUtil.SetTrackId();
             LogUtil.Info("调用UploadFile");
-            HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];//获取传统context
-            HttpRequestBase request = context.Request;//定义传统request对象 
+            LogUtil.Info("调用context");
+            LogUtil.Info("调用request");
             CustomJsonResult r = new CustomJsonResult();
             try
             {
 
                 if (entity.FileData == null)
                 {
+                    LogUtil.Info("文件对象为空");
                     r = new CustomJsonResult(ResultType.Failure, "文件对象为空");
                 }
                 else if (entity.FileData.Length == 0)
                 {
+                    LogUtil.Info("文件内容为空");
                     r = new CustomJsonResult(ResultType.Failure, "文件内容为空");
                 }
                 else if (entity.FileData.Length > (50 * 1024 * 1024))
                 {
+                    LogUtil.Info("文件大小不能超过50M");
                     r = new CustomJsonResult(ResultType.Failure, "文件大小不能超过50M");
                 }
                 else 
                 {
+                    LogUtil.Info("开始上传文件");
 
                     string imageSign = "";
 

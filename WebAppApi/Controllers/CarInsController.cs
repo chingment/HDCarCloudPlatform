@@ -74,7 +74,7 @@ namespace WebAppApi.Controllers
             switch (pms.Type)
             {
                 case "1":
-                    //imgurl = "http://file.gzhaoyilian.com/Upload/d1.jpg";
+                   // imgurl = "http://120.79.233.231:8087/Upload/CarInsure/56f84750-294f-4a40-a702-f30d3ecf2aa3_O.jpg";
                     YdtUploadResultData model1 = YdtUtils.UploadImg(imgurl);
                     LogUtil.Info("解释图片结束");
                     if (model1 != null)

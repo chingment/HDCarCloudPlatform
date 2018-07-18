@@ -21,7 +21,7 @@ namespace Lumos.Common
 
             {
 
-                MaxResponseContentBufferSize = 1024 * 1024 * 2,
+                MaxResponseContentBufferSize = 1024 * 1024 * 1024,
 
                 BaseAddress = new Uri(webapiBaseUrl)
 

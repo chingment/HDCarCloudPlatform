@@ -85,6 +85,7 @@ namespace WebUploadImageServer.Controllers
             {
                 if (entity.FileData != null && entity.FileData.Length > 0)
                 {
+                    LogUtil.Info("HasData");
                     ImageUpload image = new ImageUpload();
                     int[] bigImgSize = new int[2] { 500, 500 };
                     int[] smallImgSize = new int[2] { 100, 100 };
@@ -104,7 +105,7 @@ namespace WebUploadImageServer.Controllers
 
                     string path = System.Configuration.ConfigurationManager.AppSettings["custom:FileServerUploadPath"];
 
-                    string serverOriginalSavePath = path + "/"+originalSavePath;
+                    string serverOriginalSavePath = path + "/" + originalSavePath;
                     string serverBigSavePath = path + "/" + bigSavePath;
                     string serverSmallSavePath = path + "/" + smallSavePath;
 
@@ -114,19 +115,19 @@ namespace WebUploadImageServer.Controllers
                     string domain = System.Configuration.ConfigurationManager.AppSettings["custom:FilesServerUrl"];
 
 
-
+                    LogUtil.Info("HasData1");
 
                     DirectoryInfo Drr = new DirectoryInfo(path + "/" + savefolder);
                     if (!Drr.Exists)
                     {
                         Drr.Create();
                     }
-
+                    LogUtil.Info("HasData2");
                     FileStream fs = new FileStream(serverOriginalSavePath, FileMode.Create, FileAccess.Write);
                     fs.Write(entity.FileData, 0, entity.FileData.Length);
                     fs.Flush();
                     fs.Close();
-
+                    LogUtil.Info("HasData3");
                     System.Drawing.Image originalImage = System.Drawing.Image.FromFile(serverOriginalSavePath);
                     image.OriginalPath = domain + originalSavePath;
                     image.OriginalWidth = originalImage.Width;
@@ -146,11 +147,15 @@ namespace WebUploadImageServer.Controllers
                             image.SmallHeight = smallImgSize[1];
                         }
                     }
-
+                    LogUtil.Info("HasData4");
                     originalImage.Dispose();
                     r.Data = image;
                     r.Message = "上传成功";
                     r.Result = ResultType.Success;
+                }
+                else
+                {
+                    LogUtil.Info("no Data");
                 }
             }
             catch (Exception ex)
@@ -160,8 +165,9 @@ namespace WebUploadImageServer.Controllers
                 LogUtil.Error("WebApi上传图片异常", ex);
 
             }
-
+            LogUtil.Info("HasData6");
             string json = r.ToString();
+            LogUtil.Info("HasData7:" + json);
             HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(json, Encoding.GetEncoding("UTF-8"), "application/json") };
             return result;
         }

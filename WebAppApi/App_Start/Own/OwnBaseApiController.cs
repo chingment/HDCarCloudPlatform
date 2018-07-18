@@ -93,13 +93,14 @@ namespace WebAppApi
                 entity.FileName = DateTime.Now.ToString("yyyyMMddHHmmss") + fileExt;//自定义文件名称，这里以当前时间为例
                 entity.FileData = bytes;
                 entity.UploadFolder = savepath;
+                entity.GenerateSize = true;
                 CustomJsonResult rm = HttpClientOperate.Post<CustomJsonResult>(savepath, strUrl, entity);//封装的POST提交方
 
                 if (rm.Result == ResultType.Success)
                 {
                     ImageUpload imageUpload = Newtonsoft.Json.JsonConvert.DeserializeObject<ImageUpload>(rm.Data.ToString());
 
-                    imageUrl = imageUpload.OriginalPath;
+                    imageUrl = imageUpload.BigPath;
                 }
                 else
                 {
@@ -111,7 +112,7 @@ namespace WebAppApi
             }
             catch (Exception ex)
             {
-                LogUtil.Error("", ex);
+                LogUtil.Error("调用API上传图片发生异常2222", ex);
 
             }
             return imageUrl;

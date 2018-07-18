@@ -1283,11 +1283,14 @@ namespace WebAppApi.Controllers
             if (orderToCarInsure.IsAuto)
             {
 
+                ydtInscarPayPms.notifyUrl = string.Format("{0}/Api/CarIns/PayResultNotify", BizFactory.AppSettings.WebApiServerUrl);
+                ydtInscarPayPms.openNotifyUrl = string.Format("{0}/Api/CarIns/PayResultNotify", BizFactory.AppSettings.WebApiServerUrl);
+
                 var result_Pay = YdtUtils.PayByAuto(ydtInscarPayPms);
 
                 if (result_Pay.Result != ResultType.Success)
                 {
-                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "生成支付失败", result);
+                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "生成支付申请失败，请联系客服", result);
                 }
 
 

@@ -508,7 +508,7 @@ namespace Lumos.BLL
                     }
 
                     l_orderToCarInsure.PartnerInquiryId = pms.PartnerInquiryId;
-
+                    l_orderToCarInsure.IsAuto = pms.Auto == 0 ? false : true;
                     if (pms.Auto == 0)
                     {
                         l_orderToCarInsure.IsInvisiable = false;
@@ -530,11 +530,11 @@ namespace Lumos.BLL
                         LogUtil.Info("orderToCarInsureOfferCompany 为空，partnerCompany.UpLinkCode:" + partnerCompany.UpLinkCode + ",OrderId:" + l_orderToCarInsure.Id + ",InsuranceCompanyId:" + carInsuranceCompany.InsuranceCompanyId);
                     }
 
+                    orderToCarInsureOfferCompany.IsAuto = pms.Auto == 0 ? false : true;
                     orderToCarInsureOfferCompany.OfferResult = pms.OfferResult;
                     orderToCarInsureOfferCompany.PartnerInquiryId = pms.PartnerInquiryId;
                     orderToCarInsureOfferCompany.LastUpdateTime = this.DateTime;
                     orderToCarInsureOfferCompany.Mender = operater;
-
 
                     var orderToCarInsureOfferCompanyKinds = CurrentDb.OrderToCarInsureOfferCompanyKind.Where(m => m.OrderId == l_orderToCarInsure.Id && m.InsuranceCompanyId == carInsuranceCompany.InsuranceCompanyId).ToList();
 

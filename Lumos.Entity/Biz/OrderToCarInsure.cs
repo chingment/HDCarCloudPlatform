@@ -182,5 +182,7 @@ namespace Lumos.Entity
         public DateTime? EndOfferTime { get; set; }
 
         public Enumeration.CarUserCharacter CarUserCharacter { get; set; }
+
+        public bool IsAuto { get; set; }
     }
 }

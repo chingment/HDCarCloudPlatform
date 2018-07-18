@@ -1069,7 +1069,7 @@ namespace WebAppApi.Controllers
 
 
             //0 人工报价，1 自动报价
-            if (pms.Auto == 0)
+            if (!orderToCarInsure.IsAuto)
             {
                 #region 提交人工核保
                 YdtInscarInsureByArtificialPms ydtInscarInsureByArtificialPms = new YdtInscarInsureByArtificialPms();
@@ -1096,7 +1096,7 @@ namespace WebAppApi.Controllers
                 orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
                 orderToCarInsure.IsInvisiable = false;
                 orderToCarInsure.PartnerInsureId = result_Insure.Data.insureSeq;
-
+                orderToCarInsure.IsAuto = pms.Auto == 0 ? false : true;
                 CurrentDb.SaveChanges();
 
 
@@ -1123,6 +1123,7 @@ namespace WebAppApi.Controllers
                 orderToCarInsure.CiProposalNo = result_Insure.Data.ciProposalNo;
                 orderToCarInsure.Status = Enumeration.OrderStatus.WaitPay;
                 orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay;
+                orderToCarInsure.IsAuto = pms.Auto == 0 ? false : true;
                 CurrentDb.SaveChanges();
 
                 #endregion
@@ -1279,7 +1280,7 @@ namespace WebAppApi.Controllers
 
             ydtInscarPayPms.address.areaId = areaId;
 
-            if (pms.Auto == 1)
+            if (orderToCarInsure.IsAuto)
             {
 
                 var result_Pay = YdtUtils.PayByAuto(ydtInscarPayPms);
@@ -1623,7 +1624,7 @@ namespace WebAppApi.Controllers
             if (kinds.Count == 0)
                 return 0;
 
-       
+
             var lists = kinds.Where(m => m.Id == 1).ToList();
             var listc = kinds.Where(m => m.Id >= 3).ToList();
 

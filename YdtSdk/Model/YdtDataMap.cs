@@ -31,20 +31,27 @@ namespace YdtSdk
             List<YdtInscarCoveragesModel> list = new List<YdtInscarCoveragesModel>();
             list.Add(new YdtInscarCoveragesModel { UpLinkCode = 3, Code = "001", Name = "车损险", IsWaiverDeductibleKind = false, Priority = 1, WaiverDeductibleKindCode = "101" });
             list.Add(new YdtInscarCoveragesModel { UpLinkCode = 4, Code = "002", Name = "三者险", IsWaiverDeductibleKind = false, Priority = 2, WaiverDeductibleKindCode = "112" });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 5, Code = "003", Name = "司机险", IsWaiverDeductibleKind = false, Priority = 3, WaiverDeductibleKindCode = "111" });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 6, Code = "004", Name = "乘客险", IsWaiverDeductibleKind = false, Priority = 4 });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 7, Code = "005", Name = "盗抢险", IsWaiverDeductibleKind = false, Priority = 5 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 5, Code = "003", Name = "司机险", IsWaiverDeductibleKind = false, Priority = 3, WaiverDeductibleKindCode = "103" });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 6, Code = "004", Name = "乘客险", IsWaiverDeductibleKind = false, Priority = 4, WaiverDeductibleKindCode = "104" });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 7, Code = "005", Name = "盗抢险", IsWaiverDeductibleKind = false, Priority = 5, WaiverDeductibleKindCode = "105" });
             list.Add(new YdtInscarCoveragesModel { UpLinkCode = 8, Code = "006", Name = "玻璃险", IsWaiverDeductibleKind = false, Priority = 6 });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 9, Code = "007", Name = "划痕险", IsWaiverDeductibleKind = false, Priority = 7 });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 12, Code = "008", Name = "自燃险", IsWaiverDeductibleKind = false, Priority = 8 });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 11, Code = "009", Name = "涉水险", IsWaiverDeductibleKind = false, Priority = 9 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 9, Code = "007", Name = "划痕险", IsWaiverDeductibleKind = false, Priority = 7, WaiverDeductibleKindCode = "106" });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 12, Code = "008", Name = "自燃险", IsWaiverDeductibleKind = false, Priority = 8, WaiverDeductibleKindCode = "107" });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 11, Code = "009", Name = "涉水险", IsWaiverDeductibleKind = false, Priority = 9, WaiverDeductibleKindCode = "108" });
             list.Add(new YdtInscarCoveragesModel { UpLinkCode = 17, Code = "010", Name = "指定维修厂", IsWaiverDeductibleKind = false, Priority = 10 });
             list.Add(new YdtInscarCoveragesModel { UpLinkCode = 10, Code = "011", Name = "无法找到第三方险", IsWaiverDeductibleKind = false, Priority = 11 });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 20, Code = "101", Name = "车损险不计免赔", IsWaiverDeductibleKind = true, Priority = 12 });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 21, Code = "102", Name = "三者险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 22, Code = "112", Name = "车上人员不计免赔", IsWaiverDeductibleKind = true, Priority = 14 });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 23, Code = "110", Name = "附加险不计免赔", IsWaiverDeductibleKind = true, Priority = 15 });
-            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 23, Code = "111", Name = "总不计免赔", IsWaiverDeductibleKind = true, Priority = 16 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 31, Code = "101", Name = "车损险不计免赔", IsWaiverDeductibleKind = true, Priority = 12 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 32, Code = "102", Name = "三者险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 33, Code = "103", Name = "司机险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 34, Code = "104", Name = "乘客险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 35, Code = "105", Name = "盗抢险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 36, Code = "106", Name = "划痕险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 37, Code = "107", Name = "自燃险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 38, Code = "108", Name = "涉水险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 39, Code = "109", Name = "主险不计免赔", IsWaiverDeductibleKind = true, Priority = 13 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 40, Code = "110", Name = "附加险不计免赔", IsWaiverDeductibleKind = true, Priority = 15 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 41, Code = "111", Name = "总不计免赔", IsWaiverDeductibleKind = true, Priority = 16 });
+            list.Add(new YdtInscarCoveragesModel { UpLinkCode = 42, Code = "112", Name = "车上人员不计免赔", IsWaiverDeductibleKind = true, Priority = 14 });
             return list;
         }
 

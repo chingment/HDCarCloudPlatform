@@ -1615,22 +1615,30 @@ namespace WebAppApi.Controllers
         private static int GetRisk(List<CarInsInsureKindModel> kinds)
         {
             if (kinds == null)
-                return 2;
+                return 0;
 
             if (kinds.Count == 0)
-                return 2;
+                return 0;
 
-
-            var lists = kinds.Where(m => m.Id == 1 || m.Id == 2).ToList();
+       
+            var lists = kinds.Where(m => m.Id == 1).ToList();
             var listc = kinds.Where(m => m.Id >= 3).ToList();
 
-            if (lists.Count == 2 && listc.Count == 0)
+            if (lists.Count == 1 && listc.Count == 0)
+            {
+                LogUtil.Info("交强险");
                 return 2;
+            }
 
 
             if (lists.Count == 0 && listc.Count > 0)
+            {
+                LogUtil.Info("商业险");
                 return 1;
 
+            }
+
+            LogUtil.Info("商业险+交强险");
             return 3;
 
         }

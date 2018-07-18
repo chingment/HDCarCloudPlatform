@@ -280,6 +280,11 @@ namespace WebAppApi.Controllers
             carInfoResult.Car = carInfo;
             carInfoResult.Car.Belong = carInfoResult.Car.Belong ?? "1";
             carInfoResult.Car.ChgownerType = carInfoResult.Car.ChgownerType ?? "0";
+
+            carInfoResult.Customers[0].Name = "测试";
+            carInfoResult.Customers[1].Name = "测试";
+            carInfoResult.Customers[2].Name = "测试";
+
             return ResponseResult(ResultType.Success, ResultCode.Success, "获取成功", carInfoResult);
         }
 
@@ -813,7 +818,7 @@ namespace WebAppApi.Controllers
 
                 if (offerResult.Result != ResultType.Success)
                 {
-                    return ResponseResult(ResultType.Failure, ResultCode.Failure, "自动报价失败");
+                    return ResponseResult(ResultType.Failure, ResultCode.Failure, offerResult.Message);
                 }
 
                 updateOrderOfferPms.OfferResult = Enumeration.OfferResult.AutoOfferSuccess;

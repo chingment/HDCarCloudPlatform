@@ -12,16 +12,16 @@ namespace YdtSdk
         public static List<YdtInscarComanyModel> YdtInsComanyList()
         {
             List<YdtInscarComanyModel> list = new List<YdtInscarComanyModel>();
-            list.Add(new YdtInscarComanyModel { UpLinkCode = 1, YdtCode = "002000", Name = "平安保险", PrintName = "平安保险有限公司", ChannelId = 19 });
-            list.Add(new YdtInscarComanyModel { UpLinkCode = 2, YdtCode = "008000", Name = "太平洋保险", PrintName = "太平洋保险有限公司" });
-            list.Add(new YdtInscarComanyModel { UpLinkCode = 3, YdtCode = "003000", Name = "阳光保险", PrintName = "阳光保险有限公司", ChannelId = 12 });
-            list.Add(new YdtInscarComanyModel { UpLinkCode = 4, YdtCode = "", Name = "亚太保险", PrintName = "亚太保险有限公司" });
-            list.Add(new YdtInscarComanyModel { UpLinkCode = 5, YdtCode = "005000", Name = "人民保险", PrintName = "人民保险有限公司" });
-            list.Add(new YdtInscarComanyModel { UpLinkCode = 6, YdtCode = "", Name = "中华保险", PrintName = "中华保险有限公司", ChannelId = 16 });
-            //list.Add(new YdtInsComanyModel { UpLinkCode = 7, YdtCode = "005000", Name = "人民保险(佛山)", PrintName = "人民保险有限公司" });
-            list.Add(new YdtInscarComanyModel { UpLinkCode = 8, YdtCode = "007000", Name = "大地保险", PrintName = "大地保险有限公司", ChannelId = 6 });
-            list.Add(new YdtInscarComanyModel { UpLinkCode = 9, YdtCode = "006000", Name = "太平保险", PrintName = "太平保险有限公司", ChannelId = 1 });
-
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 1, YdtCode = "002000", Name = "平安保险", PrintName = "平安保险", ChannelId = 19 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 2, YdtCode = "008000", Name = "太平洋保险", PrintName = "太平洋保险", ChannelId = 15 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 3, YdtCode = "003000", Name = "阳光保险", PrintName = "阳光保险", ChannelId = 12 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 5, YdtCode = "001400", Name = "广州中保", PrintName = "广州中保", ChannelId = 26 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 6, YdtCode = "004000", Name = "广州中华联合", PrintName = "广州中华联合", ChannelId = 16 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 8, YdtCode = "007000", Name = "大地保险", PrintName = "大地保险", ChannelId = 6 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 9, YdtCode = "006000", Name = "太平保险", PrintName = "太平保险", ChannelId = 1 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 10, YdtCode = "001000", Name = "广州众诚", PrintName = "广州众诚", ChannelId = 18 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 11, YdtCode = "001700", Name = "广州安心", PrintName = "广州安心", ChannelId = 78 });
+            list.Add(new YdtInscarComanyModel { UpLinkCode = 13, YdtCode = "001600", Name = "广州国任(信达)", PrintName = "广州国任(信达)", ChannelId = 28 });
             return list;
         }
 

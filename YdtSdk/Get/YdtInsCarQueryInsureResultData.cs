@@ -12,8 +12,8 @@ namespace YdtSdk
         public string insureSeq { get; set; }
         public string inquirySeq { get; set; }
         public string orderSeq { get; set; }
-        public string payUrl { get; set; }
-        public string method { get; set; }
-        public string param { get; set; }
+        public string biProposalNo { get; set; }
+        public string ciProposalNo { get; set; }
+        public int? result { get; set; }
     }
 }

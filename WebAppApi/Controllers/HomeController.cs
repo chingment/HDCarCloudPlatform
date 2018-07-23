@@ -1986,7 +1986,7 @@ namespace WebAppApi.Controllers
         public void CarIns(int userId, int merchantId, int posMachineId)
         {
 
-            model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
+            //model.Add("上传普通文件", CarIns_ImgUplad("1", @"d:\c1.jpg"));
             //model.Add("上传身份证", CarIns_ImgUplad("10", @"d:\c1.jpg"));
             // model.Add("上传驾驶证", CarIns_ImgUplad("11", @"d:\c2.jpg"));
 

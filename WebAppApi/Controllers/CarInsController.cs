@@ -1199,6 +1199,7 @@ namespace WebAppApi.Controllers
 
             var orderInfo = new ItemParentField("投保单信息", "");
 
+
             orderInfo.Child.Add(new ItemChildField("交强险单号", orderToCarInsureOfferCompany.CiProposalNo));
             orderInfo.Child.Add(new ItemChildField("商业险单号", orderToCarInsureOfferCompany.BiProposalNo));
             orderInfo.Child.Add(new ItemChildField("投保单号", orderToCarInsureOfferCompany.PartnerInsureId));

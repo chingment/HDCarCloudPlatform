@@ -106,7 +106,32 @@ namespace Lumos.BLL.Biz.Task
 
                             if (result_QueryInsurey.Result == ResultType.Success)
                             {
-                                LogUtil.InfoFormat("处理订单号:{0}，查询人工核保成功", item.Sn);
+
+                                if (result_QueryInsurey.Data == null)
+                                {
+
+                                }
+                                else
+                                {
+                                    orderToCarInsureOfferCompany.PartnerInsureId = result_QueryInsurey.Data.insureSeq;
+                                    orderToCarInsureOfferCompany.BiProposalNo = result_QueryInsurey.Data.biProposalNo;
+                                    orderToCarInsureOfferCompany.CiProposalNo = result_QueryInsurey.Data.ciProposalNo;
+
+
+                                    item.PartnerInsureId = result_QueryInsurey.Data.insureSeq;
+                                    item.BiProposalNo = result_QueryInsurey.Data.biProposalNo;
+                                    item.CiProposalNo = result_QueryInsurey.Data.ciProposalNo;
+
+
+                                    item.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay;
+
+                                    item.Status = Enumeration.OrderStatus.WaitPay;
+
+                                    CurrentDb.SaveChanges();
+
+
+                                    LogUtil.InfoFormat("处理订单号:{0}，查询人工核保成功", item.Sn);
+                                }
                             }
                             else
                             {

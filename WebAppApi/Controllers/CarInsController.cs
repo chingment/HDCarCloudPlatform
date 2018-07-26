@@ -1091,13 +1091,11 @@ namespace WebAppApi.Controllers
                     return ResponseResult(ResultType.Failure, ResultCode.Failure, "人工核保提交失败，请联系客服", result);
                 }
 
-                orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure;
-
-
                 orderToCarInsureOfferCompany.PartnerInsureId = result_Insure.Data.insureSeq;
                 orderToCarInsure.IsInvisiable = false;
                 orderToCarInsure.PartnerInsureId = result_Insure.Data.insureSeq;
                 orderToCarInsure.IsAuto = pms.Auto == 0 ? false : true;
+                orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitArtificialInsure;
                 CurrentDb.SaveChanges();
 
 

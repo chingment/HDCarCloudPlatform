@@ -74,7 +74,7 @@ namespace WebAppApi.Controllers
             switch (pms.Type)
             {
                 case "1":
-                   // imgurl = "http://120.79.233.231:8087/Upload/CarInsure/56f84750-294f-4a40-a702-f30d3ecf2aa3_O.jpg";
+                    // imgurl = "http://120.79.233.231:8087/Upload/CarInsure/56f84750-294f-4a40-a702-f30d3ecf2aa3_O.jpg";
                     YdtUploadResultData model1 = YdtUtils.UploadImg(imgurl);
                     LogUtil.Info("解释图片结束");
                     if (model1 != null)
@@ -905,6 +905,7 @@ namespace WebAppApi.Controllers
                     carInsCompanyInfoModel.PartnerCode = orderToCarInsureOfferCompany.PartnerCompanyId;
                 }
             }
+            carInsCompanyInfoModel.Auto = orderToCarInsure.IsAuto == false ? 0 : 1;
 
             carInsCompanyInfoModel.OfferId = orderToCarInsureOfferCompany.Id;
             carInsCompanyInfoModel.OfferInquirys = GetInsureItem(orderToCarInsure, orderToCarInsureOfferCompany, orderToCarInsureOfferCompanyKinds);
@@ -1186,6 +1187,7 @@ namespace WebAppApi.Controllers
             carInsCompanyInfoModel.OfferInquirys = GetInsureItem(orderToCarInsure, orderToCarInsureOfferCompany, orderToCarInsureOfferCompanyKinds);
             carInsCompanyInfoModel.OfferSumPremium = orderToCarInsureOfferCompany.InsureTotalPrice.Value.ToF2Price();
 
+            info.Auto = orderToCarInsure.IsAuto == false ? 0 : 1;
             info.OfferInfo = carInsCompanyInfoModel;
 
             CarInsInsureResult insureInfo = new CarInsInsureResult();

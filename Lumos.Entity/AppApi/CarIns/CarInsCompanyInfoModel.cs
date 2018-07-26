@@ -8,6 +8,7 @@ namespace Lumos.Entity
 {
     public class CarInsComanyModel
     {
+        public int Auto { get; set; }
         public int Id { get; set; }
         public string ImgUrl { get; set; }
         public string Name { get; set; }

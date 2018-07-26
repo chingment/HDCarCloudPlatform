@@ -592,7 +592,7 @@ namespace Lumos.BLL
                         }
 
 
-
+                        l_orderToCarInsure.Price = insureTotalPrice;
                         orderToCarInsureOfferCompany.InsureTotalPrice = insureTotalPrice;
                         CurrentDb.SaveChanges();
 

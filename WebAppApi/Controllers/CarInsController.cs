@@ -1294,7 +1294,11 @@ namespace WebAppApi.Controllers
                     return ResponseResult(ResultType.Failure, ResultCode.Failure, "生成支付申请失败，请联系客服", result);
                 }
 
-
+                orderToCarInsure.Recipient = pms.ReceiptAddress.Consignee;
+                orderToCarInsure.RecipientAddress = pms.ReceiptAddress.Address;
+                orderToCarInsure.RecipientPhoneNumber = pms.ReceiptAddress.Mobile;
+                orderToCarInsure.RecipientAreaName = pms.ReceiptAddress.AreaName;
+                orderToCarInsure.RecipientAreaCode = pms.ReceiptAddress.AreaId;
                 orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay;
                 orderToCarInsure.Status = Enumeration.OrderStatus.WaitPay;
                 orderToCarInsure.PartnerPayId = result_Pay.Data.paySeq;
@@ -1338,6 +1342,12 @@ namespace WebAppApi.Controllers
                     orderToCarInsure.Status = Enumeration.OrderStatus.WaitPay;
                     orderToCarInsure.PartnerPayId = result_PayByArtificial.Data.paySeq;
                     orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.WaitPay;
+                    orderToCarInsure.Recipient = pms.ReceiptAddress.Consignee;
+                    orderToCarInsure.RecipientAddress = pms.ReceiptAddress.Address;
+                    orderToCarInsure.RecipientPhoneNumber = pms.ReceiptAddress.Mobile;
+                    orderToCarInsure.RecipientAreaName = pms.ReceiptAddress.AreaName;
+                    orderToCarInsure.RecipientAreaCode = pms.ReceiptAddress.AreaId;
+
                     orderToCarInsureOfferCompany.PayUrl = result_PayByArtificial.Data.payUrl;
                     orderToCarInsureOfferCompany.PartnerPayId = result_PayByArtificial.Data.paySeq;
 
@@ -1390,7 +1400,7 @@ namespace WebAppApi.Controllers
                 else
                 {
 
-                    var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).ToList();
+                    var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq && m.PartnerInquiryId == pms.inquirySeq).ToList();
 
                     if (orderToCarInsures.Count == 0)
                     {
@@ -1486,7 +1496,7 @@ namespace WebAppApi.Controllers
                 else
                 {
 
-                    var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).ToList();
+                    var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq && m.PartnerInsureId == pms.insureSeq).ToList();
 
                     foreach (var item in orderToCarInsures)
                     {
@@ -1564,7 +1574,7 @@ namespace WebAppApi.Controllers
 
                 if (!string.IsNullOrEmpty(pms.orderSeq))
                 {
-                    var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq).ToList();
+                    var orderToCarInsures = CurrentDb.OrderToCarInsure.Where(m => m.PartnerOrderId == pms.orderSeq && m.PartnerPayId == pms.paySeq).ToList();
 
                     foreach (var item in orderToCarInsures)
                     {
@@ -1924,8 +1934,32 @@ namespace WebAppApi.Controllers
             {
                 parents.Add(new ItemParentField("过户日期", carInsure.CarChgownerDate));
             }
-
             parents.Add(parentsByCarInfo);
+
+
+            if (carInsure.Status == Enumeration.OrderStatus.Completed)
+            {
+                var parentsByInusreInfo = new ItemParentField("投保单信息", "");
+
+                parentsByInusreInfo.Child.Add(new ItemChildField("交强险单号", carInsure.CiProposalNo));
+                parentsByInusreInfo.Child.Add(new ItemChildField("商业险单号", carInsure.BiProposalNo));
+                parentsByInusreInfo.Child.Add(new ItemChildField("投保单号", carInsure.PartnerInsureId));
+                parentsByInusreInfo.Child.Add(new ItemChildField("商业险", carInsure.InsCommercialPrice.ToF2Price()));
+                parentsByInusreInfo.Child.Add(new ItemChildField("交强险", carInsure.InsCompulsoryPrice.ToF2Price()));
+                parentsByInusreInfo.Child.Add(new ItemChildField("车船税", carInsure.InsTravelTaxPrice.ToF2Price()));
+
+                parents.Add(parentsByInusreInfo);
+
+                var parentsByReceiptAddress = new ItemParentField("快递信息", "");
+
+                parentsByReceiptAddress.Child.Add(new ItemChildField("联系人", carInsure.Recipient));
+                parentsByReceiptAddress.Child.Add(new ItemChildField("联系电话", carInsure.RecipientPhoneNumber));
+                parentsByReceiptAddress.Child.Add(new ItemChildField("联系地址", carInsure.RecipientAddress));
+
+                parents.Add(parentsByReceiptAddress);
+
+            }
+
 
             return parents;
         }

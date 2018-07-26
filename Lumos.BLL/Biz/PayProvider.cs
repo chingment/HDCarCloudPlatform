@@ -546,6 +546,7 @@ namespace Lumos.BLL
 
 
                 orderToCarInsure.Status = Enumeration.OrderStatus.Completed;
+                orderToCarInsure.FollowStatus = (int)Enumeration.OrderToCarInsureFollowStatus.PaySuccess;
                 orderToCarInsure.PayTime = this.DateTime;
                 orderToCarInsure.CompleteTime = this.DateTime;
                 orderToCarInsure.LastUpdateTime = this.DateTime;

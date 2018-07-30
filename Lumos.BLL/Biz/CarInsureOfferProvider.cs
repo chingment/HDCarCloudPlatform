@@ -62,51 +62,66 @@ namespace Lumos.BLL
     {
         public DrivingLicenceInfo GetDrivingLicenceInfoFromImgUrl(string url)
         {
-            DrivingLicenceInfo licenceInfo = null;
-
-
-            var ydtLicenceInfo = YdtUtils.GetLicenseInfoByUrl(url);
-            if (ydtLicenceInfo != null)
+            try
             {
-                licenceInfo = new DrivingLicenceInfo();
-                licenceInfo.owner = ydtLicenceInfo.owner;
-                licenceInfo.plateNum = ydtLicenceInfo.plateNum;
-                licenceInfo.address = null;
-                licenceInfo.userCharacter = null;
-                licenceInfo.model = ydtLicenceInfo.model;
-                licenceInfo.vin = ydtLicenceInfo.vin;
-                licenceInfo.engineNo = ydtLicenceInfo.engineNum;
-                licenceInfo.registerDate = ydtLicenceInfo.registerDate;
-                licenceInfo.issueDate = ydtLicenceInfo.issueDate;
-                licenceInfo.vehicleType = ydtLicenceInfo.vehicleType;
-                licenceInfo.fileKey = ydtLicenceInfo.fileKey;
-            }
+                DrivingLicenceInfo licenceInfo = null;
 
-            return licenceInfo;
+
+                var ydtLicenceInfo = YdtUtils.GetLicenseInfoByUrl(url);
+                if (ydtLicenceInfo != null)
+                {
+                    licenceInfo = new DrivingLicenceInfo();
+                    licenceInfo.owner = ydtLicenceInfo.owner;
+                    licenceInfo.plateNum = ydtLicenceInfo.plateNum;
+                    licenceInfo.address = null;
+                    licenceInfo.userCharacter = null;
+                    licenceInfo.model = ydtLicenceInfo.model;
+                    licenceInfo.vin = ydtLicenceInfo.vin;
+                    licenceInfo.engineNo = ydtLicenceInfo.engineNum;
+                    licenceInfo.registerDate = ydtLicenceInfo.registerDate;
+                    licenceInfo.issueDate = ydtLicenceInfo.issueDate;
+                    licenceInfo.vehicleType = ydtLicenceInfo.vehicleType;
+                    licenceInfo.fileKey = ydtLicenceInfo.fileKey;
+                }
+
+                return licenceInfo;
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error("解释行驶证数据错误", ex);
+                return null;
+            }
         }
 
         public IdentityCardInfo GetIdentityCardInfoFromImgUrl(string url)
         {
             IdentityCardInfo identityCardInfo = null;
 
-
-            var ydtIdentityCardInfo = YdtUtils.GetIdentityInfoByUrl(url);
-            if (ydtIdentityCardInfo != null)
+            try
             {
-                identityCardInfo = new IdentityCardInfo();
-                identityCardInfo.address = ydtIdentityCardInfo.address;
-                identityCardInfo.birthday = ydtIdentityCardInfo.birthday;
-                identityCardInfo.idNumber = ydtIdentityCardInfo.num;
-                identityCardInfo.name = ydtIdentityCardInfo.name;
-                identityCardInfo.people = ydtIdentityCardInfo.nationality;
-                identityCardInfo.sex = ydtIdentityCardInfo.sex;
-                identityCardInfo.type = null;
-                identityCardInfo.issueAuthority = null;
-                identityCardInfo.validity = null;
-                identityCardInfo.fileKey = ydtIdentityCardInfo.fileKey;
-            }
+                var ydtIdentityCardInfo = YdtUtils.GetIdentityInfoByUrl(url);
+                if (ydtIdentityCardInfo != null)
+                {
+                    identityCardInfo = new IdentityCardInfo();
+                    identityCardInfo.address = ydtIdentityCardInfo.address;
+                    identityCardInfo.birthday = ydtIdentityCardInfo.birthday;
+                    identityCardInfo.idNumber = ydtIdentityCardInfo.num;
+                    identityCardInfo.name = ydtIdentityCardInfo.name;
+                    identityCardInfo.people = ydtIdentityCardInfo.nationality;
+                    identityCardInfo.sex = ydtIdentityCardInfo.sex;
+                    identityCardInfo.type = null;
+                    identityCardInfo.issueAuthority = null;
+                    identityCardInfo.validity = null;
+                    identityCardInfo.fileKey = ydtIdentityCardInfo.fileKey;
+                }
 
-            return identityCardInfo;
+                return identityCardInfo;
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error("解释身份证正面数据错误", ex);
+                return null;
+            }
         }
     }
 }

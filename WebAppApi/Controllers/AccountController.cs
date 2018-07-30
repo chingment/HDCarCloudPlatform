@@ -401,6 +401,11 @@ namespace WebAppApi.Controllers
                 extendedApps = extendedApps.Where(m => m.Id != 9 && m.Id != 10).ToList();
             }
 
+            if (GetAppVersion() >= 12)
+            {
+                extendedApps = extendedApps.Where(m => m.Id != 4).ToList();
+            }
+
             List<ExtendedAppModel> extendedAppModel = new List<ExtendedAppModel>();
 
             foreach (var m in extendedApps)

@@ -31,5 +31,9 @@ namespace Lumos.Entity
         public string CarCertPicUrl { get; set; }
         public string CarInvoicePicKey { get; set; }
         public string CarInvoicePicUrl { get; set; }
+        public string BiEndDate { get; set; }
+        public string BiStartDate { get; set; }
+        public string CiEndDate { get; set; }
+        public string CiStartDate { get; set; }
     }
 }

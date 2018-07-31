@@ -83,13 +83,17 @@ namespace Lumos.BLL
                     insCarInfoOrder.LicensePicUrl = carInfo.LicensePicUrl;
                     insCarInfoOrder.LicenseOtherPicKey = carInfo.LicenseOtherPicKey;
                     insCarInfoOrder.LicenseOtherPicUrl = carInfo.LicenseOtherPicUrl;
+                  
                     insCarInfoOrder.CarCertPicKey = carInfo.CarCertPicKey;
                     insCarInfoOrder.CarCertPicUrl = carInfo.CarCertPicUrl;
                     insCarInfoOrder.CarInvoicePicKey = carInfo.CarInvoicePicKey;
                     insCarInfoOrder.CarInvoicePicUrl = carInfo.CarInvoicePicUrl;
                     insCarInfoOrder.CreateTime = this.DateTime;
                     insCarInfoOrder.Creator = operater;
-
+                    insCarInfoOrder.BiEndDate = carInfo.BiEndDate;
+                    insCarInfoOrder.BiStartDate = carInfo.BiStartDate;
+                    insCarInfoOrder.CiEndDate = carInfo.CiEndDate;
+                    insCarInfoOrder.CiStartDate = carInfo.CiStartDate;
                     if (customers != null)
                     {
                         var carowner = customers.Where(m => m.InsuredFlag == "3").FirstOrDefault();
@@ -956,6 +960,10 @@ namespace Lumos.BLL
             insCarInfo.CarCertPicUrl = carInfo.CarCertPicUrl;
             insCarInfo.CarInvoicePicKey = carInfo.CarInvoicePicKey;
             insCarInfo.CarInvoicePicUrl = carInfo.CarInvoicePicUrl;
+            insCarInfo.BiEndDate = carInfo.BiEndDate;
+            insCarInfo.BiStartDate = carInfo.BiStartDate;
+            insCarInfo.CiEndDate = carInfo.CiEndDate;
+            insCarInfo.CiStartDate = carInfo.CiStartDate;
 
             if (customers != null)
             {

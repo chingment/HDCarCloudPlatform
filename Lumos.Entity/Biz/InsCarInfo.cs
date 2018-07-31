@@ -130,6 +130,13 @@ namespace Lumos.Entity
         public DateTime CreateTime { get; set; }
         public int? Mender { get; set; }
         public DateTime? LastUpdateTime { get; set; }
-
+        [MaxLength(128)]
+        public string BiEndDate { get; set; }
+        [MaxLength(128)]
+        public string BiStartDate { get; set; }
+        [MaxLength(128)]
+        public string CiEndDate { get; set; }
+        [MaxLength(128)]
+        public string CiStartDate { get; set; }
     }
 }

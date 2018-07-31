@@ -226,6 +226,10 @@ namespace WebAppApi.Controllers
                         }
                         carInfo.Tonnage = ydtInsCarApiSearchResultData.Car.tonnage.NullStringToNullObject();
                         carInfo.WholeWeight = ydtInsCarApiSearchResultData.Car.wholeWeight.NullStringToNullObject();
+                        carInfo.BiEndDate = ydtInsCarApiSearchResultData.BiEndDate;
+                        carInfo.BiStartDate = ydtInsCarApiSearchResultData.BiStartDate;
+                        carInfo.CiEndDate = ydtInsCarApiSearchResultData.CiEndDate;
+                        carInfo.CiStartDate = ydtInsCarApiSearchResultData.CiStartDate;
                     }
 
                 }

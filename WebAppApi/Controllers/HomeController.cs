@@ -26,8 +26,28 @@ using WebAppApi.Models.Order;
 
 namespace WebAppApi.Controllers
 {
+
     public class HomeController : Controller
     {
+        public static string DeleteChineseWord(string str)
+        {
+            string retValue = str;
+            if (System.Text.RegularExpressions.Regex.IsMatch(str, @"[\u4e00-\u9fa5]"))
+            {
+                retValue = string.Empty;
+                var strsStrings = str.ToCharArray();
+                for (int index = 0; index < strsStrings.Length; index++)
+                {
+                    if (strsStrings[index] >= 0x4e00 && strsStrings[index] <= 0x9fa5)
+                    {
+                        continue;
+                    }
+                    retValue += strsStrings[index];
+                }
+            }
+            return retValue;
+        }
+
         private string key = "test";
         private string secret = "6ZB97cdVz211O08EKZ6yriAYrHXFBowC";
         private long timespan = (long)(DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds;
@@ -117,6 +137,7 @@ namespace WebAppApi.Controllers
 
         public ActionResult Index()
         {
+            string aav = DeleteChineseWord("大霸王PREVIA ACR30L-MFSEK旅行车");
 
             decimal s2 = 4.5m;
             int s = (int)s2;
@@ -204,7 +225,7 @@ namespace WebAppApi.Controllers
             //model.Add("上传日志", UploadLogTrace(userId, merchantId, posMachineId));
 
 
-           //  model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
+            //  model.Add("获取保险方案", InsPrdGetPlan(userId, merchantId, posMachineId, 301));
 
             CarIns(userId, merchantId, posMachineId);
 
@@ -2014,7 +2035,7 @@ namespace WebAppApi.Controllers
 
             //model.Add("获取支付确认信息", GetConfirmPayInfo(userId, merchantId, posMachineId, OfferId));
 
-          //  model.Add("支付信息申请", CarIns_Pay(1234, 258, 153, 1041));
+            //  model.Add("支付信息申请", CarIns_Pay(1234, 258, 153, 1041));
 
 
 

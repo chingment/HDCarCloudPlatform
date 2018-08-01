@@ -44,6 +44,7 @@ namespace WebAppApi.Controllers
         public static string nullCerno = "440182198804141552";
         public static string nullMobile = "13800138000";
 
+
         [HttpPost]
         public APIResponse UploadImg(CarInsUploadImgPms pms)
         {
@@ -426,7 +427,9 @@ namespace WebAppApi.Controllers
             baseInfoModel.car.vin = pms.Car.Vin;
             baseInfoModel.car.engineNo = pms.Car.EngineNo;
             baseInfoModel.car.firstRegisterDate = pms.Car.FirstRegisterDate;
+
             baseInfoModel.car.modelCode = pms.Car.ModelCode;
+
             baseInfoModel.car.modelName = pms.Car.ModelName;
             baseInfoModel.car.displacement = pms.Car.Displacement;
             baseInfoModel.car.marketYear = pms.Car.MarketYear;
@@ -1719,6 +1722,9 @@ namespace WebAppApi.Controllers
                             {
                                 model.compensation = 0;
                             }
+                            break;
+                        default:
+                            model.compensation = 0;
                             break;
                     }
                     #endregion

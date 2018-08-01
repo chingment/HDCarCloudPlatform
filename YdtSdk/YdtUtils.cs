@@ -185,12 +185,50 @@ namespace YdtSdk
             return ydtInscarGetInquiryInfoResult.data;
         }
 
+
+        public static string DeleteChineseWord(string str)
+        {
+            string retValue = str;
+            if (System.Text.RegularExpressions.Regex.IsMatch(str, @"[\u4e00-\u9fa5]"))
+            {
+                retValue = string.Empty;
+                var strsStrings = str.ToCharArray();
+                for (int index = 0; index < strsStrings.Length; index++)
+                {
+                    if (strsStrings[index] >= 0x4e00 && strsStrings[index] <= 0x9fa5)
+                    {
+                        continue;
+                    }
+                    retValue += strsStrings[index];
+                }
+            }
+            return retValue;
+        }
+
         public static CustomJsonResult<string> EditBaseInfo(YdtInscarEditbasePms model)
         {
             CustomJsonResult<string> result = new CustomJsonResult<string>();
 
             var au = YdtUtils.GetToken();
             YdtApi ydtApi = new YdtApi();
+
+            if (model != null)
+            {
+                if (model.car != null)
+                {
+                    if (model.car.modelCode != null)
+                    {
+                        string code = DeleteChineseWord(model.car.modelCode);
+
+                        if (code.Length > 20)
+                        {
+                            code = code.Substring(0, 19);
+                        }
+
+                        model.car.modelCode = code;
+                    }
+                }
+            }
 
             if (string.IsNullOrEmpty(model.orderSeq))
             {
@@ -339,7 +377,7 @@ namespace YdtSdk
             return new CustomJsonResult<YdtInscarInsureByArtificialResultData>(ResultType.Success, ResultCode.Success, ydtInscarInsureResult.msg, ydtInscarInsureResult.data);
         }
 
-        public static CustomJsonResult<YdtInsCarQueryInsureResultData> QueryInsure(string orderSeq, string inquirySeq,string insureSeq)
+        public static CustomJsonResult<YdtInsCarQueryInsureResultData> QueryInsure(string orderSeq, string inquirySeq, string insureSeq)
         {
             var result = new CustomJsonResult();
             var au = YdtUtils.GetToken();
@@ -394,7 +432,7 @@ namespace YdtSdk
 
 
 
-        public static CustomJsonResult<YdtInscarPayQueryResultData> PayQuery(string orderSeq,string inquirySeq,string insureSeq,string paySeq)
+        public static CustomJsonResult<YdtInscarPayQueryResultData> PayQuery(string orderSeq, string inquirySeq, string insureSeq, string paySeq)
         {
             var result = new CustomJsonResult<YdtInscarPayQueryResultData>();
             var au = YdtUtils.GetToken();
